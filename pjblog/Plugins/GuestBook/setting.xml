@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PluginOptions>
+ <Key name="bookPage" value="20" type="input" description="每页显示留言数量(个)" size="5"/>
+ <Key name="charCount" value="800" type="input" description="留言最大字数(字)" size="5"/>
+ <Key name="delay" value="30" type="input" description="留言间隔时间(秒)" size="5"/>
+ <Key name="ubbCode" value="0" type="select" description="是否允许使用UBB代码">
+    <option value="0">允许</option>
+   <option value="1">不允许</option>
+ </Key>
+ <Key name="ImgCode" value="1" type="select" description="是否允许帖图">
+    <option value="0">允许</option>
+   <option value="1">不允许</option>
+ </Key>
+ <Key name="autoURL" value="1" type="select" description="自动转换连接">
+    <option value="1">允许</option>
+   <option value="0">不允许</option>
+ </Key>
+ 
+  <Key name="canDel" value="1" type="select" description="是否允许用户删除自己的留言内容">
+   <option value="1">允许</option>
+   <option value="0">不允许</option>
+ </Key>
+ <Key name="OpenState" value="1" type="select" description="是否开放留言本">
+   <option value="1">开放</option>
+   <option value="0">关闭</option>
+ </Key>
+ <Key name="face1" value="Plugins/GuestBook/face/face1.gif" type="input" description="用户头像1地址(48X48)" size="40"/>
+ <Key name="face2" value="Plugins/GuestBook/face/face2.gif" type="input" description="用户头像2地址(48X48)" size="40"/>
+ <Key name="face3" value="Plugins/GuestBook/face/face3.gif" type="input" description="用户头像3地址(48X48)" size="40"/>
+ <Key name="face4" value="Plugins/GuestBook/face/face4.gif" type="input" description="用户头像4地址(48X48)" size="40"/>
+ <Key name="face5" value="Plugins/GuestBook/face/face5.gif" type="input" description="用户头像5地址(48X48)" size="40"/>
+ <Key name="face6" value="Plugins/GuestBook/face/face6.gif" type="input" description="用户头像6地址(48X48)" size="40"/>
+ <Key name="face7" value="Plugins/GuestBook/face/face7.gif" type="input" description="用户头像7地址(48X48)" size="40"/>
+ <Key name="face8" value="Plugins/GuestBook/face/face8.gif" type="input" description="用户头像8地址(48X48)" size="40"/>
+</PluginOptions>
