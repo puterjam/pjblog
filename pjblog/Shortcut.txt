@@ -1,0 +1,52 @@
+﻿PJBlog2 快捷键列表
+
+发表日志-选择分类
+	Alt+N 下一步 ★
+	Alt+Q 返回 ★
+	Alt+U UBB编辑器 ★
+	Alt+K FCK编辑器 ★
+
+发表日志-编辑新日志
+	Alt+S 发表日志 ★
+	Alt+D 保存草稿 ★
+	Alt+Q 返回 ★
+
+编辑日志
+	Alt+S 保存日志 ★
+	Alt+D 保存并取消草稿 ★
+	Alt+K 删除该日志 ★
+	Alt+Q 取消编辑 ★
+
+查看日志列表
+	Alt+1 正常模式
+	Alt+2 列表模式
+	Alt+, 上一页
+	Alt+. 下一页
+	Alt+3 管理员登录后台
+	Alt+N 发表日志
+	Alt+D 编辑草稿
+	Alt+M 修改个人资料
+	Alt+L 登录
+	Alt+U 注册
+	Alt+Q 退出登录
+
+查看日志内容
+	Alt+1 小字体
+	Alt+2 中字体
+	Alt+3 大字体
+	Alt+E 编辑当前日志
+	Alt+K 删除当前日志
+	Alt+, 上一篇日志
+	Alt+. 下一篇日志
+	Alt+O 订阅日志所在分类的文章
+	Alt+B 跳转到文章顶部 ★
+	Alt+C 跳转到评论顶部
+	Alt+R 跳转到发表评论 ★
+	Alt+S 发表评论 ★
+
+公用快捷键
+	Alt+I 返回主页
+	Alt+Z 返回上一页
+
+说明: 打★号的为通用快捷键,即IE和Mozilla都可以直接使用.
+      其它不打星号的,Mozilla可以直接用快捷键.而IE在使用快捷键必须等页面加载完成后才可以使用,IE对accesskey支持不好呀
