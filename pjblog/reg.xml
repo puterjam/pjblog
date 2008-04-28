@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" ?><reg><text><![CDATA[这里是一份测试文本哦~~ 大家一起来测试一下哈
+不知道如何测试好呢
+[img] [img]
+[img=]
+什么???
+http://www.google.cn
+http://www.google.cn
+
+这一段是测试文本哦]]></text><key des="限制UBB超链接的数量" re="\\[url\\]" times="2"/><key des="限制超链接的数量" re="(http://|https://)" times="1"/><key des="限制帖图数量" re="\\[img(|=)\\]" times="3"/><key des="限制引用次数" re="\\[quote" times="5"/></reg>
