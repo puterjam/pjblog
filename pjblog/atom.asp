@@ -4,7 +4,7 @@
 <!--#include file="common/function.asp" -->
 <!--#include file="common/ubbcode.asp" -->
 <%
-
+''test
 function AddSiteURL(ByVal Str)
   If IsNull(Str) Then
   	AddSiteURL = ""
