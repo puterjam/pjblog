@@ -1,0 +1,33 @@
+td {
+	font-family: "ËÎÌו", "Arial", "tahoma";
+	font-size: 12px;
+	font-weight: bold;
+	color: #334488;
+}
+textarea {
+	font-family: Courier New, Courier, mono;
+	font-size: 12px;
+	border: 1px solid;
+	padding: 4px;
+}
+input {
+	font-family: "ËÎÌו", "Arial", "tahoma";
+	font-size: 12px;
+	border: 1px outset;
+	height: 20px;
+	width: 50px;
+	padding: 2px;
+	background-color: #ffffff;
+}
+select {
+	font-family: "ËÎÌו", "Arial", "tahoma";
+	font-size: 12px;
+	height: 20px;
+}
+.title {
+	font-family: "Arial", "Impact";
+	font-size: 18px;
+	font-weight: bold;
+	color: #660000;
+	text-decoration: underline;
+}

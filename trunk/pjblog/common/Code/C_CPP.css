@@ -1,0 +1,48 @@
+.CPP_Default {
+	color: #000000;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_Comments {
+	color: #008080;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_String {
+	color: #ff00ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_Char {
+	color: #4080ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_BlockComment {
+	color: #008080;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_Operator {
+	color: #0000ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_Keyword {
+	color: #800000;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_VarType {
+	color: #ff8000;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.CPP_Compiler {
+	color: #008000;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}

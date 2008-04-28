@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>Html转换程序</title>
+<SCRIPT language="JavaScript1.2">
+function HtmlToUBB(str) {
+	str = str.replace(/\r/g,"");
+	str = str.replace(/on(load|click|dbclick|mouseover|mousedown|mouseup)="[^"]+"/ig,"");
+	str = str.replace(/<script[^>]*?>([\w\W]*?)<\/script>/ig,"");
+	str = str.replace(/<a[^>]+href="([^"]+)"[^>]*>(.*?)<\/a>/ig,"\n[url=$1]$2[/url]\n");
+	str = str.replace(/<font[^>]+color=([^ >]+)[^>]*>(.*?)<\/font>/ig,"\n[color=$1]$2[/color]\n");
+	str = str.replace(/<img[^>]+src="([^"]+)"[^>]*>/ig,"\n[img]$1[/img]\n");
+	str = str.replace(/<([\/]?)b>/ig,"[$1b]");
+	str = str.replace(/<([\/]?)strong>/ig,"[$1b]");
+	str = str.replace(/<([\/]?)u>/ig,"[$1u]");
+	str = str.replace(/<([\/]?)i>/ig,"[$1i]");
+	str = str.replace(/&nbsp;/g," ");
+	str = str.replace(/&amp;/g,"&");
+	str = str.replace(/&quot;/g,"\"");
+	str = str.replace(/&lt;/g,"<");
+	str = str.replace(/&gt;/g,">");
+	str = str.replace(/<br>/ig,"\n");
+	str = str.replace(/<[^>]*?>/g,"");
+	str = str.replace(/\[url=([^\]]+)\]\n(\[img\]\1\[\/img\])\n\[\/url\]/g,"$2");
+	str = str.replace(/\n+/g,"\n");
+	return str;
+}
+
+function trans(){
+	var str = "";
+	str = document.getElementById('edit').contentWindow.document.body.innerHTML;
+	if (str.length == 0) {
+		alert("无转换内容！请使用 Ctrl+V 把内容复制到下面的编辑框内");
+		return
+	}
+	document.getElementById('ReCode').value=HtmlToUBB(str);
+	document.getElementById('insert').disabled=false
+}
+function doHtmlinsert() {
+ if (document.getElementById('ReCode').value=="") {alert("你没有进行代码转换,无法插入．");return}
+ opener.AddText(document.getElementById('ReCode').value)
+ window.close()
+}
+function clearCode(){
+	document.getElementById('ReCode').value="";
+}
+
+function Start() {
+  document.getElementById('edit').contentWindow.document.designMode = "on";
+  try {
+    document.getElementById('edit').contentWindow.document.execCommand("undo", false, null);
+  }  catch (e) {
+    alert("你的Mozilla浏览器不支持在线RichEditor");
+  }
+}
+
+function ViewSource(Source){
+  var Html;
+  if (Source){
+	document.getElementById('sCode').value = document.getElementById('edit').contentWindow.document.body.innerHTML;
+	document.getElementById('edit').style.display="none";
+	document.getElementById('sCode').style.display="";
+	document.getElementById('tip').innerText="修改粘贴后的网页源代码 >>";
+	document.getElementById('tranButton').disabled="disabled"
+  }
+  else{
+	document.getElementById('edit').contentWindow.document.body.innerHTML = document.getElementById('sCode').value;
+  	document.getElementById('edit').style.display="";
+	document.getElementById('sCode').style.display="none";
+    document.getElementById('edit').contentWindow.document.designMode = "on";
+ 	document.getElementById('tip').innerText="请使用 Ctrl+V 把内容复制到这里 >>";
+	document.getElementById('tranButton').disabled=""
+}
+}
+</SCRIPT>
+<style>
+body{background:#688ABD;margin:2px;}
+label{color:#fff;}
+th{font-size:14px;font-family:verdana,宋体;font-weight:bold;color:fc6;text-align:left}
+#sCode{width:400;height:150px;border:1px solid #1F2F47;margin-top:0px !important;margin-top:-1px;margin-bottom:0px !important;margin-bottom:-1px;}
+#ReCode{width:400;height:150px;border:1px solid #1F2F47;font-size:12px;}
+#edit{width:398;height:148px;border:1px solid #1F2F47;background:#fff;font-size:12px}
+.input{
+ border-top:1px solid #fff;
+ border-right:1px solid #003;
+ border-bottom:1px solid #003;
+ border-left:1px solid #fff;
+ background:#F4F7FB;
+}
+.tip{
+ color:#ffc;
+ font-weight:bold;
+ font-size:12px;
+ font-family:宋体;
+}
+</style>
+</head>
+<body onload="Start()" style="">
+<table border="0" align="center">
+	<tr>
+		<th style="">Html转换UBB程序</th>
+	</tr>
+	<tr>
+		<td style="font-size:12px;">
+		 <label for="Source"><input type="checkbox" id="Source" onclick="ViewSource(this.checked)">查看源代码 </label>
+         <input id="tranButton" type="button" value="转 换" onclick="trans()" class="input">
+         <input type="button" value="清 除" onclick="clearCode()" class="input">
+         <input id="insert" type="button" value="插　入" onClick="doHtmlinsert()" disabled class="input">
+         </td>
+	</tr>
+	<tr>
+		<td class="tip">
+         <span id="tip">请使用 Ctrl+V 把内容复制到这里 &gt;&gt;</span></td>
+	</tr>
+	<tr>
+		<td>
+         <textarea id="sCode" style="display:none"></textarea>
+         <iframe id="edit"src="about:blank" border="0" frameborder="0"></iframe>
+		</td>
+	</tr>
+	<tr>
+		<td class="tip">
+         转换输出代码 &gt;&gt;</td>
+	</tr>
+	<tr>
+		<td>
+         <textarea id="ReCode" readonly="readonly"></textarea>
+        </td>
+	</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,69 @@
+.AS_Default {
+	color: #000000;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Comments {
+	color: #008080;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_String {
+	color: #ff00ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_String2 {
+	color: #ff00ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_BlockComment {
+	color: #008080;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Operator {
+	color: #0000ff;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Keyword {
+	color: #800000;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Object {
+	color: #0000a0;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Method {
+	color: #5000a0;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Property {
+	color: #008000;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Event {
+	color: #800080;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_CustomObject {
+	color: #804080;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
+.AS_Component {
+	color: #00a0c0;
+	font-weight: bold;
+	font-family: Courier New;
+	font-size: 12px;
+}
