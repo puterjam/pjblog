@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SkinSet>
+ <SkinName>Nuvola Style For PJBlog2</SkinName>
+ <SkinDesigner>PuterJam</SkinDesigner>
+ <pubDate>2005-08-12</pubDate>
+ <DesignerURL>http://www.pjhome.net</DesignerURL>
+ <DesignerMail>puterjam@gmail.com</DesignerMail>
+ <Flash>
+  <UseFlash>0</UseFlash>
+  <FlashPath></FlashPath>
+  <FlashWidth></FlashWidth>
+  <FlashHeight></FlashHeight>
+  <FlashAlign></FlashAlign>
+  <FlashTop></FlashTop>
+  <FlashTransparent></FlashTransparent>
+ </Flash>
+</SkinSet>

@@ -1,0 +1,12 @@
+ body{
+	font-size:12px;
+    margin:0px;
+	padding:0px;
+	text-align:center;
+	background:#f7f7f4;
+	color:#000;
+	font-family: Verdana, Arial;
+}
+ img {max-width: 100%;height: auto;}
+ select{font-family: Verdana, Arial}
+ th{background:#f5f5f1;}
