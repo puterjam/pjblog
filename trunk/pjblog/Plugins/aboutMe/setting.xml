@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PluginOptions>
+ <Key name="MyName" value="无名人士" type="input" description="站长昵称" size="6"/>
+ <Key name="MyFace" value="Plugins/aboutMe/Myface.jpg" type="input" description="头像地址(140X220)" size="40"/>
+ <Key name="Age" value="未知" type="input" description="年 龄" size="6"/>
+ <Key name="MyDay" value="未知" type="input" description="生 日" size="10"/>
+  <Key name="Sex" value="保密" type="select" description="性 别">
+  <option value="保密">保密</option>
+  <option value="男">男</option>
+  <option value="女">女</option>
+ </Key>
+ <Key name="MyBrood" value="未知" type="input" description="血 型" size="6"/>
+ <Key name="MyStar" value="未知" type="input" description="星 座" size="6"/>
+ <Key name="Address" value="未知" type="input" description="地 址" size="30"/>
+ <Key name="MyDes" value="这家伙很懒什么也没留下" type="input" description="个人说明" size="40"/>
+ <Key name="ILike" value="" type="input" description="兴趣爱好" size="40"/>
+</PluginOptions>

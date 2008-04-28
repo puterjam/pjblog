@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PluginInstall>
+ <main>
+  <PluginName>AboutMeForPJBlog</PluginName>
+  <PluginTitle>个人档案</PluginTitle>
+  <PluginType>function</PluginType>
+  <PluginHtmlCode><![CDATA[]]></PluginHtmlCode>
+  <PluginASPCode><![CDATA[]]></PluginASPCode>
+  <PluginPath><![CDATA[siteMaster.asp]]></PluginPath>
+  <SettingFile>setting.xml</SettingFile>
+  <CreateTableSQL><![CDATA[]]></CreateTableSQL>
+  <UpdateTableSQL><![CDATA[]]></UpdateTableSQL>
+  <DropTable></DropTable>
+  <Author>PuterJam</Author>
+  <pubDate>2005-7-5</pubDate>
+  <About><![CDATA[个人档案插件]]></About>
+ </main>
+</PluginInstall>
