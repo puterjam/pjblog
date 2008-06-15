@@ -1,5 +1,25 @@
 ﻿//PBlog2 公用JS代码
 //Author:PuterJam
+function $() 
+{ 
+    var elements = new Array(); 
+    for (var i = 0; i < arguments.length; i++) 
+    { 
+        var element = arguments[i]; 
+        if (typeof element == 'string') 
+            element = document.getElementById(element); 
+        if (element) {
+        } else {
+            element = null;
+        }
+        if (arguments.length == 1) {
+            return element; 
+        } else {
+            elements.push(element); 
+        }
+    } 
+    return elements; 
+}
 
 //查找网页内宽度太大的图片进行缩放以及PNG纠正
  function ReImgSize(){

@@ -19,7 +19,7 @@ Function UBBCode(ByVal strContent,DisSM,DisUBB,DisIMG,AutoURL,AutoKEY)
 				tmpStr1=strMatch.SubMatches(0)
 				tmpStr2=strMatch.SubMatches(1)
 				tmpStr3=checkURL(strMatch.SubMatches(2))
-				strContent=replace(strContent,strMatch.Value,tmpStr1&"<a href="""&tmpStr2&"://"&tmpStr3&""" target=""_blank"">"&tmpStr2&"://"&tmpStr3&"</a>",1,-1,0)
+				strContent=replace(strContent,strMatch.Value,tmpStr1&"<a href="""&tmpStr2&"://"&tmpStr3&""" target=""_blank"" rel=""external"">"&tmpStr2&"://"&tmpStr3&"</a>",1,-1,0)
 			Next
 			're.Pattern="(^|\s)(www\.\S+)"
 			'strContent=re.Replace(strContent,"$1<a href=""http://$2"" target=""_blank"">$2</a>")
@@ -145,14 +145,14 @@ Function UBBCode(ByVal strContent,DisSM,DisUBB,DisIMG,AutoURL,AutoKEY)
 			For Each strMatch in strMatchs
 				tmpStr1=checkURL(strMatch.SubMatches(0))
 				tmpStr2=strMatch.SubMatches(1)
-				strContent=replace(strContent,strMatch.Value,"<a target=""_blank"" href="""&tmpStr1&""">"&tmpStr2&"</a>",1,-1,0)
+				strContent=replace(strContent,strMatch.Value,"<a target=""_blank"" href="""&tmpStr1&""" rel=""external"">"&tmpStr2&"</a>",1,-1,0)
 			Next
 
 			re.Pattern = "\[url](.[^\[]*)\[\/url]"
 			Set strMatchs=re.Execute(strContent)
 			For Each strMatch in strMatchs
 				tmpStr1=checkURL(strMatch.SubMatches(0))
-				strContent=replace(strContent,strMatch.Value,"<a target=""_blank"" href="""&tmpStr1&""">"&tmpStr1&"</a>",1,-1,0)
+				strContent=replace(strContent,strMatch.Value,"<a target=""_blank"" href="""&tmpStr1&""" rel=""external"">"&tmpStr1&"</a>",1,-1,0)
 			Next
 						
 			re.Pattern = "\[ed2k=([^\r]*?)\]([^\r]*?)\[\/ed2k]"
