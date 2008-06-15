@@ -1,0 +1,9 @@
+﻿User-agent: *
+
+Disallow: /404.asp
+Disallow: /blog*.asp
+Disallow: /register.asp
+Disallow: /login.asp
+Disallow: /search.asp
+
+<sitemap_location>/sitemap.asp</sitemap_location>
