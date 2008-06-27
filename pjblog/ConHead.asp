@@ -32,6 +32,6 @@ If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True
 </html>
 <%
 Else
-    Response.Redirect("default.asp")
+    RedirectUrl("default.asp")
 End If
 %>

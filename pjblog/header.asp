@@ -19,7 +19,16 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp
     If CheckStr(Request.QueryString("id"))<>Empty Then
         Tid = CheckStr(Request.QueryString("id"))
     End If
-    If Len(Tid)>0 Then Response.Redirect ("article.asp?id="&Tid)
+    If Len(Tid)>0 Then 
+    	Dim rUrl
+        If blog_postFile = 2 Then
+        	rUrl = "article/" & Tid & ".htm"
+	    else
+		 	rUrl = "article.asp?id=" & Tid
+	    end if 
+	    RedirectUrl (rUrl)
+	    Response.end
+    End If
 End If
 
 If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/article.asp") = 0 Then
@@ -69,7 +78,7 @@ Sub getBlogHead(Title, CateTitle, CateID)
    <div id="blogname"><%=siteName%>
     <div id="blogTitle"><%=blog_Title%></div>
    </div>
-   		<%CategoryList(0)%>
+   		<%=CategoryList(0)%>
   </div>
 <%
 End Sub

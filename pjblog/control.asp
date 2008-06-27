@@ -18,7 +18,7 @@
 </head>
 <%
 If memName = Empty Or stat_Admin<>True Then
-    Response.Redirect("default.asp")
+    RedirectUrl("default.asp")
 Else
     If session(CookieName&"_System") = True Then
 
@@ -56,14 +56,14 @@ If action = "login" Then
     Set chUser = conn.Execute("SELECT Top 1 mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&memName&"'")
     If chUser.EOF Or chUser.bof Then
         session(CookieName&"_ShowError") = "管理员密码错误!"
-        Response.Redirect("control.asp")
+        RedirectUrl("control.asp")
     Else
         If chUser("mem_Password")<>SHA1(getPass&chUser("mem_salt")) Then
             session(CookieName&"_ShowError") = "管理员密码错误!"
-            Response.Redirect("control.asp")
+            RedirectUrl("control.asp")
         Else
             session(CookieName&"_System") = True
-            Response.Redirect("control.asp")
+            RedirectUrl("control.asp")
         End If
     End If
 End If

@@ -40,7 +40,7 @@ If Request.QueryString("action") = "view" Then '查看tb
 				<rss version="0.91">
 					<channel>
 						<title><![CDATA[<%=tbBlog(4)%>]]></title>
-						<link><![CDATA[<%=SiteURL%>article.asp?id=<%=tbID%>]]></link>
+						<link><![CDATA[<%=SiteURL%>default.asp?id=<%=tbID%>]]></link>
 						<description><![CDATA[<%=SiteName%>]]></description>
 						<language>utf-8</language>
 					 	<% do while not tbBlog.eof %>

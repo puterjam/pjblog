@@ -63,7 +63,7 @@ If UBound(FeedRows, 1)>0 Then
             .Write "  <url>"
             .Write vbCrLf
             .Write "    <loc>"
-            .Write SiteURL&"article.asp?id="&FeedRows(0, i)
+            .Write SiteURL&"default.asp?id="&FeedRows(0, i)
             .Write "</loc>"
             .Write vbCrLf
             .Write "    <lastmod>"

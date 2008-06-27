@@ -11,7 +11,7 @@
 '==================================
 Dim blog_Mem
 If Request.QueryString("action") = "edit" Then
-    If memName = Empty Then Response.Redirect("member.asp")
+    If memName = Empty Then RedirectUrl("member.asp")
 
 %><br/><br/>
    <div style="text-align:center;">

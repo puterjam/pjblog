@@ -54,6 +54,6 @@ function MenuClick(obj,url){
 </html>
 <%
 Else
-    Response.Redirect("default.asp")
+    RedirectUrl("default.asp")
 End If
 %>

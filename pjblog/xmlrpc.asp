@@ -14,16 +14,16 @@
 '======================================
 
 
-'╤ах║BlogиХжцпео╒
+'О©╫О©╫х║BlogО©╫О©╫О©╫О©╫О©╫О©╫о╒
 getInfo(1)
 
-'п╢хК╧ь╪Эвжап╠М
+'п╢О©╫О©╫ь╪О©╫О©╫О©╫О©╫п╠О©╫
 Keywords(1)
 
-'п╢хК╠МгИ╥Ш╨е
+'п╢О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 Smilies(1)
 
-'п╢хК╠Йг╘
+'п╢О©╫О©╫О©╫г╘
 Tags(1)
 
 Response.Charset = "UTF-8"
@@ -281,7 +281,7 @@ Function getCategories()
     Dim Categories
     Categories = "<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param><value><array><data>"
     Dim Arr_Category, Category_Len, i
-    CategoryList(1)
+    CategoryList(3)
     Arr_Category = Application(CookieName&"_blog_Category")
     If UBound(Arr_Category, 1) = 0 Then Call returnError(0, "no Categories")
     Category_Len = UBound(Arr_Category, 2)
@@ -391,7 +391,7 @@ Function setPostCategories(lID, lCID)
             Conn.Execute("UPDATE blog_Content SET log_cateID="&lCID&" where log_ID="&lID)
         End If
 
-        If blog_postFile Then
+        If blog_postFile>0 Then
             Set lArticle = New ArticleCache
             lArticle.SaveCache
             Set lArticle = Nothing
@@ -485,7 +485,7 @@ End Function
 
 Function bin2str(binstr)
     Dim varlen, clow, ccc, skipflag, i
-    'жпндвж╥ШSkip╠Йж╬
+    'О©╫О©╫О©╫О©╫О©╫ж╥О©╫SkipО©╫О©╫ж╬
     skipflag = 0
     ccc = ""
     If Not IsNull(binstr) Then
@@ -493,9 +493,9 @@ Function bin2str(binstr)
         For i = 1 To varlen
             If skipflag = 0 Then
                 clow = MidB(binstr, i, 1)
-                'еп╤ойг╥Яжпнд╣двж╥Ш
+                'О©╫п╤О©╫О©╫г╥О©╫О©╫О©╫О©╫д╣О©╫О©╫ж╥О©╫
                 If AscB(clow)>127 Then
-                    'AscW╩А╟я╤Ч╫Ьжф╣джпндк╚вж╫звж╥Ш╦ън╩╨м╣мн╩╥╢в╙ё╛кЫртр╙ох╟яжпнд╣д╦ъ╣мн╩╥╢в╙
+                    'AscWО©╫О©╫я╤О©╫О©╫О©╫О©╫ф╣О©╫О©╫О©╫О©╫О©╫к╚О©╫ж╫О©╫О©╫ж╥О©╫О©╫н╩О©╫м╣О©╫н╩О©╫О©╫в╙О©╫О©╫О©╫О©╫О©╫О©╫р╙О©╫х╟О©╫О©╫О©╫О©╫д╣д╦ъ╣О©╫н╩О©╫О©╫в╙
                     ccc = ccc & Chr(AscW(MidB(binstr, i + 1, 1) & clow))
                     skipflag = 1
                 Else
