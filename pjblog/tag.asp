@@ -22,14 +22,16 @@
                  </div>
                  <div class="Content-body">
 						<%
-						    dim log_Tag,log_TagItem
-							For Each log_TagItem IN Arr_Tags
-								log_Tag=Split(log_TagItem,"||")
-								%>
+Dim log_Tag, log_TagItem
+For Each log_TagItem IN Arr_Tags
+    log_Tag = Split(log_TagItem, "||")
+
+%>
 									<a href="default.asp?tag=<%=Server.URLEncode(log_Tag(1))%>" title="共包含 <%=log_Tag(2)%> 篇日志"><span style="font-size:<%=getTagSize(log_Tag(2))%>px"><%=log_Tag(1)%></span></a>&nbsp;&nbsp;
 								<%
-							Next
-						%>
+Next
+
+%>
 			       </div>
                </div>       	 
        </div>
@@ -49,14 +51,15 @@
  <!--#include file="footer.asp" -->
  
  <%
-  function getTagSize(c)
-   dim i
-   for i=1 to 10
-    if int(c)<i*2.5 then 
-    	getTagSize=12+i
-    	exit function
-    end if
-   next
-   getTagSize=22 
-  end function
- %>
+Function getTagSize(c)
+    Dim i
+    For i = 1 To 10
+        If Int(c)<i * 2.5 Then
+            getTagSize = 12 + i
+            Exit Function
+        End If
+    Next
+    getTagSize = 22
+End Function
+
+%>

@@ -8,7 +8,7 @@
 '  后台管理顶部
 '    更新时间: 2005-6-24
 '==================================
-if session(CookieName&"_System")=true and memName<>empty and stat_Admin=true then 
+If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True Then
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -31,7 +31,7 @@ if session(CookieName&"_System")=true and memName<>empty and stat_Admin=true the
 </body>
 </html>
 <%
-else
- Response.Redirect("default.asp")
-end if
+Else
+    Response.Redirect("default.asp")
+End If
 %>

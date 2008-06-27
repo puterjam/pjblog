@@ -7,14 +7,15 @@
 '  用户注册页面
 '    更新时间: 2006-5-29
 '==================================
- if blog_Disregister then showmsg "错误信息","站点不允许注册新用户<br/><a href=""default.asp"">单击返回</a>","ErrorIcon",""
+If blog_Disregister Then showmsg "错误信息", "站点不允许注册新用户<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
 %>
 
  <div id="Tbody">
 <%
-IF Request.QueryString("action")="agree" then
-  logout(true)
- %><br/><br/>
+If Request.QueryString("action") = "agree" Then
+    logout(True)
+
+%><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:520px">
       <div id="MsgHead">用户注册</div>
@@ -42,9 +43,9 @@ IF Request.QueryString("action")="agree" then
 	</div>
 <br/><br/>
  <%
-ElseIF Request.form("action")="save" then
-dim reg
-reg=register
+ElseIf Request.Form("action") = "save" Then
+    Dim reg
+    reg = register
 %>
 <br/><br/>
    <div style="text-align:center;">
@@ -57,109 +58,110 @@ reg=register
 	</div>
   </div><br/><br/>
 <%
-function register
- dim ReInfo
- dim username,password,Confirmpassword,Gender,email,homepage,validate,HideEmail,checkUser
+Function register
+    Dim ReInfo
+    Dim username, password, Confirmpassword, Gender, email, homepage, validate, HideEmail, checkUser
 
- ReInfo=Array("错误信息","","MessageIcon")
- username=trim(CheckStr(request.form("username")))
- password=trim(CheckStr(request.form("password")))
- Confirmpassword=trim(CheckStr(request.form("Confirmpassword")))
- Gender=CheckStr(request.form("Gender"))
- email=trim(CheckStr(request.form("email")))
- homepage=trim(checkURL(CheckStr(request.form("homepage"))))
- validate=CheckStr(request.form("validate"))
- 
- if request.form("hiddenEmail")=1 then 
-   HideEmail=true 
-  else 
-   HideEmail=false 
- end if
- 
- if len(username)=0 then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>请输入用户名(昵称)!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="WarningIcon"
-	 register=ReInfo
-	 exit function
- end if
- 
- if len(username)<2 or len(username)>24  then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>用户名(昵称)不能小于2或<br/>大于24个字符！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="ErrorIcon"
-	 register=ReInfo
-	 exit function
- end if
- 
- if IsValidUserName(username)=false then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="ErrorIcon"
-	 register=ReInfo
-	 exit function
- end if
- 
- set checkUser=conn.execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
- if not checkUser.eof then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>用户名已经被注册！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="ErrorIcon"
-	 register=ReInfo
-	 exit function
- end if
- 
- if len(password)=0 or (len(password)<6 or len(password)>16) then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="WarningIcon"
-	 register=ReInfo
-	 exit function
- end if 
- 
- if password<>Confirmpassword then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>密码验证失败！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="ErrorIcon"
-	 register=ReInfo
-	 exit function
- end if  
- 
- if len(email)>0 and IsValidEmail(email)=false then
-	 ReInfo(0)="错误信息"
-	 ReInfo(1)="<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	 ReInfo(2)="ErrorIcon"
-	 register=ReInfo
-	 exit function
- end if   
- 
-  IF cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) then
-	  ReInfo(0)="错误信息"
-	  ReInfo(1)="<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
-	  ReInfo(2)="ErrorIcon"
-	  register=ReInfo
-      exit function
-  end if
-  
-  dim strSalt,AddUser,hashkey
-  hashkey=SHA1(randomStr(6)&now())
-    strSalt=randomStr(6)
-    password=SHA1(password&strSalt)
-    AddUser=array(array("mem_Name",username),array("mem_Password",password),array("mem_Sex",Gender),array("mem_salt",strSalt),array("mem_Email",email),array("mem_HideEmail",int(HideEmail)),array("mem_HomePage",homepage),Array("mem_LastIP",getIP),Array("mem_lastVisit",now()),Array("mem_hashKey",hashkey))
-    DBQuest "blog_member",AddUser,"insert"
-	'Conn.Execute("INSERT INTO blog_member(mem_Name,mem_Password,mem_Sex,mem_salt,mem_Email,mem_HideEmail,mem_HomePage,mem_LastIP) Values ('"&username&"','"&password&"',"&Gender&",'"&strSalt&"','"&email&"',"&HideEmail&",'"&homepage&"','"&getIP&"')")
-	Conn.ExeCute("UPDATE blog_Info SET blog_MemNums=blog_MemNums+1")
-	getInfo(2)
-	SQLQueryNums=SQLQueryNums+2
-	ReInfo(0)="用户注册成功"
-	ReInfo(1)="<b>注册并自动登录成功，三秒钟返回首页！</b><br/><a href=""default.asp"">如果您的浏览器没有自动跳转，请点击这里</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
-	ReInfo(2)="MessageIcon"
-    register=ReInfo	 
- 	      Response.Cookies(CookieName)("memName")=username
-    Response.Cookies(CookieName)("memHashKey")=hashkey
-    Response.Cookies(CookieName).Expires=Date+365
-	Session(CookieName&"_LastDo")="RegisterUser"
-  end function		    	
+    ReInfo = Array("错误信息", "", "MessageIcon")
+    username = Trim(CheckStr(request.Form("username")))
+    password = Trim(CheckStr(request.Form("password")))
+    Confirmpassword = Trim(CheckStr(request.Form("Confirmpassword")))
+    Gender = CheckStr(request.Form("Gender"))
+    email = Trim(CheckStr(request.Form("email")))
+    homepage = Trim(checkURL(CheckStr(request.Form("homepage"))))
+    validate = CheckStr(request.Form("validate"))
+
+    If request.Form("hiddenEmail") = 1 Then
+        HideEmail = True
+    Else
+        HideEmail = False
+    End If
+
+    If Len(username) = 0 Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>请输入用户名(昵称)!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "WarningIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If Len(username)<2 Or Len(username)>24 Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>用户名(昵称)不能小于2或<br/>大于24个字符！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If IsValidUserName(username) = False Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    Set checkUser = conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
+    If Not checkUser.EOF Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>用户名已经被注册！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If Len(password) = 0 Or (Len(password)<6 Or Len(password)>16) Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "WarningIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If password<>Confirmpassword Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>密码验证失败！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If Len(email)>0 And IsValidEmail(email) = False Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    If CStr(LCase(Session("GetCode")))<>CStr(LCase(validate)) Then
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(2) = "ErrorIcon"
+        register = ReInfo
+        Exit Function
+    End If
+
+    Dim strSalt, AddUser, hashkey
+    hashkey = SHA1(randomStr(6)&Now())
+    strSalt = randomStr(6)
+    password = SHA1(password&strSalt)
+    AddUser = Array(Array("mem_Name", username), Array("mem_Password", password), Array("mem_Sex", Gender), Array("mem_salt", strSalt), Array("mem_Email", email), Array("mem_HideEmail", Int(HideEmail)), Array("mem_HomePage", homepage), Array("mem_LastIP", getIP), Array("mem_lastVisit", Now()), Array("mem_hashKey", hashkey))
+    DBQuest "blog_member", AddUser, "insert"
+    'Conn.Execute("INSERT INTO blog_member(mem_Name,mem_Password,mem_Sex,mem_salt,mem_Email,mem_HideEmail,mem_HomePage,mem_LastIP) Values ('"&username&"','"&password&"',"&Gender&",'"&strSalt&"','"&email&"',"&HideEmail&",'"&homepage&"','"&getIP&"')")
+    Conn.Execute("UPDATE blog_Info SET blog_MemNums=blog_MemNums+1")
+    getInfo(2)
+    SQLQueryNums = SQLQueryNums + 2
+    ReInfo(0) = "用户注册成功"
+    ReInfo(1) = "<b>注册并自动登录成功，三秒钟返回首页！</b><br/><a href=""default.asp"">如果您的浏览器没有自动跳转，请点击这里</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+    ReInfo(2) = "MessageIcon"
+    register = ReInfo
+    Response.Cookies(CookieName)("memName") = username
+    Response.Cookies(CookieName)("memHashKey") = hashkey
+    Response.Cookies(CookieName).Expires = Date+365
+    Session(CookieName&"_LastDo") = "RegisterUser"
+End Function
+
 Else
 %><br/><br/>
    <div style="text-align:center;">

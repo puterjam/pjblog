@@ -13,16 +13,17 @@
 ' PJblog2 Copyright 2005
 ' Update:2006-6-10
 '**************************************************
-if not ChkPost() then 
-  session(CookieName&"_System")=""
-  session(CookieName&"_disLink")=""
-  session(CookieName&"_disCount")=""
-  %>
+If Not ChkPost() Then
+    session(CookieName&"_System") = ""
+    session(CookieName&"_disLink") = ""
+    session(CookieName&"_disCount") = ""
+
+%>
    <script>try{top.location="default.asp"}catch(e){location="default.asp"}</script>
   <%
-end if
-if session(CookieName&"_System")=true and memName<>empty and stat_Admin=true then 
-dim i
+End If
+If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True Then
+    Dim i
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -45,7 +46,7 @@ dim i
 <body class="ContentBody">
 <div class="MainDiv">
 <%
-if Request.QueryString("Fmenu")="General" then '站点基本设置
+If Request.QueryString("Fmenu") = "General" Then '站点基本设置
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -55,27 +56,27 @@ if Request.QueryString("Fmenu")="General" then '站点基本设置
     <td class="CPanel">
     <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a></div>
 <%
-if Request.QueryString("Smenu")="visitors" then
+If Request.QueryString("Smenu") = "visitors" Then
 %>
 	   <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
 <%
- If CheckStr(Request.QueryString("Page"))<>Empty Then
-	Curpage=CheckStr(Request.QueryString("Page"))
-	If IsInteger(Curpage)=False OR Curpage<0 Then Curpage=1
- Else
-	Curpage=1
- End If
- dim bCounter,PageC
- Set bCounter=Server.CreateObject("ADODB.RecordSet")
- SQL="SELECT * FROM blog_Counter order by coun_Time desc"
- bCounter.Open SQL,Conn,1,1
- PageC=0
- IF not bCounter.EOF Then
-	bCounter.PageSize=30
-	bCounter.AbsolutePage=CurPage
-	Dim bCounter_nums
-	bCounter_nums=bCounter.RecordCount
-    response.write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bCounter_nums,30,CurPage,"?Fmenu=General&Smenu=visitors&","","float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+If CheckStr(Request.QueryString("Page"))<>Empty Then
+    Curpage = CheckStr(Request.QueryString("Page"))
+    If IsInteger(Curpage) = False Or Curpage<0 Then Curpage = 1
+Else
+    Curpage = 1
+End If
+Dim bCounter, PageC
+Set bCounter = Server.CreateObject("ADODB.RecordSet")
+SQL = "SELECT * FROM blog_Counter order by coun_Time desc"
+bCounter.Open SQL, Conn, 1, 1
+PageC = 0
+If Not bCounter.EOF Then
+    bCounter.PageSize = 30
+    bCounter.AbsolutePage = CurPage
+    Dim bCounter_nums
+    bCounter_nums = bCounter.RecordCount
+    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bCounter_nums, 30, CurPage, "?Fmenu=General&Smenu=visitors&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 %>
         <tr align="center">
           <td width="100" nowrap="nowrap" class="TDHead">访客IP</td>
@@ -85,8 +86,9 @@ if Request.QueryString("Smenu")="visitors" then
           <td class="TDHead">访客访问时间</td>
 	   </tr>
 	   <%
-	   	Do Until bCounter.EOF OR PageC=bCounter.PageSize
-   %>
+Do Until bCounter.EOF Or PageC = bCounter.PageSize
+
+%>
         <tr align="center">
           <td nowrap><%=bCounter("coun_IP")%></td>
           <td nowrap><%=bCounter("coun_OS")%></td>
@@ -94,15 +96,16 @@ if Request.QueryString("Smenu")="visitors" then
           <td nowrap align="left"><a href="<%=bCounter("coun_Referer")%>" target="_blank" title="<%=bCounter("coun_Referer")%>"><%=CutStr(bCounter("coun_Referer"),40)%></a></td>
           <td nowrap><%=bCounter("coun_Time")%></td>
 	   </tr>
-   <%   
-     	bCounter.MoveNext
-	    PageC=PageC+1
-	loop
-    bCounter.Close
-    Set bCounter=Nothing
-    response.write ("</table>")
- end if	   
-elseif Request.QueryString("Smenu")="Misc" then%>
+   <%
+bCounter.MoveNext
+PageC = PageC + 1
+Loop
+bCounter.Close
+Set bCounter = Nothing
+response.Write ("</table>")
+End If
+ElseIf Request.QueryString("Smenu") = "Misc" Then
+%>
 <form action="ConContent.asp" method="post" style="margin:0px">
 	<input type="hidden" name="action" value="General"/>
 	<input type="hidden" name="whatdo" value="Misc"/>
@@ -173,7 +176,14 @@ elseif Request.QueryString("Smenu")="Misc" then%>
     <legend> 日志保存设置</legend>
     <div align="left">
       <table border="0" cellpadding="2" cellspacing="1">
- 	  <tr><td width="180" align="right">静态日志模式</td><td><input name="blog_postFile" type="checkbox" value="1" <%if blog_postFile then response.write ("checked=""checked""")%>  <%if not CheckObjInstalled("ADODB.Stream") then response.write "disabled"%>/> <span style="color:#999">把文章保存成文件, 减轻数据库负担. <%if not CheckObjInstalled("ADODB.Stream") then response.write "<b style='color:#f00'>需要 ADODB.Stream 组件支持</b>"%></span> </td></tr>
+ 	  <tr><td width="180" align="right">日志输出模式<br/><br/><br/></td><td>
+ 	    <%if not CheckObjInstalled("ADODB.Stream") then response.write "disabled"%>
+ 	  <input name="blog_postFile" type="radio" value="0"/> 全动态模式 <span style="color:#999">文章数据从数据库里直接获取</span> <br/>
+ 	  <input name="blog_postFile" type="radio" value="1" <%if blog_postFile = 1 then response.write ("checked=""checked""")%>/> 半静态模式 <span style="color:#999">把文章保存成文件，但还能插件功能. </span> <br/>
+ 	  <input name="blog_postFile" type="radio" value="2" <%if blog_postFile = 2 then response.write ("checked=""checked""")%>/> 全静态模式<span style="color:#f00;font-size:8px">new</span> <span style="color:#999">把文章保存成文件，但是不能定义插件. </span> <br/>
+ 	  
+ 	  <%if not CheckObjInstalled("ADODB.Stream") then response.write "<b style='color:#f00'>需要 ADODB.Stream 组件支持</b>"%>
+ 	  </td></tr>
  	  <tr><td width="180" align="right">日志预览分割类型</td><td><select name="blog_SplitType"><option value="0">按照字符数量分割</option><option  value="1" <%if blog_SplitType then response.write ("selected=""selected""")%>>按照行数分割</option></select> <span style="color:#999">只对重新编辑日志或新建日志有效</span></td></tr>
 	  <tr><td width="180" align="right">日志预览最大字符数</td><td><input name="blog_introChar" type="text" size="5" class="text" value="<%=blog_introChar%>"/> 个 <span style="color:#999">只对UBB编辑器有效</span></td></tr>
 	  <tr><td width="180" align="right">日志预览切割行数</td><td><input name="blog_introLine" type="text" size="5" class="text" value="<%=blog_introLine%>"/> 行</td></tr>
@@ -235,9 +245,9 @@ elseif Request.QueryString("Smenu")="Misc" then%>
 	 </td>
   </tr></table>
 <%
-elseif Request.QueryString("Fmenu")="Categories" then '日志分类管理
-	    dim Arr_Category,blog_Cate,blog_Cate_Item,Icons_Lists,Icons_List,CateInOpstions
-        dim CategoryListDB
+ElseIf Request.QueryString("Fmenu") = "Categories" Then '日志分类管理
+    Dim Arr_Category, blog_Cate, blog_Cate_Item, Icons_Lists, Icons_List, CateInOpstions
+    Dim CategoryListDB
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -247,7 +257,7 @@ elseif Request.QueryString("Fmenu")="Categories" then '日志分类管理
     <td class="CPanel">
     <div class="SubMenu"><a href="?Fmenu=Categories">设置日志分类</a> | <a href="?Fmenu=Categories&Smenu=move">批量移动日志</a> | <a href="?Fmenu=Categories&Smenu=del">批量删除日志</a> | <a href="?Fmenu=Categories&Smenu=tag">Tag管理</a></div>
 <%
-if Request.QueryString("Smenu")="tag" then
+If Request.QueryString("Smenu") = "tag" Then
 %>
    <form action="ConContent.asp" method="post" style="margin:0px">
    <input type="hidden" name="action" value="Categories"/>
@@ -261,19 +271,21 @@ if Request.QueryString("Smenu")="tag" then
           <td  nowrap="nowrap" class="TDHead">日志数量</td>
 	   </tr>
 	   <%
-	  dim BTag
-      Set BTag=conn.execute("select * from blog_tag order by tag_id desc")
-	  do until BTag.eof 
-	   %>
+Dim BTag
+Set BTag = conn.Execute("select * from blog_tag order by tag_id desc")
+Do Until BTag.EOF
+
+%>
 	   <tr align="center">
 		  <td><input name="selectTagID" type="checkbox" value="<%=BTag("tag_id")%>"/></td>
           <td><input name="TagID" type="hidden" value="<%=BTag("tag_id")%>"/><input name="tagName" type="text" size="14" class="text" value="<%=BTag("tag_name")%>"/></td>
           <td><input name="tagCount" type="text" size="2" class="text" value="<%=BTag("tag_count")%>" readonly style="background:#ffe"/> 篇</td>
 	   </tr>
 	   <%
-	   BTag.movenext
-	   loop
-	   %>
+BTag.movenext
+Loop
+
+%>
 	    <tr align="center" bgcolor="#D5DAE0">
         <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加Tag</td>
        </tr>	
@@ -295,18 +307,18 @@ if Request.QueryString("Smenu")="tag" then
     </div>
 </td></tr></table>
 </div>
-<%		
-elseif Request.QueryString("Smenu")="move" then
-        set CategoryListDB=conn.execute("select * from blog_Category order by cate_local asc, cate_Order desc")
-	     do while not CategoryListDB.eof
-	      if not CategoryListDB("cate_OutLink") then
-	       CateInOpstions=CateInOpstions&"<option value="""&CategoryListDB("cate_ID")&""">&nbsp;&nbsp;"&CategoryListDB("cate_Name")&" ["&CategoryListDB("cate_count")&"]</option>"
-	      end if
-	      CategoryListDB.movenext
-         loop
-         set CategoryListDB=nothing
+<%
+ElseIf Request.QueryString("Smenu") = "move" Then
+    Set CategoryListDB = conn.Execute("select * from blog_Category order by cate_local asc, cate_Order desc")
+    Do While Not CategoryListDB.EOF
+        If Not CategoryListDB("cate_OutLink") Then
+            CateInOpstions = CateInOpstions&"<option value="""&CategoryListDB("cate_ID")&""">&nbsp;&nbsp;"&CategoryListDB("cate_Name")&" ["&CategoryListDB("cate_count")&"]</option>"
+        End If
+        CategoryListDB.movenext
+    Loop
+    Set CategoryListDB = Nothing
 %>
-  <form action="ConContent.asp" method="post" style="margin:0px" onsubmit="return CheckMove()">
+  <form action="ConContent.asp" method="post" style="margin:0px" onSubmit="return CheckMove()">
    <input type="hidden" name="action" value="Categories"/>
    <input type="hidden" name="whatdo" value="move"/>
     <div align="left" style="padding:5px;"><%getMsg%>
@@ -326,26 +338,27 @@ elseif Request.QueryString("Smenu")="move" then
      </form></td>
   </tr>
 	 <%
-	 elseif  Request.QueryString("Smenu")="del" then 
-	 dim TempOsel,FilterO
-	     set CategoryListDB=conn.execute("select * from blog_Category order by cate_local asc, cate_Order desc")
-	     FilterO=checkstr(request.QueryString("filter"))
-	     if len(FilterO)<1 then FilterO=-1
-	     do while not CategoryListDB.eof
-	      if not CategoryListDB("cate_OutLink") then
-	       if int(FilterO)=CategoryListDB("cate_ID") then TempOsel= "selected"
-	       CateInOpstions=CateInOpstions&"<option value="""&CategoryListDB("cate_ID")&""" "&TempOsel&">&nbsp;&nbsp;&nbsp; - "&CategoryListDB("cate_Name")&" ["&CategoryListDB("cate_count")&"]</option>"
-	       TempOsel=""
-	      end if
-	      CategoryListDB.movenext
-         loop
-         set CategoryListDB=nothing
-	 %>
+ElseIf Request.QueryString("Smenu") = "del" Then
+    Dim TempOsel, FilterO
+    Set CategoryListDB = conn.Execute("select * from blog_Category order by cate_local asc, cate_Order desc")
+    FilterO = checkstr(request.QueryString("filter"))
+    If Len(FilterO)<1 Then FilterO = -1
+    Do While Not CategoryListDB.EOF
+        If Not CategoryListDB("cate_OutLink") Then
+            If Int(FilterO) = CategoryListDB("cate_ID") Then TempOsel = "selected"
+            CateInOpstions = CateInOpstions&"<option value="""&CategoryListDB("cate_ID")&""" "&TempOsel&">&nbsp;&nbsp;&nbsp; - "&CategoryListDB("cate_Name")&" ["&CategoryListDB("cate_count")&"]</option>"
+            TempOsel = ""
+        End If
+        CategoryListDB.movenext
+    Loop
+    Set CategoryListDB = Nothing
+
+%>
   <form action="ConContent.asp" method="post" style="margin:0px">
    <input type="hidden" name="action" value="Categories"/>
    <input type="hidden" name="whatdo" value="batdel"/>
     <div align="left" style="padding:5px;"><%getMsg%>
-		&nbsp;过滤器: <select name="filter" onchange="location='?Fmenu=Categories&Smenu=del&filter='+this.value">
+		&nbsp;过滤器: <select name="filter" onChange="location='?Fmenu=Categories&Smenu=del&filter='+this.value">
 			<option value="-1">显示所有日志</option>
 				<%=CateInOpstions%>
 			<option value="-3" <%if int(FilterO)=-3 then response.write "selected"%>>&nbsp;&nbsp;显示所有隐藏日志</option>
@@ -354,57 +367,63 @@ elseif Request.QueryString("Smenu")="move" then
 		
 		<table style="font-size:12px;margin:8px 0px 8px 0px">
 		<%
-		 dim DelContent
-		  if int(FilterO)=-1 then 
-		   SQL="select * from blog_content order by log_posttime desc"
-		  elseif int(FilterO)=-2 then
-		   SQL="select * from blog_content where log_IsDraft=true order by log_posttime desc"
-		  elseif int(FilterO)=-3 then
-		   SQL="select * from blog_content where log_IsShow=false order by log_posttime desc"
-		  else
-		   SQL="select * from blog_content where log_CateID="&int(FilterO)&" and log_IsDraft=false order by log_posttime desc"
-		  end if
-		 set DelContent=conn.execute(SQL)
-			 if DelContent.eof and DelContent.bof then
-				 %>
+Dim DelContent
+If Int(FilterO) = -1 Then
+    SQL = "select * from blog_content order by log_posttime desc"
+ElseIf Int(FilterO) = -2 Then
+    SQL = "select * from blog_content where log_IsDraft=true order by log_posttime desc"
+ElseIf Int(FilterO) = -3 Then
+    SQL = "select * from blog_content where log_IsShow=false order by log_posttime desc"
+Else
+    SQL = "select * from blog_content where log_CateID="&Int(FilterO)&" and log_IsDraft=false order by log_posttime desc"
+End If
+Set DelContent = conn.Execute(SQL)
+If DelContent.EOF And DelContent.bof Then
+
+%>
 				 <tr><td>没有找到符合条件的查询</td></tr>
-				 <%else
-				 Dim TempImg
-				 do until DelContent.eof
-				 if DelContent("log_IsShow")=false then TempImg="<img src=""images/icon_lock.gif"" alt="""" border=""0"" style=""margin:0px 0px -3px 2px""/>"
-					  if int(FilterO)=-2 then
-						 %>
+				 <%Else
+    Dim TempImg
+    Do Until DelContent.EOF
+        If DelContent("log_IsShow") = False Then TempImg = "<img src=""images/icon_lock.gif"" alt="""" border=""0"" style=""margin:0px 0px -3px 2px""/>"
+        If Int(FilterO) = -2 Then
+
+%>
 						 <tr><td><input name="CID" type="checkbox" value="<%=DelContent("log_ID")%>"/></td><td><a href="blogedit.asp?id=<%=DelContent("log_ID")%>" target="_blank"><%=DelContent("log_ID")%>. <%=DelContent("log_Title")%> <%=TempImg%></a></td></tr>
 						 <%
-					  else
-						 %>
+Else
+
+%>
 						 <tr><td><input name="CID" type="checkbox" value="<%=DelContent("log_ID")%>"/></td><td><a href="article.asp?id=<%=DelContent("log_ID")%>" target="_blank"><%=DelContent("log_ID")%>. <%=DelContent("log_Title")%> <%=TempImg%></a></td></tr>
 						 <%
-					  end if
-				  TempImg=""
-				  DelContent.movenext
-				  loop
-			  end if
-			  DelContent.close
-			  set DelContent=nothing
-			 %>
+End If
+TempImg = ""
+DelContent.movenext
+Loop
+End If
+DelContent.Close
+Set DelContent = Nothing
+
+%>
 		</table>
-&nbsp;<input type="checkbox" name="checkbox" style="margin-bottom:-1px;" onclick="checkAll(this)"/> 全选
+&nbsp;<input type="checkbox" name="checkbox" style="margin-bottom:-1px;" onClick="checkAll(this)"/> 全选
 <input type="submit" name="Submit" value="删除选中的日志" class="button" style="margin-bottom:-1px;"/>
     </div>
      </form>
      <br/>
-	 <%else
-        set CategoryListDB=conn.execute("select * from blog_Category order by cate_local asc, cate_Order asc")
-        if CheckObjInstalled("Scripting.FileSystemObject") then Icons_Lists=split(getPathList("images\icons")(1),"*")
-	 %>
+	 <%Else
+    Set CategoryListDB = conn.Execute("select * from blog_Category order by cate_local asc, cate_Order asc")
+    If CheckObjInstalled("Scripting.FileSystemObject") Then Icons_Lists = Split(getPathList("images\icons")(1), "*")
+
+%>
 	 <script>
 	 	var il = [];
         <%
-        for each Icons_List in Icons_Lists
-          response.write ("il.push('"&Icons_List&"');" & chr(13))
-        next
-       %>
+For Each Icons_List in Icons_Lists
+    response.Write ("il.push('"&Icons_List&"');" & Chr(13))
+Next
+
+%>
        
        function fillList(o){
 	     	var v = o.defaultValue;
@@ -440,23 +459,25 @@ elseif Request.QueryString("Smenu")="move" then
           <td align="center" class="TDHead">&nbsp;</td>
         </tr>
         <%
-	    do while not CategoryListDB.eof
-        %>
+Do While Not CategoryListDB.EOF
+
+%>
         <tr id="Catetr_<%=CategoryListDB("cate_ID")%>" style="background:<%
-         if int(CategoryListDB("cate_local"))=1 then
-          response.write ("#a9c9e9")
-         elseif int(CategoryListDB("cate_local"))=2 then
-          response.write ("#bcf39e")
-         else
-          
-         end if
-        %>">
+If Int(CategoryListDB("cate_local")) = 1 Then
+    response.Write ("#a9c9e9")
+ElseIf Int(CategoryListDB("cate_local")) = 2 Then
+    response.Write ("#bcf39e")
+Else
+
+End If
+
+%>">
           <td align="center" nowrap>
           <img name="CateImg_<%=CategoryListDB("cate_ID")%>" src="<%=CategoryListDB("cate_icon")%>" width="16" height="16" />
          <%if CheckObjInstalled("Scripting.FileSystemObject") then%>
-          <select name="Cate_icons" defaultValue="<%=CategoryListDB("cate_icon")%>" onchange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value;" style="width:120px;"></select>
+          <select name="Cate_icons" defaultValue="<%=CategoryListDB("cate_icon")%>" onChange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value;" style="width:120px;"></select>
           <%else%>
-          <input name="Cate_icons" type="text" class="text" value="<%=CategoryListDB("cate_icon")%>" size="18" onchange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value"/>
+          <input name="Cate_icons" type="text" class="text" value="<%=CategoryListDB("cate_icon")%>" size="18" onChange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value"/>
           <%end if%>
           </td>
           <td><input name="Cate_Name" type="text" class="text" value="<%=CategoryListDB("cate_Name")%>" size="14"/></td>
@@ -464,7 +485,7 @@ elseif Request.QueryString("Smenu")="move" then
           <td align="left"><input name="cate_URL" type="text" value="<%=CategoryListDB("cate_URL")%>" size="30" class="text" <%if CategoryListDB("cate_count")>0 Then response.write "readonly=""readonly"" style=""background:#e5e5e5"""%>/></td>
           <td align="left"><input name="cate_Order" type="text" value="<%=CategoryListDB("cate_Order")%>" size="2" class="text"/></td>
           <td align="center">
-           <select name="Cate_local" onchange="getElementById('Catetr_<%=CategoryListDB("cate_ID")%>').style.backgroundColor=(this.value==1)?'#a9c9e9':(this.value==2)?'#bcf39e':''">
+           <select name="Cate_local" onChange="getElementById('Catetr_<%=CategoryListDB("cate_ID")%>').style.backgroundColor=(this.value==1)?'#a9c9e9':(this.value==2)?'#bcf39e':''">
 	            <option value="0">同时</option>
 	            <option value="1" <%if int(CategoryListDB("cate_local"))=1 then response.write "selected=""selected"""%>>顶部</option>
 	            <option value="2" <%if int(CategoryListDB("cate_local"))=2 then response.write "selected=""selected"""%>>侧边</option>
@@ -484,19 +505,20 @@ elseif Request.QueryString("Smenu")="move" then
           </td>
         </tr>
         <%
-        CategoryListDB.movenext
-        loop
-        set CategoryListDB=nothing
-        %>
+CategoryListDB.movenext
+Loop
+Set CategoryListDB = Nothing
+
+%>
         <tr align="center" bgcolor="#D5DAE0">
          <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加日志分类</td>
         </tr>
         <tr>
           <td align="center" nowrap><img name="CateImg" src="images/icons/1.gif" width="16" height="16" />
           <%if CheckObjInstalled("Scripting.FileSystemObject") then%>
-	          <select name="New_Cate_icons" onchange="document.images['CateImg'].src=this.value" style="width:120px;"></select>
+	          <select name="New_Cate_icons" onChange="document.images['CateImg'].src=this.value" style="width:120px;"></select>
           <%else%>
-          <input name="New_Cate_icons" type="text" class="text" value="images/icons/1.gif" size="18" onchange="document.images['CateImg'].src=this.value"/>
+          <input name="New_Cate_icons" type="text" class="text" value="images/icons/1.gif" size="18" onChange="document.images['CateImg'].src=this.value"/>
           <%end if%>
           </td>
           <td><input name="New_Cate_Name" type="text" size="14" class="text"/></td>
@@ -535,7 +557,8 @@ elseif Request.QueryString("Smenu")="move" then
 '============================================
 '      评论留言管理
 '============================================
-elseif Request.QueryString("Fmenu")="Comment" Then%>
+ElseIf Request.QueryString("Fmenu") = "Comment" Then
+%>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
     <th class="CTitle"><%=categoryTitle%></th>
@@ -549,14 +572,15 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 	</div>
    
    <%
-   if Request.QueryString("Smenu")="spam" then
-     dim spamXml,spamList
-     set spamXml=new PXML
-     	 spamXml.XmlPath="spam.xml"
-     	 spamXml.open
-     	 %>
+If Request.QueryString("Smenu") = "spam" Then
+    Dim spamXml, spamList
+    Set spamXml = New PXML
+    spamXml.XmlPath = "spam.xml"
+    spamXml.Open
+
+%>
      	 <div align="left" style="padding-top:5px;"><%getMsg%>
-     	 <form action="ConContent.asp" method="post" style="margin:0px" onsubmit="return addSpanKey()" name="filter">
+     	 <form action="ConContent.asp" method="post" style="margin:0px" onSubmit="return addSpanKey()" name="filter">
 			    <input type="hidden" name="action" value="Comment"/>
 			    <input type="hidden" name="doModule" value="updateKey"/>
 			    <input type="hidden" name="keyList" id="keyList" value=""/>
@@ -564,33 +588,35 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
      	 <tr><td class="TDHead">过滤关键字</td></tr>
      	 <tr><td><div style="width:394px;overflow:hidden">
      	 <%
-     	 spamList = "<select name=""spamList"" id=""spamList"" size=""20"" multiple=""multiple"" style=""width:400px;margin:-3px 0 -3px -3px"">"
-     	 for i=0 to spamXml.GetXmlNodeLength("key")-1
-	     	 spamList = spamList & "<option value=""" & spamXml.SelectXmlNodeItemText("key",i) & """>" & spamXml.SelectXmlNodeItemText("key",i) & "</option>"
-     	 next
-      	 response.write spamList
-	     set spamXml= nothing
-      %>
+spamList = "<select name=""spamList"" id=""spamList"" size=""20"" multiple=""multiple"" style=""width:400px;margin:-3px 0 -3px -3px"">"
+For i = 0 To spamXml.GetXmlNodeLength("key") -1
+    spamList = spamList & "<option value=""" & spamXml.SelectXmlNodeItemText("key", i) & """>" & spamXml.SelectXmlNodeItemText("key", i) & "</option>"
+Next
+response.Write spamList
+Set spamXml = Nothing
+
+%>
        </div></td></tr>
-       <tr><td style="padding-bottom:5px;background:#FAE1AF"><img src="images/add.gif" alt="" style="margin:0 5px -3px"/>添加关键字：<input id="keyWord" type="text" size="27" class="text" onkeypress="this.style.backgroundColor='#fff';"/>
-       <input type="Submit" name="Submit" value="添加" class="button" style="margin-bottom:-2px"/><input type="button" name="button" value="移除" class="button" style="margin-bottom:-2px" onclick="clearKey()"/>
+       <tr><td style="padding-bottom:5px;background:#FAE1AF"><img src="images/add.gif" alt="" style="margin:0 5px -3px"/>添加关键字：<input id="keyWord" type="text" size="27" class="text" onKeyPress="this.style.backgroundColor='#fff';"/>
+       <input type="Submit" name="Submit" value="添加" class="button" style="margin-bottom:-2px"/><input type="button" name="button" value="移除" class="button" style="margin-bottom:-2px" onClick="clearKey()"/>
        </td></tr>
        </table>
        		<div class="SubButton" style="text-align:left;padding:5px;margin:0px">
-		       	<button accesskey="s" class="button" style="margin-bottom:0px;margin-left:-5px;" onclick="submitList()" >保存关键字列表(<u>S</u>)</button>
+		       	<button accesskey="s" class="button" style="margin-bottom:0px;margin-left:-5px;" onClick="submitList()" >保存关键字列表(<u>S</u>)</button>
 		       
 	        </div>          
             <div style="color:#f00"><b>友情提示:</b><br/> - 添加或清除关键字后必须 <b>保存关键字列表</b>，垃圾关键字列表才生效。<br/> - 使用逗号或者空格输入字符串可以一次添加多个关键字<br/> - enter键直接插入关键字 ,用ctrl或shift键多选清除关键字</div>
       </div>
       </form>
       <%
-	   elseif Request.QueryString("Smenu")="reg" then
-		     dim reSpamXml,reSpamList
-		     set reSpamXml=new PXML
-		     	 reSpamXml.XmlPath="reg.xml"
-		     	 reSpamXml.open
+ElseIf Request.QueryString("Smenu") = "reg" Then
+    Dim reSpamXml, reSpamList
+    Set reSpamXml = New PXML
+    reSpamXml.XmlPath = "reg.xml"
+    reSpamXml.Open
 
-		%>
+
+%>
 		 <script src="common/reg.js" Language="javascript"></script>
      	 <div align="left" style="padding-top:5px;"><%getMsg%>
      	 	<form name="reFilter" action="ConContent.asp" method="post" style="margin:0px">
@@ -616,7 +642,7 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 		     	 			<input id="reTitle" type="text" class="text" style="width:150px"/>
 		 		     	 	<input id="reRules" type="text" class="text" style="width:300px"/>
 		     	 			<input id="reTimes" type="text" class="text" style="width:30px" maxlength="3"/>
-		     	 			<input name="des" type="button" class="button" value="添加" onclick="addRules()" style="font-size:12px;margin:0px;margin-top:-2px;margin-bottom:-1px;height:20px;"/>
+		     	 			<input name="des" type="button" class="button" value="添加" onClick="addRules()" style="font-size:12px;margin:0px;margin-top:-2px;margin-bottom:-1px;height:20px;"/>
     	 				</div>
 		     	 	</td>
 		     	 </tr>
@@ -631,8 +657,8 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 		     	 <tr></tr>
 			</table>
        		<div class="SubButton" style="text-align:left;padding:5px;margin:0px">
-		       	<button accesskey="t" class="button" style="margin-bottom:0px;margin-left:-5px;" onclick="testRules()">测试(<u>T</u>)</button>
-		        <button accesskey="s" class="button" style="margin-bottom:0px" onclick="submitReList()">保存(<u>S</u>)</button>
+		       	<button accesskey="t" class="button" style="margin-bottom:0px;margin-left:-5px;" onClick="testRules()">测试(<u>T</u>)</button>
+		        <button accesskey="s" class="button" style="margin-bottom:0px" onClick="submitReList()">保存(<u>S</u>)</button>
 	        </div>          
             <div style="color:#f00"><b>友情提示:</b>
 	            <br/> - <b>允许匹配次数:</b> 允许规则匹配的最大次数
@@ -641,69 +667,73 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 			</form>
 			<script>
 			<%
-			     for i=0 to reSpamXml.GetXmlNodeLength("key")-1
-		     		 response.write "addRule('" & replace(reSpamXml.GetAttributes("key","des",i),"'","\'") & "','" & replace(reSpamXml.GetAttributes("key","re",i),"'","\'") & "','" & reSpamXml.GetAttributes("key","times",i) & "');" & chr(13)
-		     	 next
-			%>
+For i = 0 To reSpamXml.GetXmlNodeLength("key") -1
+    response.Write "addRule('" & Replace(reSpamXml.GetAttributes("key", "des", i), "'", "\'") & "','" & Replace(reSpamXml.GetAttributes("key", "re", i), "'", "\'") & "','" & reSpamXml.GetAttributes("key", "times", i) & "');" & Chr(13)
+Next
+
+%>
 			</script>
 		</div>
 		<%
-	     	 set reSpamXml= nothing
-	   else
-   %>
+Set reSpamXml = Nothing
+Else
+
+%>
 		<form action="ConContent.asp" method="post" style="margin:0px">
 		   <input type="hidden" name="action" value="Comment"/>
 		   <input type="hidden" name="doModule" value="DelSelect"/>
 		      <div align="left" style="padding-top:5px;"><%getMsg%>
 		      <%
-		      		dim blog_Comment,comm_Num,commArr,commArrLen,Pcount,aUrl,pSize,saveButton
-					Pcount=0
-					saveButton = "<input type=""button"" value=""保存全部"" class=""button"" onclick=""updateComment()"" style=""font-weight:bold;margin:0px;margin-bottom:5px;float:right;margin-right:6px""/>"
-				    Set blog_Comment=Server.CreateObject("Adodb.RecordSet")
-						if Request.QueryString("Smenu")="trackback" then
-							SQL="SELECT tb_ID,tb_Intro,tb_Site,tb_PostTime,tb_Title,blog_ID,tb_URL,C.log_Title FROM blog_Content C,blog_Trackback T WHERE T.blog_ID=C.log_ID ORDER BY tb_PostTime desc"
-							aUrl="?Fmenu=Comment&Smenu=trackback&"
-							pSize = 100
-							saveButton=""
-							response.write "<input type=""hidden"" name=""whatdo"" value=""trackback""/>"
-						elseif Request.QueryString("Smenu")="msg" then
-							SQL="SELECT book_ID,book_Content,book_Messager,book_PostTime,book_IP,book_reply FROM blog_book ORDER BY book_PostTime desc"
-							aUrl="?Fmenu=Comment&Smenu=msg&"
-							pSize = 12
-							response.write "<input type=""hidden"" name=""whatdo"" value=""msg""/>"
-					    else '评论
-							SQL="SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_PostIP,blog_ID,T.log_Title from blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID ORDER BY C.comm_PostTime desc"
-							aUrl="?Fmenu=Comment&"
-							pSize = 15
-							response.write "<input type=""hidden"" name=""whatdo"" value=""comment""/>"
-						end if
-		      %>
+Dim blog_Comment, comm_Num, commArr, commArrLen, Pcount, aUrl, pSize, saveButton
+Pcount = 0
+saveButton = "<input type=""button"" value=""保存全部"" class=""button"" onclick=""updateComment()"" style=""font-weight:bold;margin:0px;margin-bottom:5px;float:right;margin-right:6px""/>"
+Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
+If Request.QueryString("Smenu") = "trackback" Then
+    SQL = "SELECT tb_ID,tb_Intro,tb_Site,tb_PostTime,tb_Title,blog_ID,tb_URL,C.log_Title FROM blog_Content C,blog_Trackback T WHERE T.blog_ID=C.log_ID ORDER BY tb_PostTime desc"
+    aUrl = "?Fmenu=Comment&Smenu=trackback&"
+    pSize = 100
+    saveButton = ""
+    response.Write "<input type=""hidden"" name=""whatdo"" value=""trackback""/>"
+ElseIf Request.QueryString("Smenu") = "msg" Then
+    SQL = "SELECT book_ID,book_Content,book_Messager,book_PostTime,book_IP,book_reply FROM blog_book ORDER BY book_PostTime desc"
+    aUrl = "?Fmenu=Comment&Smenu=msg&"
+    pSize = 12
+    response.Write "<input type=""hidden"" name=""whatdo"" value=""msg""/>"
+Else '评论
+    SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_PostIP,blog_ID,T.log_Title from blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID ORDER BY C.comm_PostTime desc"
+    aUrl = "?Fmenu=Comment&"
+    pSize = 15
+    response.Write "<input type=""hidden"" name=""whatdo"" value=""comment""/>"
+End If
+
+%>
 			       <div style="height:24px;">
-				       <input type="button" value="删除所选内容" onclick="DelComment()" class="button" style="margin:0px;margin-bottom:5px;float:right;"/> 
-				       <input type="button" value="全选" onclick="checkAll()" class="button" style="margin:0px;margin-bottom:5px;float:right;margin-right:6px"/>
+				       <input type="button" value="删除所选内容" onClick="DelComment()" class="button" style="margin:0px;margin-bottom:5px;float:right;"/> 
+				       <input type="button" value="全选" onClick="checkAll()" class="button" style="margin:0px;margin-bottom:5px;float:right;margin-right:6px"/>
 				       <%=saveButton%>
 				       <div id="page1" class="pageContent"></div>
 			       </div>
 			       <div class="msgDiv">
 					<%
-						blog_Comment.Open SQL,Conn,1,1
-						IF blog_Comment.EOF AND blog_Comment.BOF Then
-							response.write "</div>"
-						else
-							blog_Comment.PageSize=pSize
-							blog_Comment.AbsolutePage=CurPage
-							comm_Num=blog_Comment.RecordCount
-										   
-							commArr=blog_Comment.GetRows(comm_Num)
-							blog_Comment.close
-							set blog_Comment = nothing
-							commArrLen=Ubound(commArr,2)
-							'commArr(3,Pcount)
-							do until Pcount = commArrLen+1 or Pcount = pSize
-								if Request.QueryString("Smenu")="trackback" then
-							      %>
+blog_Comment.Open SQL, Conn, 1, 1
+If blog_Comment.EOF And blog_Comment.BOF Then
+    response.Write "</div>"
+Else
+    blog_Comment.PageSize = pSize
+    blog_Comment.AbsolutePage = CurPage
+    comm_Num = blog_Comment.RecordCount
+
+    commArr = blog_Comment.GetRows(comm_Num)
+    blog_Comment.Close
+    Set blog_Comment = Nothing
+    commArrLen = UBound(commArr, 2)
+    'commArr(3,Pcount)
+    Do Until Pcount = commArrLen + 1 Or Pcount = pSize
+        If Request.QueryString("Smenu") = "trackback" Then
+
+%>
 							        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(7,Pcount)%>"><%=CutStr(commArr(7,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onclick="highLight(this)"/><img src="images/icon_trackback.gif" alt=""/><b><a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(2,Pcount)%></a></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%>]</span></div>
+								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(7,Pcount)%>"><%=CutStr(commArr(7,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_trackback.gif" alt=""/><b><a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(2,Pcount)%></a></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%>]</span></div>
 								        <div class="contentTB">
 								         <b>标题:</b> <%=checkURL(HTMLDecode(commArr(4,Pcount)))%><br/>
 								         <b>链接:</b> <a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(6,Pcount)%></a><br/>
@@ -711,29 +741,32 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 								        </div>
 								    </div>
 							      <%
-							      elseif Request.QueryString("Smenu")="msg" then
-							      %>
+ElseIf Request.QueryString("Smenu") = "msg" Then
+
+%>
 							        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-								        <div class="title"><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>" onclick="highLight(this)"/><img src="images/reply.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
-								        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onfocus="focusMe(this)" onblur="blurMe(this)" onmouseover="overMe(this)" onmouseout="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
-								        <div class="reply"><h5>回复内容:<%if len(trim(commArr(5,Pcount)))<1 or IsNull(commArr(5,Pcount)) then response.write "<span class=""tip"">(无回复留言)</span>"%></h5><textarea name="reply_<%=commArr(0,Pcount)%>" onfocus="focusMe(this)" onblur="blurMe(this)" onmouseover="overMe(this)" onmouseout="outMe(this)" onchange="checkMe(this);document.getElementById('edited_<%=commArr(0,Pcount)%>').value=1"><%=UnCheckStr(commArr(5,Pcount))%></textarea><input id="edited_<%=commArr(0,Pcount)%>" name="edited_<%=commArr(0,Pcount)%>" type="hidden" value="0"></div>
+								        <div class="title"><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>" onClick="highLight(this)"/><img src="images/reply.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
+								        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onFocus="focusMe(this)" onBlur="blurMe(this)" onMouseOver="overMe(this)" onMouseOut="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
+								        <div class="reply"><h5>回复内容:<%if len(trim(commArr(5,Pcount)))<1 or IsNull(commArr(5,Pcount)) then response.write "<span class=""tip"">(无回复留言)</span>"%></h5><textarea name="reply_<%=commArr(0,Pcount)%>" onFocus="focusMe(this)" onBlur="blurMe(this)" onMouseOver="overMe(this)" onMouseOut="outMe(this)" onChange="checkMe(this);document.getElementById('edited_<%=commArr(0,Pcount)%>').value=1"><%=UnCheckStr(commArr(5,Pcount))%></textarea><input id="edited_<%=commArr(0,Pcount)%>" name="edited_<%=commArr(0,Pcount)%>" type="hidden" value="0"></div>
 								    </div>
 							      <%
-							       else '评论
-							      %>
+Else '评论
+
+%>
 							        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onclick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
-								        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onfocus="focusMe(this)" onblur="blurMe(this)" onmouseover="overMe(this)" onmouseout="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
+								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
+								        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onFocus="focusMe(this)" onBlur="blurMe(this)" onMouseOver="overMe(this)" onMouseOut="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
 								    </div>
 							      <%
-								end if
-								Pcount=Pcount+1
-							loop
-							%>
+End If
+Pcount = Pcount + 1
+Loop
+
+%>
 						</div>
 						<div style="height:24px;">
-						       <input type="button" value="删除所选内容" onclick="DelComment()" class="button" style="margin:0px;margin-bottom:5px;float:right;"/> 
-						       <input type="button" value="全选" onclick="checkAll()" class="button" style="margin:0px;margin-bottom:5px;float:right;margin-right:6px"/>
+						       <input type="button" value="删除所选内容" onClick="DelComment()" class="button" style="margin:0px;margin-bottom:5px;float:right;"/> 
+						       <input type="button" value="全选" onClick="checkAll()" class="button" style="margin:0px;margin-bottom:5px;float:right;margin-right:6px"/>
 						       <%=saveButton%>
 						       <div id="page2" class="pageContent"><%=MultiPage(comm_Num,pSize,CurPage,aUrl,"","")%></div>
 						       <script>document.getElementById("page1").innerHTML=document.getElementById("page2").innerHTML</script>
@@ -741,22 +774,23 @@ elseif Request.QueryString("Fmenu")="Comment" Then%>
 			  </div>
 		 </form>
 		   <%
-		end if
-		set blog_Comment=nothing
-   end if	
-	%>
+End If
+Set blog_Comment = Nothing
+End If
+
+%>
   </td></tr>
   </table>
 <%
 '============================================
 '      界面设置
 '============================================
-elseif Request.QueryString("Fmenu")="Skins" Then 
- dim bmID,bMInfo
- Dim blog_module
- dim PluginsFolders,PluginsFolder,Bmodules,Bmodule,tempB,SubItemLen,tempI
- Dim PluginsXML,DBXML,TypeArray
- TypeArray=Array("sidebar","content","function")
+ElseIf Request.QueryString("Fmenu") = "Skins" Then
+    Dim bmID, bMInfo
+    Dim blog_module
+    Dim PluginsFolders, PluginsFolder, Bmodules, Bmodule, tempB, SubItemLen, tempI
+    Dim PluginsXML, DBXML, TypeArray
+    TypeArray = Array("sidebar", "content", "function")
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -767,8 +801,9 @@ elseif Request.QueryString("Fmenu")="Skins" Then
 	<div class="SubMenu"><a href="?Fmenu=Skins">设置外观</a> | <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
 
 <%
- if Request.QueryString("Smenu")="module" then
- %>
+If Request.QueryString("Smenu") = "module" Then
+
+%>
    <div align="left" style="padding:5px;"><%getMsg%>
    <form action="ConContent.asp" method="post" style="margin:0px">
        <input type="hidden" name="action" value="Skins"/>
@@ -787,16 +822,16 @@ elseif Request.QueryString("Fmenu")="Skins" Then
           <td  class="TDHead"><nobr>模块操作</nobr></td>
           </tr>
 <%
- dim blogModule
- set blogModule=conn.execute("select * from blog_module where type<>'function' order by type desc,SortID asc")
- do until blogModule.eof 
+Dim blogModule
+Set blogModule = conn.Execute("select * from blog_module where type<>'function' order by type desc,SortID asc")
+Do Until blogModule.EOF
 %>        <tr id="tr_<%=blogModule("id")%>" align="center" style="background:<%if blogModule("type")="content" then response.write ("#a9c9e9")%>">
           <td><input type="checkbox" name="selectID" value="<%=blogModule("id")%>"/></td>
           <td><%if blogModule("IsHidden") then response.write "<img src=""images/icon_lock.gif"" alt=""隐藏模块""/>" %></td>
 	      <td><%if blogModule("IndexOnly") then response.write "<img src=""images/urlInTop.gif"" alt=""只在首页出现""/>" %></td>
           <td><img name="Mimg_<%=blogModule("id")%>" src="images/<%=blogModule("type")%>.gif" width="16" height="16"/></td>
           <td><input type="hidden" name="mID" value="<%=blogModule("id")%>"/>
-	          <select name="mType" onchange="document.getElementById('tr_<%=blogModule("id")%>').style.backgroundColor=(this.value=='content')?'#a9c9e9':'';document.images['Mimg_<%=blogModule("id")%>'].src='images/'+this.value+'.gif'" <%if blogModule("IsSystem") then response.write "disabled"%>>
+	          <select name="mType" onChange="document.getElementById('tr_<%=blogModule("id")%>').style.backgroundColor=(this.value=='content')?'#a9c9e9':'';document.images['Mimg_<%=blogModule("id")%>'].src='images/'+this.value+'.gif'" <%if blogModule("IsSystem") then response.write "disabled"%>>
 	           <option value="sidebar">侧边模块</option>
 	           <option value="content" <%if blogModule("type")="content" then response.write ("selected=""selected""")%>>内容模块</option>
 	          </select>
@@ -806,15 +841,16 @@ elseif Request.QueryString("Fmenu")="Skins" Then
           <td><input name="mTitle" type="text" size="24" class="text" value="<%=blogModule("title")%>" <%if blogModule("name")="ContentList" then response.write ("readonly=""readonly"" style=""background:#e5e5e5;""")%>/></td>
           <td><input name="mOrder" type="text" size="3" class="text" value="<%=blogModule("SortID")%>" <%if blogModule("name")="ContentList" then response.write ("readonly=""readonly"" style=""background:#e5e5e5;""")%>/></td>
           <td align="left"><nobr>
-          <%if blogModule("name")<>"ContentList" then %>       
+          <%if blogModule("name")<>"ContentList" then %>
             <a href="?Fmenu=Skins&Smenu=editModule&miD=<%=blogModule("id")%>" title="可视化编辑模块"><img border="0" src="images/html.gif" style="margin:0px 2px -3px 0px"/>可视化编辑</a> <a href="?Fmenu=Skins&Smenu=editModuleNormal&miD=<%=blogModule("id")%>" title="编辑HTML源代码"><img border="0" src="images/code.gif" style="margin:0px 2px -3px 0px"/>编辑HTML</a> <%if not blogModule("IsSystem") then%><a href="javascript:DelModule(<%=blogModule("id")%>,'<%=blogModule("IsSystem")%>')" title="删除该模块"><img border="0" src="images/icon_del.gif" style="margin:0px 2px -3px 0px"/>删除</a><%end if%>
           <%end if%>
           </nobr></td>
           </tr>
       <%
-      blogModule.movenext
-      loop
-      %>
+blogModule.movenext
+Loop
+
+%>
         <tr align="center" bgcolor="#D5DAE0">
          <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新模块</td>
         </tr>    
@@ -852,21 +888,23 @@ elseif Request.QueryString("Fmenu")="Skins" Then
 '========================================================
 ' 可视化编辑模块HTML代码
 '========================================================
-  elseif Request.QueryString("Smenu")="editModule" Then
- %>
+ElseIf Request.QueryString("Smenu") = "editModule" Then
+
+%>
 
      <div align="center" style="padding:5px;"><%getMsg%>
    <form action="ConContent.asp" method="post" style="margin:0px" onsubmit="return checkSystem()">
      <%
-     bmID=Request.QueryString("miD")
-     if IsInteger(bmID)=True then
-     set bMInfo=conn.execute("select * from blog_module where id="&bmID)
-     if bMInfo.eof or bMInfo.bof then
-          session(CookieName&"_ShowMsg")=true
-          session(CookieName&"_MsgText")="没找到符合条件的模块!"
-          Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-      Else
-      %>
+bmID = Request.QueryString("miD")
+If IsInteger(bmID) = True Then
+    Set bMInfo = conn.Execute("select * from blog_module where id="&bmID)
+    If bMInfo.EOF Or bMInfo.bof Then
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "没找到符合条件的模块!"
+        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+    Else
+
+%>
       <input type="hidden" name="action" value="Skins"/>
       <input type="hidden" name="whatdo" value="editModule"/>
       <input type="hidden" name="DoID" value="<%=bmID%>"/>
@@ -874,30 +912,31 @@ elseif Request.QueryString("Fmenu")="Skins" Then
       <input type="hidden" name="editType" value="fck"/>
       <div style="font-weight:bold;font-size:14px;margin:3px;margin-left:0px;text-align:left"><img src="images/<%=bMInfo("type")%>.gif" width="16" height="16" style="margin:0px 4px -3px 0px"/>模块名称: <%=bMInfo("Title")%></div>
       <%
-          Dim sBasePath
-          sBasePath = "fckeditor/"
-          Dim oFCKeditor
-          Set oFCKeditor = New FCKeditor
-          oFCKeditor.BasePath	= sBasePath
-          oFCKeditor.Config("AutoDetectLanguage") = true
-          oFCKeditor.Config("DefaultLanguage")    = "zh-cn"
-          oFCKeditor.Config("FormatSource") = true
-          oFCKeditor.Config("FormatOutput") = true
-          oFCKeditor.Config("EnableXHTML") = true
-          oFCKeditor.Config("EnableSourceXHTML") = true
-          oFCKeditor.Value	= UnCheckStr(bMInfo("HtmlCode"))
-          oFCKeditor.Create "HtmlCode"
+Dim sBasePath
+sBasePath = "fckeditor/"
+Dim oFCKeditor
+Set oFCKeditor = New FCKeditor
+oFCKeditor.BasePath = sBasePath
+oFCKeditor.Config("AutoDetectLanguage") = True
+oFCKeditor.Config("DefaultLanguage") = "zh-cn"
+oFCKeditor.Config("FormatSource") = True
+oFCKeditor.Config("FormatOutput") = True
+oFCKeditor.Config("EnableXHTML") = True
+oFCKeditor.Config("EnableSourceXHTML") = True
+oFCKeditor.Value = UnCheckStr(bMInfo("HtmlCode"))
+oFCKeditor.Create "HtmlCode"
 
-       end if
-      else
-     session(CookieName&"_ShowMsg")=true
-     session(CookieName&"_MsgText")="你提交了非法字符!"
-     Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-     end if
-     %>
+End If
+Else
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = "你提交了非法字符!"
+    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+End If
+
+%>
 	<div class="SubButton">
       <input type="submit" name="Submit" value="保存模块代码" class="button" /> 
-      <input type="button" name="Submit" value="返回模块列表" class="button" onclick="location='ConContent.asp?Fmenu=Skins&Smenu=module'"/> 
+      <input type="button" name="Submit" value="返回模块列表" class="button" onClick="location='ConContent.asp?Fmenu=Skins&Smenu=module'"/> 
      </div>	
    </div>
    <script>
@@ -913,22 +952,24 @@ elseif Request.QueryString("Fmenu")="Skins" Then
    }
    </script>
  <%
- '========================================
- ' 编辑模块HTML代码
- '========================================
- elseif Request.QueryString("Smenu")="editModuleNormal" Then %>
+'========================================
+' 编辑模块HTML代码
+'========================================
+ElseIf Request.QueryString("Smenu") = "editModuleNormal" Then
+%>
      <div align="left" style="padding:5px;"><%getMsg%>
    <form action="ConContent.asp" method="post" style="margin:0px" onsubmit="return checkSystem()">
      <%
-     bmID=Request.QueryString("Mid")
-     if IsInteger(bmID)=True then
-     set bMInfo=conn.execute("select * from blog_module where id="&bmID)
-     if bMInfo.eof or bMInfo.bof then
-          session(CookieName&"_ShowMsg")=true
-          session(CookieName&"_MsgText")="没找到符合条件的模块!"
-          Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-      Else
-      %>
+bmID = Request.QueryString("Mid")
+If IsInteger(bmID) = True Then
+    Set bMInfo = conn.Execute("select * from blog_module where id="&bmID)
+    If bMInfo.EOF Or bMInfo.bof Then
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "没找到符合条件的模块!"
+        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+    Else
+
+%>
       <input type="hidden" name="action" value="Skins"/>
       <input type="hidden" name="whatdo" value="editModule"/>
       <input type="hidden" name="DoID" value="<%=bmID%>"/>
@@ -937,16 +978,17 @@ elseif Request.QueryString("Fmenu")="Skins" Then
       <div style="font-weight:bold;font-size:14px;margin:3px;margin-left:0px;text-align:left"><img src="images/<%=bMInfo("type")%>.gif" width="16" height="16" style="margin:0px 4px -3px 0px"/>模块名称: <%=bMInfo("Title")%></div>
       <textarea style="width:700px;height:200px" name="HtmlCode"><%=UnCheckStr(bMInfo("HtmlCode"))%></textarea>
       <%
-       end if
-      else
-     session(CookieName&"_ShowMsg")=true
-     session(CookieName&"_MsgText")="你提交了非法字符!"
-     Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-     end if
-     %>
+End If
+Else
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = "你提交了非法字符!"
+    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+End If
+
+%>
 	<div class="SubButton" style="text-align:left">
-      <input type="submit" name="Submit" value="保存HTML代码" class="button" <%If Not CheckObjInstalled("ADODB.Stream") Then Response.Write("disabled")%>/> 
-      <input type="button" name="Submit" value="返回模块列表" class="button" onclick="location='ConContent.asp?Fmenu=Skins&Smenu=module'"/> 
+      <input type="submit" name="Submit" value="保存HTML代码" class="button" <%If Not CheckObjInstalled("ADODB.Stream") Then Response.Write("disabled")%>/>
+      <input type="button" name="Submit" value="返回模块列表" class="button" onClick="location='ConContent.asp?Fmenu=Skins&Smenu=module'"/> 
      </div>	
    </div>
    <script>
@@ -961,10 +1003,10 @@ elseif Request.QueryString("Fmenu")="Skins" Then
     return true
    }
    </script>
-<% 
- elseif Request.QueryString("Smenu")="PluginsInstall" then 
-  Bmodule=getModName
-  PluginsFolders=split(getPathList("Plugins")(0),"*")
+<%
+ElseIf Request.QueryString("Smenu") = "PluginsInstall" Then
+    Bmodule = getModName
+    PluginsFolders = Split(getPathList("Plugins")(0), "*")
 %>
     <div align="left" style="padding:5px;"><%getMsg%>
       <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
@@ -976,15 +1018,16 @@ elseif Request.QueryString("Fmenu")="Skins" Then
           <td width="140" class="TDHead">&nbsp;</td>
           </tr>
 	 <%
-	if CheckObjInstalled(getXMLDOM()) then
-	 if CheckObjInstalled("Scripting.FileSystemObject") then
-     	set PluginsXML=new PXML
-     	for each PluginsFolder in PluginsFolders
-     	 PluginsXML.XmlPath="Plugins/"&PluginsFolder&"/install.xml"
-     	 PluginsXML.open
-     	  if PluginsXML.getError=0 then
-     	   if len(PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName"))>0 and IsvalidPlugins(PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName")) and (not IsvalidValue(Bmodule,PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName"))) and IsvalidValue(TypeArray,PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginType")) then
-     	 %>		 
+If CheckObjInstalled(getXMLDOM()) Then
+    If CheckObjInstalled("Scripting.FileSystemObject") Then
+        Set PluginsXML = New PXML
+        For Each PluginsFolder in PluginsFolders
+            PluginsXML.XmlPath = "Plugins/"&PluginsFolder&"/install.xml"
+            PluginsXML.Open
+            If PluginsXML.getError = 0 Then
+                If Len(PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName"))>0 And IsvalidPlugins(PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName")) And (Not IsvalidValue(Bmodule, PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName"))) And IsvalidValue(TypeArray, PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginType")) Then
+
+%>
              <tr>
                <td align="center"><img src="images/<%=PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginType")%>.gif" width="16" height="16"/></td>
      		   <td align="left"><%=PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginTitle")%></td>
@@ -992,20 +1035,21 @@ elseif Request.QueryString("Fmenu")="Skins" Then
                <td align="center"><%=PluginsXML.SelectXmlNodeText("PluginInstall/main/pubDate")%></td>
                <td align="center"><a href="?Fmenu=Skins&Smenu=InstallPlugins&Plugins=<%=PluginsFolder%>">安装此插件</a> | <a href="javascript:alert('<%=PluginsXML.SelectXmlNodeText("PluginInstall/main/About")%>')">关于</a></td>
              </tr>
-     	<% 
-     	   end If
-     	  end if
-      	 PluginsXML.CloseXml()
-     	next
-     else
-    response.write ("<tr><td colspan=""6"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>Scripting.FileSystemObject</b> 只能手动输入插件的文件夹名称</div>")
-    response.write ("<div style=""text-align:left;padding:3px""><b>插件路径:</b> Plugins / <input id=""SPath"" type=""text"" size=""16"" class=""text"" value=""""/> <input type=""button"" value=""安装插件"" class=""button"" style=""margin-bottom:-2px"" onclick=""if (document.getElementById('SPath').value.length>0) {location='ConContent.asp?Fmenu=Skins&Smenu=InstallPlugins&Plugins='+document.getElementById('SPath').value}else{alert('请输入插件路径!')}""/></div>")
-    response.write ("</td></tr>")
-     end if
-   else
-    response.write ("<tr><td colspan=""6"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>"&getXMLDOM()&"</b>，无法使用插件管理功能，请与服务商联系！</div></td></tr>")
-   end if
-  	%>
+     	<%
+End If
+End If
+PluginsXML.CloseXml()
+Next
+Else
+    response.Write ("<tr><td colspan=""6"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>Scripting.FileSystemObject</b> 只能手动输入插件的文件夹名称</div>")
+    response.Write ("<div style=""text-align:left;padding:3px""><b>插件路径:</b> Plugins / <input id=""SPath"" type=""text"" size=""16"" class=""text"" value=""""/> <input type=""button"" value=""安装插件"" class=""button"" style=""margin-bottom:-2px"" onclick=""if (document.getElementById('SPath').value.length>0) {location='ConContent.asp?Fmenu=Skins&Smenu=InstallPlugins&Plugins='+document.getElementById('SPath').value}else{alert('请输入插件路径!')}""/></div>")
+    response.Write ("</td></tr>")
+End If
+Else
+    response.Write ("<tr><td colspan=""6"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>"&getXMLDOM()&"</b>，无法使用插件管理功能，请与服务商联系！</div></td></tr>")
+End If
+
+%>
       </table>
   <div style="color:#f00;text-align:left">
   此处列出系统找到的合法的PJBlog2插件，安装插件前需要把插件连同其目录一起上传到Plugins文件夹内
@@ -1019,15 +1063,16 @@ elseif Request.QueryString("Fmenu")="Skins" Then
 '============================================================
 '    安装插件
 '============================================================
- Elseif Request.QueryString("Smenu")="InstallPlugins" then 
+ElseIf Request.QueryString("Smenu") = "InstallPlugins" Then
     InstallPlugins
-'============================================================
-'    显示已经安装插件
-'============================================================
- elseif Request.QueryString("Smenu")="Plugins" then 
-  dim Blog_Plugins
-  set Blog_Plugins=conn.execute("select * from blog_module where IsInstall=true order by id desc")
-  %>
+    '============================================================
+    '    显示已经安装插件
+    '============================================================
+ElseIf Request.QueryString("Smenu") = "Plugins" Then
+    Dim Blog_Plugins
+    Set Blog_Plugins = conn.Execute("select * from blog_module where IsInstall=true order by id desc")
+
+%>
     <div align="left" style="padding:5px;"><%getMsg%>
       <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
         <tr align="center">
@@ -1054,134 +1099,135 @@ elseif Request.QueryString("Fmenu")="Skins" Then
 		          <a href="Plugins/<%=Blog_Plugins("InstallFolder")%>/<%=Blog_Plugins("ConfigPath")%>">高级设置</a>
 	          <%else%>
 		          <span style="color:#999">高级设置</span>
-          <%end if%>          
+          <%end if%>
            | <a href="javascript:DelPlugins('<%=Blog_Plugins("InstallFolder")%>','<%=Blog_Plugins("type")%>')">反安装此插件</a></td>
           </tr>
            <%
-       Blog_Plugins.movenext
-       loop
-       set Blog_Plugins=nothing
-       %>
+Blog_Plugins.movenext
+Loop
+Set Blog_Plugins = Nothing
+
+%>
      </table>
        <div style="color:#f00;text-align:left">
        <%If Not CheckObjInstalled("ADODB.Stream") Then %>
 	       <b>你的服务器不支持</b> <b><a href="http://www.google.com/search?hl=zh-CN&q=ADODB.Stream&btnG=Google+%E6%90%9C%E7%B4%A2&lr=" target="_blank"><b>ADODB.Stream</b></a> 组件,那将意味着大部分插件的无法正常工作</b>
        <%else%>
-	       <input type="button" name="button" value="修复插件" class="button" onclick="FixPlugins()"/>
+	       <input type="button" name="button" value="修复插件" class="button" onClick="FixPlugins()"/>
        <%End If%>
 <br/>
  假如插件反安装不成功，请到 <b>数据库与附件-数据库管理</b> 压缩修复数据再反安装
 </div>
   <%
-  
-  
-  
+
+
+
 '============================================================
 '    反安装插件
 '============================================================
- elseif Request.QueryString("Smenu")="UnInstallPlugins" then
-   Dim UnPlugName,getCateID,DropTable,KeepTable,ModSetTemp1,getMod
-   PluginsFolder=CheckStr(Request.QueryString("Plugins"))
-   KeepTable=CBool(Request.QueryString("Keep"))
-   set PluginsXML=new PXML
-   PluginsXML.XmlPath="Plugins/"&PluginsFolder&"/install.xml"
-   PluginsXML.open
-   if PluginsXML.getError=0 Then
-     UnPlugName=PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName")
-     Set ModSetTemp1=New ModSet
-     ModSetTemp1.Open UnPlugName
-     ModSetTemp1.RemoveApplication
-     DropTable=PluginsXML.SelectXmlNodeText("PluginInstall/main/DropTable")
-     set getMod=conn.Execute("select CateID from blog_module where name='"&UnPlugName&"'")
-     if getMod.eof then
-          session(CookieName&"_ShowMsg")=true
-          session(CookieName&"_MsgText")="<font color=""#ff0000"">"&UnPlugName&"</font> 无法反安装,数据库没有找到相应的信息!"
-          Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
-      else
-        getCateID=getMod(0)
-        if len(getCateID)>0 then conn.Execute("delete * from blog_Category where cate_ID="&getCateID)
-        delPlugins UnPlugName
-        if len(DropTable)>0 And KeepTable=False Then conn.Execute("DROP TABLE "&DropTable)
-        SubItemLen = int(PluginsXML.GetXmlNodeLength("PluginInstall/SubItem/item"))
-        
-        for tempI=0 to SubItemLen-1 
-          if not PluginsXML.SelectXmlNodeText("PluginInstall/SubItem/item/PluginType")="function" then
-             delPlugins UnPlugName&"SubItem"&(tempI+1)
-          end If
-       Next
-         If len(PluginsXML.SelectXmlNodeText("PluginInstall/main/SettingFile"))>0 Then
-          if KeepTable=False Then InstallPlugingSetting "",UnPlugName,"delete"
-       End If
-     end if
-   end If
-   
-   PluginsXML.CloseXml()
-   log_module(2)
-   CategoryList(2)
-   FixPlugins(0)
-   session(CookieName&"_ShowMsg")=true
-   session(CookieName&"_MsgText")="<font color=""#ff0000"">"&UnPlugName&"</font> 插件反安装完成!"
-   Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
-  
-'============================================================
-'    修复插件
-'============================================================  
-elseif Request.QueryString("Smenu")="FixPlugins" then
-  FixPlugins(1)
-'============================================================
-'    插件配置
-'============================================================
-elseif Request.QueryString("Smenu")="PluginsOptions" then
- dim PluginsSetting,LoadSetXML,KeyLen,Si,LoadModSet,SelectTemp
- set PluginsSetting=conn.execute("select top 1 * from blog_module where name='"+checkstr(Request.QueryString("Plugins"))+"'")
- set LoadSetXML=new PXML
- Set LoadModSet=New ModSet
- LoadModSet.Open(PluginsSetting("name"))
- LoadSetXML.XmlPath="Plugins/"&PluginsSetting("InstallFolder")&"/"&PluginsSetting("SettingXML")
- LoadSetXML.Open
-   if LoadSetXML.getError=0 then
-    KeyLen = int(LoadSetXML.GetXmlNodeLength("PluginOptions/Key"))
-    getMsg
-    Response.Write ("<div align=""center""><form action=""ConContent.asp"" method=""post"" style=""margin:0px"">")
-    Response.Write ("<input type=""hidden"" name=""action"" value=""Skins""/>")
-    Response.Write ("<input type=""hidden"" name=""whatdo"" value=""SavePluginsSetting""/>")
-    Response.Write ("<input type=""hidden"" name=""PluginsName"" value="""&PluginsSetting("name")&"""/>")
-    response.write  "<table border=""0"" cellpadding=""2"" cellspacing=""1"" class=""TablePanel"" style=""margin:6px"">"
-     response.write("<tr><td colspan=""2"" align=""left"" style=""background:#e5e5e5;padding:6px""><div style=""font-weight:bold;font-size:14px;"">"&PluginsSetting("title")&" 的基本设置</div></td></tr>")
-       For tempI=0 To KeyLen-1
-          response.write "<tr><td align=""right"" width=""200"" valign=""top"" style=""padding-top:6px"">"&LoadSetXML.GetAttributes("PluginOptions/Key","description",TempI)&"</td><td width=""300"">"
-          if Lcase(LoadSetXML.GetAttributes("PluginOptions/Key","type",TempI))="select" then
-             response.write "<select name="""&LoadSetXML.GetAttributes("PluginOptions/Key","name",TempI)&""">"
-                for Si=0 to LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").length-1
-                     If LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key","name",tempI)) = LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").item(Si).attributes(0).value Then SelectTemp="selected"
-                    If LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").item(Si).attributes.length>0 Then
-                        Response.write "<option "&SelectTemp&" value="""&LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").item(Si).attributes(0).value&""">"&LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").item(Si).text&"</option>"
-                     else
-                        Response.write "<option "&SelectTemp&">"&LoadSetXML.SelectXmlNode("PluginOptions/Key",TempI).getElementsByTagName("option").item(Si).text&"</option>"
-                    end If
-                    SelectTemp=""
+ElseIf Request.QueryString("Smenu") = "UnInstallPlugins" Then
+    Dim UnPlugName, getCateID, DropTable, KeepTable, ModSetTemp1, getMod
+    PluginsFolder = CheckStr(Request.QueryString("Plugins"))
+    KeepTable = CBool(Request.QueryString("Keep"))
+    Set PluginsXML = New PXML
+    PluginsXML.XmlPath = "Plugins/"&PluginsFolder&"/install.xml"
+    PluginsXML.Open
+    If PluginsXML.getError = 0 Then
+        UnPlugName = PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginName")
+        Set ModSetTemp1 = New ModSet
+        ModSetTemp1.Open UnPlugName
+        ModSetTemp1.RemoveApplication
+        DropTable = PluginsXML.SelectXmlNodeText("PluginInstall/main/DropTable")
+        Set getMod = conn.Execute("select CateID from blog_module where name='"&UnPlugName&"'")
+        If getMod.EOF Then
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 无法反安装,数据库没有找到相应的信息!"
+            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+        Else
+            getCateID = getMod(0)
+            If Len(getCateID)>0 Then conn.Execute("delete * from blog_Category where cate_ID="&getCateID)
+            delPlugins UnPlugName
+            If Len(DropTable)>0 And KeepTable = False Then conn.Execute("DROP TABLE "&DropTable)
+            SubItemLen = Int(PluginsXML.GetXmlNodeLength("PluginInstall/SubItem/item"))
+
+            For tempI = 0 To SubItemLen -1
+                If Not PluginsXML.SelectXmlNodeText("PluginInstall/SubItem/item/PluginType") = "function" Then
+                    delPlugins UnPlugName&"SubItem"&(tempI + 1)
+                End If
+            Next
+            If Len(PluginsXML.SelectXmlNodeText("PluginInstall/main/SettingFile"))>0 Then
+                If KeepTable = False Then InstallPlugingSetting "", UnPlugName, "delete"
+            End If
+        End If
+    End If
+
+    PluginsXML.CloseXml()
+    log_module(2)
+    CategoryList(2)
+    FixPlugins(0)
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 插件反安装完成!"
+    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+
+    '============================================================
+    '    修复插件
+    '============================================================
+ElseIf Request.QueryString("Smenu") = "FixPlugins" Then
+    FixPlugins(1)
+    '============================================================
+    '    插件配置
+    '============================================================
+ElseIf Request.QueryString("Smenu") = "PluginsOptions" Then
+    Dim PluginsSetting, LoadSetXML, KeyLen, Si, LoadModSet, SelectTemp
+    Set PluginsSetting = conn.Execute("select top 1 * from blog_module where name='" + checkstr(Request.QueryString("Plugins")) + "'")
+    Set LoadSetXML = New PXML
+    Set LoadModSet = New ModSet
+    LoadModSet.Open(PluginsSetting("name"))
+    LoadSetXML.XmlPath = "Plugins/"&PluginsSetting("InstallFolder")&"/"&PluginsSetting("SettingXML")
+    LoadSetXML.Open
+    If LoadSetXML.getError = 0 Then
+        KeyLen = Int(LoadSetXML.GetXmlNodeLength("PluginOptions/Key"))
+        getMsg
+        Response.Write ("<div align=""center""><form action=""ConContent.asp"" method=""post"" style=""margin:0px"">")
+        Response.Write ("<input type=""hidden"" name=""action"" value=""Skins""/>")
+        Response.Write ("<input type=""hidden"" name=""whatdo"" value=""SavePluginsSetting""/>")
+        Response.Write ("<input type=""hidden"" name=""PluginsName"" value="""&PluginsSetting("name")&"""/>")
+        response.Write "<table border=""0"" cellpadding=""2"" cellspacing=""1"" class=""TablePanel"" style=""margin:6px"">"
+        response.Write("<tr><td colspan=""2"" align=""left"" style=""background:#e5e5e5;padding:6px""><div style=""font-weight:bold;font-size:14px;"">"&PluginsSetting("title")&" 的基本设置</div></td></tr>")
+        For tempI = 0 To KeyLen -1
+            response.Write "<tr><td align=""right"" width=""200"" valign=""top"" style=""padding-top:6px"">"&LoadSetXML.GetAttributes("PluginOptions/Key", "description", TempI)&"</td><td width=""300"">"
+            If LCase(LoadSetXML.GetAttributes("PluginOptions/Key", "type", TempI)) = "select" Then
+                response.Write "<select name="""&LoadSetXML.GetAttributes("PluginOptions/Key", "name", TempI)&""">"
+                For Si = 0 To LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Length -1
+                    If LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key", "name", tempI)) = LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Item(Si).Attributes(0).Value Then SelectTemp = "selected"
+                    If LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Item(Si).Attributes.Length>0 Then
+                        Response.Write "<option "&SelectTemp&" value="""&LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Item(Si).Attributes(0).Value&""">"&LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Item(Si).text&"</option>"
+                    Else
+                        Response.Write "<option "&SelectTemp&">"&LoadSetXML.SelectXmlNode("PluginOptions/Key", TempI).getElementsByTagName("option").Item(Si).text&"</option>"
+                    End If
+                    SelectTemp = ""
                 Next
-             response.write "</select></td></tr>"
-          elseif Lcase(LoadSetXML.GetAttributes("PluginOptions/Key","type",TempI))="textarea" Then
-             response.write "<textarea name="""&LoadSetXML.GetAttributes("PluginOptions/Key","name",tempI)&""" rows="""&LoadSetXML.GetAttributes("PluginOptions/Key","rows",TempI)&""" cols="""&LoadSetXML.GetAttributes("PluginOptions/Key","cols",TempI)&""">"&LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key","name",tempI))&"</textarea></td></tr>"
-          Else
-             response.write "<input name="""&LoadSetXML.GetAttributes("PluginOptions/Key","name",TempI)&""" type="""&LoadSetXML.GetAttributes("PluginOptions/Key","type",TempI)&""" size="""&LoadSetXML.GetAttributes("PluginOptions/Key","size",TempI)&""" value="""&LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key","name",tempI))&"""/></td></tr>"
-          end If
-       next
-    response.write "<tr><td colspan=""2"" align=""center""><input type=""submit"" name=""Submit"" value=""保存设置"" class=""button""/><input type=""button"" value=""放弃返回"" class=""button"" onclick=""history.go(-1)""/></td></tr>"
-    response.write "</table>"
-    response.write "</form></div>"
-   else
-    response.write "无法找到配置文件"
-   end if
- set LoadSetXML=nothing
- set PluginsSetting=nothing
-'============================================================
-'    设置外观 
-'============================================================
- else
- dim SkinFolders,SkinFolder
-  SkinFolders=split(getPathList("skins")(0),"*")
+                response.Write "</select></td></tr>"
+            ElseIf LCase(LoadSetXML.GetAttributes("PluginOptions/Key", "type", TempI)) = "textarea" Then
+                response.Write "<textarea name="""&LoadSetXML.GetAttributes("PluginOptions/Key", "name", tempI)&""" rows="""&LoadSetXML.GetAttributes("PluginOptions/Key", "rows", TempI)&""" cols="""&LoadSetXML.GetAttributes("PluginOptions/Key", "cols", TempI)&""">"&LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key", "name", tempI))&"</textarea></td></tr>"
+            Else
+                response.Write "<input name="""&LoadSetXML.GetAttributes("PluginOptions/Key", "name", TempI)&""" type="""&LoadSetXML.GetAttributes("PluginOptions/Key", "type", TempI)&""" size="""&LoadSetXML.GetAttributes("PluginOptions/Key", "size", TempI)&""" value="""&LoadModSet.getKeyValue(LoadSetXML.GetAttributes("PluginOptions/Key", "name", tempI))&"""/></td></tr>"
+            End If
+        Next
+        response.Write "<tr><td colspan=""2"" align=""center""><input type=""submit"" name=""Submit"" value=""保存设置"" class=""button""/><input type=""button"" value=""放弃返回"" class=""button"" onclick=""history.go(-1)""/></td></tr>"
+        response.Write "</table>"
+        response.Write "</form></div>"
+    Else
+        response.Write "无法找到配置文件"
+    End If
+    Set LoadSetXML = Nothing
+    Set PluginsSetting = Nothing
+    '============================================================
+    '    设置外观
+    '============================================================
+Else
+    Dim SkinFolders, SkinFolder
+    SkinFolders = Split(getPathList("skins")(0), "*")
 %>
     <div align="left" style="padding:5px;"><%getMsg%>
    <form action="ConContent.asp" method="post" style="margin:0px">
@@ -1195,18 +1241,19 @@ elseif Request.QueryString("Smenu")="PluginsOptions" then
 	          <td width="700" class="TDHead" colspan="2">界面列表</td>
         </tr>
 	 <%
-	if CheckObjInstalled(getXMLDOM()) and CheckObjInstalled("Scripting.FileSystemObject") then
-      dim SkinXML,k,SkinPreview
-      k=2
-     set SkinXML=new PXML
-	 for each SkinFolder in  SkinFolders
-      SkinXML.XmlPath="skins/"&SkinFolder&"/skin.xml"
-      SkinXML.open
-	  if SkinXML.getError=0 then
-	  if k/2=int(k/2) then response.write "<tr>"
-	  SkinPreview="images/Control/skin.jpg"
-	  if FileExist("skins/"&SkinFolder&"/Preview.jpg") then SkinPreview="skins/"&SkinFolder&"/Preview.jpg"
-	 %>	
+If CheckObjInstalled(getXMLDOM()) And CheckObjInstalled("Scripting.FileSystemObject") Then
+    Dim SkinXML, k, SkinPreview
+    k = 2
+    Set SkinXML = New PXML
+    For Each SkinFolder in SkinFolders
+        SkinXML.XmlPath = "skins/"&SkinFolder&"/skin.xml"
+        SkinXML.Open
+        If SkinXML.getError = 0 Then
+            If k / 2 = Int(k / 2) Then response.Write "<tr>"
+            SkinPreview = "images/Control/skin.jpg"
+            If FileExist("skins/"&SkinFolder&"/Preview.jpg") Then SkinPreview = "skins/"&SkinFolder&"/Preview.jpg"
+
+%>
  		<td width="50%" style='border-bottom:1px dotted #ccc'>
  			<div class="<%if Lcase(blog_DefaultSkin)<>Lcase(SkinFolder) then response.write ("un")%>selectskin">
  			<img src="<%=SkinPreview%>" alt="" border="0" class="skinimg"/>
@@ -1215,29 +1262,31 @@ elseif Request.QueryString("Smenu")="PluginsOptions" then
  			  <span style="height:16px;overflow:hidden;cursor:default" title="设计者:<%=SkinXML.SelectXmlNodeText("SkinDesigner")%>"><B>设计者:</B> <%=SkinXML.SelectXmlNodeText("SkinDesigner")%></span><br/>
  			  <B>发布时间:</B> <%=SkinXML.SelectXmlNodeText("pubDate")%><br/></div>
 		 <%
-		    if Lcase(blog_DefaultSkin)=Lcase(SkinFolder) then 
-			  response.write ("<div class=""cskin""><img src=""images/Control/select.gif"" alt="""" border=""0"" /></div>当前界面")
-			 else
-			  response.write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')"">设置为当前主题</a>")
-			end if
-		  %>
+If LCase(blog_DefaultSkin) = LCase(SkinFolder) Then
+    response.Write ("<div class=""cskin""><img src=""images/Control/select.gif"" alt="""" border=""0"" /></div>当前界面")
+Else
+    response.Write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')"">设置为当前主题</a>")
+End If
+
+%>
 		  </div>
  		</td>
 	<%
-	  end if
-	 SkinXML.CloseXml
-	 if k/2<>int(k/2) then response.write "</tr>"
-	 k=k+1
-	next
-	 if k/2<>int(k/2) then response.write "</tr>"
-	
-	set SkinXML=nothing
-   else
-    response.write ("<tr><td colspan=""2"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>"&getXMLDOM()&"</b> 或 <b>Scripting.FileSystemObject</b> 只能手动输入Skin的文件夹名称</div>")
-    response.write ("<div style=""text-align:left;padding:3px""><b>界面路径:</b> Skins / <input id=""SPath"" type=""text"" size=""16"" class=""text"" value="""+blog_DefaultSkin+"""/> <input type=""button"" value=""保存界面"" class=""button"" style=""margin-bottom:-2px"" onclick=""if (document.getElementById('SPath').value.length>0) {setSkin(document.getElementById('SPath').value,document.getElementById('SPath').value)}else{alert('请输入界面路径!')}""/></div>")
-    response.write ("</td></tr>")
-   end if
-	%>
+End If
+SkinXML.CloseXml
+If k / 2<>Int(k / 2) Then response.Write "</tr>"
+k = k + 1
+Next
+If k / 2<>Int(k / 2) Then response.Write "</tr>"
+
+Set SkinXML = Nothing
+Else
+    response.Write ("<tr><td colspan=""2"" align=""center""><div style=""background:#ffffe8;border:1px solid #95801c;padding:3px;text-align:left;"">你的系统不支持 <b>"&getXMLDOM()&"</b> 或 <b>Scripting.FileSystemObject</b> 只能手动输入Skin的文件夹名称</div>")
+    response.Write ("<div style=""text-align:left;padding:3px""><b>界面路径:</b> Skins / <input id=""SPath"" type=""text"" size=""16"" class=""text"" value=""" + blog_DefaultSkin + """/> <input type=""button"" value=""保存界面"" class=""button"" style=""margin-bottom:-2px"" onclick=""if (document.getElementById('SPath').value.length>0) {setSkin(document.getElementById('SPath').value,document.getElementById('SPath').value)}else{alert('请输入界面路径!')}""/></div>")
+    response.Write ("</td></tr>")
+End If
+
+%>
       </table>
 </div>
 <%end if%>
@@ -1245,7 +1294,7 @@ elseif Request.QueryString("Smenu")="PluginsOptions" then
   </tr></table>
 <%
 
-elseif Request.QueryString("Fmenu")="SQLFile" then '数据库与文件
+ElseIf Request.QueryString("Fmenu") = "SQLFile" Then '数据库与文件
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -1256,44 +1305,46 @@ elseif Request.QueryString("Fmenu")="SQLFile" then '数据库与文件
 	<div class="SubMenu"><a href="?Fmenu=SQLFile">数据库管理</a> | <a href="?Fmenu=SQLFile&Smenu=Attachments">附件管理</a></div>
     <div align="left" style="padding:5px;"><%getMsg%>
      <%
-     if Request.QueryString("Smenu")="Attachments" then
-     %>
-   <form action="ConContent.asp" method="post" style="margin:0px" onsubmit="if (confirm('是否删除选择的文件或文件夹')) {return true} else {return false}">
+If Request.QueryString("Smenu") = "Attachments" Then
+
+%>
+   <form action="ConContent.asp" method="post" style="margin:0px" onSubmit="if (confirm('是否删除选择的文件或文件夹')) {return true} else {return false}">
    <input type="hidden" name="action" value="Attachments"/>
    <input type="hidden" name="whatdo" value="DelFiles"/>
      <%
-     dim AttPath,ArrFolder,Arrfile,ArrFolders,Arrfiles,arrUpFolders,arrUpFolder,TempF
-     TempF=""
-     AttPath=Request.QueryString("AttPath")
-    if len(AttPath)<1 then 
-       AttPath="attachments"
-     elseif bc(server.mapPath(AttPath),server.mapPath("attachments")) then
-       AttPath="attachments"
-     end If
-     ArrFolders=split(getPathList(AttPath)(0),"*")
-     Arrfiles=split(getPathList(AttPath)(1),"*")
-     response.write "<div style=""font-weight:bold;font-size:14px;margin:3px;margin-left:0px"">"&AttPath&"</div><div style=""margin:3px;margin-left:0px;"">"
-     if AttPath<>"attachments" then
-       arrUpFolders=split(AttPath,"/")
-       for i=0 to ubound(arrUpFolders)-1
-        arrUpFolder=arrUpFolder&TempF&arrUpFolders(i)
-        TempF="/"
-       next
-     end if
-     if len(arrUpFolder)>0 then
-      response.write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&arrUpFolder&"""><img border=""0"" src=""images/file/folder_up.gif"" style=""margin:4px 3px -3px 0px""/>返回上级目录</a><br>"
-     end if
-     for each ArrFolder in ArrFolders
-      response.write "<input name=""folders"" type=""checkbox"" value="""&AttPath&"/"&ArrFolder&"""/>&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&AttPath&"/"&ArrFolder&"""><img border=""0"" src=""images/file/folder.gif"" style=""margin:4px 3px -3px 0px""/>"&ArrFolder&"</a><br>"
-     next 
-     for each Arrfile in Arrfiles
-      response.write "<input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&"""/>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(1))&Arrfile&"</a>&nbsp;&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&" | "&getFileInfo(AttPath&"/"&Arrfile)(2)&" | "&getFileInfo(AttPath&"/"&Arrfile)(3)&"<br>"
-     next 
-     response.write "</div>"
-     %>
+Dim AttPath, ArrFolder, Arrfile, ArrFolders, Arrfiles, arrUpFolders, arrUpFolder, TempF
+TempF = ""
+AttPath = Request.QueryString("AttPath")
+If Len(AttPath)<1 Then
+    AttPath = "attachments"
+ElseIf bc(server.mapPath(AttPath), server.mapPath("attachments")) Then
+    AttPath = "attachments"
+End If
+ArrFolders = Split(getPathList(AttPath)(0), "*")
+Arrfiles = Split(getPathList(AttPath)(1), "*")
+response.Write "<div style=""font-weight:bold;font-size:14px;margin:3px;margin-left:0px"">"&AttPath&"</div><div style=""margin:3px;margin-left:0px;"">"
+If AttPath<>"attachments" Then
+    arrUpFolders = Split(AttPath, "/")
+    For i = 0 To UBound(arrUpFolders) -1
+        arrUpFolder = arrUpFolder&TempF&arrUpFolders(i)
+        TempF = "/"
+    Next
+End If
+If Len(arrUpFolder)>0 Then
+    response.Write "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&arrUpFolder&"""><img border=""0"" src=""images/file/folder_up.gif"" style=""margin:4px 3px -3px 0px""/>返回上级目录</a><br>"
+End If
+For Each ArrFolder in ArrFolders
+    response.Write "<input name=""folders"" type=""checkbox"" value="""&AttPath&"/"&ArrFolder&"""/>&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&AttPath&"/"&ArrFolder&"""><img border=""0"" src=""images/file/folder.gif"" style=""margin:4px 3px -3px 0px""/>"&ArrFolder&"</a><br>"
+Next
+For Each Arrfile in Arrfiles
+    response.Write "<input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&"""/>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(1))&Arrfile&"</a>&nbsp;&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&" | "&getFileInfo(AttPath&"/"&Arrfile)(2)&" | "&getFileInfo(AttPath&"/"&Arrfile)(3)&"<br>"
+Next
+response.Write "</div>"
+
+%>
     <div style="color:#f00">如果文件夹内存在文件，那么该文件夹将无法删除!</div>
 	  	<div class="SubButton">
-      <input type="button" value="全选" class="button" onclick="checkAll()"/>  <input type="submit" name="Submit" value="删除所选的文件或文件夹" class="button"/> 
+      <input type="button" value="全选" class="button" onClick="checkAll()"/>  <input type="submit" name="Submit" value="删除所选的文件或文件夹" class="button"/> 
      </div>
      </form>
 	  <%else%>
@@ -1301,132 +1352,134 @@ elseif Request.QueryString("Fmenu")="SQLFile" then '数据库与文件
 	  <b>数据库大小:</b> <span id="accessSize"><%=getFileInfo(AccessFile)(0)%></span><br/>
 	  <b>数据库操作:</b> <a href="?Fmenu=SQLFile&do=Compact">压缩修复</a> | <a href="?Fmenu=SQLFile&do=Backup">备份</a><br/>
 	  <%
-	  Dim AccessFSO,AccessEngine,AccessSource
+Dim AccessFSO, AccessEngine, AccessSource
 '-------------压缩数据库-----------------
-	  if Request.QueryString("do")="Compact" then
-    	Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-      	IF AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
-		  Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-		  Response.Write "压缩数据库开始，网站暂停一切用户的前台操作...<br/>"
-		  Response.Write "关闭数据库操作...<br/>"
-		  call CloseDB
-		  Application.Lock
-		  FreeApplicationMemory
-		  Application(CookieName & "_SiteEnable") = 0
-		  Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
-	      Application.UnLock
-	      Set AccessEngine = CreateObject("JRO.JetEngine")
-	      AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile & ".temp")
-	      AccessFSO.CopyFile Server.Mappath(AccessFile & ".temp"),Server.Mappath(AccessFile)
-	      AccessFSO.DeleteFile(Server.Mappath(AccessFile & ".temp"))
-	      Set AccessFSO = Nothing
-	      Set AccessEngine = Nothing
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.write "压缩数据库完成...<br/>"
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.Write "网站恢复正常访问..."
-		  Response.Write "</div>"
-		  Response.write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
-      	end if
-	  end if
+If Request.QueryString("do") = "Compact" Then
+    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
+    If AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
+        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+        Response.Write "压缩数据库开始，网站暂停一切用户的前台操作...<br/>"
+        Response.Write "关闭数据库操作...<br/>"
+        Call CloseDB
+        Application.Lock
+        FreeApplicationMemory
+        Application(CookieName & "_SiteEnable") = 0
+        Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
+        Application.UnLock
+        Set AccessEngine = CreateObject("JRO.JetEngine")
+        AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile & ".temp")
+        AccessFSO.CopyFile Server.Mappath(AccessFile & ".temp"), Server.Mappath(AccessFile)
+        AccessFSO.DeleteFile(Server.Mappath(AccessFile & ".temp"))
+        Set AccessFSO = Nothing
+        Set AccessEngine = Nothing
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "压缩数据库完成...<br/>"
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "网站恢复正常访问..."
+        Response.Write "</div>"
+        Response.Write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
+    End If
+End If
 '-------------备份数据库数据库-----------------
-	  if Request.QueryString("do")="Backup" then
-    	Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-      	IF AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
-		  Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-		  Response.Write "备份数据库开始，网站暂停一切用户的前台操作...<br/>"
-		  Response.Write "关闭数据库操作...<br/>"
-		  call CloseDB
-		  Application.Lock
-		  FreeApplicationMemory
-		  Application(CookieName & "_SiteEnable") = 0
-		  Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
-	      Application.UnLock
-          CopyFiles Server.Mappath(AccessFile),Server.Mappath("backup/Backup_" & DateToStr(Now(),"YmdHIS") & "_" & randomStr(8) &".mbk")
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.write "压缩数据库完成...<br/>"
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.Write "网站恢复正常访问..."
-		  Response.Write "</div>"
-		  Response.write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
-      	end if
-       Set AccessFSO=Nothing
-	  end if
+If Request.QueryString("do") = "Backup" Then
+    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
+    If AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
+        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+        Response.Write "备份数据库开始，网站暂停一切用户的前台操作...<br/>"
+        Response.Write "关闭数据库操作...<br/>"
+        Call CloseDB
+        Application.Lock
+        FreeApplicationMemory
+        Application(CookieName & "_SiteEnable") = 0
+        Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
+        Application.UnLock
+        CopyFiles Server.Mappath(AccessFile), Server.Mappath("backup/Backup_" & DateToStr(Now(), "YmdHIS") & "_" & randomStr(8) &".mbk")
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "压缩数据库完成...<br/>"
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "网站恢复正常访问..."
+        Response.Write "</div>"
+        Response.Write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
+    End If
+    Set AccessFSO = Nothing
+End If
 '---------------还原数据库------------
-	  if Request.QueryString("do")="Restore" then
-	   AccessSource=Request.QueryString("source")
-    	Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-      	IF AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
-		  Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-		  Response.Write "还原数据库开始，网站暂停一切用户的前台操作...<br/>"
-		  Response.Write "关闭数据库操作...<br/>"
-		  call CloseDB
-		  Application.Lock
-		  FreeApplicationMemory
-		  Application(CookieName & "_SiteEnable") = 0
-		  Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
-	      Application.UnLock
-          CopyFiles Server.Mappath(AccessFile),Server.Mappath(AccessFile & ".TEMP")
-          if DeleteFiles(Server.Mappath(AccessFile)) then response.write ("原数据库删除成功<br/>")
-          response.write CopyFiles(Server.Mappath(AccessSource),Server.Mappath(AccessFile))
-          if DeleteFiles(Server.MapPath(AccessSource)) then response.write ("数据库备份删除成功<br/>")
-	  	  if DeleteFiles(Server.Mappath(AccessFile & ".TEMP")) then response.write ("Temp备份删除成功<br/>")
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.write "数据库还原完成...<br/>"
-		  Application.Lock
-		  Application(CookieName & "_SiteEnable") = 1
-		  Application(CookieName & "_SiteDisbleWhy") = ""
-		  Application.UnLock
-		  Response.Write "网站恢复正常访问..."
-		  Response.Write "</div>"
-		  Response.write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
-      	end if
-       Set AccessFSO=Nothing
-	  end if
+If Request.QueryString("do") = "Restore" Then
+    AccessSource = Request.QueryString("source")
+    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
+    If AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
+        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+        Response.Write "还原数据库开始，网站暂停一切用户的前台操作...<br/>"
+        Response.Write "关闭数据库操作...<br/>"
+        Call CloseDB
+        Application.Lock
+        FreeApplicationMemory
+        Application(CookieName & "_SiteEnable") = 0
+        Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
+        Application.UnLock
+        CopyFiles Server.Mappath(AccessFile), Server.Mappath(AccessFile & ".TEMP")
+        If DeleteFiles(Server.Mappath(AccessFile)) Then response.Write ("原数据库删除成功<br/>")
+        response.Write CopyFiles(Server.Mappath(AccessSource), Server.Mappath(AccessFile))
+        If DeleteFiles(Server.MapPath(AccessSource)) Then response.Write ("数据库备份删除成功<br/>")
+        If DeleteFiles(Server.Mappath(AccessFile & ".TEMP")) Then response.Write ("Temp备份删除成功<br/>")
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "数据库还原完成...<br/>"
+        Application.Lock
+        Application(CookieName & "_SiteEnable") = 1
+        Application(CookieName & "_SiteDisbleWhy") = ""
+        Application.UnLock
+        Response.Write "网站恢复正常访问..."
+        Response.Write "</div>"
+        Response.Write "<script>document.getElementById('accessSize').innerText='"&getFileInfo(AccessFile)(0)&"'</script>"
+    End If
+    Set AccessFSO = Nothing
+End If
 '---------------删除备份数据库------------
-	  if Request.QueryString("do")="DelFile" then
-	   AccessSource=Request.QueryString("source")
-	    Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-      	IF AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
-		  Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-          if DeleteFiles(Server.MapPath(AccessSource)) then response.write ("数据库备份删除成功<br/>")
-		  Response.Write "</div>"
-      	end if
-       Set AccessFSO=Nothing
-      end if
-	  %>
+If Request.QueryString("do") = "DelFile" Then
+    AccessSource = Request.QueryString("source")
+    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
+    If AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
+        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+        If DeleteFiles(Server.MapPath(AccessSource)) Then response.Write ("数据库备份删除成功<br/>")
+        Response.Write "</div>"
+    End If
+    Set AccessFSO = Nothing
+End If
+
+%>
 	  	  <br/><b>数据库备份列表:</b> <br/>
 	  <%
-	   dim BackUpFiles,BackUpFile
-	   BackUpFiles=split(getPathList("backup")(1),"*")
-       for each BackUpFile in BackUpFiles
-        response.write "<a href=""backup/"&BackUpFile&""" target=""_blank"">"&getFileIcons(getFileInfo("backup/"&BackUpFile)(1))&BackUpFile&"</a>"
-        response.write "&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&do=DelFile&source=backup/"&BackUpFile&""" title=""删除备份文件"">删除</a> | <a href=""?Fmenu=SQLFile&do=Restore&source=backup/"&BackUpFile&""" title=""删除备份文件"">还原数据库</a>"
-        response.write " | "&getFileInfo("backup/"&BackUpFile)(0)&" | "&getFileInfo("backup/"&BackUpFile)(2)&"<br/>"
-       next
-       %>
+Dim BackUpFiles, BackUpFile
+BackUpFiles = Split(getPathList("backup")(1), "*")
+For Each BackUpFile in BackUpFiles
+    response.Write "<a href=""backup/"&BackUpFile&""" target=""_blank"">"&getFileIcons(getFileInfo("backup/"&BackUpFile)(1))&BackUpFile&"</a>"
+    response.Write "&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&do=DelFile&source=backup/"&BackUpFile&""" title=""删除备份文件"">删除</a> | <a href=""?Fmenu=SQLFile&do=Restore&source=backup/"&BackUpFile&""" title=""删除备份文件"">还原数据库</a>"
+    response.Write " | "&getFileInfo("backup/"&BackUpFile)(0)&" | "&getFileInfo("backup/"&BackUpFile)(2)&"<br/>"
+Next
+
+%>
 	 <%end if%>
 	 </div>
  </td>
   </tr></table>
 <%
-elseif Request.QueryString("Fmenu")="Members" then '帐户与权限
-Dim blog_Status,blog_Statu,StatusItem,blog_Status_Len
+ElseIf Request.QueryString("Fmenu") = "Members" Then '帐户与权限
+    Dim blog_Status, blog_Statu, StatusItem, blog_Status_Len
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -1436,7 +1489,7 @@ Dim blog_Status,blog_Statu,StatusItem,blog_Status_Len
     <td class="CPanel">
 	<div class="SubMenu"><a href="?Fmenu=Members">权限管理</a> | <a href="?Fmenu=Members&Smenu=Users">帐户管理</a></div>
 <%
-if Request.QueryString("Smenu")="Users" then
+If Request.QueryString("Smenu") = "Users" Then
 
 %>
 <%getMsg%>
@@ -1446,32 +1499,32 @@ if Request.QueryString("Smenu")="Users" then
    <input type="hidden" name="DelID" value=""/>
 <table border="0" cellpadding="2" cellspacing="1" class="TablePanel" style="margin:5px;">
 <%
-blog_Status=Application(CookieName&"_blog_rights")
-dim FindUser,FindUserFilter
-FindUser=Request.QueryString("User")
-if len(FindUser)<1 then 
- FindUserFilter=""
-else
- FindUserFilter=" AND M.mem_Name='" & FindUser & "'"
-end if
- If CheckStr(Request.QueryString("Page"))<>Empty Then
-	Curpage=CheckStr(Request.QueryString("Page"))
-	If IsInteger(Curpage)=False OR Curpage<0 Then Curpage=1
- Else
-	Curpage=1
- End If
- dim bMember,PageCM
- Set bMember=Server.CreateObject("ADODB.RecordSet")
- SQL="SELECT M.*,S.stat_name,S.stat_title FROM blog_Member as M,blog_status as S where M.mem_Status=S.stat_name"&FindUserFilter&" order by mem_RegTime desc"
- bMember.Open SQL,Conn,1,1
- PageCM=0
-    response.write ("<tr><td colspan=""8"" style=""border-bottom:1px solid #999;background:#fae1af;height:36px"">&nbsp;用户名&nbsp;<input id=""FindUser"" type=""text"" class=""text"" size=""16""/><input type=""button"" value=""查找用户"" class=""button"" style=""margin-bottom:-2px"" onclick=""location='ConContent.asp?Fmenu=Members&Smenu=Users&User='+escape(document.getElementById('FindUser').value)""/></td></tr>")
- IF not bMember.EOF Then
-	bMember.PageSize=30
-	bMember.AbsolutePage=CurPage
-	Dim bMember_nums
-	bMember_nums=bMember.RecordCount
-    response.write "<tr><td colspan=""8"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums,30,CurPage,"?Fmenu=Members&Smenu=Users&","","float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+blog_Status = Application(CookieName&"_blog_rights")
+Dim FindUser, FindUserFilter
+FindUser = Request.QueryString("User")
+If Len(FindUser)<1 Then
+    FindUserFilter = ""
+Else
+    FindUserFilter = " AND M.mem_Name='" & FindUser & "'"
+End If
+If CheckStr(Request.QueryString("Page"))<>Empty Then
+    Curpage = CheckStr(Request.QueryString("Page"))
+    If IsInteger(Curpage) = False Or Curpage<0 Then Curpage = 1
+Else
+    Curpage = 1
+End If
+Dim bMember, PageCM
+Set bMember = Server.CreateObject("ADODB.RecordSet")
+SQL = "SELECT M.*,S.stat_name,S.stat_title FROM blog_Member as M,blog_status as S where M.mem_Status=S.stat_name"&FindUserFilter&" order by mem_RegTime desc"
+bMember.Open SQL, Conn, 1, 1
+PageCM = 0
+response.Write ("<tr><td colspan=""8"" style=""border-bottom:1px solid #999;background:#fae1af;height:36px"">&nbsp;用户名&nbsp;<input id=""FindUser"" type=""text"" class=""text"" size=""16""/><input type=""button"" value=""查找用户"" class=""button"" style=""margin-bottom:-2px"" onclick=""location='ConContent.asp?Fmenu=Members&Smenu=Users&User='+escape(document.getElementById('FindUser').value)""/></td></tr>")
+If Not bMember.EOF Then
+    bMember.PageSize = 30
+    bMember.AbsolutePage = CurPage
+    Dim bMember_nums
+    bMember_nums = bMember.RecordCount
+    response.Write "<tr><td colspan=""8"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums, 30, CurPage, "?Fmenu=Members&Smenu=Users&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 
 %>
         <tr align="center">
@@ -1485,16 +1538,18 @@ end if
           <td class="TDHead">&nbsp;</td>
 	   </tr>
 	   <%
-        blog_Status_Len=ubound(blog_Status,2)
-	   	Do Until bMember.EOF OR PageCM=bMember.PageSize
-   %>
+blog_Status_Len = UBound(blog_Status, 2)
+Do Until bMember.EOF Or PageCM = bMember.PageSize
+
+%>
         <tr align="center">
           <td nowrap><%=bMember("mem_ID")%>
           <%
-          	if bMember("mem_Name") <> memName then
-          		response.write "<input type=""hidden"" name=""mem_ID"" value="""&bMember("mem_ID")&"""/>"
-          	end if
-          %>
+If bMember("mem_Name") <> memName Then
+    response.Write "<input type=""hidden"" name=""mem_ID"" value="""&bMember("mem_ID")&"""/>"
+End If
+
+%>
 		</td>
           <td nowrap align="left"><a href="member.asp?action=view&memName=<%=Server.URLEncode(bMember("mem_Name"))%>" target="_blank"><%=bMember("mem_Name")%></a></td>
           <td nowrap>&nbsp;<span id="RightStr_<%=bMember("mem_ID")%>"><%=bMember("stat_title")%></span>&nbsp;</td>
@@ -1502,15 +1557,16 @@ end if
           <td nowrap>&nbsp;<%=DateToStr(bMember("mem_lastVisit"),"Y-m-d H:I A")%>&nbsp;</td>
           <td nowrap>&nbsp;<%=bMember("mem_lastIP")%>&nbsp;</td>
           <td>
-	          <select name="mem_Status" onchange="ChValue(this.value,'RightStr_<%=bMember("mem_ID")%>')" <%if bMember("mem_Name") = memName then response.write "disabled"%>><%
-				For i=0 to blog_Status_Len
-	              if bMember("stat_name")=blog_Status(0,i) then
-		                response.write "<option value="""&blog_Status(0,i)&""" selected=""selected"">"&blog_Status(0,i)&"</option>"
-	               else
-		                response.write "<option value="""&blog_Status(0,i)&""">"&blog_Status(0,i)&"</option>"
-	              end if
-	           next
-	          %></select>
+	          <select name="mem_Status" onChange="ChValue(this.value,'RightStr_<%=bMember("mem_ID")%>')" <%if bMember("mem_Name") = memName then response.write "disabled"%>><%
+For i = 0 To blog_Status_Len
+    If bMember("stat_name") = blog_Status(0, i) Then
+        response.Write "<option value="""&blog_Status(0, i)&""" selected=""selected"">"&blog_Status(0, i)&"</option>"
+    Else
+        response.Write "<option value="""&blog_Status(0, i)&""">"&blog_Status(0, i)&"</option>"
+    End If
+Next
+
+%></select>
           </td>
           <td>
            <%if bMember("mem_Name") <> memName then%>
@@ -1518,16 +1574,17 @@ end if
           <%end if%>
           </td>
 	   </tr>
-   <%   
-     	bMember.MoveNext
-	    PageCM=PageCM+1
-	loop
-    bMember.Close
-    Set bMember=Nothing
- 	else
-   response.write ("<tr><td colspan=""8"" align=""center"" >你所查询的用户不存在！</td></tr>")
- end if	 
-   %></table>
+   <%
+bMember.MoveNext
+PageCM = PageCM + 1
+Loop
+bMember.Close
+Set bMember = Nothing
+Else
+    response.Write ("<tr><td colspan=""8"" align=""center"" >你所查询的用户不存在！</td></tr>")
+End If
+
+%></table>
  	<div class="SubButton">
       <input type="submit" name="Submit" value="保存用户权限" class="button"/> 
      </div>
@@ -1535,20 +1592,21 @@ end if
  <script>
   function ChValue(str,obj){
    <%
-		   For i=0 to blog_Status_Len
-	            response.write "if (str=='"&blog_Status(0,i)&"') {document.getElementById(obj).innerText='"&blog_Status(1,i)&"'};"
-           next
-   %>
+For i = 0 To blog_Status_Len
+    response.Write "if (str=='"&blog_Status(0, i)&"') {document.getElementById(obj).innerText='"&blog_Status(1, i)&"'};"
+Next
+
+%>
    }
  </script>
  <%
-     elseif Request.QueryString("Smenu")="EditRight" then
-     dim RightDB
-     sql="select * from blog_status where stat_name='" & checkstr(Request.QueryString("id")) & "'"
-     set RightDB=conn.execute(sql)
-	     if RightDB.eof then 
-	      response.write "没找到该权限组.请重新更新blog缓存信息"
-	     else
+ElseIf Request.QueryString("Smenu") = "EditRight" Then
+    Dim RightDB
+    sql = "select * from blog_status where stat_name='" & checkstr(Request.QueryString("id")) & "'"
+    Set RightDB = conn.Execute(sql)
+    If RightDB.EOF Then
+        response.Write "没找到该权限组.请重新更新blog缓存信息"
+    Else
 
 %>
 	    <form action="ConContent.asp" method="post" style="margin:0px">
@@ -1612,17 +1670,17 @@ end if
 		            <option value="0" style="background:#FABABA" <%if not CBool(mid(RightDB("stat_code"),10,1)) then response.write ("selected=""selected""")%>>不允许</option>
 		          </select>
 		      </td></tr>
-	         <tr><td align="right">附件大小</td><td ><input name="UploadSize" type="text" size="20" class="text" title="<%=RightDB("stat_attSize")%>字节" value="<%=RightDB("stat_attSize")%>" style="font-size:11px" onchange="this.title=this.value+' 字节'"/></td></tr>
-             <tr><td align="right">附件类型</td><td ><input name="UploadType" type="text" size="50" class="text" title="<%=RightDB("stat_attType")%>" value="<%=RightDB("stat_attType")%>" style="font-size:11px" onchange="this.title=this.value"/></td></tr>
-             <tr><td colspan="2" align="center"><input type="submit" name="Submit" value="保存设置" class="button"/><input type="button" value="放弃返回" class="button" onclick="history.go(-1)"/></td></tr>
+	         <tr><td align="right">附件大小</td><td ><input name="UploadSize" type="text" size="20" class="text" title="<%=RightDB("stat_attSize")%>字节" value="<%=RightDB("stat_attSize")%>" style="font-size:11px" onChange="this.title=this.value+' 字节'"/></td></tr>
+             <tr><td align="right">附件类型</td><td ><input name="UploadType" type="text" size="50" class="text" title="<%=RightDB("stat_attType")%>" value="<%=RightDB("stat_attType")%>" style="font-size:11px" onChange="this.title=this.value"/></td></tr>
+             <tr><td colspan="2" align="center"><input type="submit" name="Submit" value="保存设置" class="button"/><input type="button" value="放弃返回" class="button" onClick="history.go(-1)"/></td></tr>
 	         
 	     </table>
 	     </div>
 	    </form>
 <%
-	     end if
-	 else
-%>	
+End If
+Else
+%>
    <form action="ConContent.asp" method="post" style="margin:0px">
    <input type="hidden" name="action" value="Members"/>
    <input type="hidden" name="whatdo" value="Group"/>
@@ -1635,11 +1693,11 @@ end if
           <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
 	   </tr>
 <%
-blog_Status=Application(CookieName&"_blog_rights")
-blog_Status_Len=ubound(blog_Status,2)
+blog_Status = Application(CookieName&"_blog_rights")
+blog_Status_Len = UBound(blog_Status, 2)
 
-For i=0 to blog_Status_Len
-%>	   
+For i = 0 To blog_Status_Len
+%>
         <tr align="center">
           <td ><input name="status_name" type="text" size="15" class="text" value="<%=blog_Status(0,i)%>"  readonly="readonly" style="background:#ffe;font-size:11px"/></td>
           <td ><input name="status_title" type="text" size="20" class="text" value="<%=blog_Status(1,i)%>"/></td>
@@ -1668,8 +1726,8 @@ For i=0 to blog_Status_Len
  </td>
   </tr></table>
 <%
-	 end if
-elseif Request.QueryString("Fmenu")="Link" then '友情链接管理
+End If
+ElseIf Request.QueryString("Fmenu") = "Link" Then '友情链接管理
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -1678,29 +1736,30 @@ elseif Request.QueryString("Fmenu")="Link" then '友情链接管理
   <tr>
     <td class="CPanel"><form name="filter" action="ConContent.asp" method="post" style="margin:0px">
 	<%
-	dim disLink,disCount
-	 if session(CookieName&"_disLink")="" then session(CookieName&"_disLink")="All"
-     if session(CookieName&"_disCount")="" then session(CookieName&"_disCount")="10"
-	 disLink=session(CookieName&"_disLink")
-	 disCount=session(CookieName&"_disCount")
-dim FilterWhere
+Dim disLink, disCount
+If session(CookieName&"_disLink") = "" Then session(CookieName&"_disLink") = "All"
+If session(CookieName&"_disCount") = "" Then session(CookieName&"_disCount") = "10"
+disLink = session(CookieName&"_disLink")
+disCount = session(CookieName&"_disCount")
+Dim FilterWhere
 If CheckStr(Request.QueryString("Page"))<>Empty Then
-	Curpage=CheckStr(Request.QueryString("Page"))
-	If IsInteger(Curpage)=False OR Curpage<0 Then Curpage=1
+    Curpage = CheckStr(Request.QueryString("Page"))
+    If IsInteger(Curpage) = False Or Curpage<0 Then Curpage = 1
 Else
-	Curpage=1
-End If	
-	%>
+    Curpage = 1
+End If
+
+%>
 	<div class="SubMenu">过滤器: 
    <input type="hidden" name="action" value="Links"/>
    <input type="hidden" name="whatdo" value="Filter"/>
-  	<select name="disLink" onchange="document.forms['filter'].submit()">
+  	<select name="disLink" onChange="document.forms['filter'].submit()">
 	  <option value="All">显示所有链接</option>
 	  <option value="Allow" <%if disLink="Allow" then response.write ("selected=""selected""")%>>已通过验证链接</option>
 	  <option value="NoAllow" <%if disLink="NoAllow" then response.write ("selected=""selected""")%>>未通过验证链接</option>
 	  <option value="Top" <%if disLink="Top" then response.write ("selected=""selected""")%>>置顶链接</option>
 	  <option value="NoTop" <%if disLink="NoTop" then response.write ("selected=""selected""")%>>未置顶链接</option>
-	</select> 每页显示 	<select name="disCount" onchange="document.forms['filter'].submit()">
+	</select> 每页显示 	<select name="disCount" onChange="document.forms['filter'].submit()">
 	  <option <%if int(disCount)=100 then response.write ("selected=""selected""")%>>100</option>
 	  <option <%if int(disCount)=50 then response.write ("selected=""selected""")%>>50</option>
 	  <option <%if int(disCount)=25 then response.write ("selected=""selected""")%>>25 </option>
@@ -1715,32 +1774,32 @@ End If
        <input type="hidden" name="Page" value="<%=Curpage%>"/>       
 	   <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
 <%
-select case disLink
-  case "All"
-   FilterWhere=""
-  case "Allow"
-   FilterWhere=" where link_IsShow=true"
-  case "NoAllow"
-   FilterWhere=" where link_IsShow=false"
-  case "Top"
-   FilterWhere=" where link_IsMain=true"
-  case "NoTop"
-   FilterWhere=" where link_IsMain=false"
-  case else
-   FilterWhere=""  
-end select
- dim bLink
- Set bLink=Server.CreateObject("ADODB.RecordSet")
- SQL="SELECT * FROM blog_Links"&FilterWhere&" order by link_IsShow desc,link_Order desc"
- bLink.Open SQL,Conn,1,1
- IF not bLink.EOF Then
-	bLink.PageSize=disCount
-	bLink.AbsolutePage=CurPage
-	Dim bLink_nums
-	bLink_nums=bLink.RecordCount
-	Dim MultiPages,PageCount
-    response.write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums,disCount,CurPage,"?Fmenu=Link&Smenu=&","","float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
-  end if
+Select Case disLink
+    Case "All"
+        FilterWhere = ""
+    Case "Allow"
+        FilterWhere = " where link_IsShow=true"
+    Case "NoAllow"
+        FilterWhere = " where link_IsShow=false"
+    Case "Top"
+        FilterWhere = " where link_IsMain=true"
+    Case "NoTop"
+        FilterWhere = " where link_IsMain=false"
+    Case Else
+        FilterWhere = ""
+End Select
+Dim bLink
+Set bLink = Server.CreateObject("ADODB.RecordSet")
+SQL = "SELECT * FROM blog_Links"&FilterWhere&" order by link_IsShow desc,link_Order desc"
+bLink.Open SQL, Conn, 1, 1
+If Not bLink.EOF Then
+    bLink.PageSize = disCount
+    bLink.AbsolutePage = CurPage
+    Dim bLink_nums
+    bLink_nums = bLink.RecordCount
+    Dim MultiPages, PageCount
+    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums, disCount, CurPage, "?Fmenu=Link&Smenu=&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+End If
 %>
         <tr align="center">
           <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
@@ -1751,17 +1810,18 @@ end select
           <td class="TDHead">操作</td>
 	   </tr>
 	   <%
-  IF not bLink.EOF Then
-	   	Do Until bLink.EOF OR PageCount=bLink.PageSize
-		if not bLink("link_IsShow") then 
-   %>
+If Not bLink.EOF Then
+    Do Until bLink.EOF Or PageCount = bLink.PageSize
+        If Not bLink("link_IsShow") Then
+
+%>
         <tr align="center" bgcolor="#FCF4BC">
           <td><img src="images/slink.gif" alt="没有通过验证链接"/></td>
           <td><input name="LinkID" type="hidden" value="<%=bLink("link_ID")%>"/><input name="LinkName" type="text" size="18" class="text" value="<%=bLink("link_Name")%>"/></td>
           <td><input name="LinkURL" type="text" size="30" class="text" value="<%=bLink("link_URL")%>"/></td>
           <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
           <td><input name="LinkOrder" type="text" class="text" size="2" value="<%=bLink("link_Order")%>"/></td>
-          <td><a href="#" onclick="ShowLink(<%=bLink("link_ID")%>)" title="通过该链接的验证"><img border="0" src="images/alink.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>通过</a> <a href="<%=bLink("link_URL")%>" target="_blank" title="查看该链接"><img border="0" src="images/icon_trackback.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>查看</a> <a href="#" onclick="Dellink(<%=bLink("link_ID")%>)" title="删除该链接"><img border="0" src="images/icon_del.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>删除</a> </td>
+          <td><a href="#" onClick="ShowLink(<%=bLink("link_ID")%>)" title="通过该链接的验证"><img border="0" src="images/alink.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>通过</a> <a href="<%=bLink("link_URL")%>" target="_blank" title="查看该链接"><img border="0" src="images/icon_trackback.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>查看</a> <a href="#" onClick="Dellink(<%=bLink("link_ID")%>)" title="删除该链接"><img border="0" src="images/icon_del.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>删除</a> </td>
         </tr>
 		<%else%>
         <tr align="center">
@@ -1771,15 +1831,16 @@ end select
           <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
           <td><input name="LinkOrder" type="text" class="text" size="2" value="<%=bLink("link_Order")%>"/></td>
           <td><%if bLink("link_IsMain") then response.write ("<a href=""#"" onclick=""Toplink("&bLink("link_ID")&")"" title=""取消该链接在首页置顶""><img border=""0"" src=""images/ct.gif"" style=""margin:0px 2px -3px 0px""/>取消</a> ") else response.write ("<a href=""#"" onclick=""Toplink("&bLink("link_ID")&")"" title=""把该链接在首页置顶""><img border=""0"" src=""images/it.gif"" style=""margin:0px 2px -3px 0px""/>置顶</a> ")%>
-		  <a href="<%=bLink("link_URL")%>" target="_blank" title="查看该链接"><img border="0" src="images/icon_trackback.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>查看</a> <a href="#" onclick="Dellink(<%=bLink("link_ID")%>)" title="删除该链接"><img border="0" src="images/icon_del.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>删除</a> </td>
+		  <a href="<%=bLink("link_URL")%>" target="_blank" title="查看该链接"><img border="0" src="images/icon_trackback.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>查看</a> <a href="#" onClick="Dellink(<%=bLink("link_ID")%>)" title="删除该链接"><img border="0" src="images/icon_del.gif" width="16" height="16" style="margin:0px 2px -3px 0px"/>删除</a> </td>
 	   </tr>
-<%      end if
-     	bLink.MoveNext
-	    PageCount=PageCount+1
-	loop
-    bLink.Close
-    Set bLink=Nothing
-end if%>	   
+<%End If
+bLink.MoveNext
+PageCount = PageCount + 1
+Loop
+bLink.Close
+Set bLink = Nothing
+End If
+%>
         <tr align="center" bgcolor="#D5DAE0">
          <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新友情链接</td>
         </tr>	
@@ -1799,7 +1860,7 @@ end if%>
  </td>
   </tr></table></div></form>
 <%
-elseif Request.QueryString("Fmenu")="smilies" then '表情与关键字
+ElseIf Request.QueryString("Fmenu") = "smilies" Then '表情与关键字
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -1821,19 +1882,21 @@ elseif Request.QueryString("Fmenu")="smilies" then '表情与关键字
           <td width="220" nowrap="nowrap" class="TDHead">关键字链接地址</td>
 	   </tr>
 	   <%
-	  dim bKeyWord
-      Set bKeyWord=conn.execute("select * from blog_Keywords order by key_ID desc")
-	  do until bKeyWord.eof 
-	   %>
+Dim bKeyWord
+Set bKeyWord = conn.Execute("select * from blog_Keywords order by key_ID desc")
+Do Until bKeyWord.EOF
+
+%>
         <tr align="center">
           <td><input name="SelectKeyWordID" type="checkbox" value="<%=bKeyWord("key_ID")%>"/></td>
           <td><input name="KeyWordID" type="hidden" value="<%=bKeyWord("key_ID")%>"/><input name="KeyWord" type="text" size="18" class="text" value="<%=bKeyWord("key_Text")%>"/></td>
           <td><input name="KeyWordURL" type="text" size="34" class="text" value="<%=bKeyWord("key_URL")%>"/></td>
 	   </tr>
 	   <%
-	   bKeyWord.movenext
-	   loop
-	   %>
+bKeyWord.movenext
+Loop
+
+%>
        <tr align="center" bgcolor="#D5DAE0">
         <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新关键字</td>
        </tr>	
@@ -1863,10 +1926,11 @@ elseif Request.QueryString("Fmenu")="smilies" then '表情与关键字
           <td width="180" nowrap="nowrap" class="TDHead">表情图片地址</td>
 	   </tr>
 	   <%
-	  dim bSmile
-      Set bSmile=conn.execute("select * from blog_Smilies order by sm_ID desc")
-	  do until bSmile.eof 
-	   %>
+Dim bSmile
+Set bSmile = conn.Execute("select * from blog_Smilies order by sm_ID desc")
+Do Until bSmile.EOF
+
+%>
 	   <tr align="center">
 		  <td><input name="selectSmiliesID" type="checkbox" value="<%=bSmile("sm_ID")%>"/></td>
           <td><img src="images/smilies/<%=bSmile("sm_Image")%>" alt="<%=bSmile("sm_Image")%>"/></td>
@@ -1874,9 +1938,10 @@ elseif Request.QueryString("Fmenu")="smilies" then '表情与关键字
           <td><input name="smilesURL" type="text" size="27" class="text" value="<%=bSmile("sm_Image")%>"/></td>
 	   </tr>
 	   <%
-	   bSmile.movenext
-	   loop
-	   %>
+bSmile.movenext
+Loop
+
+%>
        <tr align="center" bgcolor="#D5DAE0">
         <td colspan="4" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新表情</td>
        </tr>	
@@ -1898,7 +1963,7 @@ elseif Request.QueryString("Fmenu")="smilies" then '表情与关键字
     </div>
 </td></tr></table>
 <%
-elseif Request.QueryString("Fmenu")="Status" then '服务器配置
+ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
 %>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
@@ -1921,15 +1986,15 @@ elseif Request.QueryString("Fmenu")="Status" then '服务器配置
      
      <b>关键组件:</b> (缺少关键组件的服务器会对PJBlog2运行有一定影响)<br/>
      <b>　－ Scripting.FileSystemObject 组件:</b> <%=DisI(CheckObjInstalled("Scripting.FileSystemObject"))%><br/>
-     <b>　－ MSXML2.ServerXMLHTTP 组件:</b> <%=DisI(CheckObjInstalled("MSXML2.ServerXMLHTTP"))%><br/> 
+     <b>　－ MSXML2.ServerXMLHTTP 组件:</b> <%=DisI(CheckObjInstalled("MSXML2.ServerXMLHTTP"))%><br/>
      <b>　－ Microsoft.XMLDOM 组件:</b> <%=DisI(CheckObjInstalled("Microsoft.XMLDOM"))%><br/>
-     <b>　－ ADODB.Stream 组件:</b> <%=DisI(CheckObjInstalled("ADODB.Stream"))%><br/> 
+     <b>　－ ADODB.Stream 组件:</b> <%=DisI(CheckObjInstalled("ADODB.Stream"))%><br/>
      <b>　－ Scripting.Dictionary 组件:</b> <%=DisI(CheckObjInstalled("Scripting.Dictionary"))%><br/>
      <br/>
      
      <b>其他组件: </b>(以下组件不影响PJBlog2运行)<br/>
-     <b>　－ Msxml2.ServerXMLHTTP.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.ServerXMLHTTP.5.0"))%><br/> 
-     <b>　－ Msxml2.DOMDocument.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.DOMDocument.5.0"))%><br/> 
+     <b>　－ Msxml2.ServerXMLHTTP.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.ServerXMLHTTP.5.0"))%><br/>
+     <b>　－ Msxml2.DOMDocument.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.DOMDocument.5.0"))%><br/>
      <b>　－ FileUp.upload 组件:</b> <%=DisI(CheckObjInstalled("FileUp.upload"))%><br/>
      <b>　－ JMail.SMTPMail 组件:</b> <%=DisI(CheckObjInstalled("JMail.SMTPMail"))%><br/>
      <b>　－ GflAx190.GflAx 组件:</b> <%=DisI(CheckObjInstalled("GflAx190.GflAx"))%><br/>
@@ -1937,14 +2002,16 @@ elseif Request.QueryString("Fmenu")="Status" then '服务器配置
     </div>
 </td></tr></table>
 <%
-elseif Request.QueryString("Fmenu")="Logout" then '退出
-  session(CookieName&"_System")=""
-  session(CookieName&"_disLink")=""
-  session(CookieName&"_disCount")=""
-  %>
+ElseIf Request.QueryString("Fmenu") = "Logout" Then '退出
+    session(CookieName&"_System") = ""
+    session(CookieName&"_disLink") = ""
+    session(CookieName&"_disCount") = ""
+
+%>
   <script>try{top.location="default.asp"}catch(e){location="default.asp"}</script>
   <%
-elseif Request.QueryString("Fmenu")="welcome" then '欢迎%>
+ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
+%>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
   <tr>
  	<th class="CTitle"><%=categoryTitle%></th>
@@ -1976,775 +2043,780 @@ elseif Request.QueryString("Fmenu")="welcome" then '欢迎%>
 	</table>
 
 </td></tr></table>
-<%else 
+<%Else
 
-'==========================后台信息处理===============================
-dim weblog
-Set weblog=Server.CreateObject("ADODB.RecordSet")
-'==========================基本信息处理===============================
- if Request.form("action")="General" then 
-    if Request.form("whatdo")="General" then 
-'--------------------------基本信息处理-------------------
-    SQL="SELECT * FROM blog_Info"
-    weblog.Open SQL,Conn,1,3
-    weblog("blog_Name")=checkURL(CheckStr(Request.form("SiteName")))
-    weblog("blog_Title")=checkURL(CheckStr(Request.form("blog_Title")))
-    weblog("blog_master")=checkURL(CheckStr(Request.form("blog_master")))
-    weblog("blog_email")=checkURL(CheckStr(Request.form("blog_email")))
-    
-    if right(CheckStr(Request.form("SiteURL")),1)<>"/" then
-		weblog("blog_URL")=checkURL(CheckStr(Request.form("SiteURL")))&"/"
-     else
-		weblog("blog_URL")=checkURL(CheckStr(Request.form("SiteURL")))
-    end if
-    
-    weblog("blog_affiche")=""
-    weblog("blog_about")=CheckStr(Request.form("blog_about"))
-    weblog("blog_PerPage")=CheckStr(Request.form("blogPerPage"))
-    weblog("blog_commPage")=CheckStr(Request.form("blogcommpage"))
-    weblog("blog_BookPage")=0 'CheckStr(Request.form("blogBookPage"))
-    weblog("blog_commTimerout")=CheckStr(Request.form("blog_commTimerout"))
-    weblog("blog_commLength")=CheckStr(Request.form("blog_commLength"))
-    if CheckObjInstalled("ADODB.Stream") then
-	    if CheckStr(Request.form("blog_postFile"))="1" then weblog("blog_postFile")=1 else weblog("blog_postFile")=0
-	else
-		weblog("blog_postFile")=0
-    end if
-    if CheckStr(Request.form("blog_Disregister"))="1" then weblog("blog_Disregister")=1 else weblog("blog_Disregister")=0
-    if CheckStr(Request.form("blog_validate"))="1" then weblog("blog_validate")=1 else weblog("blog_validate")=0
-    if CheckStr(Request.form("blog_commUBB"))="1" then weblog("blog_commUBB")=1 else weblog("blog_commUBB")=0
-    if CheckStr(Request.form("blog_commIMG"))="1" then weblog("blog_commIMG")=1 else weblog("blog_commIMG")=0
-    if CheckStr(Request.form("blog_ImgLink"))="1" then weblog("blog_ImgLink")=1 else weblog("blog_ImgLink")=0
-    weblog("blog_SplitType")=CBool(CheckStr(Request.form("blog_SplitType")))
-    weblog("blog_introChar")=CheckStr(Request.form("blog_introChar"))
-    weblog("blog_introLine")=CheckStr(Request.form("blog_introLine"))
-    weblog("blog_FilterName")=CheckStr(Request.form("Register_UserNames"))
-    weblog("blog_FilterIP")=CheckStr(Request.form("FilterIPs"))
-    weblog("blog_DisMod")=CheckStr(Request.form("blog_DisMod"))
-    if not IsInteger(Request.form("blog_CountNum")) then
-    	weblog("blog_CountNum")=0
-    else
-	    weblog("blog_CountNum")=Request.form("blog_CountNum")
-    end if
-    weblog("blog_wapNum")=CheckStr(Request.form("blog_wapNum"))
-    if CheckStr(Request.form("blog_wapImg"))="1" then weblog("blog_wapImg")=1 else weblog("blog_wapImg")=0
-    if CheckStr(Request.form("blog_wapHTML"))="1" then weblog("blog_wapHTML")=1 else weblog("blog_wapHTML")=0
-    if CheckStr(Request.form("blog_wapLogin"))="1" then weblog("blog_wapLogin")=1 else weblog("blog_wapLogin")=0
-    if CheckStr(Request.form("blog_wapComment"))="1" then weblog("blog_wapComment")=1 else weblog("blog_wapComment")=0
-    if CheckStr(Request.form("blog_wap"))="1" then weblog("blog_wap")=1 else weblog("blog_wap")=0
-    if CheckStr(Request.form("blog_wapURL"))="1" then weblog("blog_wapURL")=1 else weblog("blog_wapURL")=0
+    '==========================后台信息处理===============================
+    Dim weblog
+    Set weblog = Server.CreateObject("ADODB.RecordSet")
+    '==========================基本信息处理===============================
+    If Request.Form("action") = "General" Then
+        If Request.Form("whatdo") = "General" Then
+            '--------------------------基本信息处理-------------------
+            SQL = "SELECT * FROM blog_Info"
+            weblog.Open SQL, Conn, 1, 3
+            weblog("blog_Name") = checkURL(CheckStr(Request.Form("SiteName")))
+            weblog("blog_Title") = checkURL(CheckStr(Request.Form("blog_Title")))
+            weblog("blog_master") = checkURL(CheckStr(Request.Form("blog_master")))
+            weblog("blog_email") = checkURL(CheckStr(Request.Form("blog_email")))
 
-    Response.Cookies(CookieNameSetting)("ViewType")="" 
-    weblog.update
-    weblog.close
-    getInfo(2)
-    if int(Request.form("SiteOpen"))=1 then
-	   Application.Lock
-	   Application(CookieName & "_SiteEnable") = 1
-	   Application(CookieName & "_SiteDisbleWhy") = ""
-	   Application.UnLock
-	  Else
-	   Application.Lock
-	   Application(CookieName & "_SiteEnable") = 0
-	   Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站暂时关闭!"
-	   Application.UnLock
-    end if
-    session(CookieName&"_ShowMsg") = true
-    session(CookieName&"_MsgText") = "基本信息修改成功!"
-    Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
-    elseif Request.form("whatdo")="Misc" Then %>
+            If Right(CheckStr(Request.Form("SiteURL")), 1)<>"/" Then
+                weblog("blog_URL") = checkURL(CheckStr(Request.Form("SiteURL")))&"/"
+            Else
+                weblog("blog_URL") = checkURL(CheckStr(Request.Form("SiteURL")))
+            End If
+
+            weblog("blog_affiche") = ""
+            weblog("blog_about") = CheckStr(Request.Form("blog_about"))
+            weblog("blog_PerPage") = CheckStr(Request.Form("blogPerPage"))
+            weblog("blog_commPage") = CheckStr(Request.Form("blogcommpage"))
+            weblog("blog_BookPage") = 0 'CheckStr(Request.form("blogBookPage"))
+            weblog("blog_commTimerout") = CheckStr(Request.Form("blog_commTimerout"))
+            weblog("blog_commLength") = CheckStr(Request.Form("blog_commLength"))
+            If CheckObjInstalled("ADODB.Stream") Then
+                weblog("blog_postFile") = Request.Form("blog_postFile")
+                ' if CheckStr(Request.form("blog_postFile"))="1" then weblog("blog_postFile")=1 else weblog("blog_postFile")=0
+            Else
+                weblog("blog_postFile") = 0
+            End If
+            If CheckStr(Request.Form("blog_Disregister")) = "1" Then weblog("blog_Disregister") = 1 Else weblog("blog_Disregister") = 0
+            If CheckStr(Request.Form("blog_validate")) = "1" Then weblog("blog_validate") = 1 Else weblog("blog_validate") = 0
+            If CheckStr(Request.Form("blog_commUBB")) = "1" Then weblog("blog_commUBB") = 1 Else weblog("blog_commUBB") = 0
+            If CheckStr(Request.Form("blog_commIMG")) = "1" Then weblog("blog_commIMG") = 1 Else weblog("blog_commIMG") = 0
+            If CheckStr(Request.Form("blog_ImgLink")) = "1" Then weblog("blog_ImgLink") = 1 Else weblog("blog_ImgLink") = 0
+            weblog("blog_SplitType") = CBool(CheckStr(Request.Form("blog_SplitType")))
+            weblog("blog_introChar") = CheckStr(Request.Form("blog_introChar"))
+            weblog("blog_introLine") = CheckStr(Request.Form("blog_introLine"))
+            weblog("blog_FilterName") = CheckStr(Request.Form("Register_UserNames"))
+            weblog("blog_FilterIP") = CheckStr(Request.Form("FilterIPs"))
+            weblog("blog_DisMod") = CheckStr(Request.Form("blog_DisMod"))
+            If Not IsInteger(Request.Form("blog_CountNum")) Then
+                weblog("blog_CountNum") = 0
+            Else
+                weblog("blog_CountNum") = Request.Form("blog_CountNum")
+            End If
+            weblog("blog_wapNum") = CheckStr(Request.Form("blog_wapNum"))
+            If CheckStr(Request.Form("blog_wapImg")) = "1" Then weblog("blog_wapImg") = 1 Else weblog("blog_wapImg") = 0
+            If CheckStr(Request.Form("blog_wapHTML")) = "1" Then weblog("blog_wapHTML") = 1 Else weblog("blog_wapHTML") = 0
+            If CheckStr(Request.Form("blog_wapLogin")) = "1" Then weblog("blog_wapLogin") = 1 Else weblog("blog_wapLogin") = 0
+            If CheckStr(Request.Form("blog_wapComment")) = "1" Then weblog("blog_wapComment") = 1 Else weblog("blog_wapComment") = 0
+            If CheckStr(Request.Form("blog_wap")) = "1" Then weblog("blog_wap") = 1 Else weblog("blog_wap") = 0
+            If CheckStr(Request.Form("blog_wapURL")) = "1" Then weblog("blog_wapURL") = 1 Else weblog("blog_wapURL") = 0
+
+            Response.Cookies(CookieNameSetting)("ViewType") = ""
+            weblog.update
+            weblog.Close
+            getInfo(2)
+            If Int(Request.Form("SiteOpen")) = 1 Then
+                Application.Lock
+                Application(CookieName & "_SiteEnable") = 1
+                Application(CookieName & "_SiteDisbleWhy") = ""
+                Application.UnLock
+            Else
+                Application.Lock
+                Application(CookieName & "_SiteEnable") = 0
+                Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站暂时关闭!"
+                Application.UnLock
+            End If
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "基本信息修改成功!"
+            Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
+        ElseIf Request.Form("whatdo") = "Misc" Then
+%>
     <!--#include file="common/ubbcode.asp" -->
     <%
-     if Request.form("ReBulidArticle")=1 Then
-      Dim LoadArticle,LogLen
-      LogLen=0
-      Set LoadArticle=conn.Execute("SELECT log_ID FROM blog_Content")
-      Do Until LoadArticle.eof
+If Request.Form("ReBulidArticle") = 1 Then
+    Dim LoadArticle, LogLen
+    LogLen = 0
+    Set LoadArticle = conn.Execute("SELECT log_ID FROM blog_Content")
+    Do Until LoadArticle.EOF
         PostArticle LoadArticle("log_ID")
-        LogLen=LogLen+1
+        LogLen = LogLen + 1
         LoadArticle.movenext
-      Loop
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")=Session(CookieName&"_MsgText")&"共转换 "&LogLen&" 篇日志到文件! "
-     End If
-     
-    if Request.form("ReBulidIndex")=1 Then
-	     dim lArticle
-		 set lArticle = new ArticleCache
-		 lArticle.SaveCache
-		 set lArticle = nothing
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")=Session(CookieName&"_MsgText")&"重新输出日志索引! "
-    end if 
-     
-     if Request.form("ReTatol")=1 Then
-      dim blog_Content_count,blog_Comment_count,ContentCount,TBCount,Count_Member
-      ContentCount=0
-      TBCount=conn.execute("select count(*) from blog_Trackback")(0)
-      Count_Member=conn.execute("select count(*) from blog_Member")(0)
-      conn.execute("update blog_Info set blog_tbNums="&TBCount)
-      conn.execute("update blog_Info set blog_MemNums="&Count_Member)
-      set blog_Content_count=conn.execute("SELECT log_CateID, Count(log_CateID) FROM blog_Content where log_IsDraft=false GROUP BY log_CateID")
-      set blog_Comment_count=conn.execute("SELECT Count(*) FROM blog_Comment")
-      do while not blog_Content_count.eof
-       ContentCount=ContentCount+blog_Content_count(1)
-       conn.execute("update blog_Category set cate_count="&blog_Content_count(1)&" where cate_ID="&blog_Content_count(0))
-       blog_Content_count.movenext
-      Loop
-      conn.execute("update blog_Info set blog_LogNums="&ContentCount)
-      conn.execute("update blog_Info set blog_CommNums="&blog_Comment_count(0))
-      getInfo(2):CategoryList(2)
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"数据统计完成! "
-     end if   
-     if Request.form("CleanVisitor")=1 then
-      conn.execute("delete * from blog_Counter")
-      session(CookieName&"_ShowMsg")=true
-      session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"访客数据清除完成! "
-     end if  
-     if Request.form("ReBulid")=1 then 
-      FreeMemory
-      session(CookieName&"_ShowMsg")=true
-      session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"缓存重建成功! "
-     end If
-     Response.Redirect("ConContent.asp?Fmenu=General&Smenu=Misc")
-    else
-     session(CookieName&"_ShowMsg")=true
-     session(CookieName&"_MsgText")="非法提交内容"
-     Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
-    end if
-'==========================处理日志分类===============================
- elseif Request.form("action")="Categories" then 
-'--------------------------处理日志批量移动----------------------------
-   if Request.form("whatdo")="move" then 
-   dim Cate_source,Cate_target,Cate_source_name,Cate_source_count,Cate_target_name
-    Cate_source=int(CheckStr(Request.form("source")))
-    Cate_target=int(CheckStr(Request.form("target")))
-    if Cate_source=Cate_target then 
-     session(CookieName&"_ShowMsg")=true
-     session(CookieName&"_MsgText")="源分类和目标分类一致无法移动"
-     Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
-    end if
-    Cate_source_name=conn.execute("select cate_Name from blog_Category where cate_ID="&Cate_source)(0)
-    Cate_source_count=conn.execute("select cate_count from blog_Category where cate_ID="&Cate_source)(0)
-    Cate_target_name=conn.execute("select cate_Name from blog_Category where cate_ID="&Cate_target)(0)
-    conn.execute ("update blog_Content set log_CateID="&Cate_target&" where log_CateID="&Cate_source)
-    conn.execute ("update blog_Category set cate_count=0 where cate_ID="&Cate_source)
-    conn.execute ("update blog_Category set cate_count=cate_count+"&Cate_source_count&" where cate_ID="&Cate_target)
-    CategoryList(2)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#f00"">"&Cate_source_name&"</span> 移动到 <span style=""color:#f00"">"&Cate_target_name&"</span> 成功! 批量转移后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
-'--------------------------处理日志分类----------------------------
-   elseif Request.form("whatdo")="Cate" then 
-    '处理存在分类
-    dim LCate_ID,LCate_icons,LCate_Name,LCate_Intro,Lcate_URL,Lcate_Order,Lcate_count,LCate_local,Lcate_Secret
-    dim NCate_ID,NCate_icons,NCate_Name,NCate_Intro,Ncate_URL,Ncate_Order,NCate_local,Ncate_OutLink,Ncate_Secret
-    LCate_ID=split(Request.form("Cate_ID"),", ")
-    LCate_Name=split(Request.form("Cate_Name"),", ")
-    LCate_icons=split(Request.form("Cate_icons"),", ")
-    LCate_Intro=split(Request.form("Cate_Intro"),", ")
-    Lcate_URL=split(Request.form("cate_URL"),", ")
-    Lcate_Order=split(Request.form("cate_Order"),", ")
-    Lcate_count=split(Request.form("cate_count"),", ")
-    LCate_local=Split(Request.form("Cate_local"),", ")
-    Lcate_Secret=Split(Request.form("cate_Secret"),", ")
-    For i=0 To UBound(LCate_Name)
-     SQL="SELECT * FROM blog_Category where cate_ID="&int(CheckStr(LCate_ID(i)))
-     weblog.Open SQL,Conn,1,3
-     weblog("cate_Name")=CheckStr(LCate_Name(i))
-     weblog("cate_icon")=CheckStr(LCate_icons(i))
-     weblog("Cate_Intro")=CheckStr(LCate_Intro(i))
-     if len(trim(Lcate_URL(i)))>1 and int(Lcate_count(i))<1 then 
-      weblog("cate_URL")=trim(CheckStr(Lcate_URL(i)))
-      weblog("cate_OutLink")=true
-     else
-      weblog("cate_URL")=trim(CheckStr(Lcate_URL(i)))
-      weblog("cate_OutLink")=false
-     end if
-     weblog("cate_Order")=int(CheckStr(Lcate_Order(i)))
-     weblog("Cate_local")=int(CheckStr(LCate_local(i)))
-     weblog("cate_Secret")=CBool(CheckStr(Lcate_Secret(i)))
-     weblog.update
-     weblog.close
-    next
-    '判断添加新日志
-    NCate_Name=trim(CheckStr(Request.form("New_Cate_Name")))
-    NCate_icons=CheckStr(Request.form("New_Cate_icons"))
-    NCate_Intro=trim(CheckStr(Request.form("New_Cate_Intro")))
-    Ncate_URL=trim(CheckStr(Request.form("New_cate_URL")))
-    Ncate_Order=CheckStr(Request.form("New_cate_Order"))
-    NCate_local=CheckStr(Request.form("New_Cate_local"))
-    Ncate_Secret=CheckStr(Request.form("New_Cate_Secret"))
-    if len(NCate_Name)>0 then
-     if len(Ncate_Order)<1 then Ncate_Order=conn.execute("select count(*) from blog_Category")(0)
-     if len(Ncate_URL)>0 then Ncate_OutLink=true else Ncate_OutLink=false
-     dim AddCateArray
-     AddCateArray=array(array("cate_Name",NCate_Name),array("cate_icon",NCate_icons),array("Cate_Intro",NCate_Intro),array("cate_URL",Ncate_URL),array("cate_OutLink",Ncate_OutLink),array("cate_Order",int(Ncate_Order)),array("Cate_local",NCate_local),Array("Cate_Secret",NCate_Secret))
-     if DBQuest("blog_Category",AddCateArray,"insert")=0 then session(CookieName&"_MsgText")="新日志分类添加成功，"
-    end if
-    FreeMemory
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"日志分类更新成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
-'--------------------------批量删除日志----------------------------
-   elseif Request.form("whatdo")="batdel" then 
-     dim CID,Cids,tti,C1,C2
-     C1=0
-     C2=0
-     CID=checkstr(request.form("CID"))
-     Cids=split(CID,", ")
-     for tti=0 to ubound(Cids)
-	     if DeleteLog(Cids(tti))=1 then 
-	       C1=C1+1
-	      else
-	       C2=C2+1
-	     end if
-     next
-    FreeMemory
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="日志删除状态:"&C1&"篇成功,"&C2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=del")
-'--------------------------删除日志分类----------------------------
-   elseif Request.form("whatdo")="DelCate" then 
-    Dim DelCate,DelLog,DelID,conCount,comCount,P1,P2
-    P1=0
-    p2=0
-    DelCate=Request.form("DelCate")
-    set DelLog=Conn.Execute("select log_ID FROM blog_Content WHERE log_CateID="&DelCate)
-    do while not DelLog.eof 
-     DelID=DelLog("log_ID")
-     if DeleteLog(DelID)=1 then 
-       P1=P1+1
-      else
-       P2=P2+1
-     end if
-     DelLog.movenext
-    loop
-    Conn.ExeCute("DELETE * FROM blog_Category WHERE cate_ID="&DelCate)
-    FreeMemory
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"日志分类删除成功! 日志删除状态:"&P1&"篇成功,"&P2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
-   elseif Request.form("whatdo")="Tag" then 
-       Dim TagsID,TagName
-	   if Request.form("doModule")="DelSelect" then
-		    TagsID=split(Request.form("selectTagID"),", ")
-		    for i=0 to ubound(TagsID)
-				conn.execute("DELETE * from blog_tag where tag_id="&TagsID(i))
-			next
-		    Tags(2)
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&(ubound(TagsID)+1)&" 个Tag被删除!"
-		    if blog_postFile then session(CookieName&"_MsgText")=session(CookieName&"_MsgText")+"由于你使用了静态日志功能，所以删除tag后建议到 <a href='ConContent.asp?Fmenu=General&Smenu=Misc' title='站点基本设置-初始化数据 '>初始化数据</a> 重新生成所有日志一次."
-		    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
-    	   else
-		     TagsID=split(Request.form("TagID"),", ")
-		     TagName=split(Request.form("tagName"),", ")
-			 for i=0 to ubound(TagsID)
-		     if int(TagsID(i))<>-1 then
-		        conn.execute("update blog_tag set tag_name='"&CheckStr(TagName(i))&"' where tag_id="&TagsID(i))
-		       else
-		         if len(trim(CheckStr(TagName(i))))>0 then
-		          conn.execute("insert into blog_tag (tag_name,tag_count) values ('"&CheckStr(TagName(i))&"',0)")
-		          session(CookieName&"_MsgText")="新Tag添加成功! "
-		         end if
-		     end if
-		    next
-		    Tags(2)
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"Tag保存成功!"
-		    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
-     end if
-   else
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="非法提交内容!"
-    Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
-  end if
-  
-'==========================评论留言处理===============================
- elseif Request.form("action")="Comment" then
- 
-  dim selCommID,doCommID,doTitle,doRedirect,t1,t2
-  selCommID=split(Request.form("selectCommentID"),", ")
-  doCommID=split(Request.form("CommentID"),", ")
-
-  if Request.form("doModule")="updateKey" then
-	    saveFilterKey Request.form("keyList")
-  elseif Request.form("doModule")="updateRegKey" then
-  		saveReFilterKey
-  elseif  Request.form("doModule")="DelSelect" then
-		     for i=0 to ubound(selCommID)
-				 if Request.form("whatdo")="trackback" then
-				        t1=int(split(selCommID(i),"|")(0)): t2=int(split(selCommID(i),"|")(1))
-						conn.execute("UPDATE blog_Content SET log_QuoteNums=log_QuoteNums-1 WHERE log_ID="&t2)
-						conn.execute("DELETE * from blog_Trackback where tb_ID="&t1)
-						conn.Execute("UPDATE blog_Info Set blog_tbNums=blog_tbNums-1")
-						doTitle="引用通告"
-					    PostArticle t2
-					    doRedirect="trackback"
-				 elseif Request.form("whatdo")="msg" then
-						conn.execute("DELETE * from blog_book where book_ID="&selCommID(i))
-						doTitle="留言"
-					    doRedirect="msg"
-				 else
-				        t1=int(split(selCommID(i),"|")(0)): t2=int(split(selCommID(i),"|")(1))
-				        conn.execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&t2)
-					    conn.ExeCute("update blog_Info set blog_CommNums=blog_CommNums-1")
-						conn.execute("DELETE * from blog_Comment where comm_ID="&t1)
-						doTitle="评论"
-					    doRedirect=""
-					    PostArticle t2
-				end if
-			next
-			
-			getInfo(2)
-		    NewComment(2)
-			Application.Lock
-		    Application(CookieName&"_blog_Message")=""
-			Application.UnLock
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=(ubound(selCommID)+1)&" 个"&doTitle&"记录被删除!"
- 		    Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
-   elseif  Request.form("doModule")="Update" then
-		     for i=0 to ubound(doCommID)
-				if Request.form("whatdo")="msg" then
-						if int(Request.form("edited_"&doCommID(i)))=1 then
-							conn.execute("UPDATE blog_book SET book_Content='"&checkStr(Request.form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(now(),"Y-m-d H:I:S")&"#,book_reply='"&checkStr(Request.form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
-						else
-							conn.execute("UPDATE blog_book SET book_Content='"&checkStr(Request.form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_reply='"&checkStr(Request.form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
-						end if
-						doTitle="留言"
-					    doRedirect="msg"
-				elseif Request.form("whatdo")="comment" then
-						conn.execute("UPDATE blog_Comment SET comm_Content='"&checkStr(Request.form("message_"&doCommID(i)))&"' WHERE comm_ID="&doCommID(i))
-						doTitle="评论"
-					    doRedirect=""
-				end if
-		     next
-		     
-		    NewComment(2)
-			Application.Lock
-		    Application(CookieName&"_blog_Message")=""
-			Application.UnLock
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=doTitle&"记录更新成功!"
- 		    Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
-   end if
-    
-'==========================处理帐户和权限信息===============================
- elseif Request.form("action")="Members" then 
-'--------------------------处理权限组信息----------------------------
-  if Request.form("whatdo")="Group" then
-  dim status_name,status_title,Rights,allCount,addCount
-  status_name=split(Request.form("status_name"),", ")
-  status_title=split(Request.form("status_title"),", ")
-  allCount=ubound(status_name)
-  dim NS_Name,NS_Title,NS_Code,NS_UpSize,NS_UploadType,tmpNS
-  if len(status_name(allCount))>0 then
-   NS_Name=CheckStr(status_name(allCount))
-   NS_Title=CheckStr(status_title(allCount))
-  if not IsValidChars(NS_Name) then 
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#900"">添加新权限失败!权限标识不能为英文或数字以外的字符</span>"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
-  end if
-  set tmpNS=conn.execute("select stat_name from blog_status where stat_name='"&NS_Name&"'")
-  if not tmpNS.eof then
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&NS_Name&"”</span> 权限标识已经存在无法添加新分组!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
-  end if
-   conn.execute("insert into blog_status (stat_name,stat_title,stat_Code,stat_attSize,stat_attType) values ('"&NS_Name&"','"&NS_Title&"','000000000000',0,'')")
-   session(CookieName&"_MsgText")="新分组添加成功!"
-  end if
-  for i=0 to ubound(status_name)-1
-  conn.execute("update blog_status set stat_title='"&CheckStr(status_title(i))&"' where stat_name='"&CheckStr(status_name(i))&"'")
-  next
-    UserRight(2) 
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"权限组信息修改成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")  
-'--------------------------处理帐户信息----------------------------
-  elseif Request.form("whatdo")="User" then
-  
-'--------------------------编辑分组信息----------------------------
-  elseif Request.form("whatdo")="EditGroup" then
-    dim EditGroup,AddArticle,EditArticle,DelArticle,AddComment,DelComment,ShowHiddenCate,IsAdmin,CanUpload,UploadSize,UploadType,Group_title,SCode
-    EditGroup=CheckStr(Request.form("status_name"))
-    AddArticle=CheckStr(Request.form("AddArticle"))
-    EditArticle=CheckStr(Request.form("EditArticle"))
-    DelArticle=CheckStr(Request.form("DelArticle"))
-    AddComment=CheckStr(Request.form("AddComment"))
-    DelComment=CheckStr(Request.form("DelComment"))
-    ShowHiddenCate=CheckStr(Request.form("ShowHiddenCate"))
-    IsAdmin=CheckStr(Request.form("IsAdmin"))
-    CanUpload=CheckStr(Request.form("CanUpload"))
-    UploadSize=CheckStr(Request.form("UploadSize"))
-    UploadType=CheckStr(Request.form("UploadType"))
-    Group_title=CheckStr(Request.form("status_title"))
-    SCode=AddArticle & EditArticle & DelArticle &_
-          AddComment & DelComment & CanUpload & IsAdmin & ShowHiddenCate
-    conn.execute("update blog_status set stat_title='"&Group_title&"',stat_code='"&SCode&"',stat_attSize="&UploadSize&",stat_attType='"&UploadType&"' where stat_name='"&EditGroup&"'")
-    UserRight(2)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&EditGroup&"”</span>权限分组 编辑成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=EditRight&id="&EditGroup)
-'--------------------------删除分组信息----------------------------
-  elseif Request.form("whatdo")="DelGroup" then
-   dim DelGroup
-   DelGroup=CheckStr(Request.form("DelGroup"))
-   if lcase(DelGroup)<>"supadmin" and lcase(DelGroup)<>"member" and lcase(DelGroup)<>"guest" then
-    conn.execute ("update blog_Member set mem_Status='Member' where mem_Status='"&DelGroup&"'")
-    Conn.ExeCute("DELETE * FROM blog_status WHERE stat_name='"&DelGroup&"'")
-    UserRight(2)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&DelGroup&"”</span>权限分组 删除成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
-   else
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="特殊分组无法删除!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
-   end if
-'--------------------------保存用户权限----------------------------
-  elseif Request.form("whatdo")="SaveUserRight" then
-	for i=1 to Request.form("mem_ID").count
-      conn.execute("update blog_Member set mem_Status='"&Request.form("mem_Status").item(i)&"' where mem_ID="&Request.form("mem_ID").item(i))
-    next
-    
-    session(CookieName&"_ShowMsg") = true
-    session(CookieName&"_MsgText") = "用户权限设置成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
-'--------------------------删除用户----------------------------
-  elseif Request.form("whatdo")="DelUser" then
-    dim DelUserID,DelUserName,blogmemberNum, DelUserStatus
-    DelUserID=Request.form("DelID")
-        blogmemberNum=conn.execute("select count(mem_ID) from blog_Member where mem_Status='SupAdmin'")(0)        
-        
-        DelUserStatus=conn.execute("select mem_Status from blog_Member where mem_ID="&DelUserID)(0)
-            if ((blogmemberNum = 1) and (DelUserStatus = "SupAdmin")) then 
-                        session(CookieName&"_ShowMsg")=true
-                   session(CookieName&"_MsgText")="不能删除仅有的管理员权限!"
-                   Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
-                else 
-                DelUserName=conn.execute("select mem_Name from blog_Member where mem_ID="&DelUserID)(0)
-                    conn.execute("delete * from blog_Member where mem_ID="&DelUserID)
-                        Conn.ExeCute("UPDATE blog_Info SET blog_MemNums=blog_MemNums-1")
-                        getInfo(2)
-                    session(CookieName&"_ShowMsg")=true
-                    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&DelUserName&"”</span> 删除成功!"
-                    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")        
-                  end if   
-   else
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="非法提交内容!"
-    Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
-  end if
-'==========================友情链接管理===============================
- elseif Request.form("action")="Links" then 
-    dim LinkID,LinkName,LinkURL,LinkLogo,LinkOrder,LinkMain
-'--------------------------友情链接过滤----------------------------
-   if Request.form("whatdo")="Filter" then
-     session(CookieName&"_disLink")=CheckStr(Request.form("disLink"))
-     session(CookieName&"_disCount")=CheckStr(Request.form("disCount"))
-     Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=")
-'--------------------------保存友情链接----------------------------
-   elseif Request.form("whatdo")="SaveLink" then
-    dim TLinkName,TLinkURL,TLinkLogo,TLinkOrder
-    LinkID=split(Request.form("LinkID"),", ")
-    LinkName=split(Request.form("LinkName"),", ")
-    LinkURL=split(Request.form("LinkURL"),", ")
-    LinkLogo=split(Request.form("LinkLogo"),", ")
-    LinkOrder=split(Request.form("LinkOrder"),", ")
-    for i=0 to ubound(LinkID)
-        if ubound(LinkName)<0 then TLinkName="未知" else TLinkName=LinkName(i)
-        if ubound(LinkURL)<0 then TLinkURL="http://" else TLinkURL=LinkURL(i)
-        if ubound(LinkLogo)<0 then TLinkLogo="" else TLinkLogo=LinkLogo(i)
-        if ubound(LinkOrder)<0 then TLinkOrder="0" else TLinkOrder=LinkOrder(i)
-        conn.execute("update blog_Links set link_Name='"&CheckStr(TLinkName)&"',link_URL='"&CheckStr(TLinkURL)&"',link_Image='"&CheckStr(TLinkLogo)&"',link_Order='"&CheckStr(TLinkOrder)&"' where link_ID="&LinkID(i))
-    next
-    LinkID=Request.form("new_LinkID")
-    LinkName=Request.form("new_LinkName")
-    LinkURL=Request.form("new_LinkURL")
-    LinkLogo=Request.form("new_LinkLogo")
-    LinkOrder=Request.form("new_LinkOrder")
-       if len(LinkOrder)<1 then LinkOrder=conn.execute("select count(*) from blog_Links")(0)
-       if len(trim(CheckStr(LinkName)))>0 then
-          conn.execute("insert into blog_Links (link_Name,link_URL,link_Image,link_Order,link_IsShow) values ('"&CheckStr(LinkName)&"','"&CheckStr(LinkURL)&"','"&CheckStr(LinkLogo)&"','"&CheckStr(LinkOrder)&"',true)")
-          session(CookieName&"_MsgText")="新友情链接添加成功! "
-        end if
-    Bloglinks(2)
-    PostLink
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"保存链接成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.form("page"))
-'--------------------------通过友情链接----------------------------
-   elseif Request.form("whatdo")="ShowLink" then
-    conn.execute ("update blog_Links set link_IsShow=true where link_ID="&CheckStr(Request.form("ALinkID")))
-    LinkName=conn.execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.form("ALinkID")))(0)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 通过验证!"
-    Bloglinks(2)
-    PostLink
-    Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.form("page"))
-'--------------------------置顶友情链接----------------------------
-   elseif Request.form("whatdo")="TopLink" then
-    conn.execute ("update blog_Links set link_IsMain=not link_IsMain where link_ID="&CheckStr(Request.form("ALinkID")))
-    LinkName=conn.execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.form("ALinkID")))(0)
-    LinkMain=conn.execute ("select link_IsMain from blog_Links where link_ID="&CheckStr(Request.form("ALinkID")))(0)
-    session(CookieName&"_ShowMsg")=true
-    if LinkMain then
-      session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 置顶成功!"
-     else
-      session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 取消首页置顶!"
-    end if
-    Bloglinks(2)
-    PostLink
-    Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.form("page"))
-'--------------------------删除友情链接----------------------------
-   elseif Request.form("whatdo")="DelLink" then
-    LinkName=conn.execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.form("ALinkID")))(0)
-    conn.execute ("DELETE * from blog_Links where link_ID="&CheckStr(Request.form("ALinkID")))
-    Session(CookieName&"_ShowMsg")=true
-    Session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 删除成功!"
-    Bloglinks(2)
-    PostLink
-    Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.form("page"))
-   end if
-'==========================表情和关键字===============================
- elseif Request.form("action")="smilies" then 
- dim smilesID,smiles,smilesURL
- dim KeyWordID,KeyWord,KeyWordURL
-'--------------------------处理表情符号----------------------------
-   if Request.form("whatdo")="smilies" then
-	   if Request.form("doModule")="DelSelect" then
-		    smilesID=split(Request.form("selectSmiliesID"),", ")
-		    for i=0 to ubound(smilesID)
-				conn.execute("DELETE * from blog_Smilies where sm_ID="&smilesID(i))
-			next
-		    Smilies(2)
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&(ubound(smilesID)+1)&" 个表情被删除!"
-		    Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
-    	   else
-		     smilesID=split(Request.form("smilesID"),", ")
-		     smiles=split(Request.form("smiles"),", ")
-		     smilesURL=split(Request.form("smilesURL"),", ")
-			 for i=0 to ubound(smilesID)
-		     if int(smilesID(i))<>-1 then
-		        conn.execute("update blog_Smilies set sm_Text='"&CheckStr(smiles(i))&"',sm_Image='"&CheckStr(smilesURL(i))&"' where sm_ID="&smilesID(i))
-		       else
-		         if len(trim(CheckStr(smiles(i))))>0 then
-		          conn.execute("insert into blog_Smilies (sm_Text,sm_Image) values ('"&CheckStr(smiles(i))&"','"&CheckStr(smilesURL(i))&"')")
-		          session(CookieName&"_MsgText")="新表情添加成功! "
-		         end if
-		     end if
-		    next
-		    Smilies(2)
-		    session(CookieName&"_ShowMsg")=true
-		    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"表情保存成功!"
-		    Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
-     end if
-   Elseif Request.form("whatdo")="KeyWord" then
-	if Request.form("doModule")="DelSelect" then
-		KeyWordID=split(Request.form("SelectKeyWordID"),", ")
-		for i=0 to ubound(KeyWordID)
-		conn.execute("DELETE * from blog_Keywords where key_ID="&KeyWordID(i))
-		next
-		Keywords(2)
-	    session(CookieName&"_ShowMsg")=true
-	    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&(ubound(KeyWordID)+1)&"关键字被删除!"
-	    Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
-	 else
-	     KeyWordID=split(Request.form("KeyWordID"),", ")
-	     KeyWord=split(Request.form("KeyWord"),", ")
-	     KeyWordURL=split(Request.form("KeyWordURL"),", ")
-		 for i=0 to ubound(KeyWordID)
-	     if int(KeyWordID(i))<>-1 then
-	        conn.execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"' where key_ID="&KeyWordID(i))
-	       else
-	         if len(trim(CheckStr(KeyWord(i))))>0 then
-	          conn.execute("insert into blog_Keywords (key_Text,key_URL) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"')")
-	          session(CookieName&"_MsgText")="新关键字添加成功! "
-	         end if
-	     end if
-	    next
-		Keywords(2)
-	    session(CookieName&"_ShowMsg")=true
-	    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"关键字保存成功!"
-	    Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
-    end if
-   else
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="非法提交内容!"
-    Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
-   end if
-   
-'==========================设置界面和模版===============================
- elseif Request.form("action")="Skins" then 
- dim skinpath,Skinname,moduleID,moduleName,moduleType,moduleTitle,moduleHidden,moduleTop,moduleOrder,moduleHtmlCode,mOrder
-'--------------------------设置默认界面----------------------------
-   if Request.form("whatdo")="setDefaultSkin" then
-    skinpath=CheckStr(Request.form("SkinPath"))
-    Skinname=CheckStr(Request.form("SkinName"))
-    conn.execute("update blog_Info set blog_DefaultSkin='"&skinpath&"'")
-    getInfo(2)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&Skinname&"”</span> 设置为当前默认界面!"
-    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=")
-'--------------------------保存模块设置----------------------------
-   elseif Request.form("whatdo")="UpdateModule" then
-    Dim selectID,doModule
-    selectID=split(Request.form("selectID"),", ")
-    doModule=Request.form("doModule")
-    moduleID=split(Request.form("mID"),", ")
-    moduleName=split(Request.form("mName"),", ")
-    moduleType=split(Request.form("mType"),", ")
-    moduleTitle=split(Request.form("mTitle"),", ")
-    moduleHidden=split(Request.form("mHidden"),", ")
-    moduleTop=split(Request.form("mTop"),", ")
-    moduleOrder=split(Request.form("mOrder"),", ")
-    ',IsHidden="&CBool(moduleHidden(i))&",IndexOnly="&CBool(moduleTop(i))&"
-	 for i=0 to ubound(moduleID)
-     if int(moduleID(i))<>-1 then
-      if not conn.execute ("select IsSystem from blog_module where id="&moduleID(i))(0) then
-        conn.execute("update blog_module set title='"&CheckStr(moduleTitle(i))&"',type='"&CheckStr(moduleType(i))&"',SortID="&CheckStr(moduleOrder(i))&" where id="&moduleID(i))
-        else
-        mOrder=CheckStr(moduleOrder(i))
-        if CheckStr(moduleName(i))="ContentList" then mOrder=0
-        conn.execute("update blog_module set title='"&CheckStr(moduleTitle(i))&"',SortID="&mOrder&" where id="&moduleID(i))
-       end if
-       else
-         if len(trim(CheckStr(moduleName(i))))>0 then
-			  if not conn.execute("select name from blog_module where name='"&CheckStr(moduleName(i))&"'").eof then
-			    session(CookieName&"_ShowMsg")=true
-			    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&CheckStr(moduleName(i))&"”</span> 模块标识已经存在无法添加新模块!"
-			    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-			  end if
-			  if not IsValidChars(CheckStr(moduleName(i))) then 
-			    session(CookieName&"_ShowMsg")=true
-			    session(CookieName&"_MsgText")="<span style=""color:#900"">添加新模块失败!权限标识不能为英文或数字以外的字符</span>"
-			    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-			  end if
-			  if len(CheckStr(moduleOrder(i)))<1 then 
-				    mOrder=conn.execute("select count(id) from blog_module")(0)
-			   else
-				     if IsInteger(CheckStr(moduleOrder(i)))=false then 
-					       session(CookieName&"_ShowMsg")=true
-					       session(CookieName&"_MsgText")="输入非法，添加失败!"
-					       Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-				     end if
-			    mOrder=CheckStr(moduleOrder(i))
-			  end if
-          conn.execute("insert into blog_module (name,title,type,IsHidden,IndexOnly,SortID) values ('"&CheckStr(moduleName(i))&"','"&CheckStr(moduleTitle(i))&"','"&CheckStr(moduleType(i))&"',false,false,"&mOrder&")")
-          session(CookieName&"_MsgText")="新模块添加成功! "
-         end if
-     end if
-    next
-    for i=0 to ubound(selectID)
-	    Select case doModule
-	      Case "dohidden":
-	        conn.execute("update blog_module set IsHidden=true where id="&selectID(i))
-	      Case "cancelhidden":
-	        conn.execute("update blog_module set IsHidden=false where id="&selectID(i))
-	      Case "doIndex":
-	        conn.execute("update blog_module set IndexOnly=true where id="&selectID(i))
-	      Case "cancelIndex":
-	        conn.execute("update blog_module set IndexOnly=false where id="&selectID(i))
-	    end Select
-    next
-    log_module(2)
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")=session(CookieName&"_MsgText")&"模块保存成功!"
-    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-    
-'--------------------------编辑模块HTML代码----------------------------
-   elseif Request.form("whatdo")="editModule" Then
-    moduleID=Request.form("DoID")
-    moduleName=Request.form("DoName")
-    moduleHtmlCode=ClearHTML(CheckStr(request.form("HtmlCode")))
-    SavehtmlCode moduleHtmlCode,moduleID
-    log_module(2)
-    session(CookieName&"_ShowMsg")=True
-    session(CookieName&"_MsgText")="<span style=""color:#900"">“"&moduleName&"”</span> 代码编辑成功!"
-    if Request.form("editType")="normal" then
-		    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModuleNormal&miD="&moduleID)
-     else
-		    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModule&miD="&moduleID)
-    end if
-   
-'-------------------------------删除模块------------------------------
-   elseif Request.form("whatdo")="delModule" Then
-    moduleID=Request.form("DoID")
-    if conn.execute("select isSystem from blog_module where id="&moduleID)(0) Then
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")="<span style=""color:#900"">“"&conn.execute("select title from blog_module where id="&moduleID)(0)&"”</span> 是内置模块无法删除！"
-      Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-    Else
-      moduleName=conn.execute("select title from blog_module where id="&moduleID)(0)
-      delModule moduleID
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")="<span style=""color:#900"">“"&moduleName&"”</span> 删除成功！"
-      log_module(2)
-      Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
-    end If
-'-------------------------------保存插件配置------------------------------
-   elseif Request.form("whatdo")="SavePluginsSetting" Then
-    Dim GetPlugName,GetPlugSetItems,GetPlugSetItemName,GetPlugSetItemValue
-    GetPlugName=Request.Form("PluginsName")
-    Set GetPlugSetItems=conn.Execute ("Select * from blog_ModSetting where set_ModName='"&GetPlugName&"'")
-    Do Until GetPlugSetItems.eof 
-     GetPlugSetItemName=GetPlugSetItems("set_KeyName")
-     GetPlugSetItemValue=checkstr(Request.Form(GetPlugSetItemName))
-     conn.Execute ("update blog_ModSetting Set set_KeyValue='"&GetPlugSetItemValue&"' where set_ModName='"&GetPlugName&"'and set_KeyName='"&GetPlugSetItemName&"'")
-     GetPlugSetItems.movenext
     Loop
-    Dim ModSetTemp2
-     Set ModSetTemp2=New ModSet
-     ModSetTemp2.Open GetPlugName
-     ModSetTemp2.ReLoad()
-      session(CookieName&"_ShowMsg")=True
-      session(CookieName&"_MsgText")="<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功！"
-      Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
-   end If
-'==========================附件管理===============================
- elseif Request.form("action")="Attachments" then 
-'-------------------------------删除模块------------------------------
-   if Request.form("whatdo")="DelFiles" then
-    dim getFolders,getFiles,getFolder,getFile,getFolderCount,getFileCount
-    Dim FSODel
-    Set FSODel=Server.CreateObject("Scripting.FileSystemObject")
-    getFolders=split(Request.form("folders"),", ")
-    getFiles=split(Request.form("Files"),", ")
-    getFolderCount=0
-    getFileCount=0
-    for each getFolder in getFolders
-     if len(getPathList(getFolder)(1))>0 then
-       session(CookieName&"_ShowMsg")=true
-       session(CookieName&"_MsgText")="<span style=""color:#900"">“"&getFolder&"”</span> 文件夹内含有文件，无法删除!"
-       Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
-     end if
-     if FSODel.FolderExists(Server.MapPath(getFolder)) then
-      FSODel.DeleteFolder Server.MapPath(getFolder),true
-      getFolderCount=getFolderCount+1
-     end if
-    next
-    for each getFile in getFiles
-     if FSODel.FileExists(Server.MapPath(getFile)) then
-      FSODel.DeleteFile Server.MapPath(getFile),true
-      getFileCount=getFileCount+1
-     end if
-    next
-    session(CookieName&"_ShowMsg")=true
-    session(CookieName&"_MsgText")="有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
-    Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
-   end if
-  else'登录欢迎
-  
- end if
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共转换 "&LogLen&" 篇日志到文件! "
+End If
+
+If Request.Form("ReBulidIndex") = 1 Then
+    Dim lArticle
+    Set lArticle = New ArticleCache
+    lArticle.SaveCache
+    Set lArticle = Nothing
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"重新输出日志索引! "
+End If
+
+If Request.Form("ReTatol") = 1 Then
+    Dim blog_Content_count, blog_Comment_count, ContentCount, TBCount, Count_Member
+    ContentCount = 0
+    TBCount = conn.Execute("select count(*) from blog_Trackback")(0)
+    Count_Member = conn.Execute("select count(*) from blog_Member")(0)
+    conn.Execute("update blog_Info set blog_tbNums="&TBCount)
+    conn.Execute("update blog_Info set blog_MemNums="&Count_Member)
+    Set blog_Content_count = conn.Execute("SELECT log_CateID, Count(log_CateID) FROM blog_Content where log_IsDraft=false GROUP BY log_CateID")
+    Set blog_Comment_count = conn.Execute("SELECT Count(*) FROM blog_Comment")
+    Do While Not blog_Content_count.EOF
+        ContentCount = ContentCount + blog_Content_count(1)
+        conn.Execute("update blog_Category set cate_count="&blog_Content_count(1)&" where cate_ID="&blog_Content_count(0))
+        blog_Content_count.movenext
+    Loop
+    conn.Execute("update blog_Info set blog_LogNums="&ContentCount)
+    conn.Execute("update blog_Info set blog_CommNums="&blog_Comment_count(0))
+    getInfo(2)
+    CategoryList(2)
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"数据统计完成! "
+End If
+If Request.Form("CleanVisitor") = 1 Then
+    conn.Execute("delete * from blog_Counter")
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"访客数据清除完成! "
+End If
+If Request.Form("ReBulid") = 1 Then
+    FreeMemory
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"缓存重建成功! "
+End If
+Response.Redirect("ConContent.asp?Fmenu=General&Smenu=Misc")
+Else
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = "非法提交内容"
+    Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
+End If
+'==========================处理日志分类===============================
+ElseIf Request.Form("action") = "Categories" Then
+    '--------------------------处理日志批量移动----------------------------
+    If Request.Form("whatdo") = "move" Then
+        Dim Cate_source, Cate_target, Cate_source_name, Cate_source_count, Cate_target_name
+        Cate_source = Int(CheckStr(Request.Form("source")))
+        Cate_target = Int(CheckStr(Request.Form("target")))
+        If Cate_source = Cate_target Then
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "源分类和目标分类一致无法移动"
+            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
+        End If
+        Cate_source_name = conn.Execute("select cate_Name from blog_Category where cate_ID="&Cate_source)(0)
+        Cate_source_count = conn.Execute("select cate_count from blog_Category where cate_ID="&Cate_source)(0)
+        Cate_target_name = conn.Execute("select cate_Name from blog_Category where cate_ID="&Cate_target)(0)
+        conn.Execute ("update blog_Content set log_CateID="&Cate_target&" where log_CateID="&Cate_source)
+        conn.Execute ("update blog_Category set cate_count=0 where cate_ID="&Cate_source)
+        conn.Execute ("update blog_Category set cate_count=cate_count+"&Cate_source_count&" where cate_ID="&Cate_target)
+        CategoryList(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "<span style=""color:#f00"">"&Cate_source_name&"</span> 移动到 <span style=""color:#f00"">"&Cate_target_name&"</span> 成功! 批量转移后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
+        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
+        '--------------------------处理日志分类----------------------------
+    ElseIf Request.Form("whatdo") = "Cate" Then
+        '处理存在分类
+        Dim LCate_ID, LCate_icons, LCate_Name, LCate_Intro, Lcate_URL, Lcate_Order, Lcate_count, LCate_local, Lcate_Secret
+        Dim NCate_ID, NCate_icons, NCate_Name, NCate_Intro, Ncate_URL, Ncate_Order, NCate_local, Ncate_OutLink, Ncate_Secret
+        LCate_ID = Split(Request.Form("Cate_ID"), ", ")
+        LCate_Name = Split(Request.Form("Cate_Name"), ", ")
+        LCate_icons = Split(Request.Form("Cate_icons"), ", ")
+        LCate_Intro = Split(Request.Form("Cate_Intro"), ", ")
+        Lcate_URL = Split(Request.Form("cate_URL"), ", ")
+        Lcate_Order = Split(Request.Form("cate_Order"), ", ")
+        Lcate_count = Split(Request.Form("cate_count"), ", ")
+        LCate_local = Split(Request.Form("Cate_local"), ", ")
+        Lcate_Secret = Split(Request.Form("cate_Secret"), ", ")
+        For i = 0 To UBound(LCate_Name)
+            SQL = "SELECT * FROM blog_Category where cate_ID="&Int(CheckStr(LCate_ID(i)))
+            weblog.Open SQL, Conn, 1, 3
+            weblog("cate_Name") = CheckStr(LCate_Name(i))
+            weblog("cate_icon") = CheckStr(LCate_icons(i))
+            weblog("Cate_Intro") = CheckStr(LCate_Intro(i))
+            If Len(Trim(Lcate_URL(i)))>1 And Int(Lcate_count(i))<1 Then
+                weblog("cate_URL") = Trim(CheckStr(Lcate_URL(i)))
+                weblog("cate_OutLink") = True
+            Else
+                weblog("cate_URL") = Trim(CheckStr(Lcate_URL(i)))
+                weblog("cate_OutLink") = False
+            End If
+            weblog("cate_Order") = Int(CheckStr(Lcate_Order(i)))
+            weblog("Cate_local") = Int(CheckStr(LCate_local(i)))
+            weblog("cate_Secret") = CBool(CheckStr(Lcate_Secret(i)))
+            weblog.update
+            weblog.Close
+        Next
+        '判断添加新日志
+        NCate_Name = Trim(CheckStr(Request.Form("New_Cate_Name")))
+        NCate_icons = CheckStr(Request.Form("New_Cate_icons"))
+        NCate_Intro = Trim(CheckStr(Request.Form("New_Cate_Intro")))
+        Ncate_URL = Trim(CheckStr(Request.Form("New_cate_URL")))
+        Ncate_Order = CheckStr(Request.Form("New_cate_Order"))
+        NCate_local = CheckStr(Request.Form("New_Cate_local"))
+        Ncate_Secret = CheckStr(Request.Form("New_Cate_Secret"))
+        If Len(NCate_Name)>0 Then
+            If Len(Ncate_Order)<1 Then Ncate_Order = conn.Execute("select count(*) from blog_Category")(0)
+            If Len(Ncate_URL)>0 Then Ncate_OutLink = True Else Ncate_OutLink = False
+            Dim AddCateArray
+            AddCateArray = Array(Array("cate_Name", NCate_Name), Array("cate_icon", NCate_icons), Array("Cate_Intro", NCate_Intro), Array("cate_URL", Ncate_URL), Array("cate_OutLink", Ncate_OutLink), Array("cate_Order", Int(Ncate_Order)), Array("Cate_local", NCate_local), Array("Cate_Secret", NCate_Secret))
+            If DBQuest("blog_Category", AddCateArray, "insert") = 0 Then session(CookieName&"_MsgText") = "新日志分类添加成功，"
+        End If
+        FreeMemory
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"日志分类更新成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+        '--------------------------批量删除日志----------------------------
+    ElseIf Request.Form("whatdo") = "batdel" Then
+        Dim CID, Cids, tti, C1, C2
+        C1 = 0
+        C2 = 0
+        CID = checkstr(request.Form("CID"))
+        Cids = Split(CID, ", ")
+        For tti = 0 To UBound(Cids)
+            If DeleteLog(Cids(tti)) = 1 Then
+                C1 = C1 + 1
+            Else
+                C2 = C2 + 1
+            End If
+        Next
+        FreeMemory
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "日志删除状态:"&C1&"篇成功,"&C2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
+        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=del")
+        '--------------------------删除日志分类----------------------------
+    ElseIf Request.Form("whatdo") = "DelCate" Then
+        Dim DelCate, DelLog, DelID, conCount, comCount, P1, P2
+        P1 = 0
+        p2 = 0
+        DelCate = Request.Form("DelCate")
+        Set DelLog = Conn.Execute("select log_ID FROM blog_Content WHERE log_CateID="&DelCate)
+        Do While Not DelLog.EOF
+            DelID = DelLog("log_ID")
+            If DeleteLog(DelID) = 1 Then
+                P1 = P1 + 1
+            Else
+                P2 = P2 + 1
+            End If
+            DelLog.movenext
+        Loop
+        Conn.Execute("DELETE * FROM blog_Category WHERE cate_ID="&DelCate)
+        FreeMemory
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"日志分类删除成功! 日志删除状态:"&P1&"篇成功,"&P2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
+        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+    ElseIf Request.Form("whatdo") = "Tag" Then
+        Dim TagsID, TagName
+        If Request.Form("doModule") = "DelSelect" Then
+            TagsID = Split(Request.Form("selectTagID"), ", ")
+            For i = 0 To UBound(TagsID)
+                conn.Execute("DELETE * from blog_tag where tag_id="&TagsID(i))
+            Next
+            Tags(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(TagsID) + 1)&" 个Tag被删除!"
+            If blog_postFile>0 Then session(CookieName&"_MsgText") = session(CookieName&"_MsgText") + "由于你使用了静态日志功能，所以删除tag后建议到 <a href='ConContent.asp?Fmenu=General&Smenu=Misc' title='站点基本设置-初始化数据 '>初始化数据</a> 重新生成所有日志一次."
+            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
+        Else
+            TagsID = Split(Request.Form("TagID"), ", ")
+            TagName = Split(Request.Form("tagName"), ", ")
+            For i = 0 To UBound(TagsID)
+                If Int(TagsID(i))<> -1 Then
+                    conn.Execute("update blog_tag set tag_name='"&CheckStr(TagName(i))&"' where tag_id="&TagsID(i))
+                Else
+                    If Len(Trim(CheckStr(TagName(i))))>0 Then
+                        conn.Execute("insert into blog_tag (tag_name,tag_count) values ('"&CheckStr(TagName(i))&"',0)")
+                        session(CookieName&"_MsgText") = "新Tag添加成功! "
+                    End If
+                End If
+            Next
+            Tags(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"Tag保存成功!"
+            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
+        End If
+    Else
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "非法提交内容!"
+        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+    End If
+
+    '==========================评论留言处理===============================
+ElseIf Request.Form("action") = "Comment" Then
+
+    Dim selCommID, doCommID, doTitle, doRedirect, t1, t2
+    selCommID = Split(Request.Form("selectCommentID"), ", ")
+    doCommID = Split(Request.Form("CommentID"), ", ")
+
+    If Request.Form("doModule") = "updateKey" Then
+        saveFilterKey Request.Form("keyList")
+    ElseIf Request.Form("doModule") = "updateRegKey" Then
+        saveReFilterKey
+    ElseIf Request.Form("doModule") = "DelSelect" Then
+        For i = 0 To UBound(selCommID)
+            If Request.Form("whatdo") = "trackback" Then
+                t1 = Int(Split(selCommID(i), "|")(0))
+                t2 = Int(Split(selCommID(i), "|")(1))
+                conn.Execute("UPDATE blog_Content SET log_QuoteNums=log_QuoteNums-1 WHERE log_ID="&t2)
+                conn.Execute("DELETE * from blog_Trackback where tb_ID="&t1)
+                conn.Execute("UPDATE blog_Info Set blog_tbNums=blog_tbNums-1")
+                doTitle = "引用通告"
+                PostArticle t2
+                doRedirect = "trackback"
+            ElseIf Request.Form("whatdo") = "msg" Then
+                conn.Execute("DELETE * from blog_book where book_ID="&selCommID(i))
+                doTitle = "留言"
+                doRedirect = "msg"
+            Else
+                t1 = Int(Split(selCommID(i), "|")(0))
+                t2 = Int(Split(selCommID(i), "|")(1))
+                conn.Execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&t2)
+                conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-1")
+                conn.Execute("DELETE * from blog_Comment where comm_ID="&t1)
+                doTitle = "评论"
+                doRedirect = ""
+                PostArticle t2
+            End If
+        Next
+
+        getInfo(2)
+        NewComment(2)
+        Application.Lock
+        Application(CookieName&"_blog_Message") = ""
+        Application.UnLock
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = (UBound(selCommID) + 1)&" 个"&doTitle&"记录被删除!"
+        Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
+    ElseIf Request.Form("doModule") = "Update" Then
+        For i = 0 To UBound(doCommID)
+            If Request.Form("whatdo") = "msg" Then
+                If Int(Request.Form("edited_"&doCommID(i))) = 1 Then
+                    conn.Execute("UPDATE blog_book SET book_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(Now(), "Y-m-d H:I:S")&"#,book_reply='"&checkStr(Request.Form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
+                Else
+                    conn.Execute("UPDATE blog_book SET book_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_reply='"&checkStr(Request.Form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
+                End If
+                doTitle = "留言"
+                doRedirect = "msg"
+            ElseIf Request.Form("whatdo") = "comment" Then
+                conn.Execute("UPDATE blog_Comment SET comm_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"' WHERE comm_ID="&doCommID(i))
+                doTitle = "评论"
+                doRedirect = ""
+            End If
+        Next
+
+        NewComment(2)
+        Application.Lock
+        Application(CookieName&"_blog_Message") = ""
+        Application.UnLock
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = doTitle&"记录更新成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
+    End If
+
+    '==========================处理帐户和权限信息===============================
+ElseIf Request.Form("action") = "Members" Then
+    '--------------------------处理权限组信息----------------------------
+    If Request.Form("whatdo") = "Group" Then
+        Dim status_name, status_title, Rights, allCount, addCount
+        status_name = Split(Request.Form("status_name"), ", ")
+        status_title = Split(Request.Form("status_title"), ", ")
+        allCount = UBound(status_name)
+        Dim NS_Name, NS_Title, NS_Code, NS_UpSize, NS_UploadType, tmpNS
+        If Len(status_name(allCount))>0 Then
+            NS_Name = CheckStr(status_name(allCount))
+            NS_Title = CheckStr(status_title(allCount))
+            If Not IsValidChars(NS_Name) Then
+                session(CookieName&"_ShowMsg") = True
+                session(CookieName&"_MsgText") = "<span style=""color:#900"">添加新权限失败!权限标识不能为英文或数字以外的字符</span>"
+                Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+            End If
+            Set tmpNS = conn.Execute("select stat_name from blog_status where stat_name='"&NS_Name&"'")
+            If Not tmpNS.EOF Then
+                session(CookieName&"_ShowMsg") = True
+                session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&NS_Name&"”</span> 权限标识已经存在无法添加新分组!"
+                Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+            End If
+            conn.Execute("insert into blog_status (stat_name,stat_title,stat_Code,stat_attSize,stat_attType) values ('"&NS_Name&"','"&NS_Title&"','000000000000',0,'')")
+            session(CookieName&"_MsgText") = "新分组添加成功!"
+        End If
+        For i = 0 To UBound(status_name) -1
+            conn.Execute("update blog_status set stat_title='"&CheckStr(status_title(i))&"' where stat_name='"&CheckStr(status_name(i))&"'")
+        Next
+        UserRight(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"权限组信息修改成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+        '--------------------------处理帐户信息----------------------------
+    ElseIf Request.Form("whatdo") = "User" Then
+
+        '--------------------------编辑分组信息----------------------------
+    ElseIf Request.Form("whatdo") = "EditGroup" Then
+        Dim EditGroup, AddArticle, EditArticle, DelArticle, AddComment, DelComment, ShowHiddenCate, IsAdmin, CanUpload, UploadSize, UploadType, Group_title, SCode
+        EditGroup = CheckStr(Request.Form("status_name"))
+        AddArticle = CheckStr(Request.Form("AddArticle"))
+        EditArticle = CheckStr(Request.Form("EditArticle"))
+        DelArticle = CheckStr(Request.Form("DelArticle"))
+        AddComment = CheckStr(Request.Form("AddComment"))
+        DelComment = CheckStr(Request.Form("DelComment"))
+        ShowHiddenCate = CheckStr(Request.Form("ShowHiddenCate"))
+        IsAdmin = CheckStr(Request.Form("IsAdmin"))
+        CanUpload = CheckStr(Request.Form("CanUpload"))
+        UploadSize = CheckStr(Request.Form("UploadSize"))
+        UploadType = CheckStr(Request.Form("UploadType"))
+        Group_title = CheckStr(Request.Form("status_title"))
+        SCode = AddArticle & EditArticle & DelArticle &_
+        AddComment & DelComment & CanUpload & IsAdmin & ShowHiddenCate
+        conn.Execute("update blog_status set stat_title='"&Group_title&"',stat_code='"&SCode&"',stat_attSize="&UploadSize&",stat_attType='"&UploadType&"' where stat_name='"&EditGroup&"'")
+        UserRight(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&EditGroup&"”</span>权限分组 编辑成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=EditRight&id="&EditGroup)
+        '--------------------------删除分组信息----------------------------
+    ElseIf Request.Form("whatdo") = "DelGroup" Then
+        Dim DelGroup
+        DelGroup = CheckStr(Request.Form("DelGroup"))
+        If LCase(DelGroup)<>"supadmin" And LCase(DelGroup)<>"member" And LCase(DelGroup)<>"guest" Then
+            conn.Execute ("update blog_Member set mem_Status='Member' where mem_Status='"&DelGroup&"'")
+            Conn.Execute("DELETE * FROM blog_status WHERE stat_name='"&DelGroup&"'")
+            UserRight(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&DelGroup&"”</span>权限分组 删除成功!"
+            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+        Else
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "特殊分组无法删除!"
+            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+        End If
+        '--------------------------保存用户权限----------------------------
+    ElseIf Request.Form("whatdo") = "SaveUserRight" Then
+        For i = 1 To Request.Form("mem_ID").Count
+            conn.Execute("update blog_Member set mem_Status='"&Request.Form("mem_Status").Item(i)&"' where mem_ID="&Request.Form("mem_ID").Item(i))
+        Next
+
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "用户权限设置成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+        '--------------------------删除用户----------------------------
+    ElseIf Request.Form("whatdo") = "DelUser" Then
+        Dim DelUserID, DelUserName, blogmemberNum, DelUserStatus
+        DelUserID = Request.Form("DelID")
+        blogmemberNum = conn.Execute("select count(mem_ID) from blog_Member where mem_Status='SupAdmin'")(0)
+
+        DelUserStatus = conn.Execute("select mem_Status from blog_Member where mem_ID="&DelUserID)(0)
+        If ((blogmemberNum = 1) And (DelUserStatus = "SupAdmin")) Then
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "不能删除仅有的管理员权限!"
+            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+        Else
+            DelUserName = conn.Execute("select mem_Name from blog_Member where mem_ID="&DelUserID)(0)
+            conn.Execute("delete * from blog_Member where mem_ID="&DelUserID)
+            Conn.Execute("UPDATE blog_Info SET blog_MemNums=blog_MemNums-1")
+            getInfo(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&DelUserName&"”</span> 删除成功!"
+            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+        End If
+    Else
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "非法提交内容!"
+        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+    End If
+    '==========================友情链接管理===============================
+ElseIf Request.Form("action") = "Links" Then
+    Dim LinkID, LinkName, LinkURL, LinkLogo, LinkOrder, LinkMain
+    '--------------------------友情链接过滤----------------------------
+    If Request.Form("whatdo") = "Filter" Then
+        session(CookieName&"_disLink") = CheckStr(Request.Form("disLink"))
+        session(CookieName&"_disCount") = CheckStr(Request.Form("disCount"))
+        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=")
+        '--------------------------保存友情链接----------------------------
+    ElseIf Request.Form("whatdo") = "SaveLink" Then
+        Dim TLinkName, TLinkURL, TLinkLogo, TLinkOrder
+        LinkID = Split(Request.Form("LinkID"), ", ")
+        LinkName = Split(Request.Form("LinkName"), ", ")
+        LinkURL = Split(Request.Form("LinkURL"), ", ")
+        LinkLogo = Split(Request.Form("LinkLogo"), ", ")
+        LinkOrder = Split(Request.Form("LinkOrder"), ", ")
+        For i = 0 To UBound(LinkID)
+            If UBound(LinkName)<0 Then TLinkName = "未知" Else TLinkName = LinkName(i)
+            If UBound(LinkURL)<0 Then TLinkURL = "http://" Else TLinkURL = LinkURL(i)
+            If UBound(LinkLogo)<0 Then TLinkLogo = "" Else TLinkLogo = LinkLogo(i)
+            If UBound(LinkOrder)<0 Then TLinkOrder = "0" Else TLinkOrder = LinkOrder(i)
+            conn.Execute("update blog_Links set link_Name='"&CheckStr(TLinkName)&"',link_URL='"&CheckStr(TLinkURL)&"',link_Image='"&CheckStr(TLinkLogo)&"',link_Order='"&CheckStr(TLinkOrder)&"' where link_ID="&LinkID(i))
+        Next
+        LinkID = Request.Form("new_LinkID")
+        LinkName = Request.Form("new_LinkName")
+        LinkURL = Request.Form("new_LinkURL")
+        LinkLogo = Request.Form("new_LinkLogo")
+        LinkOrder = Request.Form("new_LinkOrder")
+        If Len(LinkOrder)<1 Then LinkOrder = conn.Execute("select count(*) from blog_Links")(0)
+        If Len(Trim(CheckStr(LinkName)))>0 Then
+            conn.Execute("insert into blog_Links (link_Name,link_URL,link_Image,link_Order,link_IsShow) values ('"&CheckStr(LinkName)&"','"&CheckStr(LinkURL)&"','"&CheckStr(LinkLogo)&"','"&CheckStr(LinkOrder)&"',true)")
+            session(CookieName&"_MsgText") = "新友情链接添加成功! "
+        End If
+        Bloglinks(2)
+        PostLink
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"保存链接成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        '--------------------------通过友情链接----------------------------
+    ElseIf Request.Form("whatdo") = "ShowLink" Then
+        conn.Execute ("update blog_Links set link_IsShow=true where link_ID="&CheckStr(Request.Form("ALinkID")))
+        LinkName = conn.Execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))(0)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 通过验证!"
+        Bloglinks(2)
+        PostLink
+        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        '--------------------------置顶友情链接----------------------------
+    ElseIf Request.Form("whatdo") = "TopLink" Then
+        conn.Execute ("update blog_Links set link_IsMain=not link_IsMain where link_ID="&CheckStr(Request.Form("ALinkID")))
+        LinkName = conn.Execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))(0)
+        LinkMain = conn.Execute ("select link_IsMain from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))(0)
+        session(CookieName&"_ShowMsg") = True
+        If LinkMain Then
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 置顶成功!"
+        Else
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 取消首页置顶!"
+        End If
+        Bloglinks(2)
+        PostLink
+        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        '--------------------------删除友情链接----------------------------
+    ElseIf Request.Form("whatdo") = "DelLink" Then
+        LinkName = conn.Execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))(0)
+        conn.Execute ("DELETE * from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))
+        Session(CookieName&"_ShowMsg") = True
+        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 删除成功!"
+        Bloglinks(2)
+        PostLink
+        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+    End If
+    '==========================表情和关键字===============================
+ElseIf Request.Form("action") = "smilies" Then
+    Dim smilesID, smiles, smilesURL
+    Dim KeyWordID, KeyWord, KeyWordURL
+    '--------------------------处理表情符号----------------------------
+    If Request.Form("whatdo") = "smilies" Then
+        If Request.Form("doModule") = "DelSelect" Then
+            smilesID = Split(Request.Form("selectSmiliesID"), ", ")
+            For i = 0 To UBound(smilesID)
+                conn.Execute("DELETE * from blog_Smilies where sm_ID="&smilesID(i))
+            Next
+            Smilies(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(smilesID) + 1)&" 个表情被删除!"
+            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+        Else
+            smilesID = Split(Request.Form("smilesID"), ", ")
+            smiles = Split(Request.Form("smiles"), ", ")
+            smilesURL = Split(Request.Form("smilesURL"), ", ")
+            For i = 0 To UBound(smilesID)
+                If Int(smilesID(i))<> -1 Then
+                    conn.Execute("update blog_Smilies set sm_Text='"&CheckStr(smiles(i))&"',sm_Image='"&CheckStr(smilesURL(i))&"' where sm_ID="&smilesID(i))
+                Else
+                    If Len(Trim(CheckStr(smiles(i))))>0 Then
+                        conn.Execute("insert into blog_Smilies (sm_Text,sm_Image) values ('"&CheckStr(smiles(i))&"','"&CheckStr(smilesURL(i))&"')")
+                        session(CookieName&"_MsgText") = "新表情添加成功! "
+                    End If
+                End If
+            Next
+            Smilies(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"表情保存成功!"
+            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+        End If
+    ElseIf Request.Form("whatdo") = "KeyWord" Then
+        If Request.Form("doModule") = "DelSelect" Then
+            KeyWordID = Split(Request.Form("SelectKeyWordID"), ", ")
+            For i = 0 To UBound(KeyWordID)
+                conn.Execute("DELETE * from blog_Keywords where key_ID="&KeyWordID(i))
+            Next
+            Keywords(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(KeyWordID) + 1)&"关键字被删除!"
+            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
+        Else
+            KeyWordID = Split(Request.Form("KeyWordID"), ", ")
+            KeyWord = Split(Request.Form("KeyWord"), ", ")
+            KeyWordURL = Split(Request.Form("KeyWordURL"), ", ")
+            For i = 0 To UBound(KeyWordID)
+                If Int(KeyWordID(i))<> -1 Then
+                    conn.Execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"' where key_ID="&KeyWordID(i))
+                Else
+                    If Len(Trim(CheckStr(KeyWord(i))))>0 Then
+                        conn.Execute("insert into blog_Keywords (key_Text,key_URL) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"')")
+                        session(CookieName&"_MsgText") = "新关键字添加成功! "
+                    End If
+                End If
+            Next
+            Keywords(2)
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"关键字保存成功!"
+            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
+        End If
+    Else
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "非法提交内容!"
+        Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+    End If
+
+    '==========================设置界面和模版===============================
+ElseIf Request.Form("action") = "Skins" Then
+    Dim skinpath, Skinname, moduleID, moduleName, moduleType, moduleTitle, moduleHidden, moduleTop, moduleOrder, moduleHtmlCode, mOrder
+    '--------------------------设置默认界面----------------------------
+    If Request.Form("whatdo") = "setDefaultSkin" Then
+        skinpath = CheckStr(Request.Form("SkinPath"))
+        Skinname = CheckStr(Request.Form("SkinName"))
+        conn.Execute("update blog_Info set blog_DefaultSkin='"&skinpath&"'")
+        getInfo(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&Skinname&"”</span> 设置为当前默认界面!"
+        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=")
+        '--------------------------保存模块设置----------------------------
+    ElseIf Request.Form("whatdo") = "UpdateModule" Then
+        Dim selectID, doModule
+        selectID = Split(Request.Form("selectID"), ", ")
+        doModule = Request.Form("doModule")
+        moduleID = Split(Request.Form("mID"), ", ")
+        moduleName = Split(Request.Form("mName"), ", ")
+        moduleType = Split(Request.Form("mType"), ", ")
+        moduleTitle = Split(Request.Form("mTitle"), ", ")
+        moduleHidden = Split(Request.Form("mHidden"), ", ")
+        moduleTop = Split(Request.Form("mTop"), ", ")
+        moduleOrder = Split(Request.Form("mOrder"), ", ")
+        ',IsHidden="&CBool(moduleHidden(i))&",IndexOnly="&CBool(moduleTop(i))&"
+        For i = 0 To UBound(moduleID)
+            If Int(moduleID(i))<> -1 Then
+                If Not conn.Execute ("select IsSystem from blog_module where id="&moduleID(i))(0) Then
+                    conn.Execute("update blog_module set title='"&CheckStr(moduleTitle(i))&"',type='"&CheckStr(moduleType(i))&"',SortID="&CheckStr(moduleOrder(i))&" where id="&moduleID(i))
+                Else
+                    mOrder = CheckStr(moduleOrder(i))
+                    If CheckStr(moduleName(i)) = "ContentList" Then mOrder = 0
+                    conn.Execute("update blog_module set title='"&CheckStr(moduleTitle(i))&"',SortID="&mOrder&" where id="&moduleID(i))
+                End If
+            Else
+                If Len(Trim(CheckStr(moduleName(i))))>0 Then
+                    If Not conn.Execute("select name from blog_module where name='"&CheckStr(moduleName(i))&"'").EOF Then
+                        session(CookieName&"_ShowMsg") = True
+                        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&CheckStr(moduleName(i))&"”</span> 模块标识已经存在无法添加新模块!"
+                        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                    End If
+                    If Not IsValidChars(CheckStr(moduleName(i))) Then
+                        session(CookieName&"_ShowMsg") = True
+                        session(CookieName&"_MsgText") = "<span style=""color:#900"">添加新模块失败!权限标识不能为英文或数字以外的字符</span>"
+                        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                    End If
+                    If Len(CheckStr(moduleOrder(i)))<1 Then
+                        mOrder = conn.Execute("select count(id) from blog_module")(0)
+                    Else
+                        If IsInteger(CheckStr(moduleOrder(i))) = False Then
+                            session(CookieName&"_ShowMsg") = True
+                            session(CookieName&"_MsgText") = "输入非法，添加失败!"
+                            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                        End If
+                        mOrder = CheckStr(moduleOrder(i))
+                    End If
+                    conn.Execute("insert into blog_module (name,title,type,IsHidden,IndexOnly,SortID) values ('"&CheckStr(moduleName(i))&"','"&CheckStr(moduleTitle(i))&"','"&CheckStr(moduleType(i))&"',false,false,"&mOrder&")")
+                    session(CookieName&"_MsgText") = "新模块添加成功! "
+                End If
+            End If
+        Next
+        For i = 0 To UBound(selectID)
+            Select Case doModule
+Case "dohidden":
+                conn.Execute("update blog_module set IsHidden=true where id="&selectID(i))
+Case "cancelhidden":
+                conn.Execute("update blog_module set IsHidden=false where id="&selectID(i))
+Case "doIndex":
+                conn.Execute("update blog_module set IndexOnly=true where id="&selectID(i))
+Case "cancelIndex":
+                conn.Execute("update blog_module set IndexOnly=false where id="&selectID(i))
+            End Select
+        Next
+        log_module(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"模块保存成功!"
+        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+
+        '--------------------------编辑模块HTML代码----------------------------
+    ElseIf Request.Form("whatdo") = "editModule" Then
+        moduleID = Request.Form("DoID")
+        moduleName = Request.Form("DoName")
+        moduleHtmlCode = ClearHTML(CheckStr(request.Form("HtmlCode")))
+        SavehtmlCode moduleHtmlCode, moduleID
+        log_module(2)
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 代码编辑成功!"
+        If Request.Form("editType") = "normal" Then
+            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModuleNormal&miD="&moduleID)
+        Else
+            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModule&miD="&moduleID)
+        End If
+
+        '-------------------------------删除模块------------------------------
+    ElseIf Request.Form("whatdo") = "delModule" Then
+        moduleID = Request.Form("DoID")
+        If conn.Execute("select isSystem from blog_module where id="&moduleID)(0) Then
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&conn.Execute("select title from blog_module where id="&moduleID)(0)&"”</span> 是内置模块无法删除！"
+            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+        Else
+            moduleName = conn.Execute("select title from blog_module where id="&moduleID)(0)
+            delModule moduleID
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 删除成功！"
+            log_module(2)
+            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+        End If
+        '-------------------------------保存插件配置------------------------------
+    ElseIf Request.Form("whatdo") = "SavePluginsSetting" Then
+        Dim GetPlugName, GetPlugSetItems, GetPlugSetItemName, GetPlugSetItemValue
+        GetPlugName = Request.Form("PluginsName")
+        Set GetPlugSetItems = conn.Execute ("Select * from blog_ModSetting where set_ModName='"&GetPlugName&"'")
+        Do Until GetPlugSetItems.EOF
+            GetPlugSetItemName = GetPlugSetItems("set_KeyName")
+            GetPlugSetItemValue = checkstr(Request.Form(GetPlugSetItemName))
+            conn.Execute ("update blog_ModSetting Set set_KeyValue='"&GetPlugSetItemValue&"' where set_ModName='"&GetPlugName&"'and set_KeyName='"&GetPlugSetItemName&"'")
+            GetPlugSetItems.movenext
+        Loop
+        Dim ModSetTemp2
+        Set ModSetTemp2 = New ModSet
+        ModSetTemp2.Open GetPlugName
+        ModSetTemp2.ReLoad()
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功！"
+        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
+    End If
+    '==========================附件管理===============================
+ElseIf Request.Form("action") = "Attachments" Then
+    '-------------------------------删除模块------------------------------
+    If Request.Form("whatdo") = "DelFiles" Then
+        Dim getFolders, getFiles, GetFolder, GetFile, getFolderCount, getFileCount
+        Dim FSODel
+        Set FSODel = Server.CreateObject("Scripting.FileSystemObject")
+        getFolders = Split(Request.Form("folders"), ", ")
+        getFiles = Split(Request.Form("Files"), ", ")
+        getFolderCount = 0
+        getFileCount = 0
+        For Each GetFolder in getFolders
+            If Len(getPathList(GetFolder)(1))>0 Then
+                session(CookieName&"_ShowMsg") = True
+                session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetFolder&"”</span> 文件夹内含有文件，无法删除!"
+                Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
+            End If
+            If FSODel.FolderExists(Server.MapPath(GetFolder)) Then
+                FSODel.DeleteFolder Server.MapPath(GetFolder), True
+                getFolderCount = getFolderCount + 1
+            End If
+        Next
+        For Each GetFile in getFiles
+            If FSODel.FileExists(Server.MapPath(GetFile)) Then
+                FSODel.DeleteFile Server.MapPath(GetFile), True
+                getFileCount = getFileCount + 1
+            End If
+        Next
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = "有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
+        Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
+    End If
+Else'登录欢迎
+
+End If
 
 '----------------------End if--------------------
-end if
+End If
 %>
 </div>
 </body>
@@ -2752,6 +2824,6 @@ end if
 <%
 
 Else
- Response.Redirect("default.asp")
-end if
+    Response.Redirect("default.asp")
+End If
 %>

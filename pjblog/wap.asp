@@ -13,56 +13,57 @@
 '    更新时间: 2006-6-12
 '==================================
 Response.Charset = "UTF-8"
-Response.ContentType = "text/vnd.wap.wml" 
+Response.ContentType = "text/vnd.wap.wml"
 
 Response.Expires = -1
 Response.AddHeader "Pragma", "no-cache"
 Response.AddHeader "Cache-Control", "no-cache, must-revalidate"
 '读取Blog设置信息
-  getInfo(1)
+getInfo(1)
 
 '验证用户登录信息
-  checkCookies
+checkCookies
 
 '读取用户权限
-  UserRight(1)
-  
+UserRight(1)
+
 '写入标签
-  Tags(1)
-  
+Tags(1)
+
 '写入关键字列表
-  Keywords(1)
+Keywords(1)
 
 '写入表情符号
-  Smilies(1)
+Smilies(1)
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
 	<%
-	  select case request.QueryString("do")
-	   case "showTag":
-	    outTagList
-	   case "Login":
-	    outLogin
-	   case "Logout":
-	    outLogout
-	   case "CheckUser":
-	    outLoginUser
-	   case "showLog":
-	    outLog
-	   case "showLogDetail":
-	    outLogDetail
-	   case "showComment":
-	    outComment
-	   case "postComment":
-	    outPostComment
-	   case "postLog":
-	    outPostLog
-	   case "editLog":
-	    outEditLog
-	   case else: 'Wap Default Page
-	    outDefault
-	  end select
-	%>
+Select Case request.QueryString("do")
+Case "showTag":
+    outTagList
+Case "Login":
+    outLogin
+Case "Logout":
+    outLogout
+Case "CheckUser":
+    outLoginUser
+Case "showLog":
+    outLog
+Case "showLogDetail":
+    outLogDetail
+Case "showComment":
+    outComment
+Case "postComment":
+    outPostComment
+Case "postLog":
+    outPostLog
+Case "editLog":
+    outEditLog
+Case Else: 'Wap Default Page
+    outDefault
+End Select
+
+%>
 </wml>

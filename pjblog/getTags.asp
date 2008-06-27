@@ -4,7 +4,7 @@
 <!--#include file="common/library.asp" -->
 <!--#include file="common/cache.asp" -->
 <%
- tags(2)
+tags(2)
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -58,10 +58,11 @@
 		<div id="Top"><b>插入已经存在的Tag</b></div>
 	     <div id="Mid">
            <%
-              dim log_Tag,log_TagItem
-			For Each log_TagItem IN Arr_Tags
-				log_Tag=Split(log_TagItem,"||")
-           %>
+Dim log_Tag, log_TagItem
+For Each log_TagItem IN Arr_Tags
+    log_Tag = Split(log_TagItem, "||")
+
+%>
 	       <a href="#" class="tagA" onclick="addTag('<%=log_Tag(1)%>')" title="插入<%=log_Tag(1)%>"><%=log_Tag(1)%> (<%=log_Tag(2)%>)</a>
 	       <%Next%>
 	     </div>
