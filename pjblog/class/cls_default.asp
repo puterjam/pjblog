@@ -128,7 +128,7 @@ If ViewDraft = "draft" Then
 %>
 		      <div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left">草稿列表</span><%=MultiPage(Log_Num,blogPerPage,CurPage,Url_Add,"","float:Left")%></div>
 		   <%else%>
-		      <div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"><%=CT%></span><%=MultiPage(Log_Num,blogPerPage,CurPage,Url_Add,"","float:Left")%> 预览模式: <a href="<%=Url_Add%>distype=normal" accesskey="1">普通</a> | <a href="<%=Url_Add%>distype=list" accesskey="2">列表</a></div>
+		      <div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"><%=CT%></span>预览模式: <a href="<%=Url_Add%>distype=normal" accesskey="1">普通</a> | <a href="<%=Url_Add%>distype=list" accesskey="2">列表</a></div>
 		   <%End If
 If ViewType = "list" Then
 %>
@@ -160,7 +160,7 @@ If ViewType = "list" Then
 %>
 		 </table></div>
 		<%end if%>
-		 <div class="pageContent"><%=MultiPage(Log_Num,blogPerPage,CurPage,Url_Add,"","float:Left")%></div>
+		 <div class="pageContent"><%=MultiPage(444,blogPerPage,6,Url_Add,"","float:Left")%></div>
 		<%End If
 End Function
 
