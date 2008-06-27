@@ -11,90 +11,92 @@
 '  显示日志内容
 '*******************************************
 
-	  sub updateViewNums(logID,vNums)
-	   if not blog_postFile then exit sub
-	   dim LoadArticle,splitStr,getA,i,tempStr
-	   splitStr="<"&"%ST(A)%"&">"
-	   tempStr=""
-	   LoadArticle=LoadFromFile("cache/"&LogID&".asp")
-	   if LoadArticle(0)=0 then
-		   getA=split(LoadArticle(1),splitStr)
-		   getA(2)=vNums
-		   for i=1 to ubound(getA)
-		     tempStr=tempStr&splitStr&getA(i)
-		   next
-		   call SaveToFile (tempStr,"cache/" & LogID & ".asp")	
-   		end if
-	  end sub
+Sub updateViewNums(logID, vNums)
+    If Not blog_postFile Then Exit Sub
+    Dim LoadArticle, splitStr, getA, i, tempStr
+    splitStr = "<"&"%ST(A)%"&">"
+    tempStr = ""
+    LoadArticle = LoadFromFile("cache/"&LogID&".asp")
+    If LoadArticle(0) = 0 Then
+        getA = Split(LoadArticle(1), splitStr)
+        getA(2) = vNums
+        For i = 1 To UBound(getA)
+            tempStr = tempStr&splitStr&getA(i)
+        Next
+        Call SaveToFile (tempStr, "cache/" & LogID & ".asp")
+    End If
+End Sub
 
 
- sub ShowArticle(LogID)
-         If (log_ViewArr(5,0)=memName And log_ViewArr(3,0)=False) Or stat_Admin or log_ViewArr(3,0)=true then 
-           else
-           showmsg "错误信息","该日志为隐藏日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>","ErrorIcon",""
-	     End if
-	     If (Not getCate.cate_Secret) Or (log_ViewArr(5,0)=memName And getCate.cate_Secret) Or stat_Admin Or (getCate.cate_Secret and stat_ShowHiddenCate) Then
-           else
-           showmsg "错误信息","该日志分类为保密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>","ErrorIcon",""
-	     end if 
-	               
-		 if log_ViewArr(6,0) then comDesc="Desc" else comDesc="Asc" end If
-	          
-	     '从文件读取日志
-	     if blog_postFile then 
-	       dim LoadArticle,TempStr,TempArticle
-	       LoadArticle=LoadFromFile("post/"&LogID&".asp")
-	       
-	       if LoadArticle(0)=0 then
-	            TempArticle=LoadArticle(1)
-		        TempStr=""
-		        if stat_EditAll or (stat_Edit and memName=log_ViewArr(5,0)) then 
-			       TempStr=TempStr&"<a href=""blogedit.asp?id="&LogID&""" title=""编辑该日志"" accesskey=""E""><img src=""images/icon_edit.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a> "
-			    end if
-			   
-			    if stat_DelAll or (stat_Del and memName=log_ViewArr(5,0)) then 
-	    		   TempStr=TempStr&"<a href=""blogedit.asp?action=del&amp;id="&LogID&""" onclick=""if (!window.confirm('是否要删除该日志')) return false"" title=""删除该日志"" accesskey=""K""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
-			    end if
-			    
-		        TempArticle=Replace(TempArticle,"<"&"%ST(A)%"&">","")
-		        TempArticle=Replace(TempArticle,"<$EditAndDel$>",TempStr)
-		        TempArticle=Replace(TempArticle,"<$log_ViewNums$>",log_ViewArr(4,0))
-		        
-			    response.write TempArticle
-	            ShowComm LogID,comDesc,log_ViewArr(7,0)
-		        call updateViewNums(id,log_ViewArr(4,0))
-	       else
-			    response.write "读取日志出错.<br/>" & LoadArticle(0) & " : " &  LoadArticle(1)
-	       end if
-           exit sub
-        end If
-        
-	     '从数据库读取日志
-	     'on error resume Next
-		set preLog=Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_ViewArr(9,0),"Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
-		set nextLog=Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_ViewArr(9,0),"Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
-		SQLQueryNums=SQLQueryNums+2
+Sub ShowArticle(LogID)
+    If (log_ViewArr(5, 0) = memName And log_ViewArr(3, 0) = False) Or stat_Admin Or log_ViewArr(3, 0) = True Then
+    Else
+        showmsg "错误信息", "该日志为隐藏日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+    End If
+    If (Not getCate.cate_Secret) Or (log_ViewArr(5, 0) = memName And getCate.cate_Secret) Or stat_Admin Or (getCate.cate_Secret And stat_ShowHiddenCate) Then
+    Else
+        showmsg "错误信息", "该日志分类为保密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+    End If
 
- %>
+    If log_ViewArr(6, 0) Then comDesc = "Desc" Else comDesc = "Asc" End If
+
+    '从文件读取日志
+    If blog_postFile Then
+        Dim LoadArticle, TempStr, TempArticle
+        LoadArticle = LoadFromFile("post/"&LogID&".asp")
+
+        If LoadArticle(0) = 0 Then
+            TempArticle = LoadArticle(1)
+            TempStr = ""
+            If stat_EditAll Or (stat_Edit And memName = log_ViewArr(5, 0)) Then
+                TempStr = TempStr&"<a href=""blogedit.asp?id="&LogID&""" title=""编辑该日志"" accesskey=""E""><img src=""images/icon_edit.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a> "
+            End If
+
+            If stat_DelAll Or (stat_Del And memName = log_ViewArr(5, 0)) Then
+                TempStr = TempStr&"<a href=""blogedit.asp?action=del&amp;id="&LogID&""" onclick=""if (!window.confirm('是否要删除该日志')) return false"" title=""删除该日志"" accesskey=""K""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
+            End If
+
+            TempArticle = Replace(TempArticle, "<"&"%ST(A)%"&">", "")
+            TempArticle = Replace(TempArticle, "<$EditAndDel$>", TempStr)
+            TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
+
+            response.Write TempArticle
+            ShowComm LogID, comDesc, log_ViewArr(7, 0)
+            Call updateViewNums(id, log_ViewArr(4, 0))
+        Else
+            response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
+        End If
+        Exit Sub
+    End If
+
+    '从数据库读取日志
+    'on error resume Next
+    Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
+    SQLQueryNums = SQLQueryNums + 2
+
+
+%>
 					   <div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 					   <div class="pageContent">
 						   <div style="float:right;width:180px !important;width:auto">
 						   <%
-								 if not preLog.eof then
-							       response.write ("<a href=""?id="&preLog("log_ID")&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/> 上一篇</a>")
-							      else
-							       response.write ("<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇")
-							    end if
-							    if not nextLog.eof then
-							       response.write (" | <a href=""?id="&nextLog("log_ID")&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/> 下一篇</a>")
-							      else
-							       response.write (" | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇")
-							    end if
-							    preLog.close
-							    nextLog.close
-							    set preLog=nothing
-							    set nextLog=nothing
-						   %>
+If Not preLog.EOF Then
+    response.Write ("<a href=""?id="&preLog("log_ID")&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/> 上一篇</a>")
+Else
+    response.Write ("<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇")
+End If
+If Not nextLog.EOF Then
+    response.Write (" | <a href=""?id="&nextLog("log_ID")&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/> 下一篇</a>")
+Else
+    response.Write (" | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇")
+End If
+preLog.Close
+nextLog.Close
+Set preLog = Nothing
+Set nextLog = Nothing
+
+%>
 						   </div>
  						   <img src="<%=getCate.cate_icon%>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<%=log_ViewArr(1,0)%>" title="查看所有<%=getCate.cate_Name%>的日志"><%=getCate.cate_Name%></a></strong> <a href="feed.asp?cateID=<%=log_ViewArr(1,0)%>" target="_blank" title="订阅所有<%=getCate.cate_Name%>的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有<%=getCate.cate_Name%>的日志" style="margin-bottom:-1px"/></a>
 					   </div>
@@ -112,12 +114,13 @@
 						</div>
 					  <div id="logPanel" class="Content-body">
 						<%
-					    keyword=CheckStr(Request.QueryString("keyword"))
-						if log_ViewArr(10,0)=1 then
-						 response.write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8,0)),mid(log_ViewArr(11,0),1,1),mid(log_ViewArr(11,0),2,1),mid(log_ViewArr(11,0),3,1),mid(log_ViewArr(11,0),4,1),mid(log_ViewArr(11,0),5,1))),keyword))
-						else
-						 response.write (highlight(UnCheckStr(log_ViewArr(8,0)),keyword))
-						end if	%>
+keyword = CheckStr(Request.QueryString("keyword"))
+If log_ViewArr(10, 0) = 1 Then
+    response.Write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1))), keyword))
+Else
+    response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
+End If
+%>
 					   <br/><br/>
 
 					   </div>
@@ -125,49 +128,53 @@
 					    <%if len(log_ViewArr(16,0))>0 then response.write (log_ViewArr(16,0)&"<br/>")%>
 						<img src="images/From.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<%=log_ViewArr(17,0)%>" target="_blank"><%=log_ViewArr(18,0)%></a><br/>
 						<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="<%="trackback.asp?tbID="&id&"&amp;action=view"%>" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<%=id%>)">我要引用此文章</a><br/>
-					   	<%dim getTag
-						  set getTag=new tag
-						%>
+					   	<%Dim getTag
+Set getTag = New tag
+
+%>
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
 					   </div>
-<%	                   set getTag=nothing
- 	  ShowComm LogID,comDesc,log_ViewArr(7,0) '显示评论内容
-end sub
+<%Set getTag = Nothing
+ShowComm LogID, comDesc, log_ViewArr(7, 0) '显示评论内容
+End Sub
 
 
 '*******************************************
 '  显示日志评论内容
 '*******************************************
-Sub ShowComm(LogID,comDesc,DisComment)
-	   response.write ("<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>")
-	   dim blog_Comment,Pcount,comm_Num,blog_CommID,blog_CommAuthor,blog_CommContent,Url_Add,commArr,commArrLen
-	   Set blog_Comment=Server.CreateObject("Adodb.RecordSet")
-	   Pcount=0
-	   SQL="SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
-	   blog_Comment.Open SQL,Conn,1,1
-	   SQLQueryNums=SQLQueryNums+1
-	  IF blog_Comment.EOF AND blog_Comment.BOF Then
-      else
-	   blog_Comment.PageSize=blogcommpage
-	   blog_Comment.AbsolutePage=CurPage
-	   comm_Num=blog_Comment.RecordCount
-	   
-	   commArr=blog_Comment.GetRows(comm_Num)
-       blog_Comment.close
-       set blog_Comment = nothing
-       commArrLen=Ubound(commArr,2)
-		   
-	   Url_Add="?id="&LogID&"&"%>
+
+Sub ShowComm(LogID, comDesc, DisComment)
+    response.Write ("<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>")
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen
+    Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
+    Pcount = 0
+    SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+    blog_Comment.Open SQL, Conn, 1, 1
+    SQLQueryNums = SQLQueryNums + 1
+    If blog_Comment.EOF And blog_Comment.BOF Then
+    Else
+        blog_Comment.PageSize = blogcommpage
+        blog_Comment.AbsolutePage = CurPage
+        comm_Num = blog_Comment.RecordCount
+
+        commArr = blog_Comment.GetRows(comm_Num)
+        blog_Comment.Close
+        Set blog_Comment = Nothing
+        commArrLen = UBound(commArr, 2)
+
+        Url_Add = "?id="&LogID&"&"
+%>
        <div class="pageContent"><%=MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,"#comm_top","float:right")%></div>
 	   <%
-	   Do Until Pcount = commArrLen + 1 OR Pcount=blogcommpage
-	   blog_CommID=commArr(0,Pcount)
-	   blog_CommAuthor=commArr(2,Pcount)
-	   blog_CommContent=commArr(1,Pcount)
-	   %>
+Do Until Pcount = commArrLen + 1 Or Pcount = blogcommpage
+    blog_CommID = commArr(0, Pcount)
+    blog_CommAuthor = commArr(2, Pcount)
+    blog_CommContent = commArr(1, Pcount)
+
+%>
 	  <div class="comment">
 	  <%IF blog_CommID=0 Then%>
 	    <div class="commenttop"><img src="images/icon_trackback.gif" alt="" style="margin:0px 4px -3px 0px"/><strong><%=("<a href="""&commArr(4,Pcount)&""">"&commArr(5,Pcount)&"</a>")%></strong> <span class="commentinfo">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I A")%><%if stat_Admin=true then response.write (" | <a href=""trackback.asp?action=deltb&amp;tbID="&commArr(6,Pcount)&"&amp;logID="&LogID&""" onclick=""if (!window.confirm('是否删除该引用?')) {return false}""><img src=""images/del1.gif"" alt=""删除该引用"" border=""0""/></a>") end if%>]</span></div>
@@ -183,24 +190,27 @@ Sub ShowComm(LogID,comDesc,DisComment)
 	  <%end if%>
 	   </div>
 	  <%
-	   Pcount=Pcount+1
-	   loop
-       %>
+Pcount = Pcount + 1
+Loop
+
+%>
        <div class="pageContent"><%=MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,"#comm_top","float:right")%></div>
        <%
-       end if
-	   if not DisComment then
-	  %>
+End If
+If Not DisComment Then
+
+%>
 	  <div id="MsgContent" style="width:94%;">
       <div id="MsgHead">发表评论</div>
       <div id="MsgBody">
       <%
-       if not stat_CommentAdd then 
-  	    response.write ("你没有权限发表留言！")
-  	    response.write ("</div></div>")
-  	    exit sub
-       end if
-      %>
+If Not stat_CommentAdd Then
+    response.Write ("你没有权限发表留言！")
+    response.Write ("</div></div>")
+    Exit Sub
+End If
+
+%>
       <script type="text/javascript">
       		function checkCommentPost(){
       			if (!CheckPost) return false
@@ -215,11 +225,12 @@ Sub ShowComm(LogID,comDesc,DisComment)
 	  <%if memName=empty or blog_validate=true then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4"/> <%=getcode()%></td></tr><%end if%>
 	  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 	  </td><td style="padding:2px;"><%
-	   UBB_TextArea_Height="150px;"
-	   UBB_Tools_Items="bold,italic,underline"
-	   UBB_Tools_Items=UBB_Tools_Items&"||image,link,mail,quote,smiley"
-	   UBBeditor("Message")
-	  %></td></tr>
+UBB_TextArea_Height = "150px;"
+UBB_Tools_Items = "bold,italic,underline"
+UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
+UBBeditor("Message")
+
+%></td></tr>
 	  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
              <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
              <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
@@ -234,16 +245,16 @@ Sub ShowComm(LogID,comDesc,DisComment)
           </tr>
           <tr>
             <td colspan="2" align="right" >
-			 <%if memName=empty then%>虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. <br/><%end if%> 
-	  字数限制 <b><%=blog_commLength%> 字</b> | 
-	  UBB代码 <b><%if (blog_commUBB=0) then response.write ("开启") else response.write ("关闭") %></b> | 
+			 <%if memName=empty then%>虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. <br/><%end if%>
+	  字数限制 <b><%=blog_commLength%> 字</b> |
+	  UBB代码 <b><%if (blog_commUBB=0) then response.write ("开启") else response.write ("关闭") %></b> |
 	  [img]标签 <b><%if (blog_commIMG=0) then response.write ("开启") else response.write ("关闭") %></b>
 
 			</td>
           </tr>		  
 	  </table></form>
 	   <%
-  	   response.write ("</div></div>")
-	  end if
-end sub
+response.Write ("</div></div>")
+End If
+End Sub
 %>
