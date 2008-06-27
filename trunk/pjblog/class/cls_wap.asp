@@ -25,8 +25,7 @@ Sub outDefault 'Output Default
     response.Write "<p><a href=""wap.asp?do=showLog"">"&toUnicode("最新日志")&"</a></p>"
     response.Write "<p><a href=""wap.asp?do=showComment"">"&toUnicode("最新评论")&"</a></p>"
     Dim Arr_Category, Category_Len, i
-    CategoryList(1)
-    Category_code = ""
+    CategoryList(3)
     Arr_Category = Application(CookieName&"_blog_Category")
     If UBound(Arr_Category, 1) = 0 Then Exit Sub
     Category_Len = UBound(Arr_Category, 2)

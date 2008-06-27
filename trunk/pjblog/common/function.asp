@@ -1015,8 +1015,6 @@ End Function
 '*************************************
 
 Sub showmsg(title, des, icon, showType)
-    Call CloseDB
-
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_title") = title
     session(CookieName&"_des") = des
@@ -1027,9 +1025,9 @@ Sub showmsg(title, des, icon, showType)
     'WarningIcon
     'QuestionIcon
     If showType = "plugins" Then
-        Response.Redirect("../../showmsg.asp")
+        RedirectUrl("../../showmsg.asp")
     Else
-        Response.Redirect("showmsg.asp")
+        RedirectUrl("showmsg.asp")
     End If
 End Sub
 
@@ -1159,4 +1157,14 @@ End Function
 			Conn = null;
 		}catch(e){}
 	}
+	
+//*************************************
+//重定向函数
+//*************************************
+	function RedirectUrl(url){
+		CloseDB();
+		Response.Redirect(url);
+	}
 </script>
+
+
