@@ -9,8 +9,8 @@
 '  XML输出菜单内容
 '    更新时间: 2006-1-22
 '==================================
-Response.ContentType="text/xml"
-Response.Expires=60
+Response.ContentType = "text/xml"
+Response.Expires = 60
 Response.Write("<?xml version=""1.0"" encoding=""UTF-8""?>")
 %>
 <CateMenu>
@@ -18,29 +18,31 @@ Response.Write("<?xml version=""1.0"" encoding=""UTF-8""?>")
 <SiteTitle><%=blog_Title%></SiteTitle>
 <SiteURL><%=SiteURL%></SiteURL>
 <%
-dim MenuXML
-SQL="select * from blog_Category order by cate_Order"
-set MenuXML=conn.execute(SQL)
+Dim MenuXML
+SQL = "select * from blog_Category order by cate_Order"
+Set MenuXML = conn.Execute(SQL)
 
-do until MenuXML.eof
+Do Until MenuXML.EOF
 %>
  <Menu>
   <MenuName><![CDATA[<%=MenuXML("cate_Name")%>]]></MenuName>
   <MenuIntro><![CDATA[<%=MenuXML("cate_Intro")%>]]></MenuIntro>
   <MenuType><%=MenuXML("cate_local")%></MenuType>
   <MenuUrl><%
-   if MenuXML("cate_OutLink")=false then
-    response.write "default.asp?cateID="&MenuXML("cate_ID")
-   else
-    response.write MenuXML("cate_URL")
-   end if
-  %></MenuUrl>
+If MenuXML("cate_OutLink") = False Then
+    response.Write "default.asp?cateID="&MenuXML("cate_ID")
+Else
+    response.Write MenuXML("cate_URL")
+End If
+
+%></MenuUrl>
   <logNum><%=MenuXML("cate_count")%></logNum>
  </Menu>
  <%
- MenuXML.movenext
- loop
- set MenuXML=nothing
- call CloseDB
- %>
+MenuXML.movenext
+Loop
+Set MenuXML = Nothing
+Call CloseDB
+
+%>
 </CateMenu>

@@ -12,22 +12,23 @@
 
 '=========================Funciton In Head=============================
 '处理标题
- Dim BlogTitle
- BlogTitle=siteName & "-" & blog_Title 
- if inStr(Replace(Lcase(Request.ServerVariables("URL")),"\","/"),"/default.asp")<>0 then
- 	dim Tid
-	If CheckStr(Request.QueryString("id"))<>Empty Then
-		Tid=CheckStr(Request.QueryString("id"))
-	End If
-	if len(Tid)>0 then Response.Redirect ("article.asp?id="&Tid)
- end if
- 
- if inStr(Replace(Lcase(Request.ServerVariables("URL")),"\","/"),"/article.asp")=0 then
-  	getBlogHead BlogTitle,"",-1
- end if
+Dim BlogTitle
+BlogTitle = siteName & "-" & blog_Title
+If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp")<>0 Then
+    Dim Tid
+    If CheckStr(Request.QueryString("id"))<>Empty Then
+        Tid = CheckStr(Request.QueryString("id"))
+    End If
+    If Len(Tid)>0 Then Response.Redirect ("article.asp?id="&Tid)
+End If
+
+If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/article.asp") = 0 Then
+    getBlogHead BlogTitle, "", -1
+End If
 
 '输出文件头
-sub getBlogHead(Title,CateTitle,CateID)
+
+Sub getBlogHead(Title, CateTitle, CateID)
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -71,31 +72,33 @@ sub getBlogHead(Title,CateTitle,CateID)
    		<%CategoryList(0)%>
   </div>
 <%
-end sub
+End Sub
 
 '读取Flash导航条
-dim SkinInfo
-sub getSkinFlash
- if CheckObjInstalled(getXMLDOM()) then
-	  dim SkinXML
-	  set SkinXML=new PXML
-	  SkinInfo=""
-	  SkinXML.XmlPath="skins/"&Skins&"/skin.xml"
-	  SkinXML.open
-	  if SkinXML.getError=0 then
-		    SkinInfo=" , <a href=""" & SkinXML.SelectXmlNodeText("DesignerURL") & """ target=""_blank""><strong>" & SkinXML.SelectXmlNodeText("SkinName") & "</strong></a> Design By <a href=""mailto:" & SkinXML.SelectXmlNodeText("DesignerMail") & """ target=""_blank""><strong>" & SkinXML.SelectXmlNodeText("SkinDesigner") & "</strong></a>"
-		     dim useFlash
-		     useFlash = SkinXML.SelectXmlNodeText("Flash/UseFlash")
-		     if useFlash = "" then useFlash = "false"
-		     if CBool(useFlash) then 
-			      %>
-			       <div id="FlashHead" style="text-align:<%=SkinXML.SelectXmlNodeText("Flash/FlashAlign")%>;top:<%=SkinXML.SelectXmlNodeText("Flash/FlashTop")%>px"></div> 
+Dim SkinInfo
+
+Sub getSkinFlash
+    If CheckObjInstalled(getXMLDOM()) Then
+        Dim SkinXML
+        Set SkinXML = New PXML
+        SkinInfo = ""
+        SkinXML.XmlPath = "skins/"&Skins&"/skin.xml"
+        SkinXML.Open
+        If SkinXML.getError = 0 Then
+            SkinInfo = " , <a href=""" & SkinXML.SelectXmlNodeText("DesignerURL") & """ target=""_blank""><strong>" & SkinXML.SelectXmlNodeText("SkinName") & "</strong></a> Design By <a href=""mailto:" & SkinXML.SelectXmlNodeText("DesignerMail") & """ target=""_blank""><strong>" & SkinXML.SelectXmlNodeText("SkinDesigner") & "</strong></a>"
+            Dim useFlash
+            useFlash = SkinXML.SelectXmlNodeText("Flash/UseFlash")
+            If useFlash = "" Then useFlash = "false"
+            If CBool(useFlash) Then
+
+%>
+			       <div id="FlashHead" style="text-align:<%=SkinXML.SelectXmlNodeText("Flash/FlashAlign")%>;top:<%=SkinXML.SelectXmlNodeText("Flash/FlashTop")%>px"></div>
 			       <script type="text/javascript">WriteHeadFlash('<%="skins/"&Skins&"/"&SkinXML.SelectXmlNodeText("Flash/FlashPath")%>','<%=SkinXML.SelectXmlNodeText("Flash/FlashWidth")%>','<%=SkinXML.SelectXmlNodeText("Flash/FlashHeight")%>',<%=Lcase(CBool(SkinXML.SelectXmlNodeText("Flash/FlashTransparent")))%>)</script>
 			      <%
-		       end if
-		      SkinXML.CloseXml
-		      set SkinXML=nothing
-	    end if
- end if
-end sub
+End If
+SkinXML.CloseXml
+Set SkinXML = Nothing
+End If
+End If
+End Sub
 %>

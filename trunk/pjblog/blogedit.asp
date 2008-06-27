@@ -11,14 +11,15 @@
 '  日志编辑或删除
 '    更新时间: 2006-5-29
 '==================================
-dim logid
-dim preLog,nextLog,getTag
-dim loadTag,loadTags
+Dim logid
+Dim preLog, nextLog, getTag
+Dim loadTag, loadTags
 
-logid=Trim(CheckStr(Request("id")))
-If ChkPost() then
-  if logid=empty or IsInteger(logid)=False then 
-   %>
+logid = Trim(CheckStr(Request("id")))
+If ChkPost() Then
+    If logid = Empty Or IsInteger(logid) = False Then
+
+%>
         <div id="MsgContent" style="width:350px">
          <div id="MsgHead">出错信息</div>
          <div id="MsgBody">
@@ -28,41 +29,43 @@ If ChkPost() then
    		 </div>
    	 </div>
    	</div>
-   <%else
-   dim lArticle,EditLog,DeleteLog
-   set lArticle=new logArticle
-   editLog = lArticle.getLog(logid)
+   <%Else
+    Dim lArticle, EditLog, DeleteLog
+    Set lArticle = New logArticle
+    editLog = lArticle.getLog(logid)
 
-   if stat_EditAll or (stat_Edit and lArticle.logAuthor = memName) Then%>
+    If stat_EditAll Or (stat_Edit And lArticle.logAuthor = memName) Then
+%>
     <!--内容-->
-   <%IF Request.Form("action")="post" Then
-         lArticle.categoryID = request.form("log_CateID")
-         lArticle.logTitle = request.form("title")
-         lArticle.logAuthor = memName
-         lArticle.logEditType = request.form("log_editType")
-         lArticle.logIntroCustom = request.form("log_IntroC")
-         lArticle.logIntro = request.form("log_Intro")
-         lArticle.logWeather = request.form("log_weather")
-         lArticle.logLevel = request.form("log_Level")
-         lArticle.logCommentOrder = request.form("log_comorder")
-         lArticle.logDisableComment = request.form("log_DisComment")
-         lArticle.logIsShow = request.form("log_IsShow")
-         lArticle.logIsTop = request.form("log_IsTop")
-         lArticle.logIsDraft = request.form("log_IsDraft")
-         lArticle.logFrom = request.form("log_From")
-         lArticle.logFromURL = request.form("log_FromURL")
-         lArticle.logDisableImage = request.form("log_disImg")
-         lArticle.logDisableSmile = request.form("log_DisSM")
-         lArticle.logDisableURL = request.form("log_DisURL")
-         lArticle.logDisableKeyWord = request.form("log_DisKey")
-         lArticle.logMessage = request.form("Message")
-         lArticle.logTrackback = request.form("log_Quote")
-         lArticle.logTags = request.form("tags")
-         lArticle.logPubTime = request.form("PubTime")
-	 	 lArticle.logPublishTimeType = request.form("PubTimeType")
-	 	 EditLog = lArticle.editLog(request.form("id"))
-    set lArticle=nothing
-		  %>
+   <%If Request.Form("action") = "post" Then
+    lArticle.categoryID = request.Form("log_CateID")
+    lArticle.logTitle = request.Form("title")
+    lArticle.logAuthor = memName
+    lArticle.logEditType = request.Form("log_editType")
+    lArticle.logIntroCustom = request.Form("log_IntroC")
+    lArticle.logIntro = request.Form("log_Intro")
+    lArticle.logWeather = request.Form("log_weather")
+    lArticle.logLevel = request.Form("log_Level")
+    lArticle.logCommentOrder = request.Form("log_comorder")
+    lArticle.logDisableComment = request.Form("log_DisComment")
+    lArticle.logIsShow = request.Form("log_IsShow")
+    lArticle.logIsTop = request.Form("log_IsTop")
+    lArticle.logIsDraft = request.Form("log_IsDraft")
+    lArticle.logFrom = request.Form("log_From")
+    lArticle.logFromURL = request.Form("log_FromURL")
+    lArticle.logDisableImage = request.Form("log_disImg")
+    lArticle.logDisableSmile = request.Form("log_DisSM")
+    lArticle.logDisableURL = request.Form("log_DisURL")
+    lArticle.logDisableKeyWord = request.Form("log_DisKey")
+    lArticle.logMessage = request.Form("Message")
+    lArticle.logTrackback = request.Form("log_Quote")
+    lArticle.logTags = request.Form("tags")
+    lArticle.logPubTime = request.Form("PubTime")
+    lArticle.logPublishTimeType = request.Form("PubTimeType")
+    EditLog = lArticle.editLog(request.Form("id"))
+    Set lArticle = Nothing
+
+%>
 		      <div id="MsgContent" style="width:300px">
 		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
@@ -76,10 +79,11 @@ If ChkPost() then
 		  	</div>
 		    </div>
 		    <%
-	  Elseif Request.QueryString("action")="del" Or Request.form("action")="del" then
-		DeleteLog=lArticle.deleteLog(request("id"))
-        set lArticle=nothing
-		  %>
+ElseIf Request.QueryString("action") = "del" Or Request.Form("action") = "del" Then
+    DeleteLog = lArticle.deleteLog(request("id"))
+    Set lArticle = Nothing
+
+%>
 		      <div id="MsgContent" style="width:300px">
 		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
@@ -89,10 +93,11 @@ If ChkPost() then
 		  	</div>
 		    </div>
 		    <%
-	else
+Else
 
-   if editLog(0)<0 then
-   %>
+    If editLog(0)<0 Then
+
+%>
         <div id="MsgContent" style="width:350px">
          <div id="MsgHead">出错信息</div>
          <div id="MsgBody">
@@ -103,10 +108,11 @@ If ChkPost() then
    	 </div>
    	</div>
    <%
-   else
-   	dim log_editType,editTs
-   	log_editType=lArticle.logEditType
-   %>
+Else
+    Dim log_editType, editTs
+    log_editType = lArticle.logEditType
+
+%>
    
    <!--第二步-->
      <form name="frm" action="blogedit.asp" method="post" onsubmit="return CheckPost()" style="margin:0px">
@@ -123,30 +129,32 @@ If ChkPost() then
                <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50" value="<%=lArticle.logTitle%>"/>
           &nbsp;&nbsp;移动到 <select name="log_CateID" id="select2">
            <%
-	          outCate
-	          sub outCate
-		            Dim Arr_Category,Category_Len,i
-		            Arr_Category=Application(CookieName&"_blog_Category")
-		            if ubound(Arr_Category,1)=0 then exit sub
-				    Category_Len=ubound(Arr_Category,2)
+outCate
 
-				  	For i=0 to Category_Len
-				   		if not Arr_Category(4,i) then
-					  		 if cbool(Arr_Category(10,i)) then
-					  		    if stat_ShowHiddenCate and stat_Admin then 
-							   		 Response.Write("<option value='"&Arr_Category(0,i)&"'")
-							   		 if lArticle.categoryID=int(Arr_Category(0,i)) then Response.Write (" selected")
-							   		 Response.Write(">"&Arr_Category(1,i)&"</option>")
-							    end if
-					  		 else
-							   		 Response.Write("<option value='"&Arr_Category(0,i)&"'")
-							   		 if lArticle.categoryID=int(Arr_Category(0,i)) then Response.Write (" selected")
-							   		 Response.Write(">"&Arr_Category(1,i)&"</option>")
-					  		 end if
-				   		end if
-				  	Next
-			  end sub
-		  %>
+Sub outCate
+    Dim Arr_Category, Category_Len, i
+    Arr_Category = Application(CookieName&"_blog_Category")
+    If UBound(Arr_Category, 1) = 0 Then Exit Sub
+    Category_Len = UBound(Arr_Category, 2)
+
+    For i = 0 To Category_Len
+        If Not Arr_Category(4, i) Then
+            If CBool(Arr_Category(10, i)) Then
+                If stat_ShowHiddenCate And stat_Admin Then
+                    Response.Write("<option value='"&Arr_Category(0, i)&"'")
+                    If lArticle.categoryID = Int(Arr_Category(0, i)) Then Response.Write (" selected")
+                    Response.Write(">"&Arr_Category(1, i)&"</option>")
+                End If
+            Else
+                Response.Write("<option value='"&Arr_Category(0, i)&"'")
+                If lArticle.categoryID = Int(Arr_Category(0, i)) Then Response.Write (" selected")
+                Response.Write(">"&Arr_Category(1, i)&"</option>")
+            End If
+        End If
+    Next
+End Sub
+
+%>
          </select>
    	</td>
                <td width="120" rowspan="3" align="center">
@@ -220,23 +228,24 @@ If ChkPost() then
             <tr>
                <td  align="right" valign="top"><span style="font-weight: bold">内容:</span></td>
                <td colspan="2" align="center"><%
-   	if log_editType=0 then 
-          Dim sBasePath
-          sBasePath = "fckeditor/"
-          Dim oFCKeditor
-          Set oFCKeditor = New FCKeditor
-          oFCKeditor.BasePath	= sBasePath
-          oFCKeditor.Config("AutoDetectLanguage") = False
-          oFCKeditor.Config("DefaultLanguage")    = "zh-cn"
-          oFCKeditor.Value	= UnCheckStr(lArticle.logMessage)
-          oFCKeditor.Create "Message"
-   	 else
-	   	 UBB_TextArea_Height="200px;"
-	  	 UBB_AutoHidden=False
-	   	 UBB_Msg_Value=UBBFilter(UnCheckStr(lArticle.logMessage))
-	   	 UBBeditor("Message")
-   	end if
-   	%></td>
+If log_editType = 0 Then
+    Dim sBasePath
+    sBasePath = "fckeditor/"
+    Dim oFCKeditor
+    Set oFCKeditor = New FCKeditor
+    oFCKeditor.BasePath = sBasePath
+    oFCKeditor.Config("AutoDetectLanguage") = False
+    oFCKeditor.Config("DefaultLanguage") = "zh-cn"
+    oFCKeditor.Value = UnCheckStr(lArticle.logMessage)
+    oFCKeditor.Create "Message"
+Else
+    UBB_TextArea_Height = "200px;"
+    UBB_AutoHidden = False
+    UBB_Msg_Value = UBBFilter(UnCheckStr(lArticle.logMessage))
+    UBBeditor("Message")
+End If
+
+%></td>
              </tr>
                        <%if log_editType<>0 then %>          <tr>
                <td align="right" valign="top">&nbsp;</td>
@@ -254,31 +263,34 @@ If ChkPost() then
    禁止自动转换关键字</label></td>
              </tr><%end if%>
              <%
-	             Dim UseIntro
-	             UseIntro=false
-	             UseIntro=CBool(lArticle.logIntroCustom)
-             %>
+Dim UseIntro
+UseIntro = False
+UseIntro = CBool(lArticle.logIntroCustom)
+
+%>
            <tr>
                <td  align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
                <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
                <div id="Div_Intro" <%if UseIntro then response.write("style=""display:none""")%>>
                <%
-               if log_editType=0 then 
-                  Dim oFCKeditor1
-                  Set oFCKeditor1 = New FCKeditor
-                  oFCKeditor1.BasePath	= sBasePath
-                  oFCKeditor1.Height="150"
-                  oFCKeditor1.ToolbarSet="Basic"
-                  oFCKeditor1.Config("AutoDetectLanguage") = False
-                  oFCKeditor1.Config("DefaultLanguage")    = "zh-cn"
-                  oFCKeditor1.Value	= UnCheckStr(lArticle.logIntro)
-                  oFCKeditor1.Create "log_Intro"
-               else
-   	         %>
+If log_editType = 0 Then
+    Dim oFCKeditor1
+    Set oFCKeditor1 = New FCKeditor
+    oFCKeditor1.BasePath = sBasePath
+    oFCKeditor1.Height = "150"
+    oFCKeditor1.ToolbarSet = "Basic"
+    oFCKeditor1.Config("AutoDetectLanguage") = False
+    oFCKeditor1.Config("DefaultLanguage") = "zh-cn"
+    oFCKeditor1.Value = UnCheckStr(lArticle.logIntro)
+    oFCKeditor1.Create "log_Intro"
+Else
+
+%>
    	         <textarea name="log_Intro" class="editTextarea" style="width:99%;height:120px;"><%=UBBFilter(HTMLDecode(UnCheckStr(lArticle.logIntro)))%></textarea>
    	         <%
-               end if
-               %></div>
+End If
+
+%></div>
                </td>
            </tr>
            <tr>
@@ -310,10 +322,11 @@ If ChkPost() then
    	</div>
    </form>
    <%
-	   set lArticle=nothing
-	   end if
-    end if
-    else%>
+Set lArticle = Nothing
+End If
+End If
+Else
+%>
         <div id="MsgContent" style="width:350px">
          <div id="MsgHead">出错信息</div>
          <div id="MsgBody">
@@ -323,9 +336,10 @@ If ChkPost() then
    		 </div>
    	 </div>
    	</div>
-   <%end if
-   end if
- else%>
+   <%End If
+End If
+Else
+%>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
       <div id="MsgHead">日志发表错误</div>

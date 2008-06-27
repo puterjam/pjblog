@@ -17,52 +17,53 @@
        	 <div id="Content_ContentList" class="content-width">
        	 
          <%
-         if request.form("action")="postLink" then
-	           dim link_Name,link_URL,link_Image,linkCount,linkDB,linkvalidate
-	           link_Name=checkURL(checkstr(request.form("link_Name")))
-	           link_URL=checkURL(checkstr(request.form("link_URL")))
-	           link_Image=checkURL(checkstr(request.form("link_Image")))
-			   linkvalidate=checkURL(checkstr(request.form("link_validate")))
-			   IF cstr(lcase(Session("GetCode")))<>cstr(lcase(linkvalidate)) and not stat_Admin  then
-	 			 	 showmsg "友情链接发表出错","<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>","ErrorIcon",""
-  			   end if
-	           if len(link_Name)<1 then 
-		             showmsg "友情链接发表出错","<b>网站名称不能为空！</b><br/><a href=""javascript:history.go(-1);"">返回</a>","ErrorIcon",""
-	           end if
-	           if len(link_URL)<1 then 
-		             showmsg "友情链接发表出错","<b>网站地址不能为空！</b><br/><a href=""javascript:history.go(-1);"">返回</a>","ErrorIcon",""
-	           end if
-			   
-	           linkCount=int(conn.execute("select count(*) from blog_links")(0))
-		           Set linkDB=Server.CreateObject("ADODB.RecordSet")
-				   linkDB.Open "blog_links",Conn,1,2
-				   linkDB.addNew
-				   linkDB("link_Name")=link_Name
-				   linkDB("link_URL")=link_URL
-				   linkDB("link_Image")=link_Image
-				   linkDB("link_Order")=linkCount
-				   linkDB("link_IsShow")=false
-				   linkDB.update
-				   linkDB.close
-				   set linkDB=nothing
-		       showmsg "友情链接添加成功","<b>网友情链接添加成功,请等待审核！</b><br/><a href=""BlogLink.asp"">返回</a>","MessageIcon",""
-           end if
-           on error resume Next
-           server.execute("post/link.html")
-           if err then
-                err.clear
-                dim blog_Links,ImgLink,TextLink
-                set blog_Links=conn.execute("select * from blog_Links where link_IsShow=true order by link_Order asc")
-                SQLQueryNums=SQLQueryNums+1
-                do until blog_Links.eof
-                 if len(blog_Links("link_Image"))>0 then
-                    ImgLink=ImgLink&"<a href="""&blog_Links("link_URL")&""" target=""_blank""><img src="""&blog_Links("link_Image")&""" alt="""&blog_Links("link_Name")&""" border=""0"" style=""margin:3px;width:88px;height:31px""/></a>"
-                  else
-                    TextLink=TextLink&"<div class=""link"" style=""width:108px;float:left;overflow:hidden;margin-right:8px;height:24px;line-height:180%""><a href="""&blog_Links("link_URL")&""" target=""_blank"" title="""&blog_Links("link_Name")&""">"&blog_Links("link_Name")&"</a></div>"
-                 end if
-                 blog_Links.movenext
-                loop
-               %>
+If request.Form("action") = "postLink" Then
+    Dim link_Name, link_URL, link_Image, linkCount, linkDB, linkvalidate
+    link_Name = checkURL(checkstr(request.Form("link_Name")))
+    link_URL = checkURL(checkstr(request.Form("link_URL")))
+    link_Image = checkURL(checkstr(request.Form("link_Image")))
+    linkvalidate = checkURL(checkstr(request.Form("link_validate")))
+    If CStr(LCase(Session("GetCode")))<>CStr(LCase(linkvalidate)) And Not stat_Admin Then
+        showmsg "友情链接发表出错", "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>", "ErrorIcon", ""
+    End If
+    If Len(link_Name)<1 Then
+        showmsg "友情链接发表出错", "<b>网站名称不能为空！</b><br/><a href=""javascript:history.go(-1);"">返回</a>", "ErrorIcon", ""
+    End If
+    If Len(link_URL)<1 Then
+        showmsg "友情链接发表出错", "<b>网站地址不能为空！</b><br/><a href=""javascript:history.go(-1);"">返回</a>", "ErrorIcon", ""
+    End If
+
+    linkCount = Int(conn.Execute("select count(*) from blog_links")(0))
+    Set linkDB = Server.CreateObject("ADODB.RecordSet")
+    linkDB.Open "blog_links", Conn, 1, 2
+    linkDB.addNew
+    linkDB("link_Name") = link_Name
+    linkDB("link_URL") = link_URL
+    linkDB("link_Image") = link_Image
+    linkDB("link_Order") = linkCount
+    linkDB("link_IsShow") = False
+    linkDB.update
+    linkDB.Close
+    Set linkDB = Nothing
+    showmsg "友情链接添加成功", "<b>网友情链接添加成功,请等待审核！</b><br/><a href=""BlogLink.asp"">返回</a>", "MessageIcon", ""
+End If
+On Error Resume Next
+server.Execute("post/link.html")
+If Err Then
+    Err.Clear
+    Dim blog_Links, ImgLink, TextLink
+    Set blog_Links = conn.Execute("select * from blog_Links where link_IsShow=true order by link_Order asc")
+    SQLQueryNums = SQLQueryNums + 1
+    Do Until blog_Links.EOF
+        If Len(blog_Links("link_Image"))>0 Then
+            ImgLink = ImgLink&"<a href="""&blog_Links("link_URL")&""" target=""_blank""><img src="""&blog_Links("link_Image")&""" alt="""&blog_Links("link_Name")&""" border=""0"" style=""margin:3px;width:88px;height:31px""/></a>"
+        Else
+            TextLink = TextLink&"<div class=""link"" style=""width:108px;float:left;overflow:hidden;margin-right:8px;height:24px;line-height:180%""><a href="""&blog_Links("link_URL")&""" target=""_blank"" title="""&blog_Links("link_Name")&""">"&blog_Links("link_Name")&"</a></div>"
+        End If
+        blog_Links.movenext
+    Loop
+
+%>
                <div class="Content">
                  <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
                    <h1 class="ContentTitle"><img src="images/image.gif" alt="" style="margin:0px 2px -3px 0px" class="CateIcon"/><b>图象链接</b></h1>

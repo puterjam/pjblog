@@ -17,11 +17,12 @@
 <title>后台管理</title>
 </head>
 <%
-if memName=empty or stat_Admin<>true then
- Response.Redirect("default.asp")
-else
-  if session(CookieName&"_System")=true then 
-    %>
+If memName = Empty Or stat_Admin<>True Then
+    Response.Redirect("default.asp")
+Else
+    If session(CookieName&"_System") = True Then
+
+%>
     <frameset rows="71,*" framespacing="0" border="0" frameborder="0">
     <frame src="ConHead.asp" scrolling="no" name="Head" noresize>
       <frameset cols="152,*">
@@ -30,8 +31,9 @@ else
      </frameset>
     </frameset>
     <%
-  else
-  %>
+Else
+
+%>
   <body style="background:#FFFFEE">
   <form action="control.asp" method="post" style="margin:2px;">
   <input type="hidden" name="action" value="login"/>
@@ -46,26 +48,26 @@ else
   </div>
   </form></body>
   <%
-      dim action 
-      action=CheckStr(Request.form("action"))
-      if action="login" then 
-       dim chUser,getPass
-       getPass=CheckStr(Request.form("adpass"))
-       set chUser=conn.execute("SELECT Top 1 mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&memName&"'")
-       if chUser.eof or chUser.bof then 
-        session(CookieName&"_ShowError")="管理员密码错误!"
+Dim action
+action = CheckStr(Request.Form("action"))
+If action = "login" Then
+    Dim chUser, getPass
+    getPass = CheckStr(Request.Form("adpass"))
+    Set chUser = conn.Execute("SELECT Top 1 mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&memName&"'")
+    If chUser.EOF Or chUser.bof Then
+        session(CookieName&"_ShowError") = "管理员密码错误!"
         Response.Redirect("control.asp")
-       else
-        if chUser("mem_Password")<>SHA1(getPass&chUser("mem_salt")) then 
-          session(CookieName&"_ShowError")="管理员密码错误!"
-	      Response.Redirect("control.asp")
-         else
-          session(CookieName&"_System")=true
-          Response.Redirect("control.asp")
-        end if
-       end if
-      end if
-   end if 
-end if
+    Else
+        If chUser("mem_Password")<>SHA1(getPass&chUser("mem_salt")) Then
+            session(CookieName&"_ShowError") = "管理员密码错误!"
+            Response.Redirect("control.asp")
+        Else
+            session(CookieName&"_System") = True
+            Response.Redirect("control.asp")
+        End If
+    End If
+End If
+End If
+End If
 %>
 </html>

@@ -7,9 +7,10 @@
 '  用户登录页面
 '    更新时间: 2006-5-29
 '==================================
-IF Request.QueryString("action")="logout" then
-  logout(true)
- %><br/><br/>
+If Request.QueryString("action") = "logout" Then
+    logout(True)
+
+%><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
       <div id="MsgHead">退出系统</div>
@@ -22,9 +23,9 @@ IF Request.QueryString("action")="logout" then
 	</div>
 <br/><br/>
  <%
-ElseIF Request.form("action")="login" then
- Dim loginUser
- loginUser=login(Request.Form("UserName"),Request.Form("Password"))
+ElseIf Request.Form("action") = "login" Then
+    Dim loginUser
+    loginUser = login(Request.Form("UserName"), Request.Form("Password"))
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">

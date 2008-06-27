@@ -4,13 +4,13 @@
 <!--#include file="common/library.asp" -->
 <!--#include file="common/cache.asp" -->
 <%
-	'==================================
-	'  插件读取页面
-	'    更新时间: 2006-5-28
-	'==================================
-	log_module(1)
-	call TransferMod '装载插件
-	call CloseDB '关闭数据库
+'==================================
+'  插件读取页面
+'    更新时间: 2006-5-28
+'==================================
+log_module(1)
+Call TransferMod '装载插件
+Call CloseDB '关闭数据库
 
 %>
 <script Language="JScript" runat="server">

@@ -6,10 +6,10 @@
 '  信息显示页面
 '    更新时间: 2005-10-18
 '==================================
-if not session(CookieName&"_ShowMsg") then 
+If Not session(CookieName&"_ShowMsg") Then
     Response.Redirect("default.asp")
-end if
-    session(CookieName&"_ShowMsg")=false
+End If
+session(CookieName&"_ShowMsg") = False
 
 %>
  <div id="Tbody">
