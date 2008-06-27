@@ -7,7 +7,7 @@
 '    更新时间: 2005-10-18
 '==================================
 If Not session(CookieName&"_ShowMsg") Then
-    Response.Redirect("default.asp")
+    RedirectUrl("default.asp")
 End If
 session(CookieName&"_ShowMsg") = False
 

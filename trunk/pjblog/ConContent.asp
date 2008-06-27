@@ -176,7 +176,7 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
     <legend> 日志保存设置</legend>
     <div align="left">
       <table border="0" cellpadding="2" cellspacing="1">
- 	  <tr><td width="180" align="right">日志输出模式<br/><br/><br/></td><td>
+ 	  <tr><td width="180" align="right">日志输出模式<br/><br/><br/><br/></td><td>
  	    <%if not CheckObjInstalled("ADODB.Stream") then response.write "disabled"%>
  	  <input name="blog_postFile" type="radio" value="0"/> 全动态模式 <span style="color:#999">文章数据从数据库里直接获取</span> <br/>
  	  <input name="blog_postFile" type="radio" value="1" <%if blog_postFile = 1 then response.write ("checked=""checked""")%>/> 半静态模式 <span style="color:#999">把文章保存成文件，但还能插件功能. </span> <br/>
@@ -394,7 +394,7 @@ If DelContent.EOF And DelContent.bof Then
 Else
 
 %>
-						 <tr><td><input name="CID" type="checkbox" value="<%=DelContent("log_ID")%>"/></td><td><a href="article.asp?id=<%=DelContent("log_ID")%>" target="_blank"><%=DelContent("log_ID")%>. <%=DelContent("log_Title")%> <%=TempImg%></a></td></tr>
+						 <tr><td><input name="CID" type="checkbox" value="<%=DelContent("log_ID")%>"/></td><td><a href="default.asp?id=<%=DelContent("log_ID")%>" target="_blank"><%=DelContent("log_ID")%>. <%=DelContent("log_Title")%> <%=TempImg%></a></td></tr>
 						 <%
 End If
 TempImg = ""
@@ -733,7 +733,7 @@ Else
 
 %>
 							        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(7,Pcount)%>"><%=CutStr(commArr(7,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_trackback.gif" alt=""/><b><a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(2,Pcount)%></a></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%>]</span></div>
+								        <div class="title"><span class="blogTitle"><a href="default.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(7,Pcount)%>"><%=CutStr(commArr(7,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_trackback.gif" alt=""/><b><a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(2,Pcount)%></a></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%>]</span></div>
 								        <div class="contentTB">
 								         <b>标题:</b> <%=checkURL(HTMLDecode(commArr(4,Pcount)))%><br/>
 								         <b>链接:</b> <a href="<%=commArr(6,Pcount)%>" target="_blank"><%=commArr(6,Pcount)%></a><br/>
@@ -754,7 +754,7 @@ Else '评论
 
 %>
 							        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-								        <div class="title"><span class="blogTitle"><a href="article.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
+								        <div class="title"><span class="blogTitle"><a href="default.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
 								        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onFocus="focusMe(this)" onBlur="blurMe(this)" onMouseOver="overMe(this)" onMouseOut="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
 								    </div>
 							      <%
@@ -901,7 +901,7 @@ If IsInteger(bmID) = True Then
     If bMInfo.EOF Or bMInfo.bof Then
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "没找到符合条件的模块!"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
     Else
 
 %>
@@ -930,7 +930,7 @@ End If
 Else
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = "你提交了非法字符!"
-    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
 End If
 
 %>
@@ -966,7 +966,7 @@ If IsInteger(bmID) = True Then
     If bMInfo.EOF Or bMInfo.bof Then
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "没找到符合条件的模块!"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
     Else
 
 %>
@@ -982,7 +982,7 @@ End If
 Else
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = "你提交了非法字符!"
-    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
 End If
 
 %>
@@ -1142,7 +1142,7 @@ ElseIf Request.QueryString("Smenu") = "UnInstallPlugins" Then
         If getMod.EOF Then
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 无法反安装,数据库没有找到相应的信息!"
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
         Else
             getCateID = getMod(0)
             If Len(getCateID)>0 Then conn.Execute("delete * from blog_Category where cate_ID="&getCateID)
@@ -1167,7 +1167,7 @@ ElseIf Request.QueryString("Smenu") = "UnInstallPlugins" Then
     FixPlugins(0)
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 插件反安装完成!"
-    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
 
     '============================================================
     '    修复插件
@@ -2119,7 +2119,7 @@ ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
             End If
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "基本信息修改成功!"
-            Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
+            RedirectUrl("ConContent.asp?Fmenu=General&Smenu=")
         ElseIf Request.Form("whatdo") = "Misc" Then
 %>
     <!--#include file="common/ubbcode.asp" -->
@@ -2177,11 +2177,11 @@ If Request.Form("ReBulid") = 1 Then
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"缓存重建成功! "
 End If
-Response.Redirect("ConContent.asp?Fmenu=General&Smenu=Misc")
+RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Misc")
 Else
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = "非法提交内容"
-    Response.Redirect("ConContent.asp?Fmenu=General&Smenu=")
+    RedirectUrl("ConContent.asp?Fmenu=General&Smenu=")
 End If
 '==========================处理日志分类===============================
 ElseIf Request.Form("action") = "Categories" Then
@@ -2193,7 +2193,7 @@ ElseIf Request.Form("action") = "Categories" Then
         If Cate_source = Cate_target Then
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "源分类和目标分类一致无法移动"
-            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
+            RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=move")
         End If
         Cate_source_name = conn.Execute("select cate_Name from blog_Category where cate_ID="&Cate_source)(0)
         Cate_source_count = conn.Execute("select cate_count from blog_Category where cate_ID="&Cate_source)(0)
@@ -2204,7 +2204,7 @@ ElseIf Request.Form("action") = "Categories" Then
         CategoryList(2)
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#f00"">"&Cate_source_name&"</span> 移动到 <span style=""color:#f00"">"&Cate_target_name&"</span> 成功! 批量转移后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=move")
+        RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=move")
         '--------------------------处理日志分类----------------------------
     ElseIf Request.Form("whatdo") = "Cate" Then
         '处理存在分类
@@ -2256,7 +2256,7 @@ ElseIf Request.Form("action") = "Categories" Then
         FreeMemory
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"日志分类更新成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=")
         '--------------------------批量删除日志----------------------------
     ElseIf Request.Form("whatdo") = "batdel" Then
         Dim CID, Cids, tti, C1, C2
@@ -2274,7 +2274,7 @@ ElseIf Request.Form("action") = "Categories" Then
         FreeMemory
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "日志删除状态:"&C1&"篇成功,"&C2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=del")
+        RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=del")
         '--------------------------删除日志分类----------------------------
     ElseIf Request.Form("whatdo") = "DelCate" Then
         Dim DelCate, DelLog, DelID, conCount, comCount, P1, P2
@@ -2295,7 +2295,7 @@ ElseIf Request.Form("action") = "Categories" Then
         FreeMemory
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"日志分类删除成功! 日志删除状态:"&P1&"篇成功,"&P2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
-        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=")
     ElseIf Request.Form("whatdo") = "Tag" Then
         Dim TagsID, TagName
         If Request.Form("doModule") = "DelSelect" Then
@@ -2307,7 +2307,7 @@ ElseIf Request.Form("action") = "Categories" Then
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(TagsID) + 1)&" 个Tag被删除!"
             If blog_postFile>0 Then session(CookieName&"_MsgText") = session(CookieName&"_MsgText") + "由于你使用了静态日志功能，所以删除tag后建议到 <a href='ConContent.asp?Fmenu=General&Smenu=Misc' title='站点基本设置-初始化数据 '>初始化数据</a> 重新生成所有日志一次."
-            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
+            RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=tag")
         Else
             TagsID = Split(Request.Form("TagID"), ", ")
             TagName = Split(Request.Form("tagName"), ", ")
@@ -2324,12 +2324,12 @@ ElseIf Request.Form("action") = "Categories" Then
             Tags(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"Tag保存成功!"
-            Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=tag")
+            RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=tag")
         End If
     Else
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "非法提交内容!"
-        Response.Redirect("ConContent.asp?Fmenu=Categories&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=")
     End If
 
     '==========================评论留言处理===============================
@@ -2377,7 +2377,7 @@ ElseIf Request.Form("action") = "Comment" Then
         Application.UnLock
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = (UBound(selCommID) + 1)&" 个"&doTitle&"记录被删除!"
-        Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
+        RedirectUrl("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
     ElseIf Request.Form("doModule") = "Update" Then
         For i = 0 To UBound(doCommID)
             If Request.Form("whatdo") = "msg" Then
@@ -2401,7 +2401,7 @@ ElseIf Request.Form("action") = "Comment" Then
         Application.UnLock
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = doTitle&"记录更新成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
+        RedirectUrl("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
     End If
 
     '==========================处理帐户和权限信息===============================
@@ -2419,13 +2419,13 @@ ElseIf Request.Form("action") = "Members" Then
             If Not IsValidChars(NS_Name) Then
                 session(CookieName&"_ShowMsg") = True
                 session(CookieName&"_MsgText") = "<span style=""color:#900"">添加新权限失败!权限标识不能为英文或数字以外的字符</span>"
-                Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+                RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
             End If
             Set tmpNS = conn.Execute("select stat_name from blog_status where stat_name='"&NS_Name&"'")
             If Not tmpNS.EOF Then
                 session(CookieName&"_ShowMsg") = True
                 session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&NS_Name&"”</span> 权限标识已经存在无法添加新分组!"
-                Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+                RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
             End If
             conn.Execute("insert into blog_status (stat_name,stat_title,stat_Code,stat_attSize,stat_attType) values ('"&NS_Name&"','"&NS_Title&"','000000000000',0,'')")
             session(CookieName&"_MsgText") = "新分组添加成功!"
@@ -2436,7 +2436,7 @@ ElseIf Request.Form("action") = "Members" Then
         UserRight(2)
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"权限组信息修改成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
         '--------------------------处理帐户信息----------------------------
     ElseIf Request.Form("whatdo") = "User" Then
 
@@ -2461,7 +2461,7 @@ ElseIf Request.Form("action") = "Members" Then
         UserRight(2)
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&EditGroup&"”</span>权限分组 编辑成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=EditRight&id="&EditGroup)
+        RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=EditRight&id="&EditGroup)
         '--------------------------删除分组信息----------------------------
     ElseIf Request.Form("whatdo") = "DelGroup" Then
         Dim DelGroup
@@ -2472,11 +2472,11 @@ ElseIf Request.Form("action") = "Members" Then
             UserRight(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&DelGroup&"”</span>权限分组 删除成功!"
-            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+            RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
         Else
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "特殊分组无法删除!"
-            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+            RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
         End If
         '--------------------------保存用户权限----------------------------
     ElseIf Request.Form("whatdo") = "SaveUserRight" Then
@@ -2486,7 +2486,7 @@ ElseIf Request.Form("action") = "Members" Then
 
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "用户权限设置成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+        RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
         '--------------------------删除用户----------------------------
     ElseIf Request.Form("whatdo") = "DelUser" Then
         Dim DelUserID, DelUserName, blogmemberNum, DelUserStatus
@@ -2497,7 +2497,7 @@ ElseIf Request.Form("action") = "Members" Then
         If ((blogmemberNum = 1) And (DelUserStatus = "SupAdmin")) Then
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "不能删除仅有的管理员权限!"
-            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+            RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
         Else
             DelUserName = conn.Execute("select mem_Name from blog_Member where mem_ID="&DelUserID)(0)
             conn.Execute("delete * from blog_Member where mem_ID="&DelUserID)
@@ -2505,12 +2505,12 @@ ElseIf Request.Form("action") = "Members" Then
             getInfo(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&DelUserName&"”</span> 删除成功!"
-            Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=Users")
+            RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
         End If
     Else
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "非法提交内容!"
-        Response.Redirect("ConContent.asp?Fmenu=Members&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=")
     End If
     '==========================友情链接管理===============================
 ElseIf Request.Form("action") = "Links" Then
@@ -2519,7 +2519,7 @@ ElseIf Request.Form("action") = "Links" Then
     If Request.Form("whatdo") = "Filter" Then
         session(CookieName&"_disLink") = CheckStr(Request.Form("disLink"))
         session(CookieName&"_disCount") = CheckStr(Request.Form("disCount"))
-        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=")
         '--------------------------保存友情链接----------------------------
     ElseIf Request.Form("whatdo") = "SaveLink" Then
         Dim TLinkName, TLinkURL, TLinkLogo, TLinkOrder
@@ -2549,7 +2549,7 @@ ElseIf Request.Form("action") = "Links" Then
         PostLink
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"保存链接成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
         '--------------------------通过友情链接----------------------------
     ElseIf Request.Form("whatdo") = "ShowLink" Then
         conn.Execute ("update blog_Links set link_IsShow=true where link_ID="&CheckStr(Request.Form("ALinkID")))
@@ -2558,7 +2558,7 @@ ElseIf Request.Form("action") = "Links" Then
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 通过验证!"
         Bloglinks(2)
         PostLink
-        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
         '--------------------------置顶友情链接----------------------------
     ElseIf Request.Form("whatdo") = "TopLink" Then
         conn.Execute ("update blog_Links set link_IsMain=not link_IsMain where link_ID="&CheckStr(Request.Form("ALinkID")))
@@ -2572,7 +2572,7 @@ ElseIf Request.Form("action") = "Links" Then
         End If
         Bloglinks(2)
         PostLink
-        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
         '--------------------------删除友情链接----------------------------
     ElseIf Request.Form("whatdo") = "DelLink" Then
         LinkName = conn.Execute ("select link_Name from blog_Links where link_ID="&CheckStr(Request.Form("ALinkID")))(0)
@@ -2581,7 +2581,7 @@ ElseIf Request.Form("action") = "Links" Then
         Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"<span style=""color:#900"">“"&LinkName&"”</span> 删除成功!"
         Bloglinks(2)
         PostLink
-        Response.Redirect("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
     End If
     '==========================表情和关键字===============================
 ElseIf Request.Form("action") = "smilies" Then
@@ -2597,7 +2597,7 @@ ElseIf Request.Form("action") = "smilies" Then
             Smilies(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(smilesID) + 1)&" 个表情被删除!"
-            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+            RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=")
         Else
             smilesID = Split(Request.Form("smilesID"), ", ")
             smiles = Split(Request.Form("smiles"), ", ")
@@ -2615,7 +2615,7 @@ ElseIf Request.Form("action") = "smilies" Then
             Smilies(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"表情保存成功!"
-            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+            RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=")
         End If
     ElseIf Request.Form("whatdo") = "KeyWord" Then
         If Request.Form("doModule") = "DelSelect" Then
@@ -2626,7 +2626,7 @@ ElseIf Request.Form("action") = "smilies" Then
             Keywords(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(KeyWordID) + 1)&"关键字被删除!"
-            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
+            RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
         Else
             KeyWordID = Split(Request.Form("KeyWordID"), ", ")
             KeyWord = Split(Request.Form("KeyWord"), ", ")
@@ -2644,12 +2644,12 @@ ElseIf Request.Form("action") = "smilies" Then
             Keywords(2)
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"关键字保存成功!"
-            Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
+            RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
         End If
     Else
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "非法提交内容!"
-        Response.Redirect("ConContent.asp?Fmenu=smilies&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=")
     End If
 
     '==========================设置界面和模版===============================
@@ -2663,7 +2663,7 @@ ElseIf Request.Form("action") = "Skins" Then
         getInfo(2)
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&Skinname&"”</span> 设置为当前默认界面!"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=")
         '--------------------------保存模块设置----------------------------
     ElseIf Request.Form("whatdo") = "UpdateModule" Then
         Dim selectID, doModule
@@ -2691,12 +2691,12 @@ ElseIf Request.Form("action") = "Skins" Then
                     If Not conn.Execute("select name from blog_module where name='"&CheckStr(moduleName(i))&"'").EOF Then
                         session(CookieName&"_ShowMsg") = True
                         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&CheckStr(moduleName(i))&"”</span> 模块标识已经存在无法添加新模块!"
-                        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
                     End If
                     If Not IsValidChars(CheckStr(moduleName(i))) Then
                         session(CookieName&"_ShowMsg") = True
                         session(CookieName&"_MsgText") = "<span style=""color:#900"">添加新模块失败!权限标识不能为英文或数字以外的字符</span>"
-                        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
                     End If
                     If Len(CheckStr(moduleOrder(i)))<1 Then
                         mOrder = conn.Execute("select count(id) from blog_module")(0)
@@ -2704,7 +2704,7 @@ ElseIf Request.Form("action") = "Skins" Then
                         If IsInteger(CheckStr(moduleOrder(i))) = False Then
                             session(CookieName&"_ShowMsg") = True
                             session(CookieName&"_MsgText") = "输入非法，添加失败!"
-                            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+                            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
                         End If
                         mOrder = CheckStr(moduleOrder(i))
                     End If
@@ -2728,7 +2728,7 @@ Case "cancelIndex":
         log_module(2)
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"模块保存成功!"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
 
         '--------------------------编辑模块HTML代码----------------------------
     ElseIf Request.Form("whatdo") = "editModule" Then
@@ -2740,9 +2740,9 @@ Case "cancelIndex":
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 代码编辑成功!"
         If Request.Form("editType") = "normal" Then
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModuleNormal&miD="&moduleID)
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=editModuleNormal&miD="&moduleID)
         Else
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=editModule&miD="&moduleID)
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=editModule&miD="&moduleID)
         End If
 
         '-------------------------------删除模块------------------------------
@@ -2751,14 +2751,14 @@ Case "cancelIndex":
         If conn.Execute("select isSystem from blog_module where id="&moduleID)(0) Then
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&conn.Execute("select title from blog_module where id="&moduleID)(0)&"”</span> 是内置模块无法删除！"
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
         Else
             moduleName = conn.Execute("select title from blog_module where id="&moduleID)(0)
             delModule moduleID
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 删除成功！"
             log_module(2)
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=module")
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
         End If
         '-------------------------------保存插件配置------------------------------
     ElseIf Request.Form("whatdo") = "SavePluginsSetting" Then
@@ -2777,7 +2777,7 @@ Case "cancelIndex":
         ModSetTemp2.ReLoad()
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功！"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
     End If
     '==========================附件管理===============================
 ElseIf Request.Form("action") = "Attachments" Then
@@ -2794,7 +2794,7 @@ ElseIf Request.Form("action") = "Attachments" Then
             If Len(getPathList(GetFolder)(1))>0 Then
                 session(CookieName&"_ShowMsg") = True
                 session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetFolder&"”</span> 文件夹内含有文件，无法删除!"
-                Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
+                RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
             End If
             If FSODel.FolderExists(Server.MapPath(GetFolder)) Then
                 FSODel.DeleteFolder Server.MapPath(GetFolder), True
@@ -2809,7 +2809,7 @@ ElseIf Request.Form("action") = "Attachments" Then
         Next
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
-        Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
+        RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
     End If
 Else'登录欢迎
 
@@ -2824,6 +2824,6 @@ End If
 <%
 
 Else
-    Response.Redirect("default.asp")
+    RedirectUrl("default.asp")
 End If
 %>

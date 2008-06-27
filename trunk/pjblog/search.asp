@@ -50,7 +50,7 @@ Select Case searchType
         If Len(SearchContent)>0 Then
             SQL = "SELECT log_ID,log_Title,log_PostTime,log_CommNums FROM blog_Content WHERE log_IsShow=true AND (log_Title LIKE '%"&SearchContent&"%' OR log_Content LIKE '%"&SearchContent&"%')"
         Else
-            Response.Redirect("default.asp")
+            RedirectUrl("default.asp")
         End If
     Case "Comments"
         If Len(SearchContent)>0 Then
@@ -68,7 +68,7 @@ Select Case searchType
         If Len(SearchContent)>0 Then
             SQL = "SELECT log_ID,log_Title,log_PostTime,log_CommNums FROM blog_Content WHERE log_IsShow=true AND log_Title LIKE '%"&SearchContent&"%'"
         Else
-            Response.Redirect("default.asp")
+            RedirectUrl("default.asp")
         End If
 End Select
 blog_Search.Open SQL, Conn, 1, 1
@@ -99,7 +99,7 @@ Else
     Do Until PageCount = SearchArrLen + 1 Or PageCount = 10
         Select Case searchType
             Case "Content"
-                Response.Write("<a href=""article.asp?id="&SearchArr(0, PageCount)&"&keyword="&Server.URLEncode(SearchContent)&""" target=""_blank""> "&highlight(SearchArr(1, PageCount), SearchContent)&" [ 日期: "&SearchArr(2, PageCount)&" | 评论数:"&SearchArr(3, PageCount)&"]</a><br/>")
+                Response.Write("<a href=""default.asp?id="&SearchArr(0, PageCount)&"&keyword="&Server.URLEncode(SearchContent)&""" target=""_blank""> "&highlight(SearchArr(1, PageCount), SearchContent)&" [ 日期: "&SearchArr(2, PageCount)&" | 评论数:"&SearchArr(3, PageCount)&"]</a><br/>")
             Case "Comments"
 
 %>
