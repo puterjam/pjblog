@@ -163,11 +163,9 @@ End Sub
 
 
 '========================日志分类缓存=========================
-Dim Category_code
-
-Sub CategoryList(ByVal action) '日志分类
+Function CategoryList(ByVal action) '日志分类
     '写入日志分类
-    'action=0 横向菜单 action=1 树状菜单 action=2重建分类
+    'action=0 横向菜单 action=1 树状菜单 action=2重建分类, 默认尝试返回Arr_Category
 
     '--------------写入日志分类缓存------------------
     Dim Arr_Category, i
@@ -190,45 +188,48 @@ Sub CategoryList(ByVal action) '日志分类
         Arr_Category = Application(CookieName&"_blog_Category")
     End If
 
+	CategoryList = "" '初始化
+	
     Dim Category_Len, Menu_Diver
     '--------------输出日志横向菜单------------------
     If action = 0 Then
-        Menu_Diver = ""
-        Response.Write("<div id=""menu""><div id=""Left""></div><div id=""Right""></div><ul><li class=""menuL""></li>")
+       Menu_Diver = ""
+       CategoryList = "<div id=""menu""><div id=""Left""></div><div id=""Right""></div><ul><li class=""menuL""></li>"
 
         If UBound(Arr_Category, 1) = 0 Then
-            Response.Write("<li class=""menuR""></li></ul></div>")
-            Exit Sub
+            CategoryList = CategoryList&"<li class=""menuR""></li></ul></div>"
+            Exit Function
         End If
 
         Category_Len = UBound(Arr_Category, 2)
 
         For i = 0 To Category_Len
             If Int(Arr_Category(9, i)) = 0 Or Int(Arr_Category(9, i)) = 1 Then
-                Response.Write(Menu_Diver)
+                CategoryList = CategoryList&Menu_Diver
+                
                 If Arr_Category(4, i) Then
                     If CBool(Arr_Category(10, i)) Then
-                        If stat_ShowHiddenCate Or stat_Admin Then Response.Write("<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>")
+                        If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&"<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     Else
-                        Response.Write("<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>")
+                        CategoryList = CategoryList&"<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     End If
                 Else
                     If CBool(Arr_Category(10, i)) Then
-                        If stat_ShowHiddenCate Or stat_Admin Then Response.Write("<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>")
+                        If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&"<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     Else
-                        Response.Write("<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>")
+                        CategoryList = CategoryList&"<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     End If
                 End If
                 Menu_Diver = "<li class=""menuDiv""></li>"
             End If
         Next
 
-        Response.Write("<li class=""menuR""></li></ul></div>")
+        CategoryList = CategoryList&"<li class=""menuR""></li></ul></div>"
     End If
 
     If action = 1 Then
-        Category_code = ""
-        If UBound(Arr_Category, 1) = 0 Then Exit Sub
+        CategoryList = ""
+        If UBound(Arr_Category, 1) = 0 Then Exit Function
 
         Category_Len = UBound(Arr_Category, 2)
 
@@ -236,21 +237,21 @@ Sub CategoryList(ByVal action) '日志分类
             If Int(Arr_Category(9, i)) = 0 Or Int(Arr_Category(9, i)) = 2 Then
                 If Arr_Category(4, i) Then
                     If CBool(Arr_Category(10, i)) Then
-                        If stat_ShowHiddenCate Or stat_Admin Then Category_code = Category_code&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a><br/>")
+                        If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a><br/>")
                     Else
-                        Category_code = Category_code&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a><br/>")
+                        CategoryList = CategoryList&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a><br/>")
                     End If
                 Else
                     If CBool(Arr_Category(10, i)) Then
-                        If stat_ShowHiddenCate Or stat_Admin Then Category_code = Category_code&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&" ["&Arr_Category(7, i)&"]</a> <a href=""feed.asp?cateID="&Arr_Category(0, i)&""" title=""订阅该分类内容""><img src=""images/rss.png"" border=""0"" style=""margin:3px 4px -1px 0px;"" alt=""""/></a><br/>")
+                        If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&" ["&Arr_Category(7, i)&"]</a> <a href=""feed.asp?cateID="&Arr_Category(0, i)&""" title=""订阅该分类内容""><img src=""images/rss.png"" border=""0"" style=""margin:3px 4px -1px 0px;"" alt=""""/></a><br/>")
                     Else
-                        Category_code = Category_code&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&" ["&Arr_Category(7, i)&"]</a> <a href=""feed.asp?cateID="&Arr_Category(0, i)&""" title=""订阅该分类内容""><img src=""images/rss.png"" border=""0"" style=""margin:3px 4px -1px 0px;"" alt=""""/></a><br/>")
+                        CategoryList = CategoryList&("<img src="""&Arr_Category(6, i)&""" border=""0"" style=""margin:3px 4px -4px 0px;"" alt="""&Arr_Category(3, i)&"""/><a class=""CategoryA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&" ["&Arr_Category(7, i)&"]</a> <a href=""feed.asp?cateID="&Arr_Category(0, i)&""" title=""订阅该分类内容""><img src=""images/rss.png"" border=""0"" style=""margin:3px 4px -1px 0px;"" alt=""""/></a><br/>")
                     End If
                 End If
             End If
         Next
     End If
-End Sub
+End Function
 
 '========================End Sub===============================
 

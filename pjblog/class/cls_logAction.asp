@@ -530,7 +530,7 @@ Class logArticle
         Call NewComment(2)
         Call Calendar("", "", "", 2)
 
-        If blog_postFile Then
+        If blog_postFile>0 Then
             Dim lArticle
             Set lArticle = New ArticleCache
             lArticle.SaveCache
@@ -685,10 +685,11 @@ End Function
 
 Public Function loadCache
     Dim LoadList
-    If Not blog_postFile Then
+    If blog_postFile<1 Then
         loadCache = False
         Exit Function
     End If
+    
     LoadList = LoadFromFile("cache/listCache.asp")
     If LoadList(0) = 0 Then
         cacheList = LoadList(1)
@@ -699,7 +700,7 @@ Public Function loadCache
 End Function
 
 Public Function SaveCache
-    If Not blog_postFile Then Exit Function
+    If blog_postFile<1 Then Exit Function
     Dim LogList, LogListArray, SaveList, CateDic, CateHDic, TagsDic
     Set CateDic = Server.CreateObject("Scripting.Dictionary")
     Set CateHDic = Server.CreateObject("Scripting.Dictionary")
@@ -772,7 +773,7 @@ End Class
 '  PJblog2 动态文章保存
 '======================================================
 
-Sub PostArticle(LogID)
+Sub PostArticle(ByVal LogID)
     If blog_postFile = 1 Then
         PostHalfStatic LogID
     ElseIf blog_postFile = 2 Then
@@ -784,143 +785,303 @@ End Sub
 '半静态化
 '======================================================
 
-Sub PostHalfStatic(LogID)
-    Dim SaveArticle, LoadTemplate1, LoadTemplate2, Temp1, Temp2, TempStr, log_View, preLogC, nextLogC
+Sub PostHalfStatic(ByVal LogID)
+    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC
+
     '读取日志模块
     LoadTemplate1 = LoadFromFile("Template/Article.asp")
-    LoadTemplate2 = LoadFromFile("Template/ArticleList.asp")
-    If LoadTemplate1(0) = 0 And LoadTemplate2(0) = 0 Then '读取成功后写入信息
-        '读取分类信息
-        Temp1 = LoadTemplate1(1)
-        Temp2 = LoadTemplate2(1)
 
-        '读取日志内容
-        SQL = "SELECT TOP 1 * FROM blog_Content WHERE log_ID=" & LogID
-        SQLQueryNums = SQLQueryNums + 1
-        Set log_View = conn.Execute(SQL)
-        Dim blog_Cate, blog_CateArray, comDesc
-        Dim getCate, getTags
-        Set getCate = New Category
-        Set getTags = New tag
-        getCate.load(Int(log_View("log_CateID"))) '获取分类信息
+    If LoadTemplate1(0) <> 0 Then Exit Sub'读取成功后写入信息
 
-        Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
-        Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
-        Temp1 = Replace(Temp1, "<$log_CateID$>", log_View("log_CateID"))
-        Temp1 = Replace(Temp1, "<$LogID$>", LogID)
-        Temp1 = Replace(Temp1, "<$log_Title$>", HtmlEncode(log_View("log_Title")))
-        Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-        Temp1 = Replace(Temp1, "<$log_PostTime$>", DateToStr(log_View("log_PostTime"), "Y-m-d"))
+    '读取分类信息
+    Temp1 = LoadTemplate1(1)
 
-        Temp2 = Replace(Temp2, "<$Cate_icon$>", getCate.cate_icon)
-        Temp2 = Replace(Temp2, "<$Cate_Title$>", getCate.cate_Name)
-        Temp2 = Replace(Temp2, "<$log_CateID$>", log_View("log_CateID"))
-        Temp2 = Replace(Temp2, "<$LogID$>", LogID)
-        Temp2 = Replace(Temp2, "<$log_Title$>", HtmlEncode(log_View("log_Title")))
-        Temp2 = Replace(Temp2, "<$log_Author$>", log_View("log_Author"))
-        Temp2 = Replace(Temp2, "<$log_PostTime$>", DateToStr(log_View("log_PostTime"), "Y-m-d"))
-        Temp2 = Replace(Temp2, "<$log_viewCount$>", log_View("log_ViewNums"))
+    '读取日志内容
+    SQL = "SELECT TOP 1 * FROM blog_Content WHERE log_ID=" & LogID
+    SQLQueryNums = SQLQueryNums + 1
 
-        If log_View("log_IsTop") Then
-            Temp2 = Replace(Temp2, "<$ShowButton$>", "<div class=""BttnE"" onclick=""TopicShow(this,'log_"&LogID&"')""></div>")
-            Temp2 = Replace(Temp2, "<$ShowStyle$>", " style=""display:none""")
-        Else
-            Temp2 = Replace(Temp2, "<$ShowButton$>", "")
-            Temp2 = Replace(Temp2, "<$ShowStyle$>", "")
-        End If
+    Set log_View = conn.Execute(SQL)
+    Dim blog_Cate, blog_CateArray, comDesc
+    Dim getCate, getTags
 
-        Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
-        Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
-        Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-        Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
-        If log_View("log_IsShow") Then
-            Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
-            Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "")
-        Else
-            Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
-            Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
-        End If
+    Set getCate = New Category
+    Set getTags = New tag
 
-        If Len(log_View("log_tag"))>0 Then
-            Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
-            Temp2 = Replace(Temp2, "<$log_tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_tag"))&"</p>")
-        Else
-            Temp1 = Replace(Temp1, "<$log_tag$>", "")
-            Temp2 = Replace(Temp2, "<$log_tag$>", "")
-        End If
-        If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
-        Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
-        Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
+    getCate.load(Int(log_View("log_CateID"))) '获取分类信息
 
-        If log_View("log_edittype") = 1 Then
-            Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
-            Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
-            If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
-                Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
-            Else
-                Temp2 = Replace(Temp2, "<$log_readMore$>", "")
-            End If
-        Else
-            Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
-            Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
-            If log_View("log_Intro")<>log_View("log_Content") Then
-                Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
-            Else
-                Temp2 = Replace(Temp2, "<$log_readMore$>", "")
-            End If
-        End If
+    Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
+    Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
+    Temp1 = Replace(Temp1, "<$log_CateID$>", log_View("log_CateID"))
+    Temp1 = Replace(Temp1, "<$LogID$>", LogID)
+    Temp1 = Replace(Temp1, "<$log_Title$>", HtmlEncode(log_View("log_Title")))
+    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
+    Temp1 = Replace(Temp1, "<$log_PostTime$>", DateToStr(log_View("log_PostTime"), "Y-m-d"))
 
+    Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
+    Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
+    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
+    Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
 
-
-        If Len(log_View("log_Modify"))>0 Then
-            Temp1 = Replace(Temp1, "<$log_Modify$>", log_View("log_Modify")&"<br/>")
-        Else
-            Temp1 = Replace(Temp1, "<$log_Modify$>", "")
-        End If
-
-        Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
-        Temp1 = Replace(Temp1, "<$log_From$>", log_View("log_From"))
-        Temp1 = Replace(Temp1, "<$trackback$>", SiteURL&"trackback.asp?tbID="&LogID&"&amp;action=view")
-
-        Temp1 = Replace(Temp1, "<$log_CommNums$>", log_View("log_CommNums"))
-        Temp1 = Replace(Temp1, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
-
-        Temp2 = Replace(Temp2, "<$log_CommNums$>", log_View("log_CommNums"))
-        Temp2 = Replace(Temp2, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
-
-
-        Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
-
-        Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
-        Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
-
-        Dim BTemp
-        BTemp = ""
-        If Not preLogC.EOF Then
-            BTemp = BTemp & "<a href=""?id="&preLogC("log_ID")&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
-        Else
-            BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
-        End If
-        If Not nextLogC.EOF Then
-            BTemp = BTemp & " | <a href=""?id="&nextLogC("log_ID")&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
-        Else
-            BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
-        End If
-        Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
-
-        SaveArticle = SaveToFile(Temp1, "post/" & LogID & ".asp")
-        SaveArticle = SaveToFile(Temp2, "cache/" & LogID & ".asp")
-        Set getCate = Nothing
-        Set getTags = Nothing
-        'getCate.cate_Secret or (not log_View("Log_IsShow"))
+    If log_View("log_IsShow") Then
+        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
+    Else
+        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
     End If
+
+    If Len(log_View("log_tag"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
+    Else
+        Temp1 = Replace(Temp1, "<$log_tag$>", "")
+    End If
+
+    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
+
+    Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
+    Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
+
+    If log_View("log_edittype") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    Else
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
+    End If
+
+    If Len(log_View("log_Modify"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_Modify$>", log_View("log_Modify")&"<br/>")
+    Else
+        Temp1 = Replace(Temp1, "<$log_Modify$>", "")
+    End If
+
+    Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+    Temp1 = Replace(Temp1, "<$log_From$>", log_View("log_From"))
+    Temp1 = Replace(Temp1, "<$trackback$>", SiteURL&"trackback.asp?tbID="&LogID&"&amp;action=view")
+
+    Temp1 = Replace(Temp1, "<$log_CommNums$>", log_View("log_CommNums"))
+    Temp1 = Replace(Temp1, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
+
+    Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
+
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
+
+    Dim BTemp
+    BTemp = ""
+    If Not preLogC.EOF Then
+        BTemp = BTemp & "<a href=""?id="&preLogC("log_ID")&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+    Else
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
+    End If
+
+    If Not nextLogC.EOF Then
+        BTemp = BTemp & " | <a href=""?id="&nextLogC("log_ID")&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+    Else
+        BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
+    End If
+
+    Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
+
+    SaveArticle = SaveToFile(Temp1, "post/" & LogID & ".asp")
+
+    PostArticleListCache LogID, log_View, getCate, getTags
+
+    Set log_View = Nothing
+    Set getCate = Nothing
+    Set getTags = Nothing
+    'getCate.cate_Secret or (not log_View("Log_IsShow"))
 End Sub
 
 '======================================================
 '全静态化
 '======================================================
 
-Sub PostFullStatic(LogID)
+Sub PostFullStatic(ByVal LogID)
+    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category
+    
+    
 
+    '读取日志模块
+    LoadTemplate1 = LoadFromFile("Template/static.htm")
+
+    If LoadTemplate1(0) <> 0 Then Exit Sub'读取成功后写入信息
+
+    '读取分类信息
+    Temp1 = LoadTemplate1(1)
+
+    '读取日志内容
+    SQL = "SELECT TOP 1 * FROM blog_Content WHERE log_ID=" & LogID
+    SQLQueryNums = SQLQueryNums + 1
+
+    Set log_View = conn.Execute(SQL)
+    Dim blog_Cate, blog_CateArray, comDesc
+    Dim getCate, getTags
+
+    Set getCate = New Category
+    Set getTags = New tag
+
+    getCate.load(Int(log_View("log_CateID"))) '获取分类信息
+    '静态页面特有的属性
+    Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
+    Temp1 = Replace(Temp1, "<$base$>", "http://127.0.0.1/pjblog/")
+    Temp1 = Replace(Temp1, "<$siteName$>", siteName)    
+    Temp1 = Replace(Temp1, "<$blog_Title$>", blog_Title)
+      
+    Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
+    Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
+    Temp1 = Replace(Temp1, "<$log_CateID$>", log_View("log_CateID"))
+    Temp1 = Replace(Temp1, "<$LogID$>", LogID)
+    Temp1 = Replace(Temp1, "<$log_Title$>", HtmlEncode(log_View("log_Title")))
+    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
+    Temp1 = Replace(Temp1, "<$log_PostTime$>", DateToStr(log_View("log_PostTime"), "Y-m-d"))
+
+    Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
+    Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
+    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
+    Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
+
+    If log_View("log_IsShow") Then
+        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
+    Else
+        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+    End If
+
+    If Len(log_View("log_tag"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
+    Else
+        Temp1 = Replace(Temp1, "<$log_tag$>", "")
+    End If
+
+    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
+
+    Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
+    Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
+
+    If log_View("log_edittype") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    Else
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
+    End If
+
+    If Len(log_View("log_Modify"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_Modify$>", log_View("log_Modify")&"<br/>")
+    Else
+        Temp1 = Replace(Temp1, "<$log_Modify$>", "")
+    End If
+
+    Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+    Temp1 = Replace(Temp1, "<$log_From$>", log_View("log_From"))
+    Temp1 = Replace(Temp1, "<$trackback$>", SiteURL&"trackback.asp?tbID="&LogID&"&amp;action=view")
+
+    Temp1 = Replace(Temp1, "<$log_CommNums$>", log_View("log_CommNums"))
+    Temp1 = Replace(Temp1, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
+
+    Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
+
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
+
+    Dim BTemp
+    BTemp = ""
+    If Not preLogC.EOF Then
+        BTemp = BTemp & "<a href=""?id="&preLogC("log_ID")&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+    Else
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
+    End If
+
+    If Not nextLogC.EOF Then
+        BTemp = BTemp & " | <a href=""?id="&nextLogC("log_ID")&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+    Else
+        BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
+    End If
+
+    Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
+
+    SaveArticle = SaveToFile(Temp1, "article/" & LogID & ".htm")
+
+    PostArticleListCache LogID, log_View, getCate , getTags
+
+    Set log_View = Nothing
+    Set getCate = Nothing
+    Set getTags = Nothing
+    'getCate.cate_Secret or (not log_View("Log_IsShow"))
 End Sub
+
+'======================================================
+'缓存静态化列表
+'======================================================
+
+Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
+    Dim LoadTemplate2, Temp2, comDesc, SaveArticle
+    LoadTemplate2 = LoadFromFile("Template/ArticleList.asp")
+    If LoadTemplate2(0) <> 0 Then Exit Sub
+
+    Temp2 = LoadTemplate2(1)
+    Temp2 = Replace(Temp2, "<$Cate_icon$>", getCate.cate_icon)
+    Temp2 = Replace(Temp2, "<$Cate_Title$>", getCate.cate_Name)
+    Temp2 = Replace(Temp2, "<$log_CateID$>", log_View("log_CateID"))
+    Temp2 = Replace(Temp2, "<$LogID$>", LogID)
+    Temp2 = Replace(Temp2, "<$log_Title$>", HtmlEncode(log_View("log_Title")))
+    Temp2 = Replace(Temp2, "<$log_Author$>", log_View("log_Author"))
+    Temp2 = Replace(Temp2, "<$log_PostTime$>", DateToStr(log_View("log_PostTime"), "Y-m-d"))
+    Temp2 = Replace(Temp2, "<$log_viewCount$>", log_View("log_ViewNums"))
+    
+    'article.asp?id=<$LogID$>
+    If blog_postFile = 2 Then
+        Temp2 = Replace(Temp2, "<$pLink$>", "article/" & LogID & ".htm")
+    else
+	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
+    end if 
+
+    
+    
+    If log_View("log_IsTop") Then
+        Temp2 = Replace(Temp2, "<$ShowButton$>", "<div class=""BttnE"" onclick=""TopicShow(this,'log_"&LogID&"')""></div>")
+        Temp2 = Replace(Temp2, "<$ShowStyle$>", " style=""display:none""")
+    Else
+        Temp2 = Replace(Temp2, "<$ShowButton$>", "")
+        Temp2 = Replace(Temp2, "<$ShowStyle$>", "")
+    End If
+
+    If log_View("log_IsShow") Then
+        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "")
+    Else
+        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+    End If
+
+    If Len(log_View("log_tag"))>0 Then
+        Temp2 = Replace(Temp2, "<$log_tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_tag"))&"</p>")
+    Else
+        Temp2 = Replace(Temp2, "<$log_tag$>", "")
+    End If
+
+    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
+
+    If log_View("log_edittype") = 1 Then
+        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+        If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
+            Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+        Else
+            Temp2 = Replace(Temp2, "<$log_readMore$>", "")
+        End If
+    Else
+        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
+        If log_View("log_Intro")<>log_View("log_Content") Then
+            Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+        Else
+            Temp2 = Replace(Temp2, "<$log_readMore$>", "")
+        End If
+    End If
+
+    Temp2 = Replace(Temp2, "<$log_CommNums$>", log_View("log_CommNums"))
+    Temp2 = Replace(Temp2, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
+
+    SaveArticle = SaveToFile(Temp2, "cache/" & LogID & ".asp")
+End Sub
+
+'======================================================
+'模板文件保存到内存里
+'======================================================
+
+Sub LoadTemplateFile(Path)
+    Dim cache
+End Sub
+
 %>

@@ -1,7 +1,7 @@
 ﻿        <%ST(A)%>
 			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 				<div class="pageContent">
-					<div style="float:right;width:180px !important;width:auto"><$log_Navigation$></div> 
+					<div style="float:right;width:auto"><$log_Navigation$></div> 
 					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有<$Cate_Title$>的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有<$Cate_Title$>的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有<$Cate_Title$>的日志" style="margin-bottom:-1px"/></a>
 				</div>
 				<div class="Content">

@@ -40,10 +40,10 @@ Function ContentList()'日志列表
 %>
 					   <div style="margin:10px 0px 10px 0px"><strong>抱歉，没有找到任何日志！</strong></div>
 				   <%
-Exit Function
-End If
-End If
-End If
+				Exit Function
+			End If
+		End If
+	End If
 
 If Request.Cookies(CookieNameSetting)("ViewType") = "list" Then ViewType = "list" Else ViewType = "normal"
 
@@ -80,7 +80,6 @@ If ArticleList.loadCache And Len(ViewTag)<1 And IsInteger(log_Year) = False And 
     End If
     Exit Function
 End If
-
 
 '=================Load DB List===============================
 If stat_ShowHiddenCate Or stat_Admin Then
@@ -160,7 +159,7 @@ If ViewType = "list" Then
 %>
 		 </table></div>
 		<%end if%>
-		 <div class="pageContent"><%=MultiPage(444,blogPerPage,6,Url_Add,"","float:Left")%></div>
+		 <div class="pageContent"><%=MultiPage(Log_Num,blogPerPage,CurPage,Url_Add,"","")%></div>
 		<%End If
 End Function
 

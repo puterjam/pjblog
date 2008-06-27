@@ -233,7 +233,7 @@ End Function
 
 Function FreeMemory
     Call reloadcache
-    If blog_postFile Then
+    If blog_postFile > 0 Then
         Dim lArticle
         Set lArticle = New ArticleCache
         lArticle.SaveCache
@@ -381,19 +381,19 @@ Sub InstallPlugins
         Else
             session(CookieName&"_ShowMsg") = True
             Session(CookieName&"_MsgText") = "<font color=""#ff0000"">安装失败</font> 安装插件和其他插件造成冲突，或插件已经安装!"
-            Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
+            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
         End If
         PluginsXML.CloseXml()
         log_module(2)
         FixPlugins(0)
         session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&PlugName&"</font> 插件安装完成并且移动到 <a href=""ConContent.asp?Fmenu=Skins&Smenu=Plugins"" style=""color:#0000ff"">已装插件管理</a>"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     Else
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
         PluginsXML.CloseXml()
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     End If
 End Sub
 
@@ -445,7 +445,7 @@ Sub FixPlugins(fixType)
                     session(CookieName&"_ShowMsg") = True
                     session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
                     PluginsXML.CloseXml()
-                    Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+                    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
                 End If
             End If
             Bmodule.movenext
@@ -454,7 +454,7 @@ Sub FixPlugins(fixType)
     If CBool(fixType) Then
         session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = "插件已经修复完成!"
-        Response.Redirect("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+        RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
     End If
 End Sub
 
@@ -509,7 +509,7 @@ Sub saveFilterKey(keyword)
     saveXML = SaveToFile (tempStr, "spam.xml")
     session(CookieName&"_ShowMsg") = True
     If saveXML(0)<>0 Then session(CookieName&"_MsgText") = saveXML(1) Else session(CookieName&"_MsgText") = "过滤列表保存成功."
-    Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu=spam")
+    RedirectUrl("ConContent.asp?Fmenu=Comment&Smenu=spam")
 End Sub
 
 Sub saveReFilterKey()
@@ -527,7 +527,7 @@ Sub saveReFilterKey()
 
     session(CookieName&"_ShowMsg") = True
     If saveXML(0)<>0 Then session(CookieName&"_MsgText") = saveXML(1) Else session(CookieName&"_MsgText") = "过滤列表保存成功."
-    Response.Redirect("ConContent.asp?Fmenu=Comment&Smenu=reg")
+    RedirectUrl("ConContent.asp?Fmenu=Comment&Smenu=reg")
 End Sub
 
 Function htmlE(reString)

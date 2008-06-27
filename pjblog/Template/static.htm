@@ -8,24 +8,25 @@
 <meta name="Copyright" content="PJBlog2 CopyRight 2008" />
 <meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
 <meta name="description" content="PJBlog2 - 创造机会的人是勇者；等待机会的人是愚者" />
-<title>test - PJBlog2</title>
+<title><$log_Title$></title>
+<base href="<$base$>"></base>
 <link rel="alternate" type="application/rss+xml" href="http://www.pjhome.net/feed.asp?cateID=3" title="订阅 PJBlog2 - test 所有文章(rss2)" />
 <link rel="alternate" type="application/atom+xml" href="http://www.pjhome.net/atom.asp?cateID=3"  title="订阅 PJBlog2 - test 所有文章(atom)"  />
-<link rel="stylesheet" rev="stylesheet" href="../skins/default/global.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/default/global.css" type="text/css" media="all" />
 <!--全局样式表-->
-<link rel="stylesheet" rev="stylesheet" href="../skins/default/layout.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/default/layout.css" type="text/css" media="all" />
 <!--层次样式表-->
-<link rel="stylesheet" rev="stylesheet" href="../skins/default/typography.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/default/typography.css" type="text/css" media="all" />
 <!--局部样式表-->
-<link rel="stylesheet" rev="stylesheet" href="../skins/default/link.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/default/link.css" type="text/css" media="all" />
 <!--超链接样式表-->
-<link rel="stylesheet" rev="stylesheet" href="../skins/default/UBB/editor.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/default/UBB/editor.css" type="text/css" media="all" />
 <!--UBB编辑器代码-->
-<link rel="stylesheet" rev="stylesheet" href="../FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" />
 <!--FCK块引用&代码样式-->
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="../common/common.js"></script>
+<script type="text/javascript" src="common/common.js"></script>
 <script type="text/javascript">
 	var g_styleID = "default";
 </script>
@@ -36,12 +37,14 @@
 <div id="container">
   <!--顶部-->
   <div id="header">
-    <div id="blogname">PJBlog2
-      <div id="blogTitle">创造机会的人是勇者；等待机会的人是愚者</div>
+    <div id="blogname"><$siteName$>
+      <div id="blogTitle"><$blog_Title$></div>
     </div>
     <div id="menu">
       <div id="Left"></div>
       <div id="Right"></div>
+      <$CategoryList$>
+      <!-- 导航位置
       <ul>
         <li class="menuL"></li>
         <li><a class="menuA" href="default.asp" title="日志首页">Index</a></li>
@@ -51,6 +54,7 @@
         <li><a class="menuA" href="default.asp?cateID=3" title="">test</a></li>
         <li class="menuR"></li>
       </ul>
+      -->
     </div>
   </div>
   <!--内容-->
@@ -58,36 +62,40 @@
     <div id="mainContent">
       <div id="innermainContent">
         <div id="mainContent-topimg"></div>
-        <div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
-          <div class="pageContent">
-            <div style="float:right;width:180px !important;width:auto"><img border="0" src="../images/Cprevious1.gif" alt="这是最新一篇日志"/>上一篇 | <img border="0" src="../images/Cnext1.gif" alt="这是最后一篇日志"/>下一篇</div>
-            <img src="../images/icons/1.gif" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=3" title="查看所有test的日志">test</a></strong> <a href="feed.asp?cateID=3" target="_blank" title="订阅所有test的日志" accesskey="O"><img border="0" src="../images/rss.png" alt="订阅所有test的日志" style="margin-bottom:-1px"/></a> </div>
-          <div class="Content">
-            <div class="Content-top">
-              <div class="ContentLeft"></div>
-              <div class="ContentRight"></div>
-              <h1 class="ContentTitle"><strong>test</strong></h1>
-              <h2 class="ContentAuthor">作者:admin 日期:2008-05-07</h2>
-            </div>
-            <div class="Content-Info">
-              <div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
-              <div class="InfoAuthor"><img src="../images/weather/hn2_sunny.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="../images/weather/hn2_t_sunny.gif" alt=""/> <img src="../images/level3.gif" style="margin:0px 2px -1px 0px" alt=""/><a href="blogedit.asp?id=1" title="编辑该日志" accesskey="E"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> <a href="blogedit.asp?action=del&amp;id=1" onclick="if (!window.confirm('是否要删除该日志')) return false" title="删除该日志" accesskey="K"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></div>
-            </div>
-            <div id="logPanel" class="Content-body"> test <br/>
-              <br/>
-              <br/>
-            </div>
-            <div class="Content-body"> <img src="../images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="http://www.pjhome.net/" target="_blank">本站原创</a><br/>
-              <img src="../images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=1&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(1)">我要引用此文章</a><br/>
-              <img src="../images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <br/>
-            </div>
-            <div class="Content-bottom">
-              <div class="ContentBLeft"></div>
-              <div class="ContentBRight"></div>
-              评论: 0 | <a href="trackback.asp?tbID=1&amp;action=view" target="_blank">引用: 0</a> | 查看次数: 2</div>
-          </div>
-        </div>
+		<!-- 内容开始 -->
+			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
+				<div class="pageContent">
+					<div style="float:right;width:auto"><$log_Navigation$></div> 
+					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有<$Cate_Title$>的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有<$Cate_Title$>的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有<$Cate_Title$>的日志" style="margin-bottom:-1px"/></a>
+				</div>
+				<div class="Content">
+					<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
+					<h1 class="ContentTitle"><strong><$log_Title$></strong><$log_hiddenIcon$></h1>
+					<h2 class="ContentAuthor">作者:<$log_Author$> 日期:<$log_PostTime$></h2>
+				</div>
+			    <div class="Content-Info">
+					<div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
+					<div class="InfoAuthor"><img src="images/weather/hn2_<$log_weather$>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="images/weather/hn2_t_<$log_weather$>.gif" alt=""/> <img src="images/<$log_level$>.gif" style="margin:0px 2px -1px 0px" alt=""/><$EditAndDel$></div>
+				</div>
+				<div id="logPanel" class="Content-body">
+					<$ArticleContent$>
+					<br/><br/><br/>
+				</div>
+				<div class="Content-body">
+					<$log_Modify$>
+					<img src="images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<$log_FromUrl$>" target="_blank"><$log_From$></a><br/>
+					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
+					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
+				</div>
+				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <$log_ViewNums$></div>
+			</div>
+		</div>
+		<!-- 内容结束 -->
         <a name="comm_top" href="#comm_top" accesskey="C"></a>
+        
+        <!--评论区域-->
+        
+        <!--
         <div id="MsgContent" style="width:94%;">
           <div id="MsgHead">发表评论</div>
           <div id="MsgBody">
@@ -110,103 +118,103 @@
                   <td style="padding:2px;"><div id="UBBSmiliesPanel" class="UBBSmiliesPanel">
                       <table cellspacing="2" cellpadding="0">
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face01]')" class="Smilie" title="[face01]"><img border="0" src="../images/smilies/Face_01.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face02]')" class="Smilie" title="[face02]"><img border="0" src="../images/smilies/Face_02.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face03]')" class="Smilie" title="[face03]"><img border="0" src="../images/smilies/Face_03.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face04]')" class="Smilie" title="[face04]"><img border="0" src="../images/smilies/Face_04.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face05]')" class="Smilie" title="[face05]"><img border="0" src="../images/smilies/Face_05.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face06]')" class="Smilie" title="[face06]"><img border="0" src="../images/smilies/Face_06.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face07]')" class="Smilie" title="[face07]"><img border="0" src="../images/smilies/Face_07.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face08]')" class="Smilie" title="[face08]"><img border="0" src="../images/smilies/Face_08.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face01]')" class="Smilie" title="[face01]"><img border="0" src="images/smilies/Face_01.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face02]')" class="Smilie" title="[face02]"><img border="0" src="images/smilies/Face_02.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face03]')" class="Smilie" title="[face03]"><img border="0" src="images/smilies/Face_03.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face04]')" class="Smilie" title="[face04]"><img border="0" src="images/smilies/Face_04.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face05]')" class="Smilie" title="[face05]"><img border="0" src="images/smilies/Face_05.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face06]')" class="Smilie" title="[face06]"><img border="0" src="images/smilies/Face_06.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face07]')" class="Smilie" title="[face07]"><img border="0" src="images/smilies/Face_07.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face08]')" class="Smilie" title="[face08]"><img border="0" src="images/smilies/Face_08.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face09]')" class="Smilie" title="[face09]"><img border="0" src="../images/smilies/Face_09.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face10]')" class="Smilie" title="[face10]"><img border="0" src="../images/smilies/Face_10.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face11]')" class="Smilie" title="[face11]"><img border="0" src="../images/smilies/Face_11.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face12]')" class="Smilie" title="[face12]"><img border="0" src="../images/smilies/Face_12.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face13]')" class="Smilie" title="[face13]"><img border="0" src="../images/smilies/Face_13.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face14]')" class="Smilie" title="[face14]"><img border="0" src="../images/smilies/Face_14.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face15]')" class="Smilie" title="[face15]"><img border="0" src="../images/smilies/Face_15.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face16]')" class="Smilie" title="[face16]"><img border="0" src="../images/smilies/Face_16.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face09]')" class="Smilie" title="[face09]"><img border="0" src="images/smilies/Face_09.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face10]')" class="Smilie" title="[face10]"><img border="0" src="images/smilies/Face_10.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face11]')" class="Smilie" title="[face11]"><img border="0" src="images/smilies/Face_11.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face12]')" class="Smilie" title="[face12]"><img border="0" src="images/smilies/Face_12.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face13]')" class="Smilie" title="[face13]"><img border="0" src="images/smilies/Face_13.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face14]')" class="Smilie" title="[face14]"><img border="0" src="images/smilies/Face_14.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face15]')" class="Smilie" title="[face15]"><img border="0" src="images/smilies/Face_15.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face16]')" class="Smilie" title="[face16]"><img border="0" src="images/smilies/Face_16.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face17]')" class="Smilie" title="[face17]"><img border="0" src="../images/smilies/Face_17.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face18]')" class="Smilie" title="[face18]"><img border="0" src="../images/smilies/Face_18.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face19]')" class="Smilie" title="[face19]"><img border="0" src="../images/smilies/Face_19.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face20]')" class="Smilie" title="[face20]"><img border="0" src="../images/smilies/Face_20.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face21]')" class="Smilie" title="[face21]"><img border="0" src="../images/smilies/Face_21.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face22]')" class="Smilie" title="[face22]"><img border="0" src="../images/smilies/Face_22.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face23]')" class="Smilie" title="[face23]"><img border="0" src="../images/smilies/Face_23.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face24]')" class="Smilie" title="[face24]"><img border="0" src="../images/smilies/Face_24.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face17]')" class="Smilie" title="[face17]"><img border="0" src="images/smilies/Face_17.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face18]')" class="Smilie" title="[face18]"><img border="0" src="images/smilies/Face_18.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face19]')" class="Smilie" title="[face19]"><img border="0" src="images/smilies/Face_19.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face20]')" class="Smilie" title="[face20]"><img border="0" src="images/smilies/Face_20.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face21]')" class="Smilie" title="[face21]"><img border="0" src="images/smilies/Face_21.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face22]')" class="Smilie" title="[face22]"><img border="0" src="images/smilies/Face_22.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face23]')" class="Smilie" title="[face23]"><img border="0" src="images/smilies/Face_23.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face24]')" class="Smilie" title="[face24]"><img border="0" src="images/smilies/Face_24.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face25]')" class="Smilie" title="[face25]"><img border="0" src="../images/smilies/Face_25.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face26]')" class="Smilie" title="[face26]"><img border="0" src="../images/smilies/Face_26.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face27]')" class="Smilie" title="[face27]"><img border="0" src="../images/smilies/Face_27.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face28]')" class="Smilie" title="[face28]"><img border="0" src="../images/smilies/Face_28.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face29]')" class="Smilie" title="[face29]"><img border="0" src="../images/smilies/Face_29.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face30]')" class="Smilie" title="[face30]"><img border="0" src="../images/smilies/Face_30.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face31]')" class="Smilie" title="[face31]"><img border="0" src="../images/smilies/Face_31.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face32]')" class="Smilie" title="[face32]"><img border="0" src="../images/smilies/Face_32.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face25]')" class="Smilie" title="[face25]"><img border="0" src="images/smilies/Face_25.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face26]')" class="Smilie" title="[face26]"><img border="0" src="images/smilies/Face_26.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face27]')" class="Smilie" title="[face27]"><img border="0" src="images/smilies/Face_27.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face28]')" class="Smilie" title="[face28]"><img border="0" src="images/smilies/Face_28.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face29]')" class="Smilie" title="[face29]"><img border="0" src="images/smilies/Face_29.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face30]')" class="Smilie" title="[face30]"><img border="0" src="images/smilies/Face_30.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face31]')" class="Smilie" title="[face31]"><img border="0" src="images/smilies/Face_31.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face32]')" class="Smilie" title="[face32]"><img border="0" src="images/smilies/Face_32.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face33]')" class="Smilie" title="[face33]"><img border="0" src="../images/smilies/Face_33.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face34]')" class="Smilie" title="[face34]"><img border="0" src="../images/smilies/Face_34.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face35]')" class="Smilie" title="[face35]"><img border="0" src="../images/smilies/Face_35.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face36]')" class="Smilie" title="[face36]"><img border="0" src="../images/smilies/Face_36.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face37]')" class="Smilie" title="[face37]"><img border="0" src="../images/smilies/Face_37.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face38]')" class="Smilie" title="[face38]"><img border="0" src="../images/smilies/Face_38.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face39]')" class="Smilie" title="[face39]"><img border="0" src="../images/smilies/Face_39.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face40]')" class="Smilie" title="[face40]"><img border="0" src="../images/smilies/Face_40.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face33]')" class="Smilie" title="[face33]"><img border="0" src="images/smilies/Face_33.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face34]')" class="Smilie" title="[face34]"><img border="0" src="images/smilies/Face_34.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face35]')" class="Smilie" title="[face35]"><img border="0" src="images/smilies/Face_35.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face36]')" class="Smilie" title="[face36]"><img border="0" src="images/smilies/Face_36.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face37]')" class="Smilie" title="[face37]"><img border="0" src="images/smilies/Face_37.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face38]')" class="Smilie" title="[face38]"><img border="0" src="images/smilies/Face_38.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face39]')" class="Smilie" title="[face39]"><img border="0" src="images/smilies/Face_39.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face40]')" class="Smilie" title="[face40]"><img border="0" src="images/smilies/Face_40.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face41]')" class="Smilie" title="[face41]"><img border="0" src="../images/smilies/Face_41.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face42]')" class="Smilie" title="[face42]"><img border="0" src="../images/smilies/Face_42.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face43]')" class="Smilie" title="[face43]"><img border="0" src="../images/smilies/Face_43.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face44]')" class="Smilie" title="[face44]"><img border="0" src="../images/smilies/Face_44.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face45]')" class="Smilie" title="[face45]"><img border="0" src="../images/smilies/Face_45.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face46]')" class="Smilie" title="[face46]"><img border="0" src="../images/smilies/Face_46.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face47]')" class="Smilie" title="[face47]"><img border="0" src="../images/smilies/Face_47.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face48]')" class="Smilie" title="[face48]"><img border="0" src="../images/smilies/Face_48.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face41]')" class="Smilie" title="[face41]"><img border="0" src="images/smilies/Face_41.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face42]')" class="Smilie" title="[face42]"><img border="0" src="images/smilies/Face_42.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face43]')" class="Smilie" title="[face43]"><img border="0" src="images/smilies/Face_43.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face44]')" class="Smilie" title="[face44]"><img border="0" src="images/smilies/Face_44.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face45]')" class="Smilie" title="[face45]"><img border="0" src="images/smilies/Face_45.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face46]')" class="Smilie" title="[face46]"><img border="0" src="images/smilies/Face_46.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face47]')" class="Smilie" title="[face47]"><img border="0" src="images/smilies/Face_47.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face48]')" class="Smilie" title="[face48]"><img border="0" src="images/smilies/Face_48.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face49]')" class="Smilie" title="[face49]"><img border="0" src="../images/smilies/Face_49.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face50]')" class="Smilie" title="[face50]"><img border="0" src="../images/smilies/Face_50.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face51]')" class="Smilie" title="[face51]"><img border="0" src="../images/smilies/Face_51.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face52]')" class="Smilie" title="[face52]"><img border="0" src="../images/smilies/Face_52.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face53]')" class="Smilie" title="[face53]"><img border="0" src="../images/smilies/Face_53.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face54]')" class="Smilie" title="[face54]"><img border="0" src="../images/smilies/Face_54.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face55]')" class="Smilie" title="[face55]"><img border="0" src="../images/smilies/Face_55.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face56]')" class="Smilie" title="[face56]"><img border="0" src="../images/smilies/Face_56.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face49]')" class="Smilie" title="[face49]"><img border="0" src="images/smilies/Face_49.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face50]')" class="Smilie" title="[face50]"><img border="0" src="images/smilies/Face_50.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face51]')" class="Smilie" title="[face51]"><img border="0" src="images/smilies/Face_51.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face52]')" class="Smilie" title="[face52]"><img border="0" src="images/smilies/Face_52.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face53]')" class="Smilie" title="[face53]"><img border="0" src="images/smilies/Face_53.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face54]')" class="Smilie" title="[face54]"><img border="0" src="images/smilies/Face_54.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face55]')" class="Smilie" title="[face55]"><img border="0" src="images/smilies/Face_55.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face56]')" class="Smilie" title="[face56]"><img border="0" src="images/smilies/Face_56.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face57]')" class="Smilie" title="[face57]"><img border="0" src="../images/smilies/Face_57.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face58]')" class="Smilie" title="[face58]"><img border="0" src="../images/smilies/Face_58.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face59]')" class="Smilie" title="[face59]"><img border="0" src="../images/smilies/Face_59.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face60]')" class="Smilie" title="[face60]"><img border="0" src="../images/smilies/Face_60.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face61]')" class="Smilie" title="[face61]"><img border="0" src="../images/smilies/Face_61.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face62]')" class="Smilie" title="[face62]"><img border="0" src="../images/smilies/Face_62.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face63]')" class="Smilie" title="[face63]"><img border="0" src="../images/smilies/Face_63.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face64]')" class="Smilie" title="[face64]"><img border="0" src="../images/smilies/Face_64.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face57]')" class="Smilie" title="[face57]"><img border="0" src="images/smilies/Face_57.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face58]')" class="Smilie" title="[face58]"><img border="0" src="images/smilies/Face_58.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face59]')" class="Smilie" title="[face59]"><img border="0" src="images/smilies/Face_59.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face60]')" class="Smilie" title="[face60]"><img border="0" src="images/smilies/Face_60.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face61]')" class="Smilie" title="[face61]"><img border="0" src="images/smilies/Face_61.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face62]')" class="Smilie" title="[face62]"><img border="0" src="images/smilies/Face_62.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face63]')" class="Smilie" title="[face63]"><img border="0" src="images/smilies/Face_63.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face64]')" class="Smilie" title="[face64]"><img border="0" src="images/smilies/Face_64.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face65]')" class="Smilie" title="[face65]"><img border="0" src="../images/smilies/Face_65.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face66]')" class="Smilie" title="[face66]"><img border="0" src="../images/smilies/Face_66.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face67]')" class="Smilie" title="[face67]"><img border="0" src="../images/smilies/Face_67.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face68]')" class="Smilie" title="[face68]"><img border="0" src="../images/smilies/Face_68.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face69]')" class="Smilie" title="[face69]"><img border="0" src="../images/smilies/Face_69.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face70]')" class="Smilie" title="[face70]"><img border="0" src="../images/smilies/Face_70.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face71]')" class="Smilie" title="[face71]"><img border="0" src="../images/smilies/Face_71.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face72]')" class="Smilie" title="[face72]"><img border="0" src="../images/smilies/Face_72.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face65]')" class="Smilie" title="[face65]"><img border="0" src="images/smilies/Face_65.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face66]')" class="Smilie" title="[face66]"><img border="0" src="images/smilies/Face_66.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face67]')" class="Smilie" title="[face67]"><img border="0" src="images/smilies/Face_67.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face68]')" class="Smilie" title="[face68]"><img border="0" src="images/smilies/Face_68.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face69]')" class="Smilie" title="[face69]"><img border="0" src="images/smilies/Face_69.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face70]')" class="Smilie" title="[face70]"><img border="0" src="images/smilies/Face_70.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face71]')" class="Smilie" title="[face71]"><img border="0" src="images/smilies/Face_71.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face72]')" class="Smilie" title="[face72]"><img border="0" src="images/smilies/Face_72.gif" alt="" width="19" height="19"/></a></td>
                         </tr>
                         <tr>
-                          <td><a href="javascript:AddSmiley('[face73]')" class="Smilie" title="[face73]"><img border="0" src="../images/smilies/Face_73.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face74]')" class="Smilie" title="[face74]"><img border="0" src="../images/smilies/Face_74.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face75]')" class="Smilie" title="[face75]"><img border="0" src="../images/smilies/Face_75.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face76]')" class="Smilie" title="[face76]"><img border="0" src="../images/smilies/Face_76.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face77]')" class="Smilie" title="[face77]"><img border="0" src="../images/smilies/Face_77.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face78]')" class="Smilie" title="[face78]"><img border="0" src="../images/smilies/Face_78.gif" alt=""/></a></td>
-                          <td><a href="javascript:AddSmiley('[face79]')" class="Smilie" title="[face79]"><img border="0" src="../images/smilies/Face_79.gif" alt=""/></a></td>
+                          <td><a href="javascript:AddSmiley('[face73]')" class="Smilie" title="[face73]"><img border="0" src="images/smilies/Face_73.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face74]')" class="Smilie" title="[face74]"><img border="0" src="images/smilies/Face_74.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face75]')" class="Smilie" title="[face75]"><img border="0" src="images/smilies/Face_75.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face76]')" class="Smilie" title="[face76]"><img border="0" src="images/smilies/Face_76.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face77]')" class="Smilie" title="[face77]"><img border="0" src="images/smilies/Face_77.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face78]')" class="Smilie" title="[face78]"><img border="0" src="images/smilies/Face_78.gif" alt="" width="19" height="19"/></a></td>
+                          <td><a href="javascript:AddSmiley('[face79]')" class="Smilie" title="[face79]"><img border="0" src="images/smilies/Face_79.gif" alt="" width="19" height="19"/></a></td>
                       </table>
                     </div>
                     <textarea id="editMask" class="editTextarea" style="width:99%;height:100px" onfocus="showUBB('Message')"></textarea>
@@ -245,6 +253,16 @@
             </form>
           </div>
         </div>
+		<script>
+		var fixUBBUrl = "";
+		var ubbTools='<div class="editorTools"><div class="Toolsbar"><ul class="ToolsUL"><li><a id="A_bold" href="javascript:UBB_bold();void(0)" title="粗体" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/bold.gif" border="0" alt="粗体" /></a></li><li><a id="A_italic" href="javascript:UBB_italic();void(0)" title="斜体" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/italic.gif" border="0" alt="斜体" /></a></li><li><a id="A_underline" href="javascript:UBB_underline();void(0)" title="下划线" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/underline.gif" border="0" alt="下划线" /></a></li></ul></div><div class="Toolsbar"><ul class="ToolsUL"><li><a id="A_image" href="javascript:UBB_image();void(0)" title="插入图像" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/image.gif" border="0" alt="插入图像" /></a></li><li><a id="A_link" href="javascript:UBB_link();void(0)" title="超链接" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/link.gif" border="0" alt="超链接" /></a></li><li><a id="A_mail" href="javascript:UBB_mail();void(0)" title="电子邮件" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/mail.gif" border="0" alt="电子邮件" /></a></li><li><a id="A_quote" href="javascript:UBB_quote();void(0)" title="插入引用" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/quote.gif" border="0" alt="插入引用" /></a></li><li><a id="A_smiley" href="javascript:UBB_smiley();void(0)" title="表情符号" class="Toolsbutton"><img src="skins/%style%/UBB/Icons/smiley.gif" border="0" alt="表情符号" /></a></li></ul></div><div style="clear: both;display: block;height:1px;overflow:hidden"></div></div>';
+		ubbTools = ubbTools.replace(/%style%/g,g_styleID);
+		</script>
+		<script language="javascript" type="text/javascript" src="common/UBBCode.js"></script>
+		<script language="javascript" type="text/javascript" src="common/UBBCode_help.js"></script>
+		<script language="javascript" type="text/javascript">initUBB("Message")</script>
+
+        -->
         <div id="mainContent-bottomimg"></div>
       </div>
     </div>
@@ -253,120 +271,8 @@
         <div id="sidebar-topimg">
           <!--工具条顶部图象-->
         </div>
-        <div id="Side_Category" class="sidepanel">
-          <h4 class="Ptitle">Category</h4>
-          <div class="Pcontent"><img src="../images/icons/22.gif" border="0" style="margin:3px 4px -4px 0px;" alt="日志首页"/><a class="CategoryA" href="default.asp" title="日志首页">Index</a><br/>
-            <img src="../images/icons/10.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/><a class="CategoryA" href="tag.asp" title="">TagsCloud</a><br/>
-            <img src="../images/icons/1.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/><a class="CategoryA" href="default.asp?cateID=3" title="">test [1]</a> <a href="feed.asp?cateID=3" title="订阅该分类内容"><img src="../images/rss.png" border="0" style="margin:3px 4px -1px 0px;" alt=""/></a><br/>
-          </div>
-          <div class="Pfoot"></div>
-        </div>
-        <div id="Side_Calendar" class="sidepanel">
-          <h4 class="Ptitle">Calendar</h4>
-          <div class="Pcontent">
-            <div id="Calendar_Body">
-              <div id="Calendar_Top">
-                <div id="LeftB" onclick="location.href='default.asp?log_Year=2008&amp;log_Month=4'"></div>
-                <div id="RightB" onclick="location.href='default.asp?log_Year=2008&amp;log_Month=6'"></div>
-                2008年5月</div>
-              <div id="Calendar_week">
-                <ul class="Week_UL">
-                  <li><font color="#FF0000">日</font></li>
-                  <li>一</li>
-                  <li>二</li>
-                  <li>三</li>
-                  <li>四</li>
-                  <li>五</li>
-                  <li>六</li>
-                </ul>
-              </div>
-              <div class="Calendar_Day">
-                <ul class="Day_UL">
-                  <li class="DayA"><a class="otherday">27</a></li>
-                  <li class="DayA"><a class="otherday">28</a></li>
-                  <li class="DayA"><a class="otherday">29</a></li>
-                  <li class="DayA"><a class="otherday">30</a></li>
-                  <li class="DayA"><a >1</a></li>
-                  <li class="DayA"><a >2</a></li>
-                  <li class="DayA"><a >3</a></li>
-                </ul>
-              </div>
-              <div class="Calendar_Day">
-                <ul class="Day_UL">
-                  <li class="DayA"><a >4</a></li>
-                  <li class="DayA"><a >5</a></li>
-                  <li class="DayA"><a >6</a></li>
-                  <li class="DayA"><a class="DayD" href="default.asp?log_Year=2008&amp;log_Month=5&amp;log_Day=7" title="当天共写了1篇日志
- - test">7</a></li>
-                  <li class="DayA"><a >8</a></li>
-                  <li class="DayA"><a >9</a></li>
-                  <li class="DayA"><a >10</a></li>
-                </ul>
-              </div>
-              <div class="Calendar_Day">
-                <ul class="Day_UL">
-                  <li class="DayA"><a >11</a></li>
-                  <li class="DayA"><a >12</a></li>
-                  <li class="DayA"><a >13</a></li>
-                  <li class="DayA"><a >14</a></li>
-                  <li class="DayA"><a >15</a></li>
-                  <li class="DayA"><a >16</a></li>
-                  <li class="DayA"><a >17</a></li>
-                </ul>
-              </div>
-              <div class="Calendar_Day">
-                <ul class="Day_UL">
-                  <li class="DayA"><a >18</a></li>
-                  <li class="DayA"><a >19</a></li>
-                  <li class="DayA"><a >20</a></li>
-                  <li class="DayA"><a >21</a></li>
-                  <li class="DayA"><a >22</a></li>
-                  <li class="DayA"><a >23</a></li>
-                  <li class="DayA"><a >24</a></li>
-                </ul>
-              </div>
-              <div class="Calendar_Day">
-                <ul class="Day_UL">
-                  <li class="DayA"><a >25</a></li>
-                  <li class="DayA"><a >26</a></li>
-                  <li class="DayA"><a >27</a></li>
-                  <li class="DayA"><a >28</a></li>
-                  <li class="DayA"><a >29</a></li>
-                  <li class="DayA"><a >30</a></li>
-                  <li class="DayA"><a >31</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="Pfoot"></div>
-        </div>
-        <div id="Side_User" class="sidepanel">
-          <h4 class="Ptitle">User Panel</h4>
-          <div class="Pcontent"> <b>admin</b>，欢迎你!<br/>
-            你的权限: 超级管理员<br/>
-            <br/>
-            <a href="control.asp" class="sideA" accesskey="3">系统管理</a><a href="blogpost.asp" class="sideA" accesskey="N">发表新日志</a><a href="default.asp?display=draft" class="sideA" accesskey="D">编辑草稿</a><a href="member.asp?action=edit" class="sideA" accesskey="M">修改个人资料</a><a href="login.asp?action=logout" class="sideA" accesskey="Q">退出系统</a></div>
-          <div class="Pfoot"></div>
-        </div>
-        <div id="Side_Comment" class="sidepanel">
-          <h4 class="Ptitle">Recent Comments</h4>
-          <div class="Pcontent">
-            <div class="commentTable"> </div>
-          </div>
-          <div class="Pfoot"></div>
-        </div>
-        <div id="Side_Archive" class="sidepanel">
-          <h4 class="Ptitle">Archive</h4>
-          <div class="Pcontent"><a class="sideA" style="margin:0px 0px 0px -2px;" href="default.asp?log_Year=2008" title="查看2008年的日志">2008</a><a style="margin-right:5px;" href="default.asp?log_Year=2008&log_Month=5" title="2008年5月有1篇日志">05月</a></div>
-          <div class="Pfoot"></div>
-        </div>
-        <div id="Side_Support" class="sidepanel">
-          <h4 class="Ptitle">Support</h4>
-          <div class="Pcontent">
-            <div style="PADDING-RIGHT: 4px; PADDING-LEFT: 4px; PADDING-BOTTOM: 4px; PADDING-TOP: 4px; TEXT-ALIGN: left"><a href="http://validator.w3.org/check/referer" target="_blank"><img alt="XHTML 1.0 Transitional" src="../images/xhtml.png" border="0" /></a> <a href="http://jigsaw.w3.org/css-validator/validator-uri.html" target="_blank"><img alt="Css Validator" src="../images/css.png" border="0" /></a> <a href="feed.asp" target="_blank"><img alt="RSS 2.0" src="../images/rss2.png" border="0" /></a>&nbsp;<a href="atom.asp" target="_blank"><img alt="Atom 1.0" src="../images/atom.png" border="0" /></a> <a href="http://www.mozilla.org/products/firefox/" target="_blank"><img alt="Get firefox" src="../images/firefox.gif" border="0" /></a> <a href="http://www.creativecommons.cn/licenses/by-nc-sa/1.0/" target="_blank"><img alt="Creative Commons" src="../images/cc.png" border="0" /></a> </div>
-          </div>
-          <div class="Pfoot"></div>
-        </div>
+        <!--侧边栏的内容-->
+        <div id="sidebarDynamic"></div>
         <div id="sidebar-bottomimg"></div>
       </div>
     </div>
@@ -380,14 +286,7 @@
     </p>
   </div>
 </div>
-<script>
-var fixUBBUrl = "../";
-var ubbTools='<div class="editorTools"><div class="Toolsbar"><ul class="ToolsUL"><li><a id="A_bold" href="javascript:UBB_bold();void(0)" title="粗体" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/bold.gif" border="0" alt="粗体" /></a></li><li><a id="A_italic" href="javascript:UBB_italic();void(0)" title="斜体" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/italic.gif" border="0" alt="斜体" /></a></li><li><a id="A_underline" href="javascript:UBB_underline();void(0)" title="下划线" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/underline.gif" border="0" alt="下划线" /></a></li></ul></div><div class="Toolsbar"><ul class="ToolsUL"><li><a id="A_image" href="javascript:UBB_image();void(0)" title="插入图像" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/image.gif" border="0" alt="插入图像" /></a></li><li><a id="A_link" href="javascript:UBB_link();void(0)" title="超链接" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/link.gif" border="0" alt="超链接" /></a></li><li><a id="A_mail" href="javascript:UBB_mail();void(0)" title="电子邮件" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/mail.gif" border="0" alt="电子邮件" /></a></li><li><a id="A_quote" href="javascript:UBB_quote();void(0)" title="插入引用" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/quote.gif" border="0" alt="插入引用" /></a></li><li><a id="A_smiley" href="javascript:UBB_smiley();void(0)" title="表情符号" class="Toolsbutton"><img src="../skins/%style%/UBB/Icons/smiley.gif" border="0" alt="表情符号" /></a></li></ul></div><div style="clear: both;display: block;height:1px;overflow:hidden"></div></div>';
-ubbTools = ubbTools.replace(/%style%/g,g_styleID);
-</script>
-<script language="javascript" type="text/javascript" src="../common/UBBCode.js"></script>
-<script language="javascript" type="text/javascript" src="../common/UBBCode_help.js"></script>
-<script language="javascript" type="text/javascript">initUBB("Message")</script>
-<script type="text/javascript">initAccessKey()  //转换AccessKey For IE</script>
+<script type="text/javascript">initAccessKey()</script>
+<script type="text/javascript" src="static_js.asp?id=<$LogID$>"></script>
 </body>
 </html>

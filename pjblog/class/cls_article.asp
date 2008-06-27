@@ -12,7 +12,7 @@
 '*******************************************
 
 Sub updateViewNums(logID, vNums)
-    If Not blog_postFile Then Exit Sub
+    If blog_postFile<1 Then Exit Sub
     Dim LoadArticle, splitStr, getA, i, tempStr
     splitStr = "<"&"%ST(A)%"&">"
     tempStr = ""
@@ -41,7 +41,7 @@ Sub ShowArticle(LogID)
     If log_ViewArr(6, 0) Then comDesc = "Desc" Else comDesc = "Asc" End If
 
     '从文件读取日志
-    If blog_postFile Then
+    If blog_postFile>0 Then
         Dim LoadArticle, TempStr, TempArticle
         LoadArticle = LoadFromFile("post/"&LogID&".asp")
 

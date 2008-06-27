@@ -551,3 +551,25 @@ function displaySelect(status){
 		s[i].style.display = (status)?"":"none";
 	}
 }
+
+//填充侧边栏内容
+function ﻿fillSideBar(html){
+	var sd = $("sidebarDynamic");
+	fillHTML(sd,html);
+}
+
+//填充html
+var fillHTML = function (el,HTMLString) {
+    if (!el) return;
+    if (window.ActiveXObject) { //For IE
+        el.innerHTML = "<img style='display:none'/>" + HTMLString.replace(/<script([^>]*)>/ig, '<script$1 defer>');
+        el.removeChild(el.firstChild)
+    } else { //For Mozilla,Opare
+        var nSibling = el.nextSibling;
+        var pNode = el.parentNode;
+        pNode.removeChild(el);
+        el.innerHTML = HTMLString;
+        pNode.insertBefore(el,nSibling)
+    }
+}
+

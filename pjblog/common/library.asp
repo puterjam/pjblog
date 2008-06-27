@@ -270,7 +270,8 @@ Sub Side_Module_Replace()
     side_html = Replace(side_html, "$archive_code$", archive_code)
 
     '树形分类处理
-    CategoryList(1)
+    Dim Category_code
+    Category_code = CategoryList(1)
     side_html_default = Replace(side_html_default, "$Category_code$", Category_code)
     side_html = Replace(side_html, "$Category_code$", Category_code)
 
