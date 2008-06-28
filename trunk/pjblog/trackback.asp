@@ -138,7 +138,7 @@ Function doTrackback(tbID, tbURL, tbTitle, tbExcerpt, tbBlog)
     Smilies(1)
     Keywords(1)
     getInfo(2)
-    PostArticle tbID
+    PostArticle tbID, False
     SQLQueryNums = SQLQueryNums + 3
     tbResponseXML 0, "Trackback 成功!"
 End Function
@@ -165,7 +165,7 @@ Function delTrackback
             SQLQueryNums = SQLQueryNums + 2
             Smilies(1)
             Keywords(1)
-            PostArticle logID
+            PostArticle logID, False
             getInfo(2)
             showmsg "提示信息", "<b>引用通告删除成功！</b><br/><a href=""default.asp?id="&logID&""">单击返回</a>", "MessageIcon", ""
         Else

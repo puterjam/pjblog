@@ -11,7 +11,7 @@
 	Response.ContentType = "application/x-javascript" 
 	
 	Side_Module_Replace '处理系统侧栏模块信息
-	outputSideBar side_html
+	outputSideBar side_html_static
 %>
 <script runat="server" Language="javascript">
 	function outputSideBar(html){

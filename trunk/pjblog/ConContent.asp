@@ -110,11 +110,20 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
 	<input type="hidden" name="action" value="General"/>
 	<input type="hidden" name="whatdo" value="Misc"/>
     <div align="left" style="padding:5px;"><%getMsg%>
+    
+   <b>1.基础数据初始化</b><br/>
     <input type="checkbox" name="ReBulid" value="1" id="T1"/> <label for="T1">重建数据缓存</label><br/>
     <input type="checkbox" name="ReTatol" value="1" id="T2"/> <label for="T2">重新统计网站数据</label><br/>
-    <input type="checkbox" name="ReBulidArticle" value="1" id="T3"/> <label for="T3">重新生成所有日志到文件</label> <span style="color:#f00">(这个过程可能会花很长时间,由你的日志数量来决定)</span><br/>
-    <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志索引</label><br/>
     <input type="checkbox" name="CleanVisitor" value="1" id="T5"/> <label for="T5">清除访客记录</label><br/>
+    
+    <br/>
+   <b>2.日志缓存和静态日志重建</b><span style="color:#f00">（这个过程可能会花很长时间,由你的日志数量来决定）</span><br/>
+    <input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
+    <input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
+    <input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
+    
+    <b>3.日志列表索引</b><br/>
+    <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/>
    </div>
    <div class="SubButton">
       <input type="submit" name="Submit" value="保存配置" class="button"/> 
@@ -176,12 +185,26 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
     <legend> 日志保存设置</legend>
     <div align="left">
       <table border="0" cellpadding="2" cellspacing="1">
- 	  <tr><td width="180" align="right">日志输出模式<br/><br/><br/><br/></td><td>
- 	    <%if not CheckObjInstalled("ADODB.Stream") then response.write "disabled"%>
- 	  <input name="blog_postFile" type="radio" value="0"/> 全动态模式 <span style="color:#999">文章数据从数据库里直接获取</span> <br/>
- 	  <input name="blog_postFile" type="radio" value="1" <%if blog_postFile = 1 then response.write ("checked=""checked""")%>/> 半静态模式 <span style="color:#999">把文章保存成文件，但还能插件功能. </span> <br/>
- 	  <input name="blog_postFile" type="radio" value="2" <%if blog_postFile = 2 then response.write ("checked=""checked""")%>/> 全静态模式<span style="color:#f00;font-size:8px">new</span> <span style="color:#999">把文章保存成文件，但是不能定义插件. </span> <br/>
+ 	  <tr><td width="180" align="right" valign="top" style="padding-top:8px">日志输出模式</td><td>
+ 	   
+ 	   <label for="p1" >
+	 	  <input id="p1" name="blog_postFile" type="radio" value="0"/> 全动态模式 (不推荐)
+	 	  <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">文章数据从数据库里直接获取</span> <br/>
+ 	  </label>
  	  
+ 	  <label for="p2" >
+	 	  <input id="p2" name="blog_postFile" type="radio" value="1" <%if blog_postFile = 1 then response.write ("checked=""checked""")%>/> 半静态模式 (适合喜欢个性化的用户) 
+	 	  <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">把文章缓存成文件，并且插件功能不受影响. </span> <br/>
+ 	  </label>
+ 	  
+ 	  <label for="p3" >
+	 	  <input id="p3" name="blog_postFile" type="radio" value="2" <%if blog_postFile = 2 then response.write ("checked=""checked""")%>/> 全静态模式<span style="color:#f00;font-size:8px">new</span> (适合在乎seo和速度的用户) 
+	 	  <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">把文章保存成全静态文件. 需要注意的是，这种模式下文章页面无法使用插件. </span> <br/>
+ 	  </label>
+	  <div style="border-top:1px solid #ccc;padding-top:5px;margin-top:5px">
+ 	  <img src="images/notify.gif"/> <b>温馨提示:</b> 进行半静态和全静态切换后，需要到 <a href="ConContent.asp?Fmenu=General&Smenu=Misc">初始化数据</a> 里更新<b>日志列表缓存</b>。
+ 	  </div>
+ 	  <br/>
  	  <%if not CheckObjInstalled("ADODB.Stream") then response.write "<b style='color:#f00'>需要 ADODB.Stream 组件支持</b>"%>
  	  </td></tr>
  	  <tr><td width="180" align="right">日志预览分割类型</td><td><select name="blog_SplitType"><option value="0">按照字符数量分割</option><option  value="1" <%if blog_SplitType then response.write ("selected=""selected""")%>>按照行数分割</option></select> <span style="color:#999">只对重新编辑日志或新建日志有效</span></td></tr>
@@ -798,44 +821,94 @@ ElseIf Request.QueryString("Fmenu") = "Skins" Then
   </tr>
   <tr>
     <td class="CPanel">
-	<div class="SubMenu"><a href="?Fmenu=Skins">设置外观</a> | <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
+	<div class="SubMenu">
+	<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <br/> 
+	<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
 
 <%
 If Request.QueryString("Smenu") = "module" Then
 
 %>
+<script>
+	var lastFlag = 7;
+	function filterModuleList(flag){
+		var items = document.getElementsByTagName("tr");
+		for (k in items) {
+			if (items[k].name!="moduleItem") {
+				continue;
+			}
+			items[k].style.display = "none";
+			
+			if (items[k].mType&flag){
+				items[k].style.display = "";
+			}
+		}
+		
+		document.getElementById("a" + lastFlag).style.fontWeight  = "normal";
+		document.getElementById("a" + flag).style.fontWeight  = "bold";
+		lastFlag = flag;
+	}
+</script>
    <div align="left" style="padding:5px;"><%getMsg%>
    <form action="ConContent.asp" method="post" style="margin:0px">
        <input type="hidden" name="action" value="Skins"/>
        <input type="hidden" name="whatdo" value="UpdateModule"/>
        <input type="hidden" name="DoID" value=""/>
+       
+       <div style="width:630px;">
+	     	<div style="float:right;margin-top:15px;">
+	     	<b>显示过滤: </b> <a id="a7" href="#" onclick="filterModuleList(7)" style="font-weight:bold">所有</a> | <a id="a1" href="#" onclick="filterModuleList(1)">隐藏</a> | <a id="a2" href="#" onclick="filterModuleList(2)">置顶</a> | <a id="a4" href="#" onclick="filterModuleList(4)">系统</a></div>
+			<div class="SubButton" style="text-align:left;padding:5px;margin:0px">
+				<select id="d1" name="doModule">
+					 <option>对模块进行屏蔽和置顶设置</option>
+					 <option>------------------------</option>
+					 <option value="dohidden">&nbsp;&nbsp;- 设置隐藏</option>
+					 <option value="cancelhidden">&nbsp;&nbsp;- 取消隐藏</option>
+					 <option>------------------------</option>
+					 <option value="doIndex">&nbsp;&nbsp;- 设置首页独享</option>
+					 <option value="cancelIndex">&nbsp;&nbsp;- 取消首页独享</option>
+				 </select>
+				<input type="submit" name="Submit" value="保存" class="button" style="margin-bottom:0px"/> 
+	     	</div>         
+     </div>  
+     	
       <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
         <tr align="center">
           <td width="18" class="TDHead"><nobr>&nbsp;</nobr></td>
           <td width="18" class="TDHead">&nbsp;</td>
           <td width="18" class="TDHead">&nbsp;</td>
           <td width="18" class="TDHead"><nobr>&nbsp;</nobr></td>
-          <td width="68" class="TDHead"><nobr>类型</nobr></td>
+          <td width="58" class="TDHead"><nobr>类型</nobr></td>
 		  <td width="82" class="TDHead"><nobr>模块标识</nobr></td>
 		  <td width="160" class="TDHead"><nobr>模块名称</nobr></td>
           <td width="42" class="TDHead"><nobr>排序</nobr></td>
           <td  class="TDHead"><nobr>模块操作</nobr></td>
           </tr>
 <%
-Dim blogModule
+Dim blogModule,flag
 Set blogModule = conn.Execute("select * from blog_module where type<>'function' order by type desc,SortID asc")
 Do Until blogModule.EOF
-%>        <tr id="tr_<%=blogModule("id")%>" align="center" style="background:<%if blogModule("type")="content" then response.write ("#a9c9e9")%>">
+flag = 0
+if blogModule("IsHidden") then flag = flag + 1
+if blogModule("IndexOnly") then flag = flag + 2
+if blogModule("IsSystem") then flag = flag + 4
+
+
+%>     <tr name="moduleItem" mType="<%=flag%>" id="tr_<%=blogModule("id")%>" align="center" style="background:<%if blogModule("type")="content" then response.write ("#a9c9e9")%>;">
           <td><input type="checkbox" name="selectID" value="<%=blogModule("id")%>"/></td>
-          <td><%if blogModule("IsHidden") then response.write "<img src=""images/icon_lock.gif"" alt=""隐藏模块""/>" %></td>
-	      <td><%if blogModule("IndexOnly") then response.write "<img src=""images/urlInTop.gif"" alt=""只在首页出现""/>" %></td>
+          <td><%if blogModule("IsHidden") then response.write "<img src=""images/hidden.gif"" alt=""隐藏模块""/>" %></td>
+	      <td><%if blogModule("IndexOnly") then response.write "<img src=""images/top.gif"" alt=""只在首页出现""/>" %></td>
           <td><img name="Mimg_<%=blogModule("id")%>" src="images/<%=blogModule("type")%>.gif" width="16" height="16"/></td>
-          <td><input type="hidden" name="mID" value="<%=blogModule("id")%>"/>
-	          <select name="mType" onChange="document.getElementById('tr_<%=blogModule("id")%>').style.backgroundColor=(this.value=='content')?'#a9c9e9':'';document.images['Mimg_<%=blogModule("id")%>'].src='images/'+this.value+'.gif'" <%if blogModule("IsSystem") then response.write "disabled"%>>
-	           <option value="sidebar">侧边模块</option>
-	           <option value="content" <%if blogModule("type")="content" then response.write ("selected=""selected""")%>>内容模块</option>
-	          </select>
-           <%if blogModule("IsSystem") then response.write "<input name=""mType"" type=""hidden"" value="""&blogModule("type")&""">"%>
+          <td align="left" style="padding-left:5px;"><input type="hidden" name="mID" value="<%=blogModule("id")%>"/>
+	           <%if blogModule("IsSystem") then
+	         		 response.write "<input name=""mType"" type=""hidden"" value="""&blogModule("type")&"""> &nbsp;<span style='color:#999'>系统</span> "
+	            else
+	            %>
+		          <select name="mType" onChange="document.getElementById('tr_<%=blogModule("id")%>').style.backgroundColor=(this.value=='content')?'#a9c9e9':'';document.images['Mimg_<%=blogModule("id")%>'].src='images/'+this.value+'.gif'">
+			           <option value="sidebar">侧边</option>
+			           <option value="content" <%if blogModule("type")="content" then response.write ("selected=""selected""")%>>内容</option>
+		          </select>
+	        <%end if%>
           </td>
           <td><input name="mName" type="text" size="12" class="text" title="<%=blogModule("name")%>" value="<%=blogModule("name")%>" readonly="readonly" style="background:#ffe;"/></td>
           <td><input name="mTitle" type="text" size="24" class="text" value="<%=blogModule("title")%>" <%if blogModule("name")="ContentList" then response.write ("readonly=""readonly"" style=""background:#e5e5e5;""")%>/></td>
@@ -860,8 +933,8 @@ Loop
 	      <td></td>
          <td><img src="images/sidebar.gif" width="16" height="16"/></td>
           <td><input type="hidden" name="mID" value="-1"/><select name="mType">
-           <option value="sidebar">侧边模块</option>
-           <option value="content">内容模块</option>
+           <option value="sidebar">侧边</option>
+           <option value="content">内容</option>
           </select></td>
           <td><input name="mName" type="text" size="12" class="text" /></td>
           <td><input name="mTitle" type="text" size="24" class="text" /></td>
@@ -870,16 +943,7 @@ Loop
           </tr>
           </table>
 		<div class="SubButton" style="text-align:left;padding:5px;margin:0px">
-		<select name="doModule">
-			 <option>所选模块可用操作</option>
-			 <option>------------------------</option>
-			 <option value="dohidden">&nbsp;&nbsp;- 设置隐藏</option>
-			 <option value="cancelhidden">&nbsp;&nbsp;- 取消隐藏</option>
-			 <option>------------------------</option>
-			 <option value="doIndex">&nbsp;&nbsp;- 设置首页独享</option>
-			 <option value="cancelIndex">&nbsp;&nbsp;- 取消首页独享</option>
-		 </select>
-			<input type="submit" name="Submit" value="保存模块" class="button" style="margin-bottom:0px"/> 
+			<input type="submit" name="Submit" value="保存" class="button" style="margin-bottom:0px"/> 
      </div>          
                <div style="color:#f00">模块标识是唯一标记.一旦确定就无法修改.系统自带的模块不允许删除,内容模块只在首页有效.<br/><b>ContentList</b> 是系统自带的日志列表模块，不允许做任何修改</div>
     </div>
@@ -2124,17 +2188,21 @@ ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
 %>
     <!--#include file="common/ubbcode.asp" -->
     <%
-If Request.Form("ReBulidArticle") = 1 Then
+If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then
     Dim LoadArticle, LogLen
     LogLen = 0
     Set LoadArticle = conn.Execute("SELECT log_ID FROM blog_Content")
     Do Until LoadArticle.EOF
-        PostArticle LoadArticle("log_ID")
+    	if Request.Form("ReBulidArticle") = 2 then 
+     	   PostArticle LoadArticle("log_ID"), True
+    	else
+      	  PostArticle LoadArticle("log_ID"), False
+    	end if
         LogLen = LogLen + 1
         LoadArticle.movenext
     Loop
     session(CookieName&"_ShowMsg") = True
-    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共转换 "&LogLen&" 篇日志到文件! "
+    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共处理了 "&LogLen&" 篇日志文件! "
 End If
 
 If Request.Form("ReBulidIndex") = 1 Then
@@ -2352,7 +2420,7 @@ ElseIf Request.Form("action") = "Comment" Then
                 conn.Execute("DELETE * from blog_Trackback where tb_ID="&t1)
                 conn.Execute("UPDATE blog_Info Set blog_tbNums=blog_tbNums-1")
                 doTitle = "引用通告"
-                PostArticle t2
+                PostArticle t2, False
                 doRedirect = "trackback"
             ElseIf Request.Form("whatdo") = "msg" Then
                 conn.Execute("DELETE * from blog_book where book_ID="&selCommID(i))
@@ -2366,7 +2434,7 @@ ElseIf Request.Form("action") = "Comment" Then
                 conn.Execute("DELETE * from blog_Comment where comm_ID="&t1)
                 doTitle = "评论"
                 doRedirect = ""
-                PostArticle t2
+                PostArticle t2, False
             End If
         Next
 

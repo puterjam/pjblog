@@ -395,7 +395,7 @@ Function setPostCategories(lID, lCID)
             Set lArticle = New ArticleCache
             lArticle.SaveCache
             Set lArticle = Nothing
-            PostArticle lID
+            PostArticle lID, False
         End If
 
         returnStr = "<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param><value><boolean>1</boolean></value></param></params></methodResponse>"
