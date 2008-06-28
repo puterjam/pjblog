@@ -92,8 +92,8 @@ Sub getInfo(ByVal action)
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
 
-        blog_version = "2.7.6.70" '当前PJBlog版本号
-        blog_UpdateDate = "2008-04-29"'PJBlog最新更新时间
+        blog_version = "2.8.0.92" '当前PJBlog版本号
+        blog_UpdateDate = "2008-06-29"'PJBlog最新更新时间
 
     End If
 End Sub
@@ -490,12 +490,14 @@ End Function
 
 
 '======================自定义模块缓存=====================
-Dim side_html_default, side_html, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin
+Dim side_html_default, side_html, side_html_static, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin
 
 Function log_module(ByVal action)
     Dim blog_modules
     side_html_default = "" '首页侧栏代码
     side_html = "" '普通页面侧栏代码
+    side_html_static = "" '静态页面的侧边栏
+    
     content_html_Top_default = "" '首页内容代码顶部
     content_html_Top = "" '普通页面内容代码顶部
     content_html_Bottom_default = "" '首页内容代码底部
@@ -505,7 +507,7 @@ Function log_module(ByVal action)
     If Not IsArray(Application(CookieName&"_blog_module")) Or action = 2 Then
         Dim blog_module, blog_module_array, TempDiv
         TempDiv = ""
-        SQL = "SELECT type,title,name,HtmlCode,IndexOnly,SortID,PluginPath,InstallFolder FROM blog_module where IsHidden=false order by SortID"
+        SQL = "SELECT type,title,name,HtmlCode,IndexOnly,SortID,PluginPath,InstallFolder,IsSystem FROM blog_module where IsHidden=false order by SortID"
         Set blog_module = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
         Do Until blog_module.EOF
@@ -513,12 +515,20 @@ Function log_module(ByVal action)
                 side_html_default = side_html_default&"<div id=""Side_"&blog_module("name")&""" class=""sidepanel"">"
                 If Len(blog_module("title"))>0 Then side_html_default = side_html_default&"<h4 class=""Ptitle"">"&blog_module("title")&"</h4>"
                 side_html_default = side_html_default&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
+                
                 If blog_module("IndexOnly") = False Then
                     side_html = side_html&"<div id=""Side_"&blog_module("name")&""" class=""sidepanel"">"
                     If Len(blog_module("title"))>0 Then side_html = side_html&"<h4 class=""Ptitle"">"&blog_module("title")&"</h4>"
                     side_html = side_html&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
                 End If
+                
+                If blog_module("IsSystem") = True Then
+                    side_html_static = side_html_static&"<div id=""Side_"&blog_module("name")&""" class=""sidepanel"">"
+                    If Len(blog_module("title"))>0 Then side_html_static = side_html_static&"<h4 class=""Ptitle"">"&blog_module("title")&"</h4>"
+                    side_html_static = side_html_static&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
+                End If
             End If
+            
             If blog_module("type") = "content" And blog_module("name")<>"ContentList" Then
                 If blog_module("SortID")<0 Then
                     content_html_Top_default = content_html_Top_default&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
@@ -532,14 +542,16 @@ Function log_module(ByVal action)
                     End If
                 End If
             End If
+            
             If blog_module("type") = "function" Then
                 function_Plugin = function_Plugin&TempDiv&blog_module("name")&"%|%"&blog_module("PluginPath")&"%|%"&blog_module("InstallFolder")
                 TempDiv = "$*$"
             End If
+            
             blog_module.movenext
         Loop
         Set blog_module = Nothing
-        blog_modules = Array(side_html_default, side_html, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin)
+        blog_modules = Array(side_html_default, side_html, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin,side_html_static)
         Application.Lock
         Application(CookieName&"_blog_module") = blog_modules
         Application.UnLock
@@ -548,8 +560,11 @@ Function log_module(ByVal action)
     End If
 
     If action<>2 Then
+
         side_html_default = UnCheckStr(blog_modules(0)) '首页侧栏代码
         side_html = UnCheckStr(blog_modules(1)) '普通页面侧栏代码
+        side_html_static = UnCheckStr(blog_modules(7)) '静态页面侧栏代码
+        
         content_html_Top_default = UnCheckStr(blog_modules(2)) '首页内容代码顶部
         content_html_Top = UnCheckStr(blog_modules(3)) '普通页面内容代码顶部
         content_html_Bottom_default = UnCheckStr(blog_modules(4)) '首页内容代码底部

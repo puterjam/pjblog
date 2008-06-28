@@ -67,7 +67,7 @@ Function delcomm
         Conn.Execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&blog_Comm("blog_ID"))
         Conn.Execute("DELETE * FROM blog_Comment WHERE comm_ID="&post_commID)
         Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-1")
-        PostArticle logid
+        PostArticle logid, False
         getInfo(2)
         NewComment(2)
         delcomm = ReInfo
@@ -242,7 +242,7 @@ Function postcomm
     Session("GetCode") = Empty
     Session(CookieName&"_LastDo") = "AddComment"
     postcomm = ReInfo
-    PostArticle post_logID
+    PostArticle post_logID, False
 End Function
 %>
   <br/></div> 

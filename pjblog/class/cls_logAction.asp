@@ -159,13 +159,13 @@ Class logArticle
         '-------------------输出静态日志档案--------------------
         Dim preLog, nextLog
         '输出日志到文件
-        PostArticle PostLogID
+        PostArticle PostLogID, False
 
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
-        If Not preLog.EOF Then PostArticle preLog("log_ID")
-        If Not nextLog.EOF Then PostArticle nextLog("log_ID")
+        If Not preLog.EOF Then PostArticle preLog("log_ID"), False
+        If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
 
         Call updateCache
 
@@ -332,13 +332,13 @@ Class logArticle
 
         '-------------------输出静态日志档案--------------------
         '输出日志到文件
-        PostArticle logid
+        PostArticle logid, False
 
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
-        If Not preLog.EOF Then PostArticle preLog("log_ID")
-        If Not nextLog.EOF Then PostArticle nextLog("log_ID")
+        If Not preLog.EOF Then PostArticle preLog("log_ID"), False
+        If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
 
         Call updateCache
 
@@ -428,8 +428,8 @@ Class logArticle
         Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
         '输出附近的日志到文件
-        If Not preLog.EOF Then PostArticle preLog("log_ID")
-        If Not nextLog.EOF Then PostArticle nextLog("log_ID")
+        If Not preLog.EOF Then PostArticle preLog("log_ID"), False
+        If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
         SQLQueryNums = SQLQueryNums + 5
         weblog.Close
 
@@ -773,11 +773,11 @@ End Class
 '  PJblog2 动态文章保存
 '======================================================
 
-Sub PostArticle(ByVal LogID)
+Sub PostArticle(ByVal LogID, ByVal UpdateListOnly)
     If blog_postFile = 1 Then
-        PostHalfStatic LogID
+        PostHalfStatic LogID, UpdateListOnly
     ElseIf blog_postFile = 2 Then
-        PostFullStatic LogID
+        PostFullStatic LogID, UpdateListOnly
     End If
 End Sub
 
@@ -785,7 +785,7 @@ End Sub
 '半静态化
 '======================================================
 
-Sub PostHalfStatic(ByVal LogID)
+Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC
 
     '读取日志模块
@@ -806,8 +806,18 @@ Sub PostHalfStatic(ByVal LogID)
 
     Set getCate = New Category
     Set getTags = New tag
-
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
+    	
+	if UpdateListOnly then '只更新列表缓存
+	    PostArticleListCache LogID, log_View, getCate, getTags
+	
+	    Set log_View = Nothing
+	    Set getCate = Nothing
+	    Set getTags = Nothing
+	    exit Sub
+	end if 
+	
+
 
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
     Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
@@ -893,7 +903,7 @@ End Sub
 '全静态化
 '======================================================
 
-Sub PostFullStatic(ByVal LogID)
+Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category
     
     
@@ -918,6 +928,16 @@ Sub PostFullStatic(ByVal LogID)
     Set getTags = New tag
 
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
+    
+	if UpdateListOnly then '只更新列表缓存
+	    PostArticleListCache LogID, log_View, getCate, getTags
+	
+	    Set log_View = Nothing
+	    Set getCate = Nothing
+	    Set getTags = Nothing
+	    exit Sub
+	end if 
+	
     '静态页面特有的属性
     Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
     Temp1 = Replace(Temp1, "<$base$>", "http://127.0.0.1/pjblog/")

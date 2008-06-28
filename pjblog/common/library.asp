@@ -256,40 +256,47 @@ Sub Side_Module_Replace()
     Cal_code = Calendar(log_Year, log_Month, log_Day, 1)
     side_html_default = Replace(side_html_default, "$calendar_code$", Cal_code)
     side_html = Replace(side_html, "$calendar_code$", Cal_code)
-
+    side_html_static = Replace(side_html_static, "$calendar_code$", Cal_code)
+    
     '用户面板处理
     Dim user_code
     user_code = userPanel
     side_html_default = Replace(side_html_default, "$user_code$", user_code)
     side_html = Replace(side_html, "$user_code$", user_code)
-
+    side_html_static = Replace(side_html_static, "$user_code$", user_code)
+    
     '归档面板处理
     Dim archive_code
     archive_code = Archive(1)
     side_html_default = Replace(side_html_default, "$archive_code$", archive_code)
     side_html = Replace(side_html, "$archive_code$", archive_code)
-
+    side_html_static = Replace(side_html_static, "$archive_code$", archive_code)
+    
     '树形分类处理
     Dim Category_code
     Category_code = CategoryList(1)
     side_html_default = Replace(side_html_default, "$Category_code$", Category_code)
     side_html = Replace(side_html, "$Category_code$", Category_code)
-
+    side_html_static = Replace(side_html_static, "$Category_code$", Category_code)
+    
     '显示统计信息
     side_html_default = info_code(side_html_default)
     side_html = info_code(side_html)
-
+    side_html_static = info_code(side_html_static)
+    
     '处理最新评论内容
     Dim Comment_code
     Comment_code = NewComment(1)
     side_html_default = Replace(side_html_default, "$comment_code$", Comment_code)
     side_html = Replace(side_html, "$comment_code$", Comment_code)
-
+    side_html_static = Replace(side_html_static, "$comment_code$", Comment_code)
+    
     '处理友情链接内容
     Dim Link_Code
     Link_Code = Bloglinks(1)
     side_html_default = Replace(side_html_default, "$Link_Code$", Link_Code)
     side_html = Replace(side_html, "$Link_Code$", Link_Code)
+    side_html_static = Replace(side_html_static, "$Link_Code$", Link_Code)
 End Sub
 
 
