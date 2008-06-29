@@ -391,7 +391,7 @@ End Sub
 Sub outCardFoot 'Output Foot
     response.Write "<p><br/>"&toUnicode("────────────")&"</p>"
     response.Write "<p><a href=""wap.asp"">"&toUnicode(HTMLDecode(SiteName))&"</a></p>"
-    response.Write "<p><a href=""http://www.pjhome.net/wap.asp"">PJBlog2&nbsp;v"&blog_version&"</a>&nbsp;Inside.</p>"
+    response.Write "<p><a href=""http://www.pjhome.net/wap.asp"">PJBlog3&nbsp;v"&blog_version&"</a>&nbsp;Inside.</p>"
     response.Write "<p>Processed&nbsp;In&nbsp;"&FormatNumber(Timer() - StartTime, 3, -1)&"&nbsp;ms</p>"
     response.Write "<do type=""prev"" label="""&toUnicode("返回")&"""><prev/></do>"
     response.Write "</card>"

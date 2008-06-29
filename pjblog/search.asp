@@ -94,7 +94,7 @@ Else
     SQLQueryNums = SQLQueryNums + 1
     SearchArrLen = UBound(SearchArr, 2)
 
-    response.Write "<div class=""pageContent"">"&MultiPage(Search_Nums, 10, CurPage, Url_Add, "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%"">"
+    response.Write "<div class=""pageContent"">"&MultiPage(Search_Nums, 10, CurPage, Url_Add, "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%"">"
 
     Do Until PageCount = SearchArrLen + 1 Or PageCount = 10
         Select Case searchType
@@ -123,7 +123,7 @@ Case Else
 End Select
 PageCount = PageCount + 1
 Loop
-response.Write "</div><div class=""pageContent"">"&MultiPage(Search_Nums, 10, CurPage, Url_Add, "", "float:left")&"</div>"
+response.Write "</div><div class=""pageContent"">"&MultiPage(Search_Nums, 10, CurPage, Url_Add, "", "float:left","")&"</div>"
 End If
 %>
          </div>

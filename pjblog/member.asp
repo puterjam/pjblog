@@ -179,7 +179,7 @@ Do Until blog_Mem.EOF Or PageCount = blog_Mem.PageSize
     blog_Mem.movenext
 Loop
 response.Write "</table>"
-response.Write "<div class=""pageContent"">"&MultiPage(blog_Mem.RecordCount, 20, CurPage, "?", "", "float:left")&"</div>"
+response.Write "<div class=""pageContent"">"&MultiPage(blog_Mem.RecordCount, 20, CurPage, "?", "", "float:left","")&"</div>"
 End If
 blog_Mem.Close
 Set blog_Mem = Nothing

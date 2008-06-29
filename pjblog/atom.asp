@@ -75,7 +75,7 @@ Set Conn = Nothing
   <id><%=SiteURL%></id>
   <link rel="alternate" type="text/html" href="<%=SiteURL%>" /> 
   <link rel="self" type="application/atom+xml" href="<%=SiteURL%>atom.asp" /> 
-  <generator uri="http://www.pjhome.net/" version="2.4.1022">PJBlog2</generator> 
+  <generator uri="http://www.pjhome.net/" version="2.8">PJBlog3</generator> 
   <updated><%
 If UBound(FeedRows, 1)<>0 Then
     response.Write DateToStr(FeedRows(3, 0), "y-m-dTH:I:S")

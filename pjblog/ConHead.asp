@@ -25,7 +25,7 @@ If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True
 <body class="headbody">
  <div class="headmain">
    <div style="height:70px;background:url('images/Control/Pic2.jpg') no-repeat;">
-   <div style="padding-top:53px;padding-left:70px;font-size:11px;font-family:verdana;font-weight:bold;color:#fff;">PJBlog2 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%></div>
+   <div style="padding-top:53px;padding-left:70px;font-size:11px;font-family:verdana;font-weight:bold;color:#fff;">PJBlog3 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%></div>
    </div>
  </div>
 </body>

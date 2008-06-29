@@ -4,6 +4,7 @@
 <!--#include file="FCKeditor/fckeditor.asp" -->
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
 <div id="Tbody">
   <div style="text-align:center;">
   <br/>
