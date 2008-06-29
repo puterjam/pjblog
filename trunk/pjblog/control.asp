@@ -43,7 +43,7 @@ Else
     <div style="padding:16px;padding-top:40px"><b style="margin-left:-76px;">管理员密码: </b><br/><input name="adpass" type="password" size="20" style="border:1px solid #999"/></div>
     <input type="submit" value=" 登 陆 " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
     <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(CookieName&"_ShowError")%></div><%session(CookieName&"_ShowError")=""%>
-    <div style="padding:2px;font-family:verdana;font-size:10px;text-align:right">PJBlog2 v<%=blog_version%></div>
+    <div style="padding:2px;font-family:verdana;font-size:10px;text-align:right">PJBlog3 v<%=blog_version%></div>
    </div>
   </div>
   </form></body>

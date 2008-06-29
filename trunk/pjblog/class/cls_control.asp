@@ -587,7 +587,7 @@ Function categoryTitle()
 
     cTitle.Add "Status." , "服务器配置信息"
 
-    cTitle.Add "welcome." , "欢迎使用PJBlog2"
+    cTitle.Add "welcome." , "欢迎使用PJBlog3"
 
     categoryTitle = cTitle(Fmenu & "." & Smenu)
     Set cTitle = Nothing

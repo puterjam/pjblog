@@ -46,7 +46,7 @@ Sub getBlogHead(Title, CateTitle, CateID)
 	<meta http-equiv="Content-Language" content="UTF-8" />
 	<meta name="robots" content="all" />
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
-	<meta name="Copyright" content="PJBlog2 CopyRight 2008" />
+	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
 	<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
 	<meta name="description" content="<%=SiteName%> - <%=blog_Title%>" />
 	<title><%=Title%></title>

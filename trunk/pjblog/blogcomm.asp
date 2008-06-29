@@ -1,6 +1,7 @@
 ﻿<!--#include file="commond.asp" -->
 <!--#include file="header.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
 <div id="Tbody">
     <div style="text-align:center;"><br/>
 <%
@@ -145,6 +146,7 @@ Function postcomm
         postcomm = ReInfo
         Exit Function
     End If
+    
     If Len(username)<1 Then
         ReInfo(0) = "评论发表错误信息"
         ReInfo(1) = "<b>请输入你的昵称.</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"

@@ -7,6 +7,7 @@
 <!--#include file="common/XML.asp" -->
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
 <!--#include file="class/cls_control.asp" -->
 <%
 '***************PJblog2 后台管理页面*******************
@@ -76,7 +77,7 @@ If Not bCounter.EOF Then
     bCounter.AbsolutePage = CurPage
     Dim bCounter_nums
     bCounter_nums = bCounter.RecordCount
-    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bCounter_nums, 30, CurPage, "?Fmenu=General&Smenu=visitors&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bCounter_nums, 30, CurPage, "?Fmenu=General&Smenu=visitors&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 %>
         <tr align="center">
           <td width="100" nowrap="nowrap" class="TDHead">访客IP</td>
@@ -791,7 +792,7 @@ Loop
 						       <input type="button" value="删除所选内容" onClick="DelComment()" class="button" style="margin:0px;margin-bottom:5px;float:right;"/> 
 						       <input type="button" value="全选" onClick="checkAll()" class="button" style="margin:0px;margin-bottom:5px;float:right;margin-right:6px"/>
 						       <%=saveButton%>
-						       <div id="page2" class="pageContent"><%=MultiPage(comm_Num,pSize,CurPage,aUrl,"","")%></div>
+						       <div id="page2" class="pageContent"><%=MultiPage(comm_Num,pSize,CurPage,aUrl,"","","")%></div>
 						       <script>document.getElementById("page1").innerHTML=document.getElementById("page2").innerHTML</script>
 					    </div>
 			  </div>
@@ -1116,7 +1117,7 @@ End If
 %>
       </table>
   <div style="color:#f00;text-align:left">
-  此处列出系统找到的合法的PJBlog2插件，安装插件前需要把插件连同其目录一起上传到Plugins文件夹内
+  此处列出系统找到的合法的PJBlog3插件，安装插件前需要把插件连同其目录一起上传到Plugins文件夹内
   <br/><b>注意:这里只列出没有安装的插件。</b>
   <br/><%If Not CheckObjInstalled("ADODB.Stream") Then %><b>你的服务器不支持</b> <b><a href="http://www.google.com/search?hl=zh-CN&q=ADODB.Stream&btnG=Google+%E6%90%9C%E7%B4%A2&lr=" target="_blank"><b>ADODB.Stream</b></a> 组件,那将意味着大部分插件的无法正常工作</b><%End If%>
   </div>    
@@ -1588,7 +1589,7 @@ If Not bMember.EOF Then
     bMember.AbsolutePage = CurPage
     Dim bMember_nums
     bMember_nums = bMember.RecordCount
-    response.Write "<tr><td colspan=""8"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums, 30, CurPage, "?Fmenu=Members&Smenu=Users&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+    response.Write "<tr><td colspan=""8"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums, 30, CurPage, "?Fmenu=Members&Smenu=Users&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 
 %>
         <tr align="center">
@@ -1862,7 +1863,7 @@ If Not bLink.EOF Then
     Dim bLink_nums
     bLink_nums = bLink.RecordCount
     Dim MultiPages, PageCount
-    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums, disCount, CurPage, "?Fmenu=Link&Smenu=&", "", "float:left")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums, disCount, CurPage, "?Fmenu=Link&Smenu=&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 End If
 %>
         <tr align="center">
@@ -2036,7 +2037,7 @@ ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
   <tr>
     <td class="CPanel">
     <div align="left" style="padding:5px;line-height:150%">
-     <b>软件版本:</b> PJBlog2 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%><br/>
+     <b>软件版本:</b> PJBlog3 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%><br/>
      <b>服务器时间:</b> <%=DateToStr(Now(),"Y-m-d H:I A")%><br/>
      <b>服务器物理路径:</b> <%=Request.ServerVariables("APPL_PHYSICAL_PATH")%><br/>
      <b>服务器空间占用:</b> <%=GetTotalSize(Request.ServerVariables("APPL_PHYSICAL_PATH"),"Folder")%><br/>
@@ -2048,7 +2049,7 @@ ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
      <b>服务器IP地址:</b> <%=Request.ServerVariables("LOCAL_ADDR")%><br/>
      <b>客户端IP地址:</b> <%=Request.ServerVariables("REMOTE_ADDR")%><br/><br/>
      
-     <b>关键组件:</b> (缺少关键组件的服务器会对PJBlog2运行有一定影响)<br/>
+     <b>关键组件:</b> (缺少关键组件的服务器会对PJBlog3运行有一定影响)<br/>
      <b>　－ Scripting.FileSystemObject 组件:</b> <%=DisI(CheckObjInstalled("Scripting.FileSystemObject"))%><br/>
      <b>　－ MSXML2.ServerXMLHTTP 组件:</b> <%=DisI(CheckObjInstalled("MSXML2.ServerXMLHTTP"))%><br/>
      <b>　－ Microsoft.XMLDOM 组件:</b> <%=DisI(CheckObjInstalled("Microsoft.XMLDOM"))%><br/>
@@ -2056,7 +2057,7 @@ ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
      <b>　－ Scripting.Dictionary 组件:</b> <%=DisI(CheckObjInstalled("Scripting.Dictionary"))%><br/>
      <br/>
      
-     <b>其他组件: </b>(以下组件不影响PJBlog2运行)<br/>
+     <b>其他组件: </b>(以下组件不影响PJBlog3运行)<br/>
      <b>　－ Msxml2.ServerXMLHTTP.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.ServerXMLHTTP.5.0"))%><br/>
      <b>　－ Msxml2.DOMDocument.5.0 组件:</b> <%=DisI(CheckObjInstalled("Msxml2.DOMDocument.5.0"))%><br/>
      <b>　－ FileUp.upload 组件:</b> <%=DisI(CheckObjInstalled("FileUp.upload"))%><br/>
@@ -2066,6 +2067,10 @@ ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
     </div>
 </td></tr></table>
 <%
+	dim element
+	For Each element In Request.ServerVariables
+		Response.write element&" : "&Request.ServerVariables(element)&"<br/><br/>"
+	Next 
 ElseIf Request.QueryString("Fmenu") = "Logout" Then '退出
     session(CookieName&"_System") = ""
     session(CookieName&"_disLink") = ""
@@ -2093,7 +2098,7 @@ ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
 		 <td valign="top" style="padding:5px;width:140px"><img src="images/Control/Icon/ControlPanel.png"/></td>
 		 <td valign="top">
 		    <div align="left" style="padding:5px;line-height:170%;clear:both;font-size:12px">
-		     <b>当前软件版本:</b> PJBlog2 v<%=blog_version%><br/>
+		     <b>当前软件版本:</b> PJBlog3 v<%=blog_version%><br/>
 		     <b>软件更新日期:</b> <%=DateToStr(blog_UpdateDate,"mdy")%><br/>
 		     <b>日志数量:</b> <%=blog_LogNums%> 篇<br/>
 		     <b>评论数量:</b> <%=blog_CommNums%> 个<br/>
@@ -2188,7 +2193,12 @@ ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
 %>
     <!--#include file="common/ubbcode.asp" -->
     <%
-If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then
+If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then           
+    Application.Lock
+    Application(CookieName & "_SiteEnable") = 0
+    Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站在初始化数据，请稍后在访问. :P"
+    Application.UnLock
+    
     Dim LoadArticle, LogLen
     LogLen = 0
     Set LoadArticle = conn.Execute("SELECT log_ID FROM blog_Content")
@@ -2201,6 +2211,12 @@ If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then
         LogLen = LogLen + 1
         LoadArticle.movenext
     Loop
+    
+    Application.Lock
+    Application(CookieName & "_SiteEnable") = 1
+    Application(CookieName & "_SiteDisbleWhy") = ""
+    Application.UnLock
+    
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共处理了 "&LogLen&" 篇日志文件! "
 End If

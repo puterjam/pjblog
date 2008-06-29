@@ -557,78 +557,6 @@ End Function
 Dim FirstShortCut, ShortCut
 FirstShortCut = False
 
-Function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style)
-    CurPage = Int(Curpage)
-    Numbers = Int(Numbers)
-    Dim URL
-    URL = Request.ServerVariables("Script_Name")&Url_Add
-    MultiPage = ""
-    Dim Page, Offset, PageI
-    '	If Int(Numbers)>Int(PerPage) Then
-    
-    Page = 9
-    Offset = 4
-    
-    Dim Pages, FromPage, ToPage
-    If Numbers Mod CInt(Perpage) = 0 Then
-        Pages = Int(Numbers / Perpage)
-    Else
-        Pages = Int(Numbers / Perpage) + 1
-    End If
-    
-    FromPage = Curpage - Offset
-    ToPage = Curpage+Page - Offset -1
-    
-    If Page>Pages Then
-        FromPage = 1
-        ToPage = Pages
-    Else
-        If FromPage<1 Then
-            Topage = Curpage+1 - FromPage
-            FromPage = 1
-            If (ToPage - FromPage)<Page And (ToPage - FromPage)<Pages Then ToPage = Page
-        ElseIf Topage>Pages Then
-            FromPage = Curpage - Pages + ToPage
-            ToPage = Pages
-            If (ToPage - FromPage)<Page And (ToPage - FromPage)<Pages Then FromPage = Pages - Page+1
-        End If
-    End If
-    
-    'html start
-    MultiPage = "<div class=""page"" style="""&Style&"""><ul><li class=""pageNumber"">" ' & Curpage&"/"&Pages & " | "
-    
-    '第一页
-    if Curpage<>1 And FromPage>1 then MultiPage=MultiPage&"<a href="""&Url&"page=1"" title=""第一页""  style=""text-decoration:none"">«</a> | "
-        
-    If Not FirstShortCut Then ShortCut = " accesskey="",""" Else ShortCut = ""
-    
-    '上一页
-    If Curpage<>1 Then MultiPage = MultiPage&"<a href="""&Url&"page="&CurPage -1&""" title=""上一页"" style=""text-decoration:none;"""&ShortCut&">‹</a> | "
-    
-    '列表部分
-    For PageI = FromPage To ToPage
-        If PageI<>CurPage Then
-            MultiPage = MultiPage&"<a href="""&Url&"page="&PageI&aname&""">"&PageI&"</a> | "
-        Else
-            MultiPage = MultiPage&"<strong>"&PageI&"</strong>"
-            If PageI<>Pages Then MultiPage = MultiPage&" | "
-        End If
-    Next
-    
-    If Not FirstShortCut Then ShortCut = " accesskey="".""" Else ShortCut = ""
-    
-    '下一页
-    If Curpage<>pages Then MultiPage = MultiPage&"<a href="""&Url&"page="&CurPage+1&""" title=""下一页"" style=""text-decoration:none"""&ShortCut&">›</a>"
-    
-    '最后一页
-    If Curpage<>pages Then MultiPage = MultiPage&" | <a href="""&Url&"page="&Pages&aname&""" title=""最后一页"" style=""text-decoration:none"">»</a>"
-    
-    'html end
-    MultiPage = MultiPage&"</li></ul></div>"
-
-    FirstShortCut = True
-End Function
-
 '*************************************
 '切割内容 - 按行分割
 '*************************************
@@ -1165,6 +1093,85 @@ End Function
 		CloseDB();
 		Response.Redirect(url);
 	}
+	
+//*************************************
+//翻页函数，改成js
+//*************************************
+function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style,baseUrl,event){
+    var _curPage = parseInt(Curpage);
+    var _numbers = parseInt(Numbers);
+	event = event || ""
+	aname = aname || ""
+    var Url = (baseUrl || Request.ServerVariables("URL"))+Url_Add;
+    
+    var Page, Offset, PageI;
+    //	If Int(_numbers)>Int(PerPage) Then
+    
+    Page = 9;
+    Offset = 4;
+    
+    var Pages, FromPage, ToPage;
+    
+    if (_numbers%Perpage == 0) {
+        Pages = parseInt(_numbers / Perpage);
+    }else{
+        Pages = parseInt(_numbers / Perpage) + 1;
+    }
+    
+    FromPage = _curPage - Offset;
+    ToPage = _curPage + Page - Offset -1;
+    
+    if (Page>Pages) {
+        FromPage = 1;
+        ToPage = Pages;
+    }else{
+        if (FromPage<1) {
+            ToPage = _curPage+1 - FromPage;
+            FromPage = 1;
+            if ((ToPage - FromPage)<Page && (ToPage - FromPage)<Pages) {ToPage = Page}
+        }else if (ToPage>Pages) {
+            FromPage = _curPage - Pages + ToPage;
+            ToPage = Pages;
+            if ((ToPage - FromPage)<Page && (ToPage - FromPage)<Pages) {FromPage = Pages - Page+1}
+        }
+    }
+
+    //html start
+    var pageCode = ['<div class="page" style="'+Style+'"><ul><li class="pageNumber">']; // & _curPage&"/"&Pages & " | "
+    
+    //第一页
+    if (_curPage!=1 && FromPage>1) {pageCode.push('<a href="'+Url+'page=1'+aname+'" page="1" title="第一页"  style="text-decoration:none" ' + event + '>«</a> | ')}
+        
+    if (!FirstShortCut) {ShortCut = ' accesskey=","'}else{ ShortCut = ''}
+    
+    //上一页
+    if (_curPage!=1) {pageCode.push('<a href="'+Url+'page='+ (_curPage -1)+aname+'" page="'+(_curPage-1)+'" title="上一页" style="text-decoration:none;"'+ShortCut+' ' + event + '>‹</a> | ')}
+    
+    //列表部分
+    for (PageI = FromPage;PageI<=ToPage;PageI++){
+        if (PageI!=_curPage) {
+            pageCode.push('<a href="'+Url+'page='+(PageI+aname)+'" ' + event + ' page="'+PageI+'">'+PageI+'</a> | ');
+        }else{
+            pageCode.push('<strong>'+PageI+'</strong>');
+            if (PageI!=Pages) {pageCode.push(' | ')}
+        }
+    }
+    
+    if (!FirstShortCut) {ShortCut = ' accesskey="."'} else {ShortCut = ''}
+    
+    //下一页
+    if (_curPage!=Pages) {pageCode.push('<a href="'+Url+'page='+(_curPage+1)+aname+'" title="下一页" page="'+(_curPage+1)+'" style="text-decoration:none"'+ShortCut+' ' + event + '>›</a>')}
+    
+    //最后一页
+    if (_curPage!=Pages && ToPage<Pages) {pageCode.push(' | <a href="'+Url+'page='+(Pages+aname)+'" page="'+Pages+'"  title="最后一页" style="text-decoration:none" ' + event + '>»</a>')}
+    
+    //html end
+    pageCode.push('</li></ul></div>');
+	pageCode = pageCode.join("");
+    FirstShortCut = true;
+    
+    return pageCode;
+}
 </script>
 
 

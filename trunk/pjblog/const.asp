@@ -12,9 +12,9 @@ Session.CodePage = 65001
 Session.LCID = 2057
 
 '定义 Cookie,Application 域，必须修改，否则可能运行不正常
-'把"PJBlog2"和"PJBlog2Setting"引号里面的东西替换称任意英文数值值即可
-Const CookieName = "PJBlog2"
-Const CookieNameSetting = "PJBlog2Setting"
+'把"PJBlog3"和"PJBlog3Setting"引号里面的东西替换称任意英文数值值即可
+Const CookieName = "PJBlog3"
+Const CookieNameSetting = "PJBlog3Setting"
 Const IPViewURL = "http://www.dheart.net/ip/index.php?ip=" 'IP查询网站地址
 Response.Cookies(CookieNameSetting).Expires = Date+365
 
@@ -71,7 +71,11 @@ If IsInteger(log_Day) = True Then
 End If
 If CheckStr(Request.QueryString("Page"))<>Empty Then
     Curpage = CheckStr(Request.QueryString("Page"))
-    If IsInteger(Curpage) = False Or Curpage<0 Then Curpage = 1
+    If IsInteger(Curpage) = False Then 
+    	Curpage = 1
+    elseif Curpage<0 then
+    	Curpage = 1
+    end if
 Else
     Curpage = 1
 End If

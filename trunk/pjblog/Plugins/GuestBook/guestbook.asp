@@ -68,7 +68,7 @@
                 GuestDB.AbsolutePage=CurPage
                 GuestNum=GuestDB.RecordCount
                   %>
-       	     <%if not replyMsg then%><div class="pageContent"><%=MultiPage(GuestNum,bookPage,CurPage,Url_Add,"","float:right")%></div><%end if%>
+       	     <%if not replyMsg then%><div class="pageContent"><%=MultiPage(GuestNum,bookPage,CurPage,Url_Add,"","float:right","")%></div><%end if%>
        	     <div class="Content">
        	       <%
                  Do Until GuestDB.eof or PageCount=bookPage
@@ -109,7 +109,7 @@
        	        PageCount=PageCount+1
        	        loop
 	            response.write "</div>"
-	            if not replyMsg then response.write "<div class=""pageContent"">"&MultiPage(GuestNum,bookPage,CurPage,Url_Add,"","float:right")&"</div>" end if
+	            if not replyMsg then response.write "<div class=""pageContent"">"&MultiPage(GuestNum,bookPage,CurPage,Url_Add,"","float:right","")&"</div>" end if
 
 	        end if 
 	       GuestDB.close

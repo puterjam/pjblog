@@ -647,7 +647,7 @@ Class ArticleCache
 
 %>
 
-<div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"><%=title%></span><%=MultiPage(ubound(aList)+1-hiddenC,pageSize,CurPage,Url_Add,"","float:Left")%> 预览模式: <a href="<%=Url_Add%>distype=normal" accesskey="1">普通</a> | <a href="<%=Url_Add%>distype=list" accesskey="2">列表</a></div>
+<div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"><%=title%></span>预览模式: <a href="<%=Url_Add%>distype=normal" accesskey="1">普通</a> | <a href="<%=Url_Add%>distype=list" accesskey="2">列表</a></div>
 <%
 If outType = "list" Then response.Write "<div class=""Content-body"" style=""text-align:Left""><table cellpadding=""2"" cellspacing=""2"" width=""100%"">"
 i = 0
@@ -662,7 +662,7 @@ Do Until i >= pageSize
         If outType = "list" Then response.Write "</table></div>"
 
 %>
-<div class="pageContent"><%=MultiPage(ubound(aList)+1-hiddenC,pageSize,CurPage,Url_Add,"","float:Left")%></div>
+<div class="pageContent"><%=MultiPage(ubound(aList)+1-hiddenC,pageSize,CurPage,Url_Add,"","float:Left","")%></div>
 <%
 Exit For
 End If
@@ -670,7 +670,7 @@ Loop
 If outType = "list" Then response.Write "</table></div>"
 
 %>
-<div class="pageContent"><%=MultiPage(ubound(aList)+1-hiddenC,pageSize,CurPage,Url_Add,"","float:Left")%></div>
+<div class="pageContent"><%=MultiPage(ubound(aList)+1-hiddenC,pageSize,CurPage,Url_Add,"","float:Left","")%></div>
 <%
 Else
     response.Write "<b>抱歉，没有找到任何日志！</b>"
@@ -904,7 +904,7 @@ End Sub
 '======================================================
 
 Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
-    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category
+    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category,baseUrl
     
     
 
@@ -938,12 +938,24 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	    exit Sub
 	end if 
 	
+    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If	
     '静态页面特有的属性
+	baseUrl = "http://" & Request.ServerVariables("HTTP_HOST") & Request.ServerVariables("URL")
+	baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
+    
     Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
-    Temp1 = Replace(Temp1, "<$base$>", "http://127.0.0.1/pjblog/")
+    Temp1 = Replace(Temp1, "<$base$>", baseUrl)
     Temp1 = Replace(Temp1, "<$siteName$>", siteName)    
     Temp1 = Replace(Temp1, "<$blog_Title$>", blog_Title)
-      
+    Temp1 = Replace(Temp1, "<$skin$>", blog_DefaultSkin)   
+    Temp1 = Replace(Temp1, "<$blogabout$>", blogabout)   
+    Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)   
+    
+   '输出第一页评论
+
+    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True))   
+    
+    
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
     Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
     Temp1 = Replace(Temp1, "<$log_CateID$>", log_View("log_CateID"))
@@ -968,8 +980,6 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Else
         Temp1 = Replace(Temp1, "<$log_tag$>", "")
     End If
-
-    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
 
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))

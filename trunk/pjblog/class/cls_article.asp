@@ -61,7 +61,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0)
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False 
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
@@ -138,7 +138,7 @@ Set getTag = New tag
 					   </div></div>
 					   </div>
 <%Set getTag = Nothing
-ShowComm LogID, comDesc, log_ViewArr(7, 0) '显示评论内容
+ShowComm LogID, comDesc, log_ViewArr(7, 0), False '显示评论内容
 End Sub
 
 
@@ -146,15 +146,27 @@ End Sub
 '  显示日志评论内容
 '*******************************************
 
-Sub ShowComm(LogID, comDesc, DisComment)
-    response.Write ("<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>")
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen
+Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic)
+	ShowComm = ""
+    ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
+    
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen,BaseUrl,aName,aEvent
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
+    
     Pcount = 0
-    SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+    BaseUrl = ""
+    aEvent = ""
+    
+   ' 带 trackback 的查询
+   ' SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+  
+   ' 不带 trackback 的查询，速度较快
+   SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+
     blog_Comment.Open SQL, Conn, 1, 1
     SQLQueryNums = SQLQueryNums + 1
     If blog_Comment.EOF And blog_Comment.BOF Then
+    
     Else
         blog_Comment.PageSize = blogcommpage
         blog_Comment.AbsolutePage = CurPage
@@ -166,95 +178,115 @@ Sub ShowComm(LogID, comDesc, DisComment)
         commArrLen = UBound(commArr, 2)
 
         Url_Add = "?id="&LogID&"&"
-%>
-       <div class="pageContent"><%=MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,"#comm_top","float:right")%></div>
-	   <%
-Do Until Pcount = commArrLen + 1 Or Pcount = blogcommpage
-    blog_CommID = commArr(0, Pcount)
-    blog_CommAuthor = commArr(2, Pcount)
-    blog_CommContent = commArr(1, Pcount)
+        aName = "#comm_top"
+        
+        If blog_postFile = 2 then '静态页面使用#方式来切换
+        	BaseUrl = "article/" & LogID & ".htm"
+        	Url_Add="#"
+        	aName = ""
+        	aEvent = "onclick=""openCommentPage(this)"""
+        End If 
+        
+		'顶部翻页
+  	   ShowComm = ShowComm&"<div class=""pageContent"">"&MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,aName,"float:right", BaseUrl,aEvent)&"</div>"
 
-%>
-	  <div class="comment">
-	  <%IF blog_CommID=0 Then%>
-	    <div class="commenttop"><img src="images/icon_trackback.gif" alt="" style="margin:0px 4px -3px 0px"/><strong><%=("<a href="""&commArr(4,Pcount)&""">"&commArr(5,Pcount)&"</a>")%></strong> <span class="commentinfo">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I A")%><%if stat_Admin=true then response.write (" | <a href=""trackback.asp?action=deltb&amp;tbID="&commArr(6,Pcount)&"&amp;logID="&LogID&""" onclick=""if (!window.confirm('是否删除该引用?')) {return false}""><img src=""images/del1.gif"" alt=""删除该引用"" border=""0""/></a>") end if%>]</span></div>
-	    <div class="commentcontent">
-		<b>标题:</b> <%=blog_CommAuthor%><br/>
-		<b>链接:</b> <%=("<a href="""&commArr(4,Pcount)&""" target=""_blank"">"&commArr(4,Pcount)&"</a>")%><br/>
-		<b>摘要:</b> <%=checkURL(HTMLDecode(blog_CommContent))%><br/>
-<br/>
-		</div>
-	  <%else%>
-	    <div class="commenttop"><a name="comm_<%=blog_CommID%>" href="javascript:addQuote('<%=blog_CommAuthor%>','commcontent_<%=blog_CommID%>')"><img border="0" src="images/<%if memName=blog_CommAuthor then response.write ("icon_quote_author.gif") else response.write ("icon_quote.gif") end if%>" alt="" style="margin:0px 4px -3px 0px"/></a><a href="member.asp?action=view&memName=<%=Server.URLEncode(blog_CommAuthor)%>"><strong><%=blog_CommAuthor%></strong></a> <span class="commentinfo">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I A")%> <%if stat_Admin then response.write (" | "&commArr(8,Pcount)) end if%><%if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then response.write (" | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""if (!window.confirm('是否删除该评论?')) {return false}""><img src=""images/del1.gif"" alt=""删除该评论"" border=""0""/></a>") end if%>]</span></div>
-	    <div class="commentcontent" id="commcontent_<%=blog_CommID%>"><%=UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))%></div>
-	  <%end if%>
-	   </div>
-	  <%
-Pcount = Pcount + 1
-Loop
+	   '显示评论
+		Do Until Pcount = commArrLen + 1 Or Pcount = blogcommpage
+		    blog_CommID = commArr(0, Pcount)
+		    blog_CommAuthor = commArr(2, Pcount)
+		    blog_CommContent = commArr(1, Pcount)
+     		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop"">"
+     		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
+     		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
+			ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"]</span>"
+		
+			'删除按钮
+		''	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 
+		'		response.write (" | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""if (!window.confirm('是否删除该评论?')) {return false}""><img src=""images/del1.gif"" alt=""删除该评论"" border=""0""/></a>") 
+		'	end if
+			
+     		'ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop"">"
+			'评论内容
+			ShowComm = ShowComm&"</div><div class=""commentcontent"" id=""commcontent_"&blog_CommID&""">"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))&"</div></div>"
+			Pcount = Pcount + 1
+		Loop
+		
+		'底部的翻页
+       ShowComm = ShowComm&"<div class=""pageContent"">"&MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,aName,"float:right" ,BaseUrl,aEvent)&"</div>"
+	End If
+	
+	If not forStatic Then
+		Response.write ShowComm
+		'输出发表评论框
+		Call showCommentPost(logID,DisComment)
+	End IF
+End Function
 
+'===============
+' 输出发表评论框
+'===============
+Sub showCommentPost(ByVal logID, ByVal DisComment)
+	If DisComment Then 
+		Exit Sub
+	End IF
+	
 %>
-       <div class="pageContent"><%=MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,"#comm_top","float:right")%></div>
-       <%
-End If
-If Not DisComment Then
-
+<div id="MsgContent" style="width:94%;"><div id="MsgHead">发表评论</div><div id="MsgBody">
+<%
+		If Not stat_CommentAdd Then
+		    response.Write ("你没有权限发表留言！")
+		    response.Write ("</div></div>")
+		    Exit Sub
+		End If
+		
+		%>
+		      <script type="text/javascript">
+		      		function checkCommentPost(){
+		      			if (!CheckPost) return false
+						// 备用方法
+		      			return true
+		      		}
+		      </script>
+		      <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">	  
+			  <table width="100%" cellpadding="0" cellspacing="0">	  
+			  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%if not memName=empty then response.write ("value="""&memName&""" readonly=""readonly""")%>/></td></tr>
+		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
+			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
+			  </td><td style="padding:2px;">
+			   <%
+				UBB_TextArea_Height = "150px;"
+				UBB_Tools_Items = "bold,italic,underline"
+				UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
+				Response.write (UBBeditorCore("Message"))
+				%>
+			  </td></tr>
+			  <%if memName=empty or blog_validate=true then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>
+			  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
+		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
+		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
+		             <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" />禁止自动转换关键字</label>
+			  </td></tr>
+		          <tr>
+		            <td colspan="2" align="center" style="padding:3px;">
+					  <input name="logID" type="hidden" value="<%=LogID%>"/>
+		              <input name="action" type="hidden" value="post"/>
+					  <input name="submit2" type="submit" class="userbutton" value="发表评论" accesskey="S"/>
+		              <input name="button" type="reset" class="userbutton" value="重写"/></td>
+		          </tr>
+		          <tr>
+		            <td colspan="2" align="right" >
+					 <%if memName=empty then%>
+					 	虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. <br/>
+					 <%end if%>
+			  字数限制 <b><%=blog_commLength%> 字</b> |
+			  UBB代码 <b><%if (blog_commUBB=0) then response.write ("开启") else response.write ("关闭") %></b> |
+			  [img]标签 <b><%if (blog_commIMG=0) then response.write ("开启") else response.write ("关闭") %></b>
+		
+					</td>
+		          </tr>		  
+			  </table></form>
+	<%response.Write ("</div></div>")
+end Sub
 %>
-	  <div id="MsgContent" style="width:94%;">
-      <div id="MsgHead">发表评论</div>
-      <div id="MsgBody">
-      <%
-If Not stat_CommentAdd Then
-    response.Write ("你没有权限发表留言！")
-    response.Write ("</div></div>")
-    Exit Sub
-End If
 
-%>
-      <script type="text/javascript">
-      		function checkCommentPost(){
-      			if (!CheckPost) return false
-				// 备用方法
-      			return true
-      		}
-      </script>
-      <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">	  
-	  <table width="100%" cellpadding="0" cellspacing="0">	  
-	  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%if not memName=empty then response.write ("value="""&memName&""" readonly=""readonly""")%>/></td></tr>
-      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
-	  <%if memName=empty or blog_validate=true then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4"/> <%=getcode()%></td></tr><%end if%>
-	  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
-	  </td><td style="padding:2px;"><%
-UBB_TextArea_Height = "150px;"
-UBB_Tools_Items = "bold,italic,underline"
-UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
-UBBeditor("Message")
 
-%></td></tr>
-	  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
-             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
-             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
-             <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" />禁止自动转换关键字</label>
-	  </td></tr>
-          <tr>
-            <td colspan="2" align="center" style="padding:3px;">
-			  <input name="logID" type="hidden" value="<%=LogID%>"/>
-              <input name="action" type="hidden" value="post"/>
-			  <input name="submit2" type="submit" class="userbutton" value="发表评论" accesskey="S"/>
-              <input name="button" type="reset" class="userbutton" value="重写"/></td>
-          </tr>
-          <tr>
-            <td colspan="2" align="right" >
-			 <%if memName=empty then%>虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. <br/><%end if%>
-	  字数限制 <b><%=blog_commLength%> 字</b> |
-	  UBB代码 <b><%if (blog_commUBB=0) then response.write ("开启") else response.write ("关闭") %></b> |
-	  [img]标签 <b><%if (blog_commIMG=0) then response.write ("开启") else response.write ("关闭") %></b>
-
-			</td>
-          </tr>		  
-	  </table></form>
-	   <%
-response.Write ("</div></div>")
-End If
-End Sub
-%>

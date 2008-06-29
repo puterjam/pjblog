@@ -572,4 +572,58 @@ var fillHTML = function (el,HTMLString) {
         pNode.insertBefore(el,nSibling)
     }
 }
+/*
+ * 打开连接特效
+ */
+function openLinkEffect(o){
+	o.innerHTML = '<img src="images/Loading.gif" border="0" style="position:absolute"/>&nbsp;&nbsp;&nbsp;&nbsp;'
+}
+
+/*=============给评论翻页===============*/
+/*
+ * 打开评论页面
+ */
+function openCommentPage(o){
+	setTimeout(function(){loadComment(o.getAttribute("page"));},0);
+	o.innerHTML = '<img src="images/Loading.gif" border="0" style="position:absolute"/>&nbsp;&nbsp;&nbsp;&nbsp;'
+}
+
+/*
+ * 加载评论数据
+ */
+function loadComment(page,needTips){
+	if (window._loadComment) {
+		return;
+	}
+	
+	if (needTips) {
+		fillComment("<div style='margin-bottom:10px;'>正在加载评论数据...</div>");
+	}
+	window._loadComment = true;
+	var cJS = document.createElement("script");
+	cJS.chatset = "utf-8";
+	document.getElementsByTagName("HEAD")[0].appendChild(cJS);
+	
+	cJS.src = "load_Comment.asp?id=" + g_logID + "&page=" + page + "&	comDesc=" + g_comDesc;
+}
+
+/*
+ * 尝试从hash里加载评论
+ */
+function tryLoadComment(){
+	var hash = location.hash;
+	var page = /page=(\d)+/g.exec(hash);
+	if (page && page[1]>1) {
+		loadComment(page[1],true);
+	}
+}
+
+/*
+ * 填充评论
+ */
+function fillComment(html){
+	var cb = $("commentBox");
+	cb.innerHTML = html;
+	window._loadComment = false;
+}
 
