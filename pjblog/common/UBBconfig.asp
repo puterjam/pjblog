@@ -1,8 +1,8 @@
 <%
 '|===========================|
-'|   UBB编辑器 1.0           |
+'|   UBB编辑器 2.0           |
 '|      作者:舜子(PuterJam)  |
-'|   版权所有 2005           |
+'|   版权所有 2008          |
 '|===========================|
 Dim UBB_TextArea_Height, UBB_Tools_Items, UBB_Tools_Fonts, UBB_Tools_Size, UBB_Tools_Color, UBB_Msg_Value, UBB_AutoHidden
 
@@ -37,13 +37,43 @@ UBB_Tools_Color = "White,Black,Red,Yellow,Pink,Green,Orange,Purple,Blue,Beige,Br
 
 
 Sub UBBeditor(TextName)
-    Dim TempStyle, Arr_Smilies, Arr_Smilie, SmilieItem, SmilieHtml, SmilieDr, SmilieCount
+	Response.write (UBBeditorCore(TextName))
+End Sub
+
+Function UBBeditorCore(TextName)
+    Dim TempStyle
     TempStyle = " style="""
+    UBBeditorCore = ""
+    
+    If UBB_TextArea_Height<>"" Then 
+   	 TempStyle = TempStyle&"height:"&UBB_TextArea_Height&";"
+    End IF
+    
+    TempStyle = TempStyle&""""
+    
+    UBBeditorCore = UBBeditorCore&"<script language=""javascript"" type=""text/javascript"" src=""common/UBBCode.js""></script>"
+    UBBeditorCore = UBBeditorCore&"<script language=""javascript"" type=""text/javascript"" src=""common/UBBCode_help.js""></script>"
+    
+
+    
+    If UBB_AutoHidden Then
+   		UBBeditorCore = UBBeditorCore&"<div id=""UBBSmiliesPanel"" class=""UBBSmiliesPanel""></div>"
+        UBBeditorCore = UBBeditorCore&"<textarea id=""editMask"" class=""editTextarea"" style=""width:99%;height:100px"" onfocus=""loadUBB('"&TextName&"')"">"&UBB_Msg_Value&"</textarea><div id=""editorbody"" style=""display:none""><div id=""editorHead"">正在加载编辑器...</div>"
+    Else
+   		UBBeditorCore = UBBeditorCore&"<div id=""UBBSmiliesPanel"" class=""UBBSmiliesPanel"">"&showSmilie&"</div>"
+        UBBeditorCore = UBBeditorCore&"<div id=""editorbody""><div id=""editorHead"">"&ToolsToCode&"</div>"
+    End If
+    
+    UBBeditorCore = UBBeditorCore&"<div class=""editorContent""><textarea name="""&TextName&""" class=""editTextarea"""&TempStyle&" cols=""1"" rows=""1"" accesskey=""R"">"&UBB_Msg_Value&"</textarea></div></div>"
+    UBBeditorCore = UBBeditorCore&"<script language=""javascript"" type=""text/javascript"">initUBB("""&TextName&""")</script>"
+End Function
+
+Function showSmilie
+	Dim Arr_Smilies, Arr_Smilie, SmilieItem, SmilieHtml, SmilieDr, SmilieCount
     SmilieHtml = ""
     SmilieDr = ""
     SmilieCount = 0
-    If UBB_TextArea_Height<>"" Then TempStyle = TempStyle&"height:"&UBB_TextArea_Height&";"
-    TempStyle = TempStyle&""""
+    
     Arr_Smilies = Application(CookieName&"_blog_Smilies")
     For Each Arr_Smilie in Arr_Smilies
         SmilieItem = Split(Arr_Smilie, "|")
@@ -56,20 +86,9 @@ Sub UBBeditor(TextName)
         End If
         SmilieDr = ""
     Next
-
-    response.Write ("<script language=""javascript"" type=""text/javascript"" src=""common/UBBCode.js""></script>")
-    response.Write ("<script language=""javascript"" type=""text/javascript"" src=""common/UBBCode_help.js""></script>")
-
-
-    response.Write ("<div id=""UBBSmiliesPanel"" class=""UBBSmiliesPanel""><table cellspacing=""2"" cellpadding=""0"">"&SmilieHtml&"</table></div>")
-    If UBB_AutoHidden Then
-        response.Write ("<textarea id=""editMask"" class=""editTextarea"" style=""width:99%;height:100px"" onfocus=""showUBB('"&TextName&"')"">"&UBB_Msg_Value&"</textarea><div id=""editorbody"" style=""display:none""><div id=""editorHead""></div><script>var ubbTools='"&ToolsToCode&"'</script>")
-    Else
-        response.Write ("<div id=""editorbody""><div id=""editorHead"">"&ToolsToCode&"</div>")
-    End If
-    response.Write ("<div class=""editorContent""><textarea name="""&TextName&""" class=""editTextarea"""&TempStyle&" cols=""1"" rows=""1"" accesskey=""R"">"&UBB_Msg_Value&"</textarea></div></div>")
-    response.Write ("<script language=""javascript"" type=""text/javascript"">initUBB("""&TextName&""")</script>")
-End Sub
+    
+    showSmilie = "<table cellspacing=""2"" cellpadding=""0"">" & SmilieHtml & "</table>"
+End Function
 
 Function ToolsToCode()
     Dim Toolsbar, barItems, barItem, ItemButtons, ItemButton, Items

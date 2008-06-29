@@ -5,12 +5,22 @@
 //|      For Mozilla          |
 //|===========================|
 
-function showUBB(UBB_Content){
+function loadUBB(UBB_Content){
 	document.getElementById("editorbody").style.display="";
-	document.getElementById("editorHead").innerHTML=ubbTools;
 	var me=document.getElementById("editMask")
 	me.parentNode.removeChild(me);
-	UBBTextArea=document.getElementsByName(UBB_Content)
+	
+	window._ubbContent = UBB_Content;
+	UBBScriptLoader.AddScript('ubb_toolbar.asp');
+	UBBScriptLoader.CheckQueue();
+}
+
+function showUBB(){
+	document.getElementById("editorHead").innerHTML = ubbTools;
+	document.getElementById("UBBSmiliesPanel").innerHTML = ubbSmile;
+	
+
+	UBBTextArea=document.getElementsByName(window._ubbContent);
 	UBBTextArea[0].focus();
 }
 
