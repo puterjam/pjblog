@@ -2067,10 +2067,7 @@ ElseIf Request.QueryString("Fmenu") = "Status" Then '服务器配置
     </div>
 </td></tr></table>
 <%
-	dim element
-	For Each element In Request.ServerVariables
-		Response.write element&" : "&Request.ServerVariables(element)&"<br/><br/>"
-	Next 
+
 ElseIf Request.QueryString("Fmenu") = "Logout" Then '退出
     session(CookieName&"_System") = ""
     session(CookieName&"_disLink") = ""

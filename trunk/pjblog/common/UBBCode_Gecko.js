@@ -6,16 +6,22 @@
 //|===========================|
 
 function loadUBB(UBB_Content){
+	window._ubbContent = UBB_Content;
+	if (window._isUBBLoaded) {
+		showUBB();
+		return
+	}
+	initUBB("Message")
 	document.getElementById("editorbody").style.display="";
 	var me=document.getElementById("editMask")
 	me.parentNode.removeChild(me);
 	
-	window._ubbContent = UBB_Content;
 	UBBScriptLoader.AddScript('ubb_toolbar.asp');
 	UBBScriptLoader.CheckQueue();
 }
 
 function showUBB(){
+	window._isUBBLoaded = true;
 	document.getElementById("editorHead").innerHTML = ubbTools;
 	document.getElementById("UBBSmiliesPanel").innerHTML = ubbSmile;
 	
@@ -23,6 +29,7 @@ function showUBB(){
 	UBBTextArea=document.getElementsByName(window._ubbContent);
 	UBBTextArea[0].focus();
 }
+	
 
 function initUBB(UBB_Content){
   UBBTextArea=document.getElementsByName(UBB_Content)

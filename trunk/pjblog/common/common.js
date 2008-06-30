@@ -345,11 +345,13 @@ function SetFont(size){
 }
 //引用
 function addQuote(usr,content){
-	try{
-	if (document.getElementById("editorbody").style.display=="none") showUBB("Message");
-    document.forms["frm"].Message.value="[quote="+usr+"]"+document.getElementById(content).innerText+"[/quote]"
-	document.forms["frm"].Message.focus();
-	}catch(e){}
+	//try{
+		if (document.getElementById("editorbody").style.display=="none") {
+			loadUBB("Message");
+		}
+	    document.forms["frm"].Message.value="[quote="+usr+"]"+document.getElementById(content).innerText+"[/quote]"
+		document.forms["frm"].Message.focus();
+	//}catch(e){}
 }
 
 //插入上传附件
@@ -585,7 +587,8 @@ function openLinkEffect(o){
  */
 function openCommentPage(o){
 	setTimeout(function(){loadComment(o.getAttribute("page"));},0);
-	o.innerHTML = '<img src="images/Loading.gif" border="0" style="position:absolute"/>&nbsp;&nbsp;&nbsp;&nbsp;'
+	o.innerHTML = '<img src="images/Loading.gif" border="0" style="position:absolute"/>&nbsp;&nbsp;&nbsp;&nbsp;';
+	o.style.textDecoration = "none"
 }
 
 /*
@@ -602,9 +605,11 @@ function loadComment(page,needTips){
 	window._loadComment = true;
 	var cJS = document.createElement("script");
 	cJS.chatset = "utf-8";
-	document.getElementsByTagName("HEAD")[0].appendChild(cJS);
-	
+
+
 	cJS.src = "load_Comment.asp?id=" + g_logID + "&page=" + page + "&	comDesc=" + g_comDesc;
+	
+	document.getElementsByTagName("HEAD")[0].appendChild(cJS);
 }
 
 /*

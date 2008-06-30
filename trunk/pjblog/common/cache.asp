@@ -92,7 +92,7 @@ Sub getInfo(ByVal action)
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
 
-        blog_version = "2.8.1.98" '当前PJBlog版本号
+        blog_version = "2.8.1.99" '当前PJBlog版本号
         blog_UpdateDate = "2008-06-30"'PJBlog最新更新时间
 
     End If
@@ -350,8 +350,15 @@ Function NewComment(ByVal action)
             Exit Function
         End If
         Comment_Item_Len = UBound(blog_Comment, 2)
+        dim url
         For i = 0 To Comment_Item_Len
-            NewComment = NewComment&"<a class=""sideA"" href=""default.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)&""" title="""&blog_Comment(2, i)&" 于 "&blog_Comment(4, i)&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))&"</a>"
+		    If blog_postFile = 1 Then
+		        url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
+		      else
+		   		url = SiteURL&"article/"&blog_Comment(1, i)&".htm#comm_"&blog_Comment(0, i)
+		    end if
+            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&blog_Comment(4, i)&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))&"</a>"
+      
         Next
     End If
 End Function
