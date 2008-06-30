@@ -28,9 +28,9 @@ Response.Expires = 60
 Dim cate_ID, FeedRows
 cate_ID = CheckStr(Request.QueryString("cateID"))
 If IsInteger(cate_ID) = False Then
-    SQL = "SELECT L.log_ID,L.log_PostTime FROM blog_Content AS L,blog_Category AS C WHERE C.cate_ID=L.log_cateID AND L.log_IsDraft=false and C.cate_Secret=false ORDER BY log_PostTime DESC"
+    SQL = "SELECT top 10 L.log_ID,L.log_PostTime FROM blog_Content AS L,blog_Category AS C WHERE C.cate_ID=L.log_cateID AND L.log_IsDraft=false and C.cate_Secret=false ORDER BY log_PostTime DESC"
 Else
-    SQL = "SELECT L.log_ID,L.log_PostTime FROM blog_Content AS L,blog_Category AS C WHERE log_cateID="&cate_ID&" AND C.cate_ID=L.log_cateID AND L.log_IsDraft=false and C.cate_Secret=false ORDER BY log_PostTime DESC"
+    SQL = "SELECT top 10 L.log_ID,L.log_PostTime FROM blog_Content AS L,blog_Category AS C WHERE log_cateID="&cate_ID&" AND C.cate_ID=L.log_cateID AND L.log_IsDraft=false and C.cate_Secret=false ORDER BY log_PostTime DESC"
 End If
 
 Dim RS, i
@@ -63,7 +63,13 @@ If UBound(FeedRows, 1)>0 Then
             .Write "  <url>"
             .Write vbCrLf
             .Write "    <loc>"
-            .Write SiteURL&"default.asp?id="&FeedRows(0, i)
+            
+             If blog_postFile = 1 Then
+         	   .Write SiteURL&"article.asp?id="&FeedRows(0, i)
+            else
+          	  .Write SiteURL&"article/"&FeedRows(0, i)&".htm"
+            end if
+            
             .Write "</loc>"
             .Write vbCrLf
             .Write "    <lastmod>"

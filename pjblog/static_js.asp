@@ -14,10 +14,13 @@
 	    id = CheckStr(Request.QueryString("id"))
 	End If
 	
-	'Response.Expires = 100
-	Response.AddHeader "pragma", "no-cache"
-	Response.AddHeader "cache-ctrol", "no-cache"
+	'Response.AddHeader "ETag", "test"
+	Response.AddHeader "Cache-Control", "no-cache"
+	'Response.Expires = 10
+	'Response.AddHeader "Last-Modified", getNow()
 	Response.ContentType = "application/x-javascript" 
+
+	
 	
 	Side_Module_Replace '处理系统侧栏模块信息
 	outputSideBar side_html_static
@@ -44,6 +47,10 @@
 		html = html.replace(/\\/g,"\\\\");
 		html = html.replace(/\'/g,"\\'");
 		Response.Write ("fillSideBar('" + html + "');")
+	}
+	function getNow(){
+		var d = new Date();
+		return d.toGMTString();
 	}
 </script>
 <%

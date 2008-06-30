@@ -88,11 +88,17 @@ Set Conn = Nothing
 If UBound(FeedRows, 1) = 0 Then
     Response.Write("<item></item>")
 Else
+	dim url
     For i = 0 To UBound(FeedRows, 2)
-
+    
+    If blog_postFile = 1 Then
+        url = SiteURL&"article.asp?id="&FeedRows(0, i)
+      else
+   		url = SiteURL&"article/"&FeedRows(0, i)&".htm"
+    end if
 %>
 			<item>
-			<link><%=SiteURL&"default.asp?id="&FeedRows(0,i)%></link>
+			<link><%=url%></link>
 			<title><![CDATA[<%=FeedRows(1,i)%>]]></title>
 			<author><%=blog_email%>(<%=FeedRows(2,i)%>)</author>
 			<category><![CDATA[<%=FeedRows(6,i)%>]]></category>

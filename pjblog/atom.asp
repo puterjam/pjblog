@@ -85,6 +85,7 @@ End If
 
 %></updated>
 <%
+dim url
 If UBound(FeedRows, 1)<>0 Then
     For i = 0 To UBound(FeedRows, 2)
 
@@ -106,8 +107,13 @@ Else
     Response.Write("<summary type=""html""><![CDATA["&AddSiteURL(UBBCode(HTMLEncode(FeedRows(4, i)), 0, 0, 0, 1, 1))&"]]></summary>")
 End If
 
+    If blog_postFile = 1 Then
+        url = SiteURL&"article.asp?id="&FeedRows(0, i)
+      else
+   		url = SiteURL&"article/"&FeedRows(0, i)&".htm"
+    end if
 %>
-	  <link rel="alternate" type="text/html" href="<%=SiteURL%>default.asp?id=<%=FeedRows(0,i)%>" /> 
+	  <link rel="alternate" type="text/html" href="<%=url%>" /> 
 	  <id><%=SiteURL%>default.asp?id=<%=FeedRows(0,i)%></id>
   </entry>	
 		<%

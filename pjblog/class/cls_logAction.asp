@@ -1011,13 +1011,13 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim BTemp
     BTemp = ""
     If Not preLogC.EOF Then
-        BTemp = BTemp & "<a href=""?id="&preLogC("log_ID")&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+        BTemp = BTemp & "<a href=""article/"&preLogC("log_ID")&".htm"" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
     Else
         BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
     End If
 
     If Not nextLogC.EOF Then
-        BTemp = BTemp & " | <a href=""?id="&nextLogC("log_ID")&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+        BTemp = BTemp & " | <a href=""article/"&nextLogC("log_ID")&".htm"" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
     Else
         BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
     End If
@@ -1087,14 +1087,24 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     If log_View("log_edittype") = 1 Then
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
-            Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+        
+            If blog_postFile = 1 Then
+       	     Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
+			else
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+  			End If
+  			
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")
         End If
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+            If blog_postFile = 1 Then
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+         	else
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+         	end if           
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")
         End If

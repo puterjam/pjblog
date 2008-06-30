@@ -23,7 +23,8 @@ UBBScriptLoader.AddScript=function(scriptPath){
 	UBBScriptLoader.Queue[UBBScriptLoader.Queue.length]=scriptPath;
 	//if (!this.IsLoading) this.CheckQueue();
 	};
-UBBScriptLoader.CheckQueue=function(){
+	
+UBBScriptLoader.CheckQueue = function(){
 	if (this.Queue.length>0){
 		this.IsLoading=true;
 		var sScriptPath=this.Queue[0];
@@ -34,29 +35,34 @@ UBBScriptLoader.CheckQueue=function(){
 		if (sScriptPath.lastIndexOf('.css')>0){
 			 e=document.createElement('LINK');
 			 e.rel='stylesheet';e.type='text/css';
-			}
-			else
-			{
+			 e.href=sScriptPath;
+		}else	{
 			 e=document.createElement("script");
 			 e.type="text/javascript";
 			 e.language="javascript";
-			};
-			document.getElementsByTagName("head")[0].appendChild(e);
-var oEvent=function(){
-	if (this.tagName=='LINK'||!this.readyState||this.readyState=='loaded') UBBScriptLoader.CheckQueue();};
-	if (e.tagName=='LINK'){
-		if (UBBBrowserInfo.IsIE) e.onload=oEvent;else UBBScriptLoader.CheckQueue();
-		e.href=sScriptPath;
-		}
-		else{
-		e.onload=e.onreadystatechange=oEvent;e.src=sScriptPath;
+			 e.src=sScriptPath;
 		};
+
+		document.getElementsByTagName("head")[0].appendChild(e);
+						
+		var oEvent = function(){
+			if (this.tagName=='LINK'||!this.readyState||this.readyState=='loaded') UBBScriptLoader.CheckQueue();
+		};
+		
+		if (e.tagName=='LINK'){
+			if (UBBBrowserInfo.IsIE) e.onload=oEvent;else UBBScriptLoader.CheckQueue();
+		}else{
+			e.onload=e.onreadystatechange=oEvent;
+		};
+		
+
 	}
 	else
 	{
 		this.IsLoading=false;
-		if (this.OnEmpty) this.OnEmpty();};
-	}
+		if (this.OnEmpty) this.OnEmpty();
+	};
+}
 
 
 var EditMethod="normal"
