@@ -189,7 +189,7 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
  	  <tr><td width="180" align="right" valign="top" style="padding-top:8px">日志输出模式</td><td>
  	   
  	   <label for="p1" >
-	 	  <input id="p1" name="blog_postFile" type="radio" value="0"/> 全动态模式 (不推荐)
+	 	  <input id="p1" name="blog_postFile" type="radio" value="0" <%if blog_postFile = 0 then response.write ("checked=""checked""")%>/> 全动态模式 (不推荐)
 	 	  <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">文章数据从数据库里直接获取</span> <br/>
  	  </label>
  	  
