@@ -764,6 +764,8 @@ Public Function SaveCache
     Set CateDic = Nothing
     Set CateHDic = Nothing
     Set TagsDic = Nothing
+    
+    call newEtag
 End Function
 
 End Class
@@ -779,6 +781,8 @@ Sub PostArticle(ByVal LogID, ByVal UpdateListOnly)
     ElseIf blog_postFile = 2 Then
         PostFullStatic LogID, UpdateListOnly
     End If
+    
+    call newEtag
 End Sub
 
 '======================================================
@@ -950,6 +954,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$skin$>", blog_DefaultSkin)   
     Temp1 = Replace(Temp1, "<$blogabout$>", blogabout)   
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)   
+    Temp1 = Replace(Temp1, "<$CookieName$>", CookieName)
     
    '输出第一页评论
 

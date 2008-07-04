@@ -555,9 +555,88 @@ function displaySelect(status){
 }
 
 //填充侧边栏内容
-function ﻿fillSideBar(html){
+function ﻿callSideBar(html){
+	if (window._sidebarReady) {
+		fillSidebar(html);
+	}else{
+		window._sidebarCache = html;
+	}
+}
+
+function initSidebar(){
+	window._sidebarReady = true;
+	if (window._sidebarCache) {
+		fillSidebar(window._sidebarCache);
+	}
+}
+
+function fillSidebar(html){
 	var sd = $("sidebarDynamic");
 	fillHTML(sd,html);
+	window._sidebarCache = null;
+}
+
+//初始化登陆态的表现 ，for static mode
+function initLogin(CookieName){
+	var n = getCookie(CookieName);
+	if (n) {
+		//用户登陆
+		var u = /memName=(\w+)/.exec(n);
+		if (u) {
+			//try{
+				var un = document.forms["frm"]["username"];
+				un.value = u[1];
+				un.readOnly = true;
+				$("passArea").parentNode.removeChild($("passArea"));
+				
+
+		//	}catch(e){
+				
+		//	}
+		}
+		
+		//blog目前的权限
+		var m =  /memRight=(\d+)/.exec(n);
+		if (m) {
+				var rn = parseInt(m[1],2);
+				
+				var ss = document.styleSheets[0];
+				var rule = ss.rules || ss.cssRules;
+				
+				if (rn&(1<<2) && rn&(1<<4)) rule[0].style.display = "";
+				if (rn&(1<<8)) {rule[1].style.display = "";}
+		}
+	}
+}
+function delCommentConfirm(){
+	if (!window.confirm('是否删除该评论?')) {return false}
+	return true;
+}
+
+//获取cookie
+function getCookie(name){
+		var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*?)(?:;|$)");
+		var m = document.cookie.match(r);
+		return (!m ? "" : m[1]);
+}
+
+//计数器
+function ping(){
+	setTimeout(toPing,500);
+}
+
+//开始统计
+function toPing(){
+	var pingBlog = document.createElement("script");
+	pingBlog.chatset = "utf-8";
+	pingBlog.src = "static_js_ping.asp?id=" + g_logID;
+	
+	document.getElementsByTagName("HEAD")[0].appendChild(pingBlog);
+}
+
+//ping的回调
+function callPing(num){
+	$("countNum").innerHTML = num;
 }
 
 //填充html

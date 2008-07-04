@@ -15,6 +15,20 @@
 Dim BlogTitle
 BlogTitle = siteName & "-" & blog_Title
 If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp")<>0 Then
+
+'备用做304优化
+'	Dim clientEtag, serverEtag
+'	serverEtag = getEtag
+'	clientEtag = Request.ServerVariables("HTTP_IF_NONE_MATCH")
+'	Response.AddHeader "ETag", getEtag
+	
+'	if serverEtag = clientEtag then
+'		Response.Status = "304 Not Modified"
+'		Session.CodePage = 936
+'		Call CloseDB
+'		Response.end
+'	end if
+	
     Dim Tid
     If CheckStr(Request.QueryString("id"))<>Empty Then
         Tid = CheckStr(Request.QueryString("id"))
