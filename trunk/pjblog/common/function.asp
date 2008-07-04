@@ -1030,6 +1030,7 @@ Function getTempKey
     getTempKey = randomStr(20)
     session(CookieName&"tempKey") = getTempKey
 End Function
+
 %>
 
 <script src="reg.js" Language="JScript" runat="server"></script>
@@ -1116,6 +1117,10 @@ function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style,baseUrl,even
         Pages = parseInt(_numbers / Perpage);
     }else{
         Pages = parseInt(_numbers / Perpage) + 1;
+    }
+    
+    if (Pages < 2){
+    	return "";
     }
     
     FromPage = _curPage - Offset;

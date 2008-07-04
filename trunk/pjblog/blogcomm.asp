@@ -79,6 +79,7 @@ Function delcomm
         ReInfo(2) = "WarningIcon"
         delcomm = ReInfo
     End If
+    call newEtag
 End Function
 
 '====================== 评论发表函数 ===========================================================
@@ -139,13 +140,13 @@ Function postcomm
         Exit Function
     End If
 
-    If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
-        ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
-        ReInfo(2) = "WarningIcon"
-        postcomm = ReInfo
-        Exit Function
-    End If
+ '   If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
+  '      ReInfo(0) = "评论发表错误信息"
+  '      ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
+  '      ReInfo(2) = "WarningIcon"
+ '       postcomm = ReInfo
+ '       Exit Function
+ '   End If
     
     If Len(username)<1 Then
         ReInfo(0) = "评论发表错误信息"
@@ -164,7 +165,7 @@ Function postcomm
     End If
 
     Dim checkMem
-    If memName = Empty Then
+    If memName = Empty Then'匿名评论
         If Len(password)>0 Then
             Dim loginUser
             loginUser = login(Request.Form("username"), Request.Form("password"))
@@ -185,7 +186,16 @@ Function postcomm
                 Exit Function
             End If
         End If
+    Else
+ 			If Not request.Cookies(CookieName)("memName") = username Then
+                ReInfo(0) = "评论发表错误信息"
+                ReInfo(1) = "请输入正确的用户名<br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+                ReInfo(2) = "WarningIcon"
+                postcomm = ReInfo
+                Exit Function
+            End If
     End If
+    
     If Not stat_CommentAdd Then
         ReInfo(0) = "评论发表错误信息"
         ReInfo(1) = "<b>你没有权限发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
@@ -245,6 +255,7 @@ Function postcomm
     Session(CookieName&"_LastDo") = "AddComment"
     postcomm = ReInfo
     PostArticle post_logID, False
+    call newEtag
 End Function
 %>
   <br/></div> 

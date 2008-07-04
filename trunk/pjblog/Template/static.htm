@@ -12,20 +12,18 @@
 <meta name="description" content="<$siteName$> - <$blog_Title$>" />
 <title><$log_Title$> - <$siteName$></title>
 <base href="<$base$>"></base>
+<style type="text/css">
+	.ownerClassLog{display:none}
+	.ownerClassComment{display:none}
+</style>
 <link rel="alternate" type="application/rss+xml" href="http://www.pjhome.net/feed.asp?cateID=3" title="订阅 PJBlog3 - test 所有文章(rss2)" />
 <link rel="alternate" type="application/atom+xml" href="http://www.pjhome.net/atom.asp?cateID=3"  title="订阅 PJBlog3 - test 所有文章(atom)"  />
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/global.css" type="text/css" media="all" />
-<!--全局样式表-->
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/layout.css" type="text/css" media="all" />
-<!--层次样式表-->
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/typography.css" type="text/css" media="all" />
-<!--局部样式表-->
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/link.css" type="text/css" media="all" />
-<!--超链接样式表-->
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/UBB/editor.css" type="text/css" media="all" />
-<!--UBB编辑器代码-->
 <link rel="stylesheet" rev="stylesheet" href="FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" />
-<!--FCK块引用&代码样式-->
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <script type="text/javascript" src="common/common.js"></script>
@@ -33,6 +31,8 @@
 	var g_styleID = "<$skin$>";
 	var g_logID = "<$LogID$>";
 	var g_comDesc = "<$comDesc$>";
+	
+	document.write ('<script type="text/javascript" src="static_js.asp"><\/script>')
 </script>
 <!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 </head>
@@ -65,7 +65,11 @@
 				</div>
 			    <div class="Content-Info">
 					<div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
-					<div class="InfoAuthor"><img src="images/weather/hn2_<$log_weather$>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="images/weather/hn2_t_<$log_weather$>.gif" alt=""/> <img src="images/<$log_level$>.gif" style="margin:0px 2px -1px 0px" alt=""/><!--<$EditAndDel$>--></div>
+					<div class="InfoAuthor"><img src="images/weather/hn2_<$log_weather$>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="images/weather/hn2_t_<$log_weather$>.gif" alt=""/> <img src="images/<$log_level$>.gif" style="margin:0px 2px -1px 0px" alt=""/>
+						<span class="ownerClassLog">
+						<a href="blogedit.asp?id=<$LogID$>" title="编辑该日志" accesskey="E"><img src="images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> <a href="blogedit.asp?action=del&amp;id=<$LogID$>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
+						</span>
+					</div>
 				</div>
 				<div id="logPanel" class="Content-body">
 					<$ArticleContent$>
@@ -77,7 +81,7 @@
 					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
 				</div>
-				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a></div>
+				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
 			</div>
 		</div>
 		<!-- 内容结束 -->   
@@ -101,6 +105,10 @@
 		          <td align="right" width="70"><strong>昵　称:</strong></td>
 		          <td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" /></td>
 		        </tr>
+		        <tr id="passArea">
+		      	  <td align="right" width="70"><strong>密　码:</strong></td>
+		      	  <td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
+		        </tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>内　容:</strong><br/></td>
 		          <td style="padding:2px;">
@@ -113,8 +121,7 @@
 		              <div class="editorContent">
 		                <textarea name="Message" class="editTextarea" style="height:150px;;" cols="1" rows="1" accesskey="R"></textarea>
 		              </div>
-		            </div>
-		            <script language="javascript" type="text/javascript">initUBB("Message")</script></td>
+		            </div></td>
 		        </tr>
 		        <tr>
 		          <td align="right" width="70"><strong>验证码:</strong></td>
@@ -170,10 +177,13 @@
     <p><a href="http://www.miibeian.gov.cn" style="font-size:12px"><b><$blogabout$></b></a></p>
   </div>
 </div>
-<script type="text/javascript" src="static_js.asp?id=<$LogID$>"></script>
+
 <script type="text/javascript">
 	//初始化日志页面
 	initAccessKey();
+	initSidebar();
+	initLogin('<$CookieName$>');
+	ping();
 </script>
 </body>
 </html>

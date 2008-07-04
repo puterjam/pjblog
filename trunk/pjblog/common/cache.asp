@@ -156,6 +156,8 @@ Sub FillRight(StatusCode) '写入权限变量
     stat_FileUpLoad = CBool(Mid(StatusCode, 10, 1))
     stat_Admin = CBool(Mid(StatusCode, 11, 1))
     stat_ShowHiddenCate = CBool(Mid(StatusCode, 12, 1))
+    
+    Response.Cookies(CookieName)("memRight") = StatusCode
 End Sub
 
 '=========================End Sub========================
@@ -599,4 +601,21 @@ Sub reloadcache
     log_module(2)
     Calendar "", "", "", 2
 End Sub
+
+'=====================304 支持==========================
+'更新Etag
+Sub newEtag
+        Application.Lock
+        Application(CookieName&"_Etag") = randomStr(10)
+        Application.UnLock
+End Sub
+
+'返回服务器的etag，由随机数和登录用户名组成
+Function getEtag
+ 	if IsEmpty(Application(CookieName&"_Etag")) then 
+ 		call newEtag
+ 	end if
+ 	
+ 	getEtag = Application(CookieName&"_Etag") & "-" & CheckStr(Request.Cookies(CookieName)("memName"))
+End Function
 %>
