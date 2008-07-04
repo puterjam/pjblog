@@ -140,13 +140,13 @@ Function postcomm
         Exit Function
     End If
 
- '   If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
-  '      ReInfo(0) = "评论发表错误信息"
-  '      ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
-  '      ReInfo(2) = "WarningIcon"
- '       postcomm = ReInfo
- '       Exit Function
- '   End If
+   If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
+        ReInfo(0) = "评论发表错误信息"
+        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
+        ReInfo(2) = "WarningIcon"
+        postcomm = ReInfo
+        Exit Function
+    End If
     
     If Len(username)<1 Then
         ReInfo(0) = "评论发表错误信息"
