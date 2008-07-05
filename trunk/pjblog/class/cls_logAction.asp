@@ -877,16 +877,27 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
     Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
 
-    Dim BTemp
+    Dim BTemp,urlLink
     BTemp = ""
+    
     If Not preLogC.EOF Then
-        BTemp = BTemp & "<a href=""?id="&preLogC("log_ID")&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+    	if blog_postFile = 2 then
+    		urlLink = "article/"&preLogC("log_ID")&".htm"
+    	else 
+    		urlLink = "?id="&preLogC("log_ID")
+    	end if
+        BTemp = BTemp & "<a href="""&urlLink&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
     Else
         BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
     End If
 
     If Not nextLogC.EOF Then
-        BTemp = BTemp & " | <a href=""?id="&nextLogC("log_ID")&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+    	if blog_postFile = 2 then
+    		urlLink = "article/"&nextLogC("log_ID")&".htm"	
+    	else 
+    		urlLink = "?id="&nextLogC("log_ID")
+    	end if
+        BTemp = BTemp & " | <a href="""&urlLink&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
     Else
         BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
     End If
@@ -916,15 +927,28 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     LoadTemplate1 = LoadFromFile("Template/static.htm")
 
     If LoadTemplate1(0) <> 0 Then Exit Sub'读取成功后写入信息
-
+    
+    '静态页面特有的属性
+	baseUrl = "http://" & Request.ServerVariables("HTTP_HOST") & Request.ServerVariables("URL")
+	baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
+	
     '读取分类信息
     Temp1 = LoadTemplate1(1)
 
     '读取日志内容
     SQL = "SELECT TOP 1 * FROM blog_Content WHERE log_ID=" & LogID
     SQLQueryNums = SQLQueryNums + 1
-
+	
     Set log_View = conn.Execute(SQL)
+    
+	if log_View("log_IsShow") = false then '如果是私密日志
+    	SaveArticle = SaveToFile("<head><title>显示隐藏日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到隐藏日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", "article/" & LogID & ".htm")
+    	PostHalfStatic LogID, UpdateListOnly
+	    
+	    Set log_View = Nothing
+	    exit Sub
+	end if
+    
     Dim blog_Cate, blog_CateArray, comDesc
     Dim getCate, getTags
 
@@ -934,7 +958,6 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
     
 	if UpdateListOnly then '只更新列表缓存
-	    PostArticleListCache LogID, log_View, getCate, getTags
 	
 	    Set log_View = Nothing
 	    Set getCate = Nothing
@@ -942,10 +965,9 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	    exit Sub
 	end if 
 	
+
+	
     If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If	
-    '静态页面特有的属性
-	baseUrl = "http://" & Request.ServerVariables("HTTP_HOST") & Request.ServerVariables("URL")
-	baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
     
     Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
     Temp1 = Replace(Temp1, "<$base$>", baseUrl)
@@ -958,7 +980,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     
    '输出第一页评论
 
-    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True))   
+    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow")))   
     
     
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
@@ -972,13 +994,6 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
     Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-    Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
-
-    If log_View("log_IsShow") Then
-        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
-    Else
-        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
-    End If
 
     If Len(log_View("log_tag"))>0 Then
         Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
@@ -1059,7 +1074,7 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Temp2 = Replace(Temp2, "<$log_viewCount$>", log_View("log_ViewNums"))
     
     'article.asp?id=<$LogID$>
-    If blog_postFile = 2 Then
+    If blog_postFile = 2  and log_View("log_IsShow") Then
         Temp2 = Replace(Temp2, "<$pLink$>", "article/" & LogID & ".htm")
     else
 	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
@@ -1093,7 +1108,7 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
-            If blog_postFile = 1 Then
+            If blog_postFile = 1 or log_View("log_IsShow") = false Then
        	     Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
 			else
          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
@@ -1105,7 +1120,7 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            If blog_postFile = 1 Then
+            If blog_postFile = 1 or log_View("log_IsShow") = false Then
          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
          	else
          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")

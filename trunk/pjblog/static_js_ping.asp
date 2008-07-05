@@ -9,7 +9,7 @@
 <%
 	Dim id, tKey
 	id = 0
-	
+	Response.CacheControl = "no-cache"
 	If CheckStr(Request.QueryString("id"))<>Empty Then
 	    id = CheckStr(Request.QueryString("id"))
 	End If

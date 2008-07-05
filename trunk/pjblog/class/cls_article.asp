@@ -61,7 +61,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0), False 
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False,log_ViewArr(3, 0) 
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
@@ -138,7 +138,7 @@ Set getTag = New tag
 					   </div></div>
 					   </div>
 <%Set getTag = Nothing
-ShowComm LogID, comDesc, log_ViewArr(7, 0), False '显示评论内容
+ShowComm LogID, comDesc, log_ViewArr(7, 0), False,log_ViewArr(3, 0)  '显示评论内容
 End Sub
 
 
@@ -146,7 +146,7 @@ End Sub
 '  显示日志评论内容
 '*******************************************
 
-Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic)
+Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, ByVal logShow)
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
@@ -180,7 +180,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic)
         Url_Add = "?id="&LogID&"&"
         aName = "#comm_top"
         
-        If blog_postFile = 2 then '静态页面使用#方式来切换
+        If blog_postFile = 2 and logShow then '静态页面使用#方式来切换
         	BaseUrl = "article/" & LogID & ".htm"
         	Url_Add="#"
         	aName = ""
