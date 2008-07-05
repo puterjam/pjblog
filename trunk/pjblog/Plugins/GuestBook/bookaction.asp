@@ -83,7 +83,7 @@ function postMsg
       exit function  
   end if
   
-  IF cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) then
+  IF cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) Or IsEmpty(Session("GetCode")) then
       showmsg "留言发表错误信息","<b>验证码有误，请返回重新输入</b><br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">请返回重新输入</a>","ErrorIcon","plugins"
       exit function
   end if

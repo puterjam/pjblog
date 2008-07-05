@@ -95,7 +95,7 @@ Do Until bCounter.EOF Or PageC = bCounter.PageSize
           <td nowrap><%=bCounter("coun_OS")%></td>
           <td nowrap><%=bCounter("coun_Browser")%></td>
           <td nowrap align="left"><a href="<%=bCounter("coun_Referer")%>" target="_blank" title="<%=bCounter("coun_Referer")%>"><%=CutStr(bCounter("coun_Referer"),40)%></a></td>
-          <td nowrap><%=bCounter("coun_Time")%></td>
+          <td nowrap><%=DateToStr(bCounter("coun_Time"),"Y-m-d H:I:S")%></td>
 	   </tr>
    <%
 bCounter.MoveNext
@@ -1159,7 +1159,7 @@ ElseIf Request.QueryString("Smenu") = "Plugins" Then
           <td ><img src="images/<%=Blog_Plugins("type")%>.gif" width="16" height="16"/></td>
 		  <td align="left"><%=Blog_Plugins("title")%></td>
           <td align="left">Plugins/<%=Blog_Plugins("InstallFolder")%>/</td>
-          <td ><%=Blog_Plugins("InstallDate")%></td>
+          <td ><%=DateToStr(Blog_Plugins("InstallDate"),"Y-m-d H:I:S")%></td>
           <td>
           <%if len(Blog_Plugins("SettingXML"))>0 then %>
 		          <a href="?Fmenu=Skins&Smenu=PluginsOptions&Plugins=<%=Blog_Plugins("name")%>">基本设置</a>
@@ -1297,6 +1297,8 @@ ElseIf Request.QueryString("Smenu") = "PluginsOptions" Then
     '============================================================
     '    设置外观
     '============================================================
+Elseif Request.QueryString("Smenu")="delskin" then
+  delskin request.QueryString("SkinFolder")
 Else
     Dim SkinFolders, SkinFolder
     SkinFolders = Split(getPathList("skins")(0), "*")
@@ -1337,7 +1339,7 @@ If CheckObjInstalled(getXMLDOM()) And CheckObjInstalled("Scripting.FileSystemObj
 If LCase(blog_DefaultSkin) = LCase(SkinFolder) Then
     response.Write ("<div class=""cskin""><img src=""images/Control/select.gif"" alt="""" border=""0"" /></div>当前界面")
 Else
-    response.Write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')"">设置为当前主题</a>")
+    response.Write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')"">设置为当前主题</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=""ConContent.asp?Fmenu=Skins&Smenu=delskin&SkinFolder="&server.URLEncode(SkinFolder)&""" onclick=""if (!window.confirm('确定要删除此主题吗？')){return false}"">删除该主题</a>")
 End If
 
 %>
@@ -1541,7 +1543,7 @@ BackUpFiles = Split(getPathList("backup")(1), "*")
 For Each BackUpFile in BackUpFiles
     response.Write "<a href=""backup/"&BackUpFile&""" target=""_blank"">"&getFileIcons(getFileInfo("backup/"&BackUpFile)(1))&BackUpFile&"</a>"
     response.Write "&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&do=DelFile&source=backup/"&BackUpFile&""" title=""删除备份文件"">删除</a> | <a href=""?Fmenu=SQLFile&do=Restore&source=backup/"&BackUpFile&""" title=""删除备份文件"">还原数据库</a>"
-    response.Write " | "&getFileInfo("backup/"&BackUpFile)(0)&" | "&getFileInfo("backup/"&BackUpFile)(2)&"<br/>"
+    response.Write " | "&getFileInfo("backup/"&BackUpFile)(0)&" | "&DateToStr(getFileInfo("backup/"&BackUpFile)(2),"Y-m-d H:I:S")&"<br/>"
 Next
 
 %>
@@ -2468,7 +2470,7 @@ ElseIf Request.Form("action") = "Categories" Then
     '==========================评论留言处理===============================
 ElseIf Request.Form("action") = "Comment" Then
 
-    Dim selCommID, doCommID, doTitle, doRedirect, t1, t2
+    Dim selCommID, doCommID, doTitle, doRedirect, t1, t2, bookDB, commDB
     selCommID = Split(Request.Form("selectCommentID"), ", ")
     doCommID = Split(Request.Form("CommentID"), ", ")
 
@@ -2488,14 +2490,19 @@ ElseIf Request.Form("action") = "Comment" Then
                 PostArticle t2, False
                 doRedirect = "trackback"
             ElseIf Request.Form("whatdo") = "msg" Then
+                Set bookDB=Conn.Execute("select book_Messager FROM blog_book WHERE book_ID="&selCommID(i))
+                conn.execute("update blog_Info set blog_MessageNums=blog_MessageNums-1")
+                conn.execute("update blog_Member set mem_PostMessageNums=mem_PostMessageNums-1 where mem_Name='"&bookDB("book_Messager")&"'")
                 conn.Execute("DELETE * from blog_book where book_ID="&selCommID(i))
                 doTitle = "留言"
                 doRedirect = "msg"
             Else
                 t1 = Int(Split(selCommID(i), "|")(0))
                 t2 = Int(Split(selCommID(i), "|")(1))
+                Set commDB=Conn.Execute("select comm_Author FROM blog_Comment WHERE comm_ID="&t1)
                 conn.Execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&t2)
                 conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-1")
+                conn.execute("update blog_Member set mem_PostComms=mem_PostComms-1 where mem_Name='"&commDB("comm_Author")&"'")
                 conn.Execute("DELETE * from blog_Comment where comm_ID="&t1)
                 doTitle = "评论"
                 doRedirect = ""
@@ -2517,7 +2524,7 @@ ElseIf Request.Form("action") = "Comment" Then
                 If Int(Request.Form("edited_"&doCommID(i))) = 1 Then
                     conn.Execute("UPDATE blog_book SET book_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(Now(), "Y-m-d H:I:S")&"#,book_reply='"&checkStr(Request.Form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
                 Else
-                    conn.Execute("UPDATE blog_book SET book_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',book_replyAuthor='"&memName&"',book_reply='"&checkStr(Request.Form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
+                    conn.Execute("UPDATE blog_book SET book_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',book_reply='"&checkStr(Request.Form("reply_"&doCommID(i)))&"' WHERE book_ID="&doCommID(i))
                 End If
                 doTitle = "留言"
                 doRedirect = "msg"

@@ -543,6 +543,18 @@ Function htmlE(reString)
     End If
 End Function
 
+Function delskin(FolderName)
+    Dim upl
+    Set upl=Server.CreateObject("Scripting.FileSystemObject")
+    If upl.FolderExists(Server.MapPath("skins/"&folderName)) Then
+        upl.deleteFolder Server.MapPath("skins/"&folderName)
+    End If
+    Set upl = Nothing
+    session(CookieName&"_ShowMsg") = True
+    Session(CookieName&"_MsgText") = "已经删除了"&FolderName
+    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=")
+end function
+
 '-----------获取分类标题-------------------
 
 Function categoryTitle()
