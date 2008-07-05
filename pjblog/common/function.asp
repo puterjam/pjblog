@@ -989,7 +989,8 @@ Function regFilterSpam(Str, Path)
     spamXml.load(Server.MapPath(Path))
     If spamXml.parseerror.errorcode = 0 Then
         For Each spamItem in spamXml.selectNodes("//key")
-            r = rgExec(Str, spamItem.getAttribute("re"), spamItem.getAttribute("times"))
+            'r = rgExec(Str, spamItem.getAttribute("re"), spamItem.getAttribute("times"))
+            r = rgExec(str,replace(spamItem.getAttribute("re"),"\\","\"),spamItem.getAttribute("times"))
             If r>0 Then
                 regFilterSpam = True
                 Exit Function

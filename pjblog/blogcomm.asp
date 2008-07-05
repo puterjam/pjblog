@@ -96,7 +96,7 @@ Function postcomm
     post_Message = CheckStr(request.Form("Message"))
     FlowControl = False
 
-    If (memName = Empty Or blog_validate = True) And CStr(LCase(Session("GetCode")))<>CStr(LCase(validate)) Or IsEmpty(Session("GetCode")) Then
+    If (memName=empty or blog_validate=true) and (cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) or IsEmpty(Session("GetCode"))) Then
         ReInfo(0) = "评论发表错误信息"
         ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"
         ReInfo(2) = "ErrorIcon"
