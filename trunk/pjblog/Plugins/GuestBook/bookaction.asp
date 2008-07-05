@@ -62,6 +62,12 @@ function postMsg
       exit function 
   end if
 
+	if regFilterSpam(post_Message,"../../reg.xml") and stat_Admin=false then
+	    showmsg "留言发表错误信息","<b>留言中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">返回</a>","WarningIcon","plugins"
+	    exit function 
+	end if
+
+
   if FlowControl then 
       showmsg "留言发表错误信息","<b>禁止恶意灌水！</b><br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">返回</a>","WarningIcon","plugins"
       exit function 
