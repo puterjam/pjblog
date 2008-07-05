@@ -66,6 +66,7 @@ Function delcomm
         ReInfo(2) = "MessageIcon"
         logid = Conn.Execute("select blog_ID from blog_Comment where comm_ID="&post_commID)(0)
         Conn.Execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&blog_Comm("blog_ID"))
+        Conn.Execute("update blog_Member set mem_PostComms=mem_PostComms-1 where mem_Name='"&blog_CommAuthor&"'")
         Conn.Execute("DELETE * FROM blog_Comment WHERE comm_ID="&post_commID)
         Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-1")
         PostArticle logid, False
@@ -98,7 +99,7 @@ Function postcomm
 
     If (memName=empty or blog_validate=true) and (cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) or IsEmpty(Session("GetCode"))) Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"
+        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">返回重新输入</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Session("GetCode") = Empty
@@ -112,12 +113,28 @@ Function postcomm
         If Trim(LastMSG("comm_Content")) = Trim(post_Message) Then FlowControl = True
     End If
 
+    If Left(post_Message,1)= Chr(32) then
+            ReInfo(0)="评论发表错误信息"
+            ReInfo(1)="<b>评论内容中不允许首字空格</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(2)="WarningIcon"
+            postcomm = ReInfo
+	    Exit Function 
+	  End If
+  
+    If Left(post_Message,1)= Chr(13) then
+            ReInfo(0)="评论发表错误信息"
+            ReInfo(1)="<b>评论内容中不允许首字换行</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(2)="WarningIcon"
+            postcomm = ReInfo
+	    Exit Function 
+	  End If
+	  
     If stat_Admin = False Then
         '高级过滤规则
         If regFilterSpam(post_Message, "reg.xml") Then
             ReInfo(0) = "评论发表错误信息"
-            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
-            ReInfo(2) = "ErrorIcon"
+            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
             Exit Function
         End If
@@ -125,7 +142,7 @@ Function postcomm
         '基本过滤规则
         If filterSpam(post_Message, "spam.xml") Then
             ReInfo(0) = "评论发表错误信息"
-            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
+            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
             Exit Function
@@ -134,7 +151,7 @@ Function postcomm
 
     If FlowControl Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>禁止恶意灌水！</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
+        ReInfo(1) = "<b>禁止恶意灌水！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
         Exit Function
@@ -142,7 +159,7 @@ Function postcomm
 
    If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">返回</a>"
+        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
         Exit Function
@@ -150,7 +167,7 @@ Function postcomm
     
     If Len(username)<1 Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>请输入你的昵称.</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"
+        ReInfo(1) = "<b>请输入你的昵称.</b><br/><a href=""javascript:history.go(-1);"">返回重新输入</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
@@ -189,7 +206,7 @@ Function postcomm
     Else
  			If Not request.Cookies(CookieName)("memName") = username Then
                 ReInfo(0) = "评论发表错误信息"
-                ReInfo(1) = "请输入正确的用户名<br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+                ReInfo(1) = "<b>请输入正确的用户名</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
                 ReInfo(2) = "WarningIcon"
                 postcomm = ReInfo
                 Exit Function
@@ -223,7 +240,7 @@ Function postcomm
     End If
     If Len(post_Message)>blog_commLength Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "评论超过最大字数限制<br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(1) = "<b>评论超过最大字数限制</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
