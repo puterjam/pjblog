@@ -421,10 +421,12 @@ Class logArticle
         Dim preLog, nextLog
         Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&id)
         Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&id)
+        
         DeleteFiles Server.MapPath("post/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/c_"&logid&".js")
-
+		DeleteFiles Server.MapPath("article/"&logid&".htm")
+		
         Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
         '输出附近的日志到文件
