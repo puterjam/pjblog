@@ -129,7 +129,7 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
     <input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
     <input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
     <input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
-    
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="silentMode" value="1" id="B4" checked	/> <label for="B4">静态化日志安静模式 <span style="color:#666">(使用安静模式不出现进度条，速度较快)</span></label><br/><br/>
     <b>3.日志列表索引</b><br/>
     <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/>
    </div>
@@ -2197,42 +2197,6 @@ ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎
 %>
     <!--#include file="common/ubbcode.asp" -->
     <%
-If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then           
-    Application.Lock
-    Application(CookieName & "_SiteEnable") = 0
-    Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站在初始化数据，请稍后在访问. :P"
-    Application.UnLock
-    
-    Dim LoadArticle, LogLen
-    LogLen = 0
-    Set LoadArticle = conn.Execute("SELECT log_ID FROM blog_Content")
-    Do Until LoadArticle.EOF
-    	if Request.Form("ReBulidArticle") = 2 then 
-     	   PostArticle LoadArticle("log_ID"), True
-    	else
-      	  PostArticle LoadArticle("log_ID"), False
-    	end if
-        LogLen = LogLen + 1
-        LoadArticle.movenext
-    Loop
-    
-    Application.Lock
-    Application(CookieName & "_SiteEnable") = 1
-    Application(CookieName & "_SiteDisbleWhy") = ""
-    Application.UnLock
-    
-    session(CookieName&"_ShowMsg") = True
-    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共处理了 "&LogLen&" 篇日志文件! "
-End If
-
-If Request.Form("ReBulidIndex") = 1 Then
-    Dim lArticle
-    Set lArticle = New ArticleCache
-    lArticle.SaveCache
-    Set lArticle = Nothing
-    session(CookieName&"_ShowMsg") = True
-    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"重新输出日志索引! "
-End If
 
 If Request.Form("ReTatol") = 1 Then
     Dim blog_Content_count, blog_Comment_count, ContentCount, TBCount, Count_Member
@@ -2265,7 +2229,88 @@ If Request.Form("ReBulid") = 1 Then
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"缓存重建成功! "
 End If
-RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Misc")
+
+If Request.Form("ReBulidIndex") = 1 Then
+    Dim lArticle
+    Set lArticle = New ArticleCache
+    lArticle.SaveCache
+    Set lArticle = Nothing
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"重新输出日志索引! "
+End If
+
+If Request.Form("ReBulidArticle") = 1 or Request.Form("ReBulidArticle") = 2 Then  
+    Dim LoadArticle,LoadArticleCount, LogLen,silent
+    Set LoadArticleCount = conn.Execute("SELECT count(log_ID) FROM blog_Content")
+    LogLen = LoadArticleCount(0).value
+    Set LoadArticleCount = nothing
+    silent = Request.Form("silentMode")
+    if silent <> 1 then
+	%>
+		<h5 style="margin-bottom:4px;">正在静态化相关的日志缓存... 共<%=LogLen%>篇日志需要处理. <span style="color:#f00">静态化过程，请不要关闭您的浏览器</span></h5>
+		<div style="background:#fff;padding:1px;border:1px solid #333">
+			<div id="per" style="width:0%;background:#0000a0 url(images/per.png);overflow:hidden;color:#fff;font-weight:bold;padding:2px;font-family:verdana;font-size:12px;white-space:nowrap">0%</div>
+		</div>
+		<script>
+			var _t = <%=LogLen%>;
+			var _p = document.getElementById("per");
+			var _cc = document.getElementById("cc");
+			var d = new Date();
+			function _s(c) {
+				var p = parseInt((c/_t)*100);
+				var d1 = new Date();
+				_p.style.width = p + "%";
+				_p.innerHTML = c + " of " + _t + " : " + p + "%" + " : " + ((d1 -d)/1000) + "s";
+				//_cc.innerHTML = c;
+			}
+		</script>
+	<%
+	end if
+    Application.Lock
+    Application(CookieName & "_SiteEnable") = 0
+    Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站在初始化数据，请稍后在访问. :P"
+    Application.UnLock
+    
+
+    
+    Set LoadArticle = conn.Execute("SELECT log_ID FROM blog_Content")
+	dim iLen
+	Do Until LoadArticle.EOF
+    	if Request.Form("ReBulidArticle") = 2 then 
+     	   PostArticle LoadArticle("log_ID"), True
+    	else
+     	   PostArticle LoadArticle("log_ID"), False
+    	end if
+    	
+    	if silent <> 1 then
+	    	iLen = iLen + 1
+	    	Response.write ("<script>_s(" & iLen & ");</script>")
+	    	Response.Flush()
+    	end if
+    	
+        LoadArticle.movenext
+    Loop
+    
+    Application.Lock
+    Application(CookieName & "_SiteEnable") = 1
+    Application(CookieName & "_SiteDisbleWhy") = ""
+    Application.UnLock
+    
+    session(CookieName&"_ShowMsg") = True
+    session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"共处理了 "&LogLen&" 篇日志文件! "
+    
+    if silent<>1  then 
+ 	   Response.write ("<script>setTimeout(""location = 'ConContent.asp?Fmenu=General&Smenu=Misc'"",2000);</script>")
+  	   Response.write ("<div><b style='color:#040;font-size:12px;margin:4px;'>静态化完成... </b></div>")
+  	else 
+  		RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Misc")
+  	end if
+else
+	RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Misc")
+End If
+
+
+
 Else
     session(CookieName&"_ShowMsg") = True
     session(CookieName&"_MsgText") = "非法提交内容"
