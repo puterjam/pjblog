@@ -6,6 +6,7 @@
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="class/cls_wap.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
 <!--#include file="common/library.asp" -->
 <%
 '==================================
@@ -57,13 +58,16 @@ Case "showComment":
     outComment
 Case "postComment":
     outPostComment
-Case "postLog":
-    outPostLog
+Case "postArtile":
+    outwap_AritclePost
 Case "editLog":
     outEditLog
+Case "Articleadd":
+    Articleadd
 Case Else: 'Wap Default Page
     outDefault
 End Select
 
+Call CloseDB
 %>
 </wml>

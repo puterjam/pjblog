@@ -24,8 +24,9 @@ Sub outDefault 'Output Default
     response.Write "<p><a href=""wap.asp"">"&toUnicode(HTMLDecode(SiteName))&"</a><br/>&nbsp;</p>"
     response.Write "<p><a href=""wap.asp?do=showLog"">"&toUnicode("最新日志")&"</a></p>"
     response.Write "<p><a href=""wap.asp?do=showComment"">"&toUnicode("最新评论")&"</a></p>"
-    Dim Arr_Category, Category_Len, i
+    Dim Arr_Category, Category_Len, i,Category_code
     CategoryList(3)
+    Category_code = ""
     Arr_Category = Application(CookieName&"_blog_Category")
     If UBound(Arr_Category, 1) = 0 Then Exit Sub
     Category_Len = UBound(Arr_Category, 2)
@@ -232,6 +233,51 @@ Sub outLogDetail
     Set Conn = Nothing
 End Sub
 
+
+Sub Articleadd() '发表日志
+    outCardHead ("欢迎光临")
+    response.Write "<p><a href=""wap.asp"">"&toUnicode(HTMLDecode(SiteName))&"</a><br/>&nbsp;</p>"
+    If stat_AddAll = True Or stat_Add = True Then
+        response.Write "<p><br/><b>发表日志:</b></p><p>"
+%>
+        分类：<select name="log_CateID" id="log_CateID">
+          <option value="" selected="selected" style="color:#333">请选择分类</option>
+          <%
+Dim Arr_Category, Category_Len, i
+Arr_Category = Application(CookieName&"_blog_Category")
+If UBound(Arr_Category, 1) = 0 Then Exit Sub
+Category_Len = UBound(Arr_Category, 2)
+
+For i = 0 To Category_Len
+    If Not Arr_Category(4, i) Then
+        If CBool(Arr_Category(10, i)) Then
+            If stat_ShowHiddenCate And stat_Admin Then Response.Write("<option value='"&Arr_Category(0, i)&"'>"&Arr_Category(1, i)&"&nbsp;["&Arr_Category(7, i)&"]</option>")
+        Else
+            Response.Write("<option value='"&Arr_Category(0, i)&"'>"&Arr_Category(1, i)&"["&Arr_Category(7, i)&"]</option>")
+        End If
+    End If
+Next
+
+%>
+        </select><br/>
+<%
+response.Write toUnicode("标题: ")&"<input emptyok=""false"" name=""Artile_Title"" size=""10"" maxlength=""50"" type=""text"" value="""" /><br/>"
+response.Write toUnicode("tags: ")&"<input emptyok=""false"" name=""tags"" size=""10"" maxlength=""50"" type=""text"" value="""" /><br/>"
+response.Write toUnicode("内容: ")&"<input emptyok=""false"" name=""Article_content"" size=""10""  maxlength=""1000"" value="""" /><br/>"
+response.Write "<anchor>"&toUnicode("发表")&"<go href=""wap.asp?do=postArtile"" method=""post"">"
+response.Write "<postfield name=""log_CateID"" value=""$(log_CateID)"" />"
+response.Write "<postfield name=""Artile_Title"" value=""$(Artile_Title)"" />"
+response.Write "<postfield name=""tags"" value=""$(tags)"" />"
+response.Write "<postfield name=""Article_content"" value=""$(Article_content)"" />"
+response.Write "<postfield name=""username"" value="""&memName&""" />"
+response.Write "</go></anchor>"
+response.Write "&nbsp;<a href=""#MainCard"">"&toUnicode("返回")&"</a></p>"
+Else
+    response.Write "<p><br/>你没有权限发表日志</p>"
+End If
+outCardFoot
+End Sub
+
 '--------------------输出导航----------------
 
 Sub getPage (lN, cP, wP, uA)
@@ -375,10 +421,9 @@ End Sub
 Sub outControl
     response.Write "<p>&nbsp;<br/>"
     If memName<>Empty Then response.Write "<b>"&toUnicode(memName)&"</b>"&toUnicode("，欢迎你!")&"<br/>"
-    'if stat_AddAll=true or stat_Add=true then response.write "<a href=""blogpost.asp"">"&toUnicode("发表新日志")&"</a>"
+    If stat_AddAll = True Or stat_Add = True Then response.Write "<a href=""wap.asp?do=Articleadd"">"&toUnicode("发表新日志")&"</a>"
     If request.QueryString("do") = "showLogDetail" And stat_CommentAdd And blog_wapComment Then response.Write "<br/><a href=""#postCommentCard"">"&toUnicode("发表评论")&"</a>"
     If memName<>Empty Then
-        'if stat_AddAll and stat_Add then response.write "<br/><a href=""wap.asp?do=postLog"">"&toUnicode("发表日志")&"</a>"
         response.Write "<br/><a href=""wap.asp?do=Logout"">"&toUnicode("登出")&"</a>"
     Else
         If blog_wapLogin Then response.Write "<br/><a href=""wap.asp?do=Login"">"&toUnicode("登入")&"</a>"
@@ -397,9 +442,6 @@ Sub outCardFoot 'Output Foot
     response.Write "</card>"
 End Sub
 
-Sub postLog
-
-End Sub
 
 Sub outPostComment
     Dim postComment
@@ -503,11 +545,71 @@ Function wap_CommentPost
     Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums+1")
     Response.Cookies(CookieName)("memLastpost") = Now()
     getInfo(2)
-    NewComment(2)
+
+    Dim blog_Comment, ShowLen, i
+    ShowLen = 10 '显示最新评论预览数量
+    '-----------------写入最新评论缓存--------------------
+    Dim log_Comments
+    SQL = "SELECT top "&ShowLen&" comm_ID,blog_ID,comm_Author,comm_Content,comm_PostTime" &_
+    " FROM blog_Comment as C,blog_Content as T,blog_Category as A where C.blog_ID=T.log_ID and T.log_IsShow=true and T.log_CateID=A.cate_ID and A.cate_Secret=false order by C.comm_PostTime Desc"
+    Set log_Comments = Conn.Execute(SQL)
+    SQLQueryNums = SQLQueryNums + 1
+    If log_Comments.EOF Or log_Comments.bof Then
+        ReDim blog_Comment(0, 0)
+    Else
+        blog_Comment = log_Comments.GetRows(ShowLen)
+    End If
+    Set log_Comments = Nothing
+    Application.Lock
+    Application(CookieName&"_blog_Comment") = blog_Comment
+    Application.UnLock
 
     If memName<>Empty Then conn.Execute("update blog_Member set mem_PostComms=mem_PostComms+1 where mem_Name='"&memName&"'")
     PostArticle post_logID
     wap_CommentPost = "<b>"&toUnicode("你成功地对该日志发表了评论")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#CommentCard"">"&toUnicode("返回")&"</a>"
+End Function
+
+Sub outwap_AritclePost
+    Dim postAritcle
+    postAritcle = wap_AritclePost
+
+    response.Write "<head><meta forua=""true"" http-equiv=""Cache-Control"" content=""max-age=0"" /></head>"
+    response.Write "<card id=""splashscreen"" ontimer=""wap.asp"" title="""&toUnicode("发表日志")&""">"
+    response.Write "<p>"&postAritcle&"</p>"
+
+    outCardFoot
+    Conn.Close
+    Set Conn = Nothing
+End Sub
+
+Function wap_AritclePost '提交日志
+    wap_AritclePost = ""
+    If stat_AddAll = True Or stat_Add = True Then
+        Dim lArticle, postLog
+        Set lArticle = New logArticle
+        lArticle.categoryID = request.Form("log_CateID")
+        lArticle.logTitle = request.Form("Artile_Title")
+        lArticle.logAuthor = memName
+        lArticle.logIsDraft = request.Form("log_IsDraft")
+        lArticle.logMessage = request.Form("Article_content")
+        lArticle.logTags = request.Form("tags")
+        postLog = lArticle.postLog
+        Set lArticle = Nothing
+        If postLog(0)<0 Then
+            wap_AritclePost = "<b>"&toUnicode("发表日志失败")&"</b><br/><a href=""wap.asp"">"&toUnicode("返回")&"</a>"
+        End If
+        If postLog(0)>= 0 Then
+            wap_AritclePost = "<b>"&toUnicode("发表日志成功")&"</b><br/><a href=""wap.asp"">"&toUnicode("返回")&"</a>"
+            Dim Article_code
+            If Session(CookieName&"_LastDo") = "DelArticle" Or Session(CookieName&"_LastDo") = "AddArticle" Or Session(CookieName&"_LastDo") = "EditArticle" Then NewArticle(2)
+            Article_code = NewArticle(0)
+            side_html_default = Replace(side_html_default, "<$NewLog$>", Article_code)
+            side_html = Replace(side_html, "<$NewLog$>", Article_code)
+        End If
+    Else
+        response.Write "<p><br/>你没有权限发表日志</p>"
+        Exit Function
+    End If
 End Function
 
 Function toUnicode(Str) 'To Unicode
@@ -530,6 +632,43 @@ Function toUnicodeJS(Str) 'To Unicode
         End If
     Next
 End Function
+
+Function NewArticle(ByVal action)
+    Dim blog_Article
+    If Not IsArray(Application(CookieName&"_blog_Article")) Or action = 2 Then
+        Dim book_Articles, book_Article
+        Set book_Articles = Conn.Execute("SELECT top 10 C.log_ID,C.log_Author,C.log_IsShow,C.log_PostTime,C.log_title,L.cate_ID,L.cate_Secret FROM blog_Content AS C,blog_Category AS L where L.cate_ID=C.log_CateID and L.cate_Secret=false and C.log_IsDraft=false order by log_ID Desc")
+        SQLQueryNums = SQLQueryNums + 1
+        TempVar = ""
+        Do While Not book_Articles.EOF
+            If book_Articles("cate_Secret") Then
+                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[隐藏分类日志]"
+            ElseIf book_Articles("log_IsShow") Then
+                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&book_Articles("log_title")
+            Else
+                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[隐藏日志]"
+            End If
+            TempVar = "|$|"
+            book_Articles.MoveNext
+        Loop
+        Set book_Articles = Nothing
+        blog_Article = Split(book_Article, "|$|")
+        Application.Lock
+        Application(CookieName&"_blog_Article") = blog_Article
+        Application.UnLock
+    Else
+        blog_Article = Application(CookieName&"_blog_Article")
+    End If
+
+    If action<>2 Then
+        Dim Article_Items, Article_Item
+        For Each Article_Items IN blog_Article
+            Article_Item = Split(Article_Items, "|,|")
+            NewArticle = NewArticle&"<a class=""sideA"" href=""default.asp?id="&Article_Item(0)&""" title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&Chr(10)&CCEncode(CutStr(Article_Item(3), 25))&""">"&CCEncode(CutStr(Article_Item(3), 25))&"</a>"
+        Next
+    End If
+End Function
+
 %>
 
 <script runat="server" Language="javascript">
