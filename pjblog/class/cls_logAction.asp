@@ -1110,10 +1110,10 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
-            If blog_postFile = 1 or log_View("log_IsShow") = false Then
-       	     Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
+            If blog_postFile = 2 and log_View("log_IsShow") Then
+          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
 			else
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
   			End If
   			
         Else
@@ -1122,10 +1122,10 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            If blog_postFile = 1 or log_View("log_IsShow") = false Then
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+            If blog_postFile = 2 and log_View("log_IsShow") Then
+             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
          	else
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
          	end if           
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")

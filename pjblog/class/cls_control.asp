@@ -551,6 +551,7 @@ Function categoryTitle()
     Smenu = Request.QueryString("Smenu")
     Set cTitle = Server.CreateObject("Scripting.Dictionary")
     cTitle.Add "General.Misc" , "站点基本设置 - 初始化数据"
+    cTitle.Add "General.clear" , "站点基本设置 - 清理服务器缓存"
     cTitle.Add "General.visitors" , "站点基本设置 - 查看访客记录"
     cTitle.Add "General." , "站点基本设置 - 设置基本信息"
 
