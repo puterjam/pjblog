@@ -107,10 +107,10 @@ Else
     Response.Write("<summary type=""html""><![CDATA["&AddSiteURL(UBBCode(HTMLEncode(FeedRows(4, i)), 0, 0, 0, 1, 1))&"]]></summary>")
 End If
 
-    If blog_postFile = 1 Then
-        url = SiteURL&"article.asp?id="&FeedRows(0, i)
+    If blog_postFile = 2 Then
+      		url = SiteURL&"article/"&FeedRows(0, i)&".htm"
       else
-   		url = SiteURL&"article/"&FeedRows(0, i)&".htm"
+      		url = SiteURL&"article.asp?id="&FeedRows(0, i)
     end if
 %>
 	  <link rel="alternate" type="text/html" href="<%=url%>" /> 

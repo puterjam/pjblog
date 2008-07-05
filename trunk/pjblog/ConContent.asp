@@ -55,7 +55,7 @@ If Request.QueryString("Fmenu") = "General" Then '站点基本设置
   </tr>
   <tr>
     <td class="CPanel">
-    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a></div>
+    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
 <%
 If Request.QueryString("Smenu") = "visitors" Then
 %>
@@ -105,6 +105,13 @@ bCounter.Close
 Set bCounter = Nothing
 response.Write ("</table>")
 End If
+ElseIf Request.QueryString("Smenu") = "clear" Then
+        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+        Application.Lock
+        FreeApplicationMemory
+        Application.UnLock
+        Response.Write "<br/><span><b style='color:#040'>缓存清理完毕...	</b></span>"
+        Response.Write "</div>"
 ElseIf Request.QueryString("Smenu") = "Misc" Then
 %>
 <form action="ConContent.asp" method="post" style="margin:0px">
@@ -220,7 +227,7 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
 	    <tr><td width="180" align="right">每页显示评论数</td><td width="300"><input name="blogcommpage" type="text" size="5" class="text" value="<%=blogcommpage%>"/> 篇</td></tr>
 		<tr><td width="180" align="right">发表评论时间间隔</td><td width="300"><input name="blog_commTimerout" type="text" size="5" class="text" value="<%=blog_commTimerout%>"/> 秒</td></tr>
 		<tr><td width="180" align="right">发表评论字数限制</td><td width="300"><input name="blog_commLength" type="text" size="5" class="text" value="<%=blog_commLength%>"/> 字</td></tr>
-		<tr><td width="180" align="right">发表评论必须输入验证码</td><td width="300"><input name="blog_validate" type="checkbox" value="1" <%if blog_validate then response.write ("checked=""checked""")%>  /> <span style="color:#999">可以让会员不写验证码也可以发表评论</span> </td></tr>
+		<tr><td width="180" align="right">发表评论必须输入验证码</td><td width="300"><input name="blog_validate" type="checkbox" value="1" <%if blog_validate then response.write ("checked=""checked""")%>  /> <span style="color:#999">可以让会员不用输入验证码，只有全动态模式有效</span> </td></tr>
 		<tr><td width="180" align="right">禁用评论UBB代码</td><td width="300"><input name="blog_commUBB" type="checkbox" value="1" <%if blog_commUBB then response.write ("checked=""checked""")%>  /></td></tr>
 		<tr><td width="180" align="right">禁用评论贴图</td><td width="300"><input name="blog_commIMG" type="checkbox" value="1" <%if blog_commIMG then response.write ("checked=""checked""")%> /></td></tr>
 		</table>

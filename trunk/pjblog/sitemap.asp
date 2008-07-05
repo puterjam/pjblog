@@ -64,10 +64,10 @@ If UBound(FeedRows, 1)>0 Then
             .Write vbCrLf
             .Write "    <loc>"
             
-             If blog_postFile = 1 Then
-         	   .Write SiteURL&"article.asp?id="&FeedRows(0, i)
+             If blog_postFile = 2 Then 
+             	.Write SiteURL&"article/"&FeedRows(0, i)&".htm"
             else
-          	  .Write SiteURL&"article/"&FeedRows(0, i)&".htm"
+          	 	.Write SiteURL&"article.asp?id="&FeedRows(0, i)
             end if
             
             .Write "</loc>"

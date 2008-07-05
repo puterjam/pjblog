@@ -91,10 +91,10 @@ Else
 	dim url
     For i = 0 To UBound(FeedRows, 2)
     
-    If blog_postFile = 1 Then
-        url = SiteURL&"article.asp?id="&FeedRows(0, i)
+    If blog_postFile = 2 Then
+        url = SiteURL&"article/"&FeedRows(0, i)&".htm"
       else
-   		url = SiteURL&"article/"&FeedRows(0, i)&".htm"
+      	url = SiteURL&"article.asp?id="&FeedRows(0, i)
     end if
 %>
 			<item>
