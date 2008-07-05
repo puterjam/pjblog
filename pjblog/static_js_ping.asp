@@ -4,7 +4,7 @@
 <!--#include file="common/cache.asp" -->
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="common/ModSet.asp" -->
-<!--#include file="plugins.asp" -->
+
 <!--#include file="class/cls_article.asp" -->
 <%
 	Dim id, tKey
