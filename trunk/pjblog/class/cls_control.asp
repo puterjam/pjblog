@@ -598,7 +598,7 @@ Function categoryTitle()
     cTitle.Add "smilies.KeyWord" , "表情与关键字 - 关键字管理"
     cTitle.Add "smilies." , "表情与关键字 - 表情管理"
 
-    cTitle.Add "Status." , "服务器配置信息"
+    cTitle.Add "Status." , "服务器配置信息 - PJBlog3"
 
     cTitle.Add "welcome." , "欢迎使用PJBlog3"
 

@@ -92,8 +92,8 @@ Sub getInfo(ByVal action)
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
 
-        blog_version = "2.8.2.117" '当前PJBlog版本号
-        blog_UpdateDate = "2008-07-5"'PJBlog最新更新时间
+        blog_version = "2.8.3.127" '当前PJBlog版本号
+        blog_UpdateDate = "2008-07-12"'PJBlog最新更新时间
 
     End If
 End Sub

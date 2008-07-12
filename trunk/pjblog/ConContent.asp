@@ -180,16 +180,6 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
     </div>
 	</fieldset>
 	<fieldset>
-    <legend> 显示设置</legend>
-    <div align="left">
-      <table border="0" cellpadding="2" cellspacing="1">
-	  <tr><td width="180" align="right">每页显示日志</td><td width="300"><input name="blogPerPage" type="text" size="5" class="text" value="<%=blogPerPage%>"/> 篇</td></tr>
-	  <tr><td width="180" align="right">默认显示模式</td><td width="300"><select name="blog_DisMod"><option value="0">普通</option><option  value="1" <%if blog_DisMod then response.write ("selected=""selected""")%>>列表</option></select></td></tr>
-	  <tr><td width="180" align="right">是否在首页显示图片友情链接</td><td width="300"><input name="blog_ImgLink" type="checkbox" value="1" <%if blog_ImgLink then response.write ("checked=""checked""")%>  /> </td></tr>
-      </table>
-    </div>
-	</fieldset>
-	<fieldset>
     <legend> 日志保存设置</legend>
     <div align="left">
       <table border="0" cellpadding="2" cellspacing="1">
@@ -221,6 +211,17 @@ ElseIf Request.QueryString("Smenu") = "Misc" Then
       </table>
     </div>
 	</fieldset>	
+	<fieldset>
+    <legend> 显示设置</legend>
+    <div align="left">
+      <table border="0" cellpadding="2" cellspacing="1">
+	  <tr><td width="180" align="right">每页显示日志</td><td width="300"><input name="blogPerPage" type="text" size="5" class="text" value="<%=blogPerPage%>"/> 篇</td></tr>
+	  <tr><td width="180" align="right">默认显示模式</td><td width="300"><select name="blog_DisMod"><option value="0">普通</option><option  value="1" <%if blog_DisMod then response.write ("selected=""selected""")%>>列表</option></select></td></tr>
+	  <tr><td width="180" align="right">是否在首页显示图片友情链接</td><td width="300"><input name="blog_ImgLink" type="checkbox" value="1" <%if blog_ImgLink then response.write ("checked=""checked""")%>  /> </td></tr>
+      </table>
+    </div>
+	</fieldset>
+	
 	<fieldset>
     <legend> 评论设置</legend>
 		<table border="0" cellpadding="2" cellspacing="1">
@@ -318,7 +319,7 @@ Loop
 
 %>
 	    <tr align="center" bgcolor="#D5DAE0">
-        <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加Tag</td>
+        <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加Tag</td>
        </tr>	
         <tr align="center">
 		  <td></td>
@@ -542,7 +543,7 @@ Set CategoryListDB = Nothing
 
 %>
         <tr align="center" bgcolor="#D5DAE0">
-         <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加日志分类</td>
+         <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加日志分类</td>
         </tr>
         <tr>
           <td align="center" nowrap><img name="CateImg" src="images/icons/1.gif" width="16" height="16" />
@@ -596,7 +597,7 @@ ElseIf Request.QueryString("Fmenu") = "Comment" Then
    </tr>
   <tr>
     <td class="CPanel">
-	<div class="SubMenu" style="line-height:160%">
+	<div class="SubMenu2">
 		<b>评论管理:</b> <a href="?Fmenu=Comment">评论管理</a> | <a href="?Fmenu=Comment&Smenu=msg">留言管理</a> | <a href="?Fmenu=Comment&Smenu=trackback">引用管理</a>
 		<br/>
 		<b>评论过滤:</b> <a href="?Fmenu=Comment&Smenu=spam" title="面向初级用户,提供简单的过滤功能">初级过滤功能</a> | <a href="?Fmenu=Comment&Smenu=reg" title="面向高级级用户,提供功能强大的过滤功能">高级过滤功能</a>
@@ -665,7 +666,7 @@ ElseIf Request.QueryString("Smenu") = "reg" Then
 		     	 	<td colspan=3 id="reList"></td>
 		     	 </tr>
 		        <tr align="center" bgcolor="#D5DAE0">
-		      	   <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新规则</td>
+		      	   <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新规则</td>
 		        </tr>
 		     	<tr>
 		     	 	<td colspan=3>
@@ -678,7 +679,7 @@ ElseIf Request.QueryString("Smenu") = "reg" Then
 		     	 	</td>
 		     	 </tr>
 		        <tr align="center" bgcolor="#D5DAE0">
-		      	   <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/html.gif" style="margin:0px 2px -3px 2px"/>测试文本区域</td>
+		      	   <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/html.gif" style="margin:0px 2px -3px 2px"/>测试文本区域</td>
 		        </tr>
 		     	<tr>
 		     	 	<td colspan=3>
@@ -829,7 +830,7 @@ ElseIf Request.QueryString("Fmenu") = "Skins" Then
   </tr>
   <tr>
     <td class="CPanel">
-	<div class="SubMenu">
+	<div class="SubMenu2">
 	<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <br/> 
 	<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
 
@@ -893,20 +894,24 @@ If Request.QueryString("Smenu") = "module" Then
           <td  class="TDHead"><nobr>模块操作</nobr></td>
           </tr>
 <%
-Dim blogModule,flag
+Dim blogModule,flag,moduleIcon
 Set blogModule = conn.Execute("select * from blog_module where type<>'function' order by type desc,SortID asc")
 Do Until blogModule.EOF
 flag = 0
+moduleIcon = blogModule("type")
 if blogModule("IsHidden") then flag = flag + 1
 if blogModule("IndexOnly") then flag = flag + 2
-if blogModule("IsSystem") then flag = flag + 4
+if blogModule("IsSystem") then
+	flag = flag + 4
+	moduleIcon = "system"
+end if
 
 
 %>     <tr name="moduleItem" mType="<%=flag%>" id="tr_<%=blogModule("id")%>" align="center" style="background:<%if blogModule("type")="content" then response.write ("#a9c9e9")%>;">
           <td><input type="checkbox" name="selectID" value="<%=blogModule("id")%>"/></td>
           <td><%if blogModule("IsHidden") then response.write "<img src=""images/hidden.gif"" alt=""隐藏模块""/>" %></td>
 	      <td><%if blogModule("IndexOnly") then response.write "<img src=""images/top.gif"" alt=""只在首页出现""/>" %></td>
-          <td><img name="Mimg_<%=blogModule("id")%>" src="images/<%=blogModule("type")%>.gif" width="16" height="16"/></td>
+          <td><img name="Mimg_<%=blogModule("id")%>" src="images/<%=moduleIcon%>.gif" width="16" height="16"/></td>
           <td align="left" style="padding-left:5px;"><input type="hidden" name="mID" value="<%=blogModule("id")%>"/>
 	           <%if blogModule("IsSystem") then
 	         		 response.write "<input name=""mType"" type=""hidden"" value="""&blogModule("type")&"""> &nbsp;<span style='color:#999'>系统</span> "
@@ -933,7 +938,7 @@ Loop
 
 %>
         <tr align="center" bgcolor="#D5DAE0">
-         <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新模块</td>
+         <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新模块</td>
         </tr>    
         <tr align="center">
           <td></td>
@@ -1764,7 +1769,7 @@ Else
         <tr align="center">
           <td nowrap="nowrap" class="TDHead">权限标识</td>
           <td nowrap="nowrap" class="TDHead">权限标题</td>
-          <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
+          <td width="100" nowrap="nowrap" class="TDHead">&nbsp;</td>
 	   </tr>
 <%
 blog_Status = Application(CookieName&"_blog_rights")
@@ -1784,7 +1789,7 @@ For i = 0 To blog_Status_Len
 	   </tr>
 <%next%>
         <tr align="center" bgcolor="#D5DAE0">
-         <td colspan="12" class="TDHead" align="left" style="border-top:1px solid #999"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新权限分组</td>
+         <td colspan="12" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新权限分组</td>
         </tr>
         <tr align="center">
           <td ><input name="status_name" type="text" size="15" class="text" style="font-size:11px"/></td>
@@ -1916,7 +1921,7 @@ Set bLink = Nothing
 End If
 %>
         <tr align="center" bgcolor="#D5DAE0">
-         <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新友情链接</td>
+         <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新友情链接</td>
         </tr>	
         <tr align="center">
           <td>&nbsp;</td>
@@ -1972,7 +1977,7 @@ Loop
 
 %>
        <tr align="center" bgcolor="#D5DAE0">
-        <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新关键字</td>
+        <td colspan="3" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新关键字</td>
        </tr>	
         <tr align="center">
 		  <td></td>
@@ -2017,7 +2022,7 @@ Loop
 
 %>
        <tr align="center" bgcolor="#D5DAE0">
-        <td colspan="4" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新表情</td>
+        <td colspan="4" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新表情</td>
        </tr>	
         <tr align="center">
 		  <td></td>

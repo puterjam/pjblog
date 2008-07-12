@@ -75,7 +75,7 @@ Set Conn = Nothing
 <link><%=SiteURL%></link>
 <description><![CDATA[<%=blog_Title%>]]></description>
 <language>zh-cn</language>
-<copyright><![CDATA[Copyright 2005 PBlog2 v2.4]]></copyright>
+<copyright><![CDATA[Copyright 2005 PBlog3 v2.8]]></copyright>
 <webMaster><![CDATA[<%=blog_email%>(<%=blog_master%>)]]></webMaster>
 <generator>PBlog2 v2.4</generator> 
 <image>

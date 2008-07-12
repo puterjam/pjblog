@@ -11,20 +11,15 @@
 <!--#include file="common/xml.asp" -->
 <%
 '======================================
-'  XML-RPC for PJBlog2
+'  XML-RPC for PJBlog
 '======================================
 
-
-'��ȡBlog������Ϣ
 getInfo(1)
-
-'д��ؼ����б�
+�
 Keywords(1)
-
-'д�������
+�������
 Smilies(1)
-
-'д���ǩ
+���ǩ
 Tags(1)
 
 Response.Charset = "UTF-8"

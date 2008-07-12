@@ -23,9 +23,9 @@ Else
     If session(CookieName&"_System") = True Then
 
 %>
-    <frameset rows="71,*" framespacing="0" border="0" frameborder="0">
+    <frameset rows="31,*" framespacing="0" border="0" frameborder="0">
     <frame src="ConHead.asp" scrolling="no" name="Head" noresize>
-      <frameset cols="152,*">
+      <frameset  id="ContentSet" rows="80,*">
       <frame src="ConMenu.asp">
        <frame src="ConContent.asp" name="MainContent" scrolling="yes" noresize>
      </frameset>
@@ -34,16 +34,19 @@ Else
 Else
 
 %>
-  <body style="background:#FFFFEE">
+  <body style="background:#E8EDF4">
   <form action="control.asp" method="post" style="margin:2px;">
   <input type="hidden" name="action" value="login"/>
   <div style="font-size:12px;text-align:center">
-   <div style="width:200px;margin:auto;border:1px solid #999;padding:2px;background:#fff;width:250px;">
-    <div style="border-bottom:1px solid #999;padding:5px;text-align:left"><img src="images/Control/logo.gif"/></div>
-    <div style="padding:16px;padding-top:40px"><b style="margin-left:-76px;">管理员密码: </b><br/><input name="adpass" type="password" size="20" style="border:1px solid #999"/></div>
-    <input type="submit" value=" 登 陆 " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
-    <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(CookieName&"_ShowError")%></div><%session(CookieName&"_ShowError")=""%>
-    <div style="padding:2px;font-family:verdana;font-size:10px;text-align:right">PJBlog3 v<%=blog_version%></div>
+   <div style="margin:auto;border:1px solid #999;padding:2px;background:#fff;width:350px;">
+
+    <div style="border:1px solid #e5e5e5;padding:2px;">
+	    <div style="border-bottom:1px solid #e5e5e5;padding:5px;text-align:left"><img src="images/Control/logo.gif"/></div>
+	    <div style="padding:16px;padding-top:40px"><b style="margin-left:-146px;font-size:14px;">管理员密码: </b><br/><br/><input name="adpass" type="password" size="20" style="border:1px solid #999;font-size:18px"/></div>
+	    <input type="submit" value=" 登 陆 " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
+	    <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(CookieName&"_ShowError")%></div><%session(CookieName&"_ShowError")=""%>
+	    <div style="padding:2px;font-family:arial;color:#666;font-size:9px;text-align:right"><b>PJBlog3 v<%=blog_version%></b></div>
+   </div>
    </div>
   </div>
   </form></body>
