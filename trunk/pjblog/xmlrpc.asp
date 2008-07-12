@@ -15,11 +15,11 @@
 '======================================
 
 getInfo(1)
-�
+
 Keywords(1)
-�������
+
 Smilies(1)
-���ǩ
+
 Tags(1)
 
 Response.Charset = "UTF-8"
@@ -519,7 +519,6 @@ End Function
 
 Function bin2str(binstr)
     Dim varlen, clow, ccc, skipflag, i
-    '�����ַ�Skip��־
     skipflag = 0
     ccc = ""
     If Not IsNull(binstr) Then
@@ -527,9 +526,7 @@ Function bin2str(binstr)
         For i = 1 To varlen
             If skipflag = 0 Then
                 clow = MidB(binstr, i, 1)
-                '�ж��Ƿ����ĵ��ַ�
                 If AscB(clow)>127 Then
-                    'AscW��Ѷ����Ƶ�����˫�ֽ��ַ��λ�͵�λ��ת������Ҫ�Ȱ����ĵĸߵ�λ��ת
                     ccc = ccc & Chr(AscW(MidB(binstr, i + 1, 1) & clow))
                     skipflag = 1
                 Else
