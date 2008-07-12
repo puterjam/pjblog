@@ -7,6 +7,7 @@
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
 <!--#include file="common/xml.asp" -->
 <%
 '======================================
@@ -66,6 +67,18 @@ Case "mt.getCategoryList":
         passWord = xmlPrc.SelectXmlNodeText("params/param[2]/value")
         login2 userName, passWord
         If stat_Admin Then Call getCategories() Else Call returnError(0, "permitted to get Categories.")
+Case "mt.getPostCategories": 
+	    if xmlPrc.GetXmlNodeLength("params/param[0]/value/string")>0 then 
+	      logID=xmlPrc.SelectXmlNodeText("params/param[0]/value/string") 
+	    else 
+	      logID=xmlPrc.SelectXmlNodeText("params/param[0]/value/struct/member[name=""PostID""]/value") 
+	    end if 
+	    if len(toInt(logID))<1 then Call returnError(0,"parameter error.") 
+	    logID=int(toInt(logID)) 
+	    userName=xmlPrc.SelectXmlNodeText("params/param[1]/value") 
+	    passWord=xmlPrc.SelectXmlNodeText("params/param[2]/value") 
+	     login2 userName,passWord 
+	    if stat_Admin then Call getPostCategories(logID) else Call returnError(0,"permitted to get post categories.")     
 Case "metaWeblog.getRecentPosts":
         userName = xmlPrc.SelectXmlNodeText("params/param[1]/value")
         passWord = xmlPrc.SelectXmlNodeText("params/param[2]/value")
@@ -480,6 +493,32 @@ Function newMediaObject(fName, fBits)
     response.Write "<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param><value><struct><member><name>url</name><value><string>"&fullPath&"</string></value></member></struct></value></param></params></methodResponse>"
 
 End Function
+
+'----------------------mt.getPostCategories--------------------------- 
+Function getPostCategories(lID) 
+    dim RecentPosts 
+    Dim RS,dbRow,i 
+    SQL="Select TOP 1 L.log_ID,L.log_Title,L.log_Author,L.log_Content,L.log_PostTime,L.log_edittype,C.cate_Name,L.log_IsDraft,C.cate_ID FROM blog_Content AS L,blog_Category AS C Where C.cate_ID=L.log_cateID And L.log_ID="&lID&" orDER BY L.log_PostTime DESC" 
+    Set RS=Conn.ExeCute(SQL) 
+    if RS.EOF or RS.BOF then 
+        ReDim dbRow(0,0) 
+        Call returnError(0,"Can't find log.") 
+     else 
+        dbRow=RS.getrows() 
+    end if 
+    RS.close 
+    set RS=nothing 
+    call CloseDB 
+    RecentPosts="<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param><value><array><data>" 
+    i=0 
+            RecentPosts = RecentPosts & "<value><struct>" 
+            RecentPosts = RecentPosts & "<member><name>categoryId</name><value><string><![CDATA["&dbRow(8,i)&"]]></string></value></member>" 
+            RecentPosts = RecentPosts & "<member><name>categoryName</name><value><string><![CDATA["&dbRow(6,i)&"]]></string></value></member>" 
+            RecentPosts = RecentPosts & "</struct></value>" 
+    RecentPosts = RecentPosts & "</data></array></value></param></params></methodResponse>"  
+    response.write RecentPosts 
+End Function
+
 
 '------------------------------------------------------------------
 
