@@ -11,7 +11,7 @@ getInfo(1)
 %><?xml version="1.0" encoding="UTF-8"?>
 <rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">
   <service>
-	  <engineName>PJBLog3 v<%=blog_version%></engineName> 
+	  <engineName>PJBlog3 v<%=blog_version%></engineName> 
 	  <engineLink>http://www.pjhome.net</engineLink> 
 	  <homePageLink><%=siteURL%></homePageLink> 
 	  <apis>

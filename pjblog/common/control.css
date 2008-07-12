@@ -17,42 +17,60 @@ a:hover{
  border-bottom:1px solid #000066;
 }
 .menuBody{
- background:url('../images/Control/menuB.jpg') repeat-y;
+ background:url('../images/Control/menuB.png') repeat-x;
  text-align:left;
+ overflow-y:hidden;
+ overflow-x:auto;
+ margin:0;
 }
 .menuUL{
  list-style:none;
- margin:0px;
- padding:0px;
+ margin:0;
+ padding:1px 0 0 4px;
+  background:url('../images/Control/pic.png') no-repeat right 0;
+  height:94px;
 }
 .menuUL li{
- display:block;
- margin-bottom:5px;
+	float:left;
+	margin-right:3px;
 }
+
 .menuA:link,.menuA:visited{
- width:100%;
- height:35px;
  display:block;
- background:url('../images/Control/menubutton.jpg') no-repeat 4px 0px;
+ background:no-repeat -105px -1px;
+ background-image:url('../images/Control/menubutton.gif');
+ _background-image:url('../images/Control/menubutton.gif');
  font-size:12px;
- color:#fff;
+ color:#2C3E67;
  text-decoration:none;
+ 	width:86px;
+	height:71px;
+	overflow:hidden;
+	text-align:center;
+padding-top:16px;
 }
+
 .menuA:hover{
- background:url('../images/Control/menubutton.jpg') no-repeat 4px -36px;
- color:#fff;
+ background:no-repeat -208px -1px;
+ background-image:url('../images/Control/menubutton.png');
+ _background-image:url('../images/Control/menubutton.gif');
+ color:#2C3E67;
  text-decoration:none;
 }
 
 .menuAS:link,.menuAS:visited{
- width:100%;
- height:35px;
  display:block;
- background:url('../images/Control/menubutton.jpg') no-repeat 4px -72px;
+ background:no-repeat -5px -1px;
+ background-image:url('../images/Control/menubutton.png');
+ _background-image:url('../images/Control/menubutton.gif');
  font-size:12px;
- color:#000;
+ color:#2C3E67;
  text-decoration:none;
- font-weight:bold;
+ 	width:86px;
+	height:71px;
+	overflow:hidden;
+		text-align:center;
+padding-top:16px;
 }
 
 .ContentBody{
@@ -60,22 +78,71 @@ a:hover{
 }
 .MainDiv{} 
 .MenuIcon{
- margin:1px 6px -12px 12px;
+display:block;
+margin:auto;
+width:32px;
+height:32px;
+margin-bottom:3px;
+background-repeat:no-repeat;
 }
+
+.icon0{
+	background-image:url(../images/Control/Icon/icon0.png);
+	_background-image:url(../images/Control/Icon/icon0.gif);
+}
+
+.icon1{
+	background-image:url(../images/Control/Icon/icon1.png);
+	_background-image:url(../images/Control/Icon/icon1.gif);
+}
+.icon2{
+	background-image:url(../images/Control/Icon/icon2.png);
+	_background-image:url(../images/Control/Icon/icon2.gif);
+}
+.icon3{
+	background-image:url(../images/Control/Icon/icon3.png);
+	_background-image:url(../images/Control/Icon/icon3.gif);
+}
+.icon4{
+	background-image:url(../images/Control/Icon/icon4.png);
+	_background-image:url(../images/Control/Icon/icon4.gif);
+}
+.icon5{
+	background-image:url(../images/Control/Icon/icon5.png);
+	_background-image:url(../images/Control/Icon/icon5.gif);
+}
+.icon6{
+	background-image:url(../images/Control/Icon/icon6.png);
+	_background-image:url(../images/Control/Icon/icon6.gif);
+}
+.icon7{
+	background-image:url(../images/Control/Icon/icon7.png);
+	_background-image:url(../images/Control/Icon/icon7.gif);
+}
+.icon8{
+	background-image:url(../images/Control/Icon/icon8.png);
+	_background-image:url(../images/Control/Icon/icon8.gif);
+}
+
+.icon10{
+	background-image:url(../images/Control/Icon/icon10.png);
+	_background-image:url(../images/Control/Icon/icon10.gif);
+}
+
+
 .CTitle{
-	background:#3E70A6;
+	background:#3E70A6 url(../images/Control/title.png);
 	padding:5px;
 	text-align:left;
-	color:#FFFFFF;
+	color:#2C3E67;
 	font-size:13px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-bottom:1px solid #9EA9C5
 }
 .CContent{
-	border-top: 1px solid #666666;
-	border-right: 1px solid #CCCCCC;
-	border-bottom: 1px solid #CCCCCC;
-	border-left: 1px solid #666666;
-	background-color: #FFFFFF;
+	border: 1px solid #9EA9C5;
+	background:#fff url(../images/Control/s.png) repeat-x;
+	background-position-y:28px;
 }
 .CPanel{
  padding:5px;
@@ -110,10 +177,12 @@ select{font-size:12px;}
 input.text{
  border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;height:18px
 }
+
 button{background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px;}
 input.button{
- background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px;
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:2px 2px 0px 2px;margin:4px;
 }
+
 input.buttonActive{
 	color: #FFFFFF;
 	background-color: #5C71AD;
@@ -132,31 +201,44 @@ input.buttonUnActive{
 }
 textarea{ border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
 .SubMenu{
-	padding: 4px;
-	border-bottom: 1px solid #003366;
+	padding:4px 0 0  4px;
 	margin:-5px -5px 2px -5px;
-	background-color: #E6EBF7;
+	background:#E6EBF7 url(../images/Control/menu.png) repeat-x;
+	height:30px;
 }
+.SubMenu select{
+font-size:10px;
+margin-top:-2px;
+}
+.SubMenu2{
+	padding:4px 0 0  4px;
+	margin:-5px -5px 2px -5px;
+	background:#E6EBF7 url(../images/Control/menu2.png) repeat-x;
+	height:54px;
+	line-height:160%
+}
+
 .SubButton{
     margin-top: 6px;
 	padding: 4px;
 	text-align:center;
 }	
 .TDHead{
- background:url(../images/Control/M.jpg);
-  border-bottom:1px solid #999;
-  height:16px;
-  font-weight:bold;
+ background:url(../images/Control/M.png);
+   border:1px solid #BDC5D7;
+  height:24px;
+
 }
 .TablePanel{
- border:1px solid #999
+ border:1px solid #E3E7EE;
 }
+
 .TablePanel td{font-size:12px;}
 .alertTxt{background:#FFCC00 url('../images/Control/aM.gif');padding:8px 6px 8px 6px !important;padding:8px 6px 8px 6px;font-weight:bold;font-size:14px;}
 .textFlow{text-overflow:ellipsis;overflow:hidden;white-space:nowrap }
 #msgInfo{margin-bottom:8px;height:33px;top:80px;position:absolute;text-align:center;width:100%;}
 
-  /*---Ö÷ÄÚÈÝÒ³Êý--*/
+  /*---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½--*/
   .pageContent{margin:0 auto;padding:3px;text-align:left;height:16px;font-size:12px;} 
   .NavTitle{float:left;font-weight:bold;}
   .page{padding-right:5px;height:18px;}

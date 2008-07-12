@@ -63,7 +63,11 @@ Sub getBlogHead(Title, CateTitle, CateID)
 	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
 	<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
 	<meta name="description" content="<%=SiteName%> - <%=blog_Title%>" />
+	<meta name="generator" content="PJBlog3" />
+	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=siteURL%>xmlrpc.asp" />
+	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />
 	<title><%=Title%></title>
+
 	<%if len(CateTitle)>0 and CateID>0 then %>
 	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CateID%>" title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(rss2)" />
 	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CateID%>"  title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(atom)"  />
@@ -71,6 +75,7 @@ Sub getBlogHead(Title, CateTitle, CateID)
 	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="订阅 <%=siteName%> 所有文章(rss2)" />
 	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="订阅 <%=siteName%> 所有文章(atom)" />
 	<%end if%>
+	
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/global.css" type="text/css" media="all" /><!--全局样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/layout.css" type="text/css" media="all" /><!--层次样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/typography.css" type="text/css" media="all" /><!--局部样式表-->

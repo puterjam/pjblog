@@ -21,11 +21,29 @@ If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True
 <meta name="description" content="PuterJam's BLOG" />
 <link rel="stylesheet" rev="stylesheet" href="common/control.css" type="text/css" media="all" />
 <title>后台管理-顶部</title>
+<script>
+	var _toolStatus = 1; // 默认打开
+	function switchToolbar(o){
+		if (_toolStatus) {
+			_toolStatus = 0;
+			o.src="images/control/openMenu.png";
+			parent.document.getElementById("ContentSet").rows = "0,*";
+		}else{
+			_toolStatus = 1;
+			o.src="images/control/closeMenu.png";
+			parent.document.getElementById("ContentSet").rows = "80,*";
+		}
+	}
+</script>
 </head>
 <body class="headbody">
  <div class="headmain">
+ 	<div style="float:right;margin:4px;">
+ 		<img src="images/control/closeMenu.png" style="cursor:pointer" onclick="switchToolbar(this)"/><img onclick="parent.MainContent.location='ConContent.asp?Fmenu=Logout&Smenu='" src="images/control/logout.png" onmouseover="this.src='images/control/logoutIn.png'" onmouseout="this.src='images/control/logout.png'" style="cursor:pointer"/>
+ 	</div>
+ 
    <div style="height:70px;background:url('images/Control/Pic2.jpg') no-repeat;">
-   <div style="padding-top:53px;padding-left:70px;font-size:11px;font-family:verdana;font-weight:bold;color:#fff;">PJBlog3 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%></div>
+   	<div style="position: absolute; font-family: verdana; top: 10px; font-size: 10px; color: rgb(158, 169, 197); left: 143px;">PJBlog3 v<%=blog_version%> - <%=DateToStr(blog_UpdateDate,"mdy")%></div>
    </div>
  </div>
 </body>
