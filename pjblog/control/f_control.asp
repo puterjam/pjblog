@@ -1,11 +1,10 @@
 ﻿<%
 '==================================
-'  后台库文件
-'    更新时间: 2006-5-21
+'  后台通用函数文件
+'    更新时间: 2008-7-13
 '==================================
 
 '----------- 显示操作信息 ----------------------------
-
 Sub getMsg
     If session(CookieName&"_ShowMsg") = True Then
         response.Write ("<div id=""msgInfo"" align=""center""><img src=""images/Control/aL.gif"" style=""margin-bottom:-11px;""/><span class=""alertTxt"">" & session(CookieName&"_MsgText") & "</span><img src=""images/Control/aR.gif"" style=""margin-bottom:-11px;""/></div>")
@@ -13,6 +12,14 @@ Sub getMsg
         session(CookieName&"_ShowMsg") = False
         session(CookieName&"_MsgText") = ""
     End If
+End Sub
+
+'----------- 退出后台程序 ----------------------------
+Sub c_Logout
+    session(CookieName&"_System") = ""
+    session(CookieName&"_disLink") = ""
+    session(CookieName&"_disCount") = ""
+    Response.Write ("<script>try{top.location=""default.asp""}catch(e){location=""default.asp""}</script>")
 End Sub
 
 '----------- 获得路径的文件信息 ----------------------------
