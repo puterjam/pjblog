@@ -53,19 +53,26 @@ End Function
 '----------- 获取文件信息 ----------------------------
 
 Function getFileInfo(FileName)
-    Dim FSO, File, FileInfo(3)
+    Dim FSO, File, FileInfo(8)
     Set FSO = Server.CreateObject("Scripting.FileSystemObject")
     If FSO.FileExists(Server.MapPath(FileName)) Then
         Set File = FSO.GetFile(Server.MapPath(FileName))
         FileInfo(0) = File.Size
+        
         If FileInfo(0) / 1000>1 Then
             FileInfo(0) = Int(FileInfo(0) / 1000)&" KB"
         Else
             FileInfo(0) = FileInfo(0)&" Bytes"
         End If
+        
         FileInfo(1) = LCase(Right(FileName, 4))
         FileInfo(2) = File.DateCreated
         FileInfo(3) = File.Type
+        FileInfo(4) = File.DateLastModified
+        FileInfo(5) = File.Path
+        FileInfo(6) = File.ShortPath
+        FileInfo(7) = File.Name
+        FileInfo(8) = File.ShortName
     End If
     getFileInfo = FileInfo
     Set FSO = Nothing
@@ -106,6 +113,18 @@ Function getFileIcons(Str)
             FileIcon = "wma.gif"
         Case ".wma"
             FileIcon = "wma.gif"
+        Case ".js"
+            FileIcon = "js.gif"
+        Case ".html"
+            FileIcon = "html.gif"
+        Case ".htm"
+            FileIcon = "htm.gif"
+        Case ".css"
+            FileIcon = "css.gif"
+        Case ".asp"
+            FileIcon = "asp.gif"
+        Case ".xml"
+            FileIcon = "xml.gif"
         Case Else
             FileIcon = "unknow.gif"
     End Select
@@ -482,7 +501,8 @@ Function DeleteLog(LogID)
         End If
         Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&LogID)
         Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&LogID)
-        DeleteFiles Server.MapPath("post/"&DelID&".asp")
+        DeleteFiles Server.MapPath("post/"&LogID&".asp")
+        DeleteFiles Server.MapPath("article/"&LogID&".htm")
         DeleteLog = 1
     End If
 End Function
@@ -608,7 +628,9 @@ Function categoryTitle()
     cTitle.Add "Status." , "服务器配置信息 - PJBlog3"
 
     cTitle.Add "welcome." , "欢迎使用PJBlog3"
-
+    
+    cTitle.Add "CodeEditor." , "在线代码编辑器 beta"
+    
     categoryTitle = cTitle(Fmenu & "." & Smenu)
     Set cTitle = Nothing
 End Function
