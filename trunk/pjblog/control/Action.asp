@@ -835,10 +835,5 @@ Else'登录欢迎
 End If
 End Sub
 
-Sub c_Logout'退出
-    session(CookieName&"_System") = ""
-    session(CookieName&"_disLink") = ""
-    session(CookieName&"_disCount") = ""
-    Response.Write ("<script>try{top.location=""default.asp""}catch(e){location=""default.asp""}</script>")
-End Sub
+
 %>
