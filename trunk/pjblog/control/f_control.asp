@@ -70,9 +70,9 @@ Function getFileInfo(FileName)
         FileInfo(3) = File.Type
         FileInfo(4) = File.DateLastModified
         FileInfo(5) = File.Path
-        FileInfo(6) = File.ShortPath
+        FileInfo(6) = "" 'File.ShortPath 部分服务器不支持
         FileInfo(7) = File.Name
-        FileInfo(8) = File.ShortName
+        FileInfo(8) = "" 'File.ShortName 部分服务器不支持
     End If
     getFileInfo = FileInfo
     Set FSO = Nothing
