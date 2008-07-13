@@ -10,7 +10,7 @@ Sub c_ceneral
 		  </tr>
 		  <tr>
 		    <td class="CPanel">
-		    <div class="SubMenu"><a href="?Fmenu=CodeEditor">测试在线编辑器</a> | <a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
+		    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
 		<%
 		If Request.QueryString("Smenu") = "visitors" Then
 		%>

@@ -8,7 +8,7 @@
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
-<!--#include file="class/cls_control.asp" -->
+
 <!--#include file="FCKeditor/fckeditor.asp" -->
 <%
 '***************PJblog3 后台管理页面*******************
@@ -18,6 +18,7 @@
 '开始加载后台需要的各个模块
 
 %>
+<!--#include file="control/f_control.asp" -->
 <!--#include file="control/c_welcome.asp" -->
 <!--#include file="control/c_general.asp" -->
 <!--#include file="control/c_categories.asp" -->
@@ -28,10 +29,15 @@
 <!--#include file="control/c_link.asp" -->
 <!--#include file="control/c_smilies.asp" -->
 <!--#include file="control/c_status.asp" -->
+<!--#include file="control/c_codeEditor.asp" -->
 <!--#include file="control/Action.asp" -->
 <%
 '定义变量
 Dim i
+
+Dim blog_module
+Dim PluginsFolders, PluginsFolder, Bmodules, Bmodule, tempB, SubItemLen, tempI
+Dim PluginsXML, DBXML, TypeArray
 
 '判断是否有权限访问
 If Not ChkPost() OR session(CookieName&"_System") <> True OR isEmpty(memName) Or stat_Admin <> True Then
@@ -61,31 +67,21 @@ End If
 <body class="ContentBody">
   <div class="MainDiv">
 	<%
-	If Request.QueryString("Fmenu") = "General" Then ' 站点基本设置
-		Call c_ceneral
-	ElseIf Request.QueryString("Fmenu") = "Categories" Then ' 日志分类管理
-		Call c_categories
-	ElseIf Request.QueryString("Fmenu") = "Comment" Then ' 评论留言管理
-		Call c_comment
-	ElseIf Request.QueryString("Fmenu") = "Skins" Then ' 界面设置
-		Call c_skins
-	ElseIf Request.QueryString("Fmenu") = "SQLFile" Then ' 数据库与文件
-		Call c_SQLFile
-	ElseIf Request.QueryString("Fmenu") = "Members" Then ' 帐户和权限设置
-		Call c_members
-	ElseIf Request.QueryString("Fmenu") = "Link" Then ' 友情链接管理
-		Call c_link
-	ElseIf Request.QueryString("Fmenu") = "smilies" Then ' 表情和关键字
-		Call c_smilies
-	ElseIf Request.QueryString("Fmenu") = "Status" Then ' 服务器配置信息
-		Call c_status
-	ElseIf Request.QueryString("Fmenu") = "Logout" Then ' 退出后台管理
-		Call c_Logout
-	ElseIf Request.QueryString("Fmenu") = "welcome" Then '欢迎页面
-		Call c_welcome
-	Else
-		Call doAction
-	End If
+      Select Case Request.QueryString("Fmenu") 
+           Case "welcome"  Call c_welcome '欢迎页面
+           Case "General"  Call c_ceneral  ' 站点基本设置
+           Case "Categories" Call c_categories ' 日志分类管理
+           Case "Comment"  Call c_comment ' 评论留言管理
+           Case "Skins"  Call c_skins ' 界面设置
+           Case "SQLFile"  Call c_SQLFile ' 数据库与文件
+           Case "Members"  Call c_members ' 帐户和权限设置
+           Case "Link"  Call c_link ' 友情链接管理
+           Case "smilies"  Call c_smilies ' 表情和关键字
+           Case "Status"  Call c_status ' 服务器配置信息
+           Case "CodeEditor"  Call c_codeEditor '代码编辑器
+           Case "Logout"  Call c_Logout ' 退出后台管理
+           Case Else Call doAction '开始执行保存设置
+      End Select
 	%>
   </div>
  </body>

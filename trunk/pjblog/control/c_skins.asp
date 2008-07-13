@@ -4,9 +4,7 @@
 '=================================
 Sub c_skins
 	    Dim bmID, bMInfo
-	    Dim blog_module
-	    Dim PluginsFolders, PluginsFolder, Bmodules, Bmodule, tempB, SubItemLen, tempI
-	    Dim PluginsXML, DBXML, TypeArray
+
 	    TypeArray = Array("sidebar", "content", "function")
 		%>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
@@ -16,7 +14,7 @@ Sub c_skins
 		  <tr>
 		    <td class="CPanel">
 			<div class="SubMenu2">
-			<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <br/> 
+			<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <b>模板: </b> <a href="?Fmenu=CodeEditor&file=Template\static.htm&referer=skins">编辑静态页面模板</a>  <br/> 
 			<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
 		
 		<%
@@ -277,7 +275,7 @@ Sub c_skins
 				  <td width="200" align="left" class="TDHead">名称</td>
 				  <td width="82" class="TDHead">作者</td>
 		          <td width="100" class="TDHead">发布日期</td>
-		          <td width="140" class="TDHead">&nbsp;</td>
+		          <td width="200" class="TDHead">&nbsp;</td>
 		          </tr>
 			 <%
 		If CheckObjInstalled(getXMLDOM()) Then
@@ -295,7 +293,10 @@ Sub c_skins
 		     		   <td align="left"><%=PluginsXML.SelectXmlNodeText("PluginInstall/main/PluginTitle")%></td>
 		     		   <td align="center"><%=PluginsXML.SelectXmlNodeText("PluginInstall/main/Author")%></td>
 		               <td align="center"><%=PluginsXML.SelectXmlNodeText("PluginInstall/main/pubDate")%></td>
-		               <td align="center"><a href="?Fmenu=Skins&Smenu=InstallPlugins&Plugins=<%=PluginsFolder%>">安装此插件</a> | <a href="javascript:alert('<%=PluginsXML.SelectXmlNodeText("PluginInstall/main/About")%>')">关于</a></td>
+		               <td align="center">
+		               <a href="?Fmenu=Skins&Smenu=InstallPlugins&Plugins=<%=PluginsFolder%>">安装插件</a> | 
+		               <a href="?Fmenu=CodeEditor&file=plugins\<%=PluginsFolder%>\install.xml&referer=plugins">编辑插件</a> | 
+		               <a href="javascript:alert('<%=PluginsXML.SelectXmlNodeText("PluginInstall/main/About")%>')">关于</a></td>
 		             </tr>
 		     	<%
 		End If
@@ -342,7 +343,7 @@ Sub c_skins
 				  <td width="150" align="left" class="TDHead">名称</td>
 		          <td width="150" class="TDHead">插件所在目录</td>
 		          <td width="150" class="TDHead">安装时间</td>
-		          <td width="140" class="TDHead">&nbsp;</td>
+		          <td width="240" class="TDHead">&nbsp;</td>
 		        </tr>
 		       <%do until Blog_Plugins.eof%>
 		        <tr align="center">
@@ -500,7 +501,7 @@ Sub c_skins
 		       <input type="hidden" name="SkinName" value=""/>
 		       <input type="hidden" name="SkinPath" value=""/>
 		  </form>
-		      <table border="0" cellpadding="2" cellspacing="1" class="TablePanel" width="700">
+		      <table border="0" cellpadding="2" cellspacing="1" class="TablePanel" width="800">
 		        <tr>
 			          <td width="700" class="TDHead" colspan="2">界面列表</td>
 		        </tr>
@@ -517,30 +518,34 @@ Sub c_skins
 		            SkinPreview = "images/Control/skin.jpg"
 		            If FileExist("skins/"&SkinFolder&"/Preview.jpg") Then SkinPreview = "skins/"&SkinFolder&"/Preview.jpg"
 		
-		%>
-		 		<td width="50%" style='border-bottom:1px dotted #ccc'>
-		 			<div class="<%if Lcase(blog_DefaultSkin)<>Lcase(SkinFolder) then response.write ("un")%>selectskin">
-		 			<img src="<%=SkinPreview%>" alt="" border="0" class="skinimg"/>
-		 			  <div class="skinDes">
-		 			  <div style="height:38px;overflow:hidden"><b style="color:#004000"><%=SkinXML.SelectXmlNodeText("SkinName")%></b></div>
-		 			  <span style="height:16px;overflow:hidden;cursor:default" title="设计者:<%=SkinXML.SelectXmlNodeText("SkinDesigner")%>"><B>设计者:</B> <%=SkinXML.SelectXmlNodeText("SkinDesigner")%></span><br/>
-		 			  <B>发布时间:</B> <%=SkinXML.SelectXmlNodeText("pubDate")%><br/></div>
-				 <%
-		If LCase(blog_DefaultSkin) = LCase(SkinFolder) Then
-		    response.Write ("<div class=""cskin""><img src=""images/Control/select.gif"" alt="""" border=""0"" /></div>当前界面")
-		Else
-		    response.Write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')"">设置为当前主题</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=""ConContent.asp?Fmenu=Skins&Smenu=delskin&SkinFolder="&server.URLEncode(SkinFolder)&""" onclick=""if (!window.confirm('确定要删除此主题吗？')){return false}"">删除该主题</a>")
-		End If
-		
-		%>
-				  </div>
-		 		</td>
-			<%
-		End If
-		SkinXML.CloseXml
-		If k / 2<>Int(k / 2) Then response.Write "</tr>"
-		k = k + 1
-		Next
+						%>
+				 		<td width="50%" style='border-bottom:1px dotted #ccc'>
+				 			<div class="<%if Lcase(blog_DefaultSkin)<>Lcase(SkinFolder) then response.write ("un")%>selectskin">
+				 			<img src="<%=SkinPreview%>" alt="" border="0" class="skinimg"/>
+				 			  <div class="skinDes">
+				 			  <div style="height:38px;overflow:hidden"><b style="color:#004000"><%=SkinXML.SelectXmlNodeText("SkinName")%></b></div>
+				 			  <span style="height:16px;overflow:hidden;cursor:default" title="设计者:<%=SkinXML.SelectXmlNodeText("SkinDesigner")%>"><B>设计者:</B> <%=SkinXML.SelectXmlNodeText("SkinDesigner")%></span><br/>
+				 			  <B>发布时间:</B> <%=SkinXML.SelectXmlNodeText("pubDate")%><br/></div>
+							 <%
+							If LCase(blog_DefaultSkin) = LCase(SkinFolder) Then
+							    'response.Write ("<div class=""cskin""><img src=""images/Control/select.gif"" alt="""" border=""0"" /></div>当前界面")
+							    response.Write ("<a href=""?Fmenu=CodeEditor&file=skins\"&SkinFolder&"\layout.css&referer=skins""><img border=""0"" src=""images/icon_edit.gif"" style=""margin:0px 2px -3px 0px""/>编辑主题</a>") 
+							Else
+							    response.Write ("<a href=""javascript:setSkin('"&SkinFolder&"','"&SkinXML.SelectXmlNodeText("SkinName")&"')""><img border=""0"" src=""images/icon_apply.gif"" style=""margin:0px 2px -3px 0px""/>应用此主题</a>")
+							    response.Write ("&nbsp;&nbsp;&nbsp;&nbsp;<a href=""?Fmenu=CodeEditor&file=skins\"&SkinFolder&"\layout.css&referer=skins""><img border=""0"" src=""images/icon_edit.gif"" style=""margin:0px 2px -3px 0px""/>编辑主题</a>")
+							    '<a href="?Fmenu=CodeEditor">测试在线编辑器</a> 
+							    response.Write ("&nbsp;&nbsp;&nbsp;&nbsp;<a href=""ConContent.asp?Fmenu=Skins&Smenu=delskin&SkinFolder="&server.URLEncode(SkinFolder)&""" onclick=""if (!window.confirm('确定要删除此主题吗？')){return false}""><img border=""0"" src=""images/icon_del.gif"" style=""margin:0px 2px -3px 0px""/>删除该主题</a>")
+							End If
+							
+							%>
+						  </div>
+				 		</td>
+					<%
+						If k / 2<>Int(k / 2) Then response.Write "</tr>"
+						k = k + 1
+				End If
+				SkinXML.CloseXml
+			Next
 		If k / 2<>Int(k / 2) Then response.Write "</tr>"
 		
 		Set SkinXML = Nothing

@@ -830,6 +830,19 @@ ElseIf Request.Form("action") = "Attachments" Then
         session(CookieName&"_MsgText") = "有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
         RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
     End If
+ElseIf Request.Form("action") = "codeEditor" Then '在线编辑器
+    If Request.Form("whatdo") = "save" Then
+    	dim referer,fPath,cCode,saveCode
+    	referer = Request.Form("referer") 
+    	fPath = Request.Form("filePath") 
+    	cCode = Request.Form("code") 
+
+		saveCode = SaveToFile(cCode,fPath)
+	
+        session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = saveCode(1)
+        RedirectUrl("ConContent.asp?Fmenu=CodeEditor&referer="&referer&"&file=" & fPath)
+    end if
 Else'登录欢迎
 
 End If

@@ -899,7 +899,14 @@ Function SaveToFile(ByVal strBody, ByVal File)
         .Charset = "utf-8"
         .Position = objStream.Size
         .WriteText = strBody
+        On Error Resume Next
         .SaveToFile Server.MapPath(File), 2
+        If Err Then
+            RText = Array(Err.Number, Err.Description)
+            SaveToFile = RText
+            Err.Clear
+            Exit Function
+        End If
         .Close
     End With
     RText = Array(0, "保存文件成功!")
