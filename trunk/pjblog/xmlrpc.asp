@@ -14,12 +14,16 @@
 '  XML-RPC for PJBlog
 '======================================
 
+'读取Blog设置信息
 getInfo(1)
 
+'写入关键字列表
 Keywords(1)
 
+'写入表情符号
 Smilies(1)
 
+'写入标签
 Tags(1)
 
 Response.Charset = "UTF-8"
@@ -31,7 +35,7 @@ Dim DebugOn
 DebugOn = False
 
 XmlBin = Request.BinaryRead(Request.TotalBytes)
-'SaveToFile bin2str(XmlBin),"debug\out_"&randomStr(3)&"_"&Year(now)&Month(now)&Day(now)&Hour(now)&Minute(now)&Second(now)&".txt"
+SaveToFile bin2str(XmlBin),"debug\out_"&randomStr(3)&"_"&Year(now)&Month(now)&Day(now)&Hour(now)&Minute(now)&Second(now)&".txt"
 Dim xmlPrc, XmlBin
 Set xmlPrc = New PXML
 
@@ -44,7 +48,7 @@ End If
 
 If xmlPrc.getError = 0 Then
     Dim strAction
-    Dim userName, passWord, intPosts, bolPublish, logTitle, logDescription, logPostTime, logCategories, tagWords, logCategoryId, logID, fileBits, fileName
+    Dim userName, passWord, intPosts, bolPublish, logTitle, logDescription, logPostTime, logCategories, tagWords, logCategoryId, logID, fileBits, fileName,logIntro
     strAction = xmlPrc.SelectXmlNodeText("methodName")
     Select Case strAction
 Case "blogger.getUsersBlogs":
@@ -91,10 +95,13 @@ Case "metaWeblog.newPost":
         logTitle = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""title""]/value")
         logDescription = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""description""]/value")
         logPostTime = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""dateCreated""]/value/dateTime.iso8601")
-        'tagWords=xmlPrc.GetXmlNodeLength("params/param[3]/value/struct/member[name=""tagwords""]/value/array/data/value")
-        bolPublish = xmlPrc.SelectXmlNodeText("params/param[4]/value/boolean")
+		'tagWords=xmlPrc.GetXmlNodeLength("params/param[3]/value/struct/member[name=""tagwords""]/value/array/data/value")
+        '支持windows live writer的关键字和Zoundry的标签
+		tagWords=xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""mt_keywords""]/value")
+		logIntro=xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""mt_excerpt""]/value")
+		bolPublish = xmlPrc.SelectXmlNodeText("params/param[4]/value/boolean")
         login2 userName, passWord
-        If stat_Admin Then Call newPost(logTitle, logDescription, logPostTime, bolPublish) Else Call returnError(0, "permitted to post a new log.")
+        If stat_Admin Then Call newPost(logTitle, logDescription,logIntro,logPostTime, tagWords, bolPublish ) Else Call returnError(0, "permitted to post a new log.")
 Case "metaWeblog.editPost":
         If xmlPrc.GetXmlNodeLength("params/param[0]/value/string")>0 Then
             logID = xmlPrc.SelectXmlNodeText("params/param[0]/value/string")
@@ -108,10 +115,12 @@ Case "metaWeblog.editPost":
         logTitle = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""title""]/value")
         logDescription = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""description""]/value")
         logPostTime = xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""dateCreated""]/value/dateTime.iso8601")
-        'tagWords=xmlPrc.GetXmlNodeLength("params/param[3]/value/struct/member[name=""tagwords""]/value/array/data/value")
-        bolPublish = xmlPrc.SelectXmlNodeText("params/param[4]/value/boolean")
+		tagWords=xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""mt_keywords""]/value")
+		logIntro=xmlPrc.SelectXmlNodeText("params/param[3]/value/struct/member[name=""mt_excerpt""]/value")
+		'tagWords=xmlPrc.GetXmlNodeLength("params/param[3]/value/struct/member[name=""tagwords""]/value/array/data/value")
+		bolPublish = xmlPrc.SelectXmlNodeText("params/param[4]/value/boolean")
         login2 userName, passWord
-        If stat_Admin Then Call editPost(logID, logTitle, logDescription, logPostTime, bolPublish) Else Call returnError(0, "permitted to post a new log.")
+        If stat_Admin Then Call editPost(logID, logTitle, logDescription,logIntro, logPostTime,tagWords, bolPublish) Else Call returnError(0, "permitted to post a new log.")
 Case "mt.setPostCategories":
         If xmlPrc.GetXmlNodeLength("params/param[0]/value/string")>0 Then
             logID = xmlPrc.SelectXmlNodeText("params/param[0]/value/string")
@@ -246,41 +255,46 @@ End Function
 '----------------------metaWeblog.getPost---------------------------
 
 Function getPost(lID)
-    Dim RecentPosts
-    Dim RS, dbRow, i
-    SQL = "SELECT TOP 1 L.log_ID,L.log_Title,L.log_Author,L.log_Content,L.log_PostTime,L.log_edittype,C.cate_Name,L.log_IsDraft FROM blog_Content AS L,blog_Category AS C WHERE C.cate_ID=L.log_cateID And L.log_ID="&lID&" ORDER BY L.log_PostTime DESC"
-    Set RS = Conn.Execute(SQL)
-    If RS.EOF Or RS.BOF Then
-        ReDim dbRow(0, 0)
-        Call returnError(0, "Can't find log.")
-    Else
-        dbRow = RS.getrows()
+    Dim RecentPosts,getLog,lArticle
+    Set lArticle = New logArticle
+    getLog = lArticle.getLog(lID)
+
+    If getLog(0)<0 Then
+       Call returnError(0, "Can't find log.")
+  	   Set RecentPosts = nothing
+  	   Call CloseDB
+  	   exit Function
     End If
-    RS.Close
-    Set RS = Nothing
-    Call CloseDB
+'    SQL = "SELECT TOP 1 L.log_ID,L.log_Title,L.log_Author,L.log_Content,L.log_PostTime,L.log_edittype,C.cate_Name,L.log_IsDraft FROM blog_Content AS L,blog_Category AS C WHERE C.cate_ID=L.log_cateID And L.log_ID="&lID&" ORDER BY L.log_PostTime DESC"
 
     RecentPosts = "<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param>"
-    i = 0
     RecentPosts = RecentPosts & "<value><struct>"
-    RecentPosts = RecentPosts & "<member><name>title</name><value><string><![CDATA["&dbRow(1, i)&"]]></string></value></member>"
-    If dbRow(5, i) = 1 Then
-        t = AddSiteURL(UBBCode(HTMLEncode(dbRow(3, i)), 0, 0, 0, 1, 1))
+    RecentPosts = RecentPosts & "<member><name>title</name><value><string><![CDATA["&lArticle.logTitle&"]]></string></value></member>"
+    If lArticle.logEditType = 1 Then
+        t = AddSiteURL(UBBCode(HTMLEncode(lArticle.logMessage), 0, 0, 0, 1, 1))
         RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
     Else
-        t = AddSiteURL(UnCheckStr(dbRow(3, i)))
+        t = AddSiteURL(UnCheckStr(lArticle.logMessage))
         RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
     End If
-    RecentPosts = RecentPosts & "<member><name>dateCreated</name><value><dateTime.iso8601>"&DateToStr(dbRow(4, i), "y-m-dTH:I:S")&"</dateTime.iso8601></value></member>"
-    RecentPosts = RecentPosts & "<member><name>categories</name><value><array><data><value><string>"&dbRow(6, i)&"</string></value></data></array></value></member>"
-    RecentPosts = RecentPosts & "<member><name>tagwords</name><value><string><![CDATA[df34,err]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>postid</name><value><string><![CDATA["&dbRow(0, i)&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>userid</name><value><string><![CDATA["&dbRow(2, i)&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>link</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&dbRow(0, i)&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&dbRow(0, i)&"]]></string></value></member>"
+    
+    RecentPosts = RecentPosts & "<member><name>dateCreated</name><value><dateTime.iso8601>"&DateToStr(lArticle.logPubTime, "y-m-dTH:I:S")&"</dateTime.iso8601></value></member>"
+    RecentPosts = RecentPosts & "<member><name>categories</name><value><array><data><value><string>"&lArticle.categoryID&"</string></value></data></array></value></member>"
+    RecentPosts = RecentPosts & "<member><name>mt_keywords</name><value><string><![CDATA["&lArticle.logTags&"]]></string></value></member>"
+    if not CBool(lArticle.logIntroCustom) then
+    	RecentPosts = RecentPosts & "<member><name>mt_excerpt</name><value><string><![CDATA["&lArticle.logIntro&"]]></string></value></member>"
+    else
+    	RecentPosts = RecentPosts & "<member><name>mt_excerpt</name><value><string><![CDATA[]]></string></value></member>"
+    end if
+    RecentPosts = RecentPosts & "<member><name>postid</name><value><string><![CDATA["&lID&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>userid</name><value><string><![CDATA["&lArticle.logAuthor&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>link</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&lID&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&lID&"]]></string></value></member>"
     RecentPosts = RecentPosts & "</struct></value>"
     RecentPosts = RecentPosts & "</param></params></methodResponse>"
     response.Write RecentPosts
+   
+    Call CloseDB
 End Function
 
 '----------------------mt.getCategoryList/metaWeblog.getCategories---------------------------
@@ -312,7 +326,7 @@ End Function
 
 '----------------------metaWeblog.newPost---------------------------
 
-Function newPost(lTitle, lDescription, lPostTime, lPublish)
+Function newPost(lTitle, lDescription,lIntro, lPostTime, lTagwords, lPublish)
     '====get Last Category
     Dim Arr_Category, Category_Len, i, lastCID
     CategoryList(1)
@@ -334,7 +348,13 @@ Function newPost(lTitle, lDescription, lPostTime, lPublish)
     lArticle.logIsDraft = Not CBool(lPublish)
     lArticle.logMessage = lDescription
     lArticle.logPubTime = Now()
-    lArticle.logIntroCustom = 0
+	lArticle.logTags    = lTagwords
+    if len(Trim(lIntro))>0 then
+    	lArticle.logIntroCustom = 1
+    	lArticle.logIntro = lIntro
+    else
+    	lArticle.logIntroCustom = 0
+    end if
     lArticle.logAuthor = memName
     postLog = lArticle.postLog
     Set lArticle = Nothing
@@ -350,7 +370,7 @@ End Function
 
 '----------------------metaWeblog.editPost---------------------------
 
-Function editPost(lID, lTitle, lDescription, lPostTime, lPublish)
+Function editPost(lID, lTitle, lDescription,lIntro, lPostTime, lTagwords,lPublish)
     '====get Last Category
     Dim editPostStr
     Dim lArticle, editLog
@@ -363,7 +383,13 @@ Function editPost(lID, lTitle, lDescription, lPostTime, lPublish)
     lArticle.logIsDraft = Not CBool(lPublish)
     lArticle.logMessage = lDescription
     lArticle.logPubTime = Now()
-    lArticle.logIntroCustom = 0
+    if len(Trim(lIntro))>0 then
+    	lArticle.logIntroCustom = 1
+    	lArticle.logIntro = lIntro
+    else
+    	lArticle.logIntroCustom = 0
+    end if
+	lArticle.logTags    = lTagwords
     editLog = lArticle.editLog(lID)
     Set lArticle = Nothing
     If editLog(2)<0 Then
@@ -519,6 +545,7 @@ End Function
 
 Function bin2str(binstr)
     Dim varlen, clow, ccc, skipflag, i
+	'中文字符Skip标志
     skipflag = 0
     ccc = ""
     If Not IsNull(binstr) Then
@@ -526,8 +553,10 @@ Function bin2str(binstr)
         For i = 1 To varlen
             If skipflag = 0 Then
                 clow = MidB(binstr, i, 1)
+				'判断是否中文的字符
                 If AscB(clow)>127 Then
-                    ccc = ccc & Chr(AscW(MidB(binstr, i + 1, 1) & clow))
+					'AscW会把二进制的中文双字节字符高位和低位反转，所以要先把中文的高低位反转
+					ccc =ccc & Chr(AscW(MidB(binstr,i+1,1) & clow))
                     skipflag = 1
                 Else
                     ccc = ccc & Chr(AscB(clow))
