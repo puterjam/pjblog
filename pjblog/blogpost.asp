@@ -214,7 +214,7 @@ End Sub
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">Tags:</span></td>
               <td align="left">
-                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onclick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的逗号分割)
+                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onclick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
                </td>
             </tr>
              <tr>
@@ -229,7 +229,9 @@ If log_editType = 0 Then
     oFCKeditor.Config("AutoDetectLanguage") = False
     oFCKeditor.Config("DefaultLanguage") = "zh-cn"
     oFCKeditor.Value = ""
+    oFCKeditor.Height = "350"
     oFCKeditor.Create "Message"
+
 Else
     UBB_TextArea_Height = "200px;"
     UBB_AutoHidden = False

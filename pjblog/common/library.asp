@@ -444,7 +444,7 @@ Class Tag
             Dim log_Tag, log_TagItem
             For Each log_TagItem IN Arr_Tags
                 log_Tag = Split(log_TagItem, "||")
-                Str = Replace(Str, "{"&log_Tag(0)&"}", log_Tag(1)&",")
+                Str = Replace(Str, "{"&log_Tag(0)&"}", log_Tag(1)&" ")
             Next
             Dim re
             Set re = New RegExp
