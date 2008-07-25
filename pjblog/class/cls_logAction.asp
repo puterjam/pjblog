@@ -63,19 +63,28 @@ Class logArticle
         End If
 
         '-------------------处理Tags--------------------
-        Dim tempTags, loadTagString, loadTags, loadTag, getTags
+        Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
         tempTags = Split(CheckStr(logTags), ",")
 
         Set getTags = New Tag
 
-        Dim post_tag, post_taglist
+        Dim post_tag,post_tag2, post_taglist
         post_taglist = ""
 
         '添加新的Tag
         For Each post_tag in tempTags
-            If Len(Trim(post_tag))>0 Then
-                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-            End If
+      	  	tempTags2 = Split(post_tag," ")
+      	  	If UBound(tempTags2)>0 Then
+	      	  	For Each post_tag2 in tempTags2
+		            If Len(Trim(post_tag2))>0 Then
+		                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag2))) & "}"
+		            End If
+	      	  	Next
+      	  	Else
+	            If Len(Trim(post_tag))>0 Then
+	                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+	            End If
+            End if
         Next
         logTags = post_taglist
         Call Tags(2)
@@ -229,7 +238,7 @@ Class logArticle
 
 
         '-------------------处理Tags--------------------
-        Dim tempTags, loadTagString, loadTags, loadTag, getTags
+        Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
         tempTags = Split(CheckStr(logTags), ",")
         loadTagString = weblog("log_tag")
 
@@ -247,14 +256,23 @@ Class logArticle
             Next
         End If
 
-        Dim post_tag, post_taglist
+        Dim post_tag,post_tag2, post_taglist
         post_taglist = ""
 
         '添加新的Tag
         For Each post_tag in tempTags
-            If Len(Trim(post_tag))>0 Then
-                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-            End If
+      	  	tempTags2 = Split(post_tag," ")
+      	  	If UBound(tempTags2)>0 Then
+	      	  	For Each post_tag2 in tempTags2
+		            If Len(Trim(post_tag2))>0 Then
+		                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag2))) & "}"
+		            End If
+	      	  	Next
+      	  	Else
+	            If Len(Trim(post_tag))>0 Then
+	                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+	            End If
+            End if
         Next
         logTags = post_taglist
         Call Tags(2)
