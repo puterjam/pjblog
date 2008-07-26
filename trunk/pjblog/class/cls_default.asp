@@ -170,9 +170,13 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
     If getCate.cate_Secret Then
         If Not stat_ShowHiddenCate And Not stat_Admin Then Exit Function
     End If
-    Dim getTag
+    Dim getTag,aUrl
     Set getTag = New tag
-
+	If blog_postFile>1 Then
+		aUrl = "article/" & webLogArr(0,PageCount) & ".htm"
+	else
+		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
+	end if
 %>
 		<div class="Content">
 		<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
@@ -181,7 +185,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 		<%end if%>
 		 <h1 class="ContentTitle"><img src="<%=getCate.cate_icon%>" style="margin:0px 2px -4px 0px;" alt="" class="CateIcon"/>
 		<%If CanRead Then%>
-			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
+			<a class="titleA" href="<%=aUrl%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
 			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>">[隐藏日志]</a>
 		<%End If
@@ -198,7 +202,7 @@ If CanRead Then
 %>
 					<div class="Content-body"><%=UnCheckStr(UBBCode(webLogArr(10,PageCount),mid(webLogArr(14,PageCount),1,1),mid(webLogArr(14,PageCount),2,1),mid(webLogArr(14,PageCount),3,1),mid(webLogArr(14,PageCount),4,1),mid(webLogArr(14,PageCount),5,1)))%>
 					<%if webLogArr(10,PageCount)<>HtmlEncode(webLogArr(11,PageCount)) then%>
-						<p><a href="article.asp?id=<%=webLogArr(0,PageCount)%>" class="more">查看更多...</a></p>
+						<p><a href="<%=aUrl%>" class="more">查看更多...</a></p>
 					<%end if%>
 			<%else%>
 					<div class="Content-body"><%=UnCheckStr(webLogArr(10,PageCount))%>
@@ -224,7 +228,7 @@ Else
 		<%if webLogArr(13,PageCount)=true then%>
 			 禁止评论 
 		<%Else%>
-			 <a href="article.asp?id=<%=webLogArr(0,PageCount)%>#comm_top">评论: <%=webLogArr(6,PageCount)%></a>
+			 <a href="<%=aUrl%>#comm_top">评论: <%=webLogArr(6,PageCount)%></a>
 		<%end If%>
 			 | 引用: <%=webLogArr(7,PageCount)%> | 查看次数: <%=webLogArr(8,PageCount)%>
 				<%if stat_EditAll or (stat_Edit and webLogArr(2,PageCount)=memName) then%>
@@ -243,17 +247,22 @@ End Function
 ' ----------------------- 输出列表模式 --------------------
 
 Function OutList(webLogArr, PageCount, getCate, ViewDraft, CanRead)
-    Dim logLink, logIcon
+    Dim logLink, logIcon,aUrl
     If getCate.cate_Secret Then
         If Not stat_ShowHiddenCate And Not stat_Admin Then Exit Function
     End If
+	If blog_postFile>1 Then
+		aUrl = "article/" & webLogArr(0,PageCount) & ".htm"
+	else
+		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
+	end if
 %>
 		<tr><td valign="top">
 		<%If ViewDraft = "draft" Then
     logLink = "blogedit.asp?id="&webLogArr(0, PageCount)
     logIcon = "<a href=""blogedit.asp?id="&webLogArr(0, PageCount)&""" title=""编辑草稿""><img border=""0"" alt=""编辑草稿"" src=""images/drafts.gif"" style=""margin:0px 4px -2px 0px""/></a>"
 Else
-    logLink = "article.asp?id="&webLogArr(0, PageCount)
+    logLink = aUrl
     logIcon = "<a href=""default.asp?cateID="&webLogArr(1, PageCount)&""" ><img border=""0"" alt=""查看 "&getCate.cate_Name&" 的日志"" src="""&getCate.cate_icon&""" style=""margin:0px 2px -3px 0px""/></a>"
 End If
 
@@ -273,7 +282,7 @@ If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 		</td>
 		<%If webLogArr(9,PageCount) Then %></b><%end If%>
 		<%If not ViewDraft="draft" then %>
-			<td valign="top" width="60"><nobr><a href="article.asp?id=<%=webLogArr(0,PageCount)%>#comm_top" title="评论"><%=webLogArr(6,PageCount)%></a> | <span title="引用通告"><%=webLogArr(7,PageCount)%></span> | <span title="阅读次数"><%=webLogArr(8,PageCount)%></span></nobr></td>
+			<td valign="top" width="60"><nobr><a href="<%=aUrl%>#comm_top" title="评论"><%=webLogArr(6,PageCount)%></a> | <span title="引用通告"><%=webLogArr(7,PageCount)%></span> | <span title="阅读次数"><%=webLogArr(8,PageCount)%></span></nobr></td>
 		<%else%>
 		    <td valign="top" width="60"><nobr><%=webLogArr(2,PageCount)%></span></nobr></td>
 		<%end if%>
