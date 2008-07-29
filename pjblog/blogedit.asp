@@ -63,6 +63,8 @@ If ChkPost() Then
     lArticle.logTags = request.Form("tags")
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
+    lArticle.logReadpw = Trim(request.form("log_Readpw"))
+    lArticle.logPwtips = request.form("log_Pwtips")
     EditLog = lArticle.editLog(request.Form("id"))
     Set lArticle = Nothing
 
@@ -158,20 +160,11 @@ End Sub
 %>
          </select>
    	</td>
-               <td width="120" rowspan="3" align="center">
-                 <div class="LDialog" style="display:none">
-                   <div class="LHead">魔法表情</div>
-                   <div class="LBody"><a href="javascript:alert('测试版，该功能暂时不可用')">选择魔法表情</a></div>
-               </div></td>
              </tr>
              <tr>
-               <td height="24" align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
-               <td width="517" align="left">
-                 <select name="log_IsShow">
-                   <option value="1" <%if lArticle.logIsShow then response.write ("selected=""selected""")%>>公开日志</option>
-                   <option value="0" <%if not lArticle.logIsShow then response.write ("selected=""selected""")%>>隐藏日志</option>
-                 </select>
-                 <select name="log_weather">
+               <td align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
+               <td align="left">
+                 <div><select name="log_weather">
                    <option value="sunny" <%if lArticle.logWeather="sunny" then response.write ("selected=""selected""")%>>晴天 </option>
                    <option value="cloudy" <%if lArticle.logWeather="cloudy" then response.write ("selected=""selected""")%>>多云 </option>
                    <option value="flurries" <%if lArticle.logWeather="flurries" then response.write ("selected=""selected""")%>>疾风 </option>
@@ -196,7 +189,16 @@ End Sub
          禁止评论</label>
                  <label for="label3">
                  <input name="log_IsTop" type="checkbox" id="label3" value="1" <%if lArticle.logIsTop then response.write ("checked=""checked""")%>/>
-         日志置顶</label><br/>
+         日志置顶</label>
+                <label for="Secret">
+                <input id="Secret" name="log_IsShow" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow then response.write ("checked=""checked""")%>/>
+        私密日志</label></div>
+                  <div id="Div_Password"  class="SecretInput" <%if lArticle.logIsShow then response.write("style=""display:none;""")%>>
+                  <span style="font-weight: bold">密码:</span>
+                  <input name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
+                  <span style="font-weight: bold">提示:</span>
+                  <input name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" value="<%=lArticle.logPwtips%>" /><br/>
+            温馨提示：密码留空日志则为私密日志，仅管理员和作者可查看，不能用密码查看！</div>
    	            </td>
              </tr>
              <tr>
@@ -271,7 +273,7 @@ UseIntro = CBool(lArticle.logIntroCustom)
 
 %>
            <tr>
-               <td  align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
+               <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
                <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
                <div id="Div_Intro" <%if UseIntro then response.write("style=""display:none""")%>>
                <%

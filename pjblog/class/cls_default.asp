@@ -9,7 +9,7 @@
 '**********************************************
 
 Function ContentList()'日志列表
-    Dim webLog, webLogArr, webLogArrLen, Log_Num, PageCount, CanRead, ViewType, ViewDraft, strSQL, ViewTag
+    Dim webLog, webLogArr, webLogArrLen, Log_Num, PageCount, CanRead, ViewType, ViewDraft, strSQL, ViewTag, Readpw
     Dim getCate, ArticleList
     PageCount = 0
     Set getCate = New Category
@@ -48,9 +48,9 @@ Function ContentList()'日志列表
 If Request.Cookies(CookieNameSetting)("ViewType") = "list" Then ViewType = "list" Else ViewType = "normal"
 
 If ViewType = "list" Then
-    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop"
+    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Readpw"
 Else
-    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Intro,log_Content,log_edittype,log_DisComment,log_ubbFlags,log_tag"
+    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Intro,log_Content,log_edittype,log_DisComment,log_ubbFlags,log_tag,log_Readpw"
 End If
 
 'row序号: 0     ,1         ,2         ,3        ,4           ,5         ,6           ,7            ,8           ,9        ,10       ,11         ,12          ,13            ,14          ,15
@@ -61,7 +61,7 @@ If Len(ViewTag)>0 Then
     If getTID<>0 Then
         SQLFiltrate = SQLFiltrate & " log_tag LIKE '%{"&getTID&"}%' AND "
         Url_Add = Url_Add & "tag="&Server.URLEncode(ViewTag)&"&amp;"
-        CT = "Tag: "&ViewTag&" | "
+        CT = "Tag: "&ViewTag&""
     End If
     Set getTag = Nothing
 End If
@@ -138,9 +138,15 @@ Do Until PageCount = webLogArrLen + 1 Or PageCount = blogPerPage
         getCate.load(webLogArr(1, PageCount))
     End If
     '是否有权限查看日记
+    If ViewType="list" Then
+    Readpw=Trim(webLogArr(10,PageCount))
+    Else
+    Readpw=Trim(webLogArr(16,PageCount))
+    End If
     If stat_Admin = True Then CanRead = True
     If webLogArr(5, PageCount) Then CanRead = True
     If webLogArr(5, PageCount) = False And webLogArr(2, PageCount) = memName Then CanRead = True
+    If Readpw<>"" and Session("ReadPassWord_"&webLogArr(0,PageCount))=Readpw then CanRead=True
     If ViewType = "list" Then
         '====================================
         '  列表模式
@@ -187,7 +193,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 		<%If CanRead Then%>
 			<a class="titleA" href="<%=aUrl%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
-			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>">[隐藏日志]</a>
+			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>"><%If Trim(webLogArr(16,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 %>
@@ -218,7 +224,12 @@ If Len(webLogArr(15, PageCount))>0 Then
 End If
 Else
 %>
-			<div class="Content-body">该日志是隐藏日志，只有管理员或发布者可以查看！
+			<div class="Content-body">
+			<%if Trim(webLogArr(16,PageCount))<>"" then%>
+			该日志是加密日志，需要输入正确密码才可以查看！
+			<%else%>
+			该日志是私密日志，只有管理员或发布者可以查看！
+			<%end if%>
 		<%end if%>
 							 
 		</div><div class="Content-bottom">
@@ -272,7 +283,7 @@ If webLogArr(9, PageCount) Then
 		<%If CanRead Then%>
 			<a href="<%=logLink%>" title="作者:<%=webLogArr(2,PageCount)%> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
-			<a href="<%=logLink%>">[隐藏日志]</a>
+			<a href="<%=logLink%>"><%If Trim(webLogArr(10,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
 
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then

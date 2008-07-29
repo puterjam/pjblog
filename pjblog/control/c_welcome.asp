@@ -27,7 +27,7 @@ Sub c_welcome
 				     <b>评论数量:</b> <%=blog_CommNums%> 个<br/>
 				     <b>引用数量:</b> <%=blog_TbCount%> 个<br/>
 				     <b>留言数量:</b> <%=blog_MessageNums%>  个(需要留言本插件支持)<br/>
-				     <b>会员数:</b> <%=blog_MemNums%> 人<br/>
+				     <b>会员总数:</b> <%=blog_MemNums%> 人<br/>
 				     <b>访问次数:</b> <%=blog_VisitNums%> 次<br/>
 				    </div>    
 				 </td>

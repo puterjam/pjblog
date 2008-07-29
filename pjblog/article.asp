@@ -17,16 +17,16 @@ Dim id, tKey
 If CheckStr(Request.QueryString("id"))<>Empty Then
     id = CheckStr(Request.QueryString("id"))
 End If
-Dim log_View, log_ViewArr, keyword, preLog, nextLog, blog_Cate, blog_CateArray, comDesc
+Dim log_View, log_ViewArr, keyword, preLog, nextLog, blog_Cate, blog_CateArray, comDesc, urlLink
 Dim getCate
 Set getCate = New Category
 If IsInteger(id) Then
     Set log_View = Server.CreateObject("ADODB.RecordSet")
-    If blog_postFile>1 Then
-        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
-    Else
-        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
-    End If
+    'If blog_postFile>1 Then
+        'SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Readpw,log_Pwtips FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
+    'Else
+        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag,log_Readpw,log_Pwtips FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
+    'End If
 
     log_View.Open SQL, Conn, 1, 3
     SQLQueryNums = SQLQueryNums + 1

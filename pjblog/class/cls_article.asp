@@ -29,19 +29,34 @@ End Sub
 
 
 Sub ShowArticle(LogID)
-    If (log_ViewArr(5, 0) = memName And log_ViewArr(3, 0) = False) Or stat_Admin Or log_ViewArr(3, 0) = True Then
+    If (log_ViewArr(5, 0) = memName And log_ViewArr(3, 0) = False) Or stat_Admin Or log_ViewArr(3, 0) = True or Trim(log_ViewArr(20, 0)) <> "" Then
     Else
-        showmsg "错误信息", "该日志为隐藏日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+        showmsg "错误信息", "该日志为私密日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
     If (Not getCate.cate_Secret) Or (log_ViewArr(5, 0) = memName And getCate.cate_Secret) Or stat_Admin Or (getCate.cate_Secret And stat_ShowHiddenCate) Then
     Else
-        showmsg "错误信息", "该日志分类为保密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+        showmsg "错误信息", "该日志分类为私密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
 
     If log_ViewArr(6, 0) Then comDesc = "Desc" Else comDesc = "Asc" End If
 
+    '是否有权限查看日记
+    Dim CanRead,CheckReadPW
+    CanRead = False
+    CheckReadPW = Trim(Request("PW"))
+    If CheckReadPW = "" Then
+    	CheckReadPW = Session("ReadPassWord_"&LogID)
+    Else
+    	Session("ReadPassWord_"&LogID) = CheckReadPW
+    End If
+    If IsNull(Session("CheckOutErr_"&LogID)) Or IsEmpty(Session("CheckOutErr_"&LogID)) Then Session("CheckOutErr_"&LogID) = 0
+    If stat_Admin = True Then CanRead = True
+    If log_ViewArr(3, 0) Then CanRead = True
+    If log_ViewArr(3, 0) = False And log_ViewArr(5, 0) = memName Then CanRead = True
+    If Trim(log_ViewArr(20,0)) = CheckReadPW Then CanRead = True
+
     '从文件读取日志
-    If blog_postFile>0 Then
+    If Trim(log_ViewArr(20, 0)) = "" and blog_postFile>0 Then
         Dim LoadArticle, TempStr, TempArticle
         LoadArticle = LoadFromFile("post/"&LogID&".asp")
 
@@ -61,7 +76,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0), False,log_ViewArr(3, 0) 
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0)
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
@@ -82,12 +97,22 @@ Sub ShowArticle(LogID)
 						   <div style="float:right;width:180px !important;width:auto">
 						   <%
 If Not preLog.EOF Then
-    response.Write ("<a href=""?id="&preLog("log_ID")&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/> 上一篇</a>")
+    	if blog_postFile = 2 then
+    		urlLink = "article/"&preLog("log_ID")&".htm"
+    	else 
+    		urlLink = "?id="&preLog("log_ID")
+    	end if
+    response.Write ("<a href="""&urlLink&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/> 上一篇</a>")
 Else
     response.Write ("<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇")
 End If
 If Not nextLog.EOF Then
-    response.Write (" | <a href=""?id="&nextLog("log_ID")&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/> 下一篇</a>")
+    	if blog_postFile = 2 then
+    		urlLink = "article/"&nextLog("log_ID")&".htm"	
+    	else 
+    		urlLink = "?id="&nextLog("log_ID")
+    	end if
+    response.Write (" | <a href="""&urlLink&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/> 下一篇</a>")
 Else
     response.Write (" | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇")
 End If
@@ -102,7 +127,17 @@ Set nextLog = Nothing
 					   </div>
 					   <div class="Content">
 					   <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
-					     <h1 class="ContentTitle"><strong><%=HtmlEncode(log_ViewArr(2,0))%></strong></h1>
+					     <h1 class="ContentTitle"><strong>
+							 <%If CanRead Then%>
+							 <%=HtmlEncode(log_ViewArr(2, 0))%>
+							 <% Else %>
+							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%>
+							 <% End If %>
+							 </strong> 
+							 <%if log_ViewArr(3, 0)=False or getCate.cate_Secret then%>
+							 <img src="images/icon_lock.gif" style="margin:0px 0px -3px 2px;" alt="" />
+							 <%end if%>
+							 </h1>
 					     <h2 class="ContentAuthor">作者:<%=log_ViewArr(5,0)%> 日期:<%=DateToStr(log_ViewArr(9,0),"Y-m-d")%></h2>
 					   </div>
 					    <div class="Content-Info">
@@ -113,14 +148,34 @@ Set nextLog = Nothing
 						  </div>
 						</div>
 					  <div id="logPanel" class="Content-body">
+						<%if Session("CheckOutErr_"&LogID) >=3 Then%>
+						<br/><div align="center" style="font-size:12px;font-weight:bold;color:#FE0000;text-align:center;border:1px solid #006;padding:6px;background:#FABABA;"><img src="images/tips.gif" style="margin:0px 0px -3px 2px;"/> 该日志是加密日志，你输入的密码已连续错误<%=Session("CheckOutErr_"&LogID)%>次，日志暂时锁定不可以查看！</div><br/>
 						<%
+					ElseIf CanRead Then '密码访问
 keyword = CheckStr(Request.QueryString("keyword"))
 If log_ViewArr(10, 0) = 1 Then
     response.Write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1))), keyword))
 Else
     response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
 End If
+					Else
 %>
+					<br/><form id="CheckRead" name="CheckRead" method="post" action="">
+					该日志是加密日志，需要输入正确密码才可以查看！<br/><br/>
+					<label>
+					请输入访问密码： <input name="pw" type="password" id="pw" size="10" class="inputBox" /><input name="do" type="hidden" value="CheckOut" />　
+					<input type="submit" name="Submit" value="确　定" class="userbutton" />
+					<%If Trim(Request.Form("do")) = "CheckOut" Then
+					Session("CheckOutErr_"&LogID) = Session("CheckOutErr_"&LogID) + 1
+					response.write "<span style=""font-size:11px;font-weight:bold;color:#FF0000;border:1px solid #006;margin-left:10px;padding:2px 2px 0px 3px;background:#eef;"">密码错误，请输入正确的密码！</span>"
+					End If%>
+					</label>
+					</form>
+					<fieldset style="font-size:12px;font-weight:bold;border:1px solid #F00;width:230px;<%If Trim(log_ViewArr(21,0))="" Then response.write "display:none;"%>"><legend style="background:#FEF50F;color:#990000;border:1px solid #F00;padding:3px;margin-left:5px;"><img src="images/tips.gif" style="margin:0px 0px -3px 2px;" alt="" /> 温馨提示</legend>
+					<div style="margin:10px;"><%=Trim(log_ViewArr(21,0))%></div></fieldset>
+					<%
+					End If	
+					%>
 					   <br/><br/>
 
 					   </div>
@@ -138,7 +193,7 @@ Set getTag = New tag
 					   </div></div>
 					   </div>
 <%Set getTag = Nothing
-ShowComm LogID, comDesc, log_ViewArr(7, 0), False,log_ViewArr(3, 0)  '显示评论内容
+ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0)  '显示评论内容
 End Sub
 
 
@@ -225,7 +280,7 @@ End Function
 '===============
 ' 输出发表评论框
 '===============
-Sub showCommentPost(ByVal logID, ByVal DisComment)
+Sub ShowCommentPost(ByVal logID, ByVal DisComment)
 	If DisComment Then 
 		Exit Sub
 	End IF
@@ -234,7 +289,7 @@ Sub showCommentPost(ByVal logID, ByVal DisComment)
 <div id="MsgContent" style="width:94%;"><div id="MsgHead">发表评论</div><div id="MsgBody">
 <%
 		If Not stat_CommentAdd Then
-		    response.Write ("你没有权限发表留言！")
+		    response.Write ("你没有权限发表评论！")
 		    response.Write ("</div></div>")
 		    Exit Sub
 		End If
@@ -288,5 +343,3 @@ Sub showCommentPost(ByVal logID, ByVal DisComment)
 	<%response.Write ("</div></div>")
 end Sub
 %>
-
-

@@ -39,6 +39,7 @@ If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True
 <body class="headbody">
  <div class="headmain">
  	<div style="float:right;margin:4px;">
+ 		<a href="javascript:open('default.asp'); void 1" align="_blank" style="position: absolute; top: 10px; font-size: 12px;right:100px;">查看首页</a>
  		<img src="images/control/closeMenu.png" style="cursor:pointer" onclick="switchToolbar(this)"/><img onclick="parent.MainContent.location='ConContent.asp?Fmenu=Logout&Smenu='" src="images/control/logout.png" onmouseover="this.src='images/control/logoutIn.png'" onmouseout="this.src='images/control/logout.png'" style="cursor:pointer"/>
  	</div>
  
