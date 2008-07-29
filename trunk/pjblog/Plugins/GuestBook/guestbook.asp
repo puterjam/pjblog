@@ -124,7 +124,7 @@
           <%if not replyMsg then%>	  
           	  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%if not memName=empty then response.write ("value="""&memName&""" readonly=""readonly""")%>/></td></tr>
           	  <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/></td></tr><%end if%>
-          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4"/> <%=getcode()%></td></tr>
+          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
           	  <tr><td align="right" width="70" valign="top" height="56"><strong>头　像:</strong></td>
           	  <td style="padding:2px;" align="left">
           	   <input type="hidden" name="book_face" value="face1"/>

@@ -55,7 +55,8 @@ If ChkPost() Then
     lArticle.logTags = request.Form("tags")
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
-
+    lArticle.logReadpw = Trim(request.form("log_Readpw"))
+    lArticle.logPwtips = request.form("log_Pwtips")
     postLog = lArticle.postLog
     Set lArticle = Nothing
 
@@ -154,20 +155,11 @@ End Sub
               <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
               <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50"/>
               </td>
-              <td width="120" rowspan="3" align="center">
-                <div class="LDialog" style="display:none">
-                  <div class="LHead">魔法表情</div>
-                  <div class="LBody"><a href="javascript:alert('测试版，该功能暂时不可用')">选择魔法表情</a></div>
-              </div></td>
             </tr>
             <tr>
-              <td height="24" align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
-              <td width="517" align="left">
-                <select name="log_IsShow">
-                  <option value="1" selected="selected">公开日志</option>
-                  <option value="0">隐藏日志</option>
-                </select>
-                <select name="log_weather">
+              <td align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
+              <td align="left">
+                <div><select name="log_weather">
                   <option value="sunny" selected="selected">晴天 </option>
                   <option value="cloudy">多云 </option>
                   <option value="flurries">疾风 </option>
@@ -193,6 +185,15 @@ End Sub
                 <label for="label3">
                 <input name="log_IsTop" type="checkbox" id="label3" value="1" />
         日志置顶</label>
+                <label for="Secret">
+                <input id="Secret" name="log_IsShow" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
+        私密日志</label></div>
+                  <div id="Div_Password" style="display:none;" class="SecretInput">
+                  <span style="font-weight: bold">密码:</span>
+                  <input name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
+                  <span style="font-weight: bold">提示:</span>
+                  <input name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" /><br/>
+            温馨提示：密码留空日志则为私密日志，仅管理员和作者可查看，不能用密码查看！</div>
               </td>
             </tr>
             <tr>
@@ -231,7 +232,6 @@ If log_editType = 0 Then
     oFCKeditor.Value = ""
     oFCKeditor.Height = "350"
     oFCKeditor.Create "Message"
-
 Else
     UBB_TextArea_Height = "200px;"
     UBB_AutoHidden = False
@@ -256,7 +256,7 @@ End If
   禁止自动转换关键字</label></td>
             </tr><%end if%>
           <tr>
-              <td  align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
+              <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
               <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
               <div id="Div_Intro" style="display:none">
               <%

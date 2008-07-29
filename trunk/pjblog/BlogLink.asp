@@ -88,7 +88,7 @@ If Err Then
           	  <tr><td align="right" width="70"><strong>网站名称:</strong></td><td align="left" style="padding:3px;"><input name="link_Name" type="text" size="35" class="userpass" maxlength="40"/> <span style="color:#f00">*</span></td></tr>
           	  <tr><td align="right" width="70"><strong>网站地址:</strong></td><td align="left" style="padding:3px;"><input name="link_URL" type="text" size="50" class="userpass"/> <span style="color:#f00">*</span></td></tr>
           	  <tr><td align="right" width="70"><strong>网站Logo:</strong></td><td align="left" style="padding:3px;"><input name="link_Image" type="text" size="50" class="userpass"/></td></tr>
-          	   <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="link_validate" type="text" size="4" class="userpass" maxlength="4"/> <%=getcode()%></td></tr>
+          	   <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="link_validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
 			  <tr><td align="right" width="70"></td><td align="left">提示：网站的Logo和地址要写完整,必须包含 http://</td></tr>
                     <tr>
                       <td colspan="2" align="center" style="padding:3px;">

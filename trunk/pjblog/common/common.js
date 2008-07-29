@@ -158,10 +158,20 @@ function doCopy(ID) {
 	if (document.all){
 		 textRange = document.getElementById(ID).createTextRange(); 
 		 textRange.execCommand("Copy"); 
+		 alert("代码已经复制到剪切板");
 	}
 	else{
-		 alert("此功能只能在IE上有效")
+		 alert("此功能只能在IE上有效\n\n请在文本域中用Ctrl+A选择再复制")
 	}
+}
+//另存代码
+function saveCode(ID) {
+	 cod=document.getElementById(ID)
+        var winname = window.open('','','width=0,height=0,top=1,left=1');
+        winname.document.open('text/html', 'replace');
+        winname.document.write(cod.value);
+        winname.document.execCommand('saveas','','Code.htm');
+        winname.close();
 }
 var MediaTemp=new Array()
 function MediaShow(strType,strID,strURL,intWidth,intHeight)

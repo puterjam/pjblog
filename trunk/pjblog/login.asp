@@ -47,7 +47,7 @@ Else
 	  <input name="action" type="hidden" value="login"/>
 	   <label>用户名：<input name="username" type="text" size="18" class="userpass" maxlength="24"/></label><br/>
 	   <label>密　码：<input name="password" type="password" size="18" class="userpass"/></label><br/>
-	   <label>验证码：<input name="validate" type="text" size="4" class="userpass" maxlength="4"/> <%=getcode()%></label><br/>
+	   <label>验证码：<input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></label><br/>
 	   　　<label><input name="KeepLogin" type="checkbox" value="1"/>记住我的登录信息</label><br/>
 	   <input type="submit" value="登　陆" class="userbutton"/>　<input type="button" value="用户注册" class="userbutton" onclick="location='register.asp'"/>
 	   </div>

@@ -282,7 +282,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
                 For Each strMatch in strMatchs
                     Randomize
                     rndID = "temp"&Int(100000 * Rnd)
-                    strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/html.gif"" style=""margin:0px 2px -3px 0px""> HTML代码</div><div class=""UBBContent""><TEXTAREA rows=""8"" id="""&rndID&""">"&UBBFilter(HTMLDecode(strMatch.SubMatches(0)))& "</TEXTAREA><br/><INPUT onclick=""runEx('"&rndID&"')""  type=""button"" value=""运行此代码""/> <INPUT onclick=""doCopy('"&rndID&"')""  type=""button"" value=""复制此代码""/><br/> [Ctrl+A 全部选择 提示：你可先修改部分代码，再按运行]</div></div>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/html.gif"" style=""margin:0px 2px -3px 0px""> HTML代码</div><div class=""UBBContent""><TEXTAREA rows=""8"" id="""&rndID&""">"&UBBFilter(HTMLDecode(strMatch.SubMatches(0)))& "</TEXTAREA><br/><INPUT onclick=""runEx('"&rndID&"')""  type=""button"" class=""userbutton"" value=""运行此代码""/> <INPUT onclick=""doCopy('"&rndID&"')""  type=""button"" class=""userbutton"" value=""复制此代码""/> <INPUT onclick=""saveCode('"&rndID&"')"" type=""button"" class=""userbutton"" value=""保存此代码""><br/> [Ctrl+A 全部选择 提示：你可先修改部分代码，再按运行]</div></div>", 1, -1, 0)
                 Next
                 Set strMatchs = Nothing
             End If

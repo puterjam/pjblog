@@ -7,7 +7,7 @@
 Class logArticle
     Private weblog
     Public categoryID, logTitle, logAuthor, logEditType
-    Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder
+    Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips
     Public logDisableComment, logIsTop, logFrom, logFromURL
     Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord
     Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount
@@ -42,6 +42,8 @@ Class logArticle
         logTags = ""
         logPubTime = "2006-1-1 00:00:00"
         logPublishTimeType = "now"
+        logReadpw = ""
+        logPwtips = ""
     End Sub
 
     Private Sub Class_Terminate()
@@ -81,9 +83,9 @@ Class logArticle
 		            End If
 	      	  	Next
       	  	Else
-	            If Len(Trim(post_tag))>0 Then
-	                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-	            End If
+            If Len(Trim(post_tag))>0 Then
+                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+            End If
             End if
         Next
         logTags = post_taglist
@@ -116,6 +118,7 @@ Class logArticle
         End If
 
         '日志基本状态
+        If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
@@ -149,6 +152,15 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
+
+If logIsShow = 0 Then '如果为私密日志
+        weblog("log_Readpw")=logReadpw
+        weblog("log_Pwtips")=logPwtips
+else
+        weblog("log_Readpw")=""
+        weblog("log_Pwtips")=""
+End If
+
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
         weblog.Close
@@ -269,9 +281,9 @@ Class logArticle
 		            End If
 	      	  	Next
       	  	Else
-	            If Len(Trim(post_tag))>0 Then
-	                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-	            End If
+            If Len(Trim(post_tag))>0 Then
+                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+            End If
             End if
         Next
         logTags = post_taglist
@@ -304,6 +316,7 @@ Class logArticle
         End If
 
         '日志基本状态
+        If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
@@ -342,6 +355,15 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
+
+If logIsShow = 0 Then '如果仍为私密日志
+        weblog("log_Readpw")=logReadpw
+        weblog("log_Pwtips")=logPwtips
+else
+        weblog("log_Readpw")=""
+        weblog("log_Pwtips")=""
+End If
+
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
         weblog.Close
@@ -443,7 +465,7 @@ Class logArticle
         DeleteFiles Server.MapPath("post/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/c_"&logid&".js")
-		DeleteFiles Server.MapPath("article/"&logid&".htm")
+        DeleteFiles Server.MapPath("article/"&logid&".htm")
 		
         Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
@@ -479,7 +501,7 @@ Class logArticle
             Exit Function
         End If
 
-        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_edittype,log_ubbFlags,log_Intro,log_weather,log_Level,log_comorder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums FROM blog_Content WHERE log_ID="&id&""
+        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_edittype,log_ubbFlags,log_Intro,log_weather,log_Level,log_comorder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums,log_Readpw,log_Pwtips FROM blog_Content WHERE log_ID="&id&""
         weblog.Open sqlString, Conn, 1, 1
         SQLQueryNums = SQLQueryNums + 1
 
@@ -511,6 +533,8 @@ Class logArticle
         logCommentCount = weblog("log_CommNums")
         logQuoteCount = weblog("log_QuoteNums")
         logViewCount = weblog("log_ViewNums")
+        logReadpw = Trim(weblog("log_Readpw"))
+        logPwtips = weblog("log_Pwtips")
         logTrackback = ""
         Set getTag = New tag
         logTags = getTag.filterEdit(weblog("log_tag"))
@@ -894,8 +918,8 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
-    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
 
     Dim BTemp,urlLink
     BTemp = ""
@@ -962,7 +986,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Set log_View = conn.Execute(SQL)
     
 	if log_View("log_IsShow") = false then '如果是私密日志
-    	SaveArticle = SaveToFile("<head><title>显示隐藏日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到隐藏日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", "article/" & LogID & ".htm")
+    	SaveArticle = SaveToFile("<head><title>显示私密日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到私密日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", "article/" & LogID & ".htm")
     	PostHalfStatic LogID, UpdateListOnly
 	    
 	    Set log_View = Nothing
@@ -997,6 +1021,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$blogabout$>", blogabout)   
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)   
     Temp1 = Replace(Temp1, "<$CookieName$>", CookieName)
+    Temp1 = Replace(Temp1, "<$blog_version$>", blog_version)
     
    '输出第一页评论
 
@@ -1045,8 +1070,8 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime DESC")
-    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsDraft=false ORDER BY log_PostTime ASC")
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
 
     Dim BTemp
     BTemp = ""
@@ -1114,6 +1139,18 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "")
     Else
         Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+    End If
+
+    If log_View("log_Readpw") <> "" Then
+        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
+    Else
+        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
+    End If
+
+    If log_View("log_Readpw") <> "" Then
+        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
+    Else
+        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
     End If
 
     If Len(log_View("log_tag"))>0 Then

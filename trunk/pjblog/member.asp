@@ -237,7 +237,7 @@ Function SaveMem
         End If
         If password<>Confirmpassword Then
             ReInfo(0) = "错误信息"
-            ReInfo(1) = "<b>密码验证失败！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "ErrorIcon"
             SaveMem = ReInfo
             Exit Function
