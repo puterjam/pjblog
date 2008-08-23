@@ -43,12 +43,14 @@ Sub ShowArticle(LogID)
     '是否有权限查看日记
     Dim CanRead,CheckReadPW
     CanRead = False
-    CheckReadPW = Trim(Request("PW"))
-    If CheckReadPW = "" Then
+    CheckReadPW = md5(Trim(Request.form("PW")))
+    
+    If CheckReadPW = "D41D8CD98F00B204E9800998ECF8427E" Then '空白的md5
     	CheckReadPW = Session("ReadPassWord_"&LogID)
     Else
     	Session("ReadPassWord_"&LogID) = CheckReadPW
     End If
+
     If IsNull(Session("CheckOutErr_"&LogID)) Or IsEmpty(Session("CheckOutErr_"&LogID)) Then Session("CheckOutErr_"&LogID) = 0
     If stat_Admin = True Then CanRead = True
     If log_ViewArr(3, 0) Then CanRead = True
@@ -94,7 +96,7 @@ Sub ShowArticle(LogID)
 %>
 					   <div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 					   <div class="pageContent">
-						   <div style="float:right;width:180px !important;width:auto">
+						   <div style="float:right;width:auto">
 						   <%
 If Not preLog.EOF Then
     	if blog_postFile = 2 then
@@ -135,7 +137,8 @@ Set nextLog = Nothing
 							 <% End If %>
 							 </strong> 
 							 <%if log_ViewArr(3, 0)=False or getCate.cate_Secret then%>
-							 <img src="images/icon_lock.gif" style="margin:0px 0px -3px 2px;" alt="" />
+							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="" /><%End If%>
+							 
 							 <%end if%>
 							 </h1>
 					     <h2 class="ContentAuthor">作者:<%=log_ViewArr(5,0)%> 日期:<%=DateToStr(log_ViewArr(9,0),"Y-m-d")%></h2>
@@ -147,32 +150,41 @@ Set nextLog = Nothing
 					        <%if stat_DelAll or (stat_Del and log_ViewArr(5,0)=memName)  then %>　<a href="blogedit.asp?action=del&amp;id=<%=log_ViewArr(0,0)%>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a><%end if%>
 						  </div>
 						</div>
+						
 					  <div id="logPanel" class="Content-body">
-						<%if Session("CheckOutErr_"&LogID) >=3 Then%>
-						<br/><div align="center" style="font-size:12px;font-weight:bold;color:#FE0000;text-align:center;border:1px solid #006;padding:6px;background:#FABABA;"><img src="images/tips.gif" style="margin:0px 0px -3px 2px;"/> 该日志是加密日志，你输入的密码已连续错误<%=Session("CheckOutErr_"&LogID)%>次，日志暂时锁定不可以查看！</div><br/>
-						<%
-					ElseIf CanRead Then '密码访问
-keyword = CheckStr(Request.QueryString("keyword"))
-If log_ViewArr(10, 0) = 1 Then
-    response.Write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1))), keyword))
-Else
-    response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
-End If
-					Else
-%>
-					<br/><form id="CheckRead" name="CheckRead" method="post" action="">
-					该日志是加密日志，需要输入正确密码才可以查看！<br/><br/>
-					<label>
-					请输入访问密码： <input name="pw" type="password" id="pw" size="10" class="inputBox" /><input name="do" type="hidden" value="CheckOut" />　
-					<input type="submit" name="Submit" value="确　定" class="userbutton" />
-					<%If Trim(Request.Form("do")) = "CheckOut" Then
-					Session("CheckOutErr_"&LogID) = Session("CheckOutErr_"&LogID) + 1
-					response.write "<span style=""font-size:11px;font-weight:bold;color:#FF0000;border:1px solid #006;margin-left:10px;padding:2px 2px 0px 3px;background:#eef;"">密码错误，请输入正确的密码！</span>"
-					End If%>
-					</label>
-					</form>
-					<fieldset style="font-size:12px;font-weight:bold;border:1px solid #F00;width:230px;<%If Trim(log_ViewArr(21,0))="" Then response.write "display:none;"%>"><legend style="background:#FEF50F;color:#990000;border:1px solid #F00;padding:3px;margin-left:5px;"><img src="images/tips.gif" style="margin:0px 0px -3px 2px;" alt="" /> 温馨提示</legend>
-					<div style="margin:10px;"><%=Trim(log_ViewArr(21,0))%></div></fieldset>
+						<%If CanRead Then '密码访问
+							keyword = CheckStr(Request.QueryString("keyword"))
+							If log_ViewArr(10, 0) = 1 Then
+							    response.Write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1))), keyword))
+							Else
+							    response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
+							End If
+						Else
+						%>
+						<div>
+							<h5 class="tips"><img alt="" style="margin: 0px 0px -3px 2px;" src="images/icon_lock2.gif"/>该日志是加密日志，需要输入正确密码才可以查看！</h5>
+							<div class="tips_body">
+								<%if Session("CheckOutErr_"&LogID) >=2 Then '超出范围%>
+									<div class="error">抱歉，您输入的验证次数已超过最大的次数，日志暂时锁定！</div>
+								<%
+								Else%>
+									<form id="CheckRead" name="CheckRead" method="post" action="">
+										<%If Trim(Request.Form("do")) = "CheckOut" Then
+											Session("CheckOutErr_"&LogID) = Session("CheckOutErr_"&LogID) + 1
+											response.write "<div class=""error"">密码错误。您还有 " & 3 - Session("CheckOutErr_"&LogID) & " 次密码验证的机会。</div>"
+										 End If%>
+										<input name="do" type="hidden" value="CheckOut" />
+										<label for="pw"><input name="pw" type="password" id="pw" size="15" class="input"/></label>
+										<input type="image" name="Submit" value="确　定" src="images/unlock.gif" style="margin-bottom:-8px;*margin-bottom:-6px"/> <a href="javascript:;" onclick="$('hints').style.display='';" title="显示密码提示">密码提示</a>
+			
+										
+										<div id="hints" class="hints" style="display:none">
+											<%=Trim(log_ViewArr(21,0))%>
+										</div>
+									</form>
+								<%end if%>
+							</div>
+						</div>
 					<%
 					End If	
 					%>
@@ -250,7 +262,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 		    blog_CommID = commArr(0, Pcount)
 		    blog_CommAuthor = commArr(2, Pcount)
 		    blog_CommContent = commArr(1, Pcount)
-     		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop"">"
+     		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
 			ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a></span>]</span>"

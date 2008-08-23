@@ -26,7 +26,7 @@ Else
     <frameset rows="31,*" framespacing="0" border="0" frameborder="0">
     <frame src="ConHead.asp" scrolling="no" name="Head" noresize>
       <frameset  id="ContentSet" rows="80,*">
-      <frame src="ConMenu.asp">
+      <frame src="ConMenu.asp" name="Menu">
        <frame src="ConContent.asp" name="MainContent" scrolling="yes" noresize>
      </frameset>
     </frameset>

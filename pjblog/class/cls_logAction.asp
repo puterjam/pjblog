@@ -118,7 +118,7 @@ Class logArticle
         End If
 
         '日志基本状态
-        If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
+       ' If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
@@ -153,13 +153,8 @@ Class logArticle
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
 
-If logIsShow = 0 Then '如果为私密日志
-        weblog("log_Readpw")=logReadpw
-        weblog("log_Pwtips")=logPwtips
-else
-        weblog("log_Readpw")=""
-        weblog("log_Pwtips")=""
-End If
+		weblog("log_Readpw")=logReadpw
+		weblog("log_Pwtips")=logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -316,7 +311,7 @@ End If
         End If
 
         '日志基本状态
-        If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
+       ' If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
@@ -356,13 +351,8 @@ End If
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
 
-If logIsShow = 0 Then '如果仍为私密日志
-        weblog("log_Readpw")=logReadpw
-        weblog("log_Pwtips")=logPwtips
-else
-        weblog("log_Readpw")=""
-        weblog("log_Pwtips")=""
-End If
+		weblog("log_Readpw") = logReadpw
+		weblog("log_Pwtips") = logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -883,7 +873,11 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     If log_View("log_IsShow") Then
         Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
     Else
-        Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+     	if log_View("log_Readpw") <> "" then
+        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+     	else
+        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+        end if
     End If
 
     If Len(log_View("log_tag"))>0 Then
@@ -965,8 +959,6 @@ End Sub
 Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category,baseUrl
     
-    
-
     '读取日志模块
     LoadTemplate1 = LoadFromFile("Template/static.htm")
 
@@ -993,16 +985,18 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	    exit Sub
 	end if
     
+    blog_currentCategoryID = log_View("log_CateID")
     Dim blog_Cate, blog_CateArray, comDesc
     Dim getCate, getTags
-
+	
     Set getCate = New Category
     Set getTags = New tag
 
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
     
 	if UpdateListOnly then '只更新列表缓存
-	
+		PostArticleListCache LogID, log_View, getCate, getTags
+		
 	    Set log_View = Nothing
 	    Set getCate = Nothing
 	    Set getTags = Nothing
@@ -1138,19 +1132,17 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     If log_View("log_IsShow") Then
         Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "")
     Else
-        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
-    End If
-
-    If log_View("log_Readpw") <> "" Then
-        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
-    Else
-        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
-    End If
-
-    If log_View("log_Readpw") <> "" Then
-        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
-    Else
-        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
+	    If log_View("log_Readpw") <> "" Then
+	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
+	    Else
+	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
+	    End If
+	    
+       
     End If
 
     If Len(log_View("log_tag"))>0 Then

@@ -39,6 +39,21 @@ If ChkPost() Then
 %>
     <!--内容-->
    <%If Request.Form("action") = "post" Then
+    dim pws,isShow
+    pws = Trim(request.form("log_Readpw"))
+    if request.form("blog_pws") = "0" then pws = ""
+    If CheckStr(Request.Form("log_IsHidden")) = "1" then
+    	isShow = false
+    else
+    	isShow = true
+    end if
+   ' response.write isShow
+    If CheckStr(Request.Form("c_pws")) = "1" then'如果密码更改了
+ 		 pws = Trim(request.form("log_Readpw"))
+   		 if not isEmpty(pws) then pws = md5(pws)
+    end if 
+ '   if isShow then pws = ""
+    
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
     lArticle.logAuthor = memName
@@ -49,7 +64,7 @@ If ChkPost() Then
     lArticle.logLevel = request.Form("log_Level")
     lArticle.logCommentOrder = request.Form("log_comorder")
     lArticle.logDisableComment = request.Form("log_DisComment")
-    lArticle.logIsShow = request.Form("log_IsShow")
+    lArticle.logIsShow = isShow
     lArticle.logIsTop = request.Form("log_IsTop")
     lArticle.logIsDraft = request.Form("log_IsDraft")
     lArticle.logFrom = request.Form("log_From")
@@ -63,7 +78,7 @@ If ChkPost() Then
     lArticle.logTags = request.Form("tags")
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
-    lArticle.logReadpw = Trim(request.form("log_Readpw"))
+    lArticle.logReadpw = pws
     lArticle.logPwtips = request.form("log_Pwtips")
     EditLog = lArticle.editLog(request.Form("id"))
     Set lArticle = Nothing
@@ -130,7 +145,7 @@ Else
              <tr>
                <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
                <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50" value="<%=lArticle.logTitle%>"/>
-          &nbsp;&nbsp;移动到 <select name="log_CateID" id="select2">
+          	 &nbsp;&nbsp;<b> 分类:</b> <select name="log_CateID" id="select2">
            <%
 outCate
 
@@ -161,8 +176,10 @@ End Sub
          </select>
    	</td>
              </tr>
+             
+             
              <tr>
-               <td align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
+               <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
                <td align="left">
                  <div><select name="log_weather">
                    <option value="sunny" <%if lArticle.logWeather="sunny" then response.write ("selected=""selected""")%>>晴天 </option>
@@ -175,11 +192,11 @@ End Sub
                    <option value="snow" <%if lArticle.logWeather="snow" then response.write ("selected=""selected""")%>>下雪 </option>
                  </select>
                  <select name="log_Level">
-                   <option value="level1" <%if lArticle.logLevel="level1" then response.write ("selected=""selected""")%>>马马虎虎 </option>
-                   <option value="level2" <%if lArticle.logLevel="level2" then response.write ("selected=""selected""")%>>普通 </option>
-                   <option value="level3" <%if lArticle.logLevel="level3" then response.write ("selected=""selected""")%>>内容不错 </option>
-                   <option value="level4" <%if lArticle.logLevel="level4" then response.write ("selected=""selected""")%>>好东西 </option>
-                   <option value="level5" <%if lArticle.logLevel="level5" then response.write ("selected=""selected""")%>>非看不可 </option>
+                   <option value="level1" <%if lArticle.logLevel="level1" then response.write ("selected=""selected""")%>>★</option>
+                   <option value="level2" <%if lArticle.logLevel="level2" then response.write ("selected=""selected""")%>>★★</option>
+                   <option value="level3" <%if lArticle.logLevel="level3" then response.write ("selected=""selected""")%>>★★★</option>
+                   <option value="level4" <%if lArticle.logLevel="level4" then response.write ("selected=""selected""")%>>★★★★</option>
+                   <option value="level5" <%if lArticle.logLevel="level5" then response.write ("selected=""selected""")%>>★★★★★</option>
                  </select>
                  <label for="label">
                  <input id="label" name="log_comorder" type="checkbox" value="1" <%if lArticle.logCommentOrder then response.write ("checked=""checked""")%>/>
@@ -190,20 +207,31 @@ End Sub
                  <label for="label3">
                  <input name="log_IsTop" type="checkbox" id="label3" value="1" <%if lArticle.logIsTop then response.write ("checked=""checked""")%>/>
          日志置顶</label>
-                <label for="Secret">
-                <input id="Secret" name="log_IsShow" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow then response.write ("checked=""checked""")%>/>
-        私密日志</label></div>
-                  <div id="Div_Password"  class="SecretInput" <%if lArticle.logIsShow then response.write("style=""display:none;""")%>>
-                  <span style="font-weight: bold">密码:</span>
-                  <input name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
-                  <span style="font-weight: bold">提示:</span>
-                  <input name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" value="<%=lArticle.logPwtips%>" /><br/>
-            温馨提示：密码留空日志则为私密日志，仅管理员和作者可查看，不能用密码查看！</div>
+
    	            </td>
              </tr>
              <tr>
-               <td height="24" align="right" valign="top">&nbsp;</td>
-               <td align="left"><span style="font-weight: bold">来自:</span>
+               <td height="24" align="right" valign="top"><b>隐私:</b></td>
+               <td align="left">
+				 <label for="Secret">
+				 
+				                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow then response.write ("checked=""checked""")%>/>
+				        设置日志隐私</label></div>
+				                  <div id="Div_Password"  class="tips_body" <%if lArticle.logIsShow then response.write("style=""display:none;""")%>>
+				                  	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
+	                  	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" then response.write("checked")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
+	                  	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+					                  <span style="font-weight: bold">密码:</span>
+					                  <input onfocus="this.select();$('bpws2').checked='checked'" onkeypress="$('c_pws').value=1" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
+					                  <span style="font-weight: bold">&nbsp;&nbsp;密码提示:</span>
+					                  <input onfocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" value="<%=lArticle.logPwtips%>" /><br/>
+					                  <input id="c_pws" name="c_pws" type="hidden" value="0">
+				                </div>
+				               </td>
+             </tr>
+             <tr>
+               <td height="24" align="right" valign="top"><b>来源:</b></td>
+               <td align="left"><span style="font-weight: bold"></span>
                    <input name="log_From" type="text" id="log_From" size="12" class="inputBox" value="<%=lArticle.logFrom%>" />
                    <span style="font-weight: bold">网址:</span>
                    <input name="log_FromURL" type="text" id="log_FromURL" size="38" class="inputBox" value="<%=lArticle.logFromURL%>"/>

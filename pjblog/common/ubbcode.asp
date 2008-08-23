@@ -255,25 +255,28 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[cc\](.*?)\[\/cc\]"
             strContent = re.Replace(strContent, "<embed src=""http://union.bokecc.com/$1"" width=""438"" height=""387"" type=""application/x-shockwave-flash""></embed>")
             re.Pattern = "\[code\](.*?)\[\/code\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/code.gif"" style=""margin:0px 2px -3px 0px"" alt=""程序代码""/> 程序代码</div><div class=""UBBContent"">$1</div></div>")
+            strContent = re.Replace(strContent, "<div class=""UBBPanel codePanel""><div class=""UBBTitle""><img src=""images/code.gif"" style=""margin:0px 2px -3px 0px"" alt=""程序代码""/> 程序代码</div><div class=""UBBContent"">$1</div></div>")
 
             re.Pattern = "\[quote\](.*?)\[\/quote\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
+            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
             re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
+            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
+
+            re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
+            strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
 
             re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
             If Len(memName)>0 Then
-                strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div>")
+                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div>")
             Else
-                strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
             End If
 
             re.Pattern = "\[hidden=(.[^\]]*)\](.*?)\[\/hidden\]"
             If Len(memName)>0 Then
-                strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 $1""/> 显示被隐藏内容来自 $1</div><div class=""UBBContent"">$2</div></div>")
+                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 $1""/> 显示被隐藏内容来自 $1</div><div class=""UBBContent"">$2</div></div>")
             Else
-                strContent = re.Replace(strContent, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 $1""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 $1""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
             End If
 
             If Not DisIMG = 1 Then

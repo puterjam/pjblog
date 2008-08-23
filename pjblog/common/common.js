@@ -721,3 +721,33 @@ function fillComment(html){
 	window._loadComment = false;
 }
 
+/**
+ * 主人回复
+ */
+function replyMsg(logId,id,a1,a2,a3){
+	var _r = $("reply_" + id);
+	if (!_r) {
+		_r = document.createElement("div");
+		_r.id = "reply_" + id;
+		var _c = $("commcontent_" + id);
+		_c.appendChild(_r);
+
+		_r.innerHTML = '<br/><div class="UBBPanel replayPanel"><div class="UBBTitle"><img alt="评论回复" style="margin: 0px 2px -3px 0px;" src="images/icon_reply.gif"/> 评论回复</div><div class="UBBContent">' +
+				'<form method="post" action="reply.asp" target="replyFrame_'+id+'">' +
+				'<input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="logId" value="'+logId+'"/>' +
+				'<input type="hidden" name="a1" value="'+a1+'"/><input type="hidden" name="a2" value="'+a2+'"/><input type="hidden" name="a3" value="'+a3+'"/>' +
+				'<textarea name="replay" style="width: 99%; height: 60px;" class="editTextarea" id="edit_'+id+'"></textarea>' +
+				'<input type="submit" value="回复" class="userbutton"  id="button_'+id+'"/> <input onclick="removeReplyMsg('+id+')" type="button" value="取消" class="userbutton"/>' +
+				'<iframe name="replyFrame_'+id+'" style="display:none"/></form></div></div>';
+	}
+	$('button_'+id).focus();
+	$('edit_'+id).select();
+}
+
+
+function removeReplyMsg(id){
+	var _r = $("reply_" + id);
+	if (_r) {
+		_r.parentNode.removeChild(_r);
+	}
+}

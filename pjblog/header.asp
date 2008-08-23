@@ -52,6 +52,15 @@ End If
 '输出文件头
 
 Sub getBlogHead(Title, CateTitle, CateID)
+'高亮分类
+If IsInteger(cateID) = True Then
+    blog_currentCategoryID = cateID
+End If
+
+'高亮分类for日志单篇
+If IsInteger(CateID) = True Then
+    blog_currentCategoryID = CateID
+End If
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -86,6 +95,36 @@ Sub getBlogHead(Title, CateTitle, CateID)
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="common/common.js"></script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
+	<style type="text/css"> 
+		.ownerClassLog{display:none}
+		.ownerClassComment{display:<%if  stat_Admin <> True then response.write("none")%>;}
+		/*全局的提示框样式*/
+		h5.tips{
+			background:#FFCC00;border:1px solid #FFCC00;background-image:url(images/bg_tips.png);color:#990000;padding:3px;margin:0;font-size:13px
+		}
+		.tips_body{
+			background:#FFFFCC;border:1px solid #FFCC00;padding:4px;
+		}
+		.tips_body form{
+			margin:0;
+		}
+		.tips_body .input{
+			height:17px;
+			border:1px solid #BD5B21
+		}
+		.tips_body .hints{
+				margin:3px 0 0 3px;
+				padding:2px 2px 2px 18px;
+				background:url(images/notify.gif) no-repeat left 4px
+		}
+		.tips_body .error{
+			border:1px solid #CC0033;
+			padding:1px 3px 1px 21px;
+			color:#990000;
+			margin-bottom:2px;
+			background:#FF9F88 url(images/tips.gif) no-repeat 3px 4px
+		}
+	</style>
 </head>
 <body onload="initJS()" onkeydown="PressKey()">
 <a href="default.asp" accesskey="i"></a>

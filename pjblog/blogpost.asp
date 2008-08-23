@@ -5,6 +5,7 @@
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
+
 <div id="Tbody">
   <div style="text-align:center;">
   <br/>
@@ -29,8 +30,18 @@ If ChkPost() Then
   <%else%>
    <!--内容-->
   <%If Request.Form("action") = "post" Then
-    Dim lArticle, postLog
+    Dim lArticle, postLog,pws,isShow
+    If CheckStr(Request.Form("log_IsHidden")) = "1" then
+    	isShow = false
+    else
+    	isShow = true
+    end if
     Set lArticle = New logArticle
+    pws = Trim(request.form("log_Readpw"))
+	if request.form("blog_pws") = "0" then pws = ""
+    if pws<>"" then pws = md5(pws)
+  '  if isShow then pws = ""
+    
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
     lArticle.logAuthor = memName
@@ -41,7 +52,7 @@ If ChkPost() Then
     lArticle.logLevel = request.Form("log_Level")
     lArticle.logCommentOrder = request.Form("log_comorder")
     lArticle.logDisableComment = request.Form("log_DisComment")
-    lArticle.logIsShow = request.Form("log_IsShow")
+    lArticle.logIsShow = isShow
     lArticle.logIsTop = request.Form("log_IsTop")
     lArticle.logIsDraft = request.Form("log_IsDraft")
     lArticle.logFrom = request.Form("log_From")
@@ -55,7 +66,7 @@ If ChkPost() Then
     lArticle.logTags = request.Form("tags")
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
-    lArticle.logReadpw = Trim(request.form("log_Readpw"))
+    lArticle.logReadpw = pws
     lArticle.logPwtips = request.form("log_Pwtips")
     postLog = lArticle.postLog
     Set lArticle = Nothing
@@ -149,7 +160,7 @@ End Sub
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="False"/>
   	<div id="MsgContent" style="width:700px">
         <div id="MsgHead">在 【<%=Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID="&Request.Form("log_CateID")&"")(0)%>】 发表日志</div>
-        <div id="MsgBody">        
+        <div id="MsgBody">
           <table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
@@ -157,7 +168,7 @@ End Sub
               </td>
             </tr>
             <tr>
-              <td align="right" valign="top"><span style="font-weight: bold">参数:</span></td>
+              <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
               <td align="left">
                 <div><select name="log_weather">
                   <option value="sunny" selected="selected">晴天 </option>
@@ -170,11 +181,11 @@ End Sub
                   <option value="snow">下雪 </option>
                 </select>
                 <select name="log_Level">
-                  <option value="level1">马马虎虎 </option>
-                  <option value="level2">普通 </option>
-                  <option value="level3" selected="selected">内容不错 </option>
-                  <option value="level4">好东西 </option>
-                  <option value="level5">非看不可 </option>
+                  <option value="level1">★</option>
+                  <option value="level2">★★</option>
+                  <option value="level3" selected="selected">★★★</option>
+                  <option value="level4">★★★★</option>
+                  <option value="level5">★★★★★</option>
                 </select>
                 <label for="label">
                 <input id="label" name="log_comorder" type="checkbox" value="1" checked="checked" />
@@ -185,20 +196,29 @@ End Sub
                 <label for="label3">
                 <input name="log_IsTop" type="checkbox" id="label3" value="1" />
         日志置顶</label>
-                <label for="Secret">
-                <input id="Secret" name="log_IsShow" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
-        私密日志</label></div>
-                  <div id="Div_Password" style="display:none;" class="SecretInput">
-                  <span style="font-weight: bold">密码:</span>
-                  <input name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
-                  <span style="font-weight: bold">提示:</span>
-                  <input name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" /><br/>
-            温馨提示：密码留空日志则为私密日志，仅管理员和作者可查看，不能用密码查看！</div>
+               
               </td>
             </tr>
+			<tr>
+               <td height="24" align="right" valign="top"><b>隐私:</b></td>
+               <td align="left">
+	 				<label for="Secret">
+	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
+	        设置日志隐私</label></div>
+	                  <div id="Div_Password" style="display:none;" class="tips_body">
+                  	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
+      	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" then response.write("c")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
+      	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+		                  <span style="font-weight: bold">密码:</span>
+		                  <input onfocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
+		                  <span style="font-weight: bold">提示:</span>
+		                  <input onfocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" /><br/>
+	           		</div>
+				  </td>
+             </tr>
             <tr>
-              <td height="24" align="right" valign="top">&nbsp;</td>
-              <td align="left"><span style="font-weight: bold">来自:</span>
+              <td height="24" align="right" valign="top"><b>来源:</b></td>
+              <td align="left"><span style="font-weight: bold"></span>
                   <input name="log_From" type="text" id="log_From" value="本站原创" size="12" class="inputBox" />
                   <span style="font-weight: bold">网址:</span>
                   <input name="log_FromURL" type="text" id="log_FromURL" value="<%=siteURL%>" size="38" class="inputBox" />

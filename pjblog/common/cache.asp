@@ -12,7 +12,12 @@ Dim blog_commUBB, blog_commImg, blog_version, blog_UpdateDate, blog_DefaultSkin,
 Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introChar, blog_introLine
 Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
-Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL
+Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
+
+'一些初始化的值
+blog_version = "2.8.4.138" '当前PJBlog版本号
+blog_UpdateDate = "2008-07-30"'PJBlog最新更新时间
+
 
 '=========================日志基本信息缓存=======================
 
@@ -91,10 +96,6 @@ Sub getInfo(ByVal action)
         blog_wapComment = CBool(blog_Infos(42, 0))'Wap 允许评论
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
-
-        blog_version = "2.8.4.138" '当前PJBlog版本号
-        blog_UpdateDate = "2008-07-30"'PJBlog最新更新时间
-
     End If
 End Sub
 
@@ -204,22 +205,40 @@ Function CategoryList(ByVal action) '日志分类
         End If
 
         Category_Len = UBound(Arr_Category, 2)
-
+		
+		Dim cClass,URL,inMod
+		URL = request.ServerVariables("script_name")
+		inMod = inStrRev(URL,"LoadMod.asp",-1,1)
+		
         For i = 0 To Category_Len
             If Int(Arr_Category(9, i)) = 0 Or Int(Arr_Category(9, i)) = 1 Then
                 CategoryList = CategoryList&Menu_Diver
                 
-                If Arr_Category(4, i) Then
+                If Arr_Category(4, i) Then '自定义链接
                     If CBool(Arr_Category(10, i)) Then
                         If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&"<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     Else
-                        CategoryList = CategoryList&"<li><a class=""menuA"" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
+                    	cClass = "menuA"
+                    	if isEmpty(blog_currentCategoryID) and InStrRev(URL,Arr_Category(5,i),-1,1) then 
+                    		cClass = "menuA menuB"
+                    	end if
+                    	
+                    	if inMod then
+                    			if inStrRev(Arr_Category(5,i),Request.QueryString("plugins"),-1,1) then
+                    				cClass = "menuA menuB"
+                    			end if
+                    	end if
+                        CategoryList = CategoryList&"<li><a class="""&cClass&""" href="""&Arr_Category(5, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     End If
-                Else
+                Else'日志分类
                     If CBool(Arr_Category(10, i)) Then
                         If stat_ShowHiddenCate Or stat_Admin Then CategoryList = CategoryList&"<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     Else
-                        CategoryList = CategoryList&"<li><a class=""menuA"" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
+                    	cClass = "menuA"
+                    	if Int(blog_currentCategoryID) = Arr_Category(0,i) then 
+                    		cClass = "menuA menuB"
+                    	end if
+                        CategoryList = CategoryList&"<li><a class="""&cClass&""" href=""default.asp?cateID="&Arr_Category(0, i)&""" title="""&Arr_Category(3, i)&""">"&Arr_Category(1, i)&"</a></li>"
                     End If
                 End If
                 Menu_Diver = "<li class=""menuDiv""></li>"
