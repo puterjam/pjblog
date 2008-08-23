@@ -139,14 +139,16 @@ Do Until PageCount = webLogArrLen + 1 Or PageCount = blogPerPage
     End If
     '是否有权限查看日记
     If ViewType="list" Then
-    Readpw=Trim(webLogArr(10,PageCount))
+		Readpw=Trim(webLogArr(16,PageCount))
     Else
-    Readpw=Trim(webLogArr(16,PageCount))
+		Readpw=Trim(webLogArr(16,PageCount))
     End If
     If stat_Admin = True Then CanRead = True
     If webLogArr(5, PageCount) Then CanRead = True
     If webLogArr(5, PageCount) = False And webLogArr(2, PageCount) = memName Then CanRead = True
-    If Readpw<>"" and Session("ReadPassWord_"&webLogArr(0,PageCount))=Readpw then CanRead=True
+
+    If Readpw<>"" and Session("ReadPassWord_"&webLogArr(0,PageCount)) = Readpw then CanRead = True
+    
     If ViewType = "list" Then
         '====================================
         '  列表模式
@@ -195,10 +197,11 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 		<%Else%>
 			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>"><%If Trim(webLogArr(16,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
-If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
-%>
-			<img src="images/icon_lock.gif" style="margin:0px 0px -3px 2px;" alt="" />
-		<%end if%>
+			If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
+			%>
+			<%If Trim(webLogArr(16,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="" /><%End If%>
+			
+			<%end if%>
 		</h1>
 		<h2 class="ContentAuthor">作者:<%=webLogArr(2,PageCount)%>&nbsp; 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%></h2></div>
 		  <div id="log_<%=webLogArr(0,PageCount)%>"<%if webLogArr(9,PageCount)=true then %> style="display:none"<%end if%>>
@@ -288,7 +291,8 @@ If webLogArr(9, PageCount) Then
 
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 %>
-			<img src="images/icon_lock.gif" style="margin:0px 0px -3px 2px;" alt=""/>
+		<%If Trim(webLogArr(10,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt=""/><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt=""/><%End If%>
+
 		<%end if%>
 		</td>
 		<%If webLogArr(9,PageCount) Then %></b><%end If%>
