@@ -35,7 +35,7 @@ StartTime = Timer()
 SQLQueryNums = 0
 
 '定义数据库链接文件，建议修改
-'blogDB/PBLog2.asp为数据库路径，PBLog2.asp为数据库，修改这里就要修改相关的文件夹及数据库名字
+'blogDB/PBLog3.asp为数据库路径，PBLog3.asp为数据库，修改这里就要修改相关的文件夹及数据库名字
 Const AccessFile = "blogDB/PBLog3.asp"
 
 '定义数据库连接
