@@ -165,6 +165,8 @@ Sub getSkinFlash
 End If
 SkinXML.CloseXml
 Set SkinXML = Nothing
+'合作信息
+	SkinInfo = SkinInfo & " - 由 B.C.T 提供代码安全检查"
 End If
 End If
 End Sub
