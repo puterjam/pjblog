@@ -583,7 +583,7 @@ Class ArticleCache
     Private cacheList
     Private cacheStream
     Private errorCode
-
+    
     Private Sub Class_Initialize()
         cacheList = ""
     End Sub
@@ -600,11 +600,15 @@ Class ArticleCache
         End If
         clearT = Str
     End Function
-
+    
     Private Function LoadIntro(id, aRight, outType)
         Dim getIntro, tempI, TempStr, getC, author
-        getIntro = LoadFile("cache/" & id & ".asp")
-        If getIntro = "error" Then
+        if not IsEmpty(Application(CookieName&"_introCache_"&id)) then
+        	getIntro = Application(CookieName&"_introCache_"&id)
+        else 
+       	    getIntro = LoadFile("cache/" & id & ".asp")
+       	end if
+        If getIntro = "error" or getIntro="" Then
             If stat_Admin Then
                 response.Write "<div style=""color:#f00"">编号为[" + id + "]的日志读取失败！建议您重新 <a href=""blogedit.asp?id="&id&""" title=""编辑该日志"" accesskey=""E"">编辑</a> 此文章获得新的缓存</div>"
             End If
@@ -724,7 +728,13 @@ Public Function loadCache
         Exit Function
     End If
     
-    LoadList = LoadFromFile("cache/listCache.asp")
+
+    if not isEmpty(Application(CookieName&"_listCache")) then
+   		LoadList = Array(0,Application(CookieName&"_listCache"))
+    else
+   		LoadList = LoadFromFile("cache/listCache.asp")
+    end if
+    
     If LoadList(0) = 0 Then
         cacheList = LoadList(1)
         loadCache = True
@@ -743,7 +753,14 @@ Public Function SaveCache
     SQL = "select T.log_ID,T.log_CateID,T.log_IsShow,C.cate_Secret FROM blog_Content As T,blog_Category As C where T.log_CateID=C.cate_ID and log_IsDraft=false ORDER BY log_IsTop ASC,log_PostTime DESC"
     Set LogList = conn.Execute(SQL)
     If LogList.EOF Or LogList.BOF Then
-        SaveList = SaveToFile("[""A"";0;()]" & Chr(13) & "[""G"";0;()]", "cache/listCache.asp")
+    	dim temp1 
+    	temp1 = "[""A"";0;()]" & Chr(13) & "[""G"";0;()]"
+        SaveList = SaveToFile(temp1, "cache/listCache.asp")
+        
+		Application.Lock
+		Application(CookieName&"_listCache") = temp1
+		Application.UnLock
+        
         Set LogList = Nothing
         Exit Function
     End If
@@ -794,7 +811,11 @@ Public Function SaveCache
     Next
 
     SaveList = SaveToFile(outIndex, "cache/listCache.asp")
-
+    
+	Application.Lock
+	Application(CookieName&"_listCache") = outIndex
+	Application.UnLock
+	
     Set CateDic = Nothing
     Set CateHDic = Nothing
     Set TagsDic = Nothing
@@ -1183,6 +1204,10 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Temp2 = Replace(Temp2, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
 
     SaveArticle = SaveToFile(Temp2, "cache/" & LogID & ".asp")
+    
+	Application.Lock
+	Application(CookieName&"_introCache_"&LogID) = Temp2
+	Application.UnLock
 End Sub
 
 '======================================================
