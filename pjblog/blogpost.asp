@@ -207,7 +207,7 @@ End Sub
 	        设置日志隐私</label></div>
 	                  <div id="Div_Password" style="display:none;" class="tips_body">
                   	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
-      	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" then response.write("c")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
+      	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1"/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
       	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
 		                  <span style="font-weight: bold">密码:</span>
 		                  <input onfocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
