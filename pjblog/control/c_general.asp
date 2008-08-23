@@ -84,7 +84,7 @@ Sub c_ceneral
 		    <input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
 		    <input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
 		    <input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
-		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="silentMode" value="1" id="B4"	/> <label for="B4">静态化日志安静模式 <span style="color:#666">(使用安静模式不出现进度条，速度较快)</span></label><br/><br/>
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input checked="checked" type="checkbox" name="silentMode" value="1" id="B4"	/> <label for="B4">静态化日志安静模式 <span style="color:#666">(使用安静模式不出现进度条，速度较快)</span></label><br/><br/>
 		    <b>3.日志列表索引</b><br/>
 		    <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/>
 		   </div>
