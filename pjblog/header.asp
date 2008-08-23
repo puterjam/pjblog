@@ -49,18 +49,20 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/article.asp
     getBlogHead BlogTitle, "", -1
 End If
 
+
 '输出文件头
 
-Sub getBlogHead(Title, CateTitle, CateID)
-'高亮分类
+Sub getBlogHead(Title, CateTitle, CategoryID)
+'高亮分类for首页
 If IsInteger(cateID) = True Then
     blog_currentCategoryID = cateID
 End If
 
 '高亮分类for日志单篇
-If IsInteger(CateID) = True Then
-    blog_currentCategoryID = CateID
+If IsInteger(CategoryID) = True  and CategoryID<>-1 Then
+    blog_currentCategoryID = CategoryID
 End If
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
@@ -77,9 +79,9 @@ End If
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />
 	<title><%=Title%></title>
 
-	<%if len(CateTitle)>0 and CateID>0 then %>
-	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CateID%>" title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(rss2)" />
-	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CateID%>"  title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(atom)"  />
+	<%if len(CateTitle)>0 and CategoryID>0 then %>
+	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CategoryID%>" title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(rss2)" />
+	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CategoryID%>"  title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(atom)"  />
 	<%else%>
 	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="订阅 <%=siteName%> 所有文章(rss2)" />
 	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="订阅 <%=siteName%> 所有文章(atom)" />
