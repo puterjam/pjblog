@@ -17,9 +17,9 @@ Dim memoryCache
 
 
 '一些初始化的值
-blog_version = "2.8.5.146" '当前PJBlog版本号
+blog_version = "2.8.5.148" '当前PJBlog版本号
 blog_UpdateDate = "2008-08-24"'PJBlog最新更新时间
-memoryCache = true '全内存cache
+memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
 
