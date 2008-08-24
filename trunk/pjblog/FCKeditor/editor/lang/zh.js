@@ -30,7 +30,6 @@ ToolbarCollapse		: "隱藏面板",
 ToolbarExpand		: "顯示面板",
 
 // Toolbar Items and Context Menu
-InsertCodeBtn			: "插入代碼",
 Save				: "儲存",
 NewPage				: "開新檔案",
 Preview				: "預覽",
@@ -45,6 +44,7 @@ RemoveFormat		: "清除格式",
 InsertLinkLbl		: "超連結",
 InsertLink			: "插入/編輯超連結",
 RemoveLink			: "移除超連結",
+VisitLink			: "開啟超連結",
 Anchor				: "插入/編輯錨點",
 AnchorDelete		: "移除錨點",
 InsertImageLbl		: "影像",
@@ -72,7 +72,10 @@ RightJustify		: "靠右對齊",
 BlockJustify		: "左右對齊",
 DecreaseIndent		: "減少縮排",
 IncreaseIndent		: "增加縮排",
-Blockquote			: "块引用",
+Blockquote			: "引用文字",
+CreateDiv			: "新增 Div 標籤",
+EditDiv				: "變更 Div 標籤",
+DeleteDiv			: "移除 Div 標籤",
 Undo				: "復原",
 Redo				: "重複",
 NumberedListLbl		: "編號清單",
@@ -158,6 +161,7 @@ UnknownToolbarSet	: "工具列設定 \"%1\" 不存在",
 NoActiveX			: "瀏覽器的安全性設定限制了本編輯器的某些功能。您必須啟用安全性設定中的「執行ActiveX控制項與外掛程式」項目，否則本編輯器將會出現錯誤並缺少某些功能",
 BrowseServerBlocked : "無法開啟資源瀏覽器，請確定所有快顯視窗封鎖程式是否關閉",
 DialogBlocked		: "無法開啟對話視窗，請確定所有快顯視窗封鎖程式是否關閉",
+VisitLinkBlocked	: "無法開啟新視窗，請確定所有快顯視窗封鎖程式是否關閉",
 
 // Dialogs
 DlgBtnOK			: "確定",
@@ -304,7 +308,6 @@ DlgTableCellSpace	: "間距",
 DlgTableCellPad		: "內距",
 DlgTableCaption		: "標題",
 DlgTableSummary		: "摘要",
-SplitCell		: "拆分單元格",
 
 // Table Cell Dialog
 DlgCellTitle		: "儲存格屬性",
@@ -361,7 +364,6 @@ DlgPasteMsg2	: "請使用快捷鍵 (<strong>Ctrl+V</strong>) 貼到下方區域�
 DlgPasteSec		: "因為瀏覽器的安全性設定，本編輯器無法直接存取您的剪貼簿資料，請您自行在本視窗進行貼上動作。",
 DlgPasteIgnoreFont		: "移除字型設定",
 DlgPasteRemoveStyles	: "移除樣式設定",
-DlgPasteCleanBox		: "清除文字區域",
 
 // Color Picker
 ColorAutomatic	: "自動",
@@ -514,5 +516,11 @@ DlgAboutAboutTab	: "關於",
 DlgAboutBrowserInfoTab	: "瀏覽器資訊",
 DlgAboutLicenseTab	: "許可證",
 DlgAboutVersion		: "版本",
-DlgAboutInfo		: "想獲得更多資訊請至 "
+DlgAboutInfo		: "想獲得更多資訊請至 ",
+
+// Div Dialog
+DlgDivGeneralTab	: "一般",
+DlgDivAdvancedTab	: "進階",
+DlgDivStyle		: "樣式",
+DlgDivInlineStyle	: "CSS 樣式"
 };
