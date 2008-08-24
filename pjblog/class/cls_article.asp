@@ -24,6 +24,11 @@ Sub updateViewNums(logID, vNums)
             tempStr = tempStr&splitStr&getA(i)
         Next
         Call SaveToFile (tempStr, "cache/" & LogID & ".asp")
+	    if memoryCache = true then
+			Application.Lock
+			Application(CookieName&"_introCache_"&LogID) = tempStr
+			Application.UnLock
+		end if
     End If
 End Sub
 
