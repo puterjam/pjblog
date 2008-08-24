@@ -21,7 +21,7 @@
  * Editor configuration settings.
  *
  * Follow this link for more information:
- * http://wiki.fckeditor.net/Developer%27s_Guide/Configuration/Configurations_Settings
+ * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
  */
 
 FCKConfig.CustomConfigurationsPath = '' ;
@@ -50,17 +50,17 @@ FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCK
 
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
-FCKConfig.Plugins.Add( 'insertcode' ) ;
+// FCKConfig.Plugins.Add( 'autogrow' ) ;
+FCKConfig.Plugins.Add( 'dragresizetable' );
 FCKConfig.Plugins.Add( 'tablecommands' ) ;
-//FCKConfig.Plugins.Add( 'autogrow' ) ;
-FCKConfig.AutoGrowMax = 450 ;
+FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
 // FCKConfig.ProtectedSource.Add( /<\?[\s\S]*?\?>/g ) ;	// PHP style server side code
 // FCKConfig.ProtectedSource.Add( /(<asp:[^\>]+>[\s|\S]*?<\/asp:[^\>]+>)|(<asp:[^\>]+\/>)/gi ) ;	// ASP.Net style tags <asp:control>
 
 FCKConfig.AutoDetectLanguage	= true ;
-FCKConfig.DefaultLanguage		= 'zh-cn' ;
+FCKConfig.DefaultLanguage		= 'en' ;
 FCKConfig.ContentLangDirection	= 'ltr' ;
 
 FCKConfig.ProcessHTMLEntities	= true ;
@@ -77,6 +77,9 @@ FCKConfig.FormatSource		= true ;
 FCKConfig.FormatOutput		= true ;
 FCKConfig.FormatIndentator	= '    ' ;
 
+FCKConfig.EMailProtection = 'encode' ; // none | encode | function
+FCKConfig.EMailProtectionFunction = 'mt(NAME,DOMAIN,SUBJECT,BODY)' ;
+
 FCKConfig.StartupFocus	= false ;
 FCKConfig.ForcePasteAsPlainText	= false ;
 FCKConfig.AutoDetectPasteFromWord = true ;	// IE only.
@@ -88,7 +91,6 @@ FCKConfig.SourcePopup	= false ;
 FCKConfig.ToolbarStartExpanded	= true ;
 FCKConfig.ToolbarCanCollapse	= true ;
 FCKConfig.IgnoreEmptyParagraphValue = true ;
-FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 FCKConfig.HtmlEncodeOutput = false ;
 
@@ -98,22 +100,22 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord'/*,'-','Print','SpellCheck'*/],
-	['Undo','Redo','-','Find','Replace','-'/*,'SelectAll'*/,'RemoveFormat','FitWindow','About'],
+	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Link','Unlink','Anchor'],
+	['Image','Flash','Table','Rule','Smiley','SpecialChar','PageBreak'],
+		['Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableCellProp'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['TextColor','BGColor'],
-	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	'/',
-	['InsertCode','Link','Unlink'/*,'Anchor'*/,'SpecialChar','Smiley','ShowBlocks'],
-	['Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableCellProp'],
-//	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
-	['Image','Flash','Rule','PageBreak'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['FitWindow','ShowBlocks','-','About'],
+
+
 	'/',
 	['Style','FontFormat','FontName','FontSize'],
-			// No comma for the last row.
+	['TextColor','BGColor']
+		// No comma for the last row.
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
@@ -131,6 +133,7 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 84 /*T*/, true ],
 	[ CTRL + 88 /*X*/, true ],
 	[ CTRL + 86 /*V*/, 'Paste' ],
+	[ CTRL + 45 /*INS*/, true ],
 	[ SHIFT + 45 /*INS*/, 'Paste' ],
 	[ CTRL + 88 /*X*/, 'Cut' ],
 	[ SHIFT + 46 /*DEL*/, 'Cut' ],
@@ -142,11 +145,13 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 73 /*I*/, 'Italic' ],
 	[ CTRL + 85 /*U*/, 'Underline' ],
 	[ CTRL + SHIFT + 83 /*S*/, 'Save' ],
-	[ CTRL + ALT + 13 /*ENTER*/, 'FitWindow' ]
+	[ CTRL + ALT + 13 /*ENTER*/, 'FitWindow' ],
+	[ SHIFT + 32 /*SPACE*/, 'Nbsp' ]
 ] ;
 
-FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
+FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form','DivContainer'] ;
 FCKConfig.BrowserContextMenuOnCtrl = false ;
+FCKConfig.BrowserContextMenu = false ;
 
 FCKConfig.EnableMoreFontColors = true ;
 FCKConfig.FontColors = '000000,993300,333300,003300,003366,000080,333399,333333,800000,FF6600,808000,808080,008080,0000FF,666699,808080,FF0000,FF9900,99CC00,339966,33CCCC,3366FF,800080,999999,FF00FF,FFCC00,FFFF00,00FF00,00FFFF,00CCFF,993366,C0C0C0,FF99CC,FFCC99,FFFF99,CCFFCC,CCFFFF,99CCFF,CC99FF,FFFFFF' ;
@@ -317,3 +322,7 @@ FCKConfig.SmileyWindowHeight	= 435 ;
 
 FCKConfig.BackgroundBlockerColor = '#ffffff' ;
 FCKConfig.BackgroundBlockerOpacity = 0.50 ;
+
+FCKConfig.MsWebBrowserControlCompat = false ;
+
+FCKConfig.PreventSubmitHandler = false ;
