@@ -174,7 +174,7 @@ End Function
 Function userPanel()
     userPanel = ""
     If memName<>Empty Then userPanel = userPanel&" <b>"&memName&"</b>，欢迎你!<br/>你的权限: "&stat_title&"<br/><br/>"
-    If stat_Admin = True Then userPanel = userPanel + "<a href=""control.asp"" class=""sideA"" accesskey=""3"">系统管理</a>"
+    If stat_Admin = True Then userPanel = userPanel + "<a href=""control.asp"" target=""_blank"" class=""sideA"" accesskey=""3"">系统管理</a>"
     If stat_AddAll = True Or stat_Add = True Then userPanel = userPanel + "<a href=""blogpost.asp"" class=""sideA"" accesskey=""N"">发表新日志</a>"
     If (stat_AddAll = True Or stat_Add = True) And (stat_EditAll Or stat_Edit) Then
         If IsEmpty(session(CookieName&"_draft_"&memName)) Then
