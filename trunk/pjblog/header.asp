@@ -104,11 +104,17 @@ End If
 		h5.tips{
 			background:#FFCC00;border:1px solid #FFCC00;background-image:url(images/bg_tips.png);color:#990000;padding:3px;margin:0;font-size:13px
 		}
+		h5.tips img{
+			border:0;background:transparent none !important;
+		}
 		.tips_body{
 			background:#FFFFCC;border:1px solid #FFCC00;padding:4px;
 		}
 		.tips_body form{
 			margin:0;
+		}
+		.tips_body a:link,.tips_body a:visited,.tips_body a:hover{
+			color:#990000;
 		}
 		.tips_body .input{
 			height:17px;
@@ -125,9 +131,6 @@ End If
 			color:#990000;
 			margin-bottom:2px;
 			background:#FF9F88 url(images/tips.gif) no-repeat 3px 4px
-		}
-		.tips_body img{
-			border:0;background:transparent none;
 		}
 	</style>
 </head>

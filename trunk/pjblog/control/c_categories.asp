@@ -183,12 +183,13 @@ Sub c_categories
 		%>
 		       
 		       function fillList(o){
-			     	var v = o.defaultValue;
+			     	var v = o.getAttribute("dv");
 			     	for (var i=0;i<il.length;i++){
 			     		var n = new Option(il[i],"images/icons/" + il[i]);
 			     		o.options.add(n);
 			     	}
-			     	if (!v) o.selectedIndex = 0; else o.value  = v;
+
+			     	if (!v) {o.selectedIndex = 0; }else {o.value  = v;}
 		       }
 		       
 		       function fillAllList(){
@@ -230,9 +231,9 @@ Sub c_categories
 		
 		%>">
 		          <td align="center" nowrap>
-		          <img name="CateImg_<%=CategoryListDB("cate_ID")%>" src="<%=CategoryListDB("cate_icon")%>" width="16" height="16" />
+		          <img id="" name="CateImg_<%=CategoryListDB("cate_ID")%>" src="<%=CategoryListDB("cate_icon")%>" width="16" height="16" />
 		         <%if CheckObjInstalled("Scripting.FileSystemObject") then%>
-		          <select name="Cate_icons" defaultValue="<%=CategoryListDB("cate_icon")%>" onChange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value;" style="width:120px;"></select>
+		          <select name="Cate_icons" dv="<%=CategoryListDB("cate_icon")%>" onChange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value;" style="width:120px;"></select>
 		          <%else%>
 		          <input name="Cate_icons" type="text" class="text" value="<%=CategoryListDB("cate_icon")%>" size="18" onChange="document.images['CateImg_<%=CategoryListDB("cate_ID")%>'].src=this.value"/>
 		          <%end if%>

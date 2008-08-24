@@ -172,7 +172,13 @@ Set nextLog = Nothing
 								<%if Session("CheckOutErr_"&LogID) >=2 Then '超出范围%>
 									<div class="error">抱歉，您输入的验证次数已超过最大的次数，日志暂时锁定！</div>
 								<%
-								Else%>
+								Else
+									dim pwTips
+									pwTips = Trim(log_ViewArr(21,0))
+									if pwTips="" then
+										pwTips = "无密码提示"
+									end if
+								%>
 									<form id="CheckRead" name="CheckRead" method="post" action="">
 										<%If Trim(Request.Form("do")) = "CheckOut" Then
 											Session("CheckOutErr_"&LogID) = Session("CheckOutErr_"&LogID) + 1
@@ -180,11 +186,11 @@ Set nextLog = Nothing
 										 End If%>
 										<input name="do" type="hidden" value="CheckOut" />
 										<label for="pw"><input name="pw" type="password" id="pw" size="15" class="input"/></label>
-										<input type="image" name="Submit" value="确　定" src="images/unlock.gif" style="margin-bottom:-8px;*margin-bottom:-6px"/> <a href="javascript:;" onclick="$('hints').style.display='';" title="显示密码提示">密码提示</a>
+										<input type="image" name="Submit" value="确　定" src="images/unlock.gif" style="margin-bottom:-8px;*margin-bottom:-6px"/> <a href="javascript:;" onclick="$('hints').style.display=$('hints').style.display=='none'?'':'none';" title="显示/隐藏密码提示">密码提示</a>
 			
 										
 										<div id="hints" class="hints" style="display:none">
-											<%=Trim(log_ViewArr(21,0))%>
+											<%=pwTips%>
 										</div>
 									</form>
 								<%end if%>
