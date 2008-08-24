@@ -26,6 +26,7 @@
 <!--#include file="control/c_skins.asp" -->
 <!--#include file="control/c_SQLFile.asp" -->
 <!--#include file="control/c_members.asp" -->
+<!--#include file="control/c_article.asp" -->
 <!--#include file="control/c_link.asp" -->
 <!--#include file="control/c_smilies.asp" -->
 <!--#include file="control/c_status.asp" -->
@@ -71,6 +72,7 @@ End If
            Case "welcome"  Call c_welcome '欢迎页面
            Case "General"  Call c_ceneral  ' 站点基本设置
            Case "Categories" Call c_categories ' 日志分类管理
+           Case "Article"  Call c_article '日志管理
            Case "Comment"  Call c_comment ' 评论留言管理
            Case "Skins"  Call c_skins ' 界面设置
            Case "SQLFile"  Call c_SQLFile ' 数据库与文件

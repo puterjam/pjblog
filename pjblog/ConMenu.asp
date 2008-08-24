@@ -39,19 +39,20 @@ html{
 }
 </style>
 </head>
-<body class="menuBody" onload="MenuClick(document.getElementById('index'),'ConContent.asp?Fmenu=welcome')">
+<body class="menuBody" onLoad="MenuClick(document.getElementById('index'),'ConContent.asp?Fmenu=welcome')">
 
  <ul class="menuUL">
-   <li><a id="index" href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=welcome')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon0"/>后台首页</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=General&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon2"/>站点基本设置</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Categories&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon4"/>日志分类管理</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Comment&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon10"/>评论留言管理</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Skins&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon5"/>界面与插件</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=SQLFile&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon3"/>数据库与附件</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Members&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon6"/>帐户与权限</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Link&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon7"/>友情链接管理</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=smilies&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon8"/>表情与关键字</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Status&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon1"/>服务器信息</a></li>
+   <li><a id="index" href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=welcome')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon0"/>后台首页</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=General&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon2"/>站点基本设置</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Categories&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon4"/>日志分类管理</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Article&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon11"/>日志管理</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Comment&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon10"/>评论留言管理</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Skins&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon5"/>界面与插件</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=SQLFile&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon3"/>数据库与附件</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Members&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon6"/>帐户与权限</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Link&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon7"/>友情链接管理</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=smilies&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon8"/>表情与关键字</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Status&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon1"/>服务器信息</a></li>
    <!--<li><a href="javascript:void(0)" class="menuA" onclick="MenuClick(this,'ConContent.asp?Fmenu=Logout&Smenu=')"><img src="images/Control/icon/icon9.gif" alt="" border="0" class="MenuIcon"/>退出</a></li>-->
 </ul>
  </body>
