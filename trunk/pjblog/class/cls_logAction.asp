@@ -3,7 +3,6 @@
 '  日志编辑类
 '    更新时间: 2006-1-22
 '==================================
-
 Class logArticle
     Private weblog
     Public categoryID, logTitle, logAuthor, logEditType
@@ -756,11 +755,11 @@ Public Function SaveCache
     	dim temp1 
     	temp1 = "[""A"";0;()]" & Chr(13) & "[""G"";0;()]"
         SaveList = SaveToFile(temp1, "cache/listCache.asp")
-        
-		Application.Lock
-		Application(CookieName&"_listCache") = temp1
-		Application.UnLock
-        
+        if memoryCache = true then
+			Application.Lock
+			Application(CookieName&"_listCache") = temp1
+			Application.UnLock
+        end if
         Set LogList = Nothing
         Exit Function
     End If
@@ -812,9 +811,11 @@ Public Function SaveCache
 
     SaveList = SaveToFile(outIndex, "cache/listCache.asp")
     
-	Application.Lock
-	Application(CookieName&"_listCache") = outIndex
-	Application.UnLock
+    if memoryCache = true then
+		Application.Lock
+		Application(CookieName&"_listCache") = outIndex
+		Application.UnLock
+	end if 
 	
     Set CateDic = Nothing
     Set CateHDic = Nothing
@@ -1085,8 +1086,8 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
-    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime ASC")
 
     Dim BTemp
     BTemp = ""
@@ -1205,9 +1206,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 
     SaveArticle = SaveToFile(Temp2, "cache/" & LogID & ".asp")
     
-	Application.Lock
-	Application(CookieName&"_introCache_"&LogID) = Temp2
-	Application.UnLock
+    if memoryCache = true then
+		Application.Lock
+		Application(CookieName&"_introCache_"&LogID) = Temp2
+		Application.UnLock
+	end if
 End Sub
 
 '======================================================

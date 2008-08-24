@@ -126,6 +126,9 @@ End If
 			margin-bottom:2px;
 			background:#FF9F88 url(images/tips.gif) no-repeat 3px 4px
 		}
+		.tips_body img{
+			border:0;background:transparent none;
+		}
 	</style>
 </head>
 <body onload="initJS()" onkeydown="PressKey()">

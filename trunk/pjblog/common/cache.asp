@@ -13,11 +13,13 @@ Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introCha
 Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
+Dim memoryCache
+
 
 '一些初始化的值
-blog_version = "2.8.5.145" '当前PJBlog版本号
+blog_version = "2.8.5.146" '当前PJBlog版本号
 blog_UpdateDate = "2008-08-24"'PJBlog最新更新时间
-
+memoryCache = true '全内存cache
 
 '=========================日志基本信息缓存=======================
 

@@ -18,7 +18,7 @@ If CheckStr(Request.QueryString("id"))<>Empty Then
     id = CheckStr(Request.QueryString("id"))
 End If
 Dim log_View, log_ViewArr, keyword, preLog, nextLog, blog_Cate, blog_CateArray, comDesc, urlLink
-Dim getCate
+Dim getCate,viewCount
 Set getCate = New Category
 If IsInteger(id) Then
     Set log_View = Server.CreateObject("ADODB.RecordSet")
@@ -34,13 +34,18 @@ If IsInteger(id) Then
         log_View.Close
         showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
-    log_View("log_ViewNums") = log_View("log_ViewNums") + 1
+    viewCount = log_View("log_ViewNums") + 1
+    log_View("log_ViewNums") = viewCount
     log_View.UPDATE
     log_ViewArr = log_View.GetRows
     log_View.Close
     Set log_View = Nothing
     getCate.load(Int(log_ViewArr(1, 0))) '获取分类信息
-
+    
+    If blog_postFile>1 Then
+		Call updateViewNums(id, viewCount)
+	end if
+	
     If log_ViewArr(3, 0) And Not getCate.cate_Secret Then
         BlogTitle = log_ViewArr(2, 0) & " - " & siteName
     End If
