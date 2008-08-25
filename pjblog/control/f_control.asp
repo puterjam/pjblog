@@ -314,7 +314,7 @@ Sub delPlugins(PluginsName) '删除插件
 End Sub
 
 Sub delModule(ModID) '删除模块
-    conn.Execute("DELETE * from blog_module where id="&moduleID)
+    conn.Execute("DELETE * from blog_module where id="&ModID)
 End Sub
 
 Sub SavehtmlCode(HCode, modID) '写HTML代码到数据库
