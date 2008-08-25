@@ -139,9 +139,9 @@ Do Until PageCount = webLogArrLen + 1 Or PageCount = blogPerPage
     End If
     '是否有权限查看日记
     If ViewType="list" Then
-		Readpw=Trim(webLogArr(16,PageCount))
+	Readpw=Trim(webLogArr(10,PageCount))
     Else
-		Readpw=Trim(webLogArr(16,PageCount))
+	Readpw=Trim(webLogArr(16,PageCount))
     End If
     If stat_Admin = True Then CanRead = True
     If webLogArr(5, PageCount) Then CanRead = True

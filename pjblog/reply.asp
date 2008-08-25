@@ -43,7 +43,7 @@ Sub replyComm
 	set quest = Conn.Execute("select top 1 comm_Content from blog_Comment where comm_ID=" & cID)
 	
  	If not quest.EOF Then
-		result = quest(0) & vbcrlf & "[reply=" + memName + "]" & replay & "[/reply]"
+		result = quest(0) & vbcrlf & "[reply=" + memName + "," & DateToStr(now(),"Y-m-d H:I A") & "]" & replay & "[/reply]"
   		conn.Execute("UPDATE blog_Comment SET comm_Content='"&result&"' WHERE comm_ID="&cID)
   		
   		dim ubbResult

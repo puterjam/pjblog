@@ -174,7 +174,7 @@ End If
 SkinXML.CloseXml
 Set SkinXML = Nothing
 '合作信息
-	SkinInfo = SkinInfo & " - 由 B.C.T 提供代码安全检查"
+	SkinInfo = SkinInfo & " |  <a href=""http://www.codefense.cn"" target=""_blank""><img border=""0"" src=""http://www.xiaoxiaoliu.org/image/logo/detect.gif"" alt=""Code Detection By Codefense"" style=""margin-bottom:-2px;height:14px;width:12px""/></a>"
 End If
 End If
 End Sub

@@ -262,9 +262,6 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
-            re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
-
             re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
             If Len(memName)>0 Then
                 strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div>")
@@ -298,6 +295,14 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             strContent = re.Replace(strContent, "<li>$1</li>")
             strContent = Replace(strContent, "[/list]", "</ul>")
         End If
+
+	'-----------回复标签----------------
+        re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 于 $2 回复</div><div class=""UBBContent"">$3</div></div>")
+
+        re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
+
 
         '-----------表情图标----------------
         If Not DisSM = 1 Then
