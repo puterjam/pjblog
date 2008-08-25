@@ -5,10 +5,6 @@
 Sub c_article
 %>
 <%getMsg%>
-	<script>
-		      var curver="0.2";
-	</script>
-	<script src="/article_manager.js"></script>
     <table width="100%" border="0" align="center" cellpadding="6" cellspacing="1" bgcolor="#CCCCCC" class="CContent">
 	    <tr>
 		    <td bgcolor="#FFFFFF" class="CTitle">日志管理v0.2 For Pjblog3 </td>
