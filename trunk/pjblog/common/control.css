@@ -129,7 +129,10 @@ background-repeat:no-repeat;
 	_background-image:url(../images/Control/Icon/icon10.gif);
 }
 
-
+.icon11{
+	background-image:url(../images/Control/Icon/icon11.png);
+	_background-image:url(../images/Control/Icon/icon11.gif);
+}
 .CTitle{
 	background:#3E70A6 url(../images/Control/title.png);
 	padding:5px;
@@ -178,8 +181,11 @@ input.text{
  border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;height:18px
 }
 
-button{background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px;}
+
 input.button{
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:2px 2px 0px 2px;margin:4px;
+}
+button{
  background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:2px 2px 0px 2px;margin:4px;
 }
 

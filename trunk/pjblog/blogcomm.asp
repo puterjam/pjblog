@@ -258,7 +258,7 @@ Function postcomm
     Set re = New RegExp
     re.IgnoreCase = True
     re.Global = True
- 	re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
+    re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
     post_Message = re.Replace(post_Message, "$2")
 
     AddComm = Array(Array("blog_ID", post_logID), Array("comm_Content", post_Message), Array("comm_Author", username), Array("comm_DisSM", post_DisSM), Array("comm_DisUBB", post_DisUBB), Array("comm_DisIMG", post_disImg), Array("comm_AutoURL", post_DisURL), Array("comm_PostIP", getIP), Array("comm_AutoKEY", post_DisKEY))

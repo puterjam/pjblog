@@ -44,7 +44,7 @@ html{
  <ul class="menuUL">
    <li><a id="index" href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=welcome')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon0"/>后台首页</a></li>
    <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=General&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon2"/>站点基本设置</a></li>
-   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Categories&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon4"/>日志分类管理</a></li>
+   <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Categories&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon4"/>分类管理</a></li>
    <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Article&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon11"/>日志管理</a></li>
    <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Comment&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon10"/>评论留言管理</a></li>
    <li><a href="javascript:void(0)" class="menuA" onClick="MenuClick(this,'ConContent.asp?Fmenu=Skins&Smenu=')"><img src="images/Control/icon/b.gif" alt="" border="0" class="MenuIcon icon5"/>界面与插件</a></li>
