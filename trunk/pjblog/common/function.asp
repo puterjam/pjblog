@@ -13,7 +13,8 @@ Function ChkPost()
     chkpost = False
     server_v1 = CStr(Request.ServerVariables("HTTP_REFERER"))
     server_v2 = CStr(Request.ServerVariables("SERVER_NAME"))
-    If Mid(server_v1, 8, Len(server_v2))<>server_v2 Then
+	if instr(server_v1, replace(replace(server_v2, "http://", ""), "www.", ""))=0 then
+'	If Mid(server_v1,8,Len(server_v2))<>server_v2 then
         chkpost = False
     Else
         chkpost = True
