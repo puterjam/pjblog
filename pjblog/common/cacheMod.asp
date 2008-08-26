@@ -58,8 +58,8 @@ Sub PostArticle(LogID)
         Temp = Replace(Temp, "<$log_QuoteNums$>", log_View("log_QuoteNums"))
         Temp = Replace(Temp, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-        Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
-        Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
+        Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime DESC")
+        Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime ASC")
 
         Dim BTemp
         BTemp = ""
