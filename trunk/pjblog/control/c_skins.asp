@@ -348,7 +348,18 @@ Sub c_skins
 		       <%do until Blog_Plugins.eof%>
 		        <tr align="center">
 		          <td ><img src="images/<%=Blog_Plugins("type")%>.gif" width="16" height="16"/></td>
-				  <td align="left"><%=Blog_Plugins("title")%></td>
+				  <td align="left">
+				  <%
+					Set PluginsXML = New PXML
+					PluginsXML.XmlPath = "Plugins/"&Blog_Plugins("InstallFolder")&"/install.xml"
+					PluginsXML.Open
+					If PluginsXML.getError = 0 Then
+						response.write "<font color=red>"&Blog_Plugins("title")&"</font>"
+					Else
+						response.write Blog_Plugins("title")
+					End If
+				  %>
+                  </td>
 		          <td align="left">Plugins/<%=Blog_Plugins("InstallFolder")%>/</td>
 		          <td ><%=DateToStr(Blog_Plugins("InstallDate"),"Y-m-d H:I:S")%></td>
 		          <td>
@@ -379,7 +390,7 @@ Sub c_skins
 			       <input type="button" name="button" value="修复插件" class="button" onClick="FixPlugins()"/>
 		       <%End If%>
 		<br/>
-		 假如插件反安装不成功，请到 <b>数据库与附件-数据库管理</b> 压缩修复数据再反安装
+		 如果插件名称显示为红色，请检查插件目录或者目录下install.xml文件是否存在；假如插件反安装不成功，请到 <b>数据库与附件-数据库管理</b> 压缩修复数据再反安装
 		</div>
 		  <%
 		
@@ -421,6 +432,17 @@ Sub c_skins
 		            If Len(PluginsXML.SelectXmlNodeText("PluginInstall/main/SettingFile"))>0 Then
 		                If KeepTable = False Then InstallPlugingSetting "", UnPlugName, "delete"
 		            End If
+		        End If
+			Else
+		        Set getMod = conn.Execute("select CateID from blog_module where InstallFolder='"&PluginsFolder&"'")
+		        If getMod.EOF Then
+		            session(CookieName&"_ShowMsg") = True
+		            session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 无法反安装,数据库没有找到相应的信息!"
+		            RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
+		        Else
+		            getCateID = getMod(0)
+		            If Len(getCateID)>0 Then conn.Execute("delete * from blog_Category where cate_ID="&getCateID)
+					conn.Execute("delete * from blog_module where InstallFolder='"&PluginsFolder&"'")
 		        End If
 		    End If
 		
