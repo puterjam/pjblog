@@ -650,6 +650,8 @@ Function DelQuote(strContent)
     strContent = re.Replace(strContent, "")
     re.Pattern = "\[quote=(.[^\]]*)\](.[^\]]*?)\[\/quote\]"
     strContent = re.Replace(strContent, "")
+    re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
+    strContent = re.Replace(strContent, "")
     re.Pattern = "\[reply=(.[^\]]*)\](.[^\]]*?)\[\/reply\]"
     strContent = re.Replace(strContent, "")
     Set re = Nothing
