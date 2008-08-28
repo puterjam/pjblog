@@ -47,7 +47,7 @@ Sub c_skins
 		       <input type="hidden" name="whatdo" value="UpdateModule"/>
 		       <input type="hidden" name="DoID" value=""/>
 		       
-		       <div style="width:630px;">
+		       <div style="width:685px;">
 			     	<div style="float:right;margin-top:15px;">
 			     	<b>显示过滤: </b> <a id="a7" href="#" onclick="filterModuleList(7)" style="font-weight:bold">所有</a> | <a id="a1" href="#" onclick="filterModuleList(1)">隐藏</a> | <a id="a2" href="#" onclick="filterModuleList(2)">置顶</a> | <a id="a4" href="#" onclick="filterModuleList(4)">系统</a></div>
 					<div class="SubButton" style="text-align:left;padding:5px;margin:0px">
@@ -74,7 +74,7 @@ Sub c_skins
 				  <td width="82" class="TDHead"><nobr>模块标识</nobr></td>
 				  <td width="160" class="TDHead"><nobr>模块名称</nobr></td>
 		          <td width="42" class="TDHead"><nobr>排序</nobr></td>
-		          <td  class="TDHead"><nobr>模块操作</nobr></td>
+		          <td width="205"class="TDHead"><nobr>模块操作</nobr></td>
 		          </tr>
 		<%
 		Dim blogModule,flag,moduleIcon
