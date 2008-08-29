@@ -354,9 +354,9 @@ Sub c_skins
 					PluginsXML.XmlPath = "Plugins/"&Blog_Plugins("InstallFolder")&"/install.xml"
 					PluginsXML.Open
 					If PluginsXML.getError = 0 Then
-						response.write "<font color=red>"&Blog_Plugins("title")&"</font>"
-					Else
 						response.write Blog_Plugins("title")
+					Else
+						response.write "<font color=red>"&Blog_Plugins("title")&"</font>"
 					End If
 				  %>
                   </td>
