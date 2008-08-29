@@ -152,8 +152,8 @@ Class logArticle
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
 
-		weblog("log_Readpw")=logReadpw
-		weblog("log_Pwtips")=logPwtips
+        weblog("log_Readpw")=logReadpw
+        weblog("log_Pwtips")=logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update

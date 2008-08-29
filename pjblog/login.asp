@@ -18,6 +18,7 @@ If Request.QueryString("action") = "logout" Then
 		 <div class="MessageIcon"></div>
         <div class="MessageText"><b>退出登录成功</b><br/>
          <a href="default.asp">单击返回首页</a></div>
+         <meta http-equiv="refresh" content="3;url=default.asp"/>
 		</div>
 	  </div>
 	</div>
