@@ -39,20 +39,24 @@ If ChkPost() Then
 %>
     <!--内容-->
    <%If Request.Form("action") = "post" Then
-    dim pws,isShow
-    pws = Trim(request.form("log_Readpw"))
-    if request.form("blog_pws") = "0" then pws = ""
-    If CheckStr(Request.Form("log_IsHidden")) = "1" then
-    	isShow = false
-    else
-    	isShow = true
-    end if
-   ' response.write isShow
-    If CheckStr(Request.Form("c_pws")) = "1" then'如果密码更改了
- 		 pws = Trim(request.form("log_Readpw"))
-   		 if not isEmpty(pws) then pws = md5(pws)
-    end if 
- '   if isShow then pws = ""
+    Dim pws,pwtips,IsShow
+		pws = Trim(Request.Form("log_Readpw"))
+		pwtips = Trim(Request.Form("log_Pwtips"))
+    If CheckStr(Request.Form("log_IsHidden")) = "1" Then
+		IsShow = False
+		If CheckStr(Request.Form("c_pws")) = "1" Then'如果密码更改了
+		   If Not IsEmpty(pws) Then pws = md5(pws)
+		End If 
+		If pws = "" Then pwtips = ""
+    Else
+		IsShow = True
+		pws = ""
+		pwtips = ""
+    End If
+    If Request.Form("blog_pws") = "0" Then
+		pws = ""
+		pwtips = ""
+    End If
     
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
@@ -64,7 +68,7 @@ If ChkPost() Then
     lArticle.logLevel = request.Form("log_Level")
     lArticle.logCommentOrder = request.Form("log_comorder")
     lArticle.logDisableComment = request.Form("log_DisComment")
-    lArticle.logIsShow = isShow
+    lArticle.logIsShow = IsShow
     lArticle.logIsTop = request.Form("log_IsTop")
     lArticle.logIsDraft = request.Form("log_IsDraft")
     lArticle.logFrom = request.Form("log_From")
@@ -79,7 +83,7 @@ If ChkPost() Then
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
     lArticle.logReadpw = pws
-    lArticle.logPwtips = request.form("log_Pwtips")
+    lArticle.logPwtips = pwtips
     EditLog = lArticle.editLog(request.Form("id"))
     Set lArticle = Nothing
 
@@ -87,9 +91,9 @@ If ChkPost() Then
 		      <div id="MsgContent" style="width:300px">
 		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
-		  		 <div class="<%if EditLog(0)<0 then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
+		  		 <div class="<%if EditLog(0)<0 Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
 		          <div class="MessageText"><%=EditLog(1)%><br/><a href="default.asp">点击返回首页</a><br/>
-		  		 <%if EditLog(0)>=0 then %>
+		  		 <%if EditLog(0)>=0 Then %>
 			      	 <a href="default.asp?id=<%=EditLog(2)%>">返回你所编辑的日志</a><br/>
 		  		     <meta http-equiv="refresh" content="3;url=default.asp?logID=<%=EditLog(2)%>"/>
 			     <%end if%>
@@ -105,7 +109,7 @@ ElseIf Request.QueryString("action") = "del" Or Request.Form("action") = "del" T
 		      <div id="MsgContent" style="width:300px">
 		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
-		  		 <div class="<%if DeleteLog(0)<0 then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
+		  		 <div class="<%if DeleteLog(0)<0 Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
 		          <div class="MessageText"><%=DeleteLog(1)%><br/><a href="default.asp">点击返回首页</a><br/>
 		  	  </div>
 		  	</div>
@@ -182,30 +186,30 @@ End Sub
                <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
                <td align="left">
                  <div><select name="log_weather">
-                   <option value="sunny" <%if lArticle.logWeather="sunny" then response.write ("selected=""selected""")%>>晴天 </option>
-                   <option value="cloudy" <%if lArticle.logWeather="cloudy" then response.write ("selected=""selected""")%>>多云 </option>
-                   <option value="flurries" <%if lArticle.logWeather="flurries" then response.write ("selected=""selected""")%>>疾风 </option>
-                   <option value="ice" <%if lArticle.logWeather="ice" then response.write ("selected=""selected""")%>>冰雹 </option>
-                   <option value="ptcl" <%if lArticle.logWeather="ptcl" then response.write ("selected=""selected""")%>>阴天 </option>
-                   <option value="rain" <%if lArticle.logWeather="rain" then response.write ("selected=""selected""")%>>下雨 </option>
-                   <option value="showers" <%if lArticle.logWeather="showers" then response.write ("selected=""selected""")%>>阵雨 </option>
-                   <option value="snow" <%if lArticle.logWeather="snow" then response.write ("selected=""selected""")%>>下雪 </option>
+                   <option value="sunny" <%if lArticle.logWeather="sunny" Then response.write ("selected=""selected""")%>>晴天 </option>
+                   <option value="cloudy" <%if lArticle.logWeather="cloudy" Then response.write ("selected=""selected""")%>>多云 </option>
+                   <option value="flurries" <%if lArticle.logWeather="flurries" Then response.write ("selected=""selected""")%>>疾风 </option>
+                   <option value="ice" <%if lArticle.logWeather="ice" Then response.write ("selected=""selected""")%>>冰雹 </option>
+                   <option value="ptcl" <%if lArticle.logWeather="ptcl" Then response.write ("selected=""selected""")%>>阴天 </option>
+                   <option value="rain" <%if lArticle.logWeather="rain" Then response.write ("selected=""selected""")%>>下雨 </option>
+                   <option value="showers" <%if lArticle.logWeather="showers" Then response.write ("selected=""selected""")%>>阵雨 </option>
+                   <option value="snow" <%if lArticle.logWeather="snow" Then response.write ("selected=""selected""")%>>下雪 </option>
                  </select>
                  <select name="log_Level">
-                   <option value="level1" <%if lArticle.logLevel="level1" then response.write ("selected=""selected""")%>>★</option>
-                   <option value="level2" <%if lArticle.logLevel="level2" then response.write ("selected=""selected""")%>>★★</option>
-                   <option value="level3" <%if lArticle.logLevel="level3" then response.write ("selected=""selected""")%>>★★★</option>
-                   <option value="level4" <%if lArticle.logLevel="level4" then response.write ("selected=""selected""")%>>★★★★</option>
-                   <option value="level5" <%if lArticle.logLevel="level5" then response.write ("selected=""selected""")%>>★★★★★</option>
+                   <option value="level1" <%if lArticle.logLevel="level1" Then response.write ("selected=""selected""")%>>★</option>
+                   <option value="level2" <%if lArticle.logLevel="level2" Then response.write ("selected=""selected""")%>>★★</option>
+                   <option value="level3" <%if lArticle.logLevel="level3" Then response.write ("selected=""selected""")%>>★★★</option>
+                   <option value="level4" <%if lArticle.logLevel="level4" Then response.write ("selected=""selected""")%>>★★★★</option>
+                   <option value="level5" <%if lArticle.logLevel="level5" Then response.write ("selected=""selected""")%>>★★★★★</option>
                  </select>
                  <label for="label">
-                 <input id="label" name="log_comorder" type="checkbox" value="1" <%if lArticle.logCommentOrder then response.write ("checked=""checked""")%>/>
+                 <input id="label" name="log_comorder" type="checkbox" value="1" <%if lArticle.logCommentOrder Then response.write ("checked=""checked""")%>/>
          评论倒序</label>
                  <label for="label2">
-                 <input name="log_DisComment" type="checkbox" id="label2" value="1" <%if lArticle.logDisableComment then response.write ("checked=""checked""")%>/>
+                 <input name="log_DisComment" type="checkbox" id="label2" value="1" <%if lArticle.logDisableComment Then response.write ("checked=""checked""")%>/>
          禁止评论</label>
                  <label for="label3">
-                 <input name="log_IsTop" type="checkbox" id="label3" value="1" <%if lArticle.logIsTop then response.write ("checked=""checked""")%>/>
+                 <input name="log_IsTop" type="checkbox" id="label3" value="1" <%if lArticle.logIsTop Then response.write ("checked=""checked""")%>/>
          日志置顶</label>
 
    	            </td>
@@ -215,11 +219,11 @@ End Sub
                <td align="left">
 				 <label for="Secret">
 				 
-				                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow then response.write ("checked=""checked""")%>/>
+				                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow Then response.write ("checked=""checked""")%>/>
 				        设置日志隐私</label></div>
-				                  <div id="Div_Password"  class="tips_body" <%if lArticle.logIsShow then response.write("style=""display:none;""")%>>
+				                  <div id="Div_Password"  class="tips_body" <%if lArticle.logIsShow Then response.write("style=""display:none;""")%>>
 				                  	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
-	                  	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" then response.write("checked")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
+	                  	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" Then response.write("checked")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
 	                  	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
 					                  <span style="font-weight: bold">密码:</span>
 					                  <input onfocus="this.select();$('bpws2').checked='checked'" onkeypress="$('c_pws').value=1" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
@@ -240,7 +244,7 @@ End Sub
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">发表时间:</span></td>
               <td align="left">
-                 <%if lArticle.logIsDraft then%>
+                 <%if lArticle.logIsDraft Then%>
 	                  <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/>当前时间</label> 
 	                  <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" />自定义日期:</label>
 	                  <input name="PubTime" type="text" value="<%=DateToStr(lArticle.logPubTime,"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
@@ -279,19 +283,19 @@ End If
 
 %></td>
              </tr>
-                       <%if log_editType<>0 then %>          <tr>
+                       <%if log_editType<>0 Then %>          <tr>
                <td align="right" valign="top">&nbsp;</td>
                 <td colspan="2" align="left"><label for="label4">
-               <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" <%if lArticle.logDisableImage=1 then response.write ("checked")%>/>
+               <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" <%if lArticle.logDisableImage=1 Then response.write ("checked")%>/>
    禁止显示图片</label>
                  <label for="label5">
-                 <input name="log_DisSM" type="checkbox" id="label5" value="1" <%if lArticle.logDisableSmile=1 then response.write ("checked")%>/>
+                 <input name="log_DisSM" type="checkbox" id="label5" value="1" <%if lArticle.logDisableSmile=1 Then response.write ("checked")%>/>
    禁止表情转换</label>
                  <label for="label6">
-                 <input name="log_DisURL" type="checkbox" id="label6" value="1" <%if lArticle.logDisableURL=0 then response.write ("checked")%>/>
+                 <input name="log_DisURL" type="checkbox" id="label6" value="1" <%if lArticle.logDisableURL=0 Then response.write ("checked")%>/>
    禁止自动转换链接</label>
                 <label for="label7">
-                 <input name="log_DisKey" type="checkbox" id="label7" value="1" <%if lArticle.logDisableKeyWord=0 then response.write ("checked")%>/>
+                 <input name="log_DisKey" type="checkbox" id="label7" value="1" <%if lArticle.logDisableKeyWord=0 Then response.write ("checked")%>/>
    禁止自动转换关键字</label></td>
              </tr><%end if%>
              <%
@@ -302,8 +306,8 @@ UseIntro = CBool(lArticle.logIntroCustom)
 %>
            <tr>
                <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
-               <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
-               <div id="Div_Intro" <%if UseIntro then response.write("style=""display:none""")%>>
+               <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro Then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
+               <div id="Div_Intro" <%if UseIntro Then response.write("style=""display:none""")%>>
                <%
 If log_editType = 0 Then
     Dim oFCKeditor1
@@ -336,14 +340,14 @@ End If
             <tr>
                <td colspan="3" align="center">
                  <input name="SaveArticle" type="submit" class="userbutton" value="保存日志" accesskey="S"/>
-                 <%if lArticle.logIsDraft then%>
+                 <%if lArticle.logIsDraft Then%>
                     <input name="SaveDraft" type="submit" class="userbutton" value="保存并取消草稿" accesskey="D" onclick="document.getElementById('log_IsDraft').value='False'"/>
                  <%end if%>
                  <input name="DelArticle" type="button" class="userbutton" value="删除该日志" accesskey="K" onclick="if (window.confirm('是否要删除该日志')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
                  <input name="CancelEdit" type="button" class="userbutton" value="取消编辑" accesskey="Q" onClick="location='default.asp?id=<%=logid%>'"/>
                </td>
              </tr>
-                 <%if lArticle.logIsDraft then%>
+                 <%if lArticle.logIsDraft Then%>
 	             <tr>
 	                <td colspan="3" align="right">
 	                友情提示:保存草稿后，日志不会在日志列表中出现。只有再次编辑，<b>取消草稿</b>后才显示出来。</td>

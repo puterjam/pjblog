@@ -23,24 +23,30 @@ If ChkPost() Then
         <div id="MsgBody">
   		 <div class="ErrorIcon"></div>
           <div class="MessageText"><b>你没有没有权限发表新日志</b><br/>
-          <a href="default.asp">单击返回首页</a><%if memName=Empty then %> | <a href="login.asp">登录</a><%end if%>
+          <a href="default.asp">单击返回首页</a><%if memName=Empty Then %> | <a href="login.asp">登录</a><%end if%>
   		 </div>
   	 </div>
   	</div>
   <%else%>
    <!--内容-->
-  <%If Request.Form("action") = "post" Then
-    Dim lArticle, postLog,pws,isShow
-    If CheckStr(Request.Form("log_IsHidden")) = "1" then
-    	isShow = false
-    else
-    	isShow = true
-    end if
+   <%If Request.Form("action") = "post" Then
+		Dim lArticle,postLog,pws,pwtips,IsShow
+		pws = Trim(Request.Form("log_Readpw"))
+		pwtips = Trim(Request.Form("log_Pwtips"))
+    If CheckStr(Request.Form("log_IsHidden")) = "1" Then
+		IsShow = False
+		If not IsEmpty(pws) Then pws = md5(pws)
+		If pws = "" Then pwtips = ""
+    Else
+		IsShow = True
+		pws = ""
+		pwtips = ""
+    End If
     Set lArticle = New logArticle
-    pws = Trim(request.form("log_Readpw"))
-	if request.form("blog_pws") = "0" then pws = ""
-    if pws<>"" then pws = md5(pws)
-  '  if isShow then pws = ""
+    If Request.Form("blog_pws") = "0" Then
+		pws = ""
+		pwtips = ""
+    End If
     
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
@@ -52,7 +58,7 @@ If ChkPost() Then
     lArticle.logLevel = request.Form("log_Level")
     lArticle.logCommentOrder = request.Form("log_comorder")
     lArticle.logDisableComment = request.Form("log_DisComment")
-    lArticle.logIsShow = isShow
+    lArticle.logIsShow = IsShow
     lArticle.logIsTop = request.Form("log_IsTop")
     lArticle.logIsDraft = request.Form("log_IsDraft")
     lArticle.logFrom = request.Form("log_From")
@@ -67,7 +73,7 @@ If ChkPost() Then
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
     lArticle.logReadpw = pws
-    lArticle.logPwtips = request.form("log_Pwtips")
+    lArticle.logPwtips = pwtips
     postLog = lArticle.postLog
     Set lArticle = Nothing
 
@@ -76,9 +82,9 @@ If ChkPost() Then
 		      <div id="MsgContent" style="width:300px">
 		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
-		  		 <div class="<%if postLog(0)<0 then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
+		  		 <div class="<%if postLog(0)<0 Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
 		          <div class="MessageText"><%=postLog(1)%><br/><a href="default.asp">点击返回首页</a><br/>
-		  		 <%if postLog(0)>=0 then %>
+		  		 <%if postLog(0)>=0 Then %>
 			  		 <a href="default.asp?id=<%=postLog(2)%>">返回你所发表的日志</a><br/>
 			  		 <meta http-equiv="refresh" content="3;url=default.asp?logID=<%=postLog(2)%>"/>
 			     <%end if%>
@@ -260,7 +266,7 @@ End If
 
 %></td>
             </tr>
-  <%if log_editType<>0 then %>          <tr>
+  <%if log_editType<>0 Then %>          <tr>
               <td align="right" valign="top">&nbsp;</td>
                <td colspan="2" align="left"><label for="label4">
               <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" />

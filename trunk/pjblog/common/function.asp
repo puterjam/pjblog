@@ -654,6 +654,27 @@ Function DelQuote(strContent)
     strContent = re.Replace(strContent, "")
     re.Pattern = "\[reply=(.[^\]]*)\](.[^\]]*?)\[\/reply\]"
     strContent = re.Replace(strContent, "")
+    re.Pattern = "\[b\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/b\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[i\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/i\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[u\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/u\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[s\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/s\]"
+    strContent = re.Replace(strContent, "")
+            Dim log_Smilies, log_SmiliesContent
+            For Each log_Smilies IN Arr_Smilies
+                log_SmiliesContent = Split(log_Smilies, "|")
+            Next
+    strContent = Replace(strContent, log_SmiliesContent(2), "")
     Set re = Nothing
     DelQuote = strContent
 End Function
