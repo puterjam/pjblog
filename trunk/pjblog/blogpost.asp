@@ -217,7 +217,7 @@ End Sub
       	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
 		                  <span style="font-weight: bold">密码:</span>
 		                  <input onfocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
-		                  <span style="font-weight: bold">提示:</span>
+		                  <span style="font-weight: bold">密码提示:</span>
 		                  <input onfocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" /><br/>
 	           		</div>
 				  </td>

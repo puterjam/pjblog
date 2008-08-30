@@ -298,10 +298,10 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 于 $2 回复</div><div class=""UBBContent"">$3</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 于 $2 回复</div><div class=""UBBContent"">$3</div></div>")
 
         re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
 
 
         '-----------表情图标----------------
