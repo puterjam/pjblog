@@ -350,8 +350,8 @@ Class logArticle
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
 
-		weblog("log_Readpw") = logReadpw
-		weblog("log_Pwtips") = logPwtips
+        weblog("log_Readpw")=logReadpw
+        weblog("log_Pwtips")=logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -896,9 +896,9 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
         Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
     Else
      	if log_View("log_Readpw") <> "" then
-        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
      	else
-        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+        	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
         end if
     End If
 
@@ -1156,11 +1156,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
 	    If log_View("log_Readpw") <> "" Then
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
-	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
 	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
 	    Else
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
-	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
 	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
 	    End If
 	    

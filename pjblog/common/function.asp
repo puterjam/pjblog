@@ -673,8 +673,8 @@ Function DelQuote(strContent)
             Dim log_Smilies, log_SmiliesContent
             For Each log_Smilies IN Arr_Smilies
                 log_SmiliesContent = Split(log_Smilies, "|")
+                strContent = Replace(strContent, log_SmiliesContent(2), "")
             Next
-    strContent = Replace(strContent, log_SmiliesContent(2), "")
     Set re = Nothing
     DelQuote = strContent
 End Function

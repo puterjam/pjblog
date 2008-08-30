@@ -142,8 +142,7 @@ Set nextLog = Nothing
 							 <% End If %>
 							 </strong> 
 							 <%if log_ViewArr(3, 0)=False or getCate.cate_Secret then%>
-							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="" /><%End If%>
-							 
+							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="加密日志" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="私密日志" /><%End If%>
 							 <%end if%>
 							 </h1>
 					     <h2 class="ContentAuthor">作者:<%=log_ViewArr(5,0)%> 日期:<%=DateToStr(log_ViewArr(9,0),"Y-m-d")%></h2>
@@ -155,7 +154,6 @@ Set nextLog = Nothing
 					        <%if stat_DelAll or (stat_Del and log_ViewArr(5,0)=memName)  then %>　<a href="blogedit.asp?action=del&amp;id=<%=log_ViewArr(0,0)%>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a><%end if%>
 						  </div>
 						</div>
-						
 					  <div id="logPanel" class="Content-body">
 						<%If CanRead Then '密码访问
 							keyword = CheckStr(Request.QueryString("keyword"))
@@ -167,7 +165,7 @@ Set nextLog = Nothing
 						Else
 						%>
 						<div>
-							<h5 class="tips"><img alt="" style="margin: 0px 0px -3px 2px;" src="images/icon_lock2.gif"/>该日志是加密日志，需要输入正确密码才可以查看！</h5>
+							<h5 class="tips"><img alt="加密日志" style="margin: 0px 0px -3px 2px;" src="images/icon_lock2.gif"/>该日志是加密日志，需要输入正确密码才可以查看！</h5>
 							<div class="tips_body">
 								<%if Session("CheckOutErr_"&LogID) >=2 Then '超出范围%>
 									<div class="error">抱歉，您输入的验证次数已超过最大的次数，日志暂时锁定！</div>
