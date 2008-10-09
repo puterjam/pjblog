@@ -93,8 +93,8 @@ Sub ShowArticle(LogID)
 
     '从数据库读取日志
     'on error resume Next
-    Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime DESC")
-    Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime ASC")
+    Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
+    Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
     SQLQueryNums = SQLQueryNums + 2
 
 
@@ -165,7 +165,7 @@ Set nextLog = Nothing
 						Else
 						%>
 						<div>
-							<h5 class="tips"><img alt="加密日志" style="margin: 0px 0px -3px 2px;" src="images/icon_lock2.gif"/>该日志是加密日志，需要输入正确密码才可以查看！</h5>
+							<h5 class="tips"><img alt="加密日志" style="margin: 0px 0px -3px 2px;" src="images/icon_lock2.gif"/> 该日志是加密日志，需要输入正确密码才可以查看！</h5>
 							<div class="tips_body">
 								<%if Session("CheckOutErr_"&LogID) >=2 Then '超出范围%>
 									<div class="error">抱歉，您输入的验证次数已超过最大的次数，日志暂时锁定！</div>

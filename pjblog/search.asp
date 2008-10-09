@@ -80,7 +80,7 @@ blog_Search.Open SQL, Conn, 1, 1
            
 <%
 If blog_Search.EOF And blog_Search.BOF Then
-    response.Write ("<b>没有找到符合条件的数据</b><br/><br/><a href=""default.asp"">返回</a><br/><br/>")
+    response.Write ("<b>没有找到符合条件的数据</b><br/><br/><a href=""default.asp"">单击返回</a><br/><br/>")
 Else
     blog_Search.PageSize = 10
     blog_Search.AbsolutePage = CurPage
@@ -106,7 +106,7 @@ Else
 	                <div class="commenttop"><img border="0" src="images/icon_quote.gif" alt="" style="margin:0px 4px -3px 0px"/></a><strong><%=SearchArr(3,PageCount)%></strong> <span class="commentinfo">[<%=DateToStr(SearchArr(8,PageCount),"Y-m-d H:I A")%>]</span></div>
 	                <div class="commentcontent"><%=highlight(UBBCode(HtmlEncode(SearchArr(4,PageCount)),SearchArr(5,PageCount),blog_commUBB,blog_commIMG,SearchArr(6,PageCount),SearchArr(7,PageCount)),SearchContent)%></div>
 	         <%
-Response.Write("<div class=""Content-bottom"">相关日志: <a href=""article.asp?id="&SearchArr(0, PageCount)&"#comm_"&SearchArr(2, PageCount)&"""><b>"&SearchArr(1, PageCount)&"</b></a></div>")
+Response.Write("<div class=""Content-bottom"">相关日志: <a href=""default.asp?id="&SearchArr(0, PageCount)&"#comm_"&SearchArr(2, PageCount)&"""><b>"&SearchArr(1, PageCount)&"</b></a></div>")
 Case "trackback"
 
 %>
@@ -119,7 +119,7 @@ Case "trackback"
 		   <%
 Response.Write("<div class=""Content-bottom"">相关日志: <a href=""article.asp?id="&SearchArr(0, PageCount)&""" target=""_blank""><b>"&SearchArr(6, PageCount)&"</b></a></div>")
 Case Else
-    Response.Write("<a href=""article.asp?id="&SearchArr(0, PageCount)&"""> "&highlight(SearchArr(1, PageCount), SearchContent)&" [ 日期: "&SearchArr(02, PageCount)&" | 评论数:"&SearchArr(3, PageCount)&"]</a><br/>")
+    Response.Write("<a href=""default.asp?id="&SearchArr(0, PageCount)&"""> "&highlight(SearchArr(1, PageCount), SearchContent)&" [ 日期: "&SearchArr(02, PageCount)&" | 评论数:"&SearchArr(3, PageCount)&"]</a><br/>")
 End Select
 PageCount = PageCount + 1
 Loop

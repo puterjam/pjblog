@@ -45,7 +45,7 @@ Sub c_SQLFile
 		    response.Write "<input name=""folders"" type=""checkbox"" value="""&AttPath&"/"&ArrFolder&"""/>&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&AttPath&"/"&ArrFolder&"""><img border=""0"" src=""images/file/folder.gif"" style=""margin:4px 3px -3px 0px""/>"&ArrFolder&"</a><br>"
 		Next
 		For Each Arrfile in Arrfiles
-		    response.Write "<input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&"""/>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(1))&Arrfile&"</a>&nbsp;&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&" | "&getFileInfo(AttPath&"/"&Arrfile)(2)&" | "&getFileInfo(AttPath&"/"&Arrfile)(3)&"<br>"
+		    response.Write "<input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&"""/>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(1))&Arrfile&"</a>&nbsp;&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&" | "&DateToStr(getFileInfo(AttPath&"/"&Arrfile)(2),"Y-m-d H:I:S")&" | "&getFileInfo(AttPath&"/"&Arrfile)(3)&"<br>"
 		Next
 		response.Write "</div>"
 		
