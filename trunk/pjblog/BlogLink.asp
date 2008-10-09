@@ -45,7 +45,7 @@ If request.Form("action") = "postLink" Then
     linkDB.update
     linkDB.Close
     Set linkDB = Nothing
-    showmsg "友情链接添加成功", "<b>网友情链接添加成功,请等待审核！</b><br/><a href=""BlogLink.asp"">返回</a>", "MessageIcon", ""
+    showmsg "友情链接添加成功", "<b>网站友情链接添加成功,请等待审核！</b><br/><a href=""BlogLink.asp"">返回</a>", "MessageIcon", ""
 End If
 On Error Resume Next
 server.Execute("post/link.html")
@@ -88,8 +88,8 @@ If Err Then
           	  <tr><td align="right" width="70"><strong>网站名称:</strong></td><td align="left" style="padding:3px;"><input name="link_Name" type="text" size="35" class="userpass" maxlength="40"/> <span style="color:#f00">*</span></td></tr>
           	  <tr><td align="right" width="70"><strong>网站地址:</strong></td><td align="left" style="padding:3px;"><input name="link_URL" type="text" size="50" class="userpass"/> <span style="color:#f00">*</span></td></tr>
           	  <tr><td align="right" width="70"><strong>网站Logo:</strong></td><td align="left" style="padding:3px;"><input name="link_Image" type="text" size="50" class="userpass"/></td></tr>
-          	   <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="link_validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
-			  <tr><td align="right" width="70"></td><td align="left">提示：网站的Logo和地址要写完整,必须包含 http://</td></tr>
+          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="link_validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
+          	  <tr><td align="right" width="70"></td><td align="left">提示：带<span style="color:#f00">*</span>项为必填项，网站的Logo和地址要写完整，必须包含 http://</td></tr>
                     <tr>
                       <td colspan="2" align="center" style="padding:3px;">
                         <input name="action" type="hidden" value="postLink"/>

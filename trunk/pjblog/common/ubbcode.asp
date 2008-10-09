@@ -193,7 +193,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[color=(#\w{3,10}|\w{3,10})\]([^\r]*?)\[\/color\]"
             strContent = re.Replace(strContent, "<span style=""color:$1"">$2</span>")
             re.Pattern = "\[size=(\d{1,2})\]([^\r]*?)\[\/size\]"
-            strContent = re.Replace(strContent, "<span style=""font-size:$1pt"">$2</span>")
+            strContent = re.Replace(strContent, "<span style=""font-size:$1pt;line-height:100%;"">$2</span>")
             re.Pattern = "\[font=([^\r]*?)\]([^\r]*?)\[\/font\]"
             strContent = re.Replace(strContent, "<span style=""font-family:$1"">$2</span>")
             re.Pattern = "\[b\]([^\r]*?)\[\/b\]"
@@ -298,7 +298,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 于 $2 回复</div><div class=""UBBContent"">$3</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
 
         re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
         strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")

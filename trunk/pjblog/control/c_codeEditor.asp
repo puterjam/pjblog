@@ -66,7 +66,7 @@ Sub c_codeEditor
 					<input type="button" name="Submit" value="返回" onclick="goBack('<%=referer%>')" class="button" style="float:right"/>
 					<input type="button" name="Submit" value="保存文件" onclick="saveFile()" class="button" style="float:right"/>
 					<%=getFileIcons(fileInfo(1))%><a href="<%=urlPath%>"><%=urlPath%></a>
-					<div style="padding-left:18px;"><span style="color:#999">文件大小:</span> <%=fileInfo(0)%> &nbsp;&nbsp;<span style="color:#999">文件修改时间:</span> <%=fileInfo(4)%> &nbsp;&nbsp;<span style="color:#999">文件类型:</span> <%=fileInfo(3)%></div>
+					<div style="padding-left:18px;"><span style="color:#999">文件大小:</span> <%=fileInfo(0)%> &nbsp;&nbsp;<span style="color:#999">文件修改时间:</span> <%=DateToStr(fileInfo(4),"Y-m-d H:I:S")%> &nbsp;&nbsp;<span style="color:#999">文件类型:</span> <%=fileInfo(3)%></div>
 				</div>
 				<div style="float:left;border:1px solid #808080;width:160px;height:385px;margin-right:4px;">
 					<div class="SubMenu" style="position:absolute;z-index:1px;width:140px;margin:0;padding-top:0;padding-left:4px;cursor:default;text-overflow:ellipsis " title="<%=AttPath%>"><img border="0" src="images/file/folder.gif" style="margin:4px 3px -3px 0px"/><%=AttPath%></div>

@@ -79,7 +79,7 @@ Function Calendar(C_Year, C_Month, C_Day, update)
                 If RS_Month("log_IsShow") Then
                     TempTitle = Chr(13) & " - " & RS_Month("log_title")
                 Else
-                    TempTitle = Chr(13) & " - [隐藏日志]"
+                    TempTitle = Chr(13) & " - [私密日志]"
                 End If
                 Link_Days(4, Link_Count) = "当天共写了" & TempCount &"篇日志" & TempTitle
                 Link_Count = Link_Count + 1
@@ -88,7 +88,7 @@ Function Calendar(C_Year, C_Month, C_Day, update)
                 If RS_Month("log_IsShow") Then
                     Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - " & RS_Month("log_title")
                 Else
-                    Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - [隐藏日志]"
+                    Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - [私密日志]"
                 End If
 
                 TempSplit = Split(Link_Days(4, Link_Count -1), Chr(13))
