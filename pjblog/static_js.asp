@@ -1,4 +1,4 @@
-﻿<!--#include file="const.asp" -->
+<!--#include file="const.asp" -->
 ﻿<!--#include file="common/function.asp" -->
 <!--#include file="common/cache.asp" -->
 

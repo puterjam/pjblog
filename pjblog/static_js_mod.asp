@@ -1,4 +1,4 @@
-﻿<!--#include file="BlogCommon.asp" -->
+<!--#include file="BlogCommon.asp" -->
 ﻿<!--#include file="common/function.asp" -->
 <!--#include file="common/library.asp" -->
 <!--#include file="common/cache.asp" -->
@@ -23,6 +23,7 @@
 		html = html.replace(/[\n\r]/g,"");
 		html = html.replace(/\\/g,"\\\\");
 		html = html.replace(/\'/g,"\\'");
+		Response.Clear();
 		Response.Write ("﻿callSideBar('" + html + "');")
 	}
 </script>
