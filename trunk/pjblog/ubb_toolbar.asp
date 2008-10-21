@@ -1,4 +1,4 @@
-﻿<!--#include file="const.asp" -->
+<!--#include file="const.asp" -->
 ﻿<!--#include file="common/function.asp" -->
 <!--#include file="common/cache.asp" -->
 <!--#include file="common/UBBconfig.asp" -->
@@ -20,8 +20,8 @@ UBB_Tools_Items=UBB_Tools_Items&"||image,link,mail,quote,smiley"
 dim toolbarCode, smileCode
 toolbarCode = replace(ToolsToCode,"'","\'")
 smileCode = replace(showSmilie,"'","\'")
-
-Response.write "var ubbTools='"&toolbarCode&"';"&vbCrlf
-Response.write "var ubbSmile='"&smileCode&"';"&vbCrlf
-Response.write "showUBB();"&vbCrlf
+Response.Clear
+Response.write "var ubbTools='"&toolbarCode&"';"
+Response.write "var ubbSmile='"&smileCode&"';"
+Response.write "showUBB();"
 %>

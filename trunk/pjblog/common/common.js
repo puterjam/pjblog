@@ -1,4 +1,4 @@
-﻿//PBlog2 公用JS代码
+//PBlog2 公用JS代码
 //Author:PuterJam
 function $() 
 { 
@@ -442,7 +442,7 @@ function addUploadItem(type,path,memberDown){
          else
 	         {parent.document.forms[0].Message.value+='[down='+path+']点击下载此文件[/down]\n'}
         }
-        else{oEditor.InsertHtml('<a href="'+path+'"><img border="0" src="'+Fhref+'images/download.gif" alt="" style="margin:0px 2px -4px 0px"/>点击下载此文件</a>')}
+        else{oEditor.InsertHtml('<a href="'+path+'"><img border="0" src="../../images/download.gif" alt="" style="margin:0px 2px -4px 0px"/>点击下载此文件</a>')}
         break;
      }
 }
@@ -462,7 +462,7 @@ function WriteHeadFlash(Path,Width,Height,Transparent){
 //获得引用连接
 function getTrackbackURL(id){
 	var strHTML = "";
-	strHTML = '<span id="tbSpan">请输入验证码 <input id="vCode" maxLength="4" size="4" style="border:1px solid #999;"/> <img id="tbCode" src="about:blank" onerror="src=\'common/getCode.asp?s='+Math.random()+'\'" onclick="src=\'common/getCode.asp?s='+Math.random()+'\'" style="margin-bottom:-4px;height:20px;width:40px;cursor:pointer" title="看不清楚？点击刷新验证码！" alt="加载中..."/> <input type="button" value="获取" onclick="getTB('+id+')"/></span><input id="getTBURL" style="border:1px solid #999;width:100%;display:none">';
+	strHTML = '<span id="tbSpan">请输入验证码 <input id="vCode" maxLength="4" size="4" style="border:1px solid #999;"/> <img id="tbCode" src="about:blank" onerror="src=\'common/getCode.asp?s='+Math.random()+'\'" onclick="src=\'common/getCode.asp?s='+Math.random()+'\'" style="margin-bottom:-4px;height:20px;width:40px;cursor:pointer" title="看不清楚?换一张" alt="加载中..."/> <input type="button" value="获取" onclick="getTB('+id+')"/></span><input id="getTBURL" style="border:1px solid #999;width:100%;display:none">';
 	showPopup("获取引用地址",strHTML,250,200);
 }
 
@@ -564,15 +564,14 @@ function displaySelect(status){
 	}
 }
 
-//填充侧边栏内容
-function ﻿callSideBar(html){
+//填充侧边栏
+function callSideBar(html){
 	if (window._sidebarReady) {
 		fillSidebar(html);
 	}else{
 		window._sidebarCache = html;
 	}
 }
-
 function initSidebar(){
 	window._sidebarReady = true;
 	if (window._sidebarCache) {
@@ -760,3 +759,56 @@ function removeReplyMsg(id){
 		_r.parentNode.removeChild(_r);
 	}
 }
+//edit by evio start
+//创建HTTPREQUEST对象
+function CreateXMLHTTP(){
+    return TryThese(
+        function() {return new ActiveXObject("Msxml2.XMLHTTP");},
+        function() {return new ActiveXObject("Microsoft.XMLHTTP");},
+        function() {return new XMLHttpRequest();}
+    ) || false;
+}
+function TryThese(){
+    for (i = 0; i < arguments.length; i++){
+        try{
+            return arguments[i]();
+        }catch(e){}
+    }
+    return false;
+}
+function CheckStr(srcStr){
+    var dstStr;
+    dstStr = srcStr;
+    dstStr = dstStr.replace(/</g, "<");
+    dstStr = dstStr.replace(/>/g, ">");
+    dstStr = dstStr.replace(/&/g, "&");
+    return dstStr;
+}
+//以下是检验别名代码--start
+function checkAlias(){
+    var strname=document.forms[0].cname.value;
+		var xmlhttp=CreateXMLHTTP();
+        xmlhttp.onreadystatechange=function(){
+			postAlias("<img src='images/lodding.gif'>");
+            if (4==xmlhttp.readystate){
+	           if (200==xmlhttp.status){
+			   var catecont=xmlhttp.responseText;
+                 postAlias(catecont);
+		       }else{
+		       alert("error!")  
+		       }
+			}
+	    }
+   
+   xmlhttp.open("post","Action.asp",true);
+   xmlhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');	
+	   //发送内容
+   xmlhttp.send("action="+escape("checkAlias")+"&cname="+strname);
+}
+
+function postAlias(catecont){
+    var span=$("CheckAlias");
+	span.innerHTML=catecont;
+}
+//以上是检验别名代码--end
+//edit by evio start

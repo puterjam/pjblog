@@ -1,4 +1,4 @@
-﻿<!--#include file="BlogCommon.asp" -->
+<!--#include file="BlogCommon.asp" -->
 ﻿<!--#include file="common/function.asp" -->
 <!--#include file="common/library.asp" -->
 <!--#include file="common/cache.asp" -->
@@ -10,6 +10,7 @@
 	Dim id, tKey
 	id = 0
 	Response.CacheControl = "no-cache"
+	Response.ContentType = "application/x-javascript"
 	If CheckStr(Request.QueryString("id"))<>Empty Then
 	    id = CheckStr(Request.QueryString("id"))
 	End If
@@ -34,6 +35,7 @@
 %>
 <script runat="server" Language="javascript">
 	function outputPing(num){
+		Response.Clear();
 		Response.Write ("﻿callPing('" + num + "');")
 	}
 </script>

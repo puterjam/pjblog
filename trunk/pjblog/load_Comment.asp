@@ -31,6 +31,7 @@
 		html = html.replace(/[\n\r]/g,"");
 		html = html.replace(/\\/g,"\\\\");
 		html = html.replace(/\'/g,"\\'");
+Response.Clear();
 		Response.Write ("fillComment('" + html + "');")
 	}
 </script>
