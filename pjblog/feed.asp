@@ -92,7 +92,7 @@ Else
     For i = 0 To UBound(FeedRows, 2)
     
     If blog_postFile = 2 Then
-        url = SiteURL&"article/"&FeedRows(0, i)&".htm"
+        url = SiteURL&Alias(FeedRows(0, i))
       else
       	url = SiteURL&"article.asp?id="&FeedRows(0, i)
     end if

@@ -1,8 +1,70 @@
 ﻿<%
 '==================================
 '  后台通用函数文件
-'    更新时间: 2008-7-13
+'    更新时间: 2008-10-22
 '==================================
+'----------- 移动单个文件 ---------------------------
+sub moveone(sourcepath,targetpath)
+    dim db1,db2,MoveOneFSO
+	db1=server.mappath(sourcepath)
+	db2=server.mappath("article/"&targetpath)
+	set MoveOneFSO=server.CreateObject("scripting.filesystemobject")
+	MoveOneFSO.MoveFile db1,db2
+	DeleteFiles db1
+	set MoveOneFSO=nothing
+End sub
+'----------- 批量删除文件 ---------------------------
+sub DeleteFile(Folder)
+dim Folders,FSO,tmpfolder,tmpfiles,tmpfile
+Folders=server.MapPath(".\article/"&Folder&"")
+Set FSO = Server.CreateObject("Scripting.FileSystemObject")
+if FSO.FolderExists(Folders) then 
+set tmpfolder=FSO.GetFolder(Folders) 
+set tmpfiles=tmpfolder.files 
+for each tmpfile in tmpfiles
+  FSO.DeleteFile tmpfile
+next 
+  else
+end if
+set FSO=nothing
+end sub
+'----------- 移动所有文件 ---------------------------
+sub moveall(sourcepath,targetpath)
+    dim db1,db2,MoveOneFSO
+	db1=server.mappath("article/"&sourcepath)
+	db2=server.mappath("article/"&targetpath)
+	set MoveOneFSO=server.CreateObject("scripting.filesystemobject")
+	if MoveOneFSO.folderexists(db1) and MoveOneFSO.folderexists(db2) then
+	MoveOneFSO.CopyFolder db1,db2
+	else
+	end if	
+	set MoveOneFSO=nothing
+End sub
+
+'----------- 删除文件夹 ---------------------------
+sub DeleteFolder(Folder)
+
+dim Folders,FSO
+Folders=server.MapPath("article/"&Folder)
+Set FSO = Server.CreateObject("Scripting.FileSystemObject")
+if FSO.FolderExists(Folders) then 
+  FSO.Deletefolder Folders
+  else
+end if
+end sub
+'----------- 更改文件夹名 ---------------------------
+sub ChangeFolderName(sourcename,targetname)
+dim objfso,yname,mname,objfolder
+set objfso=server.createobject("scripting.filesystemobject") '建立FSO对象
+yname=server.MapPath("article/"&sourcename) '子目录名
+mname=targetname
+if objfso.FolderExists(yname) then '判断是否存在
+  set objfolder=objfso.getfolder(yname) '建立folder对象
+  objfolder.name=mname '改名
+else
+end if
+set objfso=nothing '关闭对象
+end sub
 
 '----------- 显示操作信息 ----------------------------
 Sub getMsg
@@ -427,7 +489,7 @@ Sub InstallPlugins
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     Else
         session(CookieName&"_ShowMsg") = True
-        session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>，提示：请检查插件名称显示为红色的插件目录是否存在"
+        session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
         PluginsXML.CloseXml()
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     End If
@@ -479,7 +541,7 @@ Sub FixPlugins(fixType)
             Else
                 If CBool(fixType) Then
                     session(CookieName&"_ShowMsg") = True
-                    session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>，提示：请检查插件名称显示为红色的插件目录是否存在"
+                    session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
                     PluginsXML.CloseXml()
                     RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
                 End If
@@ -497,8 +559,9 @@ End Sub
 '====================删除日志方法======================
 
 Function DeleteLog(LogID)
-    Dim logDB, comCount, post_CateID
+    Dim logDB, comCount, post_CateID, maph
     Set logDB = conn.Execute("select log_IsDraft,log_CateID from blog_content where log_ID="&LogID)
+	maph=Alias(LogID)
     If logDB.EOF And logDB.bof Then
         DeleteLog = 0
     Else
@@ -512,7 +575,7 @@ Function DeleteLog(LogID)
         Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&LogID)
         Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&LogID)
         DeleteFiles Server.MapPath("post/"&LogID&".asp")
-        DeleteFiles Server.MapPath("article/"&LogID&".htm")
+        DeleteFiles Server.MapPath(maph)
         DeleteLog = 1
     End If
 End Function

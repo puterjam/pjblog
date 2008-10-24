@@ -146,6 +146,7 @@ Do Until PageCount = webLogArrLen + 1 Or PageCount = blogPerPage
     If stat_Admin = True Then CanRead = True
     If webLogArr(5, PageCount) Then CanRead = True
     If webLogArr(5, PageCount) = False And webLogArr(2, PageCount) = memName Then CanRead = True
+
     If Readpw<>"" and Session("ReadPassWord_"&webLogArr(0,PageCount)) = Readpw then CanRead = True
     
     If ViewType = "list" Then
@@ -180,7 +181,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
     Dim getTag,aUrl
     Set getTag = New tag
 	If blog_postFile>1 Then
-		aUrl = "article/" & webLogArr(0,PageCount) & ".htm"
+		aUrl = Alias(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
 	end if
@@ -199,6 +200,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 			If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 			%>
 			<%If Trim(webLogArr(16,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="加密日志" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="私密日志" /><%End If%>
+			
 			<%end if%>
 		</h1>
 		<h2 class="ContentAuthor">作者:<%=webLogArr(2,PageCount)%>&nbsp; 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%></h2></div>
@@ -264,7 +266,7 @@ Function OutList(webLogArr, PageCount, getCate, ViewDraft, CanRead)
         If Not stat_ShowHiddenCate And Not stat_Admin Then Exit Function
     End If
 	If blog_postFile>1 Then
-		aUrl = "article/" & webLogArr(0,PageCount) & ".htm"
+		aUrl = Alias(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
 	end if

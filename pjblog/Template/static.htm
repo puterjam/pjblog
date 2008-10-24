@@ -3,8 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Content-Language" content="UTF-8" />
-<meta http-equiv="Cache-Control" content="NO-CACHE" /> 
-<meta http-equiv="PRAGMA" content="NO-CACHE"/>
 <meta name="robots" content="all" />
 <meta name="author" content="your@email.com,YourName" />
 <meta name="Copyright" content="PJBlog3 CopyRight 2008" />
@@ -27,6 +25,7 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <script type="text/javascript" src="common/common.js"></script>
+<script type="text/javascript" src="common/ajax.js"></script>
 <script type="text/javascript">
 	var g_styleID = "<$skin$>";
 	var g_logID = "<$LogID$>";
@@ -126,7 +125,7 @@
 		        <tr>
 		          <td align="right" width="70"><strong>验证码:</strong></td>
 		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/>
-		            <img id="vcodeImg" src="about:blank" onerror="this.onerror=null;this.src='common/getcode.asp?s='+Math.random();" alt="验证码" title="看不清楚？点击刷新验证码！" style="margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;" onclick="src='common/getcode.asp?s='+Math.random()"/></td>
+		            <img id="vcodeImg" src="about:blank" onerror="this.onerror=null;this.src='common/getcode.asp?s='+Math.random();" alt="验证码" title="看不清楚?换一张" style="margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;" onclick="src='common/getcode.asp?s='+Math.random()"/></td>
 		        </tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
