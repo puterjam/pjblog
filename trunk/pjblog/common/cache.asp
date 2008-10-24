@@ -17,7 +17,7 @@ Dim memoryCache
 
 
 '一些初始化的值
-blog_version = "2.8.5.157" '当前PJBlog版本号
+blog_version = "3.0.6.170" '当前PJBlog版本号
 blog_UpdateDate = "2008-08-26"'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -161,6 +161,9 @@ Sub FillRight(StatusCode) '写入权限变量
     stat_ShowHiddenCate = CBool(Mid(StatusCode, 12, 1))
     
     Response.Cookies(CookieName)("memRight") = StatusCode
+	If DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))>0 Then
+        Response.Cookies(CookieName).Expires = Date + DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))
+    End If
 End Sub
 
 '=========================End Sub========================
@@ -177,7 +180,8 @@ Function CategoryList(ByVal action) '日志分类
     If Not IsArray(Application(CookieName&"_blog_Category")) Or action = 2 Then
         Dim log_Category
         TempVar = ""
-        SQL = "SELECT cate_ID,cate_Name,cate_Order,cate_Intro,cate_OutLink,cate_URL,cate_icon,cate_count,cate_Lock,cate_local,cate_Secret FROM blog_Category ORDER BY cate_Order ASC"
+        SQL = "SELECT cate_ID,cate_Name,cate_Order,cate_Intro,cate_OutLink,cate_URL,cate_icon,cate_count,cate_Lock,cate_local,cate_Secret,cate_Part FROM blog_Category ORDER BY cate_Order ASC"
+'   0        1        2           3          4          5         6         7           8        9           10         11
         Set log_Category = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
         If log_Category.EOF Or log_Category.bof Then
@@ -376,7 +380,7 @@ Function NewComment(ByVal action)
         dim url
         For i = 0 To Comment_Item_Len
 		    If blog_postFile = 2 Then
-		   		url = SiteURL&"article/"&blog_Comment(1, i)&".htm#comm_"&blog_Comment(0, i)
+		   		url = SiteURL&Alias(blog_Comment(1, i))&"#comm_"&blog_Comment(0, i)
 		      else
 		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if

@@ -209,9 +209,15 @@ ElseIf Request.Form("action") = "Categories" Then
             session(CookieName&"_MsgText") = "源分类和目标分类一致无法移动"
             RedirectUrl("ConContent.asp?Fmenu=Categories&Smenu=move")
         End If
-        Cate_source_name = conn.Execute("select cate_Name from blog_Category where cate_ID="&Cate_source)(0)
+        Cate_source_name = conn.Execute("select cate_Part from blog_Category where cate_ID="&Cate_source)(0)
         Cate_source_count = conn.Execute("select cate_count from blog_Category where cate_ID="&Cate_source)(0)
-        Cate_target_name = conn.Execute("select cate_Name from blog_Category where cate_ID="&Cate_target)(0)
+        Cate_target_name = conn.Execute("select cate_Part from blog_Category where cate_ID="&Cate_target)(0)
+		'批量移动开始
+		If blog_postFile = 2 Then
+		moveall ".\"&Cate_source_name,".\"&Cate_target_name
+		DeleteFile(Cate_source_name)
+		end if
+		'批量移动结束
         conn.Execute ("update blog_Content set log_CateID="&Cate_target&" where log_CateID="&Cate_source)
         conn.Execute ("update blog_Category set cate_count=0 where cate_ID="&Cate_source)
         conn.Execute ("update blog_Category set cate_count=cate_count+"&Cate_source_count&" where cate_ID="&Cate_target)
@@ -222,10 +228,16 @@ ElseIf Request.Form("action") = "Categories" Then
         '--------------------------处理日志分类----------------------------
     ElseIf Request.Form("whatdo") = "Cate" Then
         '处理存在分类
-        Dim LCate_ID, LCate_icons, LCate_Name, LCate_Intro, Lcate_URL, Lcate_Order, Lcate_count, LCate_local, Lcate_Secret
-        Dim NCate_ID, NCate_icons, NCate_Name, NCate_Intro, Ncate_URL, Ncate_Order, NCate_local, Ncate_OutLink, Ncate_Secret
+        Dim LCate_ID, LCate_icons, LCate_Name, LCate_Intro, Lcate_URL, Lcate_Order, Lcate_count, LCate_local, Lcate_Secret, LCate_Part, LOldCate_Name
+        Dim NCate_ID, NCate_icons, NCate_Name, NCate_Intro, Ncate_URL, Ncate_Order, NCate_local, Ncate_OutLink, Ncate_Secret, Ncate_Part
         LCate_ID = Split(Request.Form("Cate_ID"), ", ")
         LCate_Name = Split(Request.Form("Cate_Name"), ", ")
+		' New Add
+		If blog_postFile = 2 Then
+		LCate_Part = Split(Request.Form("Cate_Part"), ", ")
+		LOldCate_Name = Split(Request.Form("OldCate_Name"), ", ")
+		end if
+		' New Add
         LCate_icons = Split(Request.Form("Cate_icons"), ", ")
         LCate_Intro = Split(Request.Form("Cate_Intro"), ", ")
         Lcate_URL = Split(Request.Form("cate_URL"), ", ")
@@ -234,9 +246,23 @@ ElseIf Request.Form("action") = "Categories" Then
         LCate_local = Split(Request.Form("Cate_local"), ", ")
         Lcate_Secret = Split(Request.Form("cate_Secret"), ", ")
         For i = 0 To UBound(LCate_Name)
+		    'evio
+			If blog_postFile = 2 Then
+		    if LOldCate_Name(i)="" and LCate_Part(i)<>"" then
+			createfolder(LCate_Part(i))
+			elseif LOldCate_Name(i)<>"" and LCate_Part(i)<>LOldCate_Name(i) then
+		    ChangeFolderName LOldCate_Name(i),LCate_Part(i)
+			session(CookieName&"_MsgText") = "请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件。 "
+			else
+		    end if
+			end if
+		    'evio
             SQL = "SELECT * FROM blog_Category where cate_ID="&Int(CheckStr(LCate_ID(i)))
             weblog.Open SQL, Conn, 1, 3
             weblog("cate_Name") = CheckStr(LCate_Name(i))
+			If blog_postFile = 2 Then
+			weblog("Cate_Part") = CheckStr(LCate_Part(i))
+			end if
             weblog("cate_icon") = CheckStr(LCate_icons(i))
             weblog("Cate_Intro") = CheckStr(LCate_Intro(i))
             If Len(Trim(Lcate_URL(i)))>1 And Int(Lcate_count(i))<1 Then
@@ -254,6 +280,9 @@ ElseIf Request.Form("action") = "Categories" Then
         Next
         '判断添加新日志
         NCate_Name = Trim(CheckStr(Request.Form("New_Cate_Name")))
+		If blog_postFile = 2 Then
+		Ncate_Part = Trim(CheckStr(Request.Form("New_Cate_Part")))
+		end if
         NCate_icons = CheckStr(Request.Form("New_Cate_icons"))
         NCate_Intro = Trim(CheckStr(Request.Form("New_Cate_Intro")))
         Ncate_URL = Trim(CheckStr(Request.Form("New_cate_URL")))
@@ -264,8 +293,17 @@ ElseIf Request.Form("action") = "Categories" Then
             If Len(Ncate_Order)<1 Then Ncate_Order = conn.Execute("select count(*) from blog_Category")(0)
             If Len(Ncate_URL)>0 Then Ncate_OutLink = True Else Ncate_OutLink = False
             Dim AddCateArray
-            AddCateArray = Array(Array("cate_Name", NCate_Name), Array("cate_icon", NCate_icons), Array("Cate_Intro", NCate_Intro), Array("cate_URL", Ncate_URL), Array("cate_OutLink", Ncate_OutLink), Array("cate_Order", Int(Ncate_Order)), Array("Cate_local", NCate_local), Array("Cate_Secret", NCate_Secret))
-            If DBQuest("blog_Category", AddCateArray, "insert") = 0 Then session(CookieName&"_MsgText") = "新日志分类添加成功，"
+			If blog_postFile = 2 Then
+            AddCateArray = Array(Array("cate_Name", NCate_Name), Array("cate_icon", NCate_icons), Array("Cate_Intro", NCate_Intro), Array("cate_URL", Ncate_URL), Array("cate_OutLink", Ncate_OutLink), Array("cate_Order", Int(Ncate_Order)), Array("Cate_local", NCate_local), Array("Cate_Secret", NCate_Secret), Array("Cate_Part", Ncate_Part))
+			else
+			AddCateArray = Array(Array("cate_Name", NCate_Name), Array("cate_icon", NCate_icons), Array("Cate_Intro", NCate_Intro), Array("cate_URL", Ncate_URL), Array("cate_OutLink", Ncate_OutLink), Array("cate_Order", Int(Ncate_Order)), Array("Cate_local", NCate_local), Array("Cate_Secret", NCate_Secret))
+			end if
+            If DBQuest("blog_Category", AddCateArray, "insert") = 0 Then session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"新日志分类添加成功，"
+			if Ncate_URL="" or Ncate_URL=empty or len(Ncate_URL)=0 then
+			If blog_postFile = 2 Then
+			createfolder("article/"&Ncate_Part)
+			end if
+			end if
         End If
         FreeMemory
         session(CookieName&"_ShowMsg") = True
@@ -305,6 +343,9 @@ ElseIf Request.Form("action") = "Categories" Then
             End If
             DelLog.movenext
         Loop
+		If blog_postFile = 2 Then
+		DeleteFolder conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0)
+		end if
         Conn.Execute("DELETE * FROM blog_Category WHERE cate_ID="&DelCate)
         FreeMemory
         session(CookieName&"_ShowMsg") = True

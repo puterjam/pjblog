@@ -209,6 +209,9 @@ Sub c_categories
 		          <td class="TDHead" nowrap>分类图标</td>
 		          <td class="TDHead" nowrap>标题</td>
 		          <td class="TDHead" nowrap>提示说明</td>
+				  <%If blog_postFile = 2 Then%>
+				  <td class="TDHead" nowrap>文章存放目录名</td>
+				  <%end if%>
 		          <td width="180" class="TDHead" nowrap>外部链接</td>
 		          <td width="29" class="TDHead" nowrap>排序</td>
 		          <td class="TDHead" nowrap>位置</td>
@@ -239,7 +242,12 @@ Sub c_categories
 		          <%end if%>
 		          </td>
 		          <td><input name="Cate_Name" type="text" class="text" value="<%=CategoryListDB("cate_Name")%>" size="14"/></td>
-		          <td align="left"><input name="Cate_Intro" type="text" class="text" value="<%=CategoryListDB("cate_Intro")%>" size="30"/></td>
+		          <td align="left"><input name="Cate_Intro" type="text" class="text" value="<%=CategoryListDB("cate_Intro")%>" size="20"/></td>
+				  <!--分类名-->
+				  <%If blog_postFile = 2 Then%>
+				  <td><input name="Cate_Part" type="text" class="text" value="<%=CategoryListDB("cate_Part")%>" size="14" style="ime-mode:disabled"/><input name="OldCate_Name" type="hidden" value="<%=CategoryListDB("cate_Part")%>"/></td>
+				  <%end if%>
+				  <!--分类名-->
 		          <td align="left"><input name="cate_URL" type="text" value="<%=CategoryListDB("cate_URL")%>" size="30" class="text" <%if CategoryListDB("cate_count")>0 Then response.write "readonly=""readonly"" style=""background:#e5e5e5"""%>/></td>
 		          <td align="left"><input name="cate_Order" type="text" value="<%=CategoryListDB("cate_Order")%>" size="2" class="text"/></td>
 		          <td align="center">
@@ -269,7 +277,7 @@ Sub c_categories
 		
 		%>
 		        <tr align="center" bgcolor="#D5DAE0">
-		         <td colspan="9" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加日志分类</td>
+		         <td colspan="<%If blog_postFile = 2 Then%>10<%else%>9<%end if%>" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加日志分类</td>
 		        </tr>
 		        <tr>
 		          <td align="center" nowrap><img name="CateImg" src="images/icons/1.gif" width="16" height="16" />
@@ -280,7 +288,10 @@ Sub c_categories
 		          <%end if%>
 		          </td>
 		          <td><input name="New_Cate_Name" type="text" size="14" class="text"/></td>
-		          <td align="left"><input name="New_Cate_Intro" type="text" class="text" size="30"/></td>
+		          <td align="left"><input name="New_Cate_Intro" type="text" class="text" size="20"/></td>
+				  <%If blog_postFile = 2 Then%>
+				  <td><input name="New_Cate_Part" type="text" size="14" class="text" style="ime-mode:disabled"/></td>
+				  <%end if%>
 		          <td align="left"><input name="New_cate_URL" type="text" size="30" class="text"/></td>
 		          <td align="left"><input name="New_cate_Order" type="text" size="2" class="text"/></td>
 		          <td align="center">
@@ -302,7 +313,13 @@ Sub c_categories
 		      </table>
 		      <script>fillAllList()</script>
 		    </div>
-		    <div style="color:#f00">如果分类中存在日志，则无法使用外部连接.删除日志分类的时假如分类中存在日志,那么日志也会被删除</div>
+		    <div style="color:#f00">
+		    <%If blog_postFile = 2 Then%>
+		    您当前的日志模式是 <b>【全静态化】</b> 方式, 您可以配置 <b>【文章存放目录名】</b> 来修改分类中的文章存储的目录,方便搜索引擎. <br/>例如: http://YourBlog/article/文章存放目录名/0000-0-0-1.htm <br />
+		     <br />如果修改了 <b>【文章存放目录名】</b> 请到 <a href="ConContent.asp?Fmenu=General&Smenu=Misc" style="color:#00f">站点基本设置-初始化数据</a> ,重新生成所有日志到文件 ,不修改则前台显示日志的路径错误</div>
+			<%else%>
+			如果分类中存在日志，则无法使用外部连接.删除日志分类的时假如分类中存在日志,那么日志也会被删除
+			<%end if%>
 			<div class="SubButton">
 		      <input type="submit" name="Submit" value="保存日志分类" class="button"/> 
 		     </div>   

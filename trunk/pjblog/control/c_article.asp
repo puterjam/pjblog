@@ -7,20 +7,47 @@ Sub c_article
 <%getMsg%>
     <table width="100%" border="0" align="center" cellpadding="6" cellspacing="1" bgcolor="#CCCCCC" class="CContent">
 	    <tr>
-		    <td bgcolor="#FFFFFF" class="CTitle"><b>日志管理v0.2 For Pjblog3</b></td>
+		    <td bgcolor="#FFFFFF" class="CTitle">日志管理v0.2 For Pjblog3 </td>
    		</tr>
 	    <%IF Request.QueryString("type")="LogMG" Then%>
 	    <tr>
 		    <td align="center" bgcolor="#FFFFFF" height="48">
 		    <%
-		        Dim Log_Dele,Log_source_ID,fso
 		        If Request.form("moveto")=1 Then
+		            Dim Log_Dele,Log_source_ID
 		            Log_Dele=split(Request.form("Log_Dele"),", ")
 		            for i=0 to ubound(Log_Dele)
+					If blog_postFile = 2 Then
+					dim mph,tname,thtml,ttype
+					mph=Alias(Log_Dele(i))	
+					tname=conn.execute("select log_cname from blog_Content where log_ID="&Log_Dele(i))(0)
+					if tname="" or tname=empty or tname=null or  len(tname)=0 then
+					tname=trim(year(now())&"-"&month(now())&"-"&day(now())&"-"&Log_Dele(i))
+					else
+					tname=tname
+					end if
+					ttype=conn.execute("select log_ctype from blog_Content where log_ID="&Log_Dele(i))(0)
+					if ttype="0" then
+					thtml="htm"
+					elseif ttype="1" then
+					thtml="html"
+					else
+					thtml="asp"
+					end if
+					dim cpart
+					if conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)="" or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=empty or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=null or len(conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0))=0 then
+					cpart = ""
+					else
+					cpart = conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)&"/"
+					end if
+					moveone mph,cpart&tname&"."&thtml
+					end if
+					
 		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
 		                conn.execute ("update blog_Content set log_CateID="&Request.form("source")&" where log_ID="&Log_Dele(i))
 		                conn.execute ("update blog_Category set cate_count=cate_count+1 where cate_ID="&Request.form("source"))
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
+						PostArticle Log_Dele(i), False
 		            next
 		             session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志移动成功！"
@@ -28,14 +55,16 @@ Sub c_article
 		            RedirectUrl("ConContent.asp?Fmenu=Article")
 		        Else
 		            Log_Dele=split(Request.form("Log_Dele"),", ")
+		            dim fso
 		            Set fso = CreateObject("Scripting.FileSystemObject")
 		            for i=0 to ubound(Log_Dele)
 		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
+						if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
+		                    fso.DeleteFile(server.MapPath(Alias(Log_Dele(i))))
+		                end if
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
-		                if fso.FileExists(server.MapPath("/article/"& Log_Dele(i) &".htm")) then
-		                    fso.DeleteFile(server.MapPath("/article/"& Log_Dele(i) &".htm"))
-		                end if
+		                
 		            next
 		             session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志删除成功！"
@@ -89,18 +118,18 @@ Sub c_article
 		    </td>
 		  </tr>
 		    <tr>
-			    <td valign="top" class="CPanel" style="padding-left:20px;padding-right:20px">
+			    <td align="center" valign="top" class="CPanel" style="padding-left:20px;padding-right:20px">
+			    <a href="blogpost.asp" target="_blank" style="float:left;margin-bottom:2px;"><b><img style="margin: 0px 2px -3px 0px" src="images/add.gif" border="0" />发表新日志</b></a>
 				<div style="float:right;margin-right:6px;">
-					<b>排序:</b> 发表时间 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=1"><img src="images/sort_up.gif" alt="正序排列" border=0/></a>
-					 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=2"><img src="images/sort_down.gif" alt="倒序排列" border=0/></a>
-					 <span style="color:#999">|</span> 评论 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=5"><img src="images/sort_up.gif" alt="正序排列" border=0/></a>
-					  <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=6"><img src="images/sort_down.gif" alt="倒序排列" border=0/></a>
-					   <span style="color:#999">|</span> 引用 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=7"><img src="images/sort_up.gif" alt="正序排列" border=0/></a> 
-					   <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=8"><img src="images/sort_down.gif" alt="倒序排列" border=0/></a> 
-					  <span style="color:#999">|</span> 访问 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=3"><img src="images/sort_up.gif" alt="正序排列" border=0/></a>
-					<a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=4"><img src="images/sort_down.gif" alt="倒序排列" border=0/></a>
+					排序: <b>时间</b> <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=1"><img src="images/sort_up.gif" border=0/></a>
+					 <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=2"><img src="images/sort_down.gif" border=0/></a>
+					  <span style="color:#999">|</span> <b>访问</b> <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=3"><img src="images/sort_up.gif" border=0/></a>
+					<a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=4"><img src="images/sort_down.gif" border=0/></a>
+					 <span style="color:#999">|</span> <b>评论</b> <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=5"><img src="images/sort_up.gif" border=0/></a>
+					  <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=6"><img src="images/sort_down.gif" border=0/></a>
+					   <span style="color:#999">|</span> <b>引用</b> <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=7"><img src="images/sort_up.gif" border=0/></a> 
+					   <a href="?Fmenu=Article&cate_ID=<%=Request.QueryString("cate_ID")%>&Log_sort=8"><img src="images/sort_down.gif" border=0/></a> 
 				</div>
-			    <div style="text-align:left;margin-bottom:5px;"><a href="blogpost.asp" target="_blank"><img style="margin: 0px 2px -3px 0px" src="images/add.gif" border="0" /><b>发表新日志</b></a></div>
 			    
 					<form action="ConContent.asp?Fmenu=Article&type=LogMG" method="post" name="ph_Category" id="ph_Category" style="margin:0px;">
 			               <input type="hidden" name="doModule" value="DelSelect"/>
@@ -155,23 +184,20 @@ Sub c_article
 				        Log_List_nums=Log_List.RecordCount
 						Dim urlLink    '根据动静态判断输出连接  JieLiao
 				    %>
-				    <table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
-				    <tr align="center">
-					    <td class="TDHead" nowrap>&nbsp;</td>
-					    <%If Request.QueryString("cate_ID")=Empty Then%>
-					    <td class="TDHead" nowrap>日志分类</td>
-					    <%End If%>
-					    <td class="TDHead" width="100%">日志标题</td>
-					    <td class="TDHead" nowrap>发表时间</td>
-					    <td class="TDHead" nowrap>评论</td>
-					    <td class="TDHead" nowrap>引用</td>
-					    <td class="TDHead" nowrap>访问</td>
-					    <td class="TDHead" nowrap>操作</td>
+				    <table border="0" cellpadding="2" cellspacing="1" class="TablePanel" width="100%" style="clear:both">
+				    <tr>
+					    <td class="TDHead" nowrap>选择</td>
+					    <td  class="TDHead" width="100%">标题</td>
+					    <td  class="TDHead" nowrap width="150">发布时间</td>
+					    <td  class="TDHead" nowrap width="50">评论</td>
+					    <td  class="TDHead" nowrap width="50">引用</td>
+					    <td  class="TDHead" nowrap width="50">查看</td>
+					    <td  class="TDHead" nowrap width="50">操作</td>
 				    </tr>
 				    <%
 					Do Until Log_List.EOF OR Log_PageCM=Log_List.PageSize
 						if blog_postFile = 2 then
-							urlLink = "article/"&Log_List(0)&".htm"
+							urlLink = Alias(Log_List(0))
 						else 
 							urlLink = "article.asp?id="&Log_List(0)
 						end if
@@ -179,11 +205,14 @@ Sub c_article
 				    %>
 				    <tr bgcolor="#FFFFFF">
 				    <td align="center"><input name="Log_Dele" type="checkbox" id="Log_Dele" value=<%=Log_List(0)%>></td>
-				    <%If Request.QueryString("cate_ID")=Empty Then%>
-				    <td><nobr><a href=ConContent.asp?Fmenu=Article&cate_ID=<%=Log_List(1)%>>【<%=Log_List(8)%>】</a></nobr></td>
-				    <%End If%>
-				    <td><a target="_blank" href="<%=urlLink%>"><%=Log_List(2)%></a></td>
-				    <td><nobr><%=DateToStr(Log_List(3),"Y-m-d H:I:S")%></nobr></td>
+				    <td>
+				    <%
+				    If Request.QueryString("cate_ID")=Empty Then
+				        response.write "<a href=ConContent.asp?Fmenu=Article&cate_ID="&Log_List(1)&">【"&Log_List(8)&"】</a>"
+				    End If
+				    %>
+				    <a target="_blank" href="<%=urlLink%>"><%=Log_List(2)%></a></td>
+				    <td><%=Log_List(3)%></td>
 				    <td align="center">
 				    <%
 				    If Log_List(4)>0 then
@@ -196,9 +225,9 @@ Sub c_article
 				    <%End If
 				    %>
 				    </td>
-				    <td align="center"><nobr><%=Log_List(5)%></nobr></td>
-				    <td align="center"><nobr><%=Log_List(6)%></nobr></td>
-				    <td align="center"><nobr><a target="_blank" href="blogedit.asp?id=<%=Log_List(0)%>"><img style="margin: 0px 2px -3px 0px" src="images/icon_edit.gif" border="0" />编辑</a></nobr>
+				    <td align="center"><%=Log_List(5)%></td>
+				    <td align="center"><%=Log_List(6)%></td>
+				    <td align="center"><a target="_blank" href="blogedit.asp?id=<%=Log_List(0)%>"><img style="margin: 0px 2px -3px 0px" src="images/icon_edit.gif" border="0" />编辑</a>
 				    </select>
 				    </td>
 				    </tr>

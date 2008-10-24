@@ -3,6 +3,108 @@
 '  Function For PJblog2
 '    更新时间: 2006-6-2
 '===============================================================
+'*************************************
+'产生不重复的随机数 by evio
+'*************************************
+Function gen_key(digits) 
+dim char_array(50) 
+char_array(0) = "0" 
+char_array(1) = "1" 
+char_array(2) = "2" 
+char_array(3) = "3" 
+char_array(4) = "4" 
+char_array(5) = "5" 
+char_array(6) = "6" 
+char_array(7) = "7" 
+char_array(8) = "8" 
+char_array(9) = "9" 
+char_array(10) = "a" 
+char_array(11) = "b" 
+char_array(12) = "c" 
+char_array(13) = "d" 
+char_array(14) = "e" 
+char_array(15) = "f" 
+char_array(16) = "g" 
+char_array(17) = "h" 
+char_array(18) = "i" 
+char_array(19) = "j" 
+char_array(20) = "k" 
+char_array(21) = "l" 
+char_array(22) = "m" 
+char_array(23) = "n" 
+char_array(24) = "o" 
+char_array(25) = "p" 
+char_array(26) = "q" 
+char_array(27) = "r" 
+char_array(28) = "s" 
+char_array(29) = "t" 
+char_array(30) = "u" 
+char_array(31) = "v" 
+char_array(32) = "w" 
+char_array(33) = "x" 
+char_array(34) = "y" 
+char_array(35) = "z" 
+randomize 
+dim output,num
+do while len(output) < digits 
+num = char_array(Int((35 - 0 + 1) * Rnd + 0)) 
+output = output + num 
+loop 
+gen_key = output & year(now) & month(now) & day(now) & hour(now) & minute(now) & second(now) 
+End Function 
+'*************************************
+'判断是否存在文件 by evio
+'*************************************
+Function FileExist(FilePath) 
+    FileExist = False
+    Dim FSO
+    Set FSO = Server.CreateObject("Scripting.FileSystemObject")
+    FilePath = Server.MapPath(FilePath)
+    If FSO.FileExists(FilePath) Then FileExist = True
+End Function
+'*************************************
+'创建文件夹 by evio
+'*************************************
+sub createfolder(catename)
+    dim catefso,blogcatepath,blogcatetestpath
+	set catefso = server.CreateObject("scripting.filesystemobject")
+	blogcatepath = catename
+	blogcatetestpath=server.MapPath(".\"&blogcatepath&"")
+	if catefso.FolderExists(blogcatetestpath) Then
+    else
+	catefso.createfolder(blogcatetestpath) 
+    end if
+	set catefso=nothing
+end sub
+'*************************************
+'自定义路径 by evio
+'*************************************
+Function Alias(id)
+    dim cname,ccate,chtml,ccateID,cnames,ctype
+	ccateID=conn.execute("select log_CateID from blog_Content where log_ID="&id)(0)
+	ccate=conn.execute("select Cate_Part from blog_Category where cate_ID="&ccateID)(0)
+	if ccate="" or ccate=empty or ccate=null or len(ccate)=0 then
+	ccate="article/"
+	else
+	ccate="article/"&ccate&"/"
+	end if
+	cname=conn.execute("select log_cname from blog_Content where log_ID="&id)(0)
+	if cname="" or cname=empty or cname=null or len(cname)=0 then
+	cnames=trim(year(now())&"-"&month(now())&"-"&day(now())&"-"&id)
+	else
+	cnames=cname
+	end if
+	ctype=conn.execute("select log_ctype from blog_Content where log_ID="&id&"")(0)
+	if ctype="0" then
+	chtml="htm"
+	elseif ctype="1" then
+	chtml="html"
+	else
+	chtml="asp"
+	end if
+	chtml="."&chtml
+	Alias=ccate&cnames&chtml
+End Function
 
 '*************************************
 '防止外部提交
@@ -53,7 +155,7 @@ End Function
 '*************************************
 
 Function getcode()
-    getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='common/getcode.asp?s='+Math.random();"" alt=""验证码"" title=""看不清楚？点击刷新验证码！"" style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='common/getcode.asp?s='+Math.random()""/>"
+    getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='common/getcode.asp?s='+Math.random();"" alt=""验证码"" title=""看不清楚?换一张"" style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='common/getcode.asp?s='+Math.random()""/>"
 End Function
 
 '*************************************
@@ -650,31 +752,8 @@ Function DelQuote(strContent)
     strContent = re.Replace(strContent, "")
     re.Pattern = "\[quote=(.[^\]]*)\](.[^\]]*?)\[\/quote\]"
     strContent = re.Replace(strContent, "")
-    re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-    strContent = re.Replace(strContent, "")
     re.Pattern = "\[reply=(.[^\]]*)\](.[^\]]*?)\[\/reply\]"
     strContent = re.Replace(strContent, "")
-    re.Pattern = "\[b\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/b\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[i\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/i\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[u\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/u\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[s\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/s\]"
-    strContent = re.Replace(strContent, "")
-            Dim log_Smilies, log_SmiliesContent
-            For Each log_Smilies IN Arr_Smilies
-                log_SmiliesContent = Split(log_Smilies, "|")
-                strContent = Replace(strContent, log_SmiliesContent(2), "")
-            Next
     Set re = Nothing
     DelQuote = strContent
 End Function

@@ -36,7 +36,7 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp
     If Len(Tid)>0 Then 
     	Dim rUrl
         If blog_postFile = 2 Then
-        	rUrl = "article/" & Tid & ".htm"
+        	rUrl = Alias(Tid)
 	    else
 		 	rUrl = "article.asp?id=" & Tid
 	    end if 
@@ -96,6 +96,7 @@ End If
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="common/common.js"></script>
+	<script type="text/javascript" src="common/ajax.js"></script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 	<style type="text/css"> 
 		.ownerClassLog{display:none}
@@ -134,7 +135,7 @@ End If
 		}
 	</style>
 </head>
-<body onload="initJS()" onkeydown="PressKey()">
+<body onLoad="initJS()" onkeydown="PressKey()">
 <a href="default.asp" accesskey="i"></a>
 <a href="javascript:history.go(-1)" accesskey="z"></a>
 <%getSkinFlash%>
@@ -174,7 +175,7 @@ End If
 SkinXML.CloseXml
 Set SkinXML = Nothing
 '合作信息
-	SkinInfo = SkinInfo & " |  <a href=""http://www.codefense.cn"" target=""_blank""><img border=""0"" src=""images/detect.gif"" alt=""Code Detection By Codefense"" style=""margin-bottom:-2px;height:14px;width:12px""/></a>"
+	SkinInfo = SkinInfo & " |  <a href=""http://www.codefense.cn"" target=""_blank""><img border=""0"" src=""http://www.xiaoxiaoliu.org/image/logo/detect.gif"" alt=""Code Detection By Codefense"" style=""margin-bottom:-2px;height:14px;width:12px""/></a>"
 End If
 End If
 End Sub

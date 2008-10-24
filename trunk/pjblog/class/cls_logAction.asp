@@ -9,7 +9,7 @@ Class logArticle
     Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips
     Public logDisableComment, logIsTop, logFrom, logFromURL
     Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord
-    Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount
+    Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logcname, logctype
     Private logUbbFlags, PubTime, sqlString
 
     Private Sub Class_Initialize()
@@ -43,6 +43,10 @@ Class logArticle
         logPublishTimeType = "now"
         logReadpw = ""
         logPwtips = ""
+		If blog_postFile = 2 Then
+		logcname=""
+		logctype= "0"
+		end if
     End Sub
 
     Private Sub Class_Terminate()
@@ -151,9 +155,14 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
+		
+		If blog_postFile = 2 Then
+		weblog("log_cname")=logcname
+		weblog("log_ctype")=logctype
+		end if
 
-        weblog("log_Readpw")=logReadpw
-        weblog("log_Pwtips")=logPwtips
+		weblog("log_Readpw")=logReadpw
+		weblog("log_Pwtips")=logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -177,8 +186,8 @@ Class logArticle
         PostArticle PostLogID, False
 
         '输出附近的日志到文件
-        Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-        Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+        Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+        Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
         If Not preLog.EOF Then PostArticle preLog("log_ID"), False
         If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
 
@@ -349,9 +358,14 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_edittype") = logEditType
         weblog("log_comorder") = logCommentOrder
+		
+		If blog_postFile = 2 Then
+		weblog("log_cname")=logcname
+		weblog("log_ctype")=logctype
+		end if
 
-        weblog("log_Readpw")=logReadpw
-        weblog("log_Pwtips")=logPwtips
+		weblog("log_Readpw") = logReadpw
+		weblog("log_Pwtips") = logPwtips
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -361,11 +375,28 @@ Class logArticle
 
         '-------------------输出静态日志档案--------------------
         '输出日志到文件
+		If blog_postFile = 2 Then
+		dim oldcate,oldctype,oldcname,A,B,C
+		oldcname=request.form("oldcname")
+		oldcate=request.form("oldcate")
+		oldctype=request.form("oldtype")
+		A="article/"&conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
+		B=oldcname
+		if oldctype="0" then
+		C="htm"
+		elseif oldctype="1" then
+		C="html"
+		else
+		C="asp"
+		end if
+		if oldcname<>request.Form("cname") or oldcate<>request.Form("log_CateID") or oldctype<>request.Form("ctype") then
+		DeleteFiles Server.MapPath(A&"/"&B&"."&C)
+		end if
         PostArticle logid, False
-
+        end if
         '输出附近的日志到文件
-        Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-        Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+        Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+        Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&PubTime&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
         If Not preLog.EOF Then PostArticle preLog("log_ID"), False
         If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
 
@@ -396,6 +427,8 @@ Class logArticle
     '*********************************************
 
     Public Function deleteLog(id)
+	    Dim pcmpad
+	    pcmpad=Alias(id)
         deleteLog = Array( -4, "准备删除")
         If IsEmpty(id) Then
             getLog = Array( -5, "ID号不能为空")
@@ -454,10 +487,10 @@ Class logArticle
         DeleteFiles Server.MapPath("post/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/"&logid&".asp")
         DeleteFiles Server.MapPath("cache/c_"&logid&".js")
-        DeleteFiles Server.MapPath("article/"&logid&".htm")
+        DeleteFiles Server.MapPath(pcmpad)
 		
-        Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&Pdate&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-        Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&Pdate&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+        Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+        Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&Pdate&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
         '输出附近的日志到文件
         If Not preLog.EOF Then PostArticle preLog("log_ID"), False
         If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
@@ -490,7 +523,7 @@ Class logArticle
             Exit Function
         End If
 
-        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_edittype,log_ubbFlags,log_Intro,log_weather,log_Level,log_comorder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums,log_Readpw,log_Pwtips FROM blog_Content WHERE log_ID="&id&""
+        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_edittype,log_ubbFlags,log_Intro,log_weather,log_Level,log_comorder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums,log_Readpw,log_Pwtips,log_cname,log_ctype FROM blog_Content WHERE log_ID="&id&""
         weblog.Open sqlString, Conn, 1, 1
         SQLQueryNums = SQLQueryNums + 1
 
@@ -524,6 +557,8 @@ Class logArticle
         logViewCount = weblog("log_ViewNums")
         logReadpw = Trim(weblog("log_Readpw"))
         logPwtips = weblog("log_Pwtips")
+		logcname = weblog("log_cname")
+		logctype = weblog("log_ctype")
         logTrackback = ""
         Set getTag = New tag
         logTags = getTag.filterEdit(weblog("log_tag"))
@@ -892,7 +927,7 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
     Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
 
-    If log_View("log_IsShow") and not getCate.cate_Secret Then
+    If log_View("log_IsShow") Then
         Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
     Else
      	if log_View("log_Readpw") <> "" then
@@ -934,15 +969,15 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-    Set preLogC = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-    Set nextLogC = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
 
     Dim BTemp,urlLink
     BTemp = ""
     
     If Not preLogC.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = "article/"&preLogC("log_ID")&".htm"
+    		urlLink = Alias(preLogC("log_ID"))
     	else 
     		urlLink = "?id="&preLogC("log_ID")
     	end if
@@ -953,7 +988,7 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
 
     If Not nextLogC.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = "article/"&nextLogC("log_ID")&".htm"	
+    		urlLink = Alias(nextLogC("log_ID"))
     	else 
     		urlLink = "?id="&nextLogC("log_ID")
     	end if
@@ -999,6 +1034,14 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	
     Set log_View = conn.Execute(SQL)
     
+	if log_View("log_IsShow") = false then '如果是私密日志
+    	SaveArticle = SaveToFile("<head><title>显示私密日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到私密日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", Alias(LogID))
+    	PostHalfStatic LogID, UpdateListOnly
+	    
+	    Set log_View = Nothing
+	    exit Sub
+	end if
+    
     blog_currentCategoryID = log_View("log_CateID")
     Dim blog_Cate, blog_CateArray, comDesc
     Dim getCate, getTags
@@ -1016,14 +1059,6 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	    Set getTags = Nothing
 	    exit Sub
 	end if 
-
-	if log_View("log_IsShow") = false or getCate.cate_Secret then '如果是私密日志
-    	SaveArticle = SaveToFile("<head><title>显示私密日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到私密日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", "article/article-" & LogID & ".html")
-    	PostHalfStatic LogID, UpdateListOnly
-	    
-	    Set log_View = Nothing
-	    exit Sub
-	end if
 	
 
 	
@@ -1086,26 +1121,28 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_IsDraft$>", log_View("log_IsDraft"))
 
-    Set preLogC = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-    Set nextLogC = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+    Set preLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLogC = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_View("log_PostTime"), "Y-m-d H:I:S")&"# and (log_IsShow=true or log_Readpw<>'') and log_IsDraft=false ORDER BY log_PostTime ASC")
 
     Dim BTemp
     BTemp = ""
     If Not preLogC.EOF Then
-        BTemp = BTemp & "<a href=""article/"&preLogC("log_ID")&".htm"" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+        BTemp = BTemp & "<a href="""&Alias(preLogC("log_ID"))&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
     Else
         BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
     End If
 
     If Not nextLogC.EOF Then
-        BTemp = BTemp & " | <a href=""article/"&nextLogC("log_ID")&".htm"" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+        BTemp = BTemp & " | <a href="""&Alias(nextLogC("log_ID"))&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
     Else
         BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
     End If
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
+	
+	createfolder "article/"&getCate.cate_Part
 
-    SaveArticle = SaveToFile(Temp1, "article/" & LogID & ".htm")
+    SaveArticle = SaveToFile(Temp1, Alias(LogID))
 
     PostArticleListCache LogID, log_View, getCate , getTags
 
@@ -1135,8 +1172,8 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Temp2 = Replace(Temp2, "<$log_viewCount$>", log_View("log_ViewNums"))
     
     'article.asp?id=<$LogID$>
-    If blog_postFile = 2  and log_View("log_IsShow") and not getCate.cate_Secret Then
-        Temp2 = Replace(Temp2, "<$pLink$>", "article/" & LogID & ".htm")
+    If blog_postFile = 2  and log_View("log_IsShow") Then
+        Temp2 = Replace(Temp2, "<$pLink$>", Alias(LogID))
     else
 	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
     end if 
@@ -1151,16 +1188,16 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         Temp2 = Replace(Temp2, "<$ShowStyle$>", "")
     End If
 
-    If log_View("log_IsShow") and not getCate.cate_Secret Then
+    If log_View("log_IsShow") Then
         Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "")
     Else
 	    If log_View("log_Readpw") <> "" Then
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
-	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
 	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
 	    Else
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
-	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
+	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt="""" />")
 	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
 	    End If
 	    
@@ -1179,8 +1216,8 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
-            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
-          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+            If blog_postFile = 2 and log_View("log_IsShow") Then
+          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href="""&Alias(LogID)&""" class=""more"">查看更多...</a></p>")
 			else
           	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
   			End If
@@ -1191,8 +1228,8 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
-             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+            If blog_postFile = 2 and log_View("log_IsShow") Then
+             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href="""&Alias(LogID)&""" class=""more"">查看更多...</a></p>")
          	else
              	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
          	end if           

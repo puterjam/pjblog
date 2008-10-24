@@ -93,8 +93,8 @@ Sub ShowArticle(LogID)
 
     '从数据库读取日志
     'on error resume Next
-    Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-    Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+    Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
+    Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
     SQLQueryNums = SQLQueryNums + 2
 
 
@@ -105,7 +105,7 @@ Sub ShowArticle(LogID)
 						   <%
 If Not preLog.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = "article/"&preLog("log_ID")&".htm"
+    		urlLink = Alias(preLog("log_ID"))
     	else 
     		urlLink = "?id="&preLog("log_ID")
     	end if
@@ -115,7 +115,7 @@ Else
 End If
 If Not nextLog.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = "article/"&nextLog("log_ID")&".htm"	
+    		urlLink = Alias(nextLog("log_ID"))
     	else 
     		urlLink = "?id="&nextLog("log_ID")
     	end if
@@ -154,6 +154,7 @@ Set nextLog = Nothing
 					        <%if stat_DelAll or (stat_Del and log_ViewArr(5,0)=memName)  then %>　<a href="blogedit.asp?action=del&amp;id=<%=log_ViewArr(0,0)%>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a><%end if%>
 						  </div>
 						</div>
+						
 					  <div id="logPanel" class="Content-body">
 						<%If CanRead Then '密码访问
 							keyword = CheckStr(Request.QueryString("keyword"))
@@ -257,7 +258,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
         aName = "#comm_top"
         
         If blog_postFile = 2 and logShow then '静态页面使用#方式来切换
-        	BaseUrl = "article/" & LogID & ".htm"
+        	BaseUrl = Alias(LogID)
         	Url_Add="#"
         	aName = ""
         	aEvent = "onclick=""openCommentPage(this)"""

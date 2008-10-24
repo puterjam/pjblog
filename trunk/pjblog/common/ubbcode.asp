@@ -193,7 +193,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[color=(#\w{3,10}|\w{3,10})\]([^\r]*?)\[\/color\]"
             strContent = re.Replace(strContent, "<span style=""color:$1"">$2</span>")
             re.Pattern = "\[size=(\d{1,2})\]([^\r]*?)\[\/size\]"
-            strContent = re.Replace(strContent, "<span style=""font-size:$1pt;line-height:100%;"">$2</span>")
+            strContent = re.Replace(strContent, "<span style=""font-size:$1pt"">$2</span>")
             re.Pattern = "\[font=([^\r]*?)\]([^\r]*?)\[\/font\]"
             strContent = re.Replace(strContent, "<span style=""font-family:$1"">$2</span>")
             re.Pattern = "\[b\]([^\r]*?)\[\/b\]"
@@ -233,22 +233,16 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
-                If Len(memName)>0 Then
-                    strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">"&tmpStr2&"</a>", 1, -1, 0)
-                Else
-                    strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>", 1, -1, 0)
-                End If
+				dim rndnum1:rndnum1=gen_key(10)
+                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum1&"""></div><br /><script language=""javascript"" type=""text/javascript"" defer>check('Action.asp?action=type1&mainurl="&server.URLEncode(tmpStr1)&"&main="&server.URLEncode(tmpStr2)&"','mdown_"&rndnum1&"','mdown_"&rndnum1&"');</script>", 1, -1, 0)    
             Next
 
             re.Pattern = "\[mDown\](.[^\[]*)\[\/mDown]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
-                If Len(memName)>0 Then
-                    strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">下载此文件</a>", 1, -1, 0)
-                Else
-                    strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>", 1, -1, 0)
-                End If
+                dim rndnum2:rndnum2=gen_key(10)
+                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum2&"""></div><br /><script language=""javascript"" type=""text/javascript"" defer>check('Action.asp?action=type2&main="&server.URLEncode(tmpStr1)&"','mdown_"&rndnum2&"','mdown_"&rndnum2&"');</script>", 1, -1, 0)
             Next
 
             'CC Video 支持
@@ -298,10 +292,10 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 于 $2 回复</div><div class=""UBBContent"">$3</div></div>")
 
         re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
 
 
         '-----------表情图标----------------

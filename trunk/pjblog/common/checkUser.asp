@@ -77,10 +77,13 @@ Function login(UserName, Password)
             memLogin("mem_Password") = SHA1(Password&strSalt)
             Response.Cookies(CookieName)("memName") = memLogin("mem_Name")
             Response.Cookies(CookieName)("memHashKey") = HashKey
-            If Request.Form("KeepLogin") = "1" Then Response.Cookies(CookieName).Expires = Date+365
+            If Request.Form("KeepLogin") = "1" Then
+                Response.Cookies(CookieName).Expires = Date+365
+                Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+            End If
             memLogin.Update
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If
@@ -96,7 +99,10 @@ Function login(UserName, Password)
             memLogin("mem_hashKey") = HashKey
             Response.Cookies(CookieName)("memName") = memLogin("mem_Name")
             Response.Cookies(CookieName)("memHashKey") = HashKey
-            If Request.Form("KeepLogin") = "1" Then Response.Cookies(CookieName).Expires = Date+365
+            If Request.Form("KeepLogin") = "1" Then
+                Response.Cookies(CookieName).Expires = Date+365
+                Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+            End If
             memLogin.Update
             ReInfo(0) = "登录成功"
             ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
@@ -164,7 +170,7 @@ Function login2(UserName, Password)
             memName = memLogin("mem_Name")
             memStatus = memLogin("mem_Status")
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If
@@ -231,12 +237,12 @@ Sub checkCookies()
             logout(False)
         Else
             UserID = CheckCookie("mem_ID")
-            If CheckCookie("mem_LastIP")<>Guest_IP Or IsNull(CheckCookie("mem_LastIP")) Then
-                logout(True)
-            Else
+            '            If CheckCookie("mem_LastIP")<>Guest_IP Or IsNull(CheckCookie("mem_LastIP")) Then
+'                logout(True)
+'            Else
                 memName = CheckStr(Request.Cookies(CookieName)("memName"))
                 memStatus = CheckCookie("mem_Status")
-            End If
+'            End If
         End If
         CheckCookie.Close
         Set CheckCookie = Nothing
