@@ -88,7 +88,7 @@ Function Calendar(C_Year, C_Month, C_Day, update)
                 If RS_Month("log_IsShow") Then
                     Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - " & RS_Month("log_title")
                 Else
-                    Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - [隐藏日志]"
+                    Link_Days(4, Link_Count -1) = Link_Days(4, Link_Count -1) & Chr(10) & " - [私密日志]"
                 End If
 
                 TempSplit = Split(Link_Days(4, Link_Count -1), Chr(13))
@@ -313,7 +313,7 @@ End Sub
 Class Category
     Public cate_ID
     Public cate_Name
-	Public cate_Part
+    Public cate_Part
     Public cate_Order
     Public cate_Intro
     Public cate_OutLink
@@ -329,7 +329,7 @@ Class Category
     Private Sub Class_Initialize()
         cate_ID = 0
         cate_Name = ""
-		cate_Part = ""
+        cate_Part = ""
         cate_Order = 0
         cate_Intro = ""
         cate_OutLink = False
@@ -372,7 +372,7 @@ Class Category
                 cate_Lock = blog_CateArray(8, i)
                 cate_local = blog_CateArray(9, i)
                 cate_Secret = blog_CateArray(10, i)
-				cate_Part = blog_CateArray(11, i)
+                cate_Part = blog_CateArray(11, i)
                 LastID = Int(ID)
                 Loaded = True
                 Exit Function

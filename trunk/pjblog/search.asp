@@ -77,7 +77,6 @@ blog_Search.Open SQL, Conn, 1, 1
       <div class="Content-Info">
 		 <div class="InfoAuthor"> 查询类型 <b><%=getSType(searchType)%></b> | 关键词 <b><%=HTMLEncode(SearchContent)%></b> | 共找到 <b><%=blog_Search.RecordCount%></b> 条记录</div>
      </div>
-           
 <%
 If blog_Search.EOF And blog_Search.BOF Then
     response.Write ("<b>没有找到符合条件的数据</b><br/><br/><a href=""default.asp"">单击返回</a><br/><br/>")
@@ -117,7 +116,7 @@ Case "trackback"
 	             	<b>摘要:</b> <%=highlight(checkURL(HTMLDecode(SearchArr(3,PageCount))),SearchContent)%><br/>
 		         </div>
 		   <%
-Response.Write("<div class=""Content-bottom"">相关日志: <a href=""article.asp?id="&SearchArr(0, PageCount)&""" target=""_blank""><b>"&SearchArr(6, PageCount)&"</b></a></div>")
+Response.Write("<div class=""Content-bottom"">相关日志: <a href=""default.asp?id="&SearchArr(0, PageCount)&""" target=""_blank""><b>"&SearchArr(6, PageCount)&"</b></a></div>")
 Case Else
     Response.Write("<a href=""default.asp?id="&SearchArr(0, PageCount)&"""> "&highlight(SearchArr(1, PageCount), SearchContent)&" [ 日期: "&SearchArr(02, PageCount)&" | 评论数:"&SearchArr(3, PageCount)&"]</a><br/>")
 End Select

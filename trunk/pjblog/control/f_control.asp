@@ -489,7 +489,7 @@ Sub InstallPlugins
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     Else
         session(CookieName&"_ShowMsg") = True
-        session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
+        session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>，提示：请检查插件名称显示为灰色的插件目录是否存在"
         PluginsXML.CloseXml()
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
     End If
@@ -541,7 +541,7 @@ Sub FixPlugins(fixType)
             Else
                 If CBool(fixType) Then
                     session(CookieName&"_ShowMsg") = True
-                    session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>"
+                    session(CookieName&"_MsgText") = "安装插件时发生错误,错误代码: <font color=""#ff0000"">"&PluginsXML.getError&"</font>，提示：请检查插件名称显示为灰色的插件目录是否存在"
                     PluginsXML.CloseXml()
                     RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
                 End If

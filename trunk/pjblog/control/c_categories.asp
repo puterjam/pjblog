@@ -315,7 +315,7 @@ Sub c_categories
 		    </div>
 		    <div style="color:#f00">
 		    <%If blog_postFile = 2 Then%>
-		    您当前的日志模式是 <b>【全静态化】</b> 方式, 您可以配置 <b>【文章存放目录名】</b> 来修改分类中的文章存储的目录,方便搜索引擎. <br/>例如: http://YourBlog/article/文章存放目录名/0000-0-0-1.htm <br />
+		    您当前的日志模式是 <b>【全静态化】</b> 方式, 您可以配置 <b>【文章存放目录名】</b> 来修改分类中的文章存储的目录,方便搜索引擎. <br/>例如: <%=siteURL%>article/文章存放目录名/0000-0-0-1.html <br />
 		     <br />如果修改了 <b>【文章存放目录名】</b> 请到 <a href="ConContent.asp?Fmenu=General&Smenu=Misc" style="color:#00f">站点基本设置-初始化数据</a> ,重新生成所有日志到文件 ,不修改则前台显示日志的路径错误</div>
 			<%else%>
 			如果分类中存在日志，则无法使用外部连接.删除日志分类的时假如分类中存在日志,那么日志也会被删除

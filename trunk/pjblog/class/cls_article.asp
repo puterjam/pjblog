@@ -93,8 +93,8 @@ Sub ShowArticle(LogID)
 
     '从数据库读取日志
     'on error resume Next
-    Set preLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime DESC")
-    Set nextLog = Conn.Execute("SELECT TOP 1 log_Title,log_ID FROM blog_Content WHERE log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and log_IsShow=true and log_IsDraft=false ORDER BY log_PostTime ASC")
+    Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
+    Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
     SQLQueryNums = SQLQueryNums + 2
 
 
@@ -154,7 +154,6 @@ Set nextLog = Nothing
 					        <%if stat_DelAll or (stat_Del and log_ViewArr(5,0)=memName)  then %>　<a href="blogedit.asp?action=del&amp;id=<%=log_ViewArr(0,0)%>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a><%end if%>
 						  </div>
 						</div>
-						
 					  <div id="logPanel" class="Content-body">
 						<%If CanRead Then '密码访问
 							keyword = CheckStr(Request.QueryString("keyword"))
@@ -174,9 +173,6 @@ Set nextLog = Nothing
 								Else
 									dim pwTips
 									pwTips = Trim(log_ViewArr(21,0))
-									if pwTips="" then
-										pwTips = "无密码提示"
-									end if
 								%>
 									<form id="CheckRead" name="CheckRead" method="post" action="">
 										<%If Trim(Request.Form("do")) = "CheckOut" Then
@@ -185,9 +181,7 @@ Set nextLog = Nothing
 										 End If%>
 										<input name="do" type="hidden" value="CheckOut" />
 										<label for="pw"><input name="pw" type="password" id="pw" size="15" class="input"/></label>
-										<input type="image" name="Submit" value="确　定" src="images/unlock.gif" style="margin-bottom:-8px;*margin-bottom:-6px"/> <a href="javascript:;" onclick="$('hints').style.display=$('hints').style.display=='none'?'':'none';" title="显示/隐藏密码提示">密码提示</a>
-			
-										
+										<input type="image" name="Submit" value="确　定" src="images/unlock.gif" style="margin-bottom:-8px;*margin-bottom:-6px"/> <%if pwTips="" then%>『暂无提示』<%else%><a href="javascript:;" onclick="$('hints').style.display=$('hints').style.display=='none'?'':'none';" title="显示/隐藏密码提示">密码提示</a><%end if%>
 										<div id="hints" class="hints" style="display:none">
 											<%=pwTips%>
 										</div>
@@ -275,7 +269,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
      		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
-			ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a></span>]</span>"
+     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a></span>]</span>"
 		
 			'删除按钮
 		''	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 

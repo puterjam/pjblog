@@ -51,7 +51,7 @@
               dim Message_Items,Message_Item
              	For Each Message_Items IN blog_Message
              	 Message_Item=Split(Message_Items,"|,|")
-             	 NewMessage=NewMessage&"<a class=""sideA"" href=""LoadMod.asp?plugins=GuestBookForPJBlog#book_"&Message_Item(0)&""" title="""&Message_Item(1)&" 于 "&Message_Item(2)&" 发表留言"&CHR(10)&CCEncode(CutStr(Message_Item(3),25))&""">"&CCEncode(CutStr(Message_Item(3),25))&"</a>"
+             	 NewMessage=NewMessage&"<a class=""sideA"" href=""LoadMod.asp?plugins=GuestBookForPJBlog#book_"&Message_Item(0)&""" title="""&Message_Item(1)&" 于 "&Message_Item(2)&" 发表留言"&CHR(10)&CCEncode(CutStr(DelQuote(Message_Item(3)),100))&""">"&CCEncode(CutStr(DelQuote(Message_Item(3)),25))&"</a>"
              	Next
               end if
        end function
