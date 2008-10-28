@@ -356,7 +356,7 @@ Sub c_skins
 					If PluginsXML.getError = 0 Then
 						response.write Blog_Plugins("title")
 					Else
-						response.write "<font color=red>"&Blog_Plugins("title")&"</font>"
+						response.write "<span style=""color:#999"">"&Blog_Plugins("title")&"--[安装文件丢失]</span>"
 					End If
 				  %>
                   </td>
@@ -390,7 +390,7 @@ Sub c_skins
 			       <input type="button" name="button" value="修复插件" class="button" onClick="FixPlugins()"/>
 		       <%End If%>
 		<br/>
-		 如果插件名称显示为红色，请检查插件目录或者目录下install.xml文件是否存在；假如插件反安装不成功，请到 <b>数据库与附件-数据库管理</b> 压缩修复数据再反安装
+		 如果插件名称显示为灰色，请检查插件目录或者目录下install.xml文件是否存在；假如插件反安装不成功，请到 <b>数据库与附件-数据库管理</b> 压缩修复数据再反安装
 		</div>
 		  <%
 		

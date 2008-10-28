@@ -155,7 +155,7 @@ End Function
 '*************************************
 
 Function getcode()
-    getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='common/getcode.asp?s='+Math.random();"" alt=""验证码"" title=""看不清楚?换一张"" style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='common/getcode.asp?s='+Math.random()""/>"
+    getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='common/getcode.asp?s='+Math.random();"" alt=""验证码"" title=""看不清楚？点击刷新验证码！"" style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='common/getcode.asp?s='+Math.random()""/>"
 End Function
 
 '*************************************
@@ -752,8 +752,31 @@ Function DelQuote(strContent)
     strContent = re.Replace(strContent, "")
     re.Pattern = "\[quote=(.[^\]]*)\](.[^\]]*?)\[\/quote\]"
     strContent = re.Replace(strContent, "")
+    re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
+    strContent = re.Replace(strContent, "")
     re.Pattern = "\[reply=(.[^\]]*)\](.[^\]]*?)\[\/reply\]"
     strContent = re.Replace(strContent, "")
+    re.Pattern = "\[b\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/b\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[i\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/i\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[u\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/u\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[s\]"
+    strContent = re.Replace(strContent, "")
+    re.Pattern = "\[\/s\]"
+    strContent = re.Replace(strContent, "")
+            Dim log_Smilies, log_SmiliesContent
+            For Each log_Smilies IN Arr_Smilies
+                log_SmiliesContent = Split(log_Smilies, "|")
+                strContent = Replace(strContent, log_SmiliesContent(2), "")
+            Next
     Set re = Nothing
     DelQuote = strContent
 End Function

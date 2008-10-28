@@ -181,7 +181,6 @@ Function CategoryList(ByVal action) '日志分类
         Dim log_Category
         TempVar = ""
         SQL = "SELECT cate_ID,cate_Name,cate_Order,cate_Intro,cate_OutLink,cate_URL,cate_icon,cate_count,cate_Lock,cate_local,cate_Secret,cate_Part FROM blog_Category ORDER BY cate_Order ASC"
-'   0        1        2           3          4          5         6         7           8        9           10         11
         Set log_Category = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
         If log_Category.EOF Or log_Category.bof Then
