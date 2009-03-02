@@ -65,7 +65,7 @@ If UBound(FeedRows, 1)>0 Then
             .Write "    <loc>"
             
              If blog_postFile = 2 Then 
-             	.Write SiteURL&Alias(FeedRows(0, i))
+             	.Write SiteURL&caload(FeedRows(0, i))
             else
           	 	.Write SiteURL&"article.asp?id="&FeedRows(0, i)
             end if

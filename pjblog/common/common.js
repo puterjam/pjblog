@@ -591,17 +591,18 @@ function initLogin(CookieName){
 	if (n) {
 		//用户登陆
 		var u = /memName=(\w+)/.exec(n);
-		if (u) {
-			//try{
+		var ucn = /memName=([^\u4e00-\u9fa5]*)/.exec(n);
+		var cnvalue = decodeURI(ucn[1]).split("&")[0];
+		if (u){
 				var un = document.forms["frm"]["username"];
 				un.value = u[1];
 				un.readOnly = true;
-				$("passArea").parentNode.removeChild($("passArea"));
-				
-
-		//	}catch(e){
-				
-		//	}
+				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
+		}else if(cnvalue.length > 0){
+				var cnun = document.forms["frm"]["username"];
+				cnun.value = cnvalue;
+				cnun.readOnly = true;
+				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
 		}
 		
 		//blog目前的权限

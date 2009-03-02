@@ -87,6 +87,25 @@ Sub c_ceneral
 		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input checked="checked" type="checkbox" name="silentMode" value="1" id="B4"	/> <label for="B4">静态化日志安静模式 <span style="color:#666">(使用安静模式不出现进度条，速度较快)</span></label><br/><br/>
 		    <b>3.日志列表索引</b><br/>
 		    <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/>
+            <b>4.分段全静态化</b><br/>
+			<%
+			Dim ConurseDB, Start, Ends
+			Set ConurseDB = Server.CreateObject("Adodb.Recordset")
+				ConurseDB.open "blog_Content", Conn, 1, 2
+				if ConurseDB.bof or ConurseDB.eof then
+					Start = "0"
+					Ends = "0"
+				else
+					ConurseDB.moveFirst
+					Start = ConurseDB("log_ID")
+					ConurseDB.moveLast
+					Ends = ConurseDB("log_ID")
+				end if
+			ConurseDB.close
+			Set ConurseDB = nothing
+			%>
+			<span>您共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%></span><br />
+            <input type="checkbox" name="ReBulidPartStatus" value="1" id="C1"/> <label for="C1">分段静态化<span style="color:#666">（依据ID分段静态,减小服务器压力）</span></label><br />开始ID:<input type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/><br/>
 		   </div>
 		   <div class="SubButton">
 		      <input type="submit" name="Submit" value="保存配置" class="button"/> 
@@ -124,9 +143,17 @@ Sub c_ceneral
 		          <td align="left"><input name="SiteURL" type="text" size="50" class="text" value="<%=SiteURL%>"/></td>
 		        </tr>
 				<tr>
+		          <td width="180"><div align="right"> 首页 KeyWords 设置 </div></td>
+		          <td align="left"><input name="blog_KeyWords" type="text" size="50" class="text" value="<%=blog_KeyWords%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 首页 Description 设置 </div></td>
+		          <td align="left"><input name="blog_Description" type="text" size="50" class="text" value="<%=blog_Description%>"/></td>
+		        </tr>
+				<tr>
 		          <td width="180"><div align="right"> 网站备案信息 </div></td>
 		          <td align="left"><input name="blog_about" type="text" size="50" class="text" value="<%=blogabout%>"/></td>
-		        </tr>        
+		        </tr>  
 		        <tr>
 		          <td><div align="right">Blog对外开放</div></td>
 		          <td align="left"><input name="SiteOpen" type="checkbox" value="1" <%if Application(CookieName & "_SiteEnable")=1 then response.write ("checked=""checked""")%>/></td>

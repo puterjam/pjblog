@@ -14,6 +14,8 @@ Sub doAction
             weblog("blog_Title") = checkURL(CheckStr(Request.Form("blog_Title")))
             weblog("blog_master") = checkURL(CheckStr(Request.Form("blog_master")))
             weblog("blog_email") = checkURL(CheckStr(Request.Form("blog_email")))
+			weblog("blog_KeyWords") = checkURL(CheckStr(Request.Form("blog_KeyWords")))
+			weblog("blog_Description") = checkURL(CheckStr(Request.Form("blog_Description")))
 
             If Right(CheckStr(Request.Form("SiteURL")), 1)<>"/" Then
                 weblog("blog_URL") = checkURL(CheckStr(Request.Form("SiteURL")))&"/"
@@ -117,6 +119,30 @@ Sub doAction
                 session(CookieName&"_ShowMsg") = True
                 session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"重新输出日志索引! "
             End If
+			
+			'分段静态 - evio
+			If Request.Form("ReBulidPartStatus") = 1 Then
+			   Dim ReBulidPartStatusSart, ReBulidPartStatusEnd, ReArtLists, ReArea, TI
+			   ReBulidPartStatusSart = trim(Request.Form("ReBulidPartStatusSart"))
+			   ReBulidPartStatusEnd = trim(Request.Form("ReBulidPartStatusEnd"))
+			   If (len(ReBulidPartStatusSart) > 0) and (len(ReBulidPartStatusEnd) > 0) and (ReBulidPartStatusEnd >= ReBulidPartStatusSart) then
+			      ReArtLists = PartStatus(ReBulidPartStatusSart, ReBulidPartStatusEnd)
+				  ReArea = Split(ReArtLists, "|")
+				  for TI = 0 to (UBound(ReArea)-1)
+				      If Request.Form("ReBulidArticle") = 2 Then
+					     PostArticle ReArea(TI), True
+					  Else
+				         PostArticle ReArea(TI), False
+					  End if
+				  next
+				  session(CookieName&"_ShowMsg") = True
+                  session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"分段静态 "&UBound(ReArea)&" 篇日志成功!"
+			   Else
+			      session(CookieName&"_ShowMsg") = True
+                  session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"<font color=red>请填写分段ID的开始和结束,并且结束ID比开始ID大!</font>"
+			   End If
+			End If
+			'分段静态 - evio
 
             If Request.Form("ReBulidArticle") = 1 Or Request.Form("ReBulidArticle") = 2 Then
                 Dim LoadArticle, LoadArticleCount, LogLen, silent
@@ -214,7 +240,7 @@ ElseIf Request.Form("action") = "Categories" Then
         Cate_target_name = conn.Execute("select cate_Part from blog_Category where cate_ID="&Cate_target)(0)
 		'批量移动开始
 		If blog_postFile = 2 Then
-		moveall ".\"&Cate_source_name,".\"&Cate_target_name
+		moveall ".\article\"&Cate_source_name,".\article\"&Cate_target_name
 		DeleteFile(Cate_source_name)
 		end if
 		'批量移动结束
@@ -249,7 +275,22 @@ ElseIf Request.Form("action") = "Categories" Then
 		    'evio
 			If blog_postFile = 2 Then
 		    if LOldCate_Name(i)="" and LCate_Part(i)<>"" then
-			createfolder(LCate_Part(i))
+			   createfolder("article/"&LCate_Part(i))
+			   dim changDB,ChangID,vc,vb,vn
+			   ChangID = LCate_ID(i)
+			   set changDB = conn.execute("select * from blog_Content where log_CateID="&ChangID)
+			       if changDB.bof or changDB.eof then
+		           else
+		              do while not changDB.eof
+		              vc = Alias(changDB("log_ID"))
+	                  vb = replace(Alias(changDB("log_ID")),"article/","")
+		              vn = "article/"&LCate_Part(i)&"/"&vb
+                      moveone vc,vn
+		              DeleteFiles Server.MapPath(vc)
+	                  changDB.movenext
+	                  loop
+		           end if
+			   set changDB = nothing
 			elseif LOldCate_Name(i)<>"" and LCate_Part(i)<>LOldCate_Name(i) then
 		    ChangeFolderName LOldCate_Name(i),LCate_Part(i)
 			session(CookieName&"_MsgText") = "请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件。 "
@@ -344,7 +385,10 @@ ElseIf Request.Form("action") = "Categories" Then
             DelLog.movenext
         Loop
 		If blog_postFile = 2 Then
-		DeleteFolder conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0)
+			dim us : us = conn.execute("select cate_URL from blog_Category where cate_ID="&DelCate)(0)
+			if (len(us) = 0) or (us = "") or (us = empty) or (us = null) then
+				DeleteFolder conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0)
+			end if
 		end if
         Conn.Execute("DELETE * FROM blog_Category WHERE cate_ID="&DelCate)
         FreeMemory
@@ -567,6 +611,24 @@ ElseIf Request.Form("action") = "Members" Then
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&DelUserName&"”</span> 删除成功!"
             RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
         End If
+		'--------------------------批量删除用户----------------------------
+    ElseIf Request.Form("whatdo") = "DelUserAll" Then
+	    Dim DelSelectUserID, UseI
+		DelSelectUserID = Split(request.form("mem_CheckBox"), ",")
+		if int(ubound(DelSelectUserID)) >= 0 then
+		   For UseI = 0 to UBound(DelSelectUserID)
+		       conn.Execute("delete * from blog_Member where mem_ID="&DelSelectUserID(UseI))
+		   next
+		   Conn.Execute("UPDATE blog_Info SET blog_MemNums=blog_MemNums-"&UBound(DelSelectUserID)+1&"")
+		   getInfo(2)
+		   session(CookieName&"_ShowMsg") = True
+           session(CookieName&"_MsgText") = "<span style=""color:#900"">"&UBound(DelSelectUserID)+1&" 个用户资料</span> 删除成功!"
+           RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
+		Else
+		   session(CookieName&"_ShowMsg") = True
+           session(CookieName&"_MsgText") = "您没有选择要删除的用户!"
+           RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
+		End If
     Else
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "非法提交内容!"
@@ -642,6 +704,23 @@ ElseIf Request.Form("action") = "Links" Then
         Bloglinks(2)
         PostLink
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+	    '--------------------------批量删除友情链接----------------------------
+	ElseIf Request.Form("whatdo") = "DelLinks" Then
+        dim LinksID, PartLinks, LinksNum
+        LinksID = Request.Form("checklinkID")
+        PartLinks = split(LinksID, ", ")
+        if int(ubound(PartLinks)) >= 0 then
+           for LinksNum = 0 to ubound(PartLinks)
+               conn.execute("delete * from blog_Links where link_ID="&PartLinks(LinksNum))
+           next
+        Session(CookieName&"_ShowMsg") = True
+        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"共删除"&ubound(PartLinks)+1&"条信息，请返回!"
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        else
+        Session(CookieName&"_ShowMsg") = True
+        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"您没有选择要删除的链接!"
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
+        end if
     End If
     '==========================表情和关键字===============================
 ElseIf Request.Form("action") = "smilies" Then
@@ -810,13 +889,13 @@ Case "cancelIndex":
         moduleID = Request.Form("DoID")
         If conn.Execute("select isSystem from blog_module where id="&moduleID)(0) Then
             session(CookieName&"_ShowMsg") = True
-            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&conn.Execute("select title from blog_module where id="&moduleID)(0)&"”</span> 是内置模块无法删除！"
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&conn.Execute("select title from blog_module where id="&moduleID)(0)&"”</span> 是内置模块无法删除!"
             RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
         Else
             moduleName = conn.Execute("select title from blog_module where id="&moduleID)(0)
             delModule moduleID
             session(CookieName&"_ShowMsg") = True
-            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 删除成功！"
+            session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 删除成功!"
             log_module(2)
             RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
         End If
@@ -836,7 +915,7 @@ Case "cancelIndex":
         ModSetTemp2.Open GetPlugName
         ModSetTemp2.ReLoad()
         session(CookieName&"_ShowMsg") = True
-        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功！"
+        session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功!"
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
     End If
     '==========================附件管理===============================

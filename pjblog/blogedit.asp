@@ -39,7 +39,7 @@ If ChkPost() Then
 %>
     <!--内容-->
    <%If Request.Form("action") = "post" Then
-    Dim pws,pwtips,IsShow
+    Dim pws,pwtips,IsShow, keyword, descriptions
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
@@ -57,6 +57,19 @@ If ChkPost() Then
 		pws = ""
 		pwtips = ""
     End If
+	'evio
+	Dim logMetas
+	logMetas = Request.Form("blog_Meta")
+	keyword = Trim(Request.Form("evio_KeyWords"))
+	descriptions = Trim(Request.Form("evio_Description"))
+	If logMetas = 0 Then
+		keyword = ""
+		descriptions = ""
+	End If
+	If (len(keyword) = 0) and (len(descriptions) = 0) Then
+		logMetas = 0
+	End If
+	'evio
     
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
@@ -84,8 +97,14 @@ If ChkPost() Then
 	lArticle.logcname = request.Form("cname")
 	lArticle.logctype = request.Form("ctype")
 	end if
+	'evio
+	lArticle.logKeyWords = keyword
+	lArticle.logDescription = descriptions
+	lArticle.logmeta = logMetas
+	'evio
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
+	lArticle.TitleHidden = request.Form("Title_Hidden")
     lArticle.logReadpw = pws
     lArticle.logPwtips = pwtips
     EditLog = lArticle.editLog(request.Form("id"))
@@ -141,7 +160,7 @@ Else
 %>
    
    <!--第二步-->
-     <form name="frm" action="blogedit.asp" method="post" onsubmit="return CheckPost()" style="margin:0px">
+     <form name="frm" action="blogedit.asp" method="post" onSubmit="return CheckPost()" style="margin:0px">
                 <input name="id" type="hidden" id="id" value="<%=logid%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
    				<input id="action" name="action" type="hidden" value="post"/>
@@ -194,7 +213,7 @@ End Sub
 			<tr>
               <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="title" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onblur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onBlur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
 			   <span> . </span>
 			  <select name="ctype">
 			    <option value="0" <%if cdb("log_ctype")=0 then%>selected="selected" <%end if%>>htm</option> 
@@ -248,20 +267,38 @@ End Sub
                <td align="left">
 				 <label for="Secret">
 				 
-				                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow Then response.write ("checked=""checked""")%>/>
+				                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow Then response.write ("checked=""checked""")%>/>
 				        设置日志隐私</label></div>
 				                  <div id="Div_Password"  class="tips_body" <%if lArticle.logIsShow Then response.write("style=""display:none;""")%>>
+                                  <label for="titlehidden"><input id="titlehidden" type="checkbox" name="Title_Hidden" value="1" <%if int(lArticle.TitleHidden) = 1 then%>checked<%end if%>/><b>标题状态</b></label> - 是否显示标题 （勾选为显示标题）<br/>
 				                  	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
 	                  	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1" <%if lArticle.logReadpw<>"" Then response.write("checked")%>/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
 	                  	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
 					                  <span style="font-weight: bold">密码:</span>
-					                  <input onfocus="this.select();$('bpws2').checked='checked'" onkeypress="$('c_pws').value=1" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
+					                  <input onFocus="this.select();$('bpws2').checked='checked'" onKeyPress="$('c_pws').value=1" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" value="<%=lArticle.logReadpw%>" />
 					                  <span style="font-weight: bold">&nbsp;&nbsp;密码提示:</span>
-					                  <input onfocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" value="<%=lArticle.logPwtips%>" />
+					                  <input onFocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" value="<%=lArticle.logPwtips%>" />
 					                  <input id="c_pws" name="c_pws" type="hidden" value="0">
 				                </div>
 				               </td>
              </tr>
+			 <!--evio-->
+			 <tr>
+               <td height="24" align="right" valign="top"><b>Meta:</b></td>
+               <td align="left">
+	                  <div id="Div_Meta" class="tips_body">
+                  	      <label for="Meta1"><input id="Meta1" type="radio" name="blog_Meta" value="0" <%if lArticle.logmeta = 0 then response.write "checked"%>/> <b>默认方式</b></label> - keywords为Tag或title，Description为日志预览<br/>
+      	 				  <label for="Meta2"><input id="Meta2" type="radio" name="blog_Meta" value="1" <%if lArticle.logmeta <> 0 then response.write "checked"%>/><b>自定义</b></label> - 完全自定义
+						  <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		                  <span style="font-weight: bold">KeyWords:</span>
+						  <input onfocus="this.select();$('Meta2').checked='checked'; this.select();" name="evio_KeyWords" type="text" id="evio_KeyWords" size="30" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" value="<%=lArticle.logKeyWords%>"/>
+						  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						  <span style="font-weight: bold">Description:</span>
+						  <input onfocus="this.select();$('Meta2').checked='checked'; this.select();" name="evio_Description" type="text" id="evio_Description" size="30" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" value="<%=lArticle.logDescription%>"/>
+	           		  </div>
+				  </td>
+             </tr>
+			 <!--evio-->
              <tr>
                <td height="24" align="right" valign="top"><b>来源:</b></td>
                <td align="left"><span style="font-weight: bold"></span>
@@ -286,7 +323,7 @@ End Sub
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">Tags:</span></td>
               <td align="left">
-                      <input name="tags" type="text" value="<%=lArticle.logTags%>" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onclick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
+                      <input name="tags" type="text" value="<%=lArticle.logTags%>" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
                </td>
             </tr>
             <tr>
@@ -335,7 +372,7 @@ UseIntro = CBool(lArticle.logIntroCustom)
 %>
            <tr>
                <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
-               <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro Then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
+               <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onClick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'" <%if not UseIntro Then response.write("checked=""checked""")%>/>编辑内容摘要</label></div>
                <div id="Div_Intro" <%if UseIntro Then response.write("style=""display:none""")%>>
                <%
 If log_editType = 0 Then
@@ -370,9 +407,9 @@ End If
                <td colspan="3" align="center">
                  <input name="SaveArticle" type="submit" class="userbutton" value="保存日志" accesskey="S"/>
                  <%if lArticle.logIsDraft Then%>
-                    <input name="SaveDraft" type="submit" class="userbutton" value="保存并取消草稿" accesskey="D" onclick="document.getElementById('log_IsDraft').value='False'"/>
+                    <input name="SaveDraft" type="submit" class="userbutton" value="保存并取消草稿" accesskey="D" onClick="document.getElementById('log_IsDraft').value='False'"/>
                  <%end if%>
-                 <input name="DelArticle" type="button" class="userbutton" value="删除该日志" accesskey="K" onclick="if (window.confirm('是否要删除该日志')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
+                 <input name="DelArticle" type="button" class="userbutton" value="删除该日志" accesskey="K" onClick="if (window.confirm('是否要删除该日志')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
                  <input name="CancelEdit" type="button" class="userbutton" value="取消编辑" accesskey="Q" onClick="location='default.asp?id=<%=logid%>'"/>
                </td>
              </tr>

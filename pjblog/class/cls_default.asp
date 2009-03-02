@@ -181,7 +181,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
     Dim getTag,aUrl
     Set getTag = New tag
 	If blog_postFile>1 Then
-		aUrl = Alias(webLogArr(0,PageCount))
+		aUrl = caload(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
 	end if
@@ -266,7 +266,7 @@ Function OutList(webLogArr, PageCount, getCate, ViewDraft, CanRead)
         If Not stat_ShowHiddenCate And Not stat_Admin Then Exit Function
     End If
 	If blog_postFile>1 Then
-		aUrl = Alias(webLogArr(0,PageCount))
+		aUrl = caload(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
 	end if

@@ -176,7 +176,7 @@ Sub c_SQLFile
 		BackUpFiles = Split(getPathList("backup")(1), "*")
 		For Each BackUpFile in BackUpFiles
 		    response.Write "<a href=""backup/"&BackUpFile&""" target=""_blank"">"&getFileIcons(getFileInfo("backup/"&BackUpFile)(1))&BackUpFile&"</a>"
-		    response.Write "&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&do=DelFile&source=backup/"&BackUpFile&""" title=""删除备份文件"">删除</a> | <a href=""?Fmenu=SQLFile&do=Restore&source=backup/"&BackUpFile&""" title=""删除备份文件"">还原数据库</a>"
+		    response.Write "&nbsp;&nbsp;<a href=""?Fmenu=SQLFile&do=DelFile&source=backup/"&BackUpFile&""" title=""删除备份文件"">删除</a> | <a href=""?Fmenu=SQLFile&do=Restore&source=backup/"&BackUpFile&""" title=""还原数据库"">还原数据库</a>"
 		    response.Write " | "&getFileInfo("backup/"&BackUpFile)(0)&" | "&DateToStr(getFileInfo("backup/"&BackUpFile)(2),"Y-m-d H:I:S")&"<br/>"
 		Next
 		

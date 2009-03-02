@@ -114,8 +114,7 @@ FCKConfig.ToolbarSets["Default"] = [
 	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
 	['Image','Flash','Rule','PageBreak'],
 	'/',
-	['Style','FontFormat','FontName','FontSize'],
-	['TextColor','BGColor']
+	['Style','FontFormat','FontName','FontSize','TextColor','BGColor']
 		// No comma for the last row.
 ] ;
 

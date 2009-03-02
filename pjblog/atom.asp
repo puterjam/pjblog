@@ -108,7 +108,7 @@ Else
 End If
 
     If blog_postFile = 2 Then
-      		url = SiteURL&Alias(FeedRows(0, i))
+      		url = SiteURL&caload(FeedRows(0, i))
       else
       		url = SiteURL&"article.asp?id="&FeedRows(0, i)
     end if

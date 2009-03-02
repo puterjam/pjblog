@@ -29,10 +29,8 @@ Sub c_article
 					ttype=conn.execute("select log_ctype from blog_Content where log_ID="&Log_Dele(i))(0)
 					if ttype="0" then
 					thtml="htm"
-					elseif ttype="1" then
-					thtml="html"
 					else
-					thtml="asp"
+					thtml="html"
 					end if
 					dim cpart
 					if conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)="" or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=empty or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=null or len(conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0))=0 then
@@ -40,7 +38,7 @@ Sub c_article
 					else
 					cpart = conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)&"/"
 					end if
-					moveone mph,cpart&tname&"."&thtml
+					moveone mph,"article/"&cpart&tname&"."&thtml
 					end if
 					
 		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
@@ -58,11 +56,13 @@ Sub c_article
 		            Set fso = CreateObject("Scripting.FileSystemObject")
 		            for i=0 to ubound(Log_Dele)
 		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
-		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
-		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
-		                if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
+						if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
 		                    fso.DeleteFile(server.MapPath(Alias(Log_Dele(i))))
+							fso.DeleteFile(server.MapPath(".\cache/"&Log_Dele(i)&".asp"))
 		                end if
+		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
+						conn.execute ("update blog_Info set blog_LogNums=blog_LogNums-1 where blog_ID=1")
+		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
 		                
 		            next
 		             session(CookieName&"_ShowMsg") = True

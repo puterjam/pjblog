@@ -36,7 +36,7 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp
     If Len(Tid)>0 Then 
     	Dim rUrl
         If blog_postFile = 2 Then
-        	rUrl = Alias(Tid)
+        	rUrl = caload(Tid)
 	    else
 		 	rUrl = "article.asp?id=" & Tid
 	    end if 
@@ -72,8 +72,8 @@ End If
 	<meta name="robots" content="all" />
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
 	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
-	<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
-	<meta name="description" content="<%=SiteName%> - <%=blog_Title%>" />
+	<meta name="keywords" content="<%=blog_KeyWords%>" />
+	<meta name="description" content="<%=blog_Description%>" />
 	<meta name="generator" content="PJBlog3" />
 	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=siteURL%>xmlrpc.asp" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />
@@ -97,6 +97,8 @@ End If
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="common/common.js"></script>
 	<script type="text/javascript" src="common/ajax.js"></script>
+	<script type="text/javascript" src="common/AjaxRequest.js"></script>
+	<script type="text/javascript" src="common/Action.js"></script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 	<style type="text/css"> 
 		.ownerClassLog{display:none}
