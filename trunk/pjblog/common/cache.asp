@@ -10,7 +10,7 @@ Dim blog_VisitNums, blogBookPage, blog_MessageNums, blogcommpage, blogaffiche
 Dim blogabout, blogcolsize, blog_colNums, blog_TbCount, blog_showtotal, blog_commTimerout
 Dim blog_commUBB, blog_commImg, blog_version, blog_UpdateDate, blog_DefaultSkin, blog_SkinName, blog_SplitType
 Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introChar, blog_introLine
-Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title
+Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
 Dim memoryCache
@@ -18,7 +18,7 @@ Dim memoryCache
 
 '一些初始化的值
 blog_version = "3.0.6.170" '当前PJBlog版本号
-blog_UpdateDate = "2008-08-26"'PJBlog最新更新时间
+blog_UpdateDate = "2009-02-16"'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
@@ -35,7 +35,7 @@ Sub getInfo(ByVal action)
               "blog_postFile,blog_postCalendar,blog_DefaultSkin,blog_SkinName,blog_SplitType," & _
               "blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
-              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL" & _
+              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -98,6 +98,9 @@ Sub getInfo(ByVal action)
         blog_wapComment = CBool(blog_Infos(42, 0))'Wap 允许评论
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
+		
+		blog_KeyWords = blog_Infos(45, 0)'站点首页KeyWords
+		blog_Description = blog_Infos(46, 0)'站点首页Description
     End If
 End Sub
 
@@ -379,7 +382,7 @@ Function NewComment(ByVal action)
         dim url
         For i = 0 To Comment_Item_Len
 		    If blog_postFile = 2 Then
-		   		url = SiteURL&Alias(blog_Comment(1, i))&"#comm_"&blog_Comment(0, i)
+		   		url = SiteURL&caload(blog_Comment(1, i))&"#comm_"&blog_Comment(0, i)
 		      else
 		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if

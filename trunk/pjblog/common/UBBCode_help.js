@@ -27,7 +27,7 @@ var ed2k_normal_input = "请输入 eMule URL。";
 var image_normal = "请输入图像的 URL。\n使用标签:[img][/img]";
 var flash_normal = "请输入 Flash 动画的 URL。\n使用标签:[swf][/swf] [swf=width,height][/swf]";
 var code_normal = "请输入要插入的代码。\n使用标签:[code][/code]";
-var list_normal = "请选择列表格式：字母式列表输入 \"A\"；数字式列表输入 \"1\"。此处也可留空。使用标签:[list=1][*][/list]";
+var list_normal = "请选择列表格式：字母式列表输入 \"A\"；数字式列表输入 \"1\"。此处也可留空。\n使用标签:[list=1][*][/list]";
 var list_normal_error = "错误：列表格式只能选择输入 \"A\" 或 \"1\"或留空。";
 var list_normal_input = "请输入列表项目内容，如果留空表示项目结束。";
 var underline_normal = "请输入要加下划线的文字。\n使用标签:[u][/u]";

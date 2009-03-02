@@ -30,7 +30,7 @@ If ChkPost() Then
   <%else%>
    <!--内容-->
    <%If Request.Form("action") = "post" Then
-		Dim lArticle,postLog,pws,pwtips,IsShow
+		Dim lArticle, postLog, pws, pwtips, IsShow, keyword, descriptions
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
@@ -42,12 +42,21 @@ If ChkPost() Then
 		pws = ""
 		pwtips = ""
     End If
-    Set lArticle = New logArticle
     If Request.Form("blog_pws") = "0" Then
 		pws = ""
 		pwtips = ""
     End If
+	'evio
+	keyword = Trim(Request.Form("evio_KeyWords"))
+	descriptions = Trim(Request.Form("evio_Description"))
+	If Request.Form("blog_Meta") = 0 Then
+		keyword = ""
+		descriptions = ""
+	End If
+	'evio
     
+	Set lArticle = New logArticle
+	
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
     lArticle.logAuthor = memName
@@ -74,8 +83,14 @@ If ChkPost() Then
 	lArticle.logcname = request.Form("cname")
 	lArticle.logctype = request.Form("ctype")
 	end if
+	'evio
+	lArticle.logKeyWords = keyword
+	lArticle.logDescription = descriptions
+	lArticle.logmeta = request.Form("blog_Meta")
+	'evio
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
+	lArticle.TitleHidden = request.Form("Title_Hidden")
     lArticle.logReadpw = pws
     lArticle.logPwtips = pwtips
     postLog = lArticle.postLog
@@ -182,7 +197,7 @@ End Sub
 			<tr>
               <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="title" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
 			   <span> . </span>
 			  <select name="ctype">
 			    <option value="0">htm</option> 
@@ -231,6 +246,7 @@ End Sub
 	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
 	        设置日志隐私</label></div>
 	                  <div id="Div_Password" style="display:none;" class="tips_body">
+                          <label for="titlehidden"><input id="titlehidden" type="checkbox" name="Title_Hidden" value="1"/><b>标题状态</b></label> - 是否显示标题 （勾选为显示标题）<br/>
                   	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
       	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1"/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
       	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -241,6 +257,23 @@ End Sub
 	           		</div>
 				  </td>
              </tr>
+			 <!--evio-->
+			 <tr>
+               <td height="24" align="right" valign="top"><b>Meta:</b></td>
+               <td align="left">
+	                  <div id="Div_Meta" class="tips_body">
+                  	      <label for="Meta1"><input id="Meta1" type="radio" name="blog_Meta" value="0" checked/> <b>默认方式</b></label> - keywords为Tag或title，Description为日志预览<br/>
+      	 				  <label for="Meta2"><input id="Meta2" type="radio" name="blog_Meta" value="1"/><b>自定义</b></label> - 完全自定义
+						  <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		                  <span style="font-weight: bold">KeyWords:</span>
+						  <input onfocus="this.select();$('Meta2').checked='checked'" name="evio_KeyWords" type="text" id="evio_KeyWords" size="30" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" />
+						  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						  <span style="font-weight: bold">Description:</span>
+						  <input onfocus="this.select();$('Meta2').checked='checked'" name="evio_Description" type="text" id="evio_Description" size="30" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" value=""/>
+	           		  </div>
+				  </td>
+             </tr>
+			 <!--evio-->
             <tr>
               <td height="24" align="right" valign="top"><b>来源:</b></td>
               <td align="left"><span style="font-weight: bold"></span>

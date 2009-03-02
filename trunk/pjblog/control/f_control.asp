@@ -7,7 +7,7 @@
 sub moveone(sourcepath,targetpath)
     dim db1,db2,MoveOneFSO
 	db1=server.mappath(sourcepath)
-	db2=server.mappath("article/"&targetpath)
+	db2=server.mappath(targetpath)
 	set MoveOneFSO=server.CreateObject("scripting.filesystemobject")
 	MoveOneFSO.MoveFile db1,db2
 	DeleteFiles db1
@@ -31,8 +31,8 @@ end sub
 '----------- 移动所有文件 ---------------------------
 sub moveall(sourcepath,targetpath)
     dim db1,db2,MoveOneFSO
-	db1=server.mappath("article/"&sourcepath)
-	db2=server.mappath("article/"&targetpath)
+	db1=server.mappath(sourcepath)
+	db2=server.mappath(targetpath)
 	set MoveOneFSO=server.CreateObject("scripting.filesystemobject")
 	if MoveOneFSO.folderexists(db1) and MoveOneFSO.folderexists(db2) then
 	MoveOneFSO.CopyFolder db1,db2
@@ -54,14 +54,31 @@ end if
 end sub
 '----------- 更改文件夹名 ---------------------------
 sub ChangeFolderName(sourcename,targetname)
-dim objfso,yname,mname,objfolder
+dim objfso,yname,mname,objfolder,objrs,pathcee,pathss,vc,vb,vn
 set objfso=server.createobject("scripting.filesystemobject") '建立FSO对象
 yname=server.MapPath("article/"&sourcename) '子目录名
 mname=targetname
-if objfso.FolderExists(yname) then '判断是否存在
-  set objfolder=objfso.getfolder(yname) '建立folder对象
-  objfolder.name=mname '改名
-else
+pathss = replace(replace(split(sourcename,"/")(Ubound(split(sourcename,"/"))),".html",""),".htm","")'原文件夹名
+if mname <> "" then
+     if objfso.FolderExists(yname) then '判断是否存在
+     set objfolder=objfso.getfolder(yname) '建立folder对象
+     objfolder.name=mname '改名
+     end if
+else'原来有，现在没
+  pathcee = conn.execute("select cate_ID from blog_Category where cate_Part='"&pathss&"'")(0)
+  set objrs = conn.execute("select * from blog_Content where log_CateID="&pathcee)
+  if objrs.bof or objrs.eof then
+  else
+      do while not objrs.eof
+	  vc = Alias(objrs("log_ID"))
+	  vb = replace(Alias(objrs("log_ID")),pathss&"/","")
+      moveone vc,vb
+	  objrs.movenext
+	  loop
+	  DeleteFolder pathss
+  end if
+  set objrs = nothing
+  'DelAllFolder yname
 end if
 set objfso=nothing '关闭对象
 end sub

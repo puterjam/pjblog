@@ -4,54 +4,108 @@
 '    更新时间: 2006-6-2
 '===============================================================
 '*************************************
-'产生不重复的随机数 by evio
+'获得基址
 '*************************************
-Function gen_key(digits) 
-dim char_array(50) 
-char_array(0) = "0" 
-char_array(1) = "1" 
-char_array(2) = "2" 
-char_array(3) = "3" 
-char_array(4) = "4" 
-char_array(5) = "5" 
-char_array(6) = "6" 
-char_array(7) = "7" 
-char_array(8) = "8" 
-char_array(9) = "9" 
-char_array(10) = "a" 
-char_array(11) = "b" 
-char_array(12) = "c" 
-char_array(13) = "d" 
-char_array(14) = "e" 
-char_array(15) = "f" 
-char_array(16) = "g" 
-char_array(17) = "h" 
-char_array(18) = "i" 
-char_array(19) = "j" 
-char_array(20) = "k" 
-char_array(21) = "l" 
-char_array(22) = "m" 
-char_array(23) = "n" 
-char_array(24) = "o" 
-char_array(25) = "p" 
-char_array(26) = "q" 
-char_array(27) = "r" 
-char_array(28) = "s" 
-char_array(29) = "t" 
-char_array(30) = "u" 
-char_array(31) = "v" 
-char_array(32) = "w" 
-char_array(33) = "x" 
-char_array(34) = "y" 
-char_array(35) = "z" 
-randomize 
-dim output,num
-do while len(output) < digits 
-num = char_array(Int((35 - 0 + 1) * Rnd + 0)) 
-output = output + num 
-loop 
-gen_key = output & year(now) & month(now) & day(now) & hour(now) & minute(now) & second(now) 
-End Function 
+Function GetbaseUrl()
+        Dim baseUrl
+        baseUrl = "http://" & Request.ServerVariables("HTTP_HOST") & Request.ServerVariables("URL")
+        baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
+        GetbaseUrl = baseUrl
+End Function
+'*************************************
+'分段静态的判断 by evio
+'*************************************
+Function PartStatus(StartID,EndID)
+  Dim RI, ReArtList
+  ReArtList = ""
+  For RI = 0 to (int(EndID) - int(StartID))
+  if not isEmpty(Application(CookieName&"_introCache"&(int(StartID)+RI))) then
+     ReArtList = ReArtList&(int(StartID)+RI)&"|"
+  else
+     if FileExist("Cache/"&int(StartID)+RI&".asp") then
+	    ReArtList = ReArtList&(int(StartID)+RI)&"|"
+	 end if
+  end if
+  Next
+  ReArtList = ReArtList&"end"
+  PartStatus = ReArtList
+End Function
+'*************************************
+'自定义读取缓存路径 by evio
+'*************************************
+function caload(id)
+  if not isEmpty(Application(CookieName&"_articleUrl_"&id)) then
+  	caload = Application(CookieName&"_articleUrl_"&id)
+  	exit function
+  end if
+
+  caload = ""
+  dim rex, strrexs, strrex, conrex, istr, jstr, sestr, recname, recpart, rechtml, loadtype, cacheStream,pid,ppid
+  Dim LoadList, cacheList
+  
+  if not isEmpty(Application(CookieName&"_listCache")) then
+   		cacheList = Application(CookieName&"_listCache")
+    else
+   		LoadList = LoadFromFile("cache/listCache.asp")
+	    If LoadList(0) = 0 Then
+			Application.Lock
+			Application(CookieName&"_listCache") = LoadList(1)
+			Application.UnLock
+			cacheList = LoadList(1)
+	    End If
+    end if
+    
+
+  '**********************************
+  If stat_Admin Or stat_ShowHiddenCate Then
+ 	 loadtype = "A"
+  Else
+  	loadtype = "G"
+  End if
+  
+  set rex = New RegExp
+  rex.IgnoreCase = True
+  rex.Global = True
+  rex.Pattern = "\[""([^\r]*?)"";([^\r]*?);\(([^\r]*?)\)\]"
+  set strrex = rex.Execute(cacheList)
+    for each strrexs in strrex
+     if loadtype = strrexs.SubMatches(0) then
+	    conrex = split(strrexs.SubMatches(2),",")
+		for jstr = 0 to ubound(conrex)
+		   pid = split(conrex(jstr),"|")
+		   ppid = pid(1)
+		      if int(ppid)=int(id) then
+			     recpart = pid(2)
+				  if recpart = "" or recpart = empty or recpart = null or len(recpart) = 0 then
+				     recpart = "article/"
+				  else
+				     recpart = "article/"&recpart&"/"
+				  end if
+				 recname = pid(3)
+				  if recname = "" or recname = empty or recname = null or len(recname)=0 then
+				     recname = id
+				  else
+				     recname = recname
+				  end if
+				 rechtml = pid(4)
+				  if rechtml = "0" then
+				     rechtml = "htm"
+				  else
+				     rechtml = "html"
+				  end if
+				 caload = caload&recpart&recname&"."&rechtml
+			  end if
+		next
+	 end if
+	next
+	
+	Application.Lock
+	Application(CookieName&"_articleUrl_"&id) = caload
+	Application.UnLock
+
+  set rex = nothing
+end function
+
 '*************************************
 '判断是否存在文件 by evio
 '*************************************
@@ -80,29 +134,39 @@ end sub
 '自定义路径 by evio
 '*************************************
 Function Alias(id)
-    dim cname,ccate,chtml,ccateID,cnames,ctype
-	ccateID=conn.execute("select log_CateID from blog_Content where log_ID="&id)(0)
-	ccate=conn.execute("select Cate_Part from blog_Category where cate_ID="&ccateID)(0)
+    dim cname,ccate,chtml,ccateID,ccateExec,cnames,ctype,cc
+	set cc=conn.execute("select top 1 log_CateID,log_cname,log_ctype from blog_Content where log_ID="&id)
+	
+	ccateID = cc(0)
+	cname = cc(1)
+	ctype = cc(2)
+
+	set ccateExec=conn.execute("select Cate_Part from blog_Category where cate_ID="&ccateID)
+
+	If not ccateExec.EOF and not ccateExec.bof Then
+		ccate = ccateExec(0).value
+	end if
+	
 	if ccate="" or ccate=empty or ccate=null or len(ccate)=0 then
-	ccate="article/"
+		ccate="article/"
 	else
-	ccate="article/"&ccate&"/"
+		ccate="article/"&ccate&"/"
 	end if
-	cname=conn.execute("select log_cname from blog_Content where log_ID="&id)(0)
-	if cname="" or cname=empty or cname=null or len(cname)=0 then
-	cnames=trim(year(now())&"-"&month(now())&"-"&day(now())&"-"&id)
+	if len(cname)<1 or cname="" or cname=empty or cname=null then
+		cnames=trim(id)
 	else
-	cnames=cname
+		cnames=cname
 	end if
-	ctype=conn.execute("select log_ctype from blog_Content where log_ID="&id&"")(0)
+	
 	if ctype="0" then
-	chtml="htm"
-	elseif ctype="1" then
-	chtml="html"
+		chtml="htm"
 	else
-	chtml="asp"
+		chtml="html"
 	end if
+	
 	chtml="."&chtml
+	set ccateExec = nothing
+	set cc = nothing
 	Alias=ccate&cnames&chtml
 End Function
 

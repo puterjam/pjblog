@@ -245,7 +245,7 @@ Sub c_categories
 		          <td align="left"><input name="Cate_Intro" type="text" class="text" value="<%=CategoryListDB("cate_Intro")%>" size="20"/></td>
 				  <!--分类名-->
 				  <%If blog_postFile = 2 Then%>
-				  <td><input name="Cate_Part" type="text" class="text" value="<%=CategoryListDB("cate_Part")%>" size="14" style="ime-mode:disabled"/><input name="OldCate_Name" type="hidden" value="<%=CategoryListDB("cate_Part")%>"/></td>
+				  <td><input name="Cate_Part" type="text" class="text" value="<%=CategoryListDB("cate_Part")%>" size="14" style="ime-mode:disabled" onblur="checkpart(this.value)"/><input name="OldCate_Name" type="hidden" value="<%=CategoryListDB("cate_Part")%>"/></td>
 				  <%end if%>
 				  <!--分类名-->
 		          <td align="left"><input name="cate_URL" type="text" value="<%=CategoryListDB("cate_URL")%>" size="30" class="text" <%if CategoryListDB("cate_count")>0 Then response.write "readonly=""readonly"" style=""background:#e5e5e5"""%>/></td>
@@ -331,3 +331,8 @@ Sub c_categories
 <%
 end Sub
 %>
+<script language="javascript" type="text/javascript">
+function checkpart(val){
+   if ( val.indexOf("<",0) != -1 || val.indexOf(">",0) != -1 || val.indexOf("/",0) != -1 || val.indexOf("\\",0) != -1 || val.indexOf(":",0) != -1 || val.indexOf("*",0) != -1 || val.indexOf("?",0) != -1 || val.indexOf("|",0) != -1 || val.indexOf("\"",0) != -1) alert("文件夹名不能包含特殊字符")
+}
+</script>

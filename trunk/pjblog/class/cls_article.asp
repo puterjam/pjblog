@@ -105,7 +105,7 @@ Sub ShowArticle(LogID)
 						   <%
 If Not preLog.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = Alias(preLog("log_ID"))
+    		urlLink = caload(preLog("log_ID"))
     	else 
     		urlLink = "?id="&preLog("log_ID")
     	end if
@@ -115,7 +115,7 @@ Else
 End If
 If Not nextLog.EOF Then
     	if blog_postFile = 2 then
-    		urlLink = Alias(nextLog("log_ID"))
+    		urlLink = caload(nextLog("log_ID"))
     	else 
     		urlLink = "?id="&nextLog("log_ID")
     	end if
@@ -138,7 +138,25 @@ Set nextLog = Nothing
 							 <%If CanRead Then%>
 							 <%=HtmlEncode(log_ViewArr(2, 0))%>
 							 <% Else %>
-							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%>
+							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%>
+                             <%
+							 If log_ViewArr(22, 0) = true Then
+							 response.write HtmlEncode(log_ViewArr(2, 0))
+							 Else
+							 %>
+                             [加密日志]
+							 <%
+							 End If
+							 Else
+							 If log_ViewArr(22, 0) = true Then
+							 response.write HtmlEncode(log_ViewArr(2, 0))
+							 Else
+							 %>
+                             [私密日志]
+							 <%
+							 End If
+							 End If
+							 %>
 							 <% End If %>
 							 </strong> 
 							 <%if log_ViewArr(3, 0)=False or getCate.cate_Secret then%>
@@ -204,6 +222,9 @@ Set getTag = New tag
 
 %>
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
+						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
+                    <div class="Content-body" id="wbc_tag"></div>
+                    <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','wbc_tag','wbc_tag')</script>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
@@ -252,7 +273,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
         aName = "#comm_top"
         
         If blog_postFile = 2 and logShow then '静态页面使用#方式来切换
-        	BaseUrl = Alias(LogID)
+        	BaseUrl = caload(LogID)
         	Url_Add="#"
         	aName = ""
         	aEvent = "onclick=""openCommentPage(this)"""

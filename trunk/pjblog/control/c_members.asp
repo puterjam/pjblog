@@ -42,16 +42,17 @@ Sub c_members
 		SQL = "SELECT M.*,S.stat_name,S.stat_title FROM blog_Member as M,blog_status as S where M.mem_Status=S.stat_name"&FindUserFilter&" order by mem_RegTime desc"
 		bMember.Open SQL, Conn, 1, 1
 		PageCM = 0
-		response.Write ("<tr><td colspan=""8"" style=""border-bottom:1px solid #999;background:#fae1af;height:36px"">&nbsp;用户名&nbsp;<input id=""FindUser"" type=""text"" class=""text"" size=""16""/><input type=""button"" value=""查找用户"" class=""button"" style=""margin-bottom:-2px"" onclick=""location='ConContent.asp?Fmenu=Members&Smenu=Users&User='+escape(document.getElementById('FindUser').value)""/></td></tr>")
+		response.Write ("<tr><td colspan=""9"" style=""border-bottom:1px solid #999;background:#fae1af;height:36px"">&nbsp;用户名&nbsp;<input id=""FindUser"" type=""text"" class=""text"" size=""16""/><input type=""button"" value=""查找用户"" class=""button"" style=""margin-bottom:-2px"" onclick=""location='ConContent.asp?Fmenu=Members&Smenu=Users&User='+escape(document.getElementById('FindUser').value)""/></td></tr>")
 		If Not bMember.EOF Then
 		    bMember.PageSize = 30
 		    bMember.AbsolutePage = CurPage
 		    Dim bMember_nums
 		    bMember_nums = bMember.RecordCount
-		    response.Write "<tr><td colspan=""8"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums, 30, CurPage, "?Fmenu=Members&Smenu=Users&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+		    response.Write "<tr><td colspan=""9"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bMember_nums, 30, CurPage, "?Fmenu=Members&Smenu=Users&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 		
 		%>
 		        <tr align="center">
+                  <td nowrap="nowrap" class="TDHead">&nbsp;</td>
 		          <td nowrap="nowrap" class="TDHead">编号</td>
 		          <td width="100" nowrap="nowrap" class="TDHead">会员名称</td>
 		          <td width="100" class="TDHead">会员身份</td>
@@ -67,6 +68,7 @@ Sub c_members
 		
 		%>
 		        <tr align="center">
+                <td nowrap><%if memName <> bMember("mem_Name") then%><input value="<%=bMember("mem_ID")%>" name="mem_CheckBox" type="checkbox"/><%else%>&nbsp;<%end if%></td>
 		          <td nowrap><%=bMember("mem_ID")%>
 		          <%
 		If bMember("mem_Name") <> memName Then
@@ -110,7 +112,7 @@ Sub c_members
 		
 		%></table>
 		 	<div class="SubButton">
-		      <input type="submit" name="Submit" value="保存用户权限" class="button"/> 
+		      <input type="submit" name="Submit" value="保存用户权限" class="button"/> &nbsp;<input type="button" name="DelAll" value="批量刪除" class="button" onclick="DelMemAll()"/>
 		     </div>
 		     </form>
 		 <script>
@@ -121,6 +123,10 @@ Sub c_members
 		Next
 		
 		%>
+		   }
+		   function DelMemAll(){
+			   document.forms[0].whatdo.value = "DelUserAll";
+			   document.forms[0].submit();
 		   }
 		 </script>
 		 <%

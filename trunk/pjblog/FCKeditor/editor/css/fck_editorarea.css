@@ -109,7 +109,6 @@ p, ul, li
 	background-color: #ff9933;
 }
 
- /*块引用处理*/
  blockquote {
  clear:both;padding:0 5px 0 68px;background:url(../images/quote.png) top left no-repeat !important;background:url(../images/quote.gif) top left no-repeat ;font-family:Tahoma;min-height:60px;
  }
@@ -120,7 +119,6 @@ p, ul, li
  list-style:disc
  }
 
- /*代码处理*/
 .codeHead {
 font-weight: bold;
 font-size: 12px;

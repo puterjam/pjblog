@@ -32,7 +32,7 @@ Function Calendar(C_Year, C_Month, C_Day, update)
     Else
         NY = C_Year
     End If
-    Calendar = "<div id=""Calendar_Body""><div id=""Calendar_Top""><div id=""LeftB"" onclick=""location.href='default.asp?log_Year="&PY&"&amp;log_Month="&PM&"'""></div><div id=""RightB"" onclick=""location.href='default.asp?log_Year="&NY&"&amp;log_Month="&NM&"'""></div>"&C_Year&"年"&C_Month&"月</div>"
+    Calendar = "<div id=""Calendar_Body""><div id=""Calendar_Top""><div id=""LeftB"" onclick=""location.href='"&GetbaseUrl&"default.asp?log_Year="&PY&"&amp;log_Month="&PM&"'""></div><div id=""RightB"" onclick=""location.href='"&GetbaseUrl&"default.asp?log_Year="&NY&"&amp;log_Month="&NM&"'""></div>"&C_Year&"年"&C_Month&"月</div>"
     Calendar = Calendar & "<div id=""Calendar_week""><ul class=""Week_UL""><li><font color=""#FF0000"">日</font></li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ul></div>"
 
     '--->计算当前月份的日期

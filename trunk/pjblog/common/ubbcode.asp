@@ -233,16 +233,16 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
-                dim rndnum1:rndnum1=gen_key(10)
-                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum1&"""></div><br /><script language=""javascript"" type=""text/javascript"" defer>check('Action.asp?action=type1&mainurl="&server.URLEncode(tmpStr1)&"&main="&server.URLEncode(tmpStr2)&"','mdown_"&rndnum1&"','mdown_"&rndnum1&"');</script>", 1, -1, 0)    
+                dim rndnum1:rndnum1=randomStr(10)
+                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum1&"""></div><br /><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=type1&mainurl="&server.URLEncode(tmpStr1)&"&main="&server.URLEncode(tmpStr2)&"','mdown_"&rndnum1&"','mdown_"&rndnum1&"');</script>", 1, -1, 0)    
             Next
 
             re.Pattern = "\[mDown\](.[^\[]*)\[\/mDown]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
-                dim rndnum2:rndnum2=gen_key(10)
-                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum2&"""></div><br /><script language=""javascript"" type=""text/javascript"" defer>check('Action.asp?action=type2&main="&server.URLEncode(tmpStr1)&"','mdown_"&rndnum2&"','mdown_"&rndnum2&"');</script>", 1, -1, 0)
+                dim rndnum2:rndnum2=randomStr(10)
+                    strContent = Replace(strContent, strMatch.Value, "<div id=""mdown_"&rndnum2&"""></div><br /><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=type2&main="&server.URLEncode(tmpStr1)&"','mdown_"&rndnum2&"','mdown_"&rndnum2&"');</script>", 1, -1, 0)
             Next
 
             'CC Video 支持
@@ -256,19 +256,15 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
-            re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
-            If Len(memName)>0 Then
-                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div>")
-            Else
-                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
-            End If
-
-            re.Pattern = "\[hidden=(.[^\]]*)\](.*?)\[\/hidden\]"
-            If Len(memName)>0 Then
-                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 $1""/> 显示被隐藏内容来自 $1</div><div class=""UBBContent"">$2</div></div>")
-            Else
-                strContent = re.Replace(strContent, "<div class=""UBBPanel hiddenPanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 $1""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
-            End If
+            re.Pattern="\[hidden\](.*?)\[\/hidden\]"
+			Dim HiddenRand1
+			HiddenRand1 = randomStr(10)	
+				strContent= re.Replace(strContent,"<script>Hidden('"&HiddenRand1&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+			
+			re.Pattern="\[hidden=(.[^\]]*)\](.*?)\[\/hidden\]"
+			Dim HiddenRand2
+			HiddenRand2 = randomStr(10)	
+				strContent= re.Replace(strContent,"<script>Hidden('"&HiddenRand2&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 $1""/> 显示被隐藏内容来自 $1</div><div class=""UBBContent"">$2</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 $1""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
 
             If Not DisIMG = 1 Then
                 re.Pattern = "\[html\](.*?)\[\/html\]"

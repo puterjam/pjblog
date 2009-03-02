@@ -73,11 +73,12 @@ Sub c_link
 	    Dim bLink_nums
 	    bLink_nums = bLink.RecordCount
 	    Dim MultiPages, PageCount
-	    response.Write "<tr><td colspan=""6"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums, disCount, CurPage, "?Fmenu=Link&Smenu=&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
+	    response.Write "<tr><td colspan=""7"" style=""border-bottom:1px solid #999;""><div class=""pageContent"">"&MultiPage(bLink_nums, disCount, CurPage, "?Fmenu=Link&Smenu=&", "", "float:left","")&"</div><div class=""Content-body"" style=""line-height:200%""></td></tr>"
 	End If
 	%>
 	        <tr align="center">
 	          <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
+			  <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
 	          <td width="120" nowrap="nowrap" class="TDHead">网站名称</td>
 	          <td width="180" nowrap="nowrap" class="TDHead">网站地址</td>
 	          <td width="250" nowrap="nowrap" class="TDHead">Logo图片地址</td>
@@ -92,6 +93,7 @@ Sub c_link
 	%>
 	        <tr align="center" bgcolor="#FCF4BC">
 	          <td><img src="images/slink.gif" alt="没有通过验证链接"/></td>
+			  <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
 	          <td><input name="LinkID" type="hidden" value="<%=bLink("link_ID")%>"/><input name="LinkName" type="text" size="18" class="text" value="<%=bLink("link_Name")%>"/></td>
 	          <td><input name="LinkURL" type="text" size="30" class="text" value="<%=bLink("link_URL")%>"/></td>
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
@@ -101,6 +103,7 @@ Sub c_link
 			<%else%>
 	        <tr align="center">
 	          <td><%if bLink("link_IsMain") then response.write ("<img src=""images/urlInTop.gif"" alt=""置顶链接""/>") else response.write ("&nbsp;")%></td>
+			  <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
 	          <td><input name="LinkID" type="hidden" value="<%=bLink("link_ID")%>"/><input name="LinkName" type="text" size="18" class="text" value="<%=bLink("link_Name")%>"/></td>
 	          <td><input name="LinkURL" type="text" size="30" class="text" value="<%=bLink("link_URL")%>"/></td>
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
@@ -117,10 +120,11 @@ Sub c_link
 		End If
 		%>
 	        <tr align="center" bgcolor="#D5DAE0">
-	         <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新友情链接</td>
+	         <td colspan="7" class="TDHead" align="left" style="border-top:1px solid #9EA9C5"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加新友情链接</td>
 	        </tr>	
 	        <tr align="center">
 	          <td>&nbsp;</td>
+			  <td>&nbsp;</td>
 	          <td><input name="new_LinkID" type="hidden" value="-1"/><input name="new_LinkName" type="text" size="18" class="text"/></td>
 	          <td><input name="new_LinkURL" type="text" size="30" class="text" /></td>
 	          <td><input name="new_LinkLogo" type="text" size="40" class="text" /></td>
@@ -130,8 +134,16 @@ Sub c_link
 		 	</table>
 	  </div>
 	  <div class="SubButton">
-	      <input type="submit" name="Submit" value="保存友情链接" class="button"/> 
-	     </div>	  
+	      <input type="submit" name="Submit" value="保存友情链接" class="button"/><input type="button" name="dellinks" value="删除友情链接" class="button" onclick="DelLiks()"/> 
+	     </div>
+		 <script language="javascript" type="text/javascript">
+		 function DelLiks(){
+		    if (confirm("确定要删除所选友情链接吗？")){
+		    document.forms["Link"].whatdo.value = "DelLinks";
+			document.forms["Link"].submit();
+			}
+		 }
+		 </script>
 	 </td>
 	  </tr></table></div></form>
 <%
