@@ -22,9 +22,9 @@ If Request.QueryString("action") = "agree" Then
       <div id="MsgBody">
 	  <table width="100%" cellpadding="0" cellspacing="0">
 	  <form name="frm" action="register.asp" method="post">
-	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24"/><font color="#FF0000">&nbsp;*</font> 昵称由2到24个字符组成</td></tr>
-	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
-	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> 必须和上面的密码一样</td></tr>
+	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" onblur="if (this.value.length != 0) {CheckName();}" onfocus="if (this.value.length != 0) {CheckName();}" onclick="if (this.value.length != 0) {CheckName();}" id="vs"/><input id="PostBack_UserName" value="False|$|False" type="hidden"><font color="#FF0000">&nbsp;*</font> 昵称由2到24个字符组成 <span id="CheckName"></span></td></tr>
+	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword"/><font color="#FF0000">&nbsp;*</font> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
+	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16" onblur="if (this.value.length != 0) {CheckPwd();}" onfocus="if (this.value.length != 0) {CheckPwd();}" onclick="if (this.value.length != 0) {CheckPwd();}" id="cConfirmpassword"/><font color="#FF0000">&nbsp;*</font> 必须和上面的密码一样<span id="CheckPwds"><span></td></tr>
 	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" checked/> 保密 <input name="Gender" type="radio" value="1"/>男 <input name="Gender" type="radio" value="2"/>女</td></tr>
 	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" checked/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
 	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value=""/></td></tr>
@@ -33,7 +33,7 @@ If Request.QueryString("action") = "agree" Then
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
               <input name="action" type="hidden" value="save"/>
-			  <input name="submit2" type="submit" class="userbutton" value="注册新用户"/>
+			  <input name="submit2" type="button" class="userbutton" value="注册新用户" onclick="IsPost()"/>
               <input name="button" type="reset" class="userbutton" value="重写"/></td>
           </tr>
 		  </form>
