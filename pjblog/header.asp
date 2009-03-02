@@ -46,13 +46,15 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp
 End If
 
 If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/article.asp") = 0 Then
-    getBlogHead BlogTitle, "", -1
+    getBlogHead BlogTitle, "", -1, "", ""
 End If
 
 
 '输出文件头
 
-Sub getBlogHead(Title, CateTitle, CategoryID)
+Sub getBlogHead(Title, CateTitle, CategoryID, KeyWords, Description)
+If len(KeyWords) > 0 then blog_KeyWords = KeyWords
+If len(Description) > 0 then blog_Description = Description
 '高亮分类for首页
 If IsInteger(cateID) = True Then
     blog_currentCategoryID = cateID
