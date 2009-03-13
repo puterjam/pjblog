@@ -23,9 +23,9 @@ Set getCate = New Category
 If IsInteger(id) Then
     Set log_View = Server.CreateObject("ADODB.RecordSet")
     'If blog_postFile>1 Then
-        'SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Readpw,log_Pwtips FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
+        'SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_KeyWords,log_Description FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
     'Else
-        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag,log_Readpw,log_Pwtips,Title_Hidden,log_KeyWords,log_Description FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
+        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_KeyWords,log_Description FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
     'End If
 
     log_View.Open SQL, Conn, 1, 3

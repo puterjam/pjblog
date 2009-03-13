@@ -163,7 +163,7 @@ Sub c_categories
 		
 		%>
 				</table>
-		&nbsp;<input type="checkbox" name="checkbox" style="margin-bottom:-1px;" onClick="checkAll(this)"/> 全选
+		&nbsp;<input type="button" value="全选" onClick="checkAll()" class="button" style="margin-bottom:-1px;"/>
 		<input type="submit" name="Submit" value="删除选中的日志" class="button" style="margin-bottom:-1px;"/>
 		    </div>
 		     </form>

@@ -12,6 +12,7 @@ Function GetbaseUrl()
         baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
         GetbaseUrl = baseUrl
 End Function
+
 '*************************************
 '分段静态的判断 by evio
 '*************************************
@@ -30,6 +31,7 @@ Function PartStatus(StartID,EndID)
   ReArtList = ReArtList&"end"
   PartStatus = ReArtList
 End Function
+
 '*************************************
 '自定义读取缓存路径 by evio
 '*************************************
@@ -55,8 +57,6 @@ function caload(id)
 	    End If
     end if
     
-
-  '**********************************
   If stat_Admin Or stat_ShowHiddenCate Then
  	 loadtype = "A"
   Else
@@ -116,6 +116,7 @@ Function FileExist(FilePath)
     FilePath = Server.MapPath(FilePath)
     If FSO.FileExists(FilePath) Then FileExist = True
 End Function
+
 '*************************************
 '创建文件夹 by evio
 '*************************************
@@ -130,6 +131,7 @@ sub createfolder(catename)
     end if
 	set catefso=nothing
 end sub
+
 '*************************************
 '自定义路径 by evio
 '*************************************
@@ -993,7 +995,7 @@ Function closeUBB(strContent)
     Set re = New RegExp
     re.IgnoreCase = True
     re.Global = True
-    arrTags = Array("code", "quote", "list", "color", "align", "font", "size", "b", "i", "u", "html")
+    arrTags = Array("code", "quote", "list", "color", "align", "font", "size", "b", "i", "u", "s", "html")
     For i = 0 To UBound(arrTags)
         OpenPos = 0
         ClosePos = 0

@@ -71,6 +71,8 @@
   .UBBContent{padding:6px;line-height:160%;}
   .UBBContent TEXTAREA {width:448px;margin-bottom:2px;}
   :link.UBBLink,:visited.UBBLink{font-size:11px;font-family:verdana;}
+  /*---回复框--*/
+  .replayPanel {margin:5px -3px -3px 10px;padding-left:60px;background:url('avatar.jpg') no-repeat;border:0px;border-left:0px;}
   /*---信息框--*/
   #MsgContent{border:1px solid #DBDBD0;width:450px;padding:1px; background:#fff;margin:auto;}
   #MsgContent #MsgHead{background:#EEEEE8;padding:4px;text-align:center;font-weight:bold;}

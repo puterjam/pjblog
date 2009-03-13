@@ -75,19 +75,17 @@ Sub c_ceneral
 		    <div align="left" style="padding:5px;"><%getMsg%>
 		    
 		   <b>1.基础数据初始化</b><br/>
-		    <input type="checkbox" name="ReBulid" value="1" id="T1"/> <label for="T1">重建数据缓存</label><br/>
-		    <input type="checkbox" name="ReTatol" value="1" id="T2"/> <label for="T2">重新统计网站数据</label><br/>
-		    <input type="checkbox" name="CleanVisitor" value="1" id="T5"/> <label for="T5">清除访客记录</label><br/>
-		    
-		    <br/>
+		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulid" value="1" id="T1"/> <label for="T1">重建数据缓存</label><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReTatol" value="1" id="T2"/> <label for="T2">重新统计网站数据</label><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="CleanVisitor" value="1" id="T5"/> <label for="T5">清除访客记录</label><br/><br/>
 		   <b>2.日志缓存和静态日志重建</b><span style="color:#f00">（这个过程可能会花很长时间,由你的日志数量来决定）</span><br/>
-		    <input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
-		    <input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
-		    <input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
-		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input checked="checked" type="checkbox" name="silentMode" value="1" id="B4"	/> <label for="B4">静态化日志安静模式 <span style="color:#666">(使用安静模式不出现进度条，速度较快)</span></label><br/><br/>
-		    <b>3.日志列表索引</b><br/>
-		    <input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/>
-            <b>4.分段全静态化</b><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
+		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input checked="checked" type="checkbox" name="silentMode" value="1" id="B4"/> <label for="B4">静态化日志安静模式 <span style="color:#666">（使用安静模式不出现进度条，速度较快）</span></label><br/><br/>
+		   <b>3.日志列表索引</b><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/><br/>
+           <b>4.分段全静态化</b><br/>
 			<%
 			Dim ConurseDB, Start, Ends
 			Set ConurseDB = Server.CreateObject("Adodb.Recordset")
@@ -104,8 +102,8 @@ Sub c_ceneral
 			ConurseDB.close
 			Set ConurseDB = nothing
 			%>
-			<span>您共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%></span><br />
-            <input type="checkbox" name="ReBulidPartStatus" value="1" id="C1"/> <label for="C1">分段静态化<span style="color:#666">（依据ID分段静态,减小服务器压力）</span></label><br />开始ID:<input type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/><br/>
+            &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidPartStatus" value="1" id="C1"/> <label for="C1">分段静态化<span style="color:#666">（依据ID分段静态,减小服务器压力）</span></label><br/><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/>
 		   </div>
 		   <div class="SubButton">
 		      <input type="submit" name="Submit" value="保存配置" class="button"/> 

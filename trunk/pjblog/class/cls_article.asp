@@ -83,7 +83,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0)
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead 
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
@@ -97,7 +97,6 @@ Sub ShowArticle(LogID)
     Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
     SQLQueryNums = SQLQueryNums + 2
 
-
 %>
 					   <div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 					   <div class="pageContent">
@@ -109,7 +108,7 @@ If Not preLog.EOF Then
     	else 
     		urlLink = "?id="&preLog("log_ID")
     	end if
-    response.Write ("<a href="""&urlLink&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/> 上一篇</a>")
+    response.Write ("<a href="""&urlLink&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>")
 Else
     response.Write ("<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇")
 End If
@@ -119,7 +118,7 @@ If Not nextLog.EOF Then
     	else 
     		urlLink = "?id="&nextLog("log_ID")
     	end if
-    response.Write (" | <a href="""&urlLink&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/> 下一篇</a>")
+    response.Write (" | <a href="""&urlLink&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>")
 Else
     response.Write (" | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇")
 End If
@@ -138,25 +137,7 @@ Set nextLog = Nothing
 							 <%If CanRead Then%>
 							 <%=HtmlEncode(log_ViewArr(2, 0))%>
 							 <% Else %>
-							 <%If Trim(log_ViewArr(20, 0)) <> "" Then%>
-                             <%
-							 If log_ViewArr(22, 0) = true Then
-							 response.write HtmlEncode(log_ViewArr(2, 0))
-							 Else
-							 %>
-                             [加密日志]
-							 <%
-							 End If
-							 Else
-							 If log_ViewArr(22, 0) = true Then
-							 response.write HtmlEncode(log_ViewArr(2, 0))
-							 Else
-							 %>
-                             [私密日志]
-							 <%
-							 End If
-							 End If
-							 %>
+							 <%If log_ViewArr(22, 0) = False then%><%=HtmlEncode(log_ViewArr(2, 0))%><%ElseIf Trim(log_ViewArr(20, 0)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%>
 							 <% End If %>
 							 </strong> 
 							 <%if log_ViewArr(3, 0)=False or getCate.cate_Secret then%>
@@ -211,26 +192,24 @@ Set nextLog = Nothing
 					End If	
 					%>
 					   <br/><br/>
-
 					   </div>
 					   <div class="Content-body">
-					    <%if len(log_ViewArr(16,0))>0 then response.write (log_ViewArr(16,0)&"<br/>")%>
+					    <%if len(log_ViewArr(16,0))>0 then response.write ("<div class=""Modify"">"&log_ViewArr(16,0)&"</div>")%>
 						<img src="images/From.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<%=log_ViewArr(17,0)%>" target="_blank"><%=log_ViewArr(18,0)%></a><br/>
 						<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="<%="trackback.asp?tbID="&id&"&amp;action=view"%>" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<%=id%>)">我要引用此文章</a><br/>
 					   	<%Dim getTag
-Set getTag = New tag
-
-%>
+					   	Set getTag = New tag
+					   	%>
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
-                    <div class="Content-body" id="wbc_tag"></div>
-                    <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','wbc_tag','wbc_tag')</script>
+						 <div class="Content-body" id="wbc_tag"></div>
+						 <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','wbc_tag','wbc_tag')</script>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
 					   </div>
 <%Set getTag = Nothing
-ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0)  '显示评论内容
+ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead  '显示评论内容
 End Sub
 
 
@@ -238,7 +217,7 @@ End Sub
 '  显示日志评论内容
 '*******************************************
 
-Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, ByVal logShow)
+Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, ByVal logShow, ByVal logPwcomm, ByVal CanRead)
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
@@ -257,7 +236,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 
     blog_Comment.Open SQL, Conn, 1, 1
     SQLQueryNums = SQLQueryNums + 1
-    If blog_Comment.EOF And blog_Comment.BOF Then
+    If (blog_Comment.EOF And blog_Comment.BOF) or (logPwcomm = True and CanRead = False) Then
     
     Else
         blog_Comment.PageSize = blogcommpage
@@ -310,14 +289,14 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	If not forStatic Then
 		Response.write ShowComm
 		'输出发表评论框
-		Call showCommentPost(logID,DisComment)
+		Call showCommentPost(logID,DisComment,logPwcomm,CanRead)
 	End IF
 End Function
 
 '===============
 ' 输出发表评论框
 '===============
-Sub ShowCommentPost(ByVal logID, ByVal DisComment)
+Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRead)
 	If DisComment Then 
 		Exit Sub
 	End IF
@@ -327,6 +306,11 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment)
 <%
 		If Not stat_CommentAdd Then
 		    response.Write ("你没有权限发表评论！")
+		    response.Write ("</div></div>")
+		    Exit Sub
+		End If
+		If logPwcomm = True and CanRead = False Then
+		    response.Write ("该日志需要输入正确密码方可发表和查看评论！")
 		    response.Write ("</div></div>")
 		    Exit Sub
 		End If

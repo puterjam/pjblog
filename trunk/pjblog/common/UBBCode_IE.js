@@ -188,7 +188,28 @@ function UBB_underline(){
  {
 	 AddText("[u][/u]")
  }
-} 
+}
+//删除线
+function UBB_deleteline(){
+ var UBBSelectrange=document.selection.createRange()
+  if (SelectAllow && UBBSelectrange.text!=""){
+   UBBSelectrange.text="[s]"+UBBSelectrange.text+"[/s]"
+   return
+  }	
+  
+ if (EditMethod=="normal")
+ {
+	 var PopText
+	  if (PopText=window.prompt(deleteline_normal,"")) {
+		AddText("[s]"+PopText+"[/s]")
+   }
+ }
+ 
+if (EditMethod=="expert")
+ {
+     AddText("[s][/s]")
+ }
+}
 //向左对齐
 function UBB_justifyleft(){
  var UBBSelectrange=document.selection.createRange()

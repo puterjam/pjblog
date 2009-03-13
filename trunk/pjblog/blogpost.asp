@@ -22,7 +22,7 @@ If ChkPost() Then
         <div id="MsgHead">出错信息</div>
         <div id="MsgBody">
   		 <div class="ErrorIcon"></div>
-          <div class="MessageText"><b>你没有没有权限发表新日志</b><br/>
+          <div class="MessageText"><b>您没有没有权限发表新日志!</b><br/>
           <a href="default.asp">单击返回首页</a><%if memName=Empty Then %> | <a href="login.asp">登录</a><%end if%>
   		 </div>
   	 </div>
@@ -30,33 +30,33 @@ If ChkPost() Then
   <%else%>
    <!--内容-->
    <%If Request.Form("action") = "post" Then
-		Dim lArticle, postLog, pws, pwtips, IsShow, keyword, descriptions
+		Dim lArticle, postLog, pws, pwtips, IsShow, keyword, description
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
+		keyword = Trim(Request.Form("log_KeyWords"))
+		description = Trim(Request.Form("log_Description"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
 		IsShow = False
-		If not IsEmpty(pws) Then pws = md5(pws)
+		If IsEmpty(pws) or IsNull(pws) or pws = "" Then
+		Else
+			pws = md5(pws)
+		End If
 		If pws = "" Then pwtips = ""
     Else
 		IsShow = True
 		pws = ""
 		pwtips = ""
     End If
-    If Request.Form("blog_pws") = "0" Then
+    If Request.Form("log_pws") = "0" Then
 		pws = ""
 		pwtips = ""
     End If
-	'evio
-	keyword = Trim(Request.Form("evio_KeyWords"))
-	descriptions = Trim(Request.Form("evio_Description"))
-	If Request.Form("blog_Meta") = 0 Then
+	If  CheckStr(Request.Form("log_Meta")) = "0" Then
 		keyword = ""
-		descriptions = ""
+		description = ""
 	End If
-	'evio
-    
+   
 	Set lArticle = New logArticle
-	
     lArticle.categoryID = request.Form("log_CateID")
     lArticle.logTitle = request.Form("title")
     lArticle.logAuthor = memName
@@ -79,20 +79,19 @@ If ChkPost() Then
     lArticle.logMessage = request.Form("Message")
     lArticle.logTrackback = request.Form("log_Quote")
     lArticle.logTags = request.Form("tags")
-	If blog_postFile = 2 Then
-	lArticle.logcname = request.Form("cname")
-	lArticle.logctype = request.Form("ctype")
-	end if
-	'evio
-	lArticle.logKeyWords = keyword
-	lArticle.logDescription = descriptions
-	lArticle.logmeta = request.Form("blog_Meta")
-	'evio
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
-	lArticle.TitleHidden = request.Form("Title_Hidden")
+    If blog_postFile = 2 Then
+    lArticle.logCname = request.Form("Cname")
+    lArticle.logCtype = request.Form("Ctype")
+    End If
     lArticle.logReadpw = pws
     lArticle.logPwtips = pwtips
+    lArticle.logPwtitle = request.form("log_Pwtitle")
+    lArticle.logPwcomm = request.form("log_Pwcomm")
+    lArticle.logMeta = request.Form("log_Meta")
+    lArticle.logKeyWords = keyword
+    lArticle.logDescription = description
     postLog = lArticle.postLog
     Set lArticle = Nothing
 
@@ -188,29 +187,27 @@ End Sub
         <div id="MsgBody">
           <table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
-              <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
+              <td width="76" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
               <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50"/>
               </td>
             </tr>
-			<!--edit by evio-->
 			<%If blog_postFile = 2 Then%>
 			<tr>
-              <td width="72" height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
+              <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="Cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&Cname='+document.forms['frm'].Cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
 			   <span> . </span>
-			  <select name="ctype">
+			  <select name="Ctype">
 			    <option value="0">htm</option> 
 				<option value="1">html</option>
 			  </select> <span id="CheckAlias"></span>
               </td>
             </tr>
 			<%end if%>
-			<!--edit by evio-->
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
               <td align="left">
-                <div><select name="log_weather">
+                <select name="log_weather">
                   <option value="sunny" selected="selected">晴天 </option>
                   <option value="cloudy">多云 </option>
                   <option value="flurries">疾风 </option>
@@ -236,44 +233,38 @@ End Sub
                 <label for="label3">
                 <input name="log_IsTop" type="checkbox" id="label3" value="1" />
         日志置顶</label>
-               
               </td>
             </tr>
 			<tr>
-               <td height="24" align="right" valign="top"><b>隐私:</b></td>
-               <td align="left">
+               <td align="right" valign="top"><span style="font-weight: bold">隐私及Meta:</span></td>
+               <td align="left"><div>
 	 				<label for="Secret">
-	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onclick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
-	        设置日志隐私</label></div>
+	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
+	        设置日志隐私</label>
+	 				<label for="Meta">
+	                <input id="Meta" name="log_Meta" type="checkbox" value="1" onclick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" />
+	        自定义日志页Meta信息</label></div>
 	                  <div id="Div_Password" style="display:none;" class="tips_body">
-                          <label for="titlehidden"><input id="titlehidden" type="checkbox" name="Title_Hidden" value="1"/><b>标题状态</b></label> - 是否显示标题 （勾选为显示标题）<br/>
-                  	      <label for="bpws1"><input id="bpws1" type="radio" name="blog_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
-      	 				  <label for="bpws2"><input id="bpws2" type="radio" name="blog_pws" value="1"/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
-      	 				  <br/>&nbsp;&nbsp;&nbsp;&nbsp;
-		                  <span style="font-weight: bold">密码:</span>
-		                  <input onfocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
-		                  <span style="font-weight: bold">密码提示:</span>
-		                  <input onfocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="38" class="inputBox" title="不需要提示则留空" />
-	           		</div>
-				  </td>
-             </tr>
-			 <!--evio-->
-			 <tr>
-               <td height="24" align="right" valign="top"><b>Meta:</b></td>
-               <td align="left">
-	                  <div id="Div_Meta" class="tips_body">
-                  	      <label for="Meta1"><input id="Meta1" type="radio" name="blog_Meta" value="0" checked/> <b>默认方式</b></label> - keywords为Tag或title，Description为日志预览<br/>
-      	 				  <label for="Meta2"><input id="Meta2" type="radio" name="blog_Meta" value="1"/><b>自定义</b></label> - 完全自定义
-						  <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		                  <span style="font-weight: bold">KeyWords:</span>
-						  <input onfocus="this.select();$('Meta2').checked='checked'" name="evio_KeyWords" type="text" id="evio_KeyWords" size="30" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" />
-						  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
+                          <label for="bpws2"><input id="bpws2" type="radio" name="log_pws" value="1"/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
+                          <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+                          <span style="font-weight: bold">密码:</span>
+                          <input onFocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
+                          <span style="font-weight: bold">密码提示:</span>
+                          <input onFocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="35" class="inputBox" title="不需要提示则留空" />
+                          <label for="bpws3"><input id="bpws3" name="log_Pwtitle" type="checkbox" value="1" checked="checked" />加密标题</label>
+                          <label for="bpws4"><input id="bpws4" name="log_Pwcomm" type="checkbox" value="1" />加密评论</label>
+	                  </div>
+	                  <div id="Div_Meta" style="display:none;" class="tips_body">
+      	 				  - 自定义日志页面头的Meta信息<br/>
+		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
+						  <input name="log_KeyWords" type="text" id="log_KeyWords" size="80" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" />
+						  <br />
 						  <span style="font-weight: bold">Description:</span>
-						  <input onfocus="this.select();$('Meta2').checked='checked'" name="evio_Description" type="text" id="evio_Description" size="30" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" value=""/>
-	           		  </div>
+						  <input name="log_Description" type="text" id="log_Description" size="80" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" />
+	                  </div>
 				  </td>
              </tr>
-			 <!--evio-->
             <tr>
               <td height="24" align="right" valign="top"><b>来源:</b></td>
               <td align="left"><span style="font-weight: bold"></span>
@@ -287,7 +278,7 @@ End Sub
               <td align="left">
                   <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/>当前时间</label> 
                   <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" />自定义日期:</label>
-                  <input name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
+                  <input onfocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
                 </td>
             </tr>
             <tr>
@@ -298,10 +289,10 @@ End Sub
             </tr>
              <tr>
               <td  align="right" valign="top"><span style="font-weight: bold">内容:</span></td>
-              <td colspan="2" align="center"><%
+              <td align="center"><%
 If log_editType = 0 Then
     Dim sBasePath
-    sBasePath = "fckeditor/"
+    sBasePath = "FCKeditor/"
     Dim oFCKeditor
     Set oFCKeditor = New FCKeditor
     oFCKeditor.BasePath = sBasePath
@@ -318,10 +309,12 @@ End If
 
 %></td>
             </tr>
-  <%if log_editType<>0 then %>          <tr>
+            <tr>
               <td align="right" valign="top">&nbsp;</td>
-               <td colspan="2" align="left"><label for="label4">
-              <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" />
+               <td align="left">
+  <%if log_editType<>0 then %>
+               <label for="label4">
+                <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" />
   禁止显示图片</label>
                 <label for="label5">
                 <input name="log_DisSM" type="checkbox" id="label5" value="1" />
@@ -329,13 +322,15 @@ End If
                 <label for="label6">
                 <input name="log_DisURL" type="checkbox" id="label6" value="1" />
   禁止自动转换链接</label>
-               <label for="label7">
+                <label for="label7">
                 <input name="log_DisKey" type="checkbox" id="label7" value="1" />
-  禁止自动转换关键字</label></td>
-            </tr><%end if%>
+  禁止自动转换关键字</label>
+  <%else%>
+                <strong>[&nbsp;&nbsp;<a herf="#" onClick="GetLength();" style="cursor:pointer">统计字数</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onClick="SetContents();" style="cursor:pointer">清空内容</a>&nbsp;&nbsp;]</strong>
+  <%end if%></td></tr>
           <tr>
               <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
-              <td colspan="2" align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
+              <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
               <div id="Div_Intro" style="display:none">
               <%
 If log_editType = 0 Then
@@ -359,20 +354,20 @@ End If
               </td>
           </tr>          <tr>
               <td align="right" valign="top" nowrap><span style="font-weight: bold">附件上传:</span></td>
-              <td colspan="2" align="left"><iframe src="attachment.asp" width="100%" height="24" frameborder="0" scrolling="no" border="0" frameborder="0"></iframe></td>
+              <td align="left"><iframe src="attachment.asp" width="100%" height="24" frameborder="0" scrolling="no" border="0" frameborder="0"></iframe></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold">引用通告:</span></td>
-              <td colspan="2" align="left"><input name="log_Quote" type="text" size="80" class="inputBox" /><br>请输入网络日志项的引用通告URL。可以用逗号分隔多个引用通告地址.          </td>
+              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" /><br>请输入网络日志项的引用通告URL。可以用逗号分隔多个引用通告地址.          </td>
             </tr>
             <tr>
-              <td colspan="3" align="center">
+              <td colspan="2" align="center">
                 <input name="SaveArticle" type="submit" class="userbutton" value="提交日志" accesskey="S"/>
                 <input name="SaveDraft" type="submit" class="userbutton" value="保存为草稿" accesskey="D" onclick="document.getElementById('log_IsDraft').value='True'"/>
                 <input name="ReturnButton" type="button" class="userbutton" value="返回" accesskey="Q" onClick="history.go(-1)"/></td>
             </tr>
             <tr>
-              <td colspan="3" align="right">
+              <td colspan="2" align="right">
                 友情提示:保存草稿后，日志不会在日志列表中出现。只有再次编辑，<b>取消草稿</b>后才显示出来。</td>
             </tr>
            

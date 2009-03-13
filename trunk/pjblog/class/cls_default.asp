@@ -48,9 +48,9 @@ Function ContentList()'日志列表
 If Request.Cookies(CookieNameSetting)("ViewType") = "list" Then ViewType = "list" Else ViewType = "normal"
 
 If ViewType = "list" Then
-    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Readpw"
+    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Readpw,log_Pwtitle"
 Else
-    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Intro,log_Content,log_edittype,log_DisComment,log_ubbFlags,log_tag,log_Readpw"
+    strSQL = "log_ID,log_CateID,log_Author,log_Title,log_PostTime,log_IsShow,log_CommNums,log_QuoteNums,log_ViewNums,log_IsTop,log_Intro,log_Content,log_edittype,log_DisComment,log_ubbFlags,log_tag,log_Readpw,log_Pwtitle"
 End If
 
 'row序号: 0     ,1         ,2         ,3        ,4           ,5         ,6           ,7            ,8           ,9        ,10       ,11         ,12          ,13            ,14          ,15
@@ -146,7 +146,6 @@ Do Until PageCount = webLogArrLen + 1 Or PageCount = blogPerPage
     If stat_Admin = True Then CanRead = True
     If webLogArr(5, PageCount) Then CanRead = True
     If webLogArr(5, PageCount) = False And webLogArr(2, PageCount) = memName Then CanRead = True
-
     If Readpw<>"" and Session("ReadPassWord_"&webLogArr(0,PageCount)) = Readpw then CanRead = True
     
     If ViewType = "list" Then
@@ -195,12 +194,11 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 		<%If CanRead Then%>
 			<a class="titleA" href="<%=aUrl%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
-			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>"><%If Trim(webLogArr(16,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
+			<a class="titleA" href="article.asp?id=<%=webLogArr(0,PageCount)%>"><%If webLogArr(17,PageCount) = False then%><%=HtmlEncode(webLogArr(3,PageCount))%><%ElseIf Trim(webLogArr(16,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
 			If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 			%>
 			<%If Trim(webLogArr(16,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="加密日志" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="私密日志" /><%End If%>
-			
 			<%end if%>
 		</h1>
 		<h2 class="ContentAuthor">作者:<%=webLogArr(2,PageCount)%>&nbsp; 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%></h2></div>
@@ -286,7 +284,7 @@ If webLogArr(9, PageCount) Then
 		<%If CanRead Then%>
 			<a href="<%=logLink%>" title="作者:<%=webLogArr(2,PageCount)%> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
-			<a href="<%=logLink%>"><%If Trim(webLogArr(10,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
+			<a href="<%=logLink%>"><%if webLogArr(11,PageCount)=False then%><%=HtmlEncode(webLogArr(3,PageCount))%><%ElseIf Trim(webLogArr(10,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
 
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then

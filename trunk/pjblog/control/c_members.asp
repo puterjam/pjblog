@@ -52,7 +52,7 @@ Sub c_members
 		
 		%>
 		        <tr align="center">
-                  <td nowrap="nowrap" class="TDHead">&nbsp;</td>
+		          <td nowrap="nowrap" class="TDHead">&nbsp;</td>
 		          <td nowrap="nowrap" class="TDHead">编号</td>
 		          <td width="100" nowrap="nowrap" class="TDHead">会员名称</td>
 		          <td width="100" class="TDHead">会员身份</td>
@@ -68,7 +68,7 @@ Sub c_members
 		
 		%>
 		        <tr align="center">
-                <td nowrap><%if memName <> bMember("mem_Name") then%><input value="<%=bMember("mem_ID")%>" name="mem_CheckBox" type="checkbox"/><%else%>&nbsp;<%end if%></td>
+		        <td nowrap><%if memName <> bMember("mem_Name") then%><input value="<%=bMember("mem_ID")%>" name="mem_CheckBox" type="checkbox"/><%else%>&nbsp;<%end if%></td>
 		          <td nowrap><%=bMember("mem_ID")%>
 		          <%
 		If bMember("mem_Name") <> memName Then
