@@ -1,5 +1,18 @@
 //PBlog2 公用JS代码
 //Author:PuterJam
+
+//复制提交内容
+function CopyAll(A)
+{
+A.focus() //使文本框得到焦点
+A.select() //把文本框中的内容全选
+if (document.all)
+{
+therange=A.createTextRange()
+therange.execCommand("Copy") //复制
+}
+}
+
 function $() 
 { 
     var elements = new Array(); 
@@ -329,7 +342,6 @@ function CheckPost(){
         return (d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds());
    }
 
-
 function GetMessageLength()
 {
 	var oEditor = FCKeditorAPI.GetInstance('Message') ;
@@ -346,13 +358,28 @@ function GetMessageLength()
 		r.selectNodeContents( oDOM.body ) ;
 		iLength = r.toString().length ;
 	}
-//	oEditor.InsertHtml('')
+//	oEditor.InsertHtml('');
+	oEditor.Focus();
 return iLength
 }	
+
+//FCK编辑器字数统计
+function GetLength()
+{
+	alert( '当前字数: 共 ' + GetMessageLength() + ' 个字' ) ;
+}
+
+function SetContents()
+{
+	var oEditor = FCKeditorAPI.GetInstance('Message') ;
+	oEditor.SetData( '' ) ;
+	oEditor.Focus();
+}
 
 function SetFont(size){
 	document.getElementById("logPanel").style.fontSize=size
 }
+
 //引用
 function addQuote(usr,content){
 	//try{
@@ -572,6 +599,7 @@ function ﻿callSideBar(html){
 		window._sidebarCache = html;
 	}
 }
+
 function initSidebar(){
 	window._sidebarReady = true;
 	if (window._sidebarCache) {

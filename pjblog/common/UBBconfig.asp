@@ -9,7 +9,7 @@ Dim UBB_TextArea_Height, UBB_Tools_Items, UBB_Tools_Fonts, UBB_Tools_Size, UBB_T
 '-------默认工具条------
 Dim UBB_Tools_default
 UBB_Tools_default = ""
-UBB_Tools_default = UBB_Tools_default&"bold,italic,underline,justifyleft,justifycenter,justifyright"
+UBB_Tools_default = UBB_Tools_default&"bold,italic,underline,deleteline,justifyleft,justifycenter,justifyright"
 UBB_Tools_default = UBB_Tools_default&"||"
 UBB_Tools_default = UBB_Tools_default&"link,mail,image,insertunorderedlist,quote,hidden,code,html"
 UBB_Tools_default = UBB_Tools_default&"||"
@@ -148,6 +148,8 @@ Case "about":
         Tip = "关于"
 Case "bold":
         Tip = "粗体"
+Case "deleteline":
+        Tip="删除线"
 Case "code":
         Tip = "插入代码"
 Case "flash":

@@ -74,8 +74,8 @@ End If
 	<meta name="robots" content="all" />
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
 	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
-	<meta name="keywords" content="<%=blog_KeyWords%>" />
-	<meta name="description" content="<%=blog_Description%>" />
+	<meta name="keywords" content="<%=blog_KeyWords%>,PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
+	<meta name="description" content="<%=blog_Description%>,<%=SiteName%> - <%=blog_Title%>" />
 	<meta name="generator" content="PJBlog3" />
 	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=siteURL%>xmlrpc.asp" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />

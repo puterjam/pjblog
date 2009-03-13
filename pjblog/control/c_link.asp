@@ -78,7 +78,7 @@ Sub c_link
 	%>
 	        <tr align="center">
 	          <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
-			  <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
+	          <td width="16" nowrap="nowrap" class="TDHead">&nbsp;</td>
 	          <td width="120" nowrap="nowrap" class="TDHead">网站名称</td>
 	          <td width="180" nowrap="nowrap" class="TDHead">网站地址</td>
 	          <td width="250" nowrap="nowrap" class="TDHead">Logo图片地址</td>
@@ -93,7 +93,7 @@ Sub c_link
 	%>
 	        <tr align="center" bgcolor="#FCF4BC">
 	          <td><img src="images/slink.gif" alt="没有通过验证链接"/></td>
-			  <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
+	          <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
 	          <td><input name="LinkID" type="hidden" value="<%=bLink("link_ID")%>"/><input name="LinkName" type="text" size="18" class="text" value="<%=bLink("link_Name")%>"/></td>
 	          <td><input name="LinkURL" type="text" size="30" class="text" value="<%=bLink("link_URL")%>"/></td>
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
@@ -103,7 +103,7 @@ Sub c_link
 			<%else%>
 	        <tr align="center">
 	          <td><%if bLink("link_IsMain") then response.write ("<img src=""images/urlInTop.gif"" alt=""置顶链接""/>") else response.write ("&nbsp;")%></td>
-			  <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
+	          <td><input type="checkbox" name="checklinkID" value="<%=bLink("link_ID")%>"></td>
 	          <td><input name="LinkID" type="hidden" value="<%=bLink("link_ID")%>"/><input name="LinkName" type="text" size="18" class="text" value="<%=bLink("link_Name")%>"/></td>
 	          <td><input name="LinkURL" type="text" size="30" class="text" value="<%=bLink("link_URL")%>"/></td>
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
@@ -124,7 +124,7 @@ Sub c_link
 	        </tr>	
 	        <tr align="center">
 	          <td>&nbsp;</td>
-			  <td>&nbsp;</td>
+	          <td>&nbsp;</td>
 	          <td><input name="new_LinkID" type="hidden" value="-1"/><input name="new_LinkName" type="text" size="18" class="text"/></td>
 	          <td><input name="new_LinkURL" type="text" size="30" class="text" /></td>
 	          <td><input name="new_LinkLogo" type="text" size="40" class="text" /></td>

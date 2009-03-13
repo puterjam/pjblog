@@ -90,7 +90,6 @@ Sub getInfo(ByVal action)
         blog_master = blog_Infos(35, 0)'blog管理员姓名
         blog_email = blog_Infos(36, 0)'blog管理员邮件地址
         blog_CountNum = blog_Infos(37, 0)'访客统计最大次数
-
         blog_wapNum = Int(blog_Infos(38, 0))'Wap 文章列表数量
         blog_wapImg = CBool(blog_Infos(39, 0))'Wap 文章显示图片
         blog_wapHTML = CBool(blog_Infos(40, 0))'Wap 文章使用简单HTML
@@ -98,7 +97,6 @@ Sub getInfo(ByVal action)
         blog_wapComment = CBool(blog_Infos(42, 0))'Wap 允许评论
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
-		
 		blog_KeyWords = blog_Infos(45, 0)'站点首页KeyWords
 		blog_Description = blog_Infos(46, 0)'站点首页Description
     End If

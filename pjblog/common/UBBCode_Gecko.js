@@ -87,6 +87,21 @@ function UBB_underline(){
  }
 } 
 
+function UBB_deleteline(){
+ if (EditMethod=="normal")
+ {
+	 var PopText
+	  if (PopText=window.prompt(deleteline_normal,"")) {
+		AddText("[s]"+PopText+"[/s]")
+   }
+}
+ 
+ if (EditMethod=="expert")
+ {
+	 AddText("[s][/s]")
+ }
+}
+
 function UBB_justifyleft(){
  if (EditMethod=="normal")
  {

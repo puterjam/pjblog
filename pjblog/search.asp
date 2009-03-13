@@ -66,7 +66,7 @@ Select Case searchType
         End If
     Case Else
         If Len(SearchContent)>0 Then
-            SQL = "SELECT log_ID,log_Title,log_PostTime,log_CommNums FROM blog_Content WHERE log_IsShow=true AND log_Title LIKE '%"&SearchContent&"%'"
+            SQL = "SELECT log_ID,log_Title,log_PostTime,log_CommNums FROM blog_Content WHERE (log_IsShow=true OR (log_IsShow=false AND log_Pwtitle=false)) AND log_Title LIKE '%"&SearchContent&"%'"
         Else
             RedirectUrl("default.asp")
         End If

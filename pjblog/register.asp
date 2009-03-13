@@ -184,6 +184,7 @@ Else
 　　 （十）进行商业广告行为的。 <br/>
 　 二、互相尊重，对自己的言论和行为负责。 <br/><br/></div>
 	   <input type="button" name="agreesubmit" value="我同意" class="userbutton" onclick="location='register.asp?action=agree'"/>
+	   <input type="button" name="noagreesubmit" value="不同意" class="userbutton" onclick="location='default.asp'"/>
 	   </div>
 	</div>
   </form>
@@ -191,9 +192,10 @@ Else
  <script language="javascript">
 var secs = 3;
 var wait = secs * 1000;
-var agreetext=" 我同意 ";
+var agreetext="请仔细阅读以上条款";
 document.aform.agreesubmit.value = agreetext+"(" + secs + ") ";
 document.aform.agreesubmit.disabled = true;
+document.aform.noagreesubmit.disabled = true;
 for(i = 1; i <= secs; i++) {
   window.setTimeout("update(" + i + ")", i * 1000);
 }
@@ -208,7 +210,8 @@ function update(num, value) {
 }
 function timer() {
   document.aform.agreesubmit.disabled = false;
-  document.aform.agreesubmit.value = agreetext;
+  document.aform.noagreesubmit.disabled = false;
+  document.aform.agreesubmit.value = "我同意";
 }
 </script>
  

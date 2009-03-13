@@ -6,10 +6,10 @@
 Class logArticle
     Private weblog
     Public categoryID, logTitle, logAuthor, logEditType
-    Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, TitleHidden
+    Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, logPwtitle, logPwcomm
     Public logDisableComment, logIsTop, logFrom, logFromURL
-    Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logKeyWords, logDescription, logmeta
-    Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logcname, logctype
+    Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logMeta, logKeyWords, logDescription
+    Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logCname, logCtype
     Private logUbbFlags, PubTime, sqlString
 
     Private Sub Class_Initialize()
@@ -41,16 +41,17 @@ Class logArticle
         logTags = ""
         logPubTime = "2006-1-1 00:00:00"
         logPublishTimeType = "now"
+    If blog_postFile = 2 Then
+        logCname = ""
+        logCtype = "0"
+    End If
         logReadpw = ""
         logPwtips = ""
-		TitleHidden = false
-		If blog_postFile = 2 Then
-		logcname=""
-		logctype= "0"
-		end if
-		logKeyWords = "http://www.evio.name"
-		logDescription = "http://www.evio.name"
-		logmeta = 0
+        logPwtitle = False
+        logPwcomm = False
+        logmeta = 0
+        logKeyWords = ""
+        logDescription = ""
     End Sub
 
     Private Sub Class_Terminate()
@@ -62,12 +63,12 @@ Class logArticle
     '*********************************************
 
     Public Function postLog()
-        postLog = Array( -4, "准备发表日志", -1)
+        postLog = Array( -4, "准备发表日志!", -1)
         weblog.Open "blog_Content", Conn, 1, 2
         SQLQueryNums = SQLQueryNums + 1
 
         If stat_AddAll<>True And stat_Add<>True Then
-            postLog = Array( -3, "没有权限发表日志", -1)
+            postLog = Array( -3, "您没有权限发表日志!", -1)
             Exit Function
         End If
 
@@ -90,10 +91,10 @@ Class logArticle
 		            End If
 	      	  	Next
       	  	Else
-            If Len(Trim(post_tag))>0 Then
-                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-            End If
-            End if
+	      	  	If Len(Trim(post_tag))>0 Then
+		            post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+	      	  	End If
+      	  	End If
         Next
         logTags = post_taglist
         Call Tags(2)
@@ -125,12 +126,14 @@ Class logArticle
         End If
 
         '日志基本状态
-       ' If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
         logIsTop = CBool(logIsTop)
         logIsDraft = CBool(logIsDraft)
+        logPwtitle = CBool(logPwtitle)
+        logPwcomm = CBool(logPwcomm)
+        logMeta = CBool(logMeta)
 
         'UBB 特别属性
         If logDisableSmile = 1 Then logDisableSmile = 1 Else logDisableSmile = 0
@@ -139,20 +142,22 @@ Class logArticle
         If logDisableKeyWord = 1 Then logDisableKeyWord = 0 Else logDisableKeyWord = 1
         If logIntroCustom = 1 Then logIntroCustom = 0 Else logIntroCustom = 1
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
-		
+
 		'Meta特别属性
-		if logmeta = 0 then
+		If logMeta = 0 Then
 			logDescription = logIntro
 			logKeyWords = CheckStr(logTags)
-			if len(logKeyWords) = 0 then
+			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
-			else
+			Else
 				logKeyWords = Replace(Replace(Replace(logKeyWords, ",", "|"), " ", "|"), "|", ",")
-			end if
-		end if
+			End If
+		End If
 
         weblog.addNew
-		Dim CnameID:CnameID = weblog("log_ID")
+        If len(logCname) < 1 or logCname = "" or logCname = empty or logCname = null Then
+            logCname = weblog("log_ID")
+        End If
         weblog("log_CateID") = CheckStr(categoryID)
         weblog("log_Author") = CheckStr(logAuthor)
         weblog("log_Title") = CheckStr(logTitle)
@@ -162,34 +167,25 @@ Class logArticle
         weblog("log_FromURL") = CheckStr(logFromURL)
         weblog("log_Content") = CheckStr(logMessage)
         weblog("log_Intro") = logIntro
-        weblog("log_tag") = logTags
-        weblog("log_ubbFlags") = logUbbFlags
+        weblog("log_Tag") = logTags
+        weblog("log_UbbFlags") = logUbbFlags
         weblog("log_IsShow") = logIsShow
         weblog("log_IsTop") = logIsTop
         weblog("log_PostTime") = PubTime
         weblog("log_IsDraft") = logIsDraft
         weblog("log_DisComment") = logDisableComment
-        weblog("log_edittype") = logEditType
-        weblog("log_comorder") = logCommentOrder
-		
-		if len(logcname) < 1 or logcname = "" or logcname = empty or logcname = null then
-		logcname = CnameID
-		end if
-		weblog("log_cname") = logcname
-		weblog("log_ctype") = logctype
-
-		if int(TitleHidden) = 1 then
-		weblog("Title_Hidden") = true
-		else
-		weblog("Title_Hidden") = false
-		end if
-		weblog("log_Readpw") = logReadpw
-		weblog("log_Pwtips") = logPwtips
-		
-		weblog("log_KeyWords") = logKeyWords
-		weblog("log_Description") = logDescription
-		weblog("log_Meta") = logmeta
-		
+        weblog("log_EditType") = logEditType
+        weblog("log_ComOrder") = logCommentOrder
+        weblog("log_Cname") = logCname
+        weblog("log_Ctype") = logCtype
+        weblog("log_Readpw") = logReadpw
+        weblog("log_Pwtips") = logPwtips
+        weblog("log_Pwtitle") = logPwtitle
+        weblog("log_Pwcomm") = logPwcomm
+        weblog("log_Meta") = logMeta
+        weblog("log_KeyWords") = logKeyWords
+        weblog("log_Description") = logDescription
+        
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
         weblog.Close
@@ -226,9 +222,9 @@ Class logArticle
 
 
         If logIsDraft Then
-            postLog = Array(1, "日志成功保存为草稿", PostLogID)
+            postLog = Array(1, "日志成功保存为草稿!", PostLogID)
         Else
-            postLog = Array(0, "恭喜!日志发表成功", PostLogID)
+            postLog = Array(0, "恭喜!日志发表成功!", PostLogID)
         End If
 
         '-------------------引用通告-------------------
@@ -249,13 +245,13 @@ Class logArticle
     '*********************************************
 
     Public Function editLog(id)
-        editLog = Array( -4, "准备编辑日志", -1)
+        editLog = Array( -4, "准备编辑日志!", -1)
         If IsEmpty(id) Then
-            getLog = Array( -5, "ID号不能为空")
+            getLog = Array( -5, "ID号不能为空!")
             Exit Function
         End If
         If Not IsInteger(id) Then
-            editLog = Array( -1, "非法ID号", -1)
+            editLog = Array( -1, "非法ID号!", -1)
             Exit Function
         End If
 
@@ -264,12 +260,12 @@ Class logArticle
         SQLQueryNums = SQLQueryNums + 1
 
         If weblog.EOF Or weblog.bof Then
-            editLog = Array( -2, "无法找到相应文章", -1)
+            editLog = Array( -2, "无法找到相应文章!", -1)
             Exit Function
         End If
 
         If stat_EditAll<>True And (stat_Edit And weblog("log_Author") = logAuthor)<>True Then
-            editLog = Array( -3, "您没有权限编辑日志", -1)
+            editLog = Array( -3, "您没有权限编辑日志!", -1)
             Exit Function
         End If
 
@@ -281,7 +277,7 @@ Class logArticle
         '-------------------处理Tags--------------------
         Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
         tempTags = Split(CheckStr(logTags), ",")
-        loadTagString = weblog("log_tag")
+        loadTagString = weblog("log_Tag")
 
         Set getTags = New Tag
 
@@ -310,10 +306,10 @@ Class logArticle
 		            End If
 	      	  	Next
       	  	Else
-            If Len(Trim(post_tag))>0 Then
-                post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
-            End If
-            End if
+	      	  	If Len(Trim(post_tag))>0 Then
+		            post_taglist = post_taglist & "{" & getTags.insert(CheckStr(Trim(post_tag))) & "}"
+	      	  	End If
+      	  	End If
         Next
         logTags = post_taglist
         Call Tags(2)
@@ -345,12 +341,14 @@ Class logArticle
         End If
 
         '日志基本状态
-       ' If logIsShow = 1 Then logIsShow = 0 Else logIsShow = 1 '私密日志特别属性
         logIsShow = CBool(logIsShow)
         logCommentOrder = CBool(logCommentOrder)
         logDisableComment = CBool(logDisableComment)
         logIsTop = CBool(logIsTop)
         logIsDraft = CBool(logIsDraft)
+        logPwtitle = CBool(logPwtitle)
+        logPwcomm = CBool(logPwcomm)
+        logMeta = CBool(logMeta)
 
         'UBB 特别属性
         If logDisableSmile = 1 Then logDisableSmile = 1 Else logDisableSmile = 0
@@ -366,17 +364,21 @@ Class logArticle
             Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID=" & CheckStr(categoryID))
             SQLQueryNums = SQLQueryNums + 2
         End If
+
 		'Meta特别属性
-		if logmeta = 0 then
+		If logMeta = 0 Then
 			logDescription = logIntro
 			logKeyWords = CheckStr(logTags)
-			if len(logKeyWords) = 0 then
+			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
-			else
+			Else
 				logKeyWords = Replace(Replace(Replace(logKeyWords, ",", "|"), " ", "|"), "|", ",")
-			end if
-		end if
+			End If
+		End If
 
+        If len(logCname) < 1 or logCname = "" or logCname = empty or logCname = null Then
+            logCname = weblog("log_ID")
+        End If
         weblog("log_Title") = CheckStr(logTitle)
         weblog("log_weather") = CheckStr(logWeather)
         weblog("log_Level") = CheckStr(logLevel)
@@ -385,30 +387,24 @@ Class logArticle
         weblog("log_Content") = CheckStr(logMessage)
         weblog("log_Intro") = logIntro
         weblog("log_CateID") = CheckStr(categoryID)
-        weblog("log_tag") = logTags
-        weblog("log_ubbFlags") = logUbbFlags
+        weblog("log_Tag") = logTags
+        weblog("log_UbbFlags") = logUbbFlags
         weblog("log_IsShow") = logIsShow
         weblog("log_IsTop") = logIsTop
         weblog("log_PostTime") = PubTime
         weblog("log_IsDraft") = logIsDraft
         weblog("log_DisComment") = logDisableComment
-        weblog("log_edittype") = logEditType
-        weblog("log_comorder") = logCommentOrder
-		
-		weblog("log_cname")=logcname
-		weblog("log_ctype")=logctype
-
-		if int(TitleHidden) = 1 then
-		weblog("Title_Hidden")=true
-		else
-		weblog("Title_Hidden")=false
-		end if
-		weblog("log_Readpw") = logReadpw
-		weblog("log_Pwtips") = logPwtips
-		
-		weblog("log_KeyWords") = logKeyWords
-		weblog("log_Description") = logDescription
-		weblog("log_Meta") = logmeta
+        weblog("log_EditType") = logEditType
+        weblog("log_ComOrder") = logCommentOrder
+        weblog("log_Cname")=logCname
+        weblog("log_Ctype")=logCtype
+        weblog("log_Readpw") = logReadpw
+        weblog("log_Pwtips") = logPwtips
+        weblog("log_Pwtitle") = logPwtitle
+        weblog("log_Pwcomm") = logPwcomm
+        weblog("log_Meta") = logMeta
+        weblog("log_KeyWords") = logKeyWords
+        weblog("log_Description") = logDescription
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -428,21 +424,20 @@ Class logArticle
 		oldcname=request.form("oldcname")
 		oldcate=request.form("oldcate")
 		oldctype=request.form("oldtype")
-
 		D = conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
-		A="article/"&D
-		if D = "" or len(D) = 0 then
+		A = "article/"&D
+		If D = "" or len(D) = 0 then
 			A = "article"
-		end if
-			B=oldcname
-		if oldctype="0" then
+		End If
+		B=oldcname
+		If oldctype="0" Then
 			C="htm"
-		else
+		Else
 			C="html"
-		end if
-		if oldcname<>request.Form("cname") or oldcate<>request.Form("log_CateID") or oldctype<>request.Form("ctype") then
+		End If
+		If oldcname<>request.Form("Cname") or oldcate<>request.Form("log_CateID") or oldctype<>request.Form("Ctype") Then
 			DeleteFiles Server.MapPath(A&"/"&B&"."&C)
-		end if
+		End If
 		
 		'用来检查是否有
         If Err Then
@@ -450,7 +445,7 @@ Class logArticle
         End If
         
         PostArticle logid, False
-        end if
+        End If
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
@@ -464,9 +459,9 @@ Class logArticle
         SQLQueryNums = SQLQueryNums + 1
 
         If logIsDraft Then
-            editLog = Array(1, "日志成功保存为草稿", id)
+            editLog = Array(1, "日志成功保存为草稿!", id)
         Else
-            editLog = Array(0, "恭喜!日志编辑成功", id)
+            editLog = Array(0, "恭喜!日志编辑成功!", id)
         End If
 
         '-------------------引用通告-------------------
@@ -479,7 +474,7 @@ Class logArticle
         End If
 		If blog_postFile = 1 Then
 		PostHalfStatic id,false
-		end if
+        End If
     End Function
 
     '*********************************************
@@ -489,14 +484,14 @@ Class logArticle
     Public Function deleteLog(id)
 	    Dim pcmpad
 	    pcmpad=Alias(id)
-        deleteLog = Array( -4, "准备删除")
+        deleteLog = Array( -4, "准备删除!")
         If IsEmpty(id) Then
-            getLog = Array( -5, "ID号不能为空")
+            getLog = Array( -5, "ID号不能为空!")
             Exit Function
         End If
 
         If Not IsInteger(id) Then
-            deleteLog = Array( -1, "非法ID号")
+            deleteLog = Array( -1, "非法ID号!")
             Exit Function
         End If
 
@@ -505,17 +500,17 @@ Class logArticle
         SQLQueryNums = SQLQueryNums + 1
 
         If weblog.EOF Or weblog.bof Then
-            deleteLog = Array( -2, "找不到相应文章")
+            deleteLog = Array( -2, "找不到相应文章!")
             Exit Function
         End If
 
         If stat_DelAll<>True And (stat_Del And weblog("log_Author") = logAuthor)<>True Then
-            deleteLog = Array( -3, "没有权限删除")
+            deleteLog = Array( -3, "没有权限删除!")
             Exit Function
         End If
 
         Dim Pdate, getTag
-        Dim tempTags, loadTagString, loadTags, loadTag, getTags, post_tag
+        Dim tempTags, loadTagString, loadTags, loadTag, getTags, post_Tag
         Pdate = weblog("log_PostTime")
         Conn.Execute("UPDATE blog_Member SET mem_PostLogs=mem_PostLogs-1 WHERE mem_Name='"&weblog("log_Author")&"'")
         If Not weblog("log_IsDraft") Then
@@ -524,7 +519,7 @@ Class logArticle
             Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-"&weblog("log_CommNums"))
         End If
 
-        loadTag = weblog("log_tag")
+        loadTag = weblog("log_Tag")
         Set getTag = New Tag
 
         '清除旧的Tag
@@ -562,7 +557,7 @@ Class logArticle
         Session(CookieName&"_LastDo") = "DelArticle"
         session(CookieName&"_draft_"&logAuthor) = conn.Execute("select count(log_ID) from blog_Content where log_Author='"&logAuthor&"' and log_IsDraft=true")(0)
         SQLQueryNums = SQLQueryNums + 1
-        deleteLog = Array(0, "删除成功")
+        deleteLog = Array(0, "删除成功!")
 
     End Function
 
@@ -572,72 +567,67 @@ Class logArticle
 
     Public Function getLog(id)
         Dim getTag
-        getLog = Array( -3, "准备提取日志")
+        getLog = Array( -3, "准备提取日志!")
         If IsEmpty(id) Then
-            getLog = Array( -4, "ID号不能为空")
+            getLog = Array( -4, "ID号不能为空!")
             Exit Function
         End If
 
         If Not IsInteger(id) Then
-            getLog = Array( -1, "非法ID号")
+            getLog = Array( -1, "非法ID号!")
             Exit Function
         End If
 
-        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_edittype,log_ubbFlags,log_Intro,log_weather,log_Level,log_comorder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums,log_Readpw,log_Pwtips,log_cname,log_ctype,Title_Hidden,log_KeyWords,log_Description,log_Meta FROM blog_Content WHERE log_ID="&id&""
+        sqlString = "SELECT top 1 log_CateID,log_Author,log_Title,log_EditType,log_UbbFlags,log_Intro,log_weather,log_Level,log_ComOrder,log_DisComment,log_IsShow,log_IsTop,log_IsDraft,log_From,log_FromURL,log_Content,log_Tag,log_PostTime,log_CommNums,log_QuoteNums,log_ViewNums,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_Cname,log_Ctype,log_KeyWords,log_Description,log_Meta FROM blog_Content WHERE log_ID="&id&""
         weblog.Open sqlString, Conn, 1, 1
         SQLQueryNums = SQLQueryNums + 1
 
         If weblog.EOF Or weblog.bof Then
-            getLog = Array( -2, "找不到相应文章")
+            getLog = Array( -2, "找不到相应文章!")
             Exit Function
         End If
 
         categoryID = weblog("log_CateID")
         logAuthor = weblog("log_Author")
         logTitle = weblog("log_Title")
-        logEditType = weblog("log_edittype")
-        logIntroCustom = Mid(weblog("log_ubbFlags"), 6, 1)
+        logEditType = weblog("log_EditType")
+        logIntroCustom = Mid(weblog("log_UbbFlags"), 6, 1)
         logIntro = weblog("log_Intro")
         logWeather = weblog("log_weather")
         logLevel = weblog("log_Level")
-        logCommentOrder = weblog("log_comorder")
+        logCommentOrder = weblog("log_ComOrder")
         logDisableComment = weblog("log_DisComment")
         logIsShow = weblog("log_IsShow")
         logIsTop = weblog("log_IsTop")
         logIsDraft = weblog("log_IsDraft")
         logFrom = weblog("log_From")
         logFromURL = weblog("log_FromURL")
-        logDisableImage = Mid(weblog("log_ubbFlags"), 3, 1)
-        logDisableSmile = Mid(weblog("log_ubbFlags"), 1, 1)
-        logDisableURL = Mid(weblog("log_ubbFlags"), 4, 1)
-        logDisableKeyWord = Mid(weblog("log_ubbFlags"), 5, 1)
+        logDisableImage = Mid(weblog("log_UbbFlags"), 3, 1)
+        logDisableSmile = Mid(weblog("log_UbbFlags"), 1, 1)
+        logDisableURL = Mid(weblog("log_UbbFlags"), 4, 1)
+        logDisableKeyWord = Mid(weblog("log_UbbFlags"), 5, 1)
         logMessage = weblog("log_Content")
         logCommentCount = weblog("log_CommNums")
         logQuoteCount = weblog("log_QuoteNums")
         logViewCount = weblog("log_ViewNums")
-		if weblog("Title_Hidden") = true then
-		TitleHidden = 1
-		else
-		TitleHidden = 0
-		end if
-		
-		logKeyWords = weblog("log_KeyWords")
-		logDescription = weblog("log_Description")
-		logmeta = weblog("log_Meta")
-		
+		logCname = weblog("log_Cname")
+		logCtype = weblog("log_Ctype")
         logReadpw = Trim(weblog("log_Readpw"))
         logPwtips = weblog("log_Pwtips")
-		logcname = weblog("log_cname")
-		logctype = weblog("log_ctype")
+        logPwtitle = weblog("log_Pwtitle")
+        logPwcomm = weblog("log_Pwcomm")
+		logmeta = weblog("log_Meta")
+		logKeyWords = weblog("log_KeyWords")
+		logDescription = weblog("log_Description")
         logTrackback = ""
-        Set getTag = New tag
-        logTags = getTag.filterEdit(weblog("log_tag"))
+        Set getTag = New Tag
+        logTags = getTag.filterEdit(weblog("log_Tag"))
         Set getTag = Nothing
         logPubTime = weblog("log_PostTime")
         logPublishTimeType = "now"
 
         weblog.Close
-        getLog = Array(0, "成功获取日志")
+        getLog = Array(0, "成功获取日志!")
 
     End Function
 
@@ -705,17 +695,17 @@ Class ArticleCache
         clearT = Str
     End Function
     
-    Private Function LoadIntro(id, cpart, cname, ctype, aisshow, aRight, outType)
+    Private Function LoadIntro(id, Cpart, Cname, Ctype, aisshow, aRight, outType)
         Dim getIntro, tempI, TempStr, getC, author
-        if not IsEmpty(Application(CookieName&"_introCache_"&id)) then
+        If not IsEmpty(Application(CookieName&"_introCache_"&id)) then
         	getIntro = Application(CookieName&"_introCache_"&id)
-        else 
-		    if cpart = "" or cpart = empty or cpart = null or len(cpart) = 0 then
+        Else 
+		    If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
 			   getIntro = LoadFile("cache/" & id & ".asp")
-			else
+			Else
        	       getIntro = LoadFile("cache/" & id & ".asp")
-			end if
-       	end if
+			End If
+       	End If
         If getIntro = "error" or getIntro="" Then
             If stat_Admin Then
                 response.Write "<div style=""color:#f00"">编号为[" + id + "]的日志读取失败！建议您重新 <a href=""blogedit.asp?id="&id&""" title=""编辑该日志"" accesskey=""E"">编辑</a> 此文章获得新的缓存</div>"
@@ -732,24 +722,24 @@ Class ArticleCache
             End If
 			'evio
 			dim ceeurl2,chtml2
-			if ctype = "0" then
+			If Ctype = "0" then
 		        chtml2 = "htm"
-	        else
+			Else
 		        chtml2 = "html"
-	        end if
+			End If
 			chtml2 ="."&chtml2
 			
 			ceeurl2=""
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   if cpart = "" or cpart = empty or cpart = null or len(cpart) = 0 then
+			   If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
 			      ceeurl2 = ceeurl2&"article/"&cname&chtml2
-			   else
+			   Else
 			      ceeurl2 = ceeurl2&"article/"&cpart&"/"&cname&chtml2
-			   end if
-			else
+			   End If
+			Else
 			   ceeurl2 = ceeurl2&"article.asp?id="&id
-			end if
+			End If
 			tempI = Replace(tempI, "<$log_ceeurl$>", ceeurl2)
 			'evio
             tempI = Replace(tempI, "<$log_viewC$>", getIntro(2))
@@ -761,7 +751,7 @@ Class ArticleCache
             End If
 
             If stat_DelAll Or (stat_Del And memName = author) Then
-                TempStr = TempStr&" | <a href=""blogedit.asp?action=del&amp;id="&id&""" onclick=""if (!window.confirm('是否要删除该日志')) return false"" title=""删除该日志"" accesskey=""K""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
+                TempStr = TempStr&" | <a href=""blogedit.asp?action=del&amp;id="&id&""" onclick=""If (!window.confirm('是否要删除该日志')) return false"" title=""删除该日志"" accesskey=""K""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
             End If
             If CBool(Int(aRight)) Or stat_Admin Or (Not CBool(Int(aRight)) And memName = author) Then
                 tempI = getIntro(3)
@@ -770,24 +760,24 @@ Class ArticleCache
             End If
 			'evio
 			dim ceeurl,chtml
-			if ctype = "0" then
+			If Ctype = "0" then
 		        chtml = "htm"
-	        else
+			Else
 		        chtml = "html"
-	        end if
+			End If
 			chtml="."&chtml
 			
 			ceeurl=""
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   if cpart = "" or cpart = empty or cpart = null or len(cpart) = 0 then
+			   If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
 			      ceeurl = ceeurl&"article/"&cname&chtml
-			   else
+			   Else
 			      ceeurl = ceeurl&"article/"&cpart&"/"&cname&chtml
-			   end if
-			else
+			   End If
+			Else
 			   ceeurl = ceeurl&"article.asp?id="&id
-			end if
+			End If
 			tempI = Replace(tempI, "<$log_ceeurl$>", ceeurl)
 			'evio
             tempI = Replace(tempI, "<"&"%Article In PJblog2%"&">", "")
@@ -818,7 +808,7 @@ Class ArticleCache
     End Function
 
     Public Function outHTML(loadType, outType, title)
-        Dim re, strMatchs, strMatch, i, j, id, aRight, hiddenC ,acpart, acname, actype, aisshow
+        Dim re, strMatchs, strMatch, i, j, id, aRight, hiddenC , aCpart, aCname, aCtype, aisshow
         Set cacheStream = Server.CreateObject("ADODB.Stream")
         Set re = New RegExp
         re.IgnoreCase = True
@@ -846,11 +836,11 @@ Do Until i >= pageSize
     If j<= UBound(aList) Then
         id = Split(aList(j), "|")(1)
         aRight = Split(aList(j), "|")(0)
-		acpart = Split(aList(j), "|")(2)
-		acname = Split(aList(j), "|")(3)
-		actype = Split(aList(j), "|")(4)
-		aisshow = Split(aList(j), "|")(5)
-        LoadIntro id, acpart, acname, actype, aisshow, aRight, outType
+        aCpart = Split(aList(j), "|")(2)
+        aCname = Split(aList(j), "|")(3)
+        aCtype = Split(aList(j), "|")(4)
+        aisshow = Split(aList(j), "|")(5)
+        LoadIntro id, aCpart, aCname, aCtype, aisshow, aRight, outType
         i = i + 1
     Else
         If outType = "list" Then response.Write "</table></div>"
@@ -885,11 +875,11 @@ Public Function loadCache
     End If
     
 
-    if not isEmpty(Application(CookieName&"_listCache")) then
+    If not isEmpty(Application(CookieName&"_listCache")) then
    		LoadList = Array(0,Application(CookieName&"_listCache"))
-    else
+    Else
    		LoadList = LoadFromFile("cache/listCache.asp")
-    end if
+    End If
     
     If LoadList(0) = 0 Then
         cacheList = LoadList(1)
@@ -906,17 +896,17 @@ Public Function SaveCache
     Set CateHDic = Server.CreateObject("Scripting.Dictionary")
     Set TagsDic = Server.CreateObject("Scripting.Dictionary")
 
-    SQL = "select T.log_ID,T.log_CateID,T.log_IsShow,C.cate_Secret,C.cate_part,T.log_cname,T.log_ctype FROM blog_Content As T,blog_Category As C where T.log_CateID=C.cate_ID and log_IsDraft=false ORDER BY log_IsTop ASC,log_PostTime DESC"
+    SQL = "select T.log_ID,T.log_CateID,T.log_IsShow,C.cate_Secret,C.cate_part,T.log_Cname,T.log_Ctype FROM blog_Content As T,blog_Category As C where T.log_CateID=C.cate_ID and log_IsDraft=false ORDER BY log_IsTop ASC,log_PostTime DESC"
     Set LogList = conn.Execute(SQL)
     If LogList.EOF Or LogList.BOF Then
     	dim temp1 
     	temp1 = "[""A"";0;()]" & Chr(13) & "[""G"";0;()]"
         SaveList = SaveToFile(temp1, "cache/listCache.asp")
-'       if memoryCache = true then
+'       If memoryCache = true then
 			Application.Lock
 			Application(CookieName&"_listCache") = temp1
 			Application.UnLock
- '       end if
+'       End If
         Set LogList = Nothing
         Exit Function
     End If
@@ -968,11 +958,11 @@ Public Function SaveCache
 
     SaveList = SaveToFile(outIndex, "cache/listCache.asp")
     
-   ' if memoryCache = true then
+'   If memoryCache = true then
 		Application.Lock
 		Application(CookieName&"_listCache") = outIndex
 		Application.UnLock
-'	end if 
+'   End If 
 	
     Set CateDic = Nothing
     Set CateHDic = Nothing
@@ -1022,17 +1012,17 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim getCate, getTags
 
     Set getCate = New Category
-    Set getTags = New tag
+    Set getTags = New Tag
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
     	
-	if UpdateListOnly then '只更新列表缓存
+	If UpdateListOnly then '只更新列表缓存
 	    PostArticleListCache LogID, log_View, getCate, getTags
 	
 	    Set log_View = Nothing
 	    Set getCate = Nothing
 	    Set getTags = Nothing
 	    exit Sub
-	end if 
+	End If 
 	
 
 
@@ -1052,32 +1042,32 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     If log_View("log_IsShow") and not getCate.cate_Secret Then
         Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "")
     Else
-     	if log_View("log_Readpw") <> "" then
+     	If log_View("log_Readpw") <> "" then
         	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
-     	else
+     	Else
         	Temp1 = Replace(Temp1, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
-        end if
+        End If
     End If
 
-    If Len(log_View("log_tag"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
+    If Len(log_View("log_Tag"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_Tag$>", getTags.filterHTML(log_View("log_Tag")))
     Else
-        Temp1 = Replace(Temp1, "<$log_tag$>", "")
+        Temp1 = Replace(Temp1, "<$log_Tag$>", "")
     End If
 
-    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
+    If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If
 
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
 
-    If log_View("log_edittype") = 1 Then
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    If log_View("log_EditType") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
     Else
         Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
     End If
 
     If Len(log_View("log_Modify"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_Modify$>", log_View("log_Modify")&"<br/>")
+        Temp1 = Replace(Temp1, "<$log_Modify$>", "<div class=""Modify"">"&log_View("log_Modify")&"</div>")
     Else
         Temp1 = Replace(Temp1, "<$log_Modify$>", "")
     End If
@@ -1098,22 +1088,22 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     BTemp = ""
     
     If Not preLogC.EOF Then
-    	if blog_postFile = 2 then
+    	If blog_postFile = 2 then
     		urlLink = Alias(preLogC("log_ID"))
-    	else 
+    	Else 
     		urlLink = "?id="&preLogC("log_ID")
-    	end if
+    	End If
         BTemp = BTemp & "<a href="""&urlLink&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
     Else
         BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
     End If
 
     If Not nextLogC.EOF Then
-    	if blog_postFile = 2 then
+    	If blog_postFile = 2 then
     		urlLink = Alias(nextLogC("log_ID"))
-    	else 
+    	Else 
     		urlLink = "?id="&nextLogC("log_ID")
-    	end if
+    	End If
         BTemp = BTemp & " | <a href="""&urlLink&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
     Else
         BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
@@ -1157,32 +1147,63 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Set log_View = conn.Execute(SQL)
     
     blog_currentCategoryID = log_View("log_CateID")
-    Dim blog_Cate, blog_CateArray, comDesc
+    Dim blog_Cate, blog_CateArray, comDesc, CanRead
     Dim getCate, getTags
 	
     Set getCate = New Category
-    Set getTags = New tag
+    Set getTags = New Tag
 
     getCate.load(Int(log_View("log_CateID"))) '获取分类信息
     
-	if UpdateListOnly then '只更新列表缓存
+	If UpdateListOnly then '只更新列表缓存
 		PostArticleListCache LogID, log_View, getCate, getTags
 		
 	    Set log_View = Nothing
 	    Set getCate = Nothing
 	    Set getTags = Nothing
 	    exit Sub
-	end if 
+	End If 
 
-	if log_View("log_IsShow") = false or getCate.cate_Secret then '如果是私密日志
-    	SaveArticle = SaveToFile("<head><title>显示私密日志</title><meta http-equiv=""Refresh"" content=""0;url="&baseUrl&"article.asp?id="&LogID&"""></head><body><h1>正在跳转到私密日志</h1>您可以在<a HREF="""&baseUrl&"article.asp?id="&LogID&""">此处</a>进行访问.</body>", Alias(LogID))
+	If log_View("log_IsShow") = false or getCate.cate_Secret then '如果是私密日志
+    	SaveArticle = SaveToFile("<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.0 Transitional//EN"">"& vbcrlf &_
+    	"<html><head><title>加载私密日志</title>"& vbcrlf &_
+    	"<style type=""text/css"">"& vbcrlf &_
+    	"#out{width:400px;height:20px;background:#EEE;border:1px #206CFF solid;}"& vbcrlf &_
+    	"#in{width:10px;height:20px;background:#206CFF;color:white;text-align:right;font-weight:bold;padding-right:5px;font-family:Arial;}"& vbcrlf &_
+    	"#body{position:absolute;left:expression(document.body.clientWidth/2-210);top:expression(document.body.clientHeight/2-100);border:1px dotted #206CFF;padding:20px;color:#206CFF;background:#EEFCFF;}"& vbcrlf &_
+    	"</style></head>"& vbcrlf &_
+    	"<body onLoad=""loadarticle();"" >"& vbcrlf &_
+    	"<div id=""body""><h3>请稍后...正在加载私密日志</h3>"& vbcrlf &_
+    	"<div id=""out""><div id=""in"" style=""width:10%"">10%</div></div>"& vbcrlf &_
+    	"<script type=""text/javascript"">"& vbcrlf &_
+    	"function loadarticle(){"& vbcrlf &_
+    	"	i=0;"& vbcrlf &_
+    	"	ba=setInterval(""begin()"",5);"& vbcrlf &_
+    	"}"& vbcrlf &_
+    	"function begin(){"& vbcrlf &_
+    	"	i+=1;"& vbcrlf &_
+    	"	if(i<=100)"& vbcrlf &_
+    	"	{"& vbcrlf &_
+    	"	document.getElementById(""in"").style.width=i+""%"";"& vbcrlf &_
+    	"	document.getElementById(""in"").innerHTML=i+""%"";}"& vbcrlf &_
+    	"	else"& vbcrlf &_
+    	"	{"& vbcrlf &_
+    	"	clearInterval(ba);"& vbcrlf &_
+    	"	document.getElementById(""out"").style.display=""none"";"& vbcrlf &_
+    	"	  document.write( ""\<SCRIPT>"" );"& vbcrlf &_
+    	"	  document.write( ""window.location.href='"&baseUrl&"article.asp?id="&LogID&"'"");"& vbcrlf &_
+    	"	  document.write( ""\</SCRIPT\>"" );"& vbcrlf &_
+    	"	}"& vbcrlf &_
+    	"}"& vbcrlf &_
+    	"</script>"& vbcrlf &_
+    	"</div></body></html>", Alias(LogID))
     	PostHalfStatic LogID, UpdateListOnly
 	    
 	    Set log_View = Nothing
 	    exit Sub
-	end if
+	End If
 	
-    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If	
+    If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If	
     
     Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
     Temp1 = Replace(Temp1, "<$base$>", baseUrl)
@@ -1196,7 +1217,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     
    '输出第一页评论
 
-    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow")))   
+    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow"), log_View("log_Readpw"), CanRead))   
     
     
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
@@ -1210,33 +1231,30 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
     Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-	
-	'evio
 	if len(log_View("log_KeyWords")) > 0 then
-		Temp1 = Replace(Temp1, "<$keywords$>", log_View("log_KeyWords"))
+    Temp1 = Replace(Temp1, "<$keywords$>", log_View("log_KeyWords"))
 	end if
 	if len(log_View("log_Description")) > 0 then
-		Temp1 = Replace(Temp1, "<$description$>", log_View("log_Description"))
+    Temp1 = Replace(Temp1, "<$description$>", log_View("log_Description"))
 	end if
-	'evio
 
-    If Len(log_View("log_tag"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_tag")))
+    If Len(log_View("log_Tag"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_Tag$>", getTags.filterHTML(log_View("log_Tag")))
     Else
-        Temp1 = Replace(Temp1, "<$log_tag$>", "")
+        Temp1 = Replace(Temp1, "<$log_Tag$>", "")
     End If
 
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
 
-    If log_View("log_edittype") = 1 Then
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    If log_View("log_EditType") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
     Else
         Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
     End If
 
     If Len(log_View("log_Modify"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_Modify$>", log_View("log_Modify")&"<br/>")
+        Temp1 = Replace(Temp1, "<$log_Modify$>", "<div class=""Modify"">"&log_View("log_Modify")&"</div>")
     Else
         Temp1 = Replace(Temp1, "<$log_Modify$>", "")
     End If
@@ -1303,9 +1321,9 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     'article.asp?id=<$LogID$>
     If blog_postFile = 2  and log_View("log_IsShow") and not getCate.cate_Secret Then
         Temp2 = Replace(Temp2, "<$pLink$>", Alias(LogID))
-    else
+    Else
 	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
-    end if 
+    End If 
 
     
     
@@ -1323,37 +1341,35 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 	    If log_View("log_Readpw") <> "" Then
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
 	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
-	        if log_View("Title_Hidden") = true then
-			Temp2 = Replace(Temp2, "<$Show_Title$>", log_View("log_Title"))
-			else
-	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
-			end if
 	    Else
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
 	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
-	        if log_View("Title_Hidden") = true then
-			Temp2 = Replace(Temp2, "<$Show_Title$>", log_View("log_Title"))
-			else
+	    End If
+
+	    If log_View("log_Pwtitle") = False Then
+	        Temp2 = Replace(Temp2, "<$Show_Title$>", HtmlEncode(log_View("log_Title")))
+	    ElseIf log_View("log_Readpw") <> "" Then
+	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[加密日志]")
+	    Else
 	        Temp2 = Replace(Temp2, "<$Show_Title$>", "[私密日志]")
-			end if
 	    End If
     End If
 
-    If Len(log_View("log_tag"))>0 Then
-        Temp2 = Replace(Temp2, "<$log_tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_tag"))&"</p>")
+    If Len(log_View("log_Tag"))>0 Then
+        Temp2 = Replace(Temp2, "<$log_Tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_Tag"))&"</p>")
     Else
-        Temp2 = Replace(Temp2, "<$log_tag$>", "")
+        Temp2 = Replace(Temp2, "<$log_Tag$>", "")
     End If
 
-    If log_View("log_comorder") Then comDesc = "Desc" Else comDesc = "Asc" End If
+    If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If
 
-    If log_View("log_edittype") = 1 Then
-        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    If log_View("log_EditType") = 1 Then
+        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
             If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
           	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href="""&Alias(LogID)&""" class=""more"">查看更多...</a></p>")
-			else
+			Else
           	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
   			End If
   			
@@ -1365,9 +1381,9 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
         If log_View("log_Intro")<>log_View("log_Content") Then
             If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
              	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href="""&Alias(LogID)&""" class=""more"">查看更多...</a></p>")
-         	else
+            Else
              	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
-         	end if           
+            End If
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")
         End If
@@ -1378,11 +1394,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 
     SaveArticle = SaveToFile(Temp2, "cache/" & LogID & ".asp")
     
-    if memoryCache = true then
+    If memoryCache = true then
 		Application.Lock
 		Application(CookieName&"_introCache_"&LogID) = Temp2
 		Application.UnLock
-	end if
+	End If
 End Sub
 
 '======================================================
