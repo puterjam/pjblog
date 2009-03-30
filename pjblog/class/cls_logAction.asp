@@ -8,7 +8,7 @@ Class logArticle
     Public categoryID, logTitle, logAuthor, logEditType
     Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, logPwtitle, logPwcomm
     Public logDisableComment, logIsTop, logFrom, logFromURL
-    Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logMeta, logKeyWords, logDescription
+    Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logMeta, logKeyWords, logDescription, TagMeta
     Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logCname, logCtype
     Private logUbbFlags, PubTime, sqlString
 
@@ -71,7 +71,7 @@ Class logArticle
             postLog = Array( -3, "您没有权限发表日志!", -1)
             Exit Function
         End If
-
+		TagMeta = logTags
         '-------------------处理Tags--------------------
         Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
         tempTags = Split(CheckStr(logTags), ",")
@@ -144,9 +144,9 @@ Class logArticle
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
 
 		'Meta特别属性
-		If logMeta = 0 Then
+		If logMeta <> 1 Then
 			logDescription = logIntro
-			logKeyWords = CheckStr(logTags)
+			logKeyWords = CheckStr(TagMeta)
 			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
 			Else
@@ -273,7 +273,7 @@ Class logArticle
         Conn.Execute("UPDATE blog_Category SET cate_count=cate_count-1 where cate_ID="&weblog("log_CateID"))
         Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID="&CheckStr(categoryID))
 
-
+		TagMeta = logTags
         '-------------------处理Tags--------------------
         Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
         tempTags = Split(CheckStr(logTags), ",")
@@ -366,9 +366,9 @@ Class logArticle
         End If
 
 		'Meta特别属性
-		If logMeta = 0 Then
+		If logMeta <> 1 Then
 			logDescription = logIntro
-			logKeyWords = CheckStr(logTags)
+			logKeyWords = CheckStr(TagMeta)
 			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
 			Else
@@ -1239,9 +1239,9 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 	end if
 
     If Len(log_View("log_Tag"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_Tag$>", getTags.filterHTML(log_View("log_Tag")))
+        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_Tag")))
     Else
-        Temp1 = Replace(Temp1, "<$log_Tag$>", "")
+        Temp1 = Replace(Temp1, "<$log_tag$>", "")
     End If
 
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
@@ -1356,9 +1356,9 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     End If
 
     If Len(log_View("log_Tag"))>0 Then
-        Temp2 = Replace(Temp2, "<$log_Tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_Tag"))&"</p>")
+        Temp2 = Replace(Temp2, "<$log_tag$>", "<p>Tags: "&getTags.filterHTML(log_View("log_Tag"))&"</p>")
     Else
-        Temp2 = Replace(Temp2, "<$log_Tag$>", "")
+        Temp2 = Replace(Temp2, "<$log_tag$>", "")
     End If
 
     If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If

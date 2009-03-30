@@ -277,7 +277,7 @@ End Sub
                           <label for="bpws3"><input id="bpws3" name="log_Pwtitle" type="checkbox" value="1" <%if lArticle.logPwtitle then response.write ("checked=""checked""")%> />加密标题</label>
                           <label for="bpws4"><input id="bpws4" name="log_Pwcomm" type="checkbox" value="1" <%if lArticle.logPwcomm then response.write ("checked=""checked""")%> />加密评论</label>
 	                  </div>
-	                  <div id="Div_Meta" class="tips_body" <%if not lArticle.logMeta Then response.write("style=""display:none;""")%>>
+	                  <div id="Div_Meta" class="tips_body" <%if not lArticle.logMeta = 1 Then response.write("style=""display:none;""")%>>
       	 				  - 自定义日志页面头的Meta信息<br/>
 		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
 						  <input name="log_KeyWords" type="text" id="log_KeyWords" size="80" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" value="<%=lArticle.logKeyWords%>" />

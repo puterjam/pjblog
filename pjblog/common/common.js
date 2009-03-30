@@ -788,3 +788,33 @@ function removeReplyMsg(id){
 		_r.parentNode.removeChild(_r);
 	}
 }
+function istrong(){
+		var n = ""
+		CheckPassword($("cpassword").value);
+		
+		function CheckPassword(val){    
+			var z = val;
+			var regexp = new RegExp("[0-9]");
+				if (regexp.test(val)){
+					n += ("1|$|");
+				}
+			regexp = new RegExp("[a-z]");
+				if (regexp.test(val)){
+					n += ("1|$|");
+				}
+			regexp = new RegExp("[A-Z]");
+				if (regexp.test(val)){
+					n += ("1|$|");
+				}
+			regexp = new RegExp("[^a-zA-Z0-9]");
+				if (regexp.test(val)){
+					n += ("1|$|");
+				}
+			if (val.length > 12){
+					n += ("1|$|");
+				}
+			n += "end"
+			var c = (n.split("|$|").length) - 1 ;
+			$("strong").src = "images/" + c + ".gif";
+		}  
+}
