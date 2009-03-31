@@ -115,17 +115,22 @@ function PostSave(){
    
 // 从表单中读取数据    
 function ReadCode(){ 
-	var mCateID, str, cname;
-    var title = document.forms["frm"].title.value;    
+	var mCateID, str, cname, ctype;
+	//title
+    var title = document.forms["frm"].title.value;  
+	//cname
     try {
 		cname = document.forms["frm"].cname.value;
 	} catch(e){
 		if (e.description != "" ){
 			cname = "";
 		} 
-	}  
+	} 
+	//content
     var Message = document.forms["frm"].Message.value;  
+	//tag
 	var Tags = document.forms["frm"].tags.value; 
+	//cate
 	try{
 		mCateID = $("select2").options[$("select2").options.selectedIndex].value;	
 	}catch(e){
@@ -137,6 +142,14 @@ function ReadCode(){
 			}
 		}
 	}
-    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
+	//ctype
+	try{
+		ctype = document.forms["frm"].ctype.options[document.forms["frm"].ctype.options.selectedIndex].value;	
+	}catch(e){
+		if (e.description != "" ){
+			ctype = "1";
+		}
+	}
+    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
     return str;    
 }
