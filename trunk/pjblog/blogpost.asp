@@ -82,8 +82,8 @@ If ChkPost() Then
     lArticle.logPubTime = request.Form("PubTime")
     lArticle.logPublishTimeType = request.Form("PubTimeType")
     If blog_postFile = 2 Then
-    lArticle.logCname = request.Form("Cname")
-    lArticle.logCtype = request.Form("Ctype")
+    lArticle.logCname = request.Form("cname")
+    lArticle.logCtype = request.Form("ctype")
     End If
     lArticle.logReadpw = pws
     lArticle.logPwtips = pwtips
@@ -205,7 +205,7 @@ End Sub
               <td align="left">
 			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&Cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
 			   <span> . </span>
-			  <select name="Ctype">
+			  <select name="ctype">
 			    <option value="0">htm</option> 
 				<option value="1">html</option>
 			  </select> <span id="CheckAlias"></span>

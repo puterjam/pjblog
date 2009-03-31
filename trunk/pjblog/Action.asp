@@ -9,7 +9,7 @@
 response.expires=-1 
 response.expiresabsolute=now()-1 
 response.cachecontrol="no-cache"
-Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags
+Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags, ctype
 '--------------Alias-----------------
 If request("action")="checkAlias" then
    dim strcname,checkcdb
@@ -72,10 +72,12 @@ elseif request("action")="PostSave" then
         Message = CheckStr(Request.QueryString("Message")) 
 		cCateID = CheckStr(Request.QueryString("cateid"))
 		e_tags =  CheckStr(Request.QueryString("tags"))
+		ctype = CheckStr(Request.QueryString("ctype"))
             
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
-        lArticle.logcname = cname    
+        lArticle.logcname = cname 
+		lArticle.logCtype = ctype   
         lArticle.logMessage = Message 
 		lArticle.categoryID = cCateID   
         lArticle.logAuthor = memName ' 关键是这个
@@ -95,13 +97,15 @@ elseif request("action")="UpdateSave" then
         title = CheckStr(Request.QueryString("title"))    
         cname = CheckStr(Request.QueryString("cname"))   
         Message = CheckStr(Request.QueryString("Message")) 
-		e_tags =  CheckStr(Request.QueryString("tags"))   
+		e_tags =  CheckStr(Request.QueryString("tags")) 
+		ctype = CheckStr(Request.QueryString("ctype")) 
             
         SaveId = Request.QueryString("postId")    
             
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
-        lArticle.logcname = cname    
+        lArticle.logcname = cname 
+		lArticle.logCtype = ctype   
         lArticle.logMessage = Message    
         lArticle.logAuthor = memName ' 关键是这个
 		lArticle.logTags = e_tags
