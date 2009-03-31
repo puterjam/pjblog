@@ -813,7 +813,7 @@ function istrong(){
 			if (val.length > 12){
 					n += ("1|$|");
 				}
-			n += "end"
+			n += "end";
 			var c = (n.split("|$|").length) - 1 ;
 			$("strong").src = "images/" + c + ".gif";
 		}  

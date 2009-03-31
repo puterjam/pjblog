@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
-var GetFile = ["Action.asp?action="]
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&"]
+var GetFile = ["Action.asp?action="];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&"];
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -72,13 +72,13 @@ function CheckPwd(){
 function OutTime(){    
     var loop = time;    
     $("AjaxTimeSave").innerHTML = loop;    
-    setTimeout('goTime('+loop+')',1000);    
+    setTimeout('goTime('+loop+');',1000);    
 }    
 function goTime(i){    
     i = i - 1;    
     if ( i != 0 ){    
         $("AjaxTimeSave").innerHTML = i;    
-        setTimeout("goTime("+i+")",1000);    
+        setTimeout("goTime("+i+");",1000);    
     }else{    
         PostSave();    
         setTimeout('goTime('+(time+1)+')',3000);    
