@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="]
-var GetAction = ["Hidden&", "checkname&"]
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&"]
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -66,4 +66,78 @@ function CheckPwd(){
 		$("PostBack_UserName").value = HoldValue.split("|$|")[0] + "|$|True";
 		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color='blue'>两次输入的密码相同！</font></u>"
 	}
+}
+
+// Ajax草稿保存    
+var time = 10;    
+function OutTime(){    
+    var loop = time;    
+    $("AjaxTimeSave").innerHTML = loop;    
+    setTimeout('goTime('+loop+')',1000);    
+}    
+function goTime(i){    
+    i = i - 1;    
+    if ( i != 0 ){    
+        $("AjaxTimeSave").innerHTML = i;    
+        setTimeout("goTime("+i+")",1000);    
+    }else{    
+        PostSave();    
+        setTimeout('goTime('+(time+1)+')',3000);    
+    }    
+}    
+   
+//发表时的保存    
+function PostSave(){    
+    var TempStr, left, right, ToWhere, postId;    
+    var ajax = new AJAXRequest;    
+    var str = ReadCode();    
+    var FirstPost = document.forms["frm"].FirstPost.value;    
+    if (FirstPost == 1){    
+        var zpt =document.forms["frm"].postbackId.value;    
+        ToWhere = GetAction[3] + "postId=" + escape(zpt) + "&";    
+    }else{    
+        ToWhere = GetAction[2];    
+    }   
+    ajax.get(    
+             GetFile[0] + ToWhere + str + "TimeStamp=" + new Date().getTime(),    
+             function(obj) {    
+                 TempStr = obj.responseText;    
+                 left = TempStr.split("|$|")[0];    
+                 right = TempStr.split("|$|")[1];    
+                 postId = TempStr.split("|$|")[2];    
+                 $("AjaxTimeSave").innerHTML = left;    
+                 if ( right == 1 ){    
+                     document.forms["frm"].FirstPost.value = 1;    
+                     document.forms["frm"].postbackId.value = postId;    
+                 }    
+             }    
+     );    
+}    
+   
+// 从表单中读取数据    
+function ReadCode(){ 
+	var mCateID, str, cname;
+    var title = document.forms["frm"].title.value;    
+    try {
+		cname = document.forms["frm"].cname.value;
+	} catch(e){
+		if (e.description != "" ){
+			cname = "";
+		} 
+	}  
+    var Message = document.forms["frm"].Message.value;  
+	var Tags = document.forms["frm"].tags.value; 
+	try{
+		mCateID = $("select2").options[$("select2").options.selectedIndex].value;	
+	}catch(e){
+		if (e.description != "" ){
+			try{
+				mCateID = $("log_CateID").value;
+			}catch(e){
+				alert(e.description);
+			}
+		}
+	}
+    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
+    return str;    
 }

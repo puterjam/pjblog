@@ -4,10 +4,12 @@
 <!--#include file="common/upfile.asp" -->
 <!--#include file="common/cache.asp" -->
 <!--#include file="common/checkUser.asp" -->
+<!--#include file="class/cls_logAction.asp" -->
 <%
 response.expires=-1 
 response.expiresabsolute=now()-1 
 response.cachecontrol="no-cache"
+Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags
 '--------------Alias-----------------
 If request("action")="checkAlias" then
    dim strcname,checkcdb
@@ -62,6 +64,56 @@ elseif request("action")="checkname" then
 		response.write"<font color=""#ff0000"">用户名已注册！</font>|$|False"
 	end if
 		set checkdb = nothing
+'---------------------------[Ajax草稿保存 -- 发表时保存]--------------------------    
+elseif request("action")="PostSave" then    
+    If ChkPost() Then   
+        title = CheckStr(Request.QueryString("title"))    
+        cname = CheckStr(Request.QueryString("cname"))   
+        Message = CheckStr(Request.QueryString("Message")) 
+		cCateID = CheckStr(Request.QueryString("cateid"))
+		e_tags =  CheckStr(Request.QueryString("tags"))
+            
+        Set lArticle = New logArticle    
+        lArticle.logTitle = title    
+        lArticle.logcname = cname    
+        lArticle.logMessage = Message 
+		lArticle.categoryID = cCateID   
+        lArticle.logAuthor = memName ' 关键是这个
+		lArticle.logTags = e_tags    
+        lArticle.logIsDraft = CBool(true)
+		lArticle.isajax = true    
+        postLog = lArticle.postLog    
+        Set lArticle = Nothing   
+            
+        response.write "草稿保存成功！|$|1|$|"&postLog(2)    
+    else    
+        response.write "非法提交数据"   
+    end if    
+'---------------------------[Ajax草稿保存 -- 编辑时保存]--------------------------    
+elseif request("action")="UpdateSave" then    
+    If ChkPost() Then   
+        title = CheckStr(Request.QueryString("title"))    
+        cname = CheckStr(Request.QueryString("cname"))   
+        Message = CheckStr(Request.QueryString("Message")) 
+		e_tags =  CheckStr(Request.QueryString("tags"))   
+            
+        SaveId = Request.QueryString("postId")    
+            
+        Set lArticle = New logArticle    
+        lArticle.logTitle = title    
+        lArticle.logcname = cname    
+        lArticle.logMessage = Message    
+        lArticle.logAuthor = memName ' 关键是这个
+		lArticle.logTags = e_tags
+		lArticle.logIsDraft = CBool(true)
+		lArticle.isajax = true    
+        postLog = lArticle.editLog(SaveId)    
+        Set lArticle = Nothing   
+            
+        response.write "草稿更新成功！|$|0|$|"&SaveId    
+    else    
+        response.write "非法提交数据"   
+    end if
 else
 response.write "非法操作!"
 End If

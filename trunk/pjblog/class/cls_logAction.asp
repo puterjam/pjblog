@@ -7,7 +7,7 @@ Class logArticle
     Private weblog
     Public categoryID, logTitle, logAuthor, logEditType
     Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, logPwtitle, logPwcomm
-    Public logDisableComment, logIsTop, logFrom, logFromURL
+    Public logDisableComment, logIsTop, logFrom, logFromURL, isajax
     Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logMeta, logKeyWords, logDescription, TagMeta
     Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logCname, logCtype
     Private logUbbFlags, PubTime, sqlString
@@ -52,6 +52,7 @@ Class logArticle
         logmeta = 0
         logKeyWords = ""
         logDescription = ""
+		isajax = false
     End Sub
 
     Private Sub Class_Terminate()
@@ -205,13 +206,16 @@ Class logArticle
         '-------------------输出静态日志档案--------------------
         Dim preLog, nextLog
         '输出日志到文件
-        PostArticle PostLogID, False
-
+		if isajax = false then
+        	PostArticle PostLogID, False
+		end if
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
-        If Not preLog.EOF Then PostArticle preLog("log_ID"), False
-        If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
+        if isajax = false then
+			If Not preLog.EOF Then PostArticle preLog("log_ID"), False
+        	If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
+		end if
 
         Call updateCache
 
@@ -444,14 +448,19 @@ Class logArticle
             Err.Clear
         End If
         
-        PostArticle logid, False
+        if isajax = false then
+			PostArticle id, False
+		end if
+		
         End If
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
-        If Not preLog.EOF Then PostArticle preLog("log_ID"), False
-        If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
-
+        if isajax = false then
+			If Not preLog.EOF Then PostArticle preLog("log_ID"), False
+        	If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
+		end if
+		
         Call updateCache
 
         Session(CookieName&"_LastDo") = "EditArticle"

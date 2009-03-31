@@ -159,6 +159,8 @@ Else
                 <input name="id" type="hidden" id="id" value="<%=logid%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
    				<input id="action" name="action" type="hidden" value="post"/>
+                <input name="FirstPost" type="hidden" value="1"/>   
+                <input name="postbackId" type="hidden" value="<%=logid%>"/>
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="<%=lArticle.logIsDraft%>"/>
    	<div id="MsgContent" style="width:700px">
          <div id="MsgHead">编辑日志</div>
@@ -335,7 +337,7 @@ Else
     UBBeditor("Message")
 End If
 
-%></td>
+%><p class="tips_body" id="AjaxTimeSave"><a href="javascript:void(0);" onClick="OutTime();">点击开启Ajax自动保存草稿功能</a></p></td>
              </tr>
             <tr>
               <td align="right" valign="top">&nbsp;</td>

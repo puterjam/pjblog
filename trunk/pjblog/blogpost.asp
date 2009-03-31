@@ -92,7 +92,13 @@ If ChkPost() Then
     lArticle.logMeta = request.Form("log_Meta")
     lArticle.logKeyWords = keyword
     lArticle.logDescription = description
-    postLog = lArticle.postLog
+    if request.form("FirstPost") = 1 then
+		lArticle.isajax = false
+		lArticle.logIsDraft = false
+		postLog = lArticle.editLog(request.Form("postbackId"))
+	else
+    	postLog = lArticle.postLog
+	end if
     Set lArticle = Nothing
 
 
@@ -181,6 +187,8 @@ End Sub
       		    <input name="log_CateID" type="hidden" id="log_CateID" value="<%=Request.Form("log_CateID")%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
   				<input name="action" type="hidden" value="post"/>
+                <input name="FirstPost" type="hidden" value="0"/>   
+                <input name="postbackId" type="hidden" value="0"/>
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="False"/>
   	<div id="MsgContent" style="width:700px">
         <div id="MsgHead">在 【<%=Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID="&Request.Form("log_CateID")&"")(0)%>】 发表日志</div>
@@ -195,7 +203,7 @@ End Sub
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="Cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&Cname='+document.forms['frm'].Cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&Cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
 			   <span> . </span>
 			  <select name="Ctype">
 			    <option value="0">htm</option> 
@@ -307,7 +315,7 @@ Else
     UBBeditor("Message")
 End If
 
-%></td>
+%><p class="tips_body" id="AjaxTimeSave"><a href="javascript:void(0);" onClick="OutTime();">点击开启Ajax自动保存草稿功能</a></p></td>
             </tr>
             <tr>
               <td align="right" valign="top">&nbsp;</td>
