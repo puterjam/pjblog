@@ -101,6 +101,9 @@ End If
 	<script type="text/javascript" src="common/ajax.js"></script>
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>
 	<script type="text/javascript" src="common/Action.js"></script>
+    <script language="javascript" type="text/javascript">
+		var time = <%=blog_SaveTime%>;
+	</script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 	<style type="text/css"> 
 		.ownerClassLog{display:none}

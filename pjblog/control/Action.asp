@@ -30,6 +30,7 @@ Sub doAction
             weblog("blog_BookPage") = 0 'CheckStr(Request.form("blogBookPage"))
             weblog("blog_commTimerout") = CheckStr(Request.Form("blog_commTimerout"))
             weblog("blog_commLength") = CheckStr(Request.Form("blog_commLength"))
+			weblog("blog_SaveTime") = CheckStr(Request.Form("blog_SaveTime"))
             If CheckObjInstalled("ADODB.Stream") Then
                 weblog("blog_postFile") = Request.Form("blog_postFile")
                 ' if CheckStr(Request.form("blog_postFile"))="1" then weblog("blog_postFile")=1 else weblog("blog_postFile")=0
