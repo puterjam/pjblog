@@ -789,7 +789,7 @@ function removeReplyMsg(id){
 	}
 }
 function istrong(){
-		var n = ""
+		var n = "";
 		CheckPassword($("cpassword").value);
 		
 		function CheckPassword(val){    
