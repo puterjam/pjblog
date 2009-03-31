@@ -188,6 +188,7 @@ Sub c_ceneral
 		 	  <tr><td width="180" align="right">日志预览分割类型</td><td><select name="blog_SplitType"><option value="0">按照字符数量分割</option><option  value="1" <%if blog_SplitType then response.write ("selected=""selected""")%>>按照行数分割</option></select> <span style="color:#999">只对重新编辑日志或新建日志有效</span></td></tr>
 			  <tr><td width="180" align="right">日志预览最大字符数</td><td><input name="blog_introChar" type="text" size="5" class="text" value="<%=blog_introChar%>"/> 个 <span style="color:#999">只对UBB编辑器有效</span></td></tr>
 			  <tr><td width="180" align="right">日志预览切割行数</td><td><input name="blog_introLine" type="text" size="5" class="text" value="<%=blog_introLine%>"/> 行</td></tr>
+              <tr><td width="180" align="right">草稿自动保存时间间隔</td><td><input name="blog_SaveTime" type="text" size="5" class="text" value="<%=blog_SaveTime%>"/> 秒</td></tr>
 		      </table>
 		    </div>
 			</fieldset>	

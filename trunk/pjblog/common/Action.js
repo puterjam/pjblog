@@ -68,8 +68,7 @@ function CheckPwd(){
 	}
 }
 
-// Ajax草稿保存    
-var time = 10;    
+// Ajax草稿保存  
 function OutTime(){    
     var loop = time;    
     $("AjaxTimeSave").innerHTML = loop;    
