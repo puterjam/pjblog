@@ -215,7 +215,7 @@ End Sub
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
               <td align="left">
-                <select name="log_weather">
+                <select name="log_weather" id="logweather">
                   <option value="sunny" selected="selected">晴天 </option>
                   <option value="cloudy">多云 </option>
                   <option value="flurries">疾风 </option>
@@ -225,7 +225,7 @@ End Sub
                   <option value="showers">阵雨 </option>
                   <option value="snow">下雪 </option>
                 </select>
-                <select name="log_Level">
+                <select name="log_Level" id="logLevel">
                   <option value="level1">★</option>
                   <option value="level2">★★</option>
                   <option value="level3" selected="selected">★★★</option>

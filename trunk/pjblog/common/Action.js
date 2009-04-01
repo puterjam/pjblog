@@ -25,7 +25,7 @@ function Hidden(i){
 //关于注册页面的用户名判断
 function CheckName(){
 	var TempStr, StrHtml, Bool;
-	$("CheckName").innerHTML = "<font color='#ccc'>检测用户名...</font>"
+	$("CheckName").innerHTML = "<font color='#ccc'>检测用户名...</font>";
 	var UserName = document.forms["frm"].username.value;
 	var HoldValue = $("PostBack_UserName").value;
 	var ajax = new AJAXRequest;
@@ -49,7 +49,7 @@ function IsPost(){
 	if ($("PostBack_UserName").value == "True|$|True"){
 		document.forms["frm"].submit();
 	}else{
-		alert("你填写的资料不正确，或者用户名已被注册！")
+		alert("你填写的资料不正确，或者用户名已被注册！");
 	}
 }
 
@@ -115,9 +115,11 @@ function PostSave(){
    
 // 从表单中读取数据    
 function ReadCode(){ 
-	var mCateID, str, cname, ctype;
+	var mCateID, str, cname, ctype, logweather, logLevel;
+	
 	//title
     var title = document.forms["frm"].title.value;  
+	
 	//cname
     try {
 		cname = document.forms["frm"].cname.value;
@@ -126,10 +128,13 @@ function ReadCode(){
 			cname = "";
 		} 
 	} 
+	
 	//content
-    var Message = document.forms["frm"].Message.value;  
+    var Message = document.forms["frm"].Message.value; 
+	
 	//tag
 	var Tags = document.forms["frm"].tags.value; 
+	
 	//cate
 	try{
 		mCateID = $("select2").options[$("select2").options.selectedIndex].value;	
@@ -142,6 +147,7 @@ function ReadCode(){
 			}
 		}
 	}
+	
 	//ctype
 	try{
 		ctype = document.forms["frm"].ctype.options[document.forms["frm"].ctype.options.selectedIndex].value;	
@@ -150,6 +156,26 @@ function ReadCode(){
 			ctype = "1";
 		}
 	}
-    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
+	
+	//logweather
+	logweather = select_model("logweather", "sunny");
+	
+	//logLevel
+	logLevel = select_model("logLevel", "level3");
+	
+    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&logweather=" + escape(logweather) + "&logLevel=" + escape(logLevel) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
     return str;    
+}
+
+//select 选择器
+function select_model(A, B){
+	var c;
+	try{
+		c = $(A).options[$(A).options.selectedIndex].value;
+	}catch(e){
+		if (e.description != ""){
+			c = B;
+		}
+	}
+	return c;
 }
