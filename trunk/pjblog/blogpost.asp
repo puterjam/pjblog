@@ -366,7 +366,7 @@ End If
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold">引用通告:</span></td>
-              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" /><br>请输入网络日志项的引用通告URL。可以用逗号分隔多个引用通告地址.          </td>
+              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" id="logQuote"/><br>请输入网络日志项的引用通告URL。可以用逗号分隔多个引用通告地址.          </td>
             </tr>
             <tr>
               <td colspan="2" align="center">

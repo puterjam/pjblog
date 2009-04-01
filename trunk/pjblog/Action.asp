@@ -9,7 +9,8 @@
 response.expires=-1 
 response.expiresabsolute=now()-1 
 response.cachecontrol="no-cache"
-Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags, ctype, logWeather, logLevel
+Dim title, cname, Message, lArticle, postLog, SaveId
+Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
 '--------------Alias-----------------
 If request("action")="checkAlias" then
    dim strcname,checkcdb
@@ -75,6 +76,18 @@ elseif request("action")="PostSave" then
 		ctype = CheckStr(Request.QueryString("ctype"))
 		logWeather = CheckStr(Request.QueryString("logweather"))
 		logLevel = CheckStr(Request.QueryString("logLevel"))
+		logcomorder = CheckStr(Request.QueryString("logcomorder"))
+		logDisComment = Request.QueryString("logDisComment")
+		logIsTop = Request.QueryString("logIsTop")
+		'logIsHidden = Request.QueryString("logIsHidden")
+		logMeta = Request.QueryString("logMeta")
+		logFrom = Request.QueryString("logFrom")
+		logFromURL = Request.QueryString("logFromURL")
+		logdisImg = Request.QueryString("logdisImg")
+		logDisSM = Request.QueryString("logDisSM")
+		logDisURL = Request.QueryString("logDisURL")
+		logDisKey = Request.QueryString("logDisKey")
+		logQuote = Request.QueryString("logQuote")
             
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
@@ -87,7 +100,18 @@ elseif request("action")="PostSave" then
         lArticle.logIsDraft = CBool(true)
 		lArticle.isajax = true
 		lArticle.logWeather = logWeather 
-		lArticle.logLevel = logLevel  
+		lArticle.logLevel = logLevel
+		lArticle.logCommentOrder = logcomorder  
+		lArticle.logDisableComment = logDisComment
+		lArticle.logIsTop = logIsTop
+		lArticle.logMeta = logMeta
+		lArticle.logFrom = logFrom
+    	lArticle.logFromURL = logFromURL
+		lArticle.logDisableImage = logdisImg
+		lArticle.logDisableSmile = logDisSM
+		lArticle.logDisableURL = logDisURL
+		lArticle.logDisableKeyWord = logDisKey
+		lArticle.logTrackback = logQuote
         postLog = lArticle.postLog    
         Set lArticle = Nothing   
             
@@ -105,6 +129,18 @@ elseif request("action")="UpdateSave" then
 		ctype = CheckStr(Request.QueryString("ctype"))
 		logWeather = CheckStr(Request.QueryString("logweather")) 
 		logLevel = CheckStr(Request.QueryString("logLevel"))
+		logcomorder = CheckStr(Request.QueryString("logcomorder"))
+		logDisComment = Request.QueryString("logDisComment")
+		logIsTop = Request.QueryString("logIsTop")
+		'logIsHidden = Request.QueryString("logIsHidden")
+		logMeta = Request.QueryString("logMeta")
+		logFrom = Request.QueryString("logFrom")
+		logFromURL = Request.QueryString("logFromURL")
+		logdisImg = Request.QueryString("logdisImg")
+		logDisSM = Request.QueryString("logDisSM")
+		logDisURL = Request.QueryString("logDisURL")
+		logDisKey = Request.QueryString("logDisKey")
+		logQuote = Request.QueryString("logQuote")
             
         SaveId = Request.QueryString("postId")    
             
@@ -119,6 +155,17 @@ elseif request("action")="UpdateSave" then
 		lArticle.isajax = true   
 		lArticle.logWeather = logWeather 
 		lArticle.logLevel = logLevel
+		lArticle.logCommentOrder = logcomorder
+		lArticle.logDisableComment = logDisComment
+		lArticle.logIsTop = logIsTop
+		lArticle.logMeta = logMeta
+		lArticle.logFrom = logFrom
+    	lArticle.logFromURL = logFromURL
+		lArticle.logDisableImage = logdisImg
+		lArticle.logDisableSmile = logDisSM
+		lArticle.logDisableURL = logDisURL
+		lArticle.logDisableKeyWord = logDisKey
+		lArticle.logTrackback = logQuote
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             
