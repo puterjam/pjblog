@@ -810,34 +810,21 @@ End Function
 
 Function DelQuote(strContent)
     If IsNull(strContent) Then Exit Function
-    Dim re
+    Dim re, iarray, i
     Set re = New RegExp
     re.IgnoreCase = True
     re.Global = True
-    re.Pattern = "\[quote\](.[^\]]*?)\[\/quote\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[quote=(.[^\]]*)\](.[^\]]*?)\[\/quote\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[reply=(.[^\]]*)\](.[^\]]*?)\[\/reply\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[b\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/b\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[i\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/i\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[u\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/u\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[s\]"
-    strContent = re.Replace(strContent, "")
-    re.Pattern = "\[\/s\]"
-    strContent = re.Replace(strContent, "")
+	iarray = Array("quote","reply", "img", "swf|wma|wmv|rm|ra|qt", "mid", "url", "ed2k", "email", "align", "color", "size", "font", "b", "i", "u", "s", "sup", "sub", "fly", "down", "mDown", "cc", "code", "hidden", "html")
+	for i = 0 to UBound(iarray)
+		re.Pattern = "\["&iarray(i)&"\]"
+    	strContent = re.Replace(strContent, "")
+		re.Pattern = "\["&iarray(i)&"=(.[^\]]*)\]"
+    	strContent = re.Replace(strContent, "")
+    	re.Pattern = "\[\/"&iarray(i)&"\]"
+    	strContent = re.Replace(strContent, "")
+		re.Pattern = "\[\/"&iarray(i)&"=(.[^\]]*)\]"
+    	strContent = re.Replace(strContent, "")
+	next
             Dim log_Smilies, log_SmiliesContent
             For Each log_Smilies IN Arr_Smilies
                 log_SmiliesContent = Split(log_Smilies, "|")
