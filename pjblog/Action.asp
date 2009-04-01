@@ -9,7 +9,7 @@
 response.expires=-1 
 response.expiresabsolute=now()-1 
 response.cachecontrol="no-cache"
-Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags, ctype
+Dim title, cname, Message, lArticle, postLog, SaveId, cCateID, e_tags, ctype, logWeather, logLevel
 '--------------Alias-----------------
 If request("action")="checkAlias" then
    dim strcname,checkcdb
@@ -73,6 +73,8 @@ elseif request("action")="PostSave" then
 		cCateID = CheckStr(Request.QueryString("cateid"))
 		e_tags =  CheckStr(Request.QueryString("tags"))
 		ctype = CheckStr(Request.QueryString("ctype"))
+		logWeather = CheckStr(Request.QueryString("logweather"))
+		logLevel = CheckStr(Request.QueryString("logLevel"))
             
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
@@ -83,7 +85,9 @@ elseif request("action")="PostSave" then
         lArticle.logAuthor = memName ' 关键是这个
 		lArticle.logTags = e_tags    
         lArticle.logIsDraft = CBool(true)
-		lArticle.isajax = true    
+		lArticle.isajax = true
+		lArticle.logWeather = logWeather 
+		lArticle.logLevel = logLevel  
         postLog = lArticle.postLog    
         Set lArticle = Nothing   
             
@@ -98,7 +102,9 @@ elseif request("action")="UpdateSave" then
         cname = CheckStr(Request.QueryString("cname"))   
         Message = CheckStr(Request.QueryString("Message")) 
 		e_tags =  CheckStr(Request.QueryString("tags")) 
-		ctype = CheckStr(Request.QueryString("ctype")) 
+		ctype = CheckStr(Request.QueryString("ctype"))
+		logWeather = CheckStr(Request.QueryString("logweather")) 
+		logLevel = CheckStr(Request.QueryString("logLevel"))
             
         SaveId = Request.QueryString("postId")    
             
@@ -110,7 +116,9 @@ elseif request("action")="UpdateSave" then
         lArticle.logAuthor = memName ' 关键是这个
 		lArticle.logTags = e_tags
 		lArticle.logIsDraft = CBool(true)
-		lArticle.isajax = true    
+		lArticle.isajax = true   
+		lArticle.logWeather = logWeather 
+		lArticle.logLevel = logLevel
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             

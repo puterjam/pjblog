@@ -229,7 +229,7 @@ End Sub
              <tr>
                <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
                <td align="left">
-                 <div><select name="log_weather">
+                 <div><select name="log_weather" id="logweather">
                    <option value="sunny" <%if lArticle.logWeather="sunny" Then response.write ("selected=""selected""")%>>晴天 </option>
                    <option value="cloudy" <%if lArticle.logWeather="cloudy" Then response.write ("selected=""selected""")%>>多云 </option>
                    <option value="flurries" <%if lArticle.logWeather="flurries" Then response.write ("selected=""selected""")%>>疾风 </option>
@@ -239,7 +239,7 @@ End Sub
                    <option value="showers" <%if lArticle.logWeather="showers" Then response.write ("selected=""selected""")%>>阵雨 </option>
                    <option value="snow" <%if lArticle.logWeather="snow" Then response.write ("selected=""selected""")%>>下雪 </option>
                  </select>
-                 <select name="log_Level">
+                 <select name="log_Level" id="logLevel">
                    <option value="level1" <%if lArticle.logLevel="level1" Then response.write ("selected=""selected""")%>>★</option>
                    <option value="level2" <%if lArticle.logLevel="level2" Then response.write ("selected=""selected""")%>>★★</option>
                    <option value="level3" <%if lArticle.logLevel="level3" Then response.write ("selected=""selected""")%>>★★★</option>
