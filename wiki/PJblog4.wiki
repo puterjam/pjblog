@@ -1,0 +1,12 @@
+#labels Phase-Implementation,Phase-Design,Featured
+关于PJ4..
+
+我说3点:
+
+1. 首先,要解决的是侧边使用插件的问题,支持静态化.
+
+2. 其次,建立在线安装模板插件的平台.
+
+3. 最后,也是最艰巨的任务..把PJ的DIV构架模板化.
+
+这是PJ4的目标.大家努力
