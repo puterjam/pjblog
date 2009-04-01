@@ -64,7 +64,7 @@ function CheckPwd(){
 		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color=red>两次输入的密码不同</font></u>";
 	}else{
 		$("PostBack_UserName").value = HoldValue.split("|$|")[0] + "|$|True";
-		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color='blue'>两次输入的密码相同！</font></u>"
+		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color='blue'>两次输入的密码相同！</font></u>";
 	}
 }
 
@@ -163,7 +163,39 @@ function ReadCode(){
 	//logLevel
 	logLevel = select_model("logLevel", "level3");
 	
-    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&logweather=" + escape(logweather) + "&logLevel=" + escape(logLevel) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
+	//评论倒序
+	logcomorder = checkbox_model("label");
+	
+	//禁止评论
+	logDisComment = checkbox_model("label2");
+	
+	//日志置顶
+	logIsTop = checkbox_model("label3");
+	
+	//隐私和META
+	//logIsHidden = checkbox_model("Secret");
+	logMeta = checkbox_model("Meta");
+	
+	//来源网址
+	logFrom = $("log_From").value;
+	logFromURL = $("log_FromURL").value;
+	
+	//禁止显示图片
+	logdisImg = checkbox_model("label4");
+	
+	//禁止表情转换
+	logDisSM = checkbox_model("label5");
+	
+	//禁止自动转换链接
+	logDisURL = checkbox_model("label6");
+	
+	//禁止自动转换关键字
+	logDisKey = checkbox_model("label7");
+	
+	//引用通告
+	logQuote = $("logQuote").value;
+	
+    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&logweather=" + escape(logweather) + "&logLevel=" + escape(logLevel) + "&logcomorder=" + escape(logcomorder) + "&logDisComment=" + escape(logDisComment) + "&logIsTop=" + escape(logIsTop) + "&logMeta=" + escape(logMeta) + "&logFrom=" + escape(logFrom) + "&logFromURL=" + escape(logFromURL) + "&logdisImg=" + escape(logdisImg) + "&logDisSM=" + escape(logDisSM) + "&logDisURL=" + escape(logDisURL) + "&logDisKey=" + escape(logDisKey) + "&logQuote=" + escape(logQuote) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
     return str;    
 }
 
@@ -178,4 +210,15 @@ function select_model(A, B){
 		}
 	}
 	return c;
+}
+
+// checkbox 选择器
+function checkbox_model(A){
+	var temp;
+	if ($(A).checked){
+		temp = $(A).value;
+	}else{
+		temp = "0";
+	}
+	return temp;
 }
