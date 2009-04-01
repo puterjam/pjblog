@@ -185,7 +185,7 @@ Class logArticle
         weblog("log_Pwcomm") = logPwcomm
         weblog("log_Meta") = logMeta
         weblog("log_KeyWords") = logKeyWords
-        weblog("log_Description") = logDescription
+        weblog("log_Description") = DelQuote(logDescription)
         
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -408,7 +408,7 @@ Class logArticle
         weblog("log_Pwcomm") = logPwcomm
         weblog("log_Meta") = logMeta
         weblog("log_KeyWords") = logKeyWords
-        weblog("log_Description") = logDescription
+        weblog("log_Description") = DelQuote(logDescription)
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
