@@ -4,6 +4,17 @@
 '    更新时间: 2006-6-2
 '===============================================================
 '*************************************
+'防XSS注入函数 更新于2009-04-21 by evio
+'*************************************
+Function Checkxss(byVal ChkStr)
+	Dim Str : Str = ChkStr
+	Str = CheckStr(Str)
+	If Instr(Str, "expression") > 0 Then
+		Str = Replace(Str, "expression", "e&#173;xpression", 1, -1, 0) '防止xss注入
+	End If
+	Checkxss = Str
+End Function
+'*************************************
 '获得基址
 '*************************************
 Function GetbaseUrl()

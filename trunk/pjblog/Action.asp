@@ -20,7 +20,7 @@ Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, lo
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
    dim strcname, checkcdb
-   strcname = CheckStr(request.QueryString("cname"))  '防攻击 http://www.pjhome.net + +
+   strcname = Checkxss(request.QueryString("cname"))  '防攻击 http://www.pjhome.net + +
    set checkcdb = conn.execute("select * from [blog_Content] where [log_cname]="""&strcname&"""")
        if checkcdb.bof or checkcdb.eof then
           response.write "<img src=""images/check_right.gif"">"
@@ -31,8 +31,8 @@ If request.QueryString("action") = "checkAlias" then
 '------------- [mdown] ---------------
 elseif request.QueryString("action") = "type1" then
     dim mainurl, main, mainstr
-        mainurl = request.QueryString("mainurl")
-        main = trim(checkstr(request.QueryString("main")))
+        mainurl = Checkxss(request.QueryString("mainurl"))
+        main = trim(Checkxss(request.QueryString("main")))
         response.clear()
         mainstr = ""
     If Len(memName)>0 Then
@@ -44,7 +44,7 @@ elseif request.QueryString("action") = "type1" then
 
 elseif request.QueryString("action") = "type2" then
     dim main2, mstr
-        main2 = CheckStr(request.QueryString("main"))
+        main2 = Checkxss(request.QueryString("main"))
         response.clear()
         mstr = ""
     If Len(memName) > 0 Then
