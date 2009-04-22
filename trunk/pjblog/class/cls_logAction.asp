@@ -425,9 +425,9 @@ Class logArticle
 		
 		'之前如果调用过request.BinaryRead后，不能直接调用request.form了
 		'live write 就挂在这里
-		oldcname=request.form("oldcname")
-		oldcate=request.form("oldcate")
-		oldctype=request.form("oldtype")
+		oldcname = Checkxss(request.form("oldcname"))
+		oldcate = Checkxss(request.form("oldcate"))
+		oldctype = Checkxss(request.form("oldtype"))
 		D = conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
 		A = "article/"&D
 		If D = "" or len(D) = 0 then
