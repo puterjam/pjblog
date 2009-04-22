@@ -5,14 +5,57 @@
 '===============================================================
 '*************************************
 '防XSS注入函数 更新于2009-04-21 by evio
+'与checkstr()相比, checkxss更加安全
 '*************************************
 Function Checkxss(byVal ChkStr)
-	Dim Str : Str = ChkStr
-	Str = CheckStr(Str)
+    Dim Str
+    Str = ChkStr
+    If IsNull(Str) Then
+        CheckStr = ""
+        Exit Function
+    End If
+    Str = Replace(Str, "&", "&amp;")
+    Str = Replace(Str, "'", "&acute;")
+    Str = Replace(Str, """", "&quot;")
+	Str = Replace(Str, "<", "&lt;")
+	Str = Replace(Str, ">", "&gt;")
+    Dim re
+    Set re = New RegExp
+    re.IgnoreCase = True
+    re.Global = True
+    re.Pattern = "(w)(here)"
+    Str = re.Replace(Str, "$1h&#101;re")
+    re.Pattern = "(s)(elect)"
+    Str = re.Replace(Str, "$1el&#101;ct")
+    re.Pattern = "(i)(nsert)"
+    Str = re.Replace(Str, "$1ns&#101;rt")
+    re.Pattern = "(c)(reate)"
+    Str = re.Replace(Str, "$1r&#101;ate")
+    re.Pattern = "(d)(rop)"
+    Str = re.Replace(Str, "$1ro&#112;")
+    re.Pattern = "(a)(lter)"
+    Str = re.Replace(Str, "$1lt&#101;r")
+    re.Pattern = "(d)(elete)"
+    Str = re.Replace(Str, "$1el&#101;te")
+    re.Pattern = "(u)(pdate)"
+    Str = re.Replace(Str, "$1p&#100;ate")
+    re.Pattern = "(\s)(or)"
+    Str = re.Replace(Str, "$1o&#114;")
+	re.Pattern = "(\n)"
+    Str = re.Replace(Str, "$1o&#114;")
+	'----------------------------------
+	re.Pattern = "(java)(script)"
+    Str = re.Replace(Str, "$1scri&#112;t")
+	re.Pattern = "(j)(script)"
+    Str = re.Replace(Str, "$1scri&#112;t")
+	re.Pattern = "(vb)(script)"
+    Str = re.Replace(Str, "$1scri&#112;t")
+	'----------------------------------
 	If Instr(Str, "expression") > 0 Then
 		Str = Replace(Str, "expression", "e&#173;xpression", 1, -1, 0) '防止xss注入
 	End If
-	Checkxss = Str
+    Set re = Nothing
+    Checkxss = Str
 End Function
 '*************************************
 '获得基址
