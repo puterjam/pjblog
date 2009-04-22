@@ -12,47 +12,50 @@ response.cachecontrol="no-cache"
 '*************************************************
 ' Ajax 类 ASP 代码 // AjaxRequest.js 框架支持
 ' evio edit 
-' 2009-04-21 防XSS注入攻击
-' 受影响BLog http://www.pjhome.net
 '*************************************************
 Dim title, cname, Message, lArticle, postLog, SaveId
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
-   dim strcname, checkcdb
-   strcname = Checkxss(request.QueryString("cname"))  '防攻击 http://www.pjhome.net + +
-   set checkcdb = conn.execute("select * from [blog_Content] where [log_cname]="""&strcname&"""")
-       if checkcdb.bof or checkcdb.eof then
-          response.write "<img src=""images/check_right.gif"">"
-       else
-          response.write "<img src=""images/check_error.gif"">"
-       end if
-    set checkcdb=nothing
+	If ChkPost() Then
+   		dim strcname, checkcdb
+   		strcname = Checkxss(request.QueryString("cname"))
+   		set checkcdb = conn.execute("select * from [blog_Content] where [log_cname]="""&strcname&"""")
+       		if checkcdb.bof or checkcdb.eof then
+          		response.write "<img src=""images/check_right.gif"">"
+       		else
+          		response.write "<img src=""images/check_error.gif"">"
+       		end if
+    	set checkcdb=nothing
+	End If
 '------------- [mdown] ---------------
 elseif request.QueryString("action") = "type1" then
-    dim mainurl, main, mainstr
-        mainurl = Checkxss(request.QueryString("mainurl"))
-        main = trim(Checkxss(request.QueryString("main")))
-        response.clear()
-        mainstr = ""
-    If Len(memName)>0 Then
-        mainstr = mainstr & "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
-    Else
-        mainstr = mainstr & "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
-    End If
-    response.write mainstr
-
+    If ChkPost() Then
+		dim mainurl, main, mainstr
+        	mainurl = Checkxss(request.QueryString("mainurl"))
+        	main = trim(Checkxss(request.QueryString("main")))
+        	response.clear()
+        	mainstr = ""
+    	If Len(memName)>0 Then
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
+    	Else
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
+    	End If
+    	response.write mainstr
+	End If
 elseif request.QueryString("action") = "type2" then
-    dim main2, mstr
-        main2 = Checkxss(request.QueryString("main"))
-        response.clear()
-        mstr = ""
-    If Len(memName) > 0 Then
-       mstr=mstr&"<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">下载此文件</a>"
-    Else
-       mstr=mstr&"<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
-    End If
-    response.write mstr
+    If ChkPost() Then
+		dim main2, mstr
+        	main2 = Checkxss(request.QueryString("main"))
+        	response.clear()
+        	mstr = ""
+    	If Len(memName) > 0 Then
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">下载此文件</a>"
+    	Else
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
+    	End If
+    	response.write mstr
+	End If
 '--------------- [hidden] -----------------
 elseif request.QueryString("action") = "Hidden" then
     If Len(memName) > 0 Then
@@ -62,15 +65,17 @@ elseif request.QueryString("action") = "Hidden" then
 	End If
 '--------------- [用户名检测] -----------------
 elseif request.QueryString("action") = "checkname" then
-	dim strname, checkdb
-		strname = CheckStr(request.QueryString("usename"))
-		set checkdb = conn.execute("select * from blog_Member where mem_Name='"&strname&"'")
-	if checkdb.bof or checkdb.eof then
-		response.write"<font color=""#0000ff"">用户名未注册！</font>|$|True"
-	else
-		response.write"<font color=""#ff0000"">用户名已注册！</font>|$|False"
-	end if
-		set checkdb = nothing
+	If ChkPost() Then
+		dim strname, checkdb
+			strname = Checkxss(request.QueryString("usename"))
+			set checkdb = conn.execute("select * from blog_Member where mem_Name='"&strname&"'")
+				if checkdb.bof or checkdb.eof then
+					response.write"<font color=""#0000ff"">用户名未注册！</font>|$|True"
+				else
+					response.write"<font color=""#ff0000"">用户名已注册！</font>|$|False"
+				end if
+			set checkdb = nothing
+	End If
 '--------------------------- [Ajax草稿保存 -- 发表时保存] --------------------------    
 elseif request.QueryString("action") = "PostSave" then    
     If ChkPost() Then   
