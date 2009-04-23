@@ -11,7 +11,7 @@ Response.AddHeader"cache-control","no-store"
 Session.CodePage=65001
 Dim id
 id=request("id")
-blog_postFile = request("blog_postFile")
+blog_postFile = Cint(Checkxss(request.QueryString("blog_postFile")))
 if id<>"" and  isnumeric(id) then   
   Dim wbc_tag,Rs,i,RsT,OutPut,i2,i3,i4,str,ifMore,i2_2,total_rela,page,pagestr,thispage
   Set Rs=conn.execute("Select * from blog_Content where log_ID="&id&"")
