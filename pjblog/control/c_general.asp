@@ -10,7 +10,7 @@ Sub c_ceneral
 		  </tr>
 		  <tr>
 		    <td class="CPanel">
-		    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
+		    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=UpLoadSet">附件基本设置</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
 		<%
 		If Request.QueryString("Smenu") = "visitors" Then
 		%>
@@ -106,6 +106,191 @@ Sub c_ceneral
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/>
 		   </div>
 		   <div class="SubButton">
+		      <input type="submit" name="Submit" value="保存配置" class="button"/>
+		     </div>
+			 </form>
+		<%ElseIf Request.QueryString("Smenu") = "UpLoadSet" Then%>
+			 	<form action="ConContent.asp" method="post">
+			<input type="hidden" name="action" value="UpLoadSet"/>
+			   <%getMsg
+			   Dim UpLoadSet : UpLoadSet = Split(blog_UpLoadSet,"|")%>
+		<fieldset>
+		    <legend> 附件基本设置</legend>
+		    <div align="left">
+		      <table border="0" cellpadding="2" cellspacing="1">
+		        <tr>
+		          <td><div align="right"> 防盗链 </div></td>
+		          <td align="left"><input name="Antimdown" type="checkbox" value="1" <%If UpLoadSet(0) = 1 then response.write ("checked=""checked""")%>/></td>
+		        </tr>
+		        <tr>
+		          <td width="180"><div align="right"> 上传文件命名类型 </div></td>
+		          <td>
+				    <select name="FileNameMid">
+				      <option value="0" <%If UpLoadSet(1) = 0 then response.write ("selected=""selected""")%>>上传日期时间</option>
+				      <option value="1" <%If UpLoadSet(1) = 1 then response.write ("selected=""selected""")%>>文件原名</option>
+				      <option value="2" <%If UpLoadSet(1) = 2 then response.write ("selected=""selected""")%>>上传日期时间_文件原名</option>
+				      <option value="3" <%If UpLoadSet(1) = 3 then response.write ("selected=""selected""")%>>上传日期时间带-</option>
+				      <option value="4" <%If UpLoadSet(1) = 4 then response.write ("selected=""selected""")%>>PJBlog默认</option>
+				    </select>
+				  </td>
+		        </tr>
+		        <tr>
+		          <td width="180"><div align="right"> 上传文件命名方式 </div></td>
+		          <td>
+				    <select name="FileNameType">
+				      <option value="0" <%If UpLoadSet(2) = 0 then response.write ("selected=""selected""")%>>类型</option>
+				      <option value="1" <%If UpLoadSet(2) = 1 then response.write ("selected=""selected""")%>>前缀_类型</option>
+				      <option value="2" <%If UpLoadSet(2) = 2 then response.write ("selected=""selected""")%>>类型_后缀</option>
+				      <option value="3" <%If UpLoadSet(2) = 3 then response.write ("selected=""selected""")%>>前缀_类型_后缀</option>
+				    </select>
+				   <span style="color:#999">其中“类型”指上面设置的“上传文件命名类型”</span>
+				  </td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 上传文件命名前缀 </div></td>
+		          <td align="left"><input name="FileNameLeft" type="text" size="20" class="text" value="<%=UpLoadSet(3)%>" maxlength="10"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 上传文件命名后缀 </div></td>
+		          <td align="left"><input name="FileNameRight" type="text" size="20" class="text" value="<%=UpLoadSet(4)%>"/></td>
+		        </tr>
+		      </table>
+		    </div>
+			</fieldset>
+			<fieldset>
+		    <legend> 水印基本设置</legend>
+		    <div align="left">
+		      <table border="0" cellpadding="2" cellspacing="1">
+		        <tr>
+		          <td width="180"><div align="right"> 水印位置 </div></td>
+		          <td>
+				    <select name="Place">
+				      <option value="0" <%If UpLoadSet(5) = 0 then response.write ("selected=""selected""")%>>默认位置</option>
+				      <option value="1" <%If UpLoadSet(5) = 1 then response.write ("selected=""selected""")%>>顶部左侧</option>
+				      <option value="2" <%If UpLoadSet(5) = 2 then response.write ("selected=""selected""")%>>顶部居中</option>
+				      <option value="3" <%If UpLoadSet(5) = 3 then response.write ("selected=""selected""")%>>顶部右侧</option>
+				      <option value="4" <%If UpLoadSet(5) = 4 then response.write ("selected=""selected""")%>>中部左侧</option>
+				      <option value="5" <%If UpLoadSet(5) = 5 then response.write ("selected=""selected""")%>>中部居中</option>
+				      <option value="6" <%If UpLoadSet(5) = 6 then response.write ("selected=""selected""")%>>中部右侧</option>
+				      <option value="7" <%If UpLoadSet(5) = 7 then response.write ("selected=""selected""")%>>底部左侧</option>
+				      <option value="8" <%If UpLoadSet(5) = 8 then response.write ("selected=""selected""")%>>底部居中</option>
+				      <option value="9" <%If UpLoadSet(5) = 9 then response.write ("selected=""selected""")%>>底部右侧</option>
+				      <option value="10" <%If UpLoadSet(5) = 10 then response.write ("selected=""selected""")%>>随机位置</option>
+					</select>
+				  </td>
+		        </tr>
+		        <tr>
+		          <td><div align="right"> 水印位置计算边距 </div></td>
+		          <td align="left"><input name="Calculate" type="checkbox" value="1" <%If UpLoadSet(6) = 1 then response.write ("checked=""checked""")%>/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印离左边距离 </div></td>
+		          <td align="left"><input name="SYX" type="text" size="10" class="text" value="<%=UpLoadSet(7)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印离顶部距离 </div></td>
+		          <td align="left"><input name="SYY" type="text" size="10" class="text" value="<%=UpLoadSet(8)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 添加图片边框颜色 </div></td>
+		          <td align="left"><input name="SYPenColor" type="text" size="10" class="text" value="<%=UpLoadSet(9)%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 添加图片边框宽度 </div></td>
+		          <td align="left"><input name="SYPenWidth" type="text" size="10" class="text" value="<%=UpLoadSet(10)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印水平边距 </div></td>
+		          <td align="left"><input name="SYPaddingH" type="text" size="10" class="text" value="<%=UpLoadSet(11)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印垂直边距 </div></td>
+		          <td align="left"><input name="SYPaddingV" type="text" size="10" class="text" value="<%=UpLoadSet(12)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印透明度 </div></td>
+		          <td align="left"><input name="SYAlpha" type="text" size="10" class="text" value="<%=UpLoadSet(13)%>"/> px</td>
+		        </tr>
+		      </table>
+		    </div>
+			</fieldset>
+			<fieldset>
+		    <legend> 图片水印设置</legend>
+		    <div align="left">
+		      <table border="0" cellpadding="2" cellspacing="1">
+				<tr>
+		          <td width="180"><div align="right"> 水印图片 </div></td>
+		          <td align="left"><input name="PicPath" type="text" size="30" class="text" value="<%=UpLoadSet(14)%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 图片水印宽度 </div></td>
+		          <td align="left"><input name="PicWidth" type="text" size="10" class="text" value="<%=UpLoadSet(15)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 图片水印高度 </div></td>
+		          <td align="left"><input name="PicHeight" type="text" size="10" class="text" value="<%=UpLoadSet(16)%>"/> px</td>
+		        </tr>
+		      </table>
+		    </div>
+			</fieldset>
+			<fieldset>
+		    <legend> 文字水印设置</legend>
+		    <div align="left">
+		      <table border="0" cellpadding="2" cellspacing="1">
+				<tr>
+		          <td width="180"><div align="right"> 水印文字 </div></td>
+		          <td align="left"><input name="Character" type="text" size="40" class="text" value="<%=UpLoadSet(17)%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印字体颜色 </div></td>
+		          <td align="left"><input name="FontColor" type="text" size="10" class="text" value="<%=UpLoadSet(18)%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印字体大小 </div></td>
+		          <td align="left"><input name="FontSize" type="text" size="10" class="text" value="<%=UpLoadSet(19)%>"/> px</td>
+		        </tr>
+		        <tr>
+		          <td width="180"><div align="right"> 水印字体类型 </div></td>
+		          <td>
+				    <select name="FontFamily">
+				      <option value="宋体" <%If UpLoadSet(20) = "宋体" then response.write ("checked=""checked""")%>>宋体</option>
+				      <option value="黑体" <%If UpLoadSet(20) = "黑体" then response.write ("checked=""checked""")%>>黑体</option>
+				      <option value="Arial" <%If UpLoadSet(20) = "Arial" then response.write ("checked=""checked""")%>>Arial</option>
+				      <option value="Book Antiqua" <%If UpLoadSet(20) = "Book Antiqua" then response.write ("checked=""checked""")%>>Book Antiqua</option>
+				      <option value="Century Gothic" <%If UpLoadSet(20) = "Century Gothic" then response.write ("checked=""checked""")%>>Century Gothic</option>
+				      <option value="Courier New" <%If UpLoadSet(20) = "Courier New" then response.write ("checked=""checked""")%>>Courier New</option>
+				      <option value="Georgia" <%If UpLoadSet(20) = "Georgia" then response.write ("checked=""checked""")%>>Georgia</option>
+				      <option value="Impact" <%If UpLoadSet(20) = "Impact" then response.write ("checked=""checked""")%>>Impact</option>
+				      <option value="Courier New" <%If UpLoadSet(20) = "Courier New" then response.write ("checked=""checked""")%>>Courier New</option>
+				      <option value="Tahoma" <%If UpLoadSet(20) = "Tahoma" then response.write ("checked=""checked""")%>>Tahoma</option>
+				      <option value="Times New Roman" <%If UpLoadSet(20) = "Times New Roman" then response.write ("checked=""checked""")%>>Times New Roman</option>
+				      <option value="Verdana" <%If UpLoadSet(20) = "Verdana" then response.write ("checked=""checked""")%>>Verdana</option>
+				    </select>
+				  </td>
+		        </tr>
+		        <tr>
+		          <td><div align="right"> 加粗 </div></td>
+		          <td align="left"><input name="FontBold" type="checkbox" value="1" <%If UpLoadSet(21) = 1 then response.write ("checked=""checked""")%>/></td>
+		        </tr>
+		        <tr>
+		          <td><div align="right"> 斜体 </div></td>
+		          <td align="left"><input name="FontItalic" type="checkbox" value="1" <%If UpLoadSet(22) = 1 then response.write ("checked=""checked""")%>/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印阴影颜色 </div></td>
+		          <td align="left"><input name="FontShadowColor" type="text" size="10" class="text" value="<%=UpLoadSet(23)%>"/></td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印阴影向右偏移量 </div></td>
+		          <td align="left"><input name="FontShadowXOffset" type="text" size="10" class="text" value="<%=UpLoadSet(24)%>"/> px</td>
+		        </tr>
+				<tr>
+		          <td width="180"><div align="right"> 水印阴影向下偏移量 </div></td>
+		          <td align="left"><input name="FontShadowYOffset" type="text" size="10" class="text" value="<%=UpLoadSet(25)%>"/> px</td>
+		        </tr>
+		      </table>
+		    </div>
+			</fieldset>	<div class="SubButton">
 		      <input type="submit" name="Submit" value="保存配置" class="button"/>
 		     </div>
 			 </form>

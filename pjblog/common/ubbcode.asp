@@ -213,6 +213,45 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 
             '-----------特殊标签----------------
+            dim rndnum11, rndnum22, rndnum33, rndnum44
+            re.Pattern = "\[down=(download\.asp\?id=)(.[^\[]*)\](.[^\[]*)\[\/down]"
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+                tmpStr1 = checkURL(strMatch.SubMatches(0))
+                tmpStr2 = strMatch.SubMatches(1)
+                tmpStr3 = strMatch.SubMatches(2)
+                rndnum11 = randomStr(10)
+                strContent = Replace(strContent, strMatch.Value, "<span id=""down_"&rndnum11&"""></span><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=Antidown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode(tmpStr3)&"','down_"&rndnum11&"','down_"&rndnum11&"');</script>", 1, -1, 0)
+            Next
+
+            re.Pattern = "\[down\](download\.asp\?id=)(.[^\[]*)\[\/down\]"
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+                tmpStr1 = checkURL(strMatch.SubMatches(0))
+                tmpStr2 = strMatch.SubMatches(1)
+                rndnum22 = randomStr(10)
+                strContent = Replace(strContent, strMatch.Value, "<span id=""down_"&rndnum22&"""></span><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=Antidown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode("点击下载此文件")&"','down_"&rndnum22&"','down_"&rndnum22&"');</script>", 1, -1, 0)
+            Next
+
+            re.Pattern = "\[mDown=(download\.asp\?id=)(.[^\[]*)\](.[^\[]*)\[\/mDown]"
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+                tmpStr1 = checkURL(strMatch.SubMatches(0))
+                tmpStr2 = strMatch.SubMatches(1)
+                tmpStr3 = strMatch.SubMatches(2)
+                rndnum33 = randomStr(10)
+                strContent = Replace(strContent, strMatch.Value, "<span id=""mdown_"&rndnum33&"""></span><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=Antimdown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode(tmpStr3)&"','mdown_"&rndnum33&"','mdown_"&rndnum33&"');</script>", 1, -1, 0)
+            Next
+
+            re.Pattern = "\[mDown\](download\.asp\?id=)(.[^\[]*)\[\/mDown]"
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+                tmpStr1 = checkURL(strMatch.SubMatches(0))
+                tmpStr2 = strMatch.SubMatches(1)
+                rndnum44 = randomStr(10)
+                strContent = Replace(strContent, strMatch.Value, "<span id=""mdown_"&rndnum44&"""></span><script language=""javascript"" type=""text/javascript"">check('Action.asp?action=Antimdown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode("点击下载此文件")&"','mdown_"&rndnum44&"','mdown_"&rndnum44&"');</script>", 1, -1, 0)
+            Next
+
             re.Pattern = "\[down=(.[^\]]*)\](.[^\[]*)\[\/down]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs

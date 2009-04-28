@@ -132,18 +132,22 @@ End Function
 '----------- 获取文件信息 ----------------------------
 
 Function getFileInfo(FileName)
-    Dim FSO, File, FileInfo(8)
+    Dim FSO, File, FileInfo(10)
     Set FSO = Server.CreateObject("Scripting.FileSystemObject")
     If FSO.FileExists(Server.MapPath(FileName)) Then
         Set File = FSO.GetFile(Server.MapPath(FileName))
-        FileInfo(0) = File.Size
-        
-        If FileInfo(0) / 1000>1 Then
-            FileInfo(0) = Int(FileInfo(0) / 1000)&" KB"
+        FileInfo(0)=File.Size
+        If FileInfo(0)>1024 Then
+          FileInfo(0)=Round(FileInfo(0) / 1024,2)
+        If FileInfo(0) > 1024 Then
+          FileInfo(0)=Round(FileInfo(0) / 1024,2)
+          FileInfo(0)= FileInfo(0) & " MB"
         Else
-            FileInfo(0) = FileInfo(0)&" Bytes"
+         FileInfo(0)= FileInfo(0) & " KB"
         End If
-        
+        Else
+          FileInfo(0)= FileInfo(0) & " Byte"
+        End If
         FileInfo(1) = LCase(Right(FileName, 4))
         FileInfo(2) = File.DateCreated
         FileInfo(3) = File.Type
@@ -152,6 +156,8 @@ Function getFileInfo(FileName)
         FileInfo(6) = "" 'File.ShortPath 部分服务器不支持
         FileInfo(7) = File.Name
         FileInfo(8) = "" 'File.ShortName 部分服务器不支持
+        FileInfo(9) = FSO.getExtensionName(Server.MapPath(FileName))
+        FileInfo(10) = File.DateLastModified
     End If
     getFileInfo = FileInfo
     Set FSO = Nothing
@@ -160,54 +166,9 @@ End Function
 '----------- 获取文件图标 ----------------------------
 
 Function getFileIcons(Str)
-    Dim FileIcon, Target
-    Select Case Str
-        Case ".jpg"
-            FileIcon = "jpg.gif"
-        Case ".gif"
-            FileIcon = "gif.gif"
-        Case ".bmp"
-            FileIcon = "bmp.gif"
-        Case ".png"
-            FileIcon = "png.gif"
-        Case ".zip"
-            FileIcon = "zip.gif"
-        Case ".rar"
-            FileIcon = "rar.gif"
-        Case ".swf"
-            FileIcon = "swf.gif"
-        Case ".mdb"
-            FileIcon = "mdb.gif"
-        Case ".doc"
-            FileIcon = "doc.gif"
-        Case ".xls"
-            FileIcon = "xls.gif"
-        Case ".pdf"
-            FileIcon = "pdf.gif"
-        Case ".mbk"
-            FileIcon = "mbk.gif"
-        Case ".mp3"
-            FileIcon = "mp3.gif"
-        Case ".wmv"
-            FileIcon = "wma.gif"
-        Case ".wma"
-            FileIcon = "wma.gif"
-        Case ".js"
-            FileIcon = "js.gif"
-        Case ".html"
-            FileIcon = "html.gif"
-        Case ".htm"
-            FileIcon = "htm.gif"
-        Case ".css"
-            FileIcon = "css.gif"
-        Case ".asp"
-            FileIcon = "asp.gif"
-        Case ".xml"
-            FileIcon = "xml.gif"
-        Case Else
-            FileIcon = "unknow.gif"
-    End Select
-    getFileIcons = "<img border=""0"" src=""images/file/"&FileIcon&""" style=""margin:4px 3px -3px 0px""/>"
+    Dim FileIcon
+If FileExist("images/file/"&Str&".gif") Then FileIcon = Str Else FileIcon = "unknow"
+    getFileIcons = "<img border=""0"" src=""images/file/"&FileIcon&".gif"" style=""margin:4px 3px -3px 0px""/>"
 End Function
 
 
@@ -679,9 +640,10 @@ Function categoryTitle()
     Fmenu = Request.QueryString("Fmenu")
     Smenu = Request.QueryString("Smenu")
     Set cTitle = Server.CreateObject("Scripting.Dictionary")
-    cTitle.Add "General.Misc" , "站点基本设置 - 初始化数据"
     cTitle.Add "General.clear" , "站点基本设置 - 清理服务器缓存"
+    cTitle.Add "General.Misc" , "站点基本设置 - 初始化数据"
     cTitle.Add "General.visitors" , "站点基本设置 - 查看访客记录"
+    cTitle.Add "General.UpLoadSet" , "站点基本设置 - 附件基本设置"
     cTitle.Add "General." , "站点基本设置 - 设置基本信息"
 
     cTitle.Add "Categories.move" , "日志分类管理 - 批量移动日志"
@@ -703,6 +665,7 @@ Function categoryTitle()
     cTitle.Add "Skins.PluginsOptions" , "界面设置 - 插件配置"
     cTitle.Add "Skins." , "界面设置 - 设置外观"
 
+    cTitle.Add "SQLFile.Attachment" , "数据库与附件 - 附件信息"
     cTitle.Add "SQLFile.Attachments" , "数据库与附件 - 附件管理"
     cTitle.Add "SQLFile." , "数据库与附件 - 数据库管理"
 
