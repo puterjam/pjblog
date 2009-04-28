@@ -10,7 +10,7 @@ Sub c_SQLFile
 		  </tr>
 		  <tr>
 		    <td class="CPanel">
-			<div class="SubMenu"><a href="?Fmenu=SQLFile">数据库管理</a> | <a href="?Fmenu=SQLFile&Smenu=Attachments">附件管理</a></div>
+			<div class="SubMenu"><a href="?Fmenu=SQLFile">数据库管理</a> | <a href="?Fmenu=SQLFile&Smenu=Attachments">附件管理</a> | <a href="?Fmenu=SQLFile&Smenu=Attachment">附件信息</a></div>
 		    <div align="left" style="padding:5px;"><%getMsg%>
 		     <%
 		If Request.QueryString("Smenu") = "Attachments" Then
@@ -44,17 +44,120 @@ Sub c_SQLFile
 		For Each ArrFolder in ArrFolders
 		    response.Write "<input name=""folders"" type=""checkbox"" value="""&AttPath&"/"&ArrFolder&"""/>&nbsp;<a href=""?Fmenu=SQLFile&Smenu=Attachments&AttPath="&AttPath&"/"&ArrFolder&"""><img border=""0"" src=""images/file/folder.gif"" style=""margin:4px 3px -3px 0px""/>"&ArrFolder&"</a><br>"
 		Next
-		For Each Arrfile in Arrfiles
-		    response.Write "<input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&"""/>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(1))&Arrfile&"</a>&nbsp;&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&" | "&DateToStr(getFileInfo(AttPath&"/"&Arrfile)(2),"Y-m-d H:I:S")&" | "&getFileInfo(AttPath&"/"&Arrfile)(3)&"<br>"
-		Next
-		response.Write "</div>"
-		
 		%>
-		    <div style="color:#f00">如果文件夹内存在文件，那么该文件夹将无法删除!</div>
+	    <table width="100%" cellpadding="2" cellspacing="1" class="TablePanel" style=" font-size:11px">
+        <tr align="center">
+		  <td nowrap="nowrap" class="TDHead">&nbsp;</td>
+		  <td nowrap="nowrap" class="TDHead">附件所在文章</td>
+		  <td nowrap="nowrap" class="TDHead">附件名</td>
+		  <td nowrap="nowrap" class="TDHead">附件大小</td>
+		  <td nowrap="nowrap" class="TDHead">附件更新时间</td>
+		</tr>
+		<%
+		For Each Arrfile in Arrfiles
+		    response.Write "<tr><td><input name=""Files"" type=""checkbox"" value="""&AttPath&"/"&Arrfile&""" "&checkit(Arrfile)&"</td><td>&nbsp;<a href="""&AttPath&"/"&Arrfile&""" target=""_blank"">"&getFileIcons(getFileInfo(AttPath&"/"&Arrfile)(9))&Arrfile&"</a></td><td>&nbsp;"&getFileInfo(AttPath&"/"&Arrfile)(0)&"</td><td>&nbsp;"&DateToStr(getFileInfo(AttPath&"/"&Arrfile)(10),"Y-m-d H:I:S")&"</td></tr>"
+		Next
+		response.Write "</table></div>"
+		%>
+		    <div style="color:#f00">如果文件夹内存在文件，那么该文件夹将无法删除!
+			<br/>没有被日志引用的附件将被自动选中！</div>
 			  	<div class="SubButton">
-		      <input type="button" value="全选" class="button" onClick="checkAll()"/>  <input type="submit" name="Submit" value="删除所选的文件或文件夹" class="button"/> 
+		      <input type="button" value="全选" class="button" onClick="checkAll()"/>  <input type="submit" name="Submit" value="删除所选的文件或文件夹" class="button"/>
 		     </div>
 		     </form>
+			  <%
+ElseIf Request.QueryString("Smenu") = "Attachment" Then%>
+    <form action="ConContent.asp" method="post" style="margin:0px" name="bdkey" id="bdkey">
+       <input type="hidden" name="action" value="Attachment2"/>
+	    <table width="100%" cellpadding="2" cellspacing="1" class="TablePanel" style=" font-size:11px">
+	   <%
+	   dim uploadDB, upload_nums, PageCount
+	   Set uploadDB = Server.CreateObject("ADODB.RecordSet")
+       SQL="select * from blog_Files order by id desc"
+       uploadDB.Open SQL,Conn,1,1
+       IF not uploadDB.EOF Then
+	     uploadDB.AbsolutePage = CurPage
+		 upload_nums = uploadDB.RecordCount
+	   %>
+	     <tr><td colspan="8" style="border-bottom:1px solid #999;"><div class="pageContent">
+		 <%=MultiPage(upload_nums,10,CurPage,"?Fmenu=SQLFile&Smenu=Attachment&","","float:left")%></div></td></tr>
+        <tr align="center">
+		  <td nowrap="nowrap" class="TDHead">&nbsp;</td>
+          <td nowrap="nowrap" class="TDHead">ID</td>
+          <td nowrap="nowrap" class="TDHead">附件大小</td>
+          <td nowrap="nowrap" class="TDHead">附件类型</td>
+          <td nowrap="nowrap" class="TDHead">附件地址</td>
+          <td nowrap="nowrap" class="TDHead">附件点击次数</td>
+          <td nowrap="nowrap" class="TDHead">附件更新日期</td>
+          <td nowrap="nowrap" class="TDHead">白名单Code</td>
+	   </tr>
+	   <%
+	   	Do Until uploadDB.EOF OR PageCount = uploadDB.PageSize
+          If instr(uploadDB("FilesPath"),"http://") = 0 then
+          If FileExist(uploadDB("FilesPath")) = True Then
+            Dim FilesSize, FilesType, Filestime
+            FilesSize = getFileInfo(uploadDB("FilesPath"))(0)
+            FilesType = getFileInfo(uploadDB("FilesPath"))(9)
+            Filestime = DateToStr(getFileInfo(uploadDB("FilesPath"))(10),"Y-m-d H:I:S")
+          Else
+            FilesSize = "文件不存在"
+            FilesType = "未知"
+            Filestime = "文件不存在"
+          End If
+          Else
+            FilesSize = "外连地址"
+            FilesType = Replace(right(uploadDB("FilesPath"),4),".","")
+            Filestime = "外连地址"
+          End If
+	   %>
+	   <tr align="center">
+		  <td><input name="SelectFilesID" type="checkbox" value="<%=uploadDB("id")%>"/></td>
+          <td><input name="FilesID" type="hidden" value="<%=uploadDB("id")%>"/><%=uploadDB("id")%></td>
+          <td align="left">&nbsp;<%=FilesSize%></td>
+          <td><%=FilesType%></td>
+	      <td><input name="url" type="text" size="60" class="text" value="<%=uploadDB("FilesPath")%>" style="width:100%"/></td>
+	      <td><input name="count" type="text" size="10" value="<%=uploadDB("FilesCounts")%>" class="text"/></td>
+	      <td><%=Filestime%></td>
+	      <td><%=right(md5(right(Ucase(uploadDB("FilesPath")),15)),10)%></td>
+	   </tr>
+	   <%
+     	uploadDB.MoveNext
+	    PageCount=PageCount+1
+	loop
+    uploadDB.Close
+    Set uploadDB=Nothing
+End If
+%>
+	    <tr align="center" bgcolor="#D5DAE0">
+        <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加附件</td>
+       </tr>
+<%
+Dim Rs, S_ID
+Set Rs = Conn.Execute("Select top 1 id From blog_Files order by id desc")
+If not rs.eof then S_ID = Rs(0) + 1 Else S_ID=1
+Rs.Close : Set Rs = Nothing
+%>
+        <tr align="center">
+		  <td></td>
+          <td><input name="FilesID" type="hidden" value="-1"/><%=S_ID%></td>
+          <td align="left"></td>
+          <td></td>
+	      <td><input name="url" type="text" size="60" class="text" value="" style="width:100%"/></td>
+	      <td><input name="count" type="text" size="10" value="" class="text"/></td>
+	      <td></td>
+	      <td></td>
+	   </tr>
+	  </table>
+  <div class="SubButton" style="text-align:left;">
+    	 <select name="S_Action">
+			 <option value="SaveAll">保存所有附件</option>
+			 <option value="DelSelect">删除所选附件</option>
+		 </select>
+      <input type="button" value="全选" class="button" onClick="checkAll()" style="margin-bottom:0px"/>
+	  <input type="submit" name="Submit" value="提交" class="button" style="margin-bottom:0px"/>
+	  <font color="red">白名单Code:Code的值是唯一的。例如：download.asp?id=1</font><font color="blue">&code=F24757B14A</font> <font color="red">带蓝色部分允许盗链，不带蓝色部分防盗链</font>
+     </div>
+	 </form>
 			  <%else%>
 			  <b>数据库路径:</b> <%=Server.MapPath(AccessFile)%><br/>
 			  <b>数据库大小:</b> <span id="accessSize"><%=getFileInfo(AccessFile)(0)%></span><br/>
@@ -187,4 +290,24 @@ Sub c_SQLFile
 		  </tr></table>
 <%
 end Sub
+
+Function checkit(str)
+Dim Rs
+On Error Resume Next
+Set Rs = Conn.Execute("select id from blog_Files where Lcase(FilesPath) like '%"&str&"%'")
+If Rs.eof then
+   checkit = "checked/></td><td><b>没有日志使用此附件</b></td>"
+Else
+   Set Rs = Conn.Execute("select log_id,log_Title from blog_Content where log_Intro like '%download.asp?id="&rs(0)&"%' or log_Content like '%download.asp?id="&rs(0)&"%'")
+   Dim link
+     If blog_postFile = 2 Then
+      	link = caload(rs(0))
+     Else
+      	link = "article.asp?id="&rs(0)
+     End If
+   checkit = "/></td><td><a target=""_blank"" href="&link&">"&rs(1)&"</a></td>"
+End If
+Set Rs = Nothing
+If err then checkit = "checked/></td><td><b>没有日志使用此附件</b></td>"
+End Function
 %>

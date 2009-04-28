@@ -13,7 +13,7 @@ Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introCha
 Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
-Dim memoryCache
+Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
@@ -35,7 +35,7 @@ Sub getInfo(ByVal action)
               "blog_postFile,blog_postCalendar,blog_DefaultSkin,blog_SkinName,blog_SplitType," & _
               "blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
-              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime" & _
+              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -97,9 +97,10 @@ Sub getInfo(ByVal action)
         blog_wapComment = CBool(blog_Infos(42, 0))'Wap 允许评论
         blog_wap = CBool(blog_Infos(43, 0))'使用 wap
         blog_wapURL = CBool(blog_Infos(44, 0))'使用 wap 转换文章超链接
-		blog_KeyWords = blog_Infos(45, 0)'站点首页KeyWords
-		blog_Description = blog_Infos(46, 0)'站点首页Description
-		blog_SaveTime = blog_Infos(47, 0)'Ajax草稿自动保存时间间隔
+        blog_KeyWords = blog_Infos(45, 0)'站点首页KeyWords
+        blog_Description = blog_Infos(46, 0)'站点首页Description
+        blog_SaveTime = blog_Infos(47, 0)'Ajax草稿自动保存时间间隔
+        blog_UpLoadSet = blog_Infos(48, 0)'附件管理
     End If
 End Sub
 

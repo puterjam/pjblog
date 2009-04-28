@@ -1274,6 +1274,256 @@ Function getTempKey
     session(CookieName&"tempKey") = getTempKey
 End Function
 
+'*************************************
+'水印函数
+'*************************************
+
+Sub CreateView(imgName,mode,UpLoadSet)
+'imgName:图片地址，mode：水印样式，UpLoadSet：水印参数
+'UpLoadSet = "0|0|0|PJBlog|PJBlog|0|1|10|10|FFFFFF|0|10|10|0.5|images/wind.png|120|35|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0"
+'防盗链|文件命名|文件命名2|前缀|后缀|水印位置|计数边距|离左边距|离顶边距|边框颜色|边框宽度|水平边距|垂直边距|透明度|图片水印|图宽|图高|文字|字体颜色|字体大小|字体类型|加粗|斜体|阴影颜色|阴影向右偏移量|阴影向下偏移量
+'   0      1        2      3    4     5       6        7      8        9      10         11      12     13      14     15  16  17     18      19      20      21  22     23       24            25
+UpLoadSet = Split(UpLoadSet,"|")
+If UBound(UpLoadSet) <> 25 then
+  UpLoadSet = "0|0|0|PJBlog|PJBlog|0|0|10|10|FFFFFF|0|10|10|0.5|images/wind.png|120|35|www.pjhome.net|000000|18|宋体|1|0|000000|0|0"
+  UpLoadSet = Split(UpLoadSet,"|")
+End If
+
+Dim nSYWZPosition, UpPlace, UpCalculate, UpSYX, UpSYY, UpSYPenColor, UpSYPenWidth, UpSYPaddingH, UpSYPaddingV, UpSYAlpha
+Dim UpPicPath, UpPicWidth, UpPicHeight
+Dim UpCharacter, UpFontColor, UpFontSize, UpFontFamily,  UpFontBold, UpFontItalic
+Dim UpFontShadowColor, UpFontShadowXOffset, UpFontShadowYOffset
+
+UpPlace = UpLoadSet(5)  '水印位置
+UpCalculate = UpLoadSet(6)  '计数边距
+UpSYX = UpLoadSet(7)  '离左边距
+UpSYY = UpLoadSet(8)  '离顶边距
+UpSYPenColor = "&H"&UpLoadSet(9)  '边框颜色
+UpSYPenWidth = UpLoadSet(10)  '边框宽度
+UpSYPaddingH = UpLoadSet(11)  '水平边距
+UpSYPaddingV = UpLoadSet(12)  '垂直边距
+UpSYAlpha = UpLoadSet(13)  '透明度
+UpPicPath = UpLoadSet(14)  '图片水印
+UpPicWidth = UpLoadSet(15)  '图宽
+UpPicHeight = UpLoadSet(16)  '图高
+UpCharacter = UpLoadSet(17)  '文字
+UpFontColor = "&H"&UpLoadSet(18)  '字体颜色
+UpFontSize = UpLoadSet(19)  '字体大小
+UpFontFamily = UpLoadSet(20)  '字体类型
+UpFontBold = CBool(UpLoadSet(21))  '加粗
+UpFontItalic = CBool(UpLoadSet(22))  '斜体
+UpFontShadowColor = "&H"&UpLoadSet(23)  '阴影颜色
+UpFontShadowXOffset = UpLoadSet(24)  '阴影向右偏移量
+UpFontShadowYOffset = UpLoadSet(25)  '阴影向下偏移量
+
+	On Error Resume Next
+	Dim Jpeg,Logobox,LogoPath
+	Set Jpeg = Server.CreateObject("Persits.Jpeg")
+	dim UpSYHx,UpSYVy,UpjpegX,UpjpegY,UpfontX,UpfontY
+	If UpCalculate = 1 then
+	  UpSYHx = 0
+	  UpSYVy = 0
+    Else
+	  UpSYHx = UpSYPaddingH
+	  UpSYVy = UpSYPaddingV
+	End IF
+	If mode = 2 Then '图片水印
+		LogoPath = Server.MapPath(UpPicPath)
+		Set Logobox = Server.CreateObject("Persits.Jpeg")
+	    Logobox.Open LogoPath
+        Logobox.Width = UpPicWidth
+        Logobox.Height = Logobox.Width * Logobox.OriginalHeight / Logobox.OriginalWidth
+		Jpeg.Open Trim(Server.MapPath(imgName))
+	If Jpeg.OriginalWidth > Logobox.Width and Jpeg.OriginalHeight > Logobox.Height then
+	    UpjpegX = Jpeg.OriginalWidth-Logobox.Width-UpSYHx
+	    UpjpegY = Jpeg.OriginalHeight-Logobox.Height-UpSYVy
+
+		Select Case UpPlace
+           Case 0	'水印随机位置
+			  randomize
+			  nSYWZPosition = Int(rnd()*9+1)
+			  UpSYX = getSYPosX(nSYWZPosition, Jpeg.OriginalWidth, Logobox.Width, UpSYPaddingH )
+			  UpSYY = getSYPosY(nSYWZPosition, Jpeg.OriginalHeight, Logobox.Height, UpSYPaddingV )
+           Case 1	'水印顶部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpSYVy
+           Case 2	'水印顶部居中
+			  UpSYX = UpjpegX \ 2
+			  UpSYY = UpSYVy
+           Case 3	'水印顶部右侧
+			  UpSYX = UpjpegX
+			  UpSYY = UpSYVy
+           Case 4	'水印中部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpjpegY \ 2
+           Case 5	'水印中部居中
+			  UpSYX = UpjpegX \ 2
+			  UpSYY = UpjpegY \ 2
+           Case 6	'水印中部右侧
+			  UpSYX = UpjpegX
+			  UpSYY = UpjpegY \ 2
+           Case 7	'水印底部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpjpegY
+           Case 8	'水印底部居中
+			  UpSYX = UpjpegX \ 2
+			  UpSYY = UpjpegY
+           Case 9	'水印底部右侧
+			  UpSYX = UpjpegX
+			  UpSYY = UpjpegY
+           Case Else	'水印默认位置
+			  UpSYX = UpSYX
+			  UpSYY = UpSYY
+        End Select
+
+	      If UpSYPenWidth > 0 then
+		    Jpeg.Canvas.Pen.Color = UpSYPenColor
+		    Jpeg.Canvas.Pen.Width = UpSYPenWidth
+		    Jpeg.Canvas.Brush.Solid = False
+		    Jpeg.Canvas.Bar 0, 0, Jpeg.Width, Jpeg.Height
+	      End If
+			Jpeg.DrawImage UpSYX, UpSYY, Logobox, UpSYAlpha, UpSYPenColor
+			Jpeg.Save Server.MapPath(imgName)
+			Logobox.close : Set Logobox = Nothing
+			Jpeg.close : Set Jpeg = Nothing
+      End If
+	Else '文字水印
+		Jpeg.Open Server.MapPath(imgName)
+		Dim aa,MyJpeg,Logo,bb
+		aa = Jpeg.Binary
+     If Jpeg.OriginalWidth>(len(UpCharacter)*UpFontsize) and Jpeg.OriginalHeight>(1*UpFontsize) then
+		UpfontX = Jpeg.OriginalWidth-(bLen(UpCharacter)*UpFontsize)+UpFontShadowXOffset-UpSYHx
+		UpfontY = Jpeg.OriginalHeight-UpFontsize+UpFontShadowYOffset-UpSYVy
+
+		Select Case UpPlace
+           Case 10	'水印随机位置
+			  randomize
+			  nSYWZPosition = Int(rnd()*9+1)
+			  UpSYX = getSYPosX(nSYWZPosition, Jpeg.OriginalWidth, (bLen(UpCharacter)*UpFontsize)+UpFontShadowXOffset, UpSYPaddingH )
+			  UpSYY = getSYPosY(nSYWZPosition, Jpeg.OriginalHeight, UpFontsize+UpFontShadowYOffset, UpSYPaddingV )
+           Case 1	'水印顶部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpSYVy
+           Case 2	'水印顶部居中
+			  UpSYX = UpfontX \ 2
+			  UpSYY = UpSYVy
+           Case 3	'水印顶部右侧
+			  UpSYX = UpfontX
+			  UpSYY = UpSYVy
+           Case 4	'水印中部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpfontY \ 2
+           Case 5	'水印中部居中
+			  UpSYX = UpfontX \ 2
+			  UpSYY = UpfontY \ 2
+           Case 6	'水印中部右侧
+			  UpSYX = UpfontX
+			  UpSYY = UpfontY \ 2
+           Case 7	'水印底部左侧
+			  UpSYX = UpSYHx
+			  UpSYY = UpfontY
+           Case 8	'水印底部居中
+			  UpSYX = UpfontX \ 2
+			  UpSYY = UpfontY
+           Case 9	'水印底部右侧
+			  UpSYX = UpfontX
+			  UpSYY = UpfontY
+           Case Else	'水印默认位置
+			  UpSYX = UpSYX
+			  UpSYY = UpSYY
+        End Select
+
+	    Jpeg.Canvas.Font.Color = UpFontColor
+	    Jpeg.Canvas.Font.Family = UpFontFamily
+	    Jpeg.Canvas.Font.Size = UpFontSize
+	    Jpeg.Canvas.Font.Bold = UpFontBold
+	    Jpeg.Canvas.Font.Italic = UpFontItalic
+	    Jpeg.Canvas.Font.Quality = 2
+	    Jpeg.Canvas.Font.ShadowColor = UpFontShadowColor
+	    Jpeg.Canvas.Font.ShadowXOffset = UpFontShadowXOffset
+	    Jpeg.Canvas.Font.ShadowYOffset = UpFontShadowYOffset
+	    Jpeg.Canvas.Print UpSYX, UpSYY, UpCharacter
+		Set MyJpeg = Server.CreateObject("Persits.Jpeg")
+		MyJpeg.OpenBinary aa
+		MyJpeg.DrawImage 0,0, Jpeg, UpSYAlpha
+		If UpSYPenWidth > 0 then
+		  MyJpeg.Canvas.Pen.Color = UpSYPenColor
+		  MyJpeg.Canvas.Pen.Width = UpSYPenWidth
+		  MyJpeg.Canvas.Brush.Solid = False
+		  MyJpeg.Canvas.Bar 0, 0, MyJpeg.Width, MyJpeg.Height
+		End If
+		MyJpeg.Save Server.MapPath(imgName)
+		Jpeg.close
+		Set aa = nothing
+		MyJpeg.Close
+      End If
+	End If
+End Sub
+
+'*************************************
+'识别中英文字符，计算文字水印长度
+'*************************************
+Function bLen(str)
+	Dim strLen,charLen,ascChar,i
+	strLen = len(str)
+	charLen = 0
+	For i = 1 to strLen
+		ascChar = asc(mid(str,i,1))
+		If ascChar < 0 then ascChar = ascChar+65536
+		If ascChar > 255 then
+			charLen=  charLen + 1.02
+		Else
+			charLen = charLen + 0.56
+		End If
+	Next
+	bLen = charLen
+End Function
+
+'*************************************
+'计算随机水印水平坐标（随机位置，原图宽度，水印宽度，左右边距）
+'*************************************
+Function getSYPosX(posFlag, originalW, syW, paddingH)
+	Select Case posFlag
+		Case 1, 2, 3
+			getSYPosX = paddingH
+		Case 4, 5, 6
+			getSYPosX = (originalW - syW) \ 2
+		Case 7, 8, 9
+			getSYPosX = originalW - paddingH - syW
+	End Select
+End Function
+
+'*************************************
+'计算随机水印垂直坐标（随机位置，原图高度，水印高度，上下边距）
+'*************************************
+Function getSYPosY(posFlag, originalH, syH, paddingV)
+	Select Case posFlag
+		Case 1, 4, 7
+			getSYPosY = paddingV
+		Case 2, 5, 8
+			getSYPosY = (originalH - syH) \ 2
+		Case 3, 6, 9
+			getSYPosY = originalH - paddingV - syH
+	End Select
+End Function
+
+'*************************************
+'截取文件名
+'*************************************
+Function getF_Name(n)
+	getF_Name = mid(n,1,Cint(InstrRev(n,"."))-1)
+End Function
+
+'*************************************
+'日期补0
+'*************************************
+Function lenNum(n)
+	IF len(n)=1 then
+		lenNum="0"&n
+	Else
+		lenNum=n
+	End If
+End Function
 %>
 
 <script src="reg.js" Language="JScript" runat="server"></script>

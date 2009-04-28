@@ -953,6 +953,81 @@ ElseIf Request.Form("action") = "Attachments" Then
         session(CookieName&"_MsgText") = "有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
         RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
     End If
+ElseIf Request.Form("action") = "Attachment2" Then
+       Dim FilesID, FilesPath, FilesCounts, i
+       If Request.form("S_Action")="DelSelect" then
+            FilesID = split(Request.form("SelectFilesID"),", ")
+            For i = 0 to ubound(FilesID)
+                Conn.execute("Delete * from blog_Files where id="&FilesID(i))
+            next
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(ubound(FilesID)+1)&" 个附件被删除!"
+            Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachment")
+           Else
+             FilesID = split(Request.form("FilesID"),", ")
+             FilesPath = split(Request.form("url"),", ")
+             FilesCounts = split(Request.form("count"),", ")
+             For i = 0 to ubound(FilesID)
+             If Int(FilesID(i)) <> -1 then
+			    If FilesCounts(i) = "" or FilesCounts(i) < 0 then FilesCounts(i) = 0
+                Conn.execute("update blog_Files set FilesPath='"&CheckStr(FilesPath(i))&"',FilesCounts='"&FilesCounts(i)&"' where id="&FilesID(i))
+		     Else
+				If len(trim(CheckStr(FilesPath(i))))>0 then
+				  If FilesCounts(i) = "" or FilesCounts(i) < 0 then FilesCounts(i) = 0
+		          Conn.execute("insert into blog_Files (FilesPath,FilesCounts) values ('"&CheckStr(FilesPath(i))&"',"&FilesCounts(i)&")")
+		          session(CookieName&"_MsgText")="新附件添加成功! "
+		        End If
+			 End If
+            Next
+            session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"附件保存成功!"
+            Response.Redirect("ConContent.asp?Fmenu=SQLFile&Smenu=Attachment")
+        End If
+ElseIf Request.Form("action") = "UpLoadSet" Then
+       Dim Antimdown, FileNameMid, FileNameType, FileNameLeft, FileNameRight, Place, Calculate
+       Dim SYX, SYY, SYPenColor, SYPenWidth, SYPaddingH, SYPaddingV, SYAlpha, PicPath, PicWidth, PicHeight
+       Dim Character, FontColor, FontSize, FontFamily, FontBold, FontItalic, FontShadowColor, FontShadowXOffset, FontShadowYOffset
+	   Dim UpLoadSet
+	   Antimdown = Request.Form("Antimdown")
+       FileNameMid = Request.Form("FileNameMid")
+       FileNameType = Request.Form("FileNameType")
+       FileNameLeft = Request.Form("FileNameLeft")
+       FileNameRight = Request.Form("FileNameRight")
+       Place = Request.Form("Place")
+       Calculate = Request.Form("Calculate")
+       SYX = Request.Form("SYX")
+       SYY = Request.Form("SYY")
+       SYPenColor = Request.Form("SYPenColor")
+       SYPenWidth = Request.Form("SYPenWidth")
+       SYPaddingH = Request.Form("SYPaddingH")
+       SYPaddingV = Request.Form("SYPaddingV")
+       SYAlpha = Request.Form("SYAlpha")
+       PicPath = Request.Form("PicPath")
+       PicWidth = Request.Form("PicWidth")
+       PicHeight = Request.Form("PicHeight")
+       Character = Request.Form("Character")
+       FontColor = Request.Form("FontColor")
+       FontSize = Request.Form("FontSize")
+       FontFamily = Request.Form("FontFamily")
+       FontBold = Request.Form("FontBold")
+       FontItalic = Request.Form("FontItalic")
+       FontShadowColor = Request.Form("FontShadowColor")
+       FontShadowXOffset = Request.Form("FontShadowXOffset")
+       FontShadowYOffset= Request.Form("FontShadowYOffset")
+	   If Antimdown <> 1 then Antimdown = 0
+	   If Calculate <> 1 then Calculate = 0
+	   If FontBold <> 1 then FontBold = 0
+	   If FontItalic <> 1 then FontItalic = 0
+	   UpLoadSet = Antimdown & "|" & FileNameMid & "|" & FileNameType & "|" & FileNameLeft & "|" & FileNameRight & "|" & Place &_
+	   "|" & Calculate & "|" & SYX & "|" & SYY & "|" & SYPenColor & "|" & SYPenWidth & "|" & SYPaddingH &_
+	   "|" & SYPaddingV & "|" & SYAlpha & "|" & PicPath & "|" & PicWidth & "|" & PicHeight & "|" & Character &_
+	   "|" & FontColor & "|" & FontSize & "|" & FontFamily & "|" & FontBold & "|" & FontItalic & "|" & FontShadowColor &_
+	   "|" & FontShadowXOffset & "|" & FontShadowYOffset
+       conn.Execute("update blog_Info set blog_UpLoadSet='"&UpLoadSet&"'")
+	   getInfo(2)
+	   session(CookieName&"_ShowMsg") = True
+	   session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"水印设置保存成功!"
+	   RedirectUrl("ConContent.asp?Fmenu=General&Smenu=UpLoadSet")
 ElseIf Request.Form("action") = "codeEditor" Then '在线编辑器
     If Request.Form("whatdo") = "save" Then
     	dim referer,fPath,cCode,saveCode
