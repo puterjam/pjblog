@@ -9,9 +9,12 @@
 '  会员页面
 '    更新时间: 2006-1-9
 '==================================
-Dim blog_Mem
+Dim blog_Mem, Referer_Url
 If Request.QueryString("action") = "edit" Then
     If memName = Empty Then RedirectUrl("member.asp")
+    Referer_Url = Cstr(Request.ServerVariables("HTTP_REFERER"))
+    If len(Referer_Url) < 8 then Referer_Url= "http://" & Request.ServerVariables("HTTP_HOST")
+    Session(CookieName & "_Member_Referer_Url") = Referer_Url
 
 %><br/><br/>
    <div style="text-align:center;">
@@ -30,12 +33,12 @@ If blog_Mem.EOF Or blog_Mem.bof Then
          </script>
        <%else%>
 	  <table width="100%" cellpadding="0" cellspacing="0">
-	  <form name="frm" action="member.asp" method="post" onsubmit="if (this.Oldpassword.value.length<1){alert('请输入你的登录密码!');this.Oldpassword.focus();return false}">
+	  <form name="frm" action="member.asp" method="post" onsubmit="if (this.Oldpassword.value.length<1){alert('请输入您的登录密码!');this.Oldpassword.focus();return false}">
 	  <input name="UID" type="hidden" value="<%=blog_Mem("mem_ID")%>"/>
 	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
-	  <tr><td align="right" width="85"><strong>　旧密码:</strong></td><td align="left" style="padding:3px;"><input name="Oldpassword" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> 输入你的旧密码.下面的密码输入框为空则不修改密码</td></tr>
+	  <tr><td align="right" width="85"><strong>　旧密码:</strong></td><td align="left" style="padding:3px;"><input name="Oldpassword" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> 输入您的旧密码.下面的密码输入框为空则不修改密码</td></tr>
 	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
-      <tr><td align="right" width="85"><strong>　密码强度:</strong></td><td align="left"> &nbsp;<img src="images/0.gif" id="strong"></td></tr>
+      <tr><td align="right" width="85"><strong>密码强度:</strong></td><td align="left"> &nbsp;<img src="images/0.gif" id="strong"></td></tr>
 	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16"/> 必须和上面的密码一样</td></tr>
 	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" <%if blog_Mem("mem_Sex")=0 then response.write "checked"%>/> 保密 <input name="Gender" type="radio" value="1" <%if blog_Mem("mem_Sex")=1 then response.write "checked"%>/>男 <input name="Gender" type="radio" value="2" <%if blog_Mem("mem_Sex")=2 then response.write "checked"%>/>女</td></tr>
 	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_Email")%>"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" <%if blog_Mem("mem_HideEmail") then response.write "checked"%>/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
@@ -73,7 +76,7 @@ If CheckStr(Request.QueryString("memName")) = Empty Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">非法操作！！无法完成你的请求！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
+         <div class="MessageText"  align="center">非法操作！！无法完成您的请求！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
            document.getElementById("MsgHead").innerText="错误信息"
@@ -126,6 +129,9 @@ End If
 <%
 ElseIf Request.Form("action") = "save" Then
     Dim reg
+    Referer_Url = Session(CookieName & "_Member_Referer_Url")
+    If len(Referer_Url) < 8 then Referer_Url = Cstr(Request.ServerVariables("HTTP_REFERER"))
+    If len(Referer_Url) < 8 then Referer_Url = "http://" & Request.ServerVariables("HTTP_HOST")
     reg = SaveMem
 %>
 <br/><br/>
@@ -280,7 +286,7 @@ Function SaveMem
         SQLQueryNums = SQLQueryNums + 1
         logout(True)
         ReInfo(0) = "用户修改成功"
-        ReInfo(1) = "<b>你的资料已经修改成功</b><br/>由于你更改了密码所以必须 <a href=""login.asp"">重新登录</a>"
+        ReInfo(1) = "<b>您的资料已经修改成功</b><br/>由于您更改了密码所以必须 <a href=""login.asp"">重新登录</a><br/>三秒后自动返回登录页面<meta http-equiv=""refresh"" content=""3;url=login.asp""/>"
         ReInfo(2) = "MessageIcon"
         SaveMem = ReInfo
         Session(CookieName&"_LastDo") = "EditUser"
@@ -288,7 +294,7 @@ Function SaveMem
     End If
     getInfo(2)
     ReInfo(0) = "用户修改成功"
-    ReInfo(1) = "<b>你的资料已经修改成功</b><br/><a href=""default.asp"">返回首页</a>"
+    ReInfo(1) = "<b>您的资料已经修改成功</b><br/><a href=""default.asp"">返回首页</a>&nbsp;|&nbsp;<a href="""&Referer_Url&""">单击返回修改前页面</a><br/>三秒后自动返回修改前页面<meta http-equiv=""refresh"" content=""3;url="&Referer_Url&"""/>"
     ReInfo(2) = "MessageIcon"
     SaveMem = ReInfo
     Session(CookieName&"_LastDo") = "EditUser"
