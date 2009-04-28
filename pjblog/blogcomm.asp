@@ -97,6 +97,7 @@ Function postcomm
     post_Message = CheckStr(request.Form("Message"))
     FlowControl = False
 
+  If stat_Admin = False Then
     If (memName=empty or blog_validate=true) and (cstr(lcase(Session("GetCode")))<>cstr(lcase(validate)) or IsEmpty(Session("GetCode"))) Then
         ReInfo(0) = "评论发表错误信息"
         ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">返回重新输入</a>"
@@ -129,24 +130,22 @@ Function postcomm
 	    Exit Function 
 	  End If
 	  
-    If stat_Admin = False Then
         '高级过滤规则
-        If regFilterSpam(post_Message, "reg.xml") Then
+    If regFilterSpam(post_Message, "reg.xml") Then
             ReInfo(0) = "评论发表错误信息"
             ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
-            Exit Function
-        End If
+      Exit Function
+    End If
 
         '基本过滤规则
-        If filterSpam(post_Message, "spam.xml") Then
+    If filterSpam(post_Message, "spam.xml") Then
             ReInfo(0) = "评论发表错误信息"
             ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
-            Exit Function
-        End If
+      Exit Function
     End If
 
     If FlowControl Then
@@ -157,13 +156,14 @@ Function postcomm
         Exit Function
     End If
 
-   If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
+    If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), Now())<blog_commTimerout Then
         ReInfo(0) = "评论发表错误信息"
         ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
-        Exit Function
+      Exit Function
     End If
+  End If
     
     If Len(username)<1 Then
         ReInfo(0) = "评论发表错误信息"

@@ -129,7 +129,7 @@ Set nextLog = Nothing
 
 %>
 						   </div>
- 						   <img src="<%=getCate.cate_icon%>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<%=log_ViewArr(1,0)%>" title="查看所有<%=getCate.cate_Name%>的日志"><%=getCate.cate_Name%></a></strong> <a href="feed.asp?cateID=<%=log_ViewArr(1,0)%>" target="_blank" title="订阅所有<%=getCate.cate_Name%>的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有<%=getCate.cate_Name%>的日志" style="margin-bottom:-1px"/></a>
+ 						   <img src="<%=getCate.cate_icon%>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<%=log_ViewArr(1,0)%>" title="查看所有【<%=getCate.cate_Name%>】的日志"><%=getCate.cate_Name%></a></strong> <a href="feed.asp?cateID=<%=log_ViewArr(1,0)%>" target="_blank" title="订阅所有【<%=getCate.cate_Name%>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<%=getCate.cate_Name%>】的日志" style="margin-bottom:-1px"/></a>
 					   </div>
 					   <div class="Content">
 					   <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
@@ -201,9 +201,9 @@ Set nextLog = Nothing
 					   	Set getTag = New tag
 					   	%>
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
-						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
-						 <div class="Content-body" id="wbc_tag"></div>
-						 <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','wbc_tag','wbc_tag')</script>
+						 <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
+						 <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
+						 <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','related_tag','related_tag')</script>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
@@ -272,7 +272,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
      		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a></span>]</span>"
 		
 			'删除按钮
-		''	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 
+		'	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 
 		'		response.write (" | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""if (!window.confirm('是否删除该评论?')) {return false}""><img src=""images/del1.gif"" alt=""删除该评论"" border=""0""/></a>") 
 		'	end if
 			
@@ -331,12 +331,12 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  </td><td style="padding:2px;">
 			   <%
 				UBB_TextArea_Height = "150px;"
-				UBB_Tools_Items = "bold,italic,underline"
+				UBB_Tools_Items = "bold,italic,underline,deleteline"
 				UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
 				Response.write (UBBeditorCore("Message"))
 				%>
 			  </td></tr>
-			  <%if memName=empty or blog_validate=true then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>
+			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>
 			  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
 		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
 		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>

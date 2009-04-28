@@ -385,7 +385,7 @@ Function NewComment(ByVal action)
 		      else
 		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if
-            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&blog_Comment(4, i)&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))&"</a>"
+            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))&"</a>"
       
         Next
     End If

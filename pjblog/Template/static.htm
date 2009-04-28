@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Content-Language" content="UTF-8" />
 <meta name="robots" content="all" />
-<meta name="author" content="your@email.com,YourName" />
+<meta name="author" content="<$blog_email$>,<$blog_master$>" />
 <meta name="Copyright" content="PJBlog3 CopyRight 2008" />
 <meta name="keywords" content="<$keywords$>,PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
 <meta name="description" content="<$description$>,<$siteName$> - <$blog_Title$>" />
@@ -14,8 +14,8 @@
 	.ownerClassLog{display:none}
 	.ownerClassComment{display:none}
 </style>
-<link rel="alternate" type="application/rss+xml" href="http://www.pjhome.net/feed.asp?cateID=3" title="订阅 PJBlog3 - test 所有文章(rss2)" />
-<link rel="alternate" type="application/atom+xml" href="http://www.pjhome.net/atom.asp?cateID=3"  title="订阅 PJBlog3 - test 所有文章(atom)"  />
+<link rel="alternate" type="application/rss+xml" href="<$siteURL$>feed.asp?cateID=<$log_CateID$>" title="订阅 <$siteName$> - <$Cate_Title$> 所有文章(rss2)" />
+<link rel="alternate" type="application/atom+xml" href="<$siteURL$>atom.asp?cateID=<$log_CateID$>"  title="订阅 <$siteName$> - <$Cate_Title$> 所有文章(atom)"  />
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/global.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/layout.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/typography.css" type="text/css" media="all" />
@@ -57,7 +57,7 @@
 			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 				<div class="pageContent">
 					<div style="float:right;width:auto"><$log_Navigation$></div> 
-					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有<$Cate_Title$>的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有<$Cate_Title$>的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有<$Cate_Title$>的日志" style="margin-bottom:-1px"/></a>
+					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有【<$Cate_Title$>】的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有【<$Cate_Title$>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<$Cate_Title$>】的日志" style="margin-bottom:-1px"/></a>
 				</div>
 				<div class="Content">
 					<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
@@ -81,9 +81,9 @@
 					<img src="images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<$log_FromUrl$>" target="_blank"><$log_From$></a><br/>
 					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
-                    <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
-                    <div class="Content-body" id="wbc_tag"></div>
-                    <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<$LogID$>&blog_postFile=2','wbc_tag','wbc_tag')</script>
+                    <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
+                    <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
+                    <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<$LogID$>&blog_postFile=2','related_tag','related_tag')</script>
 				</div>
 				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
 			</div>

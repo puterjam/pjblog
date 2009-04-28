@@ -30,31 +30,41 @@ If ChkPost() Then
   <%else%>
    <!--内容-->
    <%If Request.Form("action") = "post" Then
-		Dim lArticle, postLog, pws, pwtips, IsShow, keyword, description
+		Dim lArticle, postLog, pws, pwtips, pwtitle, pwcomm, IsShow, keyword, description
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
+		pwtitle = Request.Form("log_Pwtitle")
+		pwcomm = Request.Form("log_Pwcomm")
 		keyword = Trim(Request.Form("log_KeyWords"))
 		description = Trim(Request.Form("log_Description"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
-		IsShow = False
-		If IsEmpty(pws) or IsNull(pws) or pws = "" Then
-		Else
-			pws = md5(pws)
-		End If
-		If pws = "" Then pwtips = ""
+			IsShow = False
+			If IsEmpty(pws) or IsNull(pws) or pws = "" Then
+			Else
+				pws = md5(pws)
+			End If
+			If pws = "" Then
+				pwtips = ""
+				pwtitle = False
+				pwcomm = False
+			End If
     Else
-		IsShow = True
-		pws = ""
-		pwtips = ""
+			IsShow = True
+			pws = ""
+			pwtips = ""
+			pwtitle = False
+			pwcomm = False
     End If
     If Request.Form("log_pws") = "0" Then
-		pws = ""
-		pwtips = ""
+			pws = ""
+			pwtips = ""
+			pwtitle = False
+			pwcomm = False
     End If
-	If  CheckStr(Request.Form("log_Meta")) = "0" Then
-		keyword = ""
-		description = ""
-	End If
+    If CheckStr(Request.Form("log_Meta")) = "0" Then
+			keyword = ""
+			description = ""
+    End If
    
 	Set lArticle = New logArticle
     lArticle.categoryID = request.Form("log_CateID")
@@ -87,8 +97,8 @@ If ChkPost() Then
     End If
     lArticle.logReadpw = pws
     lArticle.logPwtips = pwtips
-    lArticle.logPwtitle = request.form("log_Pwtitle")
-    lArticle.logPwcomm = request.form("log_Pwcomm")
+    lArticle.logPwtitle = pwtitle
+    lArticle.logPwcomm = pwcomm
     lArticle.logMeta = request.Form("log_Meta")
     lArticle.logKeyWords = keyword
     lArticle.logDescription = description
@@ -264,7 +274,7 @@ End Sub
                           <label for="bpws4"><input id="bpws4" name="log_Pwcomm" type="checkbox" value="1" />加密评论</label>
 	                  </div>
 	                  <div id="Div_Meta" style="display:none;" class="tips_body">
-      	 				  - 自定义日志页面头的Meta信息<br/>
+      	 				  - 自定义日志页面头的Meta信息，留空则默认为Tag和日志摘要<br/>
 		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
 						  <input name="log_KeyWords" type="text" id="log_KeyWords" size="80" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" />
 						  <br />

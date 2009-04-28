@@ -191,12 +191,12 @@ Else
   </form>
   </div><br/><br/>
  <script language="javascript">
-var secs = 3;
+var secs = 5;
 var wait = secs * 1000;
 var agreetext="请仔细阅读以上条款";
 document.aform.agreesubmit.value = agreetext+"(" + secs + ") ";
 document.aform.agreesubmit.disabled = true;
-document.aform.noagreesubmit.disabled = true;
+document.aform.noagreesubmit.disabled = false;
 for(i = 1; i <= secs; i++) {
   window.setTimeout("update(" + i + ")", i * 1000);
 }

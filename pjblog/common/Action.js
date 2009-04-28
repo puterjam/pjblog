@@ -61,10 +61,10 @@ function CheckPwd(){
 	var HoldValue = $("PostBack_UserName").value;
 	if (Pwd != SePwd){
 		$("PostBack_UserName").value = HoldValue.split("|$|")[0] + "|$|False";
-		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color=red>两次输入的密码不同</font></u>";
+		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<font color=red>两次输入的密码不同</font>";
 	}else{
 		$("PostBack_UserName").value = HoldValue.split("|$|")[0] + "|$|True";
-		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<u><font color='blue'>两次输入的密码相同！</font></u>";
+		$("CheckPwds").innerHTML = "&nbsp;&nbsp;<font color='blue'>两次输入的密码相同！</font>"
 	}
 }
 

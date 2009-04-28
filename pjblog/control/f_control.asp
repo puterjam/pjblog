@@ -18,12 +18,12 @@ sub DeleteFile(Folder)
 dim Folders,FSO,tmpfolder,tmpfiles,tmpfile
 Folders=server.MapPath(".\article/"&Folder&"")
 Set FSO = Server.CreateObject("Scripting.FileSystemObject")
-if FSO.FolderExists(Folders) then 
-set tmpfolder=FSO.GetFolder(Folders) 
-set tmpfiles=tmpfolder.files 
+if FSO.FolderExists(Folders) then
+set tmpfolder=FSO.GetFolder(Folders)
+set tmpfiles=tmpfolder.files
 for each tmpfile in tmpfiles
   FSO.DeleteFile tmpfile
-next 
+next
   else
 end if
 set FSO=nothing
@@ -37,7 +37,7 @@ sub moveall(sourcepath,targetpath)
 	if MoveOneFSO.folderexists(db1) and MoveOneFSO.folderexists(db2) then
 	MoveOneFSO.CopyFolder db1,db2
 	else
-	end if	
+	end if
 	set MoveOneFSO=nothing
 End sub
 
@@ -47,7 +47,7 @@ sub DeleteFolder(Folder)
 dim Folders,FSO
 Folders=server.MapPath("article/"&Folder)
 Set FSO = Server.CreateObject("Scripting.FileSystemObject")
-if FSO.FolderExists(Folders) then 
+if FSO.FolderExists(Folders) then
   FSO.Deletefolder Folders
   else
 end if
