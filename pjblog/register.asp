@@ -12,9 +12,13 @@ If blog_Disregister Then showmsg "错误信息", "站点不允许注册新用户
 
  <div id="Tbody">
 <%
+dim Referer_Url
 If Request.QueryString("action") = "agree" Then
     logout(True)
 
+    Referer_Url = Session(CookieName & "_Register_Referer_Url")
+    If len(Referer_Url) < 8 then Referer_Url = Cstr(Request.ServerVariables("HTTP_REFERER"))
+    If len(Referer_Url) < 8 then Referer_Url = "http://" & Request.ServerVariables("HTTP_HOST")
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:520px">
@@ -24,7 +28,7 @@ If Request.QueryString("action") = "agree" Then
 	  <form name="frm" action="register.asp" method="post">
 	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" onblur="if (this.value.length != 0) {CheckName();}" onfocus="if (this.value.length != 0) {CheckName();}" onclick="if (this.value.length != 0) {CheckName();}" id="vs"/><input id="PostBack_UserName" value="False|$|False" type="hidden"><font color="#FF0000">&nbsp;*</font> 昵称由2到24个字符组成 <span id="CheckName"></span></td></tr>
 	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/><font color="#FF0000">&nbsp;*</font> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
-      <tr><td align="right" width="85"><strong>　密码强度:</strong></td><td align="left">&nbsp;<img src="images/0.gif" id="strong"></td></tr>
+      <tr><td align="right" width="85"><strong>密码强度:</strong></td><td align="left">&nbsp;<img src="images/0.gif" id="strong"></td></tr>
 	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16" onblur="if (this.value.length != 0) {CheckPwd();}" onfocus="if (this.value.length != 0) {CheckPwd();}" onclick="if (this.value.length != 0) {CheckPwd();}" id="cConfirmpassword"/><font color="#FF0000">&nbsp;*</font> 必须和上面的密码一样<span id="CheckPwds"><span></td></tr>
 	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" checked/> 保密 <input name="Gender" type="radio" value="1"/>男 <input name="Gender" type="radio" value="2"/>女</td></tr>
 	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" checked/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
@@ -154,7 +158,12 @@ Function register
     getInfo(2)
     SQLQueryNums = SQLQueryNums + 2
     ReInfo(0) = "用户注册成功"
-    ReInfo(1) = "<b>注册并自动登录成功，三秒钟返回首页！</b><br/><a href=""default.asp"">如果您的浏览器没有自动跳转，请点击这里</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+	Referer_Url = Session(CookieName & "_Register_Referer_Url")
+    If len(Referer_Url) < 8 Then
+    	ReInfo(1) = "<b>注册并登录成功，三秒后返回首页！</b><br/><a href=""default.asp"">如果您的浏览器没有自动跳转，请点击这里</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+    Else
+    	ReInfo(1) = "<b>注册并登录成功！</b><br/><a href="""&Referer_Url&""">返回注册前页面</a>&nbsp;|&nbsp;<a href=""default.asp"">返回首页</a><br/>三秒后自动返回登录前页面<meta http-equiv=""Refresh"" content=""3;url="&Referer_Url&"""/>"
+    End If
     ReInfo(2) = "MessageIcon"
     register = ReInfo
     Response.Cookies(CookieName)("memName") = username
@@ -164,6 +173,9 @@ Function register
 End Function
 
 Else
+    Referer_Url = Cstr(Request.ServerVariables("HTTP_REFERER"))
+    If len(Referer_Url) < 8 then Referer_Url= "http://" & Request.ServerVariables("HTTP_HOST")
+    Session(CookieName & "_Register_Referer_Url") = Referer_Url
 %><br/><br/>
    <div style="text-align:center;">
   <form name="aform" action="login.asp" method="post">
