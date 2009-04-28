@@ -14,7 +14,7 @@ Skins = blog_DefaultSkin
 Response.Expires = 99999 '让服务器缓存这个文件更加长时间
 Response.ContentType = "application/x-javascript"
 
-UBB_Tools_Items="bold,italic,underline"
+UBB_Tools_Items="bold,italic,underline,deleteline"
 UBB_Tools_Items=UBB_Tools_Items&"||image,link,mail,quote,smiley"
              	   
 dim toolbarCode, smileCode

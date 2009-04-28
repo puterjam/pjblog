@@ -30,7 +30,7 @@ Sub doAction
             weblog("blog_BookPage") = 0 'CheckStr(Request.form("blogBookPage"))
             weblog("blog_commTimerout") = CheckStr(Request.Form("blog_commTimerout"))
             weblog("blog_commLength") = CheckStr(Request.Form("blog_commLength"))
-			weblog("blog_SaveTime") = CheckStr(Request.Form("blog_SaveTime"))
+            weblog("blog_SaveTime") = CheckStr(Request.Form("blog_SaveTime"))
             If CheckObjInstalled("ADODB.Stream") Then
                 weblog("blog_postFile") = Request.Form("blog_postFile")
                 ' if CheckStr(Request.form("blog_postFile"))="1" then weblog("blog_postFile")=1 else weblog("blog_postFile")=0
@@ -120,7 +120,7 @@ Sub doAction
                 session(CookieName&"_ShowMsg") = True
                 session(CookieName&"_MsgText") = Session(CookieName&"_MsgText")&"重新输出日志索引! "
             End If
-			
+
 			'分段静态 - evio
 			If Request.Form("ReBulidPartStatus") = 1 Then
 			   Dim ReBulidPartStatusSart, ReBulidPartStatusEnd, ReArtLists, ReArea, TI
@@ -710,18 +710,20 @@ ElseIf Request.Form("action") = "Links" Then
         dim LinksID, PartLinks, LinksNum
         LinksID = Request.Form("checklinkID")
         PartLinks = split(LinksID, ", ")
-        if int(ubound(PartLinks)) >= 0 then
+        If int(ubound(PartLinks)) >= 0 then
            for LinksNum = 0 to ubound(PartLinks)
-               conn.execute("delete * from blog_Links where link_ID="&PartLinks(LinksNum))
+               conn.Execute("DELETE * from blog_Links where link_ID="&PartLinks(LinksNum))
            next
         Session(CookieName&"_ShowMsg") = True
-        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"共删除"&ubound(PartLinks)+1&"条信息，请返回!"
+        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"共"&ubound(PartLinks)+1&"条链接删除成功!"
+        Bloglinks(2)
+        PostLink
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
-        else
+        Else
         Session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"您没有选择要删除的链接!"
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
-        end if
+        End If
     End If
     '==========================表情和关键字===============================
 ElseIf Request.Form("action") = "smilies" Then
@@ -954,12 +956,12 @@ ElseIf Request.Form("action") = "Attachments" Then
 ElseIf Request.Form("action") = "codeEditor" Then '在线编辑器
     If Request.Form("whatdo") = "save" Then
     	dim referer,fPath,cCode,saveCode
-    	referer = Request.Form("referer") 
-    	fPath = Request.Form("filePath") 
-    	cCode = Request.Form("code") 
+    	referer = Request.Form("referer")
+    	fPath = Request.Form("filePath")
+    	cCode = Request.Form("code")
 
 		saveCode = SaveToFile(cCode,fPath)
-	
+
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = saveCode(1)
         RedirectUrl("ConContent.asp?Fmenu=CodeEditor&referer="&referer&"&file=" & fPath)

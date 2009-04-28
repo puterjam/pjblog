@@ -107,7 +107,7 @@ End If
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 	<style type="text/css"> 
 		.ownerClassLog{display:none}
-		.ownerClassComment{display:<%if  stat_Admin <> True then response.write("none")%>;}
+		.ownerClassComment{display:<%if stat_Admin <> True then response.write("none")%>;}
 		/*全局的提示框样式*/
 		h5.tips{
 			background:#FFCC00;border:1px solid #FFCC00;background-image:url(images/bg_tips.png);color:#990000;padding:3px;margin:0;font-size:13px

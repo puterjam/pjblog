@@ -52,7 +52,7 @@ Class logArticle
         logmeta = 0
         logKeyWords = ""
         logDescription = ""
-		isajax = false
+        isajax = false
     End Sub
 
     Private Sub Class_Terminate()
@@ -1216,11 +1216,14 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     
     Temp1 = Replace(Temp1, "<$CategoryList$>", CategoryList(0))
     Temp1 = Replace(Temp1, "<$base$>", baseUrl)
-    Temp1 = Replace(Temp1, "<$siteName$>", siteName)    
+    Temp1 = Replace(Temp1, "<$siteName$>", siteName)
+    Temp1 = Replace(Temp1, "<$siteURL$>", siteURl)
     Temp1 = Replace(Temp1, "<$blog_Title$>", blog_Title)
-    Temp1 = Replace(Temp1, "<$skin$>", blog_DefaultSkin)   
-    Temp1 = Replace(Temp1, "<$blogabout$>", blogabout)   
-    Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)   
+    Temp1 = Replace(Temp1, "<$blog_email$>", blog_email)
+    Temp1 = Replace(Temp1, "<$blog_master$>", blog_master)
+    Temp1 = Replace(Temp1, "<$skin$>", blog_DefaultSkin)
+    Temp1 = Replace(Temp1, "<$blogabout$>", blogabout)
+    Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$CookieName$>", CookieName)
     Temp1 = Replace(Temp1, "<$blog_version$>", blog_version)
     
@@ -1240,12 +1243,16 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
     Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-	if len(log_View("log_KeyWords")) > 0 then
+	If len(log_View("log_KeyWords")) > 0 Then
     Temp1 = Replace(Temp1, "<$keywords$>", log_View("log_KeyWords"))
-	end if
-	if len(log_View("log_Description")) > 0 then
+    Else
+    Temp1 = Replace(Temp1, "<$keywords$>", "")
+	End If
+	If len(log_View("log_Description")) > 0 Then
     Temp1 = Replace(Temp1, "<$description$>", log_View("log_Description"))
-	end if
+    Else
+    Temp1 = Replace(Temp1, "<$description$>", "")
+	End If
 
     If Len(log_View("log_Tag"))>0 Then
         Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_Tag")))

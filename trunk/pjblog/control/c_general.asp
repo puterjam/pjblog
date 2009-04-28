@@ -78,14 +78,14 @@ Sub c_ceneral
 		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulid" value="1" id="T1"/> <label for="T1">重建数据缓存</label><br/>
 		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReTatol" value="1" id="T2"/> <label for="T2">重新统计网站数据</label><br/>
 		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="CleanVisitor" value="1" id="T5"/> <label for="T5">清除访客记录</label><br/><br/>
-		   <b>2.日志缓存和静态日志重建</b><span style="color:#f00">（这个过程可能会花很长时间,由你的日志数量来决定）</span><br/>
-		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label> <br/>
+		   <b>2.日志列表索引</b><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/><br/>
+		   <b>3.日志缓存和静态日志重建</b><span style="color:#f00">（这个过程可能会花很长时间,由你的日志数量来决定）</span><br/>
+		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="1" id="B1"/> <label for="B1">更新所有日志到文件，并且包含日志列表缓存 <span style="color:#666">（静态化所有日志内容数据，速度较慢）</span></label><br/>
 		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="2" id="B2"/> <label for="B2">只更新日志列表缓存<span style="color:#666">（在半静态和全静态之间切换的时候需要重新生成）</span></label><br/>
 		    &nbsp;&nbsp;&nbsp;<input type="radio" name="ReBulidArticle" value="0" id="B3" checked	/> <label for="B3">什么都不做</label><br/><br/>
 		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input checked="checked" type="checkbox" name="silentMode" value="1" id="B4"/> <label for="B4">静态化日志安静模式 <span style="color:#666">（使用安静模式不出现进度条，速度较快）</span></label><br/><br/>
-		   <b>3.日志列表索引</b><br/>
-		    &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidIndex" value="1" id="T4"/> <label for="T4">重新建立日志列表翻页索引<span style="color:#666">（可以修复日志列表翻页错误的问题）</span></label><br/><br/>
-           <b>4.分段全静态化</b><br/>
+           <b>4.分段静态日志重建</b><br/>
 			<%
 			Dim ConurseDB, Start, Ends
 			Set ConurseDB = Server.CreateObject("Adodb.Recordset")
@@ -103,10 +103,10 @@ Sub c_ceneral
 			Set ConurseDB = nothing
 			%>
             &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidPartStatus" value="1" id="C1"/> <label for="C1">分段静态化<span style="color:#666">（依据ID分段静态,减小服务器压力）</span></label><br/><br/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/>
 		   </div>
 		   <div class="SubButton">
-		      <input type="submit" name="Submit" value="保存配置" class="button"/> 
+		      <input type="submit" name="Submit" value="保存配置" class="button"/>
 		     </div>
 			 </form>
 			 <%else%>
@@ -116,7 +116,7 @@ Sub c_ceneral
 			   <%getMsg%>
 		<fieldset>
 		    <legend> 站点基本信息</legend>
-		    <div align="left">      
+		    <div align="left">
 		      <table border="0" cellpadding="2" cellspacing="1">
 		        <tr>
 		          <td width="180"><div align="right"> BLOG 名称 </div></td>
@@ -236,14 +236,14 @@ Sub c_ceneral
 		  	    <tr><td width="180" align="right">访客记录最大值</td><td width="300"><input name="blog_CountNum" type="text" size="5" class="text" value="<%=blog_CountNum%>"/>  <span style="color:#999">设置为0则不进行任何访客记录</span></td></tr>
 		     <tr>
 		         <td width="180" valign="top"><div align="right">注册名字过滤
-		              <div class="shuom">用"|"分割需要过滤的名字</div>              
+		              <div class="shuom">用"|"分割需要过滤的名字</div>
 		              <div class="shuom"></div>
 		          </div></td>
 		          <td align="left"><textarea name="Register_UserNames" cols="50" rows="5"><%=Register_UserNames%></textarea></td>
 		        </tr>
 		        <tr>
 		          <td width="180" valign="top"><div align="right">IP过滤
-		              <div class="shuom">以下Ip地址将无法访问Blog</div>              
+		              <div class="shuom">以下Ip地址将无法访问Blog</div>
 		              <div class="shuom">使用"|"分割IP地址,IP地址可以包含通配符号"*"用来禁止某个IP段的无法访问Blog</div>
 		          </div></td>
 		          <td align="left"><textarea name="FilterIPs" cols="50" rows="5"><%=FilterIPs%></textarea></td>
@@ -251,7 +251,7 @@ Sub c_ceneral
 		     </table>
 		    </div>
 			</fieldset>	<div class="SubButton">
-		      <input type="submit" name="Submit" value="保存配置" class="button"/> 
+		      <input type="submit" name="Submit" value="保存配置" class="button"/>
 		     </div>
 			 </form>
 			 <%end if%>

@@ -613,11 +613,11 @@ function fillSidebar(html){
 	window._sidebarCache = null;
 }
 
-//初始化登陆态的表现 ，for static mode
+//初始化登录状态的表现 ，for static mode
 function initLogin(CookieName){
 	var n = getCookie(CookieName);
 	if (n) {
-		//用户登陆
+		//用户登录
 		var u = /memName=(\w+)/.exec(n);
 		var ucn = /memName=([^\u4e00-\u9fa5]*)/.exec(n);
 		var cnvalue = decodeURI(ucn[1]).split("&")[0];
@@ -691,6 +691,26 @@ var fillHTML = function (el,HTMLString) {
         pNode.insertBefore(el,nSibling)
     }
 }
+
+//复制内容到剪贴板
+var lang = new Array();
+var userAgent = navigator.userAgent.toLowerCase();
+var is_opera = userAgent.indexOf('opera') != -1 && opera.version();
+var is_moz = (navigator.product == 'Gecko') && userAgent.substr(userAgent.indexOf('firefox') + 8, 3);
+var is_ie = (userAgent.indexOf('msie') != -1 && !is_opera) && userAgent.substr(userAgent.indexOf('msie') + 5, 3);
+
+function copycode(obj) {
+    if(is_ie && obj.style.display != 'none') {
+        var rng = document.body.createTextRange();
+        rng.moveToElementText(obj);
+        rng.scrollIntoView();
+        rng.select();
+        rng.execCommand("Copy");
+        rng.collapse(false);
+		alert("代码已经复制到剪切板");
+    }
+}
+
 /*
  * 打开连接特效
  */
@@ -792,7 +812,7 @@ function istrong(){
 		var n = "";
 		CheckPassword($("cpassword").value);
 		
-		function CheckPassword(val){    
+		function CheckPassword(val){
 			var z = val;
 			var regexp = new RegExp("[0-9]");
 				if (regexp.test(val)){
@@ -816,5 +836,5 @@ function istrong(){
 			n += "end";
 			var c = (n.split("|$|").length) - 1 ;
 			$("strong").src = "images/" + c + ".gif";
-		}  
+		}
 }

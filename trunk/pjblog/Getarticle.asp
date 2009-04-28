@@ -13,7 +13,7 @@ Dim id
 id=request("id")
 blog_postFile = Cint(Checkxss(request.QueryString("blog_postFile")))
 if id<>"" and  isnumeric(id) then   
-  Dim wbc_tag,Rs,i,RsT,OutPut,i2,i3,i4,str,ifMore,i2_2,total_rela,page,pagestr,thispage
+  Dim related_tag,Rs,i,RsT,OutPut,i2,i3,i4,str,ifMore,i2_2,total_rela,page,pagestr,thispage
   Set Rs=conn.execute("Select * from blog_Content where log_ID="&id&"")
   if request("page")<>"" and isnumeric(request("page"))  then
      page=Cint(request("page"))
@@ -29,18 +29,18 @@ if id<>"" and  isnumeric(id) then
   if request("act")="more" then i2_2=-1
   ifMore=false
   if not rs.eof then
-     wbc_tag=rs("log_tag")
-     if wbc_tag<>"" then
-        wbc_tag=split(wbc_tag,"}")
+     related_tag=rs("log_tag")
+     if related_tag<>"" then
+        related_tag=split(related_tag,"}")
 		i=0
 		i2=0
 		'find total
-		DO until i>Ubound(wbc_tag)
-           Set RsT=conn.execute("Select log_Title,log_id,log_ViewNums from  blog_Content where log_tag like '%"&wbc_tag(i)&"}%' and log_ID<>"&id&" order by log_PostTime desc")
+		DO until i>Ubound(related_tag)
+           Set RsT=conn.execute("Select log_Title,log_id,log_ViewNums from  blog_Content where log_tag like '%"&related_tag(i)&"}%' and log_ID<>"&id&" order by log_PostTime desc")
 		   if not RsT.eof then
 		      Do until Rst.eof
                   str=split(RsT(0),"(*##*)")(0)
-				  If instr(OutPut,str)=0 and wbc_tag(i)<>"" then
+				  If instr(OutPut,str)=0 and related_tag(i)<>"" then
 		             total_rela=total_rela+1
 				  End if
 				  Rst.movenext
@@ -61,7 +61,7 @@ if id<>"" and  isnumeric(id) then
 		   if thispage=i then 
 		      pagestr=pagestr&"<strong style='text-decoration:none' title='当前页'>["&i&"]</strong>"
 		   Elseif abs(thispage-i)<5 then
-		      pagestr=pagestr&"<a style='cursor:pointer'  title='转到第"&i&"页' onclick=check('Getarticle.asp?id="&id&"&page="&i&"&blog_postFile="&blog_postFile&"','wbc_tag','wbc_tag') >["&i&"]</a>"
+		      pagestr=pagestr&"<a style='cursor:pointer'  title='转到第"&i&"页' onclick=check('Getarticle.asp?id="&id&"&page="&i&"&blog_postFile="&blog_postFile&"','related_tag','related_tag') >["&i&"]</a>"
 		   end if
 		   i=i+1
 		 Loop
@@ -70,12 +70,12 @@ if id<>"" and  isnumeric(id) then
 		i=0
 		i4=0
 		Dim urlLink
-		DO until i>Ubound(wbc_tag)
-           Set RsT=conn.execute("Select log_Title,log_id,log_ViewNums from  blog_Content where log_tag like '%"&wbc_tag(i)&"}%' and log_ID<>"&id&" order by log_PostTime desc")
+		DO until i>Ubound(related_tag)
+           Set RsT=conn.execute("Select log_Title,log_id,log_ViewNums from  blog_Content where log_tag like '%"&related_tag(i)&"}%' and log_ID<>"&id&" order by log_PostTime desc")
 		   if not RsT.eof then
 		      Do until Rst.eof  or i4=i2_2
                   str=split(RsT(0),"(*##*)")(0)
-				  If instr(OutPut,str)=0 and wbc_tag(i)<>"" then
+				  If instr(OutPut,str)=0 and related_tag(i)<>"" then
 				     if i2>(i3-1) then
 					    i4=i4+1
 						if blog_postFile = 2 then
@@ -98,9 +98,9 @@ if id<>"" and  isnumeric(id) then
   End if
   output=output&pagestr
   If Ifmore or thispage<>1 then
-     OutPut=OutPut&"<br/><strong>模式:</strong> <a style='cursor:pointer'  onclick=check('Getarticle.asp?id="&id&"&act=more&blog_postFile="&blog_postFile&"','wbc_tag','wbc_tag') >全部显示[共"&total_rela&"个相关文章]</a></div>"
+     OutPut=OutPut&"<br/><strong>模式:</strong> <a style='cursor:pointer'  onclick=check('Getarticle.asp?id="&id&"&act=more&blog_postFile="&blog_postFile&"','related_tag','related_tag') >全部显示[共"&total_rela&"个相关文章]</a></div>"
   elseif i2>(i2_2-1)  then
-     OutPut=OutPut&"<div style='margin-top:10px;width:350px;'><strong>模式:</strong> <a style='cursor:pointer'  onclick=check('Getarticle.asp?id="&id&"&blog_postFile="&blog_postFile&"','wbc_tag','wbc_tag') >分页显示[共"&total_rela&"个相关文章]</a></div>"
+     OutPut=OutPut&"<div style='margin-top:10px;width:350px;'><strong>模式:</strong> <a style='cursor:pointer'  onclick=check('Getarticle.asp?id="&id&"&blog_postFile="&blog_postFile&"','related_tag','related_tag') >分页显示[共"&total_rela&"个相关文章]</a></div>"
   end if 
   OutPut=replace(OutPut,chr(39),chr(34))
   response.Write OutPut

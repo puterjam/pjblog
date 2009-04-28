@@ -1341,7 +1341,7 @@ End Function
 //*************************************
 //翻页函数，改成js
 //*************************************
-function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style,baseUrl,event){
+function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style, baseUrl, event){
     var _curPage = parseInt(Curpage);
     var _numbers = parseInt(Numbers);
 	event = event || ""

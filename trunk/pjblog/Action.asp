@@ -6,8 +6,8 @@
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <%
-response.expires=-1 
-response.expiresabsolute=now()-1 
+response.expires=-1
+response.expiresabsolute=now()-1
 response.cachecontrol="no-cache"
 '*************************************************
 ' Ajax 类 ASP 代码 // AjaxRequest.js 框架支持
