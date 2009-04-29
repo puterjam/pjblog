@@ -1,5 +1,5 @@
 ﻿FCKCommands.RegisterCommand('InsertCode',new FCKDialogCommand( 'InsertCode', FCKLang["InsertCodeBtn"], FCKPlugins.Items['insertcode'].Path + 'fck_insertcode.html', 600, 420 ) ) ;
-var oInsertCode=new FCKToolbarButton('InsertCode',null,FCKLang["InsertCodeBtn"],null,false,true,74);
+var oInsertCode=new FCKToolbarButton('InsertCode',null,FCKLang["InsertCodeBtn"],null,false,true,77);
 FCKToolbarItems.RegisterItem('InsertCode',oInsertCode);
 
 var FCKInsertCode = new Object() ;

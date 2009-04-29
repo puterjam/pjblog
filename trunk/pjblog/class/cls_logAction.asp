@@ -1059,9 +1059,9 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     End If
 
     If Len(log_View("log_Tag"))>0 Then
-        Temp1 = Replace(Temp1, "<$log_Tag$>", getTags.filterHTML(log_View("log_Tag")))
+        Temp1 = Replace(Temp1, "<$log_tag$>", getTags.filterHTML(log_View("log_Tag")))
     Else
-        Temp1 = Replace(Temp1, "<$log_Tag$>", "")
+        Temp1 = Replace(Temp1, "<$log_tag$>", "")
     End If
 
     If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If
