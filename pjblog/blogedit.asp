@@ -54,11 +54,7 @@ If ChkPost() Then
 					pws = md5(pws)
 				End If
 			End If 
-			If pws = "" Then
-				pwtips = ""
-				pwtitle = False
-				pwcomm = False
-			End If
+			If pws = "" Then pwtips = ""
     Else
 			IsShow = True
 			pws = ""
@@ -69,8 +65,6 @@ If ChkPost() Then
     If Request.Form("log_pws") = "0" Then
 			pws = ""
 			pwtips = ""
-			pwtitle = False
-			pwcomm = False
     End If
     If CheckStr(Request.Form("log_Meta")) = "0" Then
 			keyword = ""
