@@ -23,11 +23,10 @@ Else
       Path = Rs(0)
 	  conn.Execute("update blog_Files set FilesCounts='"&Rs(1)+1&"' where id ="&id)
 	  Set Rs = Nothing
-	  If ChkPost() then  Antidown = 0
 	  If left(Path,7)="http://" or left(Path,7)="rtsp://" then Antidown = 0
 	  If Request("code") = right(md5(right(Ucase(path),15)),10) then Antidown = 0
       If Antidown = 1 then
-        If Session(CookieName & "Antimdown") = "qlwz_Antimdown" Then
+        If Session(CookieName & "Antimdown") = "qlwz_Antimdown" Or ChkPost() Then
 		  Response.ContentType=GetContentType(getFileInfo(path)(9))
 		  Response.AddHeader "Content-Disposition", "null;filename="&Year(now)&Month(now)&Day(now)&Hour(now)&Minute(now)&Second(now)&""&Mid(path,InStrRev(path,"."))&""
 		  Response.Binarywrite ReadBinaryFile(server.mappath(path))
