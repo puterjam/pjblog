@@ -41,8 +41,6 @@ Function Checkxss(byVal ChkStr)
     Str = re.Replace(Str, "$1p&#100;ate")
     re.Pattern = "(\s)(or)"
     Str = re.Replace(Str, "$1o&#114;")
-	re.Pattern = "(\n)"
-    Str = re.Replace(Str, "$1o&#114;")
 	'----------------------------------
 	re.Pattern = "(java)(script)"
     Str = re.Replace(Str, "$1scri&#112;t")

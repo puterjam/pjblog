@@ -71,17 +71,23 @@ function CheckPwd(){
 // Ajax草稿保存  
 function OutTime(){    
     var loop = time;    
-    $("AjaxTimeSave").innerHTML = loop;    
-    setTimeout('goTime('+loop+');',1000);    
+    $("AjaxTimeSave").innerHTML = loop + " 秒后开始保存!";    
+    setTimeout('goTime('+loop+');',2000);    
 }    
 function goTime(i){    
     i = i - 1;    
     if ( i != 0 ){    
-        $("AjaxTimeSave").innerHTML = i;    
+        $("AjaxTimeSave").innerHTML = i + " 秒后开始保存!";    
         setTimeout("goTime("+i+");",1000);    
     }else{    
-        PostSave();    
-        setTimeout('goTime('+(time+1)+')',3000);    
+        PostSave();   
+		try{
+        	setTimeout('goTime('+(time+1)+')',3000); 
+		}catch(e){
+			if (e.description.length > 0){
+				setTimeout('goTime('+(time+1)+')',3000);
+			}
+		}
     }    
 }    
    
