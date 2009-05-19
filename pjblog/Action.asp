@@ -187,19 +187,23 @@ elseif request.QueryString("action") = "UpdateSave" then
     end if
 '-------------[防盗链]---------------
 ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
-dim down, showdownstr, id
-Session(CookieName & "Antimdown") = "qlwz_Antimdown"
-id = request("id")
-id = split(id,"&")(0)
-Set down = conn.execute("select FilesPath,FilesCounts from blog_Files where id="&id)
-response.clear()
-If request("action") = "Antimdown" and memName = empty Then
-showdownstr = getFileIcons(getFileInfo(down(0))(9))&" 该文件只允许会员下载! <a href=""login.asp"" accesskey=""L"">登录</a> | <a href=""register.asp"">注册</a>"
-Else
-showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; 下载次数:"&down(1)&"]</font>"
-End If
-response.write showdownstr
+	If ChkPost() Then
+		Dim down, showdownstr, id
+			Session(CookieName & "Antimdown") = "pjblog_Antimdown"
+			id = Checkxss(request("id"))
+			if instr(id, "&") > 0 then id = split(id,"&")(0)
+			Set down = conn.execute("select FilesPath,FilesCounts from blog_Files where id="&id)
+				response.clear()
+				If request("action") = "Antimdown" and memName = empty Then
+					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" 该文件只允许会员下载! <a href=""login.asp"" accesskey=""L"">登录</a> | <a href=""register.asp"">注册</a>"
+				Else
+					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; 下载次数:"&down(1)&"]</font>"
+				End If
+			response.write showdownstr
+	else
+		response.write "非法提交数据"
+	end if
 else
-response.write "非法操作!"
+	response.write "非法操作!"
 End If
 %>
