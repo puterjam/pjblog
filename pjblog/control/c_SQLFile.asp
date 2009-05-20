@@ -105,9 +105,9 @@ ElseIf Request.QueryString("Smenu") = "Attachment" Then%>
             Filestime = "文件不存在"
           End If
           Else
-            FilesSize = "外连地址"
+            FilesSize = "外链地址"
             FilesType = Replace(right(uploadDB("FilesPath"),4),".","")
-            Filestime = "外连地址"
+            Filestime = "外链地址"
           End If
 	   %>
 	   <tr align="center">
@@ -143,7 +143,7 @@ Rs.Close : Set Rs = Nothing
           <td align="left"></td>
           <td></td>
 	      <td><input name="url" type="text" size="60" class="text" value="" style="width:100%"/></td>
-	      <td><input name="count" type="text" size="10" value="" class="text"/></td>
+	      <td><input name="count" type="text" size="10" value="0" class="text"/></td>
 	      <td></td>
 	      <td></td>
 	   </tr>
