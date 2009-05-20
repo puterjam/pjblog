@@ -71,13 +71,13 @@ function CheckPwd(){
 // Ajax草稿保存  
 function OutTime(){    
     var loop = time;    
-    $("AjaxTimeSave").innerHTML = loop + " 秒后开始保存!";    
+    $("AjaxTimeSave").innerHTML = loop + " 秒后自动保存为草稿!";    
     setTimeout('goTime('+loop+');',2000);    
 }    
 function goTime(i){    
     i = i - 1;    
     if ( i != 0 ){    
-        $("AjaxTimeSave").innerHTML = i + " 秒后开始保存!";    
+        $("AjaxTimeSave").innerHTML = i + " 秒后自动保存为草稿!";    
         setTimeout("goTime("+i+");",1000);    
     }else{    
         PostSave();   
