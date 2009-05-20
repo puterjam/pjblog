@@ -756,11 +756,11 @@ Class ArticleCache
         Else
             TempStr = ""
             If stat_EditAll Or (stat_Edit And memName = author) Then
-                TempStr = TempStr&" | <a href=""blogedit.asp?id="&id&""" title=""编辑该日志"" accesskey=""E""><img src=""images/icon_edit.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a> "
+                TempStr = TempStr&" | <a href=""blogedit.asp?id="&id&"""><img src=""images/icon_edit.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a> "
             End If
 
             If stat_DelAll Or (stat_Del And memName = author) Then
-                TempStr = TempStr&" | <a href=""blogedit.asp?action=del&amp;id="&id&""" onclick=""If (!window.confirm('是否要删除该日志')) return false"" title=""删除该日志"" accesskey=""K""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
+                TempStr = TempStr&" | <a href=""blogedit.asp?action=del&amp;id="&id&""" onclick=""If (!window.confirm('是否要删除该日志')) return false""><img src=""images/icon_del.gif"" alt="""" border=""0"" style=""margin-bottom:-2px""/></a>"
             End If
             If CBool(Int(aRight)) Or stat_Admin Or (Not CBool(Int(aRight)) And memName = author) Then
                 tempI = getIntro(3)
