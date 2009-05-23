@@ -1,8 +1,28 @@
 ﻿<%
 '===============================================================
-'  Function For PJblog2
-'    更新时间: 2006-6-2
+'  Function For PJblog3
+'    更新时间: 2009-05-22
 '===============================================================
+'*************************************
+'函数名 : FilterHtmlTags()
+'用途 : 过滤html标签
+'更新时间 : 2009-05-22
+'*************************************
+Function FilterHtmlTags(ByVal Description)
+	If len(Description) = 0 or Description = "" Then Exit Function
+	Dim FaStr, re
+	Set re = New RegExp
+       	re.IgnoreCase = True
+       	re.Global = True
+       	re.Pattern = "<[^>]*?>"
+       		
+       	'去掉 尖括号和换行
+		FaStr = re.replace(Description, "")
+		FaStr = replace(FaStr,Chr(13), "")
+		FaStr = replace(FaStr,Chr(10), "")
+	Set re = nothing
+		FilterHtmlTags = FaStr
+End Function
 '*************************************
 '防XSS注入函数 更新于2009-04-21 by evio
 '与checkstr()相比, checkxss更加安全

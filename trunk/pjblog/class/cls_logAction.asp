@@ -7,7 +7,7 @@ Class logArticle
     Private weblog
     Public categoryID, logTitle, logAuthor, logEditType
     Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, logPwtitle, logPwcomm
-    Public logDisableComment, logIsTop, logFrom, logFromURL, isajax
+    Public logDisableComment, logIsTop, logFrom, logFromURL, isajax, logdescriptionFilt
     Public logDisableImage, logDisableSmile, logDisableURL, logDisableKeyWord, logMeta, logKeyWords, logDescription, TagMeta
     Public logQuote, logMessage, logIntro, logIntroCustom, logTags, logPublishTimeType, logPubTime, logTrackback, logCommentCount, logQuoteCount, logViewCount, logCname, logCtype
     Private logUbbFlags, PubTime, sqlString
@@ -108,6 +108,23 @@ Class logArticle
         End If
 
         '---------------分割日志--------------------
+		If logIntroCustom = 1 Then
+			If Int(logEditType) = 1 Then
+				logdescriptionFilt = closeUBB(logIntro)
+			Else
+				logdescriptionFilt = closeHTML(logIntro)
+			End If
+		Else
+			If Int(logEditType) = 1 Then
+                If blog_SplitType Then
+                    logdescriptionFilt = closeUBB(SplitLines(logMessage, blog_introLine))
+                Else
+                    logdescriptionFilt = closeUBB(CutStr(logMessage, blog_introChar))
+                End If
+            Else
+                logdescriptionFilt = closeHTML(SplitLines(logMessage, blog_introLine))
+            End If
+		End If
         If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
                 logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
@@ -145,8 +162,13 @@ Class logArticle
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
 
 		'Meta特别属性
-		If logMeta <> 1 Then
-			logDescription = logIntro
+		If logMeta <> true Then
+			logDescription = FilterHtmlTags(logdescriptionFilt)
+		Else
+			logDescription = FilterHtmlTags(logDescription)
+		End If
+		
+		If logMeta <> true Then
 			logKeyWords = CheckStr(TagMeta)
 			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
@@ -185,7 +207,7 @@ Class logArticle
         weblog("log_Pwcomm") = logPwcomm
         weblog("log_Meta") = logMeta
         weblog("log_KeyWords") = logKeyWords
-        weblog("log_Description") = DelQuote(logDescription)
+        weblog("log_Description") = logDescription
         
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
@@ -326,6 +348,23 @@ Class logArticle
         End If
 
         '---------------分割日志--------------------
+		If logIntroCustom = 1 Then
+			If Int(logEditType) = 1 Then
+				logdescriptionFilt = closeUBB(logIntro)
+			Else
+				logdescriptionFilt = closeHTML(logIntro)
+			End If
+		Else
+			If Int(logEditType) = 1 Then
+                If blog_SplitType Then
+                    logdescriptionFilt = closeUBB(SplitLines(logMessage, blog_introLine))
+                Else
+                    logdescriptionFilt = closeUBB(CutStr(logMessage, blog_introChar))
+                End If
+            Else
+                logdescriptionFilt = closeHTML(SplitLines(logMessage, blog_introLine))
+            End If
+		End If
         If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
                 logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
@@ -370,8 +409,13 @@ Class logArticle
         End If
 
 		'Meta特别属性
-		If logMeta <> 1 Then
-			logDescription = logIntro
+		If logMeta <> true Then
+			logDescription = FilterHtmlTags(logdescriptionFilt)
+		Else
+			logDescription = FilterHtmlTags(logDescription)
+		End If
+		
+		If logMeta <> true Then
 			logKeyWords = CheckStr(TagMeta)
 			If len(logKeyWords) = 0 Then
 				logKeyWords = CheckStr(logTitle)
@@ -408,7 +452,7 @@ Class logArticle
         weblog("log_Pwcomm") = logPwcomm
         weblog("log_Meta") = logMeta
         weblog("log_KeyWords") = logKeyWords
-        weblog("log_Description") = DelQuote(logDescription)
+        weblog("log_Description") = logDescription
 
         SQLQueryNums = SQLQueryNums + 2
         weblog.update
