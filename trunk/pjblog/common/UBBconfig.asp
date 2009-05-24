@@ -15,7 +15,7 @@ UBB_Tools_default = UBB_Tools_default&"link,mail,image,insertunorderedlist,quote
 UBB_Tools_default = UBB_Tools_default&"||"
 UBB_Tools_default = UBB_Tools_default&"smiley"
 UBB_Tools_default = UBB_Tools_default&"/"
-UBB_Tools_default = UBB_Tools_default&"flash,music,mediaplayer,realplayer,ed2k,mDown,htmlubb,highlightcode"
+UBB_Tools_default = UBB_Tools_default&"flash,music,mediaplayer,realplayer,ed2k,mDown,htmlubb,highlightcode,AjaxLogSave"
 UBB_Tools_default = UBB_Tools_default&"||"
 UBB_Tools_default = UBB_Tools_default&"about"
 
@@ -132,6 +132,8 @@ Function ToolsToCode()
                         ToolsToCode = ToolsToCode&"<li><a id=""A_ed2k"" href=""javascript:UBB_ed2k();void(0)"" title=""插入eMule超链接"" class=""Toolsbutton""><img src=""images/ed2k.gif"" border=""0"" alt=""插入eMule超链接"" /></a></li>"
                     Case "mDown"
                         ToolsToCode = ToolsToCode&"<li><a id=""A_mDown"" href=""javascript:UBB_mDown();void(0)"" title=""插入只允许会员下载的文件地址"" class=""Toolsbutton""><img src=""images/disk.gif"" border=""0"" alt=""插入只允许会员下载的文件地址"" /></a></li>"
+					Case "AjaxLogSave"
+                        ToolsToCode = ToolsToCode&"<li><a id=""A_mDown"" href=""javascript:UBB_AjaxLogSave();void(0)"" title=""点击开启或关闭Ajax草稿自动保存"" class=""Toolsbutton""><img src=""images/AjaxLogSave.png"" border=""0"" alt=""点击开启或关闭Ajax草稿自动保存"" /></a></li>"
                     Case Else
                         ToolsToCode = ToolsToCode&"<li><a id=""A_"&Items&""" href=""javascript:UBB_"&Items&"();void(0)"" title=""" + Tip(Items) + """ class=""Toolsbutton""><img src=""skins/"&Skins&"/UBB/Icons/"&Items&".gif"" border=""0"" alt=""" + Tip(Items) + """ /></a></li>"
                 End Select
@@ -140,6 +142,7 @@ Function ToolsToCode()
         Next
         ToolsToCode = ToolsToCode&"<div style=""clear: both;display: block;height:1px;overflow:hidden""></div></div>"
     Next
+	ToolsToCode = ToolsToCode&"<div id=""AjaxTimeSave"" style=""display:none; width:100%""></div>"
 End Function
 
 Function Tip(Str)
