@@ -52,7 +52,7 @@ If IsInteger(id) Then
 Else
     showmsg "错误信息", "非法操作", "ErrorIcon", ""
 End If
-getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(23, 0), log_ViewArr(24, 0)
+getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(24, 0), log_ViewArr(25, 0)
 tKey = getTempKey
 %>
  <!--内容-->
