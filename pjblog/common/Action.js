@@ -68,24 +68,36 @@ function CheckPwd(){
 	}
 }
 
-// Ajax草稿保存  
+// Ajax草稿保存
+var e_event = null;
+function UBB_AjaxLogSave(){
+	var obj = $("AjaxTimeSave");
+	if (obj.style.display == "none"){ obj.style.display = ""; }
+	if (e_event == null){
+		OutTime();
+	}else{
+		clearTimeout(e_event);
+		e_event = null;
+		obj.innerHTML = (obj.innerHTML + "&nbsp;&nbsp;&nbsp;&nbsp;<span style='font-size:9px;text-decoration:none'><a href='javascript:void(0);' onclick=$('AjaxTimeSave').style.display='none'><b>Close</b></a></span>");
+	}
+}
 function OutTime(){    
     var loop = time;    
     $("AjaxTimeSave").innerHTML = loop + " 秒后自动保存为草稿!";    
-    setTimeout('goTime('+loop+');',2000);    
+    e_event = setTimeout('goTime('+loop+');',2000);    
 }    
 function goTime(i){    
     i = i - 1;    
     if ( i != 0 ){    
         $("AjaxTimeSave").innerHTML = i + " 秒后自动保存为草稿!";    
-        setTimeout("goTime("+i+");",1000);    
+        e_event = setTimeout("goTime("+i+");",1000);    
     }else{    
         PostSave();   
 		try{
-        	setTimeout('goTime('+(time+1)+')',3000); 
+        	e_event = setTimeout('goTime('+(time+1)+')',3000); 
 		}catch(e){
 			if (e.description.length > 0){
-				setTimeout('goTime('+(time+1)+')',3000);
+				e_event = setTimeout('goTime('+(time+1)+')',3000);
 			}
 		}
     }    

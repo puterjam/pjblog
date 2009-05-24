@@ -341,7 +341,7 @@ Else
     UBBeditor("Message")
 End If
 
-%><p class="tips_body" id="AjaxTimeSave"><a href="javascript:void(0);" onClick="OutTime();">点击开启Ajax自动保存草稿功能</a></p></td>
+%></td>
              </tr>
             <tr>
               <td align="right" valign="top">&nbsp;</td>
