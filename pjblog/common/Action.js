@@ -95,16 +95,19 @@ function goTime(i){
 function PostSave(){    
     var TempStr, left, right, ToWhere, postId;    
     var ajax = new AJAXRequest;    
-    var str = ReadCode();    
+    //var str = ReadCode();  	
     var FirstPost = document.forms["frm"].FirstPost.value;    
     if (FirstPost == 1){    
-        var zpt =document.forms["frm"].postbackId.value;    
-        ToWhere = GetAction[3] + "postId=" + escape(zpt) + "&";    
+        //var zpt =document.forms["frm"].postbackId.value;    
+        ToWhere = GetAction[3];    
     }else{    
         ToWhere = GetAction[2];    
     }   
-    ajax.get(    
-             GetFile[0] + ToWhere + str + "TimeStamp=" + new Date().getTime(),    
+	//alert(ReadCode());
+	//alert(document.forms["frm"].postbackId.value)
+    ajax.post(    
+             GetFile[0] + ToWhere + "TimeStamp=" + new Date().getTime(),
+			 ReadCode(),
              function(obj) {    
                  TempStr = obj.responseText;    
                  left = TempStr.split("|$|")[0];    
@@ -201,7 +204,14 @@ function ReadCode(){
 	//引用通告
 	logQuote = $("logQuote").value;
 	
-    str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&logweather=" + escape(logweather) + "&logLevel=" + escape(logLevel) + "&logcomorder=" + escape(logcomorder) + "&logDisComment=" + escape(logDisComment) + "&logIsTop=" + escape(logIsTop) + "&logMeta=" + escape(logMeta) + "&logFrom=" + escape(logFrom) + "&logFromURL=" + escape(logFromURL) + "&logdisImg=" + escape(logdisImg) + "&logDisSM=" + escape(logDisSM) + "&logDisURL=" + escape(logDisURL) + "&logDisKey=" + escape(logDisKey) + "&logQuote=" + escape(logQuote) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";     
+    //str = "title=" + escape(title) + "&cname=" + escape(cname) + "&ctype=" + escape(ctype) + "&logweather=" + escape(logweather) + "&logLevel=" + escape(logLevel) + "&logcomorder=" + escape(logcomorder) + "&logDisComment=" + escape(logDisComment) + "&logIsTop=" + escape(logIsTop) + "&logMeta=" + escape(logMeta) + "&logFrom=" + escape(logFrom) + "&logFromURL=" + escape(logFromURL) + "&logdisImg=" + escape(logdisImg) + "&logDisSM=" + escape(logDisSM) + "&logDisURL=" + escape(logDisURL) + "&logDisKey=" + escape(logDisKey) + "&logQuote=" + escape(logQuote) + "&tags=" + escape(Tags) + "&cateid=" + escape(mCateID) + "&Message=" + escape(Message) + "&";
+	
+	str = escape(title) + "|$|" + escape(cname) + "|$|" + escape(ctype) + "|$|" + escape(logweather) + "|$|" + escape(logLevel) + "|$|" + escape(logcomorder) + "|$|" + escape(logDisComment) + "|$|" + escape(logIsTop) + "|$|" + escape(logMeta) + "|$|" + escape(logFrom) + "|$|" + escape(logFromURL) + "|$|" + escape(logdisImg) + "|$|" + escape(logDisSM) + "|$|" + escape(logDisURL) + "|$|" + escape(logDisKey) + "|$|" + escape(logQuote) + "|$|" + escape(Tags) + "|$|" + escape(mCateID) + "|$|" + escape(Message);
+	 if (document.forms["frm"].FirstPost.value == 1){
+		 var zpt =document.forms["frm"].postbackId.value;    
+         str = str + "|$|" + escape(zpt);
+	 }  
+	
     return str;    
 }
 
