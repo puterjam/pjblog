@@ -14,7 +14,7 @@ response.cachecontrol="no-cache"
 ' Ajax 类 ASP 代码 // AjaxRequest.js 框架支持
 ' evio edit 
 '*************************************************
-Dim title, cname, Message, lArticle, postLog, SaveId
+Dim title, cname, Message, lArticle, postLog, SaveId, ReadForm, SplitReadForm
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
@@ -79,28 +79,34 @@ elseif request.QueryString("action") = "checkname" then
 	End If
 '--------------------------- [Ajax草稿保存 -- 发表时保存] --------------------------    
 elseif request.QueryString("action") = "PostSave" then    
-    If ChkPost() Then   
-        title = CheckStr(Request.QueryString("title"))    
-        cname = CheckStr(Request.QueryString("cname"))   
-        Message = CheckStr(Request.QueryString("Message")) 
-		cCateID = CheckStr(Request.QueryString("cateid"))
-		e_tags =  CheckStr(Request.QueryString("tags"))
-		ctype = CheckStr(Request.QueryString("ctype"))
-		logWeather = CheckStr(Request.QueryString("logweather"))
-		logLevel = CheckStr(Request.QueryString("logLevel"))
-		logcomorder = CheckStr(Request.QueryString("logcomorder"))
-		logDisComment = CheckStr(Request.QueryString("logDisComment"))
-		logIsTop = CheckStr(Request.QueryString("logIsTop"))
+    If ChkPost() Then
+		ReadForm = Request.Form
+		SplitReadForm = Split(ReadForm, "|$|")
+'		response.Write(Ubound(SplitReadForm))
+'		response.End()
+		'str = escape(title) + "|$|" + escape(cname) + "|$|" + escape(ctype) + "|$|" + escape(logweather) + "|$|" + escape(logLevel) + "|$|" + escape(logcomorder) + "|$|" + escape(logDisComment) + "|$|" + escape(logIsTop) + "|$|" + escape(logMeta) + "|$|" + escape(logFrom) + "|$|" + escape(logFromURL) + "|$|" + escape(logdisImg) + "|$|" + escape(logDisSM) + "|$|" + escape(logDisURL) + "|$|" + escape(logDisKey) + "|$|" + escape(logQuote) + "|$|" + escape(Tags) + "|$|" + escape(mCateID) + "|$|" + escape(Message)
+		'            0                      1                        2                         3                         4                              5                6                             7                         8                         9                             10                        11              12                        13                        14                              15                       16                     17        18
+        title = UnEscape(SplitReadForm(0)) 
+        cname = UnEscape(SplitReadForm(1))
+		ctype = UnEscape(SplitReadForm(2))
+		logWeather = UnEscape(SplitReadForm(3))
+		logLevel = UnEscape(SplitReadForm(4))
+		logcomorder = UnEscape(SplitReadForm(5))
+		logDisComment = UnEscape(SplitReadForm(6))
+		logIsTop = UnEscape(SplitReadForm(7))
 		'logIsHidden = Request.QueryString("logIsHidden")
-		logMeta = CheckStr(Request.QueryString("logMeta"))
-		logFrom = CheckStr(Request.QueryString("logFrom"))
-		logFromURL = CheckStr(Request.QueryString("logFromURL"))
-		logdisImg = CheckStr(Request.QueryString("logdisImg"))
-		logDisSM = CheckStr(Request.QueryString("logDisSM"))
-		logDisURL = CheckStr(Request.QueryString("logDisURL"))
-		logDisKey = CheckStr(Request.QueryString("logDisKey"))
-		logQuote = CheckStr(Request.QueryString("logQuote"))
-            
+		logMeta = UnEscape(SplitReadForm(8))
+		logFrom = UnEscape(SplitReadForm(9))
+		logFromURL = UnEscape(SplitReadForm(10))
+		logdisImg = UnEscape(SplitReadForm(11))
+		logDisSM = UnEscape(SplitReadForm(12))
+		logDisURL = UnEscape(SplitReadForm(13))
+		logDisKey = UnEscape(SplitReadForm(14))
+		logQuote = UnEscape(SplitReadForm(15))
+		e_tags =  UnEscape(SplitReadForm(16))
+		cCateID = UnEscape(SplitReadForm(17))
+		Message = UnEscape(SplitReadForm(18))
+
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
         lArticle.logcname = cname 
@@ -133,28 +139,35 @@ elseif request.QueryString("action") = "PostSave" then
     end if    
 '--------------------------- [Ajax草稿保存 -- 编辑时保存] --------------------------    
 elseif request.QueryString("action") = "UpdateSave" then    
-    If ChkPost() Then   
-        title = CheckStr(Request.QueryString("title"))    
-        cname = CheckStr(Request.QueryString("cname"))   
-        Message = CheckStr(Request.QueryString("Message")) 
-		e_tags =  CheckStr(Request.QueryString("tags")) 
-		ctype = CheckStr(Request.QueryString("ctype"))
-		logWeather = CheckStr(Request.QueryString("logweather")) 
-		logLevel = CheckStr(Request.QueryString("logLevel"))
-		logcomorder = CheckStr(Request.QueryString("logcomorder"))
-		logDisComment = CheckStr(Request.QueryString("logDisComment"))
-		logIsTop = CheckStr(Request.QueryString("logIsTop"))
+    If ChkPost() Then 
+		ReadForm = Request.Form
+		SplitReadForm = Split(ReadForm, "|$|")
+'		response.Write(Ubound(SplitReadForm))
+'		response.End()
+		'str = escape(title) + "|$|" + escape(cname) + "|$|" + escape(ctype) + "|$|" + escape(logweather) + "|$|" + escape(logLevel) + "|$|" + escape(logcomorder) + "|$|" + escape(logDisComment) + "|$|" + escape(logIsTop) + "|$|" + escape(logMeta) + "|$|" + escape(logFrom) + "|$|" + escape(logFromURL) + "|$|" + escape(logdisImg) + "|$|" + escape(logDisSM) + "|$|" + escape(logDisURL) + "|$|" + escape(logDisKey) + "|$|" + escape(logQuote) + "|$|" + escape(Tags) + "|$|" + escape(mCateID) + "|$|" + escape(Message) + "|$|" + escape(id)
+		'            0                      1                        2                         3                         4                              5                6                             7                         8                         9                             10                        11              12                        13                        14                              15                       16                     17      18 
+        title = UnEscape(SplitReadForm(0))    
+        cname = UnEscape(SplitReadForm(1))   
+        Message = UnEscape(SplitReadForm(18)) 
+		e_tags =  UnEscape(SplitReadForm(16)) 
+		ctype = UnEscape(SplitReadForm(2))
+		logWeather = UnEscape(SplitReadForm(3)) 
+		logLevel = UnEscape(SplitReadForm(4))
+		logcomorder = UnEscape(SplitReadForm(5))
+		logDisComment = UnEscape(SplitReadForm(6))
+		logIsTop = UnEscape(SplitReadForm(7))
 		'logIsHidden = Request.QueryString("logIsHidden")
-		logMeta = CheckStr(Request.QueryString("logMeta"))
-		logFrom = CheckStr(Request.QueryString("logFrom"))
-		logFromURL = CheckStr(Request.QueryString("logFromURL"))
-		logdisImg = CheckStr(Request.QueryString("logdisImg"))
-		logDisSM = CheckStr(Request.QueryString("logDisSM"))
-		logDisURL = CheckStr(Request.QueryString("logDisURL"))
-		logDisKey = CheckStr(Request.QueryString("logDisKey"))
-		logQuote = CheckStr(Request.QueryString("logQuote"))
-            
-        SaveId = CheckStr(Request.QueryString("postId") )   
+		logMeta = UnEscape(SplitReadForm(8))
+		logFrom = UnEscape(SplitReadForm(9))
+		logFromURL = UnEscape(SplitReadForm(10))
+		logdisImg = UnEscape(SplitReadForm(11))
+		logDisSM = UnEscape(SplitReadForm(12))
+		logDisURL = UnEscape(SplitReadForm(13))
+		logDisKey = UnEscape(SplitReadForm(14))
+		logQuote = UnEscape(SplitReadForm(15))
+        cCateID = UnEscape(SplitReadForm(17))
+		
+        SaveId = UnEscape(SplitReadForm(19))   
             
         Set lArticle = New logArticle    
         lArticle.logTitle = title    
@@ -178,6 +191,7 @@ elseif request.QueryString("action") = "UpdateSave" then
 		lArticle.logDisableURL = logDisURL
 		lArticle.logDisableKeyWord = logDisKey
 		lArticle.logTrackback = logQuote
+		lArticle.categoryID = cCateID
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             

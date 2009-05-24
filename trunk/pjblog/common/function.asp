@@ -1613,6 +1613,13 @@ End Function
 		CloseDB();
 		Response.Redirect(url);
 	}
+
+//*************************************
+//反转 escape() 编码
+//*************************************
+	function UnEscape(str){
+		return unescape(str);
+	}
 	
 //*************************************
 //翻页函数，改成js
