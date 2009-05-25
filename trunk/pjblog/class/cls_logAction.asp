@@ -525,9 +525,11 @@ Class logArticle
                 Trackback Trim(log_QuoteEvery), siteURL&"default.asp?id="&logid, logTitle, CutStr(CheckStr(logIntro), 252), siteName
             Next
         End If
-		If blog_postFile = 1 Then
-		PostHalfStatic id,false
-        End If
+		if isajax = false then
+			If blog_postFile = 1 Then
+				PostHalfStatic id,false
+        	End If
+		end if
     End Function
 
     '*********************************************
