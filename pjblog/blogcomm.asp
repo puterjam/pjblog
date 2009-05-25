@@ -86,7 +86,7 @@ End Function
 '====================== 评论发表函数 ===========================================================
 
 Function postcomm
-    Dim username, post_logID, post_From, post_FromURL, post_disImg, post_DisSM, post_DisURL, post_DisKEY, post_DisUBB, post_Message, validate
+    Dim username, post_logID, post_From, post_FromURL, post_disImg, post_DisSM, post_DisURL, post_DisKEY, post_DisUBB, post_Message, validate, GuestCanRemeberComment
     Dim password
     Dim ReInfo, LastMSG, FlowControl
     ReInfo = Array("错误信息", "", "MessageIcon")
@@ -95,6 +95,8 @@ Function postcomm
     post_logID = CLng(CheckStr(request.Form("logID")))
     validate = Trim(request.Form("validate"))
     post_Message = CheckStr(request.Form("Message"))
+	GuestCanRemeberComment = CheckStr(Request.Form("log_GuestCanRemeberComment"))
+	if GuestCanRemeberComment = "1" then GuestCanRemeberComment = 1 else GuestCanRemeberComment = 0
     FlowControl = False
 
   If stat_Admin = False Then
@@ -261,6 +263,17 @@ Function postcomm
     re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
     post_Message = re.Replace(post_Message, "$2")
 
+	'记住信息
+	If GuestCanRemeberComment = 1 Then
+		Response.Cookies(CookieName)("Guest") = ("true|-|" & username & "|$|" & post_Message & "|+|")
+		Response.Cookies(CookieName).Expires = Date+365
+    	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+	Else
+		Response.Cookies(CookieName)("Guest") = ("false|-|null|+|")
+		Response.Cookies(CookieName).Expires = Date+365
+    	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+	End If
+	
     AddComm = Array(Array("blog_ID", post_logID), Array("comm_Content", post_Message), Array("comm_Author", username), Array("comm_DisSM", post_DisSM), Array("comm_DisUBB", post_DisUBB), Array("comm_DisIMG", post_disImg), Array("comm_AutoURL", post_DisURL), Array("comm_PostIP", getIP), Array("comm_AutoKEY", post_DisKEY))
     DBQuest "blog_Comment", AddComm, "insert"
     'Conn.ExeCute("INSERT INTO blog_Comment(blog_ID,comm_Content,comm_Author,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY) VALUES ("&post_logID&",'"&post_Message&"','"&username&"',"&post_DisSM&","&post_DisUBB&","&post_disImg&","&post_DisURL&",'"&getIP()&"',"&post_DisKEY&")")

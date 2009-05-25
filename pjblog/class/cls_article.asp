@@ -323,9 +323,28 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		      			return true
 		      		}
 		      </script>
+              <%
+			  Dim Ts, Ts_UserName, Ts_Content, Ts_True
+			  Ts = Request.Cookies(CookieName)("Guest")
+			  If len(Ts) > 0 or Ts <> "" Then
+			  	If Instr(Ts, "|-|") > 0 Then
+					Ts_True = Split(Ts, "|-|")(0)
+			  		Ts_UserName = Split(Split(Ts, "|-|")(1), "|$|")(0)
+					Ts_Content = Split(Split(Split(Ts, "|-|")(1), "|$|")(1), "|+|")(0)
+				End If
+			  End If
+			  %>
 		      <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">	  
 			  <table width="100%" cellpadding="0" cellspacing="0">	  
-			  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%if not memName=empty then response.write ("value="""&memName&""" readonly=""readonly""")%>/></td></tr>
+			  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%
+			  if not memName=empty then
+			  	response.write ("value="""&memName&""" readonly=""readonly""")
+			  else
+			  	if Ts_True = "true" then
+					response.write ("value="""&Ts_UserName&"""")
+				end if
+			  end if
+			  %>/></td></tr>
 		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
@@ -334,6 +353,11 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 				UBB_Tools_Items = "bold,italic,underline,deleteline"
 				UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
 				Response.write (UBBeditorCore("Message"))
+				if memName = empty then
+			  		if Ts_True = "true" then
+						response.write ("<script>$('editMask').value = """&Ts_Content&""";document.forms[0].Message.value="""&Ts_Content&"""</script>")
+					end if
+			  	end if 
 				%>
 			  </td></tr>
 			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>
@@ -341,6 +365,10 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
 		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
 		             <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" />禁止自动转换关键字</label>
+                     <%if not len(memName) > 0 then%>
+                     <span id="GuestCanRemeberComment"><br />
+                    <label for="label8"><input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>记住我的信息,以便下次评论时不用输入用户名.</label></span>
+                    <%end if%>
 			  </td></tr>
 		          <tr>
 		            <td colspan="2" align="center" style="padding:3px;">
