@@ -636,12 +636,14 @@ function initLogin(CookieName){
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=true\|\-\|(.*)\|\+\|/.exec(unescape(n));
-			var SplitGuest = Guest[1].split("|$|");
-			try{
-				if (document.forms[0].username) document.forms[0].username.value = escape(SplitGuest[0]);
-				if ($("editMask")) $("editMask").value = escape(SplitGuest[1]);
-				if (document.forms[0].Message) document.forms[0].Message.value = escape(SplitGuest[1]);
-			}catch(e){if (e.description.length > 0) alert(e.description);}
+			if (Guest != null && Guest[1].indexOf("|$|") != -1){
+				var SplitGuest = Guest[1].split("|$|");
+				try{
+					if (document.forms[0].username) document.forms[0].username.value = escape(SplitGuest[0]);
+					if ($("editMask")) $("editMask").value = escape(SplitGuest[1]);
+					if (document.forms[0].Message) document.forms[0].Message.value = escape(SplitGuest[1]);
+				}catch(e){if (e.description.length > 0) alert(e.description);}
+			}
 		}
 		
 		//blog目前的权限
