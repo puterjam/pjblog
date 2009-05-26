@@ -217,11 +217,15 @@ Class logArticle
         '------------------统计日志-----------------------------
         Dim PostLogID
         PostLogID = Conn.Execute("SELECT TOP 1 log_ID FROM blog_Content ORDER BY log_ID DESC")(0)
-        Conn.Execute("UPDATE blog_Member SET mem_PostLogs=mem_PostLogs+1 WHERE mem_Name='"&logAuthor&"'")
+		if isajax <> true then
+        	Conn.Execute("UPDATE blog_Member SET mem_PostLogs=mem_PostLogs+1 WHERE mem_Name='"&logAuthor&"'")
+		end if
         If Not logIsDraft Then
-            Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
-            Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID="&categoryID)
-            SQLQueryNums = SQLQueryNums + 2
+			if isajax <> true then
+            	Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
+            	Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID="&categoryID)
+            	SQLQueryNums = SQLQueryNums + 2
+			end if
         End If
 
 
@@ -296,9 +300,8 @@ Class logArticle
         End If
 
         logAuthor = weblog("log_Author")
-        Conn.Execute("UPDATE blog_Category SET cate_count=cate_count-1 where cate_ID="&weblog("log_CateID"))
-        Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID="&CheckStr(categoryID))
-
+        	Conn.Execute("UPDATE blog_Category SET cate_count=cate_count-1 where cate_ID="&weblog("log_CateID"))
+        	Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID="&CheckStr(categoryID))
 		TagMeta = logTags
         '-------------------处理Tags--------------------
         Dim tempTags,tempTags2, loadTagString, loadTags, loadTag, getTags
@@ -402,11 +405,13 @@ Class logArticle
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
 
         If logIsDraft = False Then weblog("log_Modify") = "[本日志由 "&memName&" 于 "&DateToStr(Now(), "Y-m-d H:I A")&" 编辑]"
-        If logIsDraft = False And weblog("log_IsDraft")<>logIsDraft Then
-            Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
-            Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID=" & CheckStr(categoryID))
-            SQLQueryNums = SQLQueryNums + 2
-        End If
+        'If logIsDraft = False And weblog("log_IsDraft")<>logIsDraft Then
+			'if isajax <> true then
+            	'Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
+            	'Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID=" & CheckStr(categoryID))
+			'end if
+            'SQLQueryNums = SQLQueryNums + 2
+       ' End If
 
 		'Meta特别属性
 		If logMeta <> true Then
