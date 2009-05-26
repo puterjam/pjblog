@@ -408,7 +408,7 @@ End If
                     <input name="SaveDraft" type="submit" class="userbutton" value="保存并取消草稿" accesskey="D" onClick="document.getElementById('log_IsDraft').value='False'"/>
                  <%end if%>
                  <input name="DelArticle" type="button" class="userbutton" value="删除该日志" accesskey="K" onClick="if (window.confirm('是否要删除该日志')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
-                 <input name="CancelEdit" type="button" class="userbutton" value="取消编辑" accesskey="Q" onClick="location='default.asp?id=<%=logid%>'"/>
+                 <input name="CancelEdit" type="button" class="userbutton" value="取消编辑" accesskey="Q" onClick="location='default.asp'"/>
                </td>
              </tr>
                  <%if lArticle.logIsDraft Then%>
