@@ -201,7 +201,7 @@ Sub outCate
 End Sub
 
 %>
-         </select>
+         </select>&nbsp;<a href="javascript:void(0)" onclick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
    	</td>
              </tr>
              <!--edit by evio-->

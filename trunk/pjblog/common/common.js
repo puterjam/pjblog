@@ -851,3 +851,13 @@ function istrong(){
 			$("strong").src = "images/" + c + ".gif";
 		}
 }
+
+function AddNewCate(){
+	var e = "";
+	e += "<table width='100%'>";
+	e += "<tr><td align='center' width='100%'>";
+	e += "<div style='text-align:center;width:100%;'>新分类名:&nbsp;<input type='text' value='' id='log_NewCate' /> <a href='javascript:void(0)' onclick='GoToCateAdd()'>确定</a></div>";
+	e += "</td></tr>";
+	e += "</table>";
+	return e;
+}

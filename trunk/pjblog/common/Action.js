@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="];
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&"];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&"];
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -249,4 +249,25 @@ function checkbox_model(A){
 		temp = "0";
 	}
 	return temp;
+}
+
+
+
+function GoToCateAdd(){
+	var CateAddText = $("log_NewCate").value;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[4]+"newcate="+escape(CateAddText)+"&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = parseInt(obj.responseText);
+				 try{
+				 	document.forms[0].log_CateID.add(new Option(CateAddText, TempStr, false, true));
+					hidePopup();
+				 }catch(e){
+					if (e.description.length > 0){alert(e.description);hidePopup();}
+				 }
+			 }
+	 );
+	
+	//alert(document.forms[0].log_CateID.options[document.forms[0].log_CateID.options.selectedIndex].value);
 }
