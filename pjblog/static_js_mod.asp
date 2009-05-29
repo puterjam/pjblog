@@ -5,6 +5,7 @@
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_article.asp" -->
+<!--#include file="Plugins.asp" -->
 <%
 
 	'Response.AddHeader "ETag", "test"
