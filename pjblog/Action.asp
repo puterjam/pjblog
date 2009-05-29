@@ -16,6 +16,7 @@ response.cachecontrol="no-cache"
 '*************************************************
 Dim title, cname, Message, lArticle, postLog, SaveId, ReadForm, SplitReadForm
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
+Dim NewCateName
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
 	If ChkPost() Then
@@ -217,6 +218,39 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 	else
 		response.write "非法提交数据"
 	end if
+'-------------[Ajax增加新分类]---------------
+ElseIf Request.QueryString("action") = "AddNewCate" then
+	If ChkPost() Then
+		Dim AddNewCateArray, IntCount, NewcatePart, NRs, ReturnID
+		
+		NewcatePart = "newadd_" & randomStr(8)
+		IntCount = (conn.Execute("select count(*) from blog_Category")(0) + 1)
+		NewCateName = Checkxss(Request.QueryString("newcate"))
+		
+		'*********************************
+		Set NRs = Server.CreateObject("Adodb.Recordset")
+		NRs.open "blog_Category", Conn, 1, 2
+			NRs.AddNew
+			ReturnID = NRs("cate_ID")
+			NRs("cate_Name") = NewCateName
+			NRs("cate_Order") = Int(IntCount)
+			NRs("cate_Intro") = NewCateName
+			NRs("cate_OutLink") = False
+			NRs("cate_URL") = ""
+			NRs("cate_local") = 0
+			NRs("cate_icon") = "images/icons/1.gif"
+			NRs("cate_Secret") = 0
+			NRs("cate_Part") = NewcatePart
+			NRs.update
+		NRs.Close
+		Set NRs = Nothing
+		CategoryList(2)
+		'*********************************
+		
+		Response.Write(ReturnID)
+	Else
+		response.write "非法提交数据"
+	End If
 else
 	response.write "非法操作!"
 End If

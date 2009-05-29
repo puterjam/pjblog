@@ -138,6 +138,13 @@ Else
         <div id="MsgHead">发表日志 - 选择分类</div>
         <div id="MsgBody">
           <table width="100%" border="0" cellpadding="3" cellspacing="0">
+          <tr><td colspan="2" align="left" style=" padding:2px 2px 2px 2px">
+          <ol>
+          	<li>您必须选择分类后才可以进行下一步操作.</li>
+            <li>如果您需要立即增加新分类请点击"增加新分类"链接.</li>
+            <li>请选择编辑器类型,默认为UBB编辑器.</li>
+          </ol>
+          </td></tr>
     <tr>
       <td width="100" align="right"><span style="font-weight: bold">选择日志分类:</span></td>
       <td align="left"><span style="font-weight: bold">
@@ -164,7 +171,7 @@ Sub outCate
 End Sub
 
 %>
-        </select>
+        </select>&nbsp;<a href="javascript:void(0)" onclick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
       </span></td>
     </tr>
     <tr>
