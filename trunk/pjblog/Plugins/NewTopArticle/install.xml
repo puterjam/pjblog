@@ -45,8 +45,9 @@
         Dim Article_code
         if Session(CookieName&"_LastDo")="DelArticle" or Session(CookieName&"_LastDo")="AddArticle" or Session(CookieName&"_LastDo")="EditArticle" then NewArticle(2)
     	Article_code=NewArticle(0)
-        side_html_default=replace(side_html_default,"<$NewLog$>",Article_code)
-        side_html=replace(side_html,"<$NewLog$>",Article_code)
+        side_html_default = replace(side_html_default,"<$NewLog$>",Article_code)
+        side_html = replace(side_html,"<$NewLog$>",Article_code)
+		side_html_static = replace(side_html,"<$NewLog$>",Article_code)
     %>]]></PluginASPCode>
   <PluginPath><![CDATA[guestbook.asp]]></PluginPath>
   <SettingFile></SettingFile>

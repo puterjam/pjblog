@@ -60,8 +60,9 @@
         Dim Message_code
         if Session(CookieName&"_LastDo")="DelMessage" or Session(CookieName&"_LastDo")="AddMessage" then NewMessage(2)
     	Message_code=NewMessage(0)
-        side_html_default=replace(side_html_default,"<$NewMsg$>",Message_code)
-        side_html=replace(side_html,"<$NewMsg$>",Message_code)
+        side_html_default = replace(side_html_default,"<$NewMsg$>",Message_code)
+        side_html = replace(side_html,"<$NewMsg$>",Message_code)
+		side_html_static = replace(side_html,"<$NewMsg$>",Message_code)
     %>
      ]]></PluginASPCode>
    </item>
