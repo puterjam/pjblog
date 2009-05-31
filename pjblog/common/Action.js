@@ -281,9 +281,9 @@ function GoToPassCheck(Name, i){
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 if (TempStr == "none"){
-					 $("passContent").innerHTML = "没有该用户信息";
+					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=red>没有该用户信息</font></b></div>";
 				 }else if(TempStr == "wrong"){
-					 $("passContent").innerHTML = "密码保护答案错误";
+					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=red>密码保护答案错误</font></b></div>";
 				 }else{
 					 if (i == 0){
 					 	$("passContent").innerHTML = ModiyStr2(TempStr);
@@ -304,9 +304,9 @@ function GoToPassCheck2(id){
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 if (TempStr == "1"){
-					$("passContent").innerHTML = "操作成功";
+					$("passContent").innerHTML = "<div style='text-align:center'><b><font color=blue>操作成功</font></b></div>";
 				 }else{
-					$("passContent").innerHTML = "操作失败";
+					$("passContent").innerHTML = "<div style='text-align:center'><b><font color=red>操作失败</font></b></div>";
 				 }
 			 }
 	 );
@@ -321,7 +321,7 @@ function PostPName(){
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 if (TempStr == "0"){
-					$("passContent").innerHTML = "没有该用户的信息"; 
+					$("passContent").innerHTML = "<div style='text-align:center'><b>没有该用户的信息</b></div>"; 
 				 }else{
 					 var d = TempStr.split("|$|");
 					$("passContent").innerHTML =  ModiyStr(d[1], d[0], 1);
@@ -339,9 +339,9 @@ function Gotoupdatepass(id){
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 if (TempStr == "1"){
-					 $("passContent").innerHTML = "操作成功";
+					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=blue>操作成功</font></b></div>";
 				 }else{
-					 $("passContent").innerHTML = "操作失败";
+					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=red>操作失败</font></b></div>";
 				 }
 			 }
 	 );
