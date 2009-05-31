@@ -103,6 +103,7 @@ End If
 	<script type="text/javascript" src="common/Action.js"></script>
     <script language="javascript" type="text/javascript">
 		var time = <%=blog_SaveTime%>;
+		var menvalidate = "<%=blog_validate%>";
 	</script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 	<style type="text/css"> 
