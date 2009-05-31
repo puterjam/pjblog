@@ -47,7 +47,7 @@
     	Article_code=NewArticle(0)
         side_html_default = replace(side_html_default,"<$NewLog$>",Article_code)
         side_html = replace(side_html,"<$NewLog$>",Article_code)
-		side_html_static = replace(side_html,"<$NewLog$>",Article_code)
+		side_html_static = replace(side_html_static,"<$NewLog$>",Article_code)
     %>]]></PluginASPCode>
   <PluginPath><![CDATA[guestbook.asp]]></PluginPath>
   <SettingFile></SettingFile>

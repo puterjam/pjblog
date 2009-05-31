@@ -62,7 +62,7 @@
     	Message_code=NewMessage(0)
         side_html_default = replace(side_html_default,"<$NewMsg$>",Message_code)
         side_html = replace(side_html,"<$NewMsg$>",Message_code)
-		side_html_static = replace(side_html,"<$NewMsg$>",Message_code)
+		side_html_static = replace(side_html_static,"<$NewMsg$>",Message_code)
     %>
      ]]></PluginASPCode>
    </item>
