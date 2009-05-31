@@ -462,6 +462,7 @@ Sub InstallPlugins
         PluginsXML.CloseXml()
         log_module(2)
         FixPlugins(0)
+		EmptyEtag
         session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&PlugName&"</font> 插件安装完成并且移动到 <a href=""ConContent.asp?Fmenu=Skins&Smenu=Plugins"" style=""color:#0000ff"">已装插件管理</a>"
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsInstall")
@@ -528,6 +529,7 @@ Sub FixPlugins(fixType)
         Loop
     End If
     If CBool(fixType) Then
+		EmptyEtag
         session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = "插件已经修复完成!"
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")
