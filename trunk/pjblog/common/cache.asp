@@ -10,14 +10,14 @@ Dim blog_VisitNums, blogBookPage, blog_MessageNums, blogcommpage, blogaffiche
 Dim blogabout, blogcolsize, blog_colNums, blog_TbCount, blog_showtotal, blog_commTimerout
 Dim blog_commUBB, blog_commImg, blog_version, blog_UpdateDate, blog_DefaultSkin, blog_SkinName, blog_SplitType
 Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introChar, blog_introLine
-Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime
+Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime, blog_PasswordProtection
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
 Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.231" '当前PJBlog版本号
+blog_version = "3.1.6.232" '当前PJBlog版本号
 blog_UpdateDate = "2009-05-29"'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -35,7 +35,7 @@ Sub getInfo(ByVal action)
               "blog_postFile,blog_postCalendar,blog_DefaultSkin,blog_SkinName,blog_SplitType," & _
               "blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
-              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet" & _
+              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -101,6 +101,7 @@ Sub getInfo(ByVal action)
         blog_Description = blog_Infos(46, 0)'站点首页Description
         blog_SaveTime = blog_Infos(47, 0)'Ajax草稿自动保存时间间隔
         blog_UpLoadSet = blog_Infos(48, 0)'附件管理
+		blog_PasswordProtection = blog_Infos(49, 0)'找回密码功能
     End If
 End Sub
 
@@ -558,11 +559,11 @@ Function log_module(ByVal action)
                     side_html = side_html&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
                 End If
                 
-                If blog_module("IsSystem") = True Then
+                'If blog_module("IsSystem") = True Then
                     side_html_static = side_html_static&"<div id=""Side_"&blog_module("name")&""" class=""sidepanel"">"
                     If Len(blog_module("title"))>0 Then side_html_static = side_html_static&"<h4 class=""Ptitle"">"&blog_module("title")&"</h4>"
                     side_html_static = side_html_static&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
-                End If
+                'End If
             End If
             
             If blog_module("type") = "content" And blog_module("name")<>"ContentList" Then
