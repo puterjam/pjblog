@@ -315,7 +315,6 @@ function GoToPassCheck2(id){
 function PostPName(){
 	var name = $("c_Name").value;
 	var ajax = new AJAXRequest;
-	$("passContent").innerHTML = GetFile[0]+GetAction[7]+"name="+escape(name) + "&TimeStamp="+new Date().getTime();
 	ajax.get(
 			 GetFile[0]+GetAction[7]+"name="+escape(name) + "&TimeStamp="+new Date().getTime(),
 			 function(obj) {
