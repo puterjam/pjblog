@@ -621,7 +621,6 @@ function initLogin(CookieName){
 		var u = /memName=(\w+)/.exec(n);
 		var ucn = /memName=([^\u4e00-\u9fa5]*)/.exec(n);
 		var menvalidate = /DisValidate=(\w+)/.exec(n);
-		alert(menvalidate[1]);
 		var cnvalue = decodeURI(ucn[1]).split("&")[0];
 		if (u){
 				var un = document.forms["frm"]["username"];
@@ -629,14 +628,14 @@ function initLogin(CookieName){
 				un.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
-				if (menvalidate[1] == "True" || menvalidate[1] == "true") document.forms["frm"].validate.parentNode.removeChild(document.forms["frm"].validate);
+				if (menvalidate[1] == "True" || menvalidate[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else if(cnvalue.length > 0){
 				var cnun = document.forms["frm"]["username"];
 				cnun.value = cnvalue;
 				cnun.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
-				if (menvalidate[1] == "True" || menvalidate[1] == "true") document.forms["frm"].validate.parentNode.removeChild(document.forms["frm"].validate);
+				if (menvalidate[1] == "True" || menvalidate[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=true\|\-\|(.*)\|\+\|/.exec(unescape(decodeURI(n)));
