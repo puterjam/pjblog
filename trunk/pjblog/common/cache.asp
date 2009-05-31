@@ -650,5 +650,6 @@ End Function
 '更新Etag,使其支持静态侧边插件
 Sub EmptyEtag
 	Application(CookieName&"_Etag") = empty
+	reloadcache
 End Sub
 %>

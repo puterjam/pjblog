@@ -450,6 +450,7 @@ Sub c_skins
 		    log_module(2)
 		    CategoryList(2)
 		    FixPlugins(0)
+			EmptyEtag
 		    session(CookieName&"_ShowMsg") = True
 		    session(CookieName&"_MsgText") = "<font color=""#ff0000"">"&UnPlugName&"</font> 插件反安装完成!"
 		    RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=Plugins")

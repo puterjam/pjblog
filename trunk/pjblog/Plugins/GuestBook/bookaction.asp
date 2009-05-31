@@ -30,13 +30,10 @@ end if
 
 if request.form("action")="post" then
    postMsg '发表留言
-   EmptyEtag
  elseif Request.QueryString("action")="del" then 
    delMsg  '删除留言
-   EmptyEtag
  elseif Request.form("action")="reply" then 
    replyMsg '回复留言
-   EmptyEtag
  else
    showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","plugins"
 end if
@@ -131,6 +128,7 @@ function postMsg
  end if
  Response.Cookies(CookieName)("bookLastPost")=DateToStr(now(),"Y-m-d H:I:S")
  getInfo(2)
+ EmptyEtag
  SQLQueryNums=SQLQueryNums+3
  reloadMsg
  showmsg "留言发表信息","<b>你成功地对该日志发表了留言</b><br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">单击返回留言本</a>","MessageIcon","plugins" 
@@ -155,7 +153,7 @@ function delMsg
   else
      showmsg "错误信息","<b>你没有权限删除该留言</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
   end if
-
+	EmptyEtag
 end function 
 
 '==================================== 回复留言留言 ===============================================
@@ -194,6 +192,7 @@ function reloadMsg
              	Application.Lock
              	Application(CookieName&"_blog_Message")=blog_Message
              	Application.UnLock
+				EmptyEtag
 end function
 %>
 
