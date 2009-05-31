@@ -80,6 +80,7 @@ Function login(UserName, Password)
             If Request.Form("KeepLogin") = "1" Then
                 Response.Cookies(CookieName).Expires = Date+365
                 Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+				Response.Cookies(CookieName)("DisValidate") = blog_validate
             End If
             memLogin.Update
             ReInfo(0) = "登录成功"
@@ -102,6 +103,7 @@ Function login(UserName, Password)
             If Request.Form("KeepLogin") = "1" Then
                 Response.Cookies(CookieName).Expires = Date+365
                 Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
+				Response.Cookies(CookieName)("DisValidate") = blog_validate
             End If
             memLogin.Update
             ReInfo(0) = "登录成功"
@@ -252,6 +254,7 @@ End Sub
 
 Sub logout(clearHashKey)
     On Error Resume Next
+	Response.Cookies(CookieName)("DisValidate") = "False"
     If clearHashKey Then conn.Execute("UPDATE blog_member set mem_hashKey='' where mem_ID="&UserID)
     If Err Then Err.Clear
     Response.Cookies(CookieName)("memName") = ""

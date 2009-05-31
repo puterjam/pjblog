@@ -620,6 +620,8 @@ function initLogin(CookieName){
 		//用户登录
 		var u = /memName=(\w+)/.exec(n);
 		var ucn = /memName=([^\u4e00-\u9fa5]*)/.exec(n);
+		var menvalidate = /DisValidate=(\w+)/.exec(n);
+		alert(menvalidate[1]);
 		var cnvalue = decodeURI(ucn[1]).split("&")[0];
 		if (u){
 				var un = document.forms["frm"]["username"];
@@ -627,12 +629,14 @@ function initLogin(CookieName){
 				un.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
+				if (menvalidate[1] == "True" || menvalidate[1] == "true") document.forms["frm"].validate.parentNode.removeChild(document.forms["frm"].validate);
 		}else if(cnvalue.length > 0){
 				var cnun = document.forms["frm"]["username"];
 				cnun.value = cnvalue;
 				cnun.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
+				if (menvalidate[1] == "True" || menvalidate[1] == "true") document.forms["frm"].validate.parentNode.removeChild(document.forms["frm"].validate);
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=true\|\-\|(.*)\|\+\|/.exec(unescape(decodeURI(n)));
@@ -640,8 +644,8 @@ function initLogin(CookieName){
 				var SplitGuest = Guest[1].split("|$|");
 				try{
 					if (document.forms[0].username) document.forms[0].username.value = SplitGuest[0];
-					if ($("editMask")) $("editMask").value = SplitGuest[1];
-					if (document.forms[0].Message) document.forms[0].Message.value = SplitGuest[1];
+					//if ($("editMask")) $("editMask").value = SplitGuest[1]; 去掉记录内容框里的信息
+					//if (document.forms[0].Message) document.forms[0].Message.value = SplitGuest[1];
 				}catch(e){if (e.description.length > 0) alert(e.description);}
 			}
 		}
