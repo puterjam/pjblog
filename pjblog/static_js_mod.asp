@@ -15,6 +15,7 @@
 	
 	'Response.Status = "304"
 	'Response.Clear
+	'log_module(2)
 	
 	Side_Module_Replace '处理系统侧栏模块信息
 	outputSideBar side_html_static

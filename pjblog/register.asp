@@ -30,6 +30,14 @@ If Request.QueryString("action") = "agree" Then
 	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/><font color="#FF0000">&nbsp;*</font> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
       <tr><td align="right" width="85"><strong>密码强度:</strong></td><td align="left">&nbsp;<img src="images/0.gif" id="strong"></td></tr>
 	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16" onblur="if (this.value.length != 0) {CheckPwd();}" onfocus="if (this.value.length != 0) {CheckPwd();}" onclick="if (this.value.length != 0) {CheckPwd();}" id="cConfirmpassword"/><font color="#FF0000">&nbsp;*</font> 必须和上面的密码一样<span id="CheckPwds"><span></td></tr>
+      <%
+	  	If blog_PasswordProtection Then
+	  %>
+      <tr><td align="right" width="85"><strong>密保问题:</strong></td><td align="left">&nbsp;<input type="text" value="" name="Question" class="userpass" size="40"/></td></tr>
+      <tr><td align="right" width="85"><strong>密保答案:</strong></td><td align="left">&nbsp;<input type="text" value="" name="Answer" class="userpass" /size="40"></td></tr>
+      <%
+	  	End If
+	  %>
 	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" checked/> 保密 <input name="Gender" type="radio" value="1"/>男 <input name="Gender" type="radio" value="2"/>女</td></tr>
 	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" checked/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
 	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value=""/></td></tr>
@@ -65,7 +73,7 @@ ElseIf Request.Form("action") = "save" Then
 <%
 Function register
     Dim ReInfo
-    Dim username, password, Confirmpassword, Gender, email, homepage, validate, HideEmail, checkUser
+    Dim username, password, Confirmpassword, Gender, email, homepage, validate, HideEmail, checkUser, Question, Answer
 
     ReInfo = Array("错误信息", "", "MessageIcon")
     username = Trim(CheckStr(request.Form("username")))
@@ -75,6 +83,11 @@ Function register
     email = Trim(CheckStr(request.Form("email")))
     homepage = Trim(checkURL(CheckStr(request.Form("homepage"))))
     validate = CheckStr(request.Form("validate"))
+	
+	If blog_PasswordProtection Then
+		Question = Trim(CheckStr(request.Form("Question")))
+		Answer = Trim(CheckStr(request.Form("Answer")))
+	End If
 
     If request.Form("hiddenEmail") = 1 Then
         HideEmail = True
@@ -130,6 +143,16 @@ Function register
         register = ReInfo
         Exit Function
     End If
+	
+	If blog_PasswordProtection Then
+		If (len(Question) > 0 and len(Answer) = 0) or (len(Question) = 0 and len(Answer) > 0) Then
+			ReInfo(0) = "错误信息"
+        	ReInfo(1) = "<b>密码保护问题和答案未填写完整。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        	ReInfo(2) = "ErrorIcon"
+        	register = ReInfo
+        	Exit Function
+		End If
+	End If
 
     If Len(email)>0 And IsValidEmail(email) = False Then
         ReInfo(0) = "错误信息"
@@ -151,7 +174,11 @@ Function register
     hashkey = SHA1(randomStr(6)&Now())
     strSalt = randomStr(6)
     password = SHA1(password&strSalt)
-    AddUser = Array(Array("mem_Name", username), Array("mem_Password", password), Array("mem_Sex", Gender), Array("mem_salt", strSalt), Array("mem_Email", email), Array("mem_HideEmail", Int(HideEmail)), Array("mem_HomePage", homepage), Array("mem_LastIP", getIP), Array("mem_lastVisit", Now()), Array("mem_hashKey", hashkey))
+	If blog_PasswordProtection Then
+    	AddUser = Array(Array("mem_Name", username), Array("mem_Password", password), Array("mem_Sex", Gender), Array("mem_salt", strSalt), Array("mem_Email", email), Array("mem_HideEmail", Int(HideEmail)), Array("mem_HomePage", homepage), Array("mem_LastIP", getIP), Array("mem_lastVisit", Now()), Array("mem_hashKey", hashkey), Array("mem_Question", Question), Array("mem_Answer", Answer))
+	Else
+		AddUser = Array(Array("mem_Name", username), Array("mem_Password", password), Array("mem_Sex", Gender), Array("mem_salt", strSalt), Array("mem_Email", email), Array("mem_HideEmail", Int(HideEmail)), Array("mem_HomePage", homepage), Array("mem_LastIP", getIP), Array("mem_lastVisit", Now()), Array("mem_hashKey", hashkey))
+	End If
     DBQuest "blog_member", AddUser, "insert"
     'Conn.Execute("INSERT INTO blog_member(mem_Name,mem_Password,mem_Sex,mem_salt,mem_Email,mem_HideEmail,mem_HomePage,mem_LastIP) Values ('"&username&"','"&password&"',"&Gender&",'"&strSalt&"','"&email&"',"&HideEmail&",'"&homepage&"','"&getIP&"')")
     Conn.Execute("UPDATE blog_Info SET blog_MemNums=blog_MemNums+1")

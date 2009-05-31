@@ -251,6 +251,67 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 	Else
 		response.write "非法提交数据"
 	End If
+ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
+	If ChkPost() Then
+		Dim Password, PName, Rs
+		Password = CheckStr(UnEscape(Request.QueryString("password")))
+		PName = CheckStr(UnEscape(Request.QueryString("name")))
+		Set Rs = Conn.Execute("Select * From [blog_Member] Where [mem_Name]='"&PName&"'")
+		If Rs.Bof Or Rs.Eof Then
+			Response.Write("none")
+		Else
+			If Password = Trim(Rs("mem_Answer")) Then
+				Response.Write(Rs("mem_ID"))
+			Else
+				Response.Write("wrong")
+			End If
+		End If
+		Set Rs = Nothing
+	Else
+		response.write "非法提交数据"
+	End If
+ElseIf Request.QueryString("action") = "UpdatePass" Then
+	If ChkPost() Then
+		Dim u_ID, u_q, u_a
+		u_ID = CheckStr(UnEscape(Request.QueryString("id")))
+		u_q = CheckStr(UnEscape(Request.QueryString("q")))
+		u_a = CheckStr(UnEscape(Request.QueryString("a")))
+		Conn.Execute("Update [blog_Member] Set [mem_Question]='"&u_q&"',[mem_Answer]='"&u_a&"' Where [mem_ID]="&u_ID)
+		Response.Write("1")
+	Else
+		response.write "非法提交数据"
+	End If
+ElseIf Request.QueryString("action") = "CheckPostName" Then
+	If ChkPost() Then
+		Dim zName, Zs
+		zName = CheckStr(UnEscape(Request.QueryString("name")))
+		Set Zs = Conn.Execute("Select * From [blog_Member] Where [mem_Name]='"&zName&"'")
+		If Zs.Bof Or Zs.Eof Then
+			Response.write "0"
+		Else
+			Response.Write(UnCheckStr(zName) & "|$|" & Zs("mem_Question"))
+		End If
+	Else
+		response.write "非法提交数据"
+	End If
+ElseIf Request.QueryString("action") = "updatepassto" Then
+	If ChkPost() Then
+		Dim e_Pass, e_RePass, e_ID, e_Rs, e_hash, d_pass
+		e_ID = CheckStr(UnEscape(Request.QueryString("id")))
+		e_Pass = CheckStr(UnEscape(Request.QueryString("pass")))
+		e_RePass = CheckStr(UnEscape(Request.QueryString("repass")))
+		Set e_Rs = Server.CreateObject("Adodb.Recordset")
+		e_Rs.open "Select * From [blog_Member] Where [mem_ID]="&e_ID, Conn, 1, 3
+			e_hash = e_Rs("mem_salt")
+			d_pass = SHA1(e_Pass&e_hash)
+			e_Rs("mem_Password") = d_pass
+			e_Rs.update
+		e_Rs.Close
+		Set e_Rs = nothing
+		response.Write("1")
+	Else
+		response.write "非法提交数据"
+	End If
 else
 	response.write "非法操作!"
 End If

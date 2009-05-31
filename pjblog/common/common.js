@@ -861,3 +861,58 @@ function AddNewCate(){
 	e += "</table>";
 	return e;
 }
+
+function ModiyPassProtect(Name, width, Question, ID){
+	showPopup((Name + "修改密码保护验证"), "<div id='passContent'>" + ModiyStr(Question, Name, 0, ID) + "</div>", width);
+}
+
+function ModiyStr(Question, Name, i, ID){
+	var e = "";
+	e += "<table width='100%'>";
+	e += "<tr><td align='right' width='30%'>密保问题:</td>";
+	e += "<td align='left'>" + Question + "</td></tr>";
+	e += "<tr><td align='right'>密保答案:</td><td align='left'><input type='text' value='' id='c_Answer' class='userpass'></td></tr>";
+	e += "<tr><td colspan='2' align='center'><input type='button' value='点击验证密码保护' style='width:70%' onclick=\"GoToPassCheck('"+ Name +"', " + i + ");\"></td></tr>";
+	e += "</table>";
+	if (Question.length > 0){
+		return e;
+	}else{
+		if (i == 0){
+			return "<a href='javascript:void(0)' onclick='GetNoPassInforMation(" + ID + ")'>您没有申请密码保护,点击这里设置密码保护.</a>";
+		}else{
+			return "该用户没有设置密码保护,系统将停止找回密码功能";	
+		}
+	}
+}
+
+function ModiyStr2(id){
+	var e = "";
+	e += "<table width='100%'>";
+	e += "<tr><td align='right' width='30%'>新密保问题:</td>";
+	e += "<td align='left'><input type='text' value='' id='c_Question' class='userpass' /></td></tr>";
+	e += "<tr><td align='right'>新密保答案:</td><td align='left'><input type='text' value='' id='c_Answer' class='userpass' /></td></tr>";
+	e += "<tr><td colspan='2' align='center'><input type='button' value='更新密码保护' style='width:70%' onclick=GoToPassCheck2("+id+");></td></tr>";
+	e += "</table>";
+	return e;
+}
+
+function PasswordProtection(){
+	var e = "";
+	e += "<table width='100%'>";
+	e += "<tr><td align='right' width='30%'>用户名:</td>";
+	e += "<td align='left'><input type='text' value='' id='c_Name' class='userpass' /></td></tr>";
+	e += "<tr><td colspan='2' align='center'><input type='button' value='确定用户名' onclick=\"PostPName();\"></td></tr>";
+	e += "</table>";
+	showPopup("找回密码", "<div id='passContent'>" + e + "</div>", 400);
+}
+
+function ModiyStr3(id){
+	var e = "";
+	e += "<table width='100%'>";
+	e += "<tr><td align='right' width='30%'>新密码:</td>";
+	e += "<td align='left'><input type='text' value='' id='c_Password' class='userpass' /></td></tr>";
+	e += "<tr><td align='right'>确认密码:</td><td align='left'><input type='text' value='' id='c_RePassword' class='userpass' /></td></tr>";
+	e += "<tr><td colspan='2' align='center'><input type='button' value='更新密码' onclick=\"Gotoupdatepass("+id+")\"></td></tr>";
+	e += "</table>";
+	return e;
+}

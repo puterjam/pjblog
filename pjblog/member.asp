@@ -40,6 +40,13 @@ If blog_Mem.EOF Or blog_Mem.bof Then
 	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
       <tr><td align="right" width="85"><strong>密码强度:</strong></td><td align="left"> &nbsp;<img src="images/0.gif" id="strong"></td></tr>
 	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16"/> 必须和上面的密码一样</td></tr>
+      <%
+	  	If blog_PasswordProtection Then
+	  %>
+      <tr><td align="right" width="85"><strong>密码保护:</strong></td><td align="left">&nbsp;<b><a href="javascript:;" onclick="ModiyPassProtect('<%=blog_Mem("mem_Name")%>', 350, '<%=blog_Mem("mem_Question")%>', <%=blog_Mem("mem_ID")%>)">点击这里修改您的密码保护问题和答案.</a></b></td></tr>
+      <%
+	  	End If
+	  %>
 	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" <%if blog_Mem("mem_Sex")=0 then response.write "checked"%>/> 保密 <input name="Gender" type="radio" value="1" <%if blog_Mem("mem_Sex")=1 then response.write "checked"%>/>男 <input name="Gender" type="radio" value="2" <%if blog_Mem("mem_Sex")=2 then response.write "checked"%>/>女</td></tr>
 	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_Email")%>"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" <%if blog_Mem("mem_HideEmail") then response.write "checked"%>/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
 	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_HomePage")%>"/></td></tr>

@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="];
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&"];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&"];
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -270,4 +270,84 @@ function GoToCateAdd(){
 	 );
 	
 	//alert(document.forms[0].log_CateID.options[document.forms[0].log_CateID.options.selectedIndex].value);
+}
+
+
+function GoToPassCheck(Name, i){
+	var GetPass = $("c_Answer").value;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[5]+"password="+escape(GetPass) + "&name=" + escape(Name) +"&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 if (TempStr == "none"){
+					 $("passContent").innerHTML = "没有该用户信息";
+				 }else if(TempStr == "wrong"){
+					 $("passContent").innerHTML = "密码保护答案错误";
+				 }else{
+					 if (i == 0){
+					 	$("passContent").innerHTML = ModiyStr2(TempStr);
+					 }else{
+						$("passContent").innerHTML = ModiyStr3(TempStr);
+					 }
+				 } 
+			 }
+	 );
+}
+
+function GoToPassCheck2(id){
+	var e_Question = $("c_Question").value;
+	var e_Answer = $("c_Answer").value;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[6]+"id="+escape(id) + "&q=" + escape(e_Question) + "&a=" + escape(e_Answer) +"&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 if (TempStr == "1"){
+					$("passContent").innerHTML = "操作成功";
+				 }else{
+					$("passContent").innerHTML = "操作失败";
+				 }
+			 }
+	 );
+}
+
+function PostPName(){
+	var name = $("c_Name").value;
+	var ajax = new AJAXRequest;
+	$("passContent").innerHTML = GetFile[0]+GetAction[7]+"name="+escape(name) + "&TimeStamp="+new Date().getTime();
+	ajax.get(
+			 GetFile[0]+GetAction[7]+"name="+escape(name) + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 if (TempStr == "0"){
+					$("passContent").innerHTML = "没有该用户的信息"; 
+				 }else{
+					 var d = TempStr.split("|$|");
+					$("passContent").innerHTML =  ModiyStr(d[1], d[0], 1);
+				 }
+			 }
+	 );
+}
+
+function Gotoupdatepass(id){
+	var c_pass = $("c_Password").value;
+	var c_repass = $("c_RePassword").value;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[8]+"id="+escape(id) + "&pass=" + escape(c_pass) + "&repass=" + escape(c_repass) + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 if (TempStr == "1"){
+					 $("passContent").innerHTML = "操作成功";
+				 }else{
+					 $("passContent").innerHTML = "操作失败";
+				 }
+			 }
+	 );
+}
+
+function GetNoPassInforMation(id){
+	var str = ModiyStr2(id);
+	$("passContent").innerHTML = str;
 }
