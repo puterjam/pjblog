@@ -30,10 +30,13 @@ end if
 
 if request.form("action")="post" then
    postMsg '发表留言
+   EmptyEtag
  elseif Request.QueryString("action")="del" then 
    delMsg  '删除留言
+   EmptyEtag
  elseif Request.form("action")="reply" then 
    replyMsg '回复留言
+   EmptyEtag
  else
    showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","plugins"
 end if

@@ -646,4 +646,9 @@ Function getEtag
  	
  	getEtag = Application(CookieName&"_Etag") & "-" & CheckStr(Request.Cookies(CookieName)("memName"))
 End Function
+
+'更新Etag,使其支持静态侧边插件
+Sub EmptyEtag
+	Application(CookieName&"_Etag") = empty
+End Sub
 %>

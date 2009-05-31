@@ -869,6 +869,7 @@ Case "cancelIndex":
             End Select
         Next
         log_module(2)
+		EmptyEtag
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"模块保存成功!"
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
@@ -880,6 +881,7 @@ Case "cancelIndex":
         moduleHtmlCode = ClearHTML(CheckStr(request.Form("HtmlCode")))
         SavehtmlCode moduleHtmlCode, moduleID
         log_module(2)
+		EmptyEtag
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 代码编辑成功!"
         If Request.Form("editType") = "normal" Then
@@ -901,6 +903,7 @@ Case "cancelIndex":
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&moduleName&"”</span> 删除成功!"
             log_module(2)
+			EmptyEtag
             RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=module")
         End If
         '-------------------------------保存插件配置------------------------------
@@ -918,6 +921,7 @@ Case "cancelIndex":
         Set ModSetTemp2 = New ModSet
         ModSetTemp2.Open GetPlugName
         ModSetTemp2.ReLoad()
+		EmptyEtag
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetPlugName&"”</span> 设置保存成功!"
         RedirectUrl("ConContent.asp?Fmenu=Skins&Smenu=PluginsOptions&Plugins="&GetPlugName)
