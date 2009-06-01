@@ -210,6 +210,7 @@ End Sub
 			   dim cdb
 			   set cdb=conn.execute("select log_cname,log_ctype from blog_Content where log_ID="&logid&"")
 			   %>
+               <script language="javascript" type="text/javascript" src="common/pinyin.js"></script>
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
@@ -218,7 +219,7 @@ End Sub
 			  <select name="ctype">
 			    <option value="0" <%if cdb("log_ctype")=0 then%>selected="selected" <%end if%>>htm</option> 
 				<option value="1" <%if cdb("log_ctype")=1 then%>selected="selected" <%end if%>>html</option>
-			  </select> <span id="CheckAlias"></span>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
               </td>
             </tr>
 			<input name="oldcname" type="hidden" value="<%=cdb("log_cname")%>">
