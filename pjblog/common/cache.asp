@@ -17,7 +17,7 @@ Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.240" '当前PJBlog版本号
+blog_version = "3.1.6.241" '当前PJBlog版本号
 blog_UpdateDate = "2009-05-31"'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -559,11 +559,11 @@ Function log_module(ByVal action)
                     side_html = side_html&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
                 End If
                 
-                'If blog_module("IsSystem") = True Then
+                If blog_module("IndexOnly") = False Then
                     side_html_static = side_html_static&"<div id=""Side_"&blog_module("name")&""" class=""sidepanel"">"
                     If Len(blog_module("title"))>0 Then side_html_static = side_html_static&"<h4 class=""Ptitle"">"&blog_module("title")&"</h4>"
                     side_html_static = side_html_static&"<div class=""Pcontent"">"&blog_module("HtmlCode")&"</div><div class=""Pfoot""></div></div>"
-                'End If
+                End If
             End If
             
             If blog_module("type") = "content" And blog_module("name")<>"ContentList" Then
