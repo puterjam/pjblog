@@ -204,6 +204,7 @@ End Sub
   	<div id="MsgContent" style="width:700px">
         <div id="MsgHead">在 【<%=Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID="&Request.Form("log_CateID")&"")(0)%>】 发表日志</div>
         <div id="MsgBody">
+        <script language="javascript" type="text/javascript" src="common/pinyin.js"></script>
           <table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td width="76" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
@@ -219,7 +220,7 @@ End Sub
 			  <select name="ctype">
 			    <option value="0">htm</option> 
 				<option value="1">html</option>
-			  </select> <span id="CheckAlias"></span>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
               </td>
             </tr>
 			<%end if%>
