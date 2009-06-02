@@ -341,6 +341,12 @@ Sub c_ceneral
 		          <td><div align="right">Blog对外开放</div></td>
 		          <td align="left"><input name="SiteOpen" type="checkbox" value="1" <%if Application(CookieName & "_SiteEnable")=1 then response.write ("checked=""checked""")%>/></td>
 		        </tr>
+                <tr>
+		          <td><div align="right"> 整站是否开启评论留言审核功能
+		                  <div class="shuom"><strong>[勾选]</strong>表示开启评论留言审核功能</div>
+		          </div></td>
+		          <td align="left"><input name="AuditOpen" type="checkbox" value="1" <%if blog_AuditOpen then Response.Write ("checked=""checked""")%>/></td>
+		        </tr>
 		      </table>
 		    </div>
 			</fieldset>

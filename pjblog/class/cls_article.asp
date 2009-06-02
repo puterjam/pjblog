@@ -221,18 +221,19 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen,BaseUrl,aName,aEvent
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
     
     Pcount = 0
     BaseUrl = ""
     aEvent = ""
+	outPutCommentCount = ""
     
    ' 带 trackback 的查询
    ' SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
   
    ' 不带 trackback 的查询，速度较快
-   SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+   SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit FROM blog_Comment WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
 
     blog_Comment.Open SQL, Conn, 1, 1
     SQLQueryNums = SQLQueryNums + 1
@@ -242,6 +243,8 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
         blog_Comment.PageSize = blogcommpage
         blog_Comment.AbsolutePage = CurPage
         comm_Num = blog_Comment.RecordCount
+		
+
 
         commArr = blog_Comment.GetRows(comm_Num)
         blog_Comment.Close
@@ -266,10 +269,24 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 		    blog_CommID = commArr(0, Pcount)
 		    blog_CommAuthor = commArr(2, Pcount)
 		    blog_CommContent = commArr(1, Pcount)
+			If blog_postFile = 2 Then
+				outPutCommentCount = outPutCommentCount & blog_CommID & "|$|"
+			End If
      		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
-     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a></span>]</span>"
+     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
+			'' 评论审核按钮部分
+			If blog_AuditOpen Then
+				If stat_Admin Then
+					If commArr(10,Pcount) Then
+						ShowComm = ShowComm&" | <a href=""javascript:void(0)"" onclick=""IndexAudit("&blog_CommID&", 1, this, " & LogID & ");"">取消审核</a>"
+					Else
+						ShowComm = ShowComm&" | <a href=""javascript:void(0)"" onclick=""IndexAudit("&blog_CommID&", 0, this, " & LogID & ");"">通过审核</a>"
+					End If
+				End If
+			End If
+			ShowComm = ShowComm&"</span>]</span>"
 		
 			'删除按钮
 		'	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 
@@ -278,10 +295,39 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			
      		'ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop"">"
 			'评论内容
-			ShowComm = ShowComm&"</div><div class=""commentcontent"" id=""commcontent_"&blog_CommID&""">"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))&"</div></div>"
+			ShowComm = ShowComm&"</div><div class=""commentcontent"" id=""commcontent_"&blog_CommID&""">"
+			'评论审核部分
+			If blog_AuditOpen Then
+				If blog_postFile = 2 Then '  区分动静态
+					ShowComm = ShowComm & "[ 正在加载评论信息,请稍后... ]"
+				Else
+					If stat_Admin Then
+						If commArr(10,Pcount) Then
+							ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+						Else
+							ShowComm = ShowComm&"[未审核评论,仅管理员可见]:&nbsp;"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+						End If
+					Else
+						If commArr(10,Pcount) Then	
+							ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+						Else
+							ShowComm = ShowComm&"[未审核评论,仅管理员可见]"
+						End If
+					End If
+				End If
+			Else
+				ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+			End If
+			
+			ShowComm = ShowComm&"</div>"
+			
+			ShowComm = ShowComm&"</div>"
 			Pcount = Pcount + 1
 		Loop
-		
+			If blog_postFile = 2 Then
+				outPutCommentCount = outPutCommentCount & "end"
+				ShowComm = ShowComm&"<script language='javascript' type='text/javascript'>ReadArticleComentByCommentID('"&outPutCommentCount&"');</script>"
+			End If
 		'底部的翻页
        ShowComm = ShowComm&"<div class=""pageContent"">"&MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,aName,"float:right" ,BaseUrl,aEvent)&"</div>"
 	End If
@@ -330,7 +376,7 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  	If Instr(Ts, "|-|") > 0 Then
 					Ts_True = Split(Ts, "|-|")(0)
 			  		Ts_UserName = Split(Split(Ts, "|-|")(1), "|$|")(0)
-					Ts_Content = Split(Split(Split(Ts, "|-|")(1), "|$|")(1), "|+|")(0)
+					'Ts_Content = Split(Split(Split(Ts, "|-|")(1), "|$|")(1), "|+|")(0)
 				End If
 			  End If
 			  %>
@@ -353,11 +399,6 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 				UBB_Tools_Items = "bold,italic,underline,deleteline"
 				UBB_Tools_Items = UBB_Tools_Items&"||image,link,mail,quote,smiley"
 				Response.write (UBBeditorCore("Message"))
-				if memName = empty then
-			  		if Ts_True = "true" then
-						response.write ("<script>$('editMask').value = """&Ts_Content&""";document.forms[0].Message.value="""&Ts_Content&"""</script>")
-					end if
-			  	end if 
 				%>
 			  </td></tr>
 			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>

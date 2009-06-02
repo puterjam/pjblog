@@ -61,6 +61,7 @@ Sub doAction
             If CheckStr(Request.Form("blog_wap")) = "1" Then weblog("blog_wap") = 1 Else weblog("blog_wap") = 0
             If CheckStr(Request.Form("blog_wapURL")) = "1" Then weblog("blog_wapURL") = 1 Else weblog("blog_wapURL") = 0		
 			If CheckStr(Request.Form("blog_PasswordProtection")) = "1" Then weblog("blog_PasswordProtection") = True Else weblog("blog_PasswordProtection") = False
+			If CheckStr(Request.Form("AuditOpen")) = "1" Then weblog("blog_AuditOpen") = True Else weblog("blog_AuditOpen") = False
 
             Response.Cookies(CookieNameSetting)("ViewType") = ""
             weblog.update
@@ -436,9 +437,10 @@ ElseIf Request.Form("action") = "Categories" Then
     '==========================评论留言处理===============================
 ElseIf Request.Form("action") = "Comment" Then
 
-    Dim selCommID, doCommID, doTitle, doRedirect, t1, t2, bookDB, commDB
+    Dim selCommID, doCommID, doTitle, doRedirect, t1, t2, bookDB, commDB, doCommentAudit, doAuditTrue
     selCommID = Split(Request.Form("selectCommentID"), ", ")
     doCommID = Split(Request.Form("CommentID"), ", ")
+	doCommentAudit = Split(Request.Form("CommentAudit"), ", ")
 
     If Request.Form("doModule") = "updateKey" Then
         saveFilterKey Request.Form("keyList")
@@ -495,7 +497,16 @@ ElseIf Request.Form("action") = "Comment" Then
                 doTitle = "留言"
                 doRedirect = "msg"
             ElseIf Request.Form("whatdo") = "comment" Then
-                conn.Execute("UPDATE blog_Comment SET comm_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"' WHERE comm_ID="&doCommID(i))
+				If Int(doCommentAudit(i)) = 0 Then
+					doAuditTrue = True
+				ElseIf Int(doCommentAudit(i)) = 1 Then
+					doAuditTrue = False
+				Else
+					session(CookieName&"_ShowMsg") = True
+        			session(CookieName&"_MsgText") = "参数错误"
+        			RedirectUrl("ConContent.asp?Fmenu=Comment&Smenu="&doRedirect)
+				End If
+                conn.Execute("UPDATE blog_Comment SET comm_Content='"&checkStr(Request.Form("message_"&doCommID(i)))&"',comm_IsAudit=" & doAuditTrue & " WHERE comm_ID="&doCommID(i))
                 doTitle = "评论"
                 doRedirect = ""
             End If

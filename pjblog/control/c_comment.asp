@@ -145,7 +145,7 @@ Sub c_comment
 		    pSize = 12
 		    response.Write "<input type=""hidden"" name=""whatdo"" value=""msg""/>"
 		Else '评论
-		    SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_PostIP,blog_ID,T.log_Title from blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID ORDER BY C.comm_PostTime desc"
+		    SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_PostIP,blog_ID,T.log_Title, C.comm_IsAudit from blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID ORDER BY C.comm_PostTime desc"
 		    aUrl = "?Fmenu=Comment&"
 		    pSize = 15
 		    response.Write "<input type=""hidden"" name=""whatdo"" value=""comment""/>"
@@ -199,7 +199,7 @@ Sub c_comment
 		
 		%>
 									        <div class="item"><input type="hidden" name="CommentID" value="<%=commArr(0,Pcount)%>"/>
-										        <div class="title"><span class="blogTitle"><a href="default.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]</span></div>
+										        <div class="title"><span class="blogTitle"><a href="default.asp?id=<%=commArr(5,Pcount)%>" target="_blank" title="<%=commArr(6,Pcount)%>"><%=CutStr(commArr(6,Pcount),25)%></a></span><input type="checkbox" name="selectCommentID" value="<%=commArr(0,Pcount)%>|<%=commArr(5,Pcount)%>" onClick="highLight(this)"/><img src="images/icon_quote.gif" alt=""/><b><%=HtmlEncode(commArr(2,Pcount))%></b> <span class="date">[<%=DateToStr(commArr(3,Pcount),"Y-m-d H:I:S")%> | <%=commArr(4,Pcount)%>]&nbsp;&nbsp;<select name="CommentAudit"><option value="1" style="background:#FABABA" <%if commArr(7,Pcount) = false then Response.Write("Selected=""selected""")%>>&nbsp;未审核</option><option value="0" style="background:#C5FDB7" <%if commArr(7,Pcount) = true then Response.Write("Selected=""selected""")%>>审核通过</option></select></span></div>
 										        <div class="content"><textarea name="message_<%=commArr(0,Pcount)%>" onFocus="focusMe(this)" onBlur="blurMe(this)" onMouseOver="overMe(this)" onMouseOut="outMe(this)"><%=UnCheckStr(commArr(1,Pcount))%></textarea></div>
 										    </div>
 									      <%

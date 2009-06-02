@@ -3,6 +3,44 @@
 '  Function For PJblog3
 '    更新时间: 2009-05-22
 '===============================================================
+'**********************************
+' 模块名: 所有评论的XML化
+' 作 者: evio
+' 网 址: http://www.evio.name
+'**********************************
+Function SaveCommentListCache
+	Dim SaveCommentListCacheTempValue, CommentListCache, CommentListCacheSQL, CommentListCacheRow, CommentListCache_Len, CommentListCache_Goes, SaveCommentListToFile, CommentCacheApplication
+	SaveCommentListCacheTempValue = ""
+	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<?xml version=""1.0"" encoding=""utf-8""?>"
+	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<Comments>"
+		CommentListCacheSQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit FROM blog_Comment Where 1=1 Order By comm_ID ASC"
+		Set CommentListCache = Server.CreateObject("Adodb.RecordSet")
+		CommentListCache.open CommentListCacheSQL, Conn, 1, 1
+		SQLQueryNums = SQLQueryNums + 1
+		If CommentListCache.EOF Or CommentListCache.bof Then
+            ReDim CommentListCacheRow(0, 0)
+        Else
+            CommentListCacheRow = CommentListCache.GetRows()
+        End If
+		CommentListCache.Close
+        Set CommentListCache = Nothing
+		CommentCacheApplication = CommentListCacheRow
+	If UBound(CommentCacheApplication, 1) = 0 Then
+		SaveCommentListCache = False
+		Exit Function
+	End If
+	CommentListCache_Len = UBound(CommentCacheApplication, 2)
+	'comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit
+	'    0        1          2              3             4           5          6          7            8           9             10
+	For CommentListCache_Goes = 0 to CommentListCache_Len
+		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<Comment id="""&CommentCacheApplication(0, CommentListCache_Goes)&"""><Content><![CDATA["
+		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & UBBCode(HtmlEncode(CommentCacheApplication(1, CommentListCache_Goes)),CommentCacheApplication(4, CommentListCache_Goes),blog_commUBB,blog_commIMG,CommentCacheApplication(7, CommentListCache_Goes),CommentCacheApplication(9, CommentListCache_Goes))
+		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "]]></Content></Comment>"
+	Next
+	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "</Comments>"
+	SaveCommentListToFile = SaveToFile(SaveCommentListCacheTempValue, "cache/CommentListCache.xml")
+	SaveCommentListCache = SaveCommentListToFile
+End Function
 '*************************************
 '函数名 : FilterHtmlTags()
 '用途 : 过滤html标签

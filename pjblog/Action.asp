@@ -5,6 +5,8 @@
 <!--#include file="common/cache.asp" -->
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
+<!--#include file="class/cls_article.asp" -->
+<!--#include file="common/ubbcode.asp" -->
 <!--#include file="control/f_control.asp" -->
 <%
 response.expires=-1
@@ -16,7 +18,7 @@ response.cachecontrol="no-cache"
 '*************************************************
 Dim title, cname, Message, lArticle, postLog, SaveId, ReadForm, SplitReadForm
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
-Dim NewCateName
+Dim NewCateName, AType, BlogId, eSql
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
 	If ChkPost() Then
@@ -251,6 +253,7 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 	Else
 		response.write "非法提交数据"
 	End If
+'-------------[Ajax找回密码]---------------
 ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
 	If ChkPost() Then
 		Dim Password, PName, Rs
@@ -312,7 +315,55 @@ ElseIf Request.QueryString("action") = "updatepassto" Then
 	Else
 		response.write "非法提交数据"
 	End If
-else
+'-------------[Ajax首页评论审核]---------------
+ElseIf Request.QueryString("action") = "IndexAudit" Then
+	AType = Int(CheckStr(UnEscape(Request.QueryString("type"))))
+	SaveId = Int(CheckStr(UnEscape(Request.QueryString("id"))))
+	BlogId = Int(CheckStr(UnEscape(Request.QueryString("blogid"))))
+	If len(SaveId) = 0 Then Response.Write("评论参数错误") : Response.End()
+	If len(BlogId) = 0 Then Response.Write("日志参数错误") : Response.End()
+	If AType = 0 Then
+		Conn.Execute("Update [blog_Comment] Set comm_IsAudit=true Where [comm_ID]="&SaveId)
+		Response.Write("0")
+	ElseIf AType = 1 Then
+		Conn.Execute("Update [blog_Comment] Set comm_IsAudit=false Where [comm_ID]="&SaveId)
+		Response.Write("1")
+	Else
+		Response.Write("9")
+	End If
+	If blog_postFile = 2 Then PostArticle BlogId, False
+'-------------[Ajax评论加载]---------------
+ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then
+	SaveId = CheckStr(UnEscape(Request.QueryString("CommentIDStr")))
+	Dim SplitSaveId, SplitSi, SplitRs, SplitStr
+	SplitSaveId = Split(SaveId, "|$|")
+	SplitStr = ""
+	For SplitSi = 0 to (Ubound(SplitSaveId) - 1)
+		Set SplitRs = Conn.Execute("Select comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit From blog_Comment Where comm_ID="&SplitSaveId(SplitSi))
+'   0         1            2           3            4           5         6             7           8             9         10
+		If Not SplitRs.Eof And Not SplitRs.Bof Then
+			If blog_AuditOpen Then
+				If stat_Admin Then
+					If SplitRs(10) Then
+						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+					Else
+						SplitStr = SplitStr & Escape("[未审核评论,仅管理员可见]:&nbsp;" & UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+					End If
+				Else
+					If SplitRs(10) Then	
+						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+					Else
+						SplitStr = SplitStr & "[未审核评论,仅管理员可见]|$|"
+					End If
+				End If
+			Else
+				SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+			End If
+		End If
+		Set SplitRs = nothing
+	Next
+	Response.Write(SplitStr & "end")
+Else
 	response.write "非法操作!"
 End If
 %>

@@ -919,3 +919,24 @@ function ModiyStr3(id){
 	e += "</table>";
 	return e;
 }
+function InfoCss(nStr){
+	var LoadInfo = document.createElement("div");
+	LoadInfo.id = "LoadInfo";
+	document.body.appendChild(LoadInfo);
+	var LoadInformation = document.createElement("span");
+	LoadInformation.id = "LoadInformation";
+	LoadInformation.style.cssText = "font-size:11px; font-family:Arial, Helvetica, sans-serif; color:#FF6c00";
+	var loader = document.createElement("img");
+	loader.src = "images/loader.gif";
+	LoadInfo.appendChild(LoadInformation);
+	LoadInfo.appendChild(loader);
+	LoadInfo.style.cssText="position:fixed;width:240px;height:40px;border:1px solid #98C3F5;background-color:#E3F8F9;padding:10px;text-align:center;top:400px;margin-left:-125px;left:50%;*position:absolute;*top:expression(offsetParent.scrollTop + 220 + 'px');filter:Alpha(Opacity=60);opacity:0.6;ght:bold;";
+	LoadInformation.innerHTML=nStr;
+}
+function LoadInformation(nStr){
+	if (nStr!=null){
+		if (!$("LoadInfo")) {InfoCss(nStr);}
+	}else{
+		if ($("LoadInfo")) {document.body.removeChild($("LoadInfo"));}
+	}
+}
