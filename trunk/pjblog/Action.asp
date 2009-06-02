@@ -331,6 +331,7 @@ ElseIf Request.QueryString("action") = "IndexAudit" Then
 	Else
 		Response.Write("9")
 	End If
+	NewComment(2)
 	If blog_postFile = 2 Then PostArticle BlogId, False
 '-------------[Ajax评论加载]---------------
 ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then

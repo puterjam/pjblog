@@ -17,8 +17,8 @@ Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.243" '当前PJBlog版本号
-blog_UpdateDate = "2009-05-31"'PJBlog最新更新时间
+blog_version = "3.1.6.245" '当前PJBlog版本号
+blog_UpdateDate = "2009-06-02" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
@@ -356,7 +356,7 @@ Function NewComment(ByVal action)
     '-----------------写入最新评论缓存--------------------
     If Not IsArray(Application(CookieName&"_blog_Comment")) Or action = 2 Then
         Dim log_Comments
-        SQL = "SELECT top "&ShowLen&" comm_ID,blog_ID,comm_Author,comm_Content,comm_PostTime" &_
+        SQL = "SELECT top "&ShowLen&" comm_ID,blog_ID,comm_Author,comm_Content,comm_PostTime,comm_IsAudit" &_
         " FROM blog_Comment as C,blog_Content as T,blog_Category as A where C.blog_ID=T.log_ID and T.log_IsShow=true and T.log_CateID=A.cate_ID and A.cate_Secret=false order by C.comm_PostTime Desc"
         Set log_Comments = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -388,7 +388,17 @@ Function NewComment(ByVal action)
 		      else
 		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if
-            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))&"</a>"
+            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"
+			If blog_AuditOpen Then
+				If blog_Comment(5, i) Then
+					NewComment = NewComment&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))
+				Else
+					NewComment = NewComment&"[未审核评论]"
+				End If
+			Else
+				NewComment = NewComment&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))
+			End If
+			NewComment = NewComment&"</a>"
       
         Next
     End If
