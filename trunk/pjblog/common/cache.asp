@@ -17,7 +17,7 @@ Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.245" '当前PJBlog版本号
+blog_version = "3.1.6.246" '当前PJBlog版本号
 blog_UpdateDate = "2009-06-02" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -101,8 +101,8 @@ Sub getInfo(ByVal action)
         blog_Description = blog_Infos(46, 0)'站点首页Description
         blog_SaveTime = blog_Infos(47, 0)'Ajax草稿自动保存时间间隔
         blog_UpLoadSet = blog_Infos(48, 0)'附件管理
-		blog_PasswordProtection = blog_Infos(49, 0)'找回密码功能
-		blog_AuditOpen = blog_Infos(50, 0)'是否开启评论审核功能 ' 0 就是让数据该字段为true ; 1 为 false 这里必须统一起来,不然会混乱
+		blog_PasswordProtection = CBool(blog_Infos(49, 0))'找回密码功能
+		blog_AuditOpen = CBool(blog_Infos(50, 0))'是否开启评论审核功能 ' 0 就是让数据该字段为true ; 1 为 false 这里必须统一起来,不然会混乱
     End If
 End Sub
 
