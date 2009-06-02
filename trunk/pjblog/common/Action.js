@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="];
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&"];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&"];
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -349,4 +349,52 @@ function Gotoupdatepass(id){
 function GetNoPassInforMation(id){
 	var str = ModiyStr2(id);
 	$("passContent").innerHTML = str;
+}
+
+function IndexAudit(id, i, Thisobj, BlogID){
+	var c;
+	var ajax = new AJAXRequest;
+	if (i == 0){
+		LoadInformation("正在通过审核ID为" + id + "的评论,请稍后...");
+		c = GetFile[0]+GetAction[9]+"type=0&id=" + escape(id) + "&blogid=" + escape(BlogID) + "&TimeStamp="+new Date().getTime();
+	}else if (i == 1){
+		LoadInformation("正在取消审核ID为" + id + "的评论,请稍后...");
+		c = GetFile[0]+GetAction[9]+"type=1&id=" + escape(id) + "&blogid=" + escape(BlogID) + "&TimeStamp="+new Date().getTime();
+	}else{
+		c = 0;
+	}
+	if (c != 0){
+		ajax.get(
+			 	c,
+			 	function(obj) {
+				 	TempStr = obj.responseText;
+				 	TempStr = parseInt(TempStr);
+					if (TempStr == 0){
+						Thisobj.innerHTML = "取消审核";
+						$("commcontent_" + id).innerHTML = $("commcontent_" + id).innerHTML.replace("[未审核评论,仅管理员可见]:&nbsp;", "");
+						Thisobj.onclick = function(){IndexAudit(id, 1, Thisobj, BlogID);}
+					}else if (TempStr == 1){
+						Thisobj.innerHTML = "通过审核"; 
+						$("commcontent_" + id).innerHTML = "[未审核评论,仅管理员可见]:&nbsp;" + $("commcontent_" + id).innerHTML;
+						Thisobj.onclick = function(){IndexAudit(id, 0, Thisobj, BlogID);}
+					}
+					LoadInformation();
+			 	}
+	 	);
+	}
+}
+
+function ReadArticleComentByCommentID(CommentID){
+	var t = CommentID.split("|$|");
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[10]+"CommentIDStr="+escape(CommentID) + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 var row = unescape(TempStr).split("|$|");
+				 for (var i = 0 ; i < row.length ; i++){
+					 $("commcontent_" + t[i]).innerHTML = row[i];
+				 }
+			 }
+	 );
 }
