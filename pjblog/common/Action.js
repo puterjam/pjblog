@@ -385,6 +385,7 @@ function IndexAudit(id, i, Thisobj, BlogID){
 }
 
 function ReadArticleComentByCommentID(CommentID){
+	alert(CommentID)
 	var t = CommentID.split("|$|");
 	var ajax = new AJAXRequest;
 	ajax.get(
@@ -393,7 +394,7 @@ function ReadArticleComentByCommentID(CommentID){
 				 TempStr = obj.responseText;
 				 var row = unescape(TempStr).split("|$|");
 				 for (var i = 0 ; i < row.length ; i++){
-					 $("commcontent_" + t[i]).innerHTML = row[i];
+					 try{$("commcontent_" + t[i]).innerHTML = row[i];}catch(e){}
 				 }
 			 }
 	 );

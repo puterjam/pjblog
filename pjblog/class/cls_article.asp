@@ -83,7 +83,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead 
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead,  forStaticComment
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
@@ -209,7 +209,7 @@ Set nextLog = Nothing
 					   </div></div>
 					   </div>
 <%Set getTag = Nothing
-ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead  '显示评论内容
+ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead, False  '显示评论内容
 End Sub
 
 
@@ -217,7 +217,7 @@ End Sub
 '  显示日志评论内容
 '*******************************************
 
-Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, ByVal logShow, ByVal logPwcomm, ByVal CanRead)
+Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, ByVal logShow, ByVal logPwcomm, ByVal CanRead, ByVal forStaticComment)
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
@@ -299,9 +299,25 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			'评论审核部分
 			If blog_AuditOpen Then
 				If blog_postFile = 2 Then '  区分动静态
-					ShowComm = ShowComm & "[ 正在加载评论信息,请稍后... ]"
+					 If forStaticComment Then '区分静态下的评论
+						If stat_Admin Then '  判断权限
+							If commArr(10,Pcount) Then
+								ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+							Else
+								ShowComm = ShowComm&"[未审核评论,仅管理员可见]:&nbsp;"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+							End If
+						Else
+							If commArr(10,Pcount) Then	
+								ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+							Else
+								ShowComm = ShowComm&"[未审核评论,仅管理员可见]"
+							End If
+						End If
+					Else
+						ShowComm = ShowComm & "[ 正在加载评论信息,请稍后... ]"
+					End If
 				Else
-					If stat_Admin Then
+					If stat_Admin Then '  判断权限
 						If commArr(10,Pcount) Then
 							ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 						Else
@@ -320,7 +336,6 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			End If
 			
 			ShowComm = ShowComm&"</div>"
-			
 			ShowComm = ShowComm&"</div>"
 			Pcount = Pcount + 1
 		Loop

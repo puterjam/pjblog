@@ -22,7 +22,7 @@
 	
 	if IsInteger(id) = True then
 		if id>0 then
-			outputComment ShowComm(id, comDesc, False, True, True, False, True)
+			outputComment ShowComm(id, comDesc, False, True, True, False, True, True)
 		end if
 	end if 
 %>

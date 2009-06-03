@@ -760,7 +760,7 @@ function loadComment(page,needTips){
 	cJS.chatset = "utf-8";
 
 
-	cJS.src = "load_Comment.asp?id=" + g_logID + "&page=" + page + "&	comDesc=" + g_comDesc;
+	cJS.src = "load_Comment.asp?id=" + g_logID + "&page=" + page + "&	comDesc=" + g_comDesc + "&TimeStamp="+new Date().getTime();
 	
 	document.getElementsByTagName("HEAD")[0].appendChild(cJS);
 }

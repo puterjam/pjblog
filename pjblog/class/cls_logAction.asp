@@ -1280,7 +1280,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     
    '输出第一页评论
 
-    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow"), log_View("log_Readpw"), CanRead))   
+    Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow"), log_View("log_Readpw"), CanRead, False))   
     
     
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
