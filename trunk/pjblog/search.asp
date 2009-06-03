@@ -54,9 +54,9 @@ Select Case searchType
         End If
     Case "Comments"
         If Len(SearchContent)>0 Then
-            SQL = "SELECT T.log_ID,T.log_Title,C.comm_ID,C.comm_Author,C.comm_Content,C.comm_DisSM,C.comm_AutoURL,C.comm_AutoKEY,C.comm_PostTime FROM blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID AND T.log_IsShow=true AND C.comm_Content LIKE '%"&SearchContent&"%'"
+            SQL = "SELECT T.log_ID,T.log_Title,C.comm_ID,C.comm_Author,C.comm_Content,C.comm_DisSM,C.comm_AutoURL,C.comm_AutoKEY,C.comm_PostTime,C.comm_IsAudit FROM blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID AND T.log_IsShow=true AND C.comm_Content LIKE '%"&SearchContent&"%'"
         Else
-            SQL = "SELECT T.log_ID,T.log_Title,C.comm_ID,C.comm_Author,C.comm_Content,C.comm_DisSM,C.comm_AutoURL,C.comm_AutoKEY,C.comm_PostTime FROM blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID AND T.log_IsShow=true order by comm_ID desc"
+            SQL = "SELECT T.log_ID,T.log_Title,C.comm_ID,C.comm_Author,C.comm_Content,C.comm_DisSM,C.comm_AutoURL,C.comm_AutoKEY,C.comm_PostTime,C.comm_IsAudit FROM blog_Comment C,blog_Content T WHERE C.blog_ID=T.log_ID AND T.log_IsShow=true order by comm_ID desc"
         End If
     Case "trackback"
         If Len(SearchContent)>0 Then
@@ -103,7 +103,19 @@ Else
 
 %>
 	                <div class="commenttop"><img border="0" src="images/icon_quote.gif" alt="" style="margin:0px 4px -3px 0px"/></a><strong><%=SearchArr(3,PageCount)%></strong> <span class="commentinfo">[<%=DateToStr(SearchArr(8,PageCount),"Y-m-d H:I A")%>]</span></div>
-	                <div class="commentcontent"><%=highlight(UBBCode(HtmlEncode(SearchArr(4,PageCount)),SearchArr(5,PageCount),blog_commUBB,blog_commIMG,SearchArr(6,PageCount),SearchArr(7,PageCount)),SearchContent)%></div>
+	                <div class="commentcontent">
+					<%
+					If blog_AuditOpen Then
+						If SearchArr(9,PageCount) Then
+							Response.Write highlight(UBBCode(HtmlEncode(SearchArr(4,PageCount)),SearchArr(5,PageCount),blog_commUBB,blog_commIMG,SearchArr(6,PageCount),SearchArr(7,PageCount)),SearchContent)
+						Else
+							Response.Write("[此评论正在审核中...]")
+						End If
+					Else
+						Response.Write highlight(UBBCode(HtmlEncode(SearchArr(4,PageCount)),SearchArr(5,PageCount),blog_commUBB,blog_commIMG,SearchArr(6,PageCount),SearchArr(7,PageCount)),SearchContent)
+					End If
+					%>
+                    </div>
 	         <%
 Response.Write("<div class=""Content-bottom"">相关日志: <a href=""default.asp?id="&SearchArr(0, PageCount)&"#comm_"&SearchArr(2, PageCount)&"""><b>"&SearchArr(1, PageCount)&"</b></a></div>")
 Case "trackback"
