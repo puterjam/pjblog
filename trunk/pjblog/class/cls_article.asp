@@ -278,13 +278,13 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
      		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
 			'' 评论审核按钮部分
 			If blog_AuditOpen Then
-				If stat_Admin Then
+				'If stat_Admin Then
 					If commArr(10,Pcount) Then
 						ShowComm = ShowComm&" | <a href=""javascript:void(0)"" onclick=""IndexAudit("&blog_CommID&", 1, this, " & LogID & ");"">取消审核</a>"
 					Else
 						ShowComm = ShowComm&" | <a href=""javascript:void(0)"" onclick=""IndexAudit("&blog_CommID&", 0, this, " & LogID & ");"">通过审核</a>"
 					End If
-				End If
+				'End If
 			End If
 			ShowComm = ShowComm&"</span>]</span>"
 		

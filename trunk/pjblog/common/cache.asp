@@ -17,7 +17,7 @@ Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.246" '当前PJBlog版本号
+blog_version = "3.1.6.247" '当前PJBlog版本号
 blog_UpdateDate = "2009-06-02" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -375,7 +375,7 @@ Function NewComment(ByVal action)
 
     '-----------------读取最新评论缓存--------------------
     If action<>2 Then
-        Dim Comment_Item_Len
+        Dim Comment_Item_Len, NewTitleInfo
         If UBound(blog_Comment, 1) = 0 Then
             NewComment = ""
             Exit Function
@@ -388,7 +388,16 @@ Function NewComment(ByVal action)
 		      else
 		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if
-            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))&""">"
+			If blog_AuditOpen Then
+				If blog_Comment(5, i) Then
+					NewTitleInfo = blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))
+				Else
+					NewTitleInfo = "[此评论正在审核中...]"
+				End If
+			Else
+				NewTitleInfo = blog_Comment(2, i)&" 于 "&DateToStr(blog_Comment(4, i),"Y-m-d H:I A")&" 发表评论"&Chr(10)&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 100))
+			End If
+            NewComment = NewComment&"<a class=""sideA"" href="""&url&""" title="""&NewTitleInfo&""">"
 			If blog_AuditOpen Then
 				If blog_Comment(5, i) Then
 					NewComment = NewComment&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))
