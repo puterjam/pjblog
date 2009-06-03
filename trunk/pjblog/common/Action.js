@@ -385,7 +385,6 @@ function IndexAudit(id, i, Thisobj, BlogID){
 }
 
 function ReadArticleComentByCommentID(CommentID){
-	alert(CommentID)
 	var t = CommentID.split("|$|");
 	var ajax = new AJAXRequest;
 	ajax.get(
