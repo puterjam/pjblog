@@ -291,7 +291,7 @@ Function postcomm
 
 	'记住信息
 	If GuestCanRemeberComment = 1 Then
-		Response.Cookies(CookieName)("Guest") = ("true|-|" & username & "|$|" & post_Message & "|+|")
+		Response.Cookies(CookieName)("Guest") = ("true|-|" & username & "|$|" & Post_Email & "|$|" & Post_WebSite & "|+|")
 		Response.Cookies(CookieName).Expires = Date+365
     	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
 	Else
