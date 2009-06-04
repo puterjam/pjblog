@@ -643,8 +643,8 @@ function initLogin(CookieName){
 				var SplitGuest = Guest[1].split("|$|");
 				try{
 					if (document.forms[0].username) document.forms[0].username.value = SplitGuest[0];
-					//if ($("editMask")) $("editMask").value = SplitGuest[1]; 去掉记录内容框里的信息
-					//if (document.forms[0].Message) document.forms[0].Message.value = SplitGuest[1];
+					if (document.forms[0].Email) document.forms[0].Email.value = SplitGuest[1];
+					if (document.forms[0].WebSite) document.forms[0].WebSite.value = SplitGuest[2];
 				}catch(e){if (e.description.length > 0) alert(e.description);}
 			}
 		}

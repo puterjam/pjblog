@@ -394,13 +394,19 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		      		}
 		      </script>
               <%
-			  Dim Ts, Ts_UserName, Ts_Content, Ts_True
+			  Dim Ts, Ts_UserName, Ts_Content, Ts_True, Ts_Email, Ts_WebSite
 			  Ts = Request.Cookies(CookieName)("Guest")
 			  If len(Ts) > 0 or Ts <> "" Then
 			  	If Instr(Ts, "|-|") > 0 Then
 					Ts_True = Split(Ts, "|-|")(0)
-			  		Ts_UserName = Split(Split(Ts, "|-|")(1), "|$|")(0)
-					'Ts_Content = Split(Split(Split(Ts, "|-|")(1), "|$|")(1), "|+|")(0)
+					Ts_Content = Split(Split(Ts, "|-|")(1), "|+|")(0)
+					If Instr(Ts, "|-|") > 0 Then
+						If Ubound(Split(Ts_Content, "|$|")) = 2 Then
+			  				Ts_UserName = Split(Ts_Content, "|$|")(0)
+							Ts_Email = Split(Ts_Content, "|$|")(1)
+							Ts_WebSite = Split(Ts_Content, "|$|")(2)
+						End If
+					End If
 				End If
 			  End If
 			  %>
@@ -416,8 +422,8 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  end if
 			  %>/></td></tr>
 		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
-              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" /> 输入网址便于回访.</td></tr>
+              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_Email) Else Response.Write("")%>" /> 支持Gravatar头像.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_WebSite) Else Response.Write("")%>" /> 输入网址便于回访.</td></tr>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
 			   <%
