@@ -89,12 +89,18 @@ Function postcomm
     Dim username, post_logID, post_From, post_FromURL, post_disImg, post_DisSM, post_DisURL, post_DisKEY, post_DisUBB, post_Message, validate, GuestCanRemeberComment
     Dim password
     Dim ReInfo, LastMSG, FlowControl
+	' New Add
+	Dim Post_Email, Post_WebSite
     ReInfo = Array("错误信息", "", "MessageIcon")
     username = Trim(CheckStr(request.Form("username")))
     password = Trim(CheckStr(request.Form("password")))
     post_logID = CLng(CheckStr(request.Form("logID")))
     validate = Trim(request.Form("validate"))
     post_Message = CheckStr(request.Form("Message"))
+	' --------------------------
+	Post_Email = Trim(CheckStr(request.Form("Email")))
+	Post_WebSite = Trim(CheckStr(request.Form("WebSite")))
+	' --------------------------
 	GuestCanRemeberComment = CheckStr(Request.Form("log_GuestCanRemeberComment"))
 	if GuestCanRemeberComment = "1" then GuestCanRemeberComment = 1 else GuestCanRemeberComment = 0
     FlowControl = False
@@ -247,6 +253,26 @@ Function postcomm
         postcomm = ReInfo
         Exit Function
     End If
+	
+	If Len(Post_Email) > 0 Then
+		If Not RegMatch(Post_Email, "\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*") Then
+			ReInfo(0) = "评论发表错误信息"
+        	ReInfo(1) = "<b>验证邮箱格式错误</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        	ReInfo(2) = "ErrorIcon"
+        	postcomm = ReInfo
+        	Exit Function
+		End If
+	End If
+	
+	If Len(Post_WebSite) > 0 Then
+		If Not RegMatch(Post_WebSite, "(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?") Then
+			ReInfo(0) = "评论发表错误信息"
+        	ReInfo(1) = "<b>网址格式错误,请用http://开头</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        	ReInfo(2) = "ErrorIcon"
+        	postcomm = ReInfo
+        	Exit Function
+		End If
+	End If
     'UBB 特别属性
     post_disImg = 1
     post_DisUBB = 0
@@ -274,7 +300,7 @@ Function postcomm
     	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
 	End If
 	
-    AddComm = Array(Array("blog_ID", post_logID), Array("comm_Content", post_Message), Array("comm_Author", username), Array("comm_DisSM", post_DisSM), Array("comm_DisUBB", post_DisUBB), Array("comm_DisIMG", post_disImg), Array("comm_AutoURL", post_DisURL), Array("comm_PostIP", getIP), Array("comm_AutoKEY", post_DisKEY))
+    AddComm = Array(Array("blog_ID", post_logID), Array("comm_Content", post_Message), Array("comm_Author", username), Array("comm_DisSM", post_DisSM), Array("comm_DisUBB", post_DisUBB), Array("comm_DisIMG", post_disImg), Array("comm_AutoURL", post_DisURL), Array("comm_PostIP", getIP), Array("comm_AutoKEY", post_DisKEY), Array("comm_Email", Post_Email), Array("comm_WebSite", Post_WebSite))
     DBQuest "blog_Comment", AddComm, "insert"
     'Conn.ExeCute("INSERT INTO blog_Comment(blog_ID,comm_Content,comm_Author,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY) VALUES ("&post_logID&",'"&post_Message&"','"&username&"',"&post_DisSM&","&post_DisUBB&","&post_disImg&","&post_DisURL&",'"&getIP()&"',"&post_DisKEY&")")
     Conn.Execute("update blog_Content set log_CommNums=log_CommNums+1 where log_ID="&post_logID)
