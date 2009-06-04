@@ -83,7 +83,7 @@ Sub ShowArticle(LogID)
             TempArticle = Replace(TempArticle, "<$log_ViewNums$>", log_ViewArr(4, 0))
 
             response.Write TempArticle
-            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead,  forStaticComment
+            ShowComm LogID, comDesc, log_ViewArr(7, 0), False, log_ViewArr(3, 0), log_ViewArr(23,0), CanRead,  false
             Call updateViewNums(id, log_ViewArr(4, 0))
         Else
             response.Write "读取日志出错.<br/>" & LoadArticle(0) & " : " & LoadArticle(1)
