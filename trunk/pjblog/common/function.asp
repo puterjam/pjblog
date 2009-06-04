@@ -4,6 +4,29 @@
 '    更新时间: 2009-05-22
 '===============================================================
 '**********************************
+' 模块名: 模块化所有正则的匹配
+' 作 者: evio
+' 网 址: http://www.evio.name
+' 返回值 : true / false
+' 输入值 : Str 被检查的文本
+'         MatchStr 匹配的正则式
+'**********************************
+Function RegMatch(ByVal Str, ByVal MatchStr)
+	If Len(Str) = 0 Or Len(MatchStr) = 0 Then Exit Function
+	Dim cRe, cReCount
+	Set cRe = New RegExp
+			cRe.IgnoreCase = True
+    		cRe.Global = True
+			cRe.Pattern = MatchStr
+			Set cReCount = cRe.Execute(Str)
+			If cReCount.count then
+				RegMatch = True
+			Else
+				RegMatch = False
+			End If
+	Set cRe = nothing
+End Function
+'**********************************
 ' 模块名: 所有评论的XML化
 ' 作 者: evio
 ' 网 址: http://www.evio.name
@@ -1741,6 +1764,18 @@ function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style, baseUrl, ev
     
     return pageCode;
 }
+////*************************************
+//// 设置Gravatar头像信息
+//// <img alt="Gravatar Icon" src="http://www.gravatar.com/avatar/email md5?d=identicon&s=80&r=g"/>
+////*************************************
+//function Gravatar(){
+//	this.Gravatar_d = "identicon"; // 默认图片，如d=http%3A%2F%2Fexample.com%2Fimages%2Fexample.jpg(其中“%3A”代“:”，“%2F”代“/”)，也可以用三个特殊参数：identicons、monsterids、wavatars
+//	this.Gravatar_s = "40"; // 图片大小，单位是px，默认是80，可以取1~512之间的整数值
+//	this.Gravatar_r = "g"; // 限制等级，默认为g，(G 普通级、PG 辅导级、R 和 X 为限制级)
+//	this.EmailMd5 = ""; // 邮箱的MD5值
+//	function getImg(d, s, r, e){return "http://www.gravatar.com/avatar/" + e + "?d=" + d + "&s=" + s + "&r=" + r ;}
+//	this.outPut = function(){getImg(this.Gravatar_d, this.Gravatar_s, this.Gravatar_r, this.EmailMd5);}
+//}
 </script>
 
 

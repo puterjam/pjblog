@@ -221,7 +221,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
     
     Pcount = 0
@@ -233,7 +233,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
    ' SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY FROM blog_Comment WHERE blog_ID="&LogID&" UNION ALL SELECT 0,tb_Intro,tb_Title,tb_PostTime,tb_URL,tb_Site,tb_ID,0,'127.0.0.1',0 FROM blog_Trackback WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
   
    ' 不带 trackback 的查询，速度较快
-   SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit FROM blog_Comment WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
+   SQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit,comm_Email,comm_WebSite FROM blog_Comment WHERE blog_ID="&LogID&" ORDER BY comm_PostTime "&comDesc
 
     blog_Comment.Open SQL, Conn, 1, 1
     SQLQueryNums = SQLQueryNums + 1
@@ -272,7 +272,16 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			If blog_postFile = 2 Then
 				outPutCommentCount = outPutCommentCount & blog_CommID & "|$|"
 			End If
-     		ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
+			' Gravatar 头像基本设置
+			Set NewGravatar = new Gravatar
+			If Len(commArr(11, Pcount)) > 0 Then
+				NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(commArr(11, Pcount))))
+			Else
+				NewGravatar.Gravatar_EmailMd5 = ""
+			End If
+			GravatarImg = lcase(NewGravatar.outPut())
+			Set NewGravatar = nothing
+     		ShowComm = ShowComm&"<div class=""comment"" style=""text-align:right""><div class=""commentleft Gravatar"" style=""float:left"" id=""Gravatar_"&blog_CommID&"""><a href="""&commArr(12, Pcount)&""" target=""_blank""><img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" /></a></div><div class=""commentright"" style=""text-align:left""><div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
      		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&"<span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
@@ -335,7 +344,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 				ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 			End If
 			
-			ShowComm = ShowComm&"</div>"
+			ShowComm = ShowComm&"</div></div>"
 			ShowComm = ShowComm&"</div>"
 			Pcount = Pcount + 1
 		Loop
@@ -407,6 +416,8 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  end if
 			  %>/></td></tr>
 		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
+              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" /> 输入网址便于回访.</td></tr>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
 			   <%
