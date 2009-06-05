@@ -265,12 +265,20 @@ Function postcomm
 	End If
 	
 	If Len(Post_WebSite) > 0 Then
-		If Not RegMatch(Post_WebSite, "(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?") Then
+		If Len(Post_WebSite) < 7 Then
 			ReInfo(0) = "评论发表错误信息"
-        	ReInfo(1) = "<b>网址格式错误,请用http://开头</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        	ReInfo(1) = "<b>输入网址不正确</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         	ReInfo(2) = "ErrorIcon"
         	postcomm = ReInfo
         	Exit Function
+		Else
+			If Not RegMatch(Post_WebSite, "(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?") Then
+				ReInfo(0) = "评论发表错误信息"
+        		ReInfo(1) = "<b>网址格式错误,请用http://开头</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        		ReInfo(2) = "ErrorIcon"
+        		postcomm = ReInfo
+        		Exit Function
+			End If
 		End If
 	End If
     'UBB 特别属性
