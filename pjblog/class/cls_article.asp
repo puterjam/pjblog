@@ -449,7 +449,7 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  %>/></td></tr>
 		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
               <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_Email) Else Response.Write("")%>" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_WebSite) Else Response.Write("http://")%>" /> 输入网址便于回访.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_WebSite) Else Response.Write("")%>" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
 			   <%
