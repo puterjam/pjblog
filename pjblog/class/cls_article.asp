@@ -221,7 +221,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, pjblogCommentEmail, pjblogCommentWebSite
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, pjblogCommentEmail, pjblogCommentWebSite, pjblogCommentEmailImg, pjblogCommentWebSiteImg
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
     
     Pcount = 0
@@ -300,12 +300,13 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			
 			if len(pjblogCommentEmail) = 0 then pjblogCommentEmail = "javascript:void(0)" else pjblogCommentEmail = "mailto:" & pjblogCommentEmail
 			if len(pjblogCommentWebSite) = 0 then pjblogCommentWebSite = "javascript:void(0)"
-			
+			if len(pjblogCommentEmail) = 0 then pjblogCommentEmailImg = "images/noCommentEmail.gif" else pjblogCommentEmailImg = "images/CommentEmail.gif"
+			if len(pjblogCommentWebSite) = 0 then pjblogCommentWebSiteImg = "images/nositeurl.gif" else pjblogCommentWebSiteImg = "images/siteurl.gif"
 			
 			ShowComm = ShowComm&"<div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
-     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | <a href="""&pjblogCommentEmail&"""><img src=""images/CommentEmail .gif"" border=""0""></a> | <a href="""&pjblogCommentWebSite&"""><img src=""images/siteurl.gif"" border=""0""></a><span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
+     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | <a href="""&pjblogCommentEmail&"""><img src="""&pjblogCommentEmailImg&""" border=""0""></a> | <a href="""&pjblogCommentWebSite&"""><img src="""&pjblogCommentWebSiteImg&""" border=""0""></a><span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
 			'' 评论审核按钮部分
 			If blog_AuditOpen Then
 				'If stat_Admin Then
