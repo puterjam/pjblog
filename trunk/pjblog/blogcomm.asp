@@ -265,7 +265,7 @@ Function postcomm
 	End If
 	
 	If Len(Post_WebSite) > 0 Then
-		If Len(Post_WebSite) < 7 Then
+		If Len(Post_WebSite) < 8 and Post_WebSite <> "http://" Then
 			ReInfo(0) = "评论发表错误信息"
         	ReInfo(1) = "<b>输入网址不正确</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         	ReInfo(2) = "ErrorIcon"
