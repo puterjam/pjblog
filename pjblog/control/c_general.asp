@@ -341,15 +341,35 @@ Sub c_ceneral
 		          <td><div align="right">Blog对外开放</div></td>
 		          <td align="left"><input name="SiteOpen" type="checkbox" value="1" <%if Application(CookieName & "_SiteEnable")=1 then response.write ("checked=""checked""")%>/></td>
 		        </tr>
-                <tr>
-		          <td><div align="right"> 整站是否开启评论留言审核功能
-		                  <div class="shuom"><strong>[勾选]</strong>表示开启评论留言审核功能</div>
-		          </div></td>
-		          <td align="left"><input name="AuditOpen" type="checkbox" value="1" <%if blog_AuditOpen then Response.Write ("checked=""checked""")%>/></td>
-		        </tr>
 		      </table>
 		    </div>
 			</fieldset>
+            
+            <fieldset>
+		    <legend> 整站功能的开启与关闭</legend>
+		    <div align="left">
+            	<table border="0" cellpadding="2" cellspacing="1">
+                	<tr>
+                    	<td width="180" align="right">使用密码保护功能</td>
+                        <td><input name="blog_PasswordProtection" type="checkbox" value="1" <%if blog_PasswordProtection then response.write ("checked=""checked""")%>  /> </td>
+                        <td><div class="shuom"><strong>[勾选]</strong>表示开启密码保护功能.</div></td>
+                    </tr>
+                    <tr>
+		          		<td><div align="right"> 是否开启评论留言审核功能</div></td>
+		          		<td align="left"><input name="AuditOpen" type="checkbox" value="1" <%if blog_AuditOpen then Response.Write ("checked=""checked""")%>/></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启评论留言审核功能</div></td>
+		        	</tr>
+                    <tr>
+		          		<td><div align="right"> 是否开启Gravatar头像功能</div></td>
+		          		<td align="left"><input name="GravatarOpen" type="checkbox" value="1" <%if blog_GravatarOpen then Response.Write ("checked=""checked""")%>/></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启Gravatar头像功能</div></td>
+		        	</tr>  
+                </table>
+            </div>
+            </fieldset>
+            
+            
+            
 			<fieldset>
 		    <legend> 日志保存设置</legend>
 		    <div align="left">
@@ -423,8 +443,7 @@ Sub c_ceneral
 		    <legend> 用户注册与过滤</legend>
 		    <div align="left">
 		      <table border="0" cellpadding="2" cellspacing="1">
-		  		<tr><td width="180" align="right">不允许注册新用户</td><td width="300"><input name="blog_Disregister" type="checkbox" value="1" <%if blog_Disregister then response.write ("checked=""checked""")%>  /> </td></tr>
-                <tr><td width="180" align="right">使用密码保护功能</td><td width="300"><input name="blog_PasswordProtection" type="checkbox" value="1" <%if blog_PasswordProtection then response.write ("checked=""checked""")%>  /> </td></tr>
+		  		<tr><td width="180" align="right">不允许注册新用户</td><td width="300"><input name="blog_Disregister" type="checkbox" value="1" <%if blog_Disregister then response.write ("checked=""checked""")%>  /> </td></tr> 
 		  	    <tr><td width="180" align="right">访客记录最大值</td><td width="300"><input name="blog_CountNum" type="text" size="5" class="text" value="<%=blog_CountNum%>"/>  <span style="color:#999">设置为0则不进行任何访客记录</span></td></tr>
 		     <tr>
 		         <td width="180" valign="top"><div align="right">注册名字过滤
