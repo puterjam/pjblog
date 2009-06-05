@@ -10,14 +10,14 @@ Dim blog_VisitNums, blogBookPage, blog_MessageNums, blogcommpage, blogaffiche
 Dim blogabout, blogcolsize, blog_colNums, blog_TbCount, blog_showtotal, blog_commTimerout
 Dim blog_commUBB, blog_commImg, blog_version, blog_UpdateDate, blog_DefaultSkin, blog_SkinName, blog_SplitType
 Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introChar, blog_introLine
-Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime, blog_PasswordProtection, blog_AuditOpen
+Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime, blog_PasswordProtection, blog_AuditOpen, blog_GravatarOpen
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
 Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.256" '当前PJBlog版本号
+blog_version = "3.1.6.258" '当前PJBlog版本号
 blog_UpdateDate = "2009-06-03" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -35,7 +35,7 @@ Sub getInfo(ByVal action)
               "blog_postFile,blog_postCalendar,blog_DefaultSkin,blog_SkinName,blog_SplitType," & _
               "blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
-              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection,blog_AuditOpen" & _
+              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection,blog_AuditOpen,blog_GravatarOpen" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -103,6 +103,7 @@ Sub getInfo(ByVal action)
         blog_UpLoadSet = blog_Infos(48, 0)'附件管理
 		blog_PasswordProtection = CBool(blog_Infos(49, 0))'找回密码功能
 		blog_AuditOpen = CBool(blog_Infos(50, 0))'是否开启评论审核功能 ' 0 就是让数据该字段为true ; 1 为 false 这里必须统一起来,不然会混乱
+		blog_GravatarOpen = CBool(blog_Infos(51, 0)) ' 是否开启Gravatar头像功能
     End If
 End Sub
 

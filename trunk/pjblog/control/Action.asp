@@ -62,6 +62,7 @@ Sub doAction
             If CheckStr(Request.Form("blog_wapURL")) = "1" Then weblog("blog_wapURL") = 1 Else weblog("blog_wapURL") = 0		
 			If CheckStr(Request.Form("blog_PasswordProtection")) = "1" Then weblog("blog_PasswordProtection") = True Else weblog("blog_PasswordProtection") = False
 			If CheckStr(Request.Form("AuditOpen")) = "1" Then weblog("blog_AuditOpen") = True Else weblog("blog_AuditOpen") = False
+			If CheckStr(Request.Form("GravatarOpen")) = "1" Then weblog("blog_GravatarOpen") = True Else weblog("blog_GravatarOpen") = False
 
             Response.Cookies(CookieNameSetting)("ViewType") = ""
             weblog.update
