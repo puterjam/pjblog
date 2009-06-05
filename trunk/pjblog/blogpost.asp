@@ -101,6 +101,7 @@ If ChkPost() Then
 		lArticle.logIsDraft = false
 		postLog = lArticle.editLog(request.Form("postbackId"))
 	else
+		lArticle.isajax = false
     	postLog = lArticle.postLog
 	end if
     Set lArticle = Nothing

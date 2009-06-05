@@ -405,13 +405,13 @@ Class logArticle
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
 
         If logIsDraft = False Then weblog("log_Modify") = "[本日志由 "&memName&" 于 "&DateToStr(Now(), "Y-m-d H:I A")&" 编辑]"
-        'If logIsDraft = False And weblog("log_IsDraft")<>logIsDraft Then
-			'if isajax <> true then
-            	'Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
-            	'Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID=" & CheckStr(categoryID))
-			'end if
-            'SQLQueryNums = SQLQueryNums + 2
-       ' End If
+        If logIsDraft = False And weblog("log_IsDraft")<>logIsDraft Then
+			if isajax <> true then
+            	Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
+            	Conn.Execute("UPDATE blog_Category SET cate_count=cate_count+1 where cate_ID=" & CheckStr(categoryID))
+			end if
+            SQLQueryNums = SQLQueryNums + 2
+        End If
 
 		'Meta特别属性
 		If logMeta <> true Then
