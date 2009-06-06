@@ -15,7 +15,7 @@ Sub c_skins
 		    <td class="CPanel">
 			<div class="SubMenu2">
 			<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <b>模板: </b> <a href="?Fmenu=CodeEditor&file=Template\static.htm&referer=skins">编辑静态页面模板</a>  <br/> 
-			<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a></div>
+			<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a> | <a href="?Fmenu=Skins&Smenu=PluginsOnline">在线安装插件</a></div>
 		
 		<%
 		If Request.QueryString("Smenu") = "module" Then
@@ -321,8 +321,11 @@ Sub c_skins
 		  </div>    
 		</div>
 		<%
-		
-		
+		'============================================================
+		'    在线获取插件
+		'============================================================
+		ElseIf Request.QueryString("Smenu") = "PluginsOnline" Then
+			GetOnlinePlugins
 		'============================================================
 		'    安装插件
 		'============================================================

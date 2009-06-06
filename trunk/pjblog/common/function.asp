@@ -4,6 +4,53 @@
 '    更新时间: 2009-05-22
 '===============================================================
 '**********************************
+' 模块名: 模块化抓取页面的方法
+' 作 者: evio
+' 网 址: http://www.evio.name
+' 返回值 : string 被抓去的内容
+' 输入值 : StartStr 被检查的文本
+'         EndStr 匹配的正则式
+'         URL 被抓取的地址
+'**********************************
+Function GetHttpPage(ByVal URL, ByVal StartStr, ByVal EndStr)
+	If IsNull(URL) Then GetHttpPage = "" : Exit Function
+	GetHttpPage = ""
+	Dim CreateXMLHTTP, XMLHTTP
+	set CreateXMLHTTP = Server.CreateObject("Microsoft.XMLHTTP")
+		XMLHTTP = CreateXMLHTTP.open ("GET", URL, false)
+		CreateXMLHTTP.send()
+		If err then
+			err.clear
+		Else
+			XMLHTTP = Bytestobstr(CreateXMLHTTP.responseBody)
+			If len(StartStr) > 0 and len(EndStr) > 0 Then
+				If Instr(XMLHTTP, StartStr) <> 0 Then
+					GetHttpPage = Split(XMLHTTP, StartStr)(1)
+					If Instr(XMLHTTP, EndStr) <> 0 Then
+						GetHttpPage = Split(XMLHTTP, EndStr)(0)
+					End If
+				End If
+			Else
+				GetHttpPage = XMLHTTP
+			End If
+		End If
+End Function
+
+Function Bytestobstr(Body)
+   	Dim Objstream
+   	Set Objstream = Server.Createobject("Adodb.Stream")
+   		Objstream.Type = 1
+   		Objstream.Mode =3
+   		Objstream.Open
+   		Objstream.Write Body
+   		Objstream.Position = 0
+   		Objstream.Type = 2
+   		Objstream.Charset ="utf-8"
+   		Bytestobstr = Objstream.Readtext 
+   		Objstream.Close
+   	Set Objstream = Nothing
+End Function
+'**********************************
 ' 模块名: 模块化所有正则的匹配
 ' 作 者: evio
 ' 网 址: http://www.evio.name
