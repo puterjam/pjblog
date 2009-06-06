@@ -662,6 +662,7 @@ Function categoryTitle()
     cTitle.Add "Skins.module" , "界面设置 - 设置模块"
     cTitle.Add "Skins.Plugins" , "界面设置 - 已装插件管理"
     cTitle.Add "Skins.PluginsInstall" , "界面设置 - 安装插件"
+	cTitle.Add "Skins.PluginsOnline" , "界面设置 - 在线安装插件"
     cTitle.Add "Skins.editModule" , "界面设置 - 可视化编辑HTML代码"
     cTitle.Add "Skins.editModuleNormal" , "界面设置 - 编辑HTML源代码"
     cTitle.Add "Skins.PluginsOptions" , "界面设置 - 插件配置"
@@ -689,4 +690,8 @@ Function categoryTitle()
     categoryTitle = cTitle(Fmenu & "." & Smenu)
     Set cTitle = Nothing
 End Function
+
+Sub GetOnlinePlugins
+	Response.Write(GetHttpPage(PluginURL, "", ""))
+End Sub
 %>

@@ -16,6 +16,7 @@ Session.LCID = 2057
 Const CookieName = "PJBlog3"
 Const CookieNameSetting = "PJBlog3Setting"
 Const IPViewURL = "http://www.dheart.net/ip/index.php?ip=" 'IP查询网站地址
+Const PluginURL = "http://rp.pjhome.net/ep.asp"
 Response.Cookies(CookieNameSetting).Expires = Date+365
 
 '站点开关操作
