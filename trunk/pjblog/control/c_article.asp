@@ -63,7 +63,7 @@ Sub c_article
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 						conn.execute ("update blog_Info set blog_LogNums=blog_LogNums-1 where blog_ID=1")
 		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
-		                
+		                autoDeleteTag logTag
 		            next
 		             session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志删除成功！"

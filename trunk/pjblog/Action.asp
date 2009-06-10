@@ -364,6 +364,11 @@ ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then
 		Set SplitRs = nothing
 	Next
 	Response.Write(SplitStr & "end")
+ElseIf Request.QueryString("action") = "GetHttpURL" Then
+	Message = Checkxss(Request.QueryString("url"))
+	Message = GetHttpPage(Message, "<!--StartGetHttpPage-->", "<!--EndGetHttpPage-->")
+	Message = "<!--StartGetHttpPage-->" & Message &"<!--EndGetHttpPage-->"
+	Response.Write(Message)
 Else
 	response.write "非法操作!"
 End If

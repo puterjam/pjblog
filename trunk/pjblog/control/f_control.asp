@@ -554,12 +554,37 @@ Function DeleteLog(LogID)
         End If
         Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&LogID)
         Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&LogID)
+		AutoDeleteTag logDB("log_tag")
         DeleteFiles Server.MapPath("post/"&LogID&".asp")
         DeleteFiles Server.MapPath(maph)
         DeleteLog = 1
     End If
 End Function
 
+Function AutoDeleteTag(tags)
+	dim Reg, Gomatch, Match, TagId, TagRs
+	set Reg = new RegExp
+	With Reg
+		.Global = True
+    	.IgnoreCase = True
+    	.MultiLine = True
+    	.Pattern = "\{(\d+?)\}"
+    Set Gomatch = .Execute(tags)
+    For Each Match In Gomatch
+		TagId = Match.submatches(0)
+		If IsNumeric(TagId) then
+			Set TagRs = Server.CreateObject("Adodb.RecordSet")
+			TagRs.Open "Select * From blog_tag where tag_id=" & TagId, Conn, 1, 3
+				If Not (TagRs.Eof And TagRs.Bof) Then TagRs("tag_count") = TagRs("tag_count") - 1
+				If TagRs("tag_count") = 0 Then TagRs.Delete
+				TagRs.UpDate
+			TagRs.Close
+			Set TagRs=nothing
+		End if
+    Next
+	End With
+	set Reg = nothing
+End Function
 
 Function bc(t, s)
     Dim tl, sl, i

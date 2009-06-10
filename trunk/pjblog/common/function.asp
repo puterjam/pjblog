@@ -26,8 +26,8 @@ Function GetHttpPage(ByVal URL, ByVal StartStr, ByVal EndStr)
 			If len(StartStr) > 0 and len(EndStr) > 0 Then
 				If Instr(XMLHTTP, StartStr) <> 0 Then
 					GetHttpPage = Split(XMLHTTP, StartStr)(1)
-					If Instr(XMLHTTP, EndStr) <> 0 Then
-						GetHttpPage = Split(XMLHTTP, EndStr)(0)
+					If Instr(GetHttpPage, EndStr) <> 0 Then
+						GetHttpPage = Split(GetHttpPage, EndStr)(0)
 					End If
 				End If
 			Else

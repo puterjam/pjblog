@@ -1,7 +1,7 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="];
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&"];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&", "GetHttpURL&"];
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){
@@ -395,6 +395,20 @@ function ReadArticleComentByCommentID(CommentID){
 				 for (var i = 0 ; i < row.length ; i++){
 					 try{$("commcontent_" + t[i]).innerHTML = row[i];}catch(e){}
 				 }
+			 }
+	 );
+}
+
+function ReturnPage(URL, Obj){
+	var TempStr;
+	LoadInformation("正在读取信息...");
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0]+GetAction[11]+"url="+escape(URL) + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 $(Obj).innerHTML = TempStr;
+				 LoadInformation();
 			 }
 	 );
 }
