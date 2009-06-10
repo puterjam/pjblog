@@ -13,7 +13,7 @@ Sub c_article
 	    <tr>
 		    <td align="center" bgcolor="#FFFFFF" height="48">
 		    <%
-		        Dim Log_Dele,Log_source_ID,fso
+		        Dim Log_Dele, Log_source_ID, fso, logTag
 		        If Request.form("moveto")=1 Then
 		            Log_Dele=split(Request.form("Log_Dele"),", ")
 		            for i=0 to ubound(Log_Dele)
@@ -55,7 +55,8 @@ Sub c_article
 		            Log_Dele=split(Request.form("Log_Dele"),", ")
 		            Set fso = CreateObject("Scripting.FileSystemObject")
 		            for i=0 to ubound(Log_Dele)
-		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
+		                Log_source_ID = conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
+						logTag = conn.execute("select log_Tag from blog_Content where log_ID="&Log_Dele(i))(0)
 						if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
 		                    fso.DeleteFile(server.MapPath(Alias(Log_Dele(i))))
 							fso.DeleteFile(server.MapPath(".\cache/"&Log_Dele(i)&".asp"))
