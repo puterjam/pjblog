@@ -363,25 +363,126 @@ End Sub
 
 Sub PostLink()
     Dim LoadTemplate, Temp, SaveArticle
+	Dim Link_SplitArray, Link_Global_Temp, Link_Layout_Temp, LinkClassTemp, LinkTemp, AllTemp
     LoadTemplate = LoadFromFile("Template/Link.asp")
     If LoadTemplate(0) = 0 Then '读取成功后写入信息
         Temp = LoadTemplate(1)
-        Dim blog_Links, ImgLink, TextLink
-        Set blog_Links = conn.Execute("select * from blog_Links where link_IsShow=true order by link_Order asc")
+		Link_SplitArray = Split(Temp, "<#ST(B)#>")
+		Link_Global_Temp = Link_SplitArray(1)
+		Link_Layout_Temp = Link_SplitArray(2)
+        Dim blog_Links
+        Set blog_Links = conn.Execute("Select * From blog_LinkClass order by LinkClass_Order asc")
+		AllTemp = ""
         Do Until blog_Links.EOF
-            If Len(blog_Links("link_Image"))>0 Then
-                ImgLink = ImgLink&"<a href="""&blog_Links("link_URL")&""" target=""_blank""><img src="""&blog_Links("link_Image")&""" alt="""&blog_Links("link_Name")&""" border=""0"" style=""margin:3px;width:88px;height:31px""/></a>"
-            Else
-                TextLink = TextLink&"<div class=""link"" style=""width:108px;float:left;overflow:hidden;margin-right:8px;height:24px;line-height:180%""><a href="""&blog_Links("link_URL")&""" target=""_blank"" title="""&blog_Links("link_Name")&""">"&blog_Links("link_Name")&"</a></div>"
-            End If
+            LinkClassTemp = Link_Global_Temp
+			LinkTemp = Link_Layout_Temp
+			Dim LinkSingContent
+			LinkSingContent = GetLinkSingleHtml(LinkTemp, Trim(blog_Links("LinkClass_ID")), 3)
+			If Len(LinkSingContent) > 0 Then
+				LinkClassTemp = Replace(LinkClassTemp, "<$LinkClass_Name$>", Trim(blog_Links("LinkClass_Name")))
+				LinkClassTemp = Replace(LinkClassTemp, "<$LinkClass_Title$>", Trim(blog_Links("LinkClass_Title")))
+				LinkClassTemp = Replace(LinkClassTemp, "<$LoopLayout$>", LinkSingContent)
+				AllTemp = AllTemp & LinkClassTemp
+			End If
             blog_Links.movenext
         Loop
-        Temp = Replace(Temp, "<$ImgLink$>", ImgLink)
-        Temp = Replace(Temp, "<$TextLink$>", TextLink)
-        SaveArticle = SaveToFile(Temp, "post/link.html")
+        SaveArticle = SaveToFile(AllTemp, "post/link.html")
     End If
 End Sub
 
+Function GetLinkSingleHtml(Html, Id, LoopNo)
+
+	If Not IsInteger(Id) Then Exit Function
+	If Len(Html) <= 0 Then Exit Function
+	If Not IsInteger(LoopNo) Then Exit Function
+	
+	Dim GetLinkSingleAdo, GetLinkSingleAdoCount, PerCenter
+	Dim GetLinkSingRows, i, GetLinkSingRowsStr, TmplateStr
+		PerCenter = ((100 / Int(LoopNo)) & "%")
+	SQL = "Select link_ID,link_Name,link_URL,link_Image From blog_Links Where link_IsShow=true And Link_ClassID=" & Id & " order by link_Order,link_Image asc"
+	Set GetLinkSingleAdo = Server.CreateObject("Adodb.RecordSet")
+		GetLinkSingleAdo.Open SQL, Conn, 1, 1
+		If GetLinkSingleAdo.Bof Or GetLinkSingleAdo.Eof Then
+			GetLinkSingleHtml = ""
+			GetLinkSingleAdo.Close
+			Set GetLinkSingleAdo = Nothing
+			Exit Function
+		Else
+			GetLinkSingRows = GetLinkSingleAdo.GetRows()
+		End If
+		GetLinkSingleAdo.Close
+	Set GetLinkSingleAdo = Nothing
+	
+	If UBound(GetLinkSingRows, 1) = 0 Then
+		ReDim GetLinkSingRows(0, 0)
+		GetLinkSingRowsStr = ""
+	Else
+	
+		GetLinkSingleAdoCount = UBound(GetLinkSingRows, 2)
+		GetLinkSingRowsStr = ""
+			
+		For i = 0 to GetLinkSingleAdoCount
+			TmplateStr = Html
+			If (Int(i) + 1) Mod Int(LoopNo) = 1 Then
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Left$>", "<tr>")
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Right$>", "")
+			ElseIf (Int(i) + 1) Mod Int(LoopNo) = 0 Then
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Left$>", "")
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Right$>", "</tr>")
+			Else
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Left$>", "")
+				TmplateStr = Replace(TmplateStr, "<$Link_TR_Right$>", "")
+			End If
+			
+			'link_ID,link_Name,link_URL,link_Image
+			
+			TmplateStr = Replace(TmplateStr, "<$link_URL$>", GetLinkSingRows(2, i))
+			If Len(GetLinkSingRows(3, i)) = 0 Then
+				TmplateStr = Replace(TmplateStr, "<$link_Image$>", "images/linkmoren.gif")
+			Else
+				TmplateStr = Replace(TmplateStr, "<$link_Image$>", GetLinkSingRows(3, i))
+			End If
+			TmplateStr = Replace(TmplateStr, "<$link_Name$>", GetLinkSingRows(1, i))
+			TmplateStr = Replace(TmplateStr, "<$link_URL_Http$>", e_CheckUrl(GetLinkSingRows(2, i)))
+			TmplateStr = Replace(TmplateStr, "<$PerCenter$>", PerCenter)
+			
+			GetLinkSingRowsStr = GetLinkSingRowsStr & TmplateStr
+			
+		Next
+		
+		GetLinkSingleHtml = GetLinkSingRowsStr
+		
+	End If
+End Function
+
+Function e_CheckUrl(ByVal Str)
+	If Len(Str) = 0 Then Exit Function
+	If Trim(Lcase(Mid(Str, 1, 7))) = "http://" Then
+		e_CheckUrl = Trim(Lcase(Mid(Str, 8)))
+	Else
+		e_CheckUrl = Str
+	End If
+End Function
+
+Function SelectOutOption(ByVal optain)
+	'optain = 0 为没有Selected
+	Dim c
+	SelectOutOption = ""
+	'SelectOutOption = SelectOutOption & "<option value=""0"">请选择分类</option>"
+	Set c = Conn.execute("Select * From blog_LinkClass Order by LinkClass_Order Asc")
+	If c.bof or c.eof Then
+		SelectOutOption = SelectOutOption & "<option value=""0"">暂无分类</option>"
+	Else
+		Do While Not c.Eof
+			If Int(optain) = Int(Trim(c("LinkClass_ID"))) Then
+				SelectOutOption = SelectOutOption & "<option value=""" & Trim(c("LinkClass_ID")) & """ selected=""selected"">" & c("LinkClass_Name") & "</option>"
+			Else
+				SelectOutOption = SelectOutOption & "<option value=""" & Trim(c("LinkClass_ID")) & """>" & c("LinkClass_Name") & "</option>"
+			End If
+		c.movenext
+		loop
+	End If
+End Function
 
 '=========================================
 '安装插件
@@ -701,7 +802,8 @@ Function categoryTitle()
     cTitle.Add "Members.EditRight" , "帐户与权限管理 - 编辑权限细节"
     cTitle.Add "Members." , "帐户与权限管理 - 权限管理"
 
-    cTitle.Add "Link." , "友情链接管理"
+    cTitle.Add "Link." , "友情链接管理 - 链接列表"
+	cTitle.Add "Link.LinkClass" , "友情链接管理 - 分类管理"
 
     cTitle.Add "smilies.KeyWord" , "表情与关键字 - 关键字管理"
     cTitle.Add "smilies." , "表情与关键字 - 表情管理"
