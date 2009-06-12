@@ -650,35 +650,39 @@ ElseIf Request.Form("action") = "Members" Then
     End If
     '==========================友情链接管理===============================
 ElseIf Request.Form("action") = "Links" Then
-    Dim LinkID, LinkName, LinkURL, LinkLogo, LinkOrder, LinkMain
+    Dim LinkID, LinkName, LinkURL, LinkLogo, LinkOrder, LinkMain, LinkClass
+	Dim LinkClassID, LinkClassName, LinkClassOrder, LinkClassTitle
     '--------------------------友情链接过滤----------------------------
     If Request.Form("whatdo") = "Filter" Then
         session(CookieName&"_disLink") = CheckStr(Request.Form("disLink"))
         session(CookieName&"_disCount") = CheckStr(Request.Form("disCount"))
+		session(CookieName&"_disLinkClassID") = CheckStr(Request.Form("disLinkClass"))
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=")
         '--------------------------保存友情链接----------------------------
     ElseIf Request.Form("whatdo") = "SaveLink" Then
-        Dim TLinkName, TLinkURL, TLinkLogo, TLinkOrder
+        Dim TLinkName, TLinkURL, TLinkLogo, TLinkOrder, TLinkClass
         LinkID = Split(Request.Form("LinkID"), ", ")
         LinkName = Split(Request.Form("LinkName"), ", ")
         LinkURL = Split(Request.Form("LinkURL"), ", ")
         LinkLogo = Split(Request.Form("LinkLogo"), ", ")
         LinkOrder = Split(Request.Form("LinkOrder"), ", ")
+		LinkClass = Split(Request.Form("LinkClass"), ", ")
         For i = 0 To UBound(LinkID)
             If UBound(LinkName)<0 Then TLinkName = "未知" Else TLinkName = LinkName(i)
             If UBound(LinkURL)<0 Then TLinkURL = "http://" Else TLinkURL = LinkURL(i)
             If UBound(LinkLogo)<0 Then TLinkLogo = "" Else TLinkLogo = LinkLogo(i)
             If UBound(LinkOrder)<0 Then TLinkOrder = "0" Else TLinkOrder = LinkOrder(i)
-            conn.Execute("update blog_Links set link_Name='"&CheckStr(TLinkName)&"',link_URL='"&CheckStr(TLinkURL)&"',link_Image='"&CheckStr(TLinkLogo)&"',link_Order='"&CheckStr(TLinkOrder)&"' where link_ID="&LinkID(i))
+            conn.Execute("update blog_Links set link_Name='"&CheckStr(TLinkName)&"',link_URL='"&CheckStr(TLinkURL)&"',link_Image='"&CheckStr(TLinkLogo)&"',link_Order='"&CheckStr(TLinkOrder)&"',Link_ClassID="&LinkClass(i)&" where link_ID="&LinkID(i))
         Next
         LinkID = Request.Form("new_LinkID")
         LinkName = Request.Form("new_LinkName")
         LinkURL = Request.Form("new_LinkURL")
         LinkLogo = Request.Form("new_LinkLogo")
         LinkOrder = Request.Form("new_LinkOrder")
+		LinkClass = Request.Form("new_LinkClass")
         If Len(LinkOrder)<1 Then LinkOrder = conn.Execute("select count(*) from blog_Links")(0)
         If Len(Trim(CheckStr(LinkName)))>0 Then
-            conn.Execute("insert into blog_Links (link_Name,link_URL,link_Image,link_Order,link_IsShow) values ('"&CheckStr(LinkName)&"','"&CheckStr(LinkURL)&"','"&CheckStr(LinkLogo)&"','"&CheckStr(LinkOrder)&"',true)")
+            conn.Execute("insert into blog_Links (link_Name,link_URL,link_Image,link_Order,link_IsShow,Link_ClassID) values ('"&CheckStr(LinkName)&"','"&CheckStr(LinkURL)&"','"&CheckStr(LinkLogo)&"','"&CheckStr(LinkOrder)&"',true,"&CheckStr(LinkClass)&")")
             session(CookieName&"_MsgText") = "新友情链接添加成功! "
         End If
         Bloglinks(2)
@@ -737,7 +741,49 @@ ElseIf Request.Form("action") = "Links" Then
         Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"您没有选择要删除的链接!"
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
         End If
-    End If
+    '/////////////////////////////////////////////////////////////////////////////
+	'LinkClassID, LinkClassName, LinkClassOrder, LinkClassTitle
+		'--------------------------保存友情链接分类----------------------------
+    ElseIf Request.Form("whatdo") = "LinkClassUpdate" Then
+
+		Dim TLinkClassID, TLinkClassName, TLinkClassTitle, TLinkClassOrder
+		LinkClassID = Split(Request.Form("LinkClass_ID"), ",")
+		LinkClassName = Split(Request.Form("LinkClass_Name"), ",")
+		LinkClassTitle = Split(Request.Form("LinkClass_Title"), ",")
+		LinkClassOrder = Split(Request.Form("LinkClass_Order"), ",")
+		
+		For i = 0 To UBound(LinkClassID)
+            If UBound(LinkClassName) < 0 Then TLinkClassName = "未知" Else TLinkClassName = LinkClassName(i)
+            If UBound(LinkClassTitle) < 0 Then TLinkClassTitle = "没有链接分类说明" Else TLinkClassTitle = LinkClassTitle(i)
+            If UBound(LinkClassOrder) < 0 Then TLinkClassOrder = "0" Else TLinkClassOrder = LinkClassOrder(i)
+            conn.Execute("update blog_LinkClass set LinkClass_Name='"&CheckStr(TLinkClassName)&"',LinkClass_Title='"&CheckStr(TLinkClassTitle)&"',LinkClass_Order="&CheckStr(TLinkClassOrder)&" where LinkClass_ID="&LinkClassID(i))
+        Next
+		
+        LinkClassName = Request.Form("New_LinkClass_Name")
+        LinkClassTitle = Request.Form("New_LinkClass_Title")
+        LinkClassOrder = Request.Form("New_LinkClass_Order")
+        If Len(LinkClassOrder)<1 Then LinkClassOrder = Int(Int(conn.Execute("select count(*) from blog_LinkClass")(0)) + 1)
+        If Len(Trim(CheckStr(LinkClassName)))>0 Then
+            conn.Execute("insert into blog_LinkClass (LinkClass_Name,LinkClass_Title,LinkClass_Order) values ('" & LinkClassName & "', '" & LinkClassTitle & "', " & LinkClassOrder & ")")
+            session(CookieName&"_MsgText") = "新友情链接分类添加成功! "
+        End If
+		session(CookieName&"_ShowMsg") = True
+        session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"保存链接分类成功!"
+        RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=LinkClass")
+		'--------------------------保存友情链接分类----------------------------
+    ElseIf Request.Form("whatdo") = "DelLinkClasses" Then
+		Dim LinkClassSelectID, LinkClassNum
+		LinkClassSelectID = Split(Request.Form("SelectID"), ",")
+		If Int(UBound(LinkClassSelectID)) >= 0 then
+           For LinkClassNum = 0 to UBound(LinkClassSelectID)
+               conn.Execute("DELETE * from blog_LinkClass where LinkClass_ID="&LinkClassSelectID(LinkClassNum))
+           Next
+        	Session(CookieName&"_ShowMsg") = True
+        	Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"共"&ubound(LinkClassSelectID) + 1&"条链接分类删除成功!"
+        	RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=LinkClass")
+		End If
+	End If
+	
     '==========================表情和关键字===============================
 ElseIf Request.Form("action") = "smilies" Then
     Dim smilesID, smiles, smilesURL
