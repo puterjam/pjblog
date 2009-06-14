@@ -12,8 +12,8 @@
 	<td height="31" width="<$PerCenter$>">
 		<table>
         	<tr>
-            	<td width="88" height="31" align="center"><a href="<$link_URL$>" target="_blank"><img src="<$link_Image$>" style="width:88px;height:31px; display:block" border="0" /></a></td>
-                <td height="31" valign="top" style=" padding-left:3px;"><$link_Name$><br /><a href="<$link_URL$>" target="_blank"><$link_URL_Http$></a></td>
+            	<td width="88" height="31" align="center" style="display:block"><a href="<$link_URL$>" target="_blank"><img src="<$link_Image$>" style="width:88px;height:31px; display:block" border="0" onerror="this.src='images/xlogo.jpg'" /></a></td>
+                <td height="31" valign="top" style=" padding-left:3px;"><div style="overflow:hidden"><$link_Name$><br /><a href="<$link_URL$>" target="_blank"><$link_URL_Http$></a></div></td>
             </tr>
         </table>
      </td>
