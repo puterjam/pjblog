@@ -412,3 +412,51 @@ function ReturnPage(URL, Obj){
 			 }
 	 );
 }
+
+//后台Ajax分段静态化
+	 
+function CreateHtml(){
+	if ($('AjaxRebuildButton').disabled == false) $('AjaxRebuildButton').disabled = true;
+	if(Lists.length<=0){
+		$("msgbox").innerHTML="没有文章需要静态化";
+	}else if(CurrentIndex == Lists.length){
+		$("msgbox").innerHTML = "静态化完毕";
+		$('AjaxRebuildButton').disabled = false;
+	}else{
+		if (IsStop == false) {
+			$("msgbox").innerHTML = "<font color='#0000ff'>正在静态化第 " + Lists[CurrentIndex] + " 篇日志 ...</font>" ;
+		}
+		var ajax=new AJAXRequest();
+		ajax.get("action.asp?action=ReBuildArticle&id=" + Lists[CurrentIndex] + "&TimeStamp="+new Date().getTime(),		
+			function(obj){
+					var msg=eval("("+obj.responseText+")");	
+					if(msg.suc){
+						CurrentIndex++;
+						window.setTimeout("CreateHtml()",10);	
+					}else{
+						$("msgbox").innerHTML="静态化过程出现错误，已静态化" + CurrentIndex + "篇文章!";
+						return;
+					}
+			}
+		);
+	}
+}
+
+function StopHtml(){
+	if ($('AjaxRebuildButton').disabled == true)
+	{
+		$('AjaxRebuildButton').disabled = false;
+		IsStop = true;
+	}
+	if(Lists.length <= 0){
+		$("msgbox").innerHTML="无效操作";
+	}else{
+		CurrentIndex = Lists.length;
+		$("msgbox").innerHTML = "静态化停止";
+	}
+}
+
+function StartHTML(){
+	IsStop = false;
+	CreateHtml();
+}

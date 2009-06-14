@@ -129,7 +129,7 @@ Sub doAction
 			   Dim ReBulidPartStatusSart, ReBulidPartStatusEnd, ReArtLists, ReArea, TI
 			   ReBulidPartStatusSart = trim(Request.Form("ReBulidPartStatusSart"))
 			   ReBulidPartStatusEnd = trim(Request.Form("ReBulidPartStatusEnd"))
-			   If (len(ReBulidPartStatusSart) > 0) and (len(ReBulidPartStatusEnd) > 0) and (ReBulidPartStatusEnd >= ReBulidPartStatusSart) then
+			   If (len(ReBulidPartStatusSart) > 0) and (len(ReBulidPartStatusEnd) > 0) and (Int(ReBulidPartStatusEnd) >= Int(ReBulidPartStatusSart)) then
 			      ReArtLists = PartStatus(ReBulidPartStatusSart, ReBulidPartStatusEnd)
 				  ReArea = Split(ReArtLists, "|")
 				  for TI = 0 to (UBound(ReArea)-1)

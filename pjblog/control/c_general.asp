@@ -103,7 +103,15 @@ Sub c_ceneral
 			Set ConurseDB = nothing
 			%>
             &nbsp;&nbsp;&nbsp;<input type="checkbox" name="ReBulidPartStatus" value="1" id="C1"/> <label for="C1">分段静态化<span style="color:#666">（依据ID分段静态,减小服务器压力）</span></label><br/><br/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开始ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusSart" value="" id="C2" class="text" size="3"/> - 结束ID:<input onFocus="this.select();document.getElementById('C1').checked='checked'" type="text" name="ReBulidPartStatusEnd" value="" id="C3" class="text" size="3"/>&nbsp;&nbsp;<span style="color:#666">（您目前共有日志<%=blog_LogNums%>篇; 日志ID从<%=Start%>到<%=Ends%>）</span><br/><br />
+            <script language="javascript" type="text/javascript">
+				var Lists = eval("<%=BlogArticleID(1)%>");
+	 			var CurrentIndex = 0;
+				var IsStop = true;
+			</script>
+            <b>5.Ajax分段静态日志重建</b><br/><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;※ Ajax重建日志,避免了ASP脚本超时的错误.&nbsp;&nbsp;&nbsp;<input type="button" class="text" value="开始Ajax静态化" style=" font-size:11px; color:#333" onclick="StartHTML()" id="AjaxRebuildButton" />&nbsp;&nbsp;&nbsp;<input type="button" value="停止" onclick="StopHtml();" style=" font-size:11px; color:#333" class="text" /><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<dd id="msgbox"></dd><br /><br />
 		   </div>
 		   <div class="SubButton">
 		      <input type="submit" name="Submit" value="保存配置" class="button"/>
