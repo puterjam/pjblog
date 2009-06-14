@@ -416,6 +416,7 @@ function ReturnPage(URL, Obj){
 //后台Ajax分段静态化
 	 
 function CreateHtml(){
+	pWidth = $("processBar").offsetWidth;
 	if ($('AjaxRebuildButton').disabled == false) $('AjaxRebuildButton').disabled = true;
 	if(Lists.length<=0){
 		$("msgbox").innerHTML="没有文章需要静态化";
@@ -437,6 +438,10 @@ function CreateHtml(){
 						$("msgbox").innerHTML="静态化过程出现错误，已静态化" + CurrentIndex + "篇文章!";
 						return;
 					}
+					var CurrentWidth = Math.floor((CurrentIndex / Lists.length) * (pWidth - 2));
+					$("process").style.width = CurrentWidth + "px";
+					var Ts = (Math.floor((CurrentIndex / Lists.length) * 10000) / 100) + "%";
+					$("percent").innerHTML = Ts;
 			}
 		);
 	}
