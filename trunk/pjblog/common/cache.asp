@@ -17,7 +17,7 @@ Dim memoryCache, blog_UpLoadSet
 
 
 '一些初始化的值
-blog_version = "3.1.6.269" '当前PJBlog版本号
+blog_version = "3.1.6.272" '当前PJBlog版本号
 blog_UpdateDate = "2009-06-03" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
@@ -670,6 +670,7 @@ Sub reloadcache
     Tags(2)
     Smilies(2)
     Keywords(2)
+	BlogArticleID(2)
     Bloglinks(2)
     log_module(2)
     Calendar "", "", "", 2
