@@ -369,6 +369,13 @@ ElseIf Request.QueryString("action") = "GetHttpURL" Then
 	Message = GetHttpPage(Message, "<!--StartGetHttpPage-->", "<!--EndGetHttpPage-->")
 	Message = "<!--StartGetHttpPage-->" & Message &"<!--EndGetHttpPage-->"
 	Response.Write(Message)
+'*************************************ajax重建日志**********************************
+ElseIf Request.QueryString("action") = "ReBuildArticle" Then
+	SaveId = Checkxss(Trim(Request.QueryString("id")))
+	PostArticle SaveId, False
+	Message = "{suc:true}"
+	If Err Then Message = "{suc:false}"
+	Response.Write(Message)
 Else
 	response.write "非法操作!"
 End If

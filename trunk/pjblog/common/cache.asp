@@ -546,6 +546,30 @@ End Function
 
 '=====================End Function=======================
 
+Function BlogArticleID(ByVal action)
+	If Not IsArray(Application(CookieName&"_blog_ReBuildID")) Or action = 2 Then
+		Dim BlogArticleDB, BlogArticleList
+		Set BlogArticleDB = Conn.Execute("SELECT log_ID FROM blog_Content ORDER BY log_ID ASC")
+		SQLQueryNums = SQLQueryNums + 1
+		TempVar = ""
+		If BlogArticleDB.Bof Or BlogArticleDB.Eof Then
+			TempVar = ""
+		Else
+			TempVar = TempVar & "["
+			Do While Not BlogArticleDB.Eof
+				TempVar = TempVar & BlogArticleDB(0) & ","
+			BlogArticleDB.MoveNext
+			Loop
+			TempVar = TempVar & "end"
+			TempVar = Replace(TempVar, ",end", "")
+			TempVar = TempVar & "]"
+			Application(CookieName&"_blog_ReBuildID") = TempVar
+		End If
+		BlogArticleID = TempVar
+	Else
+		BlogArticleID = Application(CookieName&"_blog_ReBuildID")
+	End If
+End Function
 
 '======================自定义模块缓存=====================
 Dim side_html_default, side_html, side_html_static, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin
