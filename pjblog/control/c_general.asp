@@ -108,10 +108,23 @@ Sub c_ceneral
 				var Lists = eval("<%=BlogArticleID(1)%>");
 	 			var CurrentIndex = 0;
 				var IsStop = true;
+				var pWidth = 0;
 			</script>
+            <style type="text/css">
+				#msgbox{ height:17px; color:#0000ff}
+				#processBar {width:80%;height:19px;border:1px #333 solid; margin-left:35px;}
+				#process {width:0px;background-color: #ccc;text-align:center; height:19px; overflow:visible; text-align:left;}
+				#percent{ color:#0000ff}
+     		</style>
             <b>5.Ajax分段静态日志重建</b><br/><br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;※ Ajax重建日志,避免了ASP脚本超时的错误.&nbsp;&nbsp;&nbsp;<input type="button" class="text" value="开始Ajax静态化" style=" font-size:11px; color:#333" onclick="StartHTML()" id="AjaxRebuildButton" />&nbsp;&nbsp;&nbsp;<input type="button" value="停止" onclick="StopHtml();" style=" font-size:11px; color:#333" class="text" /><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<dd id="msgbox"></dd><br /><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;※ Ajax重建日志,避免了ASP脚本超时的错误.&nbsp;&nbsp;&nbsp;<input type="button" class="text" value="开始Ajax重建日志" style=" font-size:11px; color:#333" onclick="StartHTML()" id="AjaxRebuildButton" />&nbsp;&nbsp;&nbsp;<input type="button" value="停止" onclick="StopHtml();" style=" font-size:11px; color:#333" class="text" />
+            <br /><br />
+            <div id="processBar">
+  				<div id="process">
+                </div>
+  			</div><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="msgbox">点击"开始Ajax重建日志"进行Ajax重建...</span>&nbsp;&nbsp;&nbsp;完成百分比:&nbsp;<span id="percent">0%</span>
+            <br /><br /><br />
 		   </div>
 		   <div class="SubButton">
 		      <input type="submit" name="Submit" value="保存配置" class="button"/>
