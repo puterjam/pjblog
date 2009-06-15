@@ -112,8 +112,8 @@ Sub c_ceneral
 			</script>
             <style type="text/css">
 				#msgbox{ height:17px; color:#0000ff}
-				#processBar {width:80%;height:19px;border:1px #333 solid; margin-left:35px;}
-				#process {width:0px;background-color: #ccc;text-align:center; height:19px; overflow:visible; text-align:left;}
+				#processBar {width:80%;height:14px;border:1px #C7C3C0 solid; margin-left:35px; padding:1px}
+				#process {width:0px;background:url(../images/process.jpg) repeat-x;text-align:center; height:14px; overflow:visible; text-align:left;}
 				#percent{ color:#0000ff}
      		</style>
             <b>5.Ajax分段静态日志重建</b><br/><br />
