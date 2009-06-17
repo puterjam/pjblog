@@ -22,16 +22,20 @@ Function GetHttpPage(ByVal URL, ByVal StartStr, ByVal EndStr)
 		If err then
 			err.clear
 		Else
-			XMLHTTP = Bytestobstr(CreateXMLHTTP.responseBody)
-			If len(StartStr) > 0 and len(EndStr) > 0 Then
-				If Instr(XMLHTTP, StartStr) <> 0 Then
-					GetHttpPage = Split(XMLHTTP, StartStr)(1)
-					If Instr(GetHttpPage, EndStr) <> 0 Then
-						GetHttpPage = Split(GetHttpPage, EndStr)(0)
-					End If
-				End If
+			If Len(CreateXMLHTTP.responseBody) = 0 or CreateXMLHTTP.responseBody = "" or CreateXMLHTTP.responseBody = empty or CreateXMLHTTP.responseBody = null Then 
+				GetHttpPage = "远程文件没有内容..."
 			Else
-				GetHttpPage = XMLHTTP
+				XMLHTTP = Bytestobstr(CreateXMLHTTP.responseBody)
+				If len(StartStr) > 0 and len(EndStr) > 0 Then
+					If Instr(XMLHTTP, StartStr) <> 0 Then
+						GetHttpPage = Split(XMLHTTP, StartStr)(1)
+						If Instr(GetHttpPage, EndStr) <> 0 Then
+							GetHttpPage = Split(GetHttpPage, EndStr)(0)
+						End If
+					End If
+				Else
+					GetHttpPage = XMLHTTP
+				End If
 			End If
 		End If
 End Function

@@ -484,6 +484,18 @@ Function SelectOutOption(ByVal optain)
 	End If
 End Function
 
+Sub PluginConnExecute(Str)
+	Dim PluginConnExecuteSplit, PluginConnExecuteCount
+	If Instr(Str, ";") <> 0 Then
+		PluginConnExecuteSplit = Split(Str, ";")
+		For PluginConnExecuteCount = 0 to UBound(PluginConnExecuteSplit)
+			Conn.Execute(PluginConnExecuteSplit(PluginConnExecuteCount))
+		Next
+	Else
+		Conn.Execute(Str)
+	End If
+End Sub
+
 '=========================================
 '安装插件
 '=========================================
@@ -530,8 +542,8 @@ Sub InstallPlugins
             CreateTableSQL = PluginsXML.SelectXmlNodeText("PluginInstall/main/CreateTableSQL")
             UpdateTableSQL = PluginsXML.SelectXmlNodeText("PluginInstall/main/UpdateTableSQL")
 
-            If Len(CreateTableSQL)>0 Then conn.Execute(CreateTableSQL)
-            If Len(UpdateTableSQL)>0 Then conn.Execute(UpdateTableSQL)
+            If Len(CreateTableSQL)>0 Then PluginConnExecute CreateTableSQL
+            If Len(UpdateTableSQL)>0 Then PluginConnExecute UpdateTableSQL
             If Len(PlugSettingXML)>0 And InstallPlugingSetting("Plugins/"&PluginsFolder&"/"&PlugSettingXML, PlugName, "insert") = 0 Then '检测并安装插件配置文件
                 MainItem = Array(Array("name", PlugName), Array("title", PlugTitle), Array("type", PlugType), Array("SortID", PlugSortID), Array("HtmlCode", PlugHtmlCode), Array("PluginPath", PlugPluginPath), Array("IsInstall", -1), Array("InstallFolder", PluginsFolder), Array("ConfigPath", ConfigPath), Array("SettingXML", PlugSettingXML), Array("CateID", MenuID))
                 Dim ModSetTemp

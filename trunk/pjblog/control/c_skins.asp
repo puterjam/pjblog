@@ -424,7 +424,17 @@ Sub c_skins
 		            getCateID = getMod(0)
 		            If Len(getCateID)>0 Then conn.Execute("delete * from blog_Category where cate_ID="&getCateID)
 		            delPlugins UnPlugName
-		            If Len(DropTable)>0 And KeepTable = False Then conn.Execute("DROP TABLE "&DropTable)
+		            If Len(DropTable)>0 And KeepTable = False Then
+						If Instr(DropTable, ";") <> 0 Then
+							Dim SplitDropTable, DropTableCount
+							SplitDropTable = Split(DropTable, ";")
+							For DropTableCount = 0 to UBound(SplitDropTable)
+								conn.Execute("DROP TABLE "&SplitDropTable(DropTableCount))
+							Next
+						Else
+							conn.Execute("DROP TABLE "&DropTable)
+						End If
+					End If
 		            SubItemLen = Int(PluginsXML.GetXmlNodeLength("PluginInstall/SubItem/item"))
 		
 		            For tempI = 0 To SubItemLen -1
