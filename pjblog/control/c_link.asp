@@ -106,7 +106,7 @@ Else
 	   <input type="hidden" name="action" value="Links"/>
 	   <input type="hidden" name="whatdo" value="Filter"/>
        <select name="disLinkClass" onchange="document.forms['filter'].submit()">
-       		<option value="0">请选择分类</option>
+       		<option value="0">所有分类</option>
        		<%=SelectOutOption(disLinkClassID)%>
        </select>
 	  	<select name="disLink" onChange="document.forms['filter'].submit()">
@@ -194,6 +194,7 @@ Else
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
               <td>
               	<select name="LinkClass">
+                	<option value="0">未分类</option>
                 	<%=SelectOutOption(bLink("Link_ClassID"))%>
               	</select>
               </td>
@@ -209,6 +210,7 @@ Else
 	          <td><input name="LinkLogo" type="text" size="40" class="text" value="<%=bLink("link_Image")%>"/></td>
               <td>
               	<select name="LinkClass">
+                	<option value="0">未分类</option>
                 	<%=SelectOutOption(bLink("Link_ClassID"))%>
               	</select>
               </td>
