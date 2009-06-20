@@ -209,18 +209,18 @@ If CanRead Then
 %>
 					<div class="Content-body"><%=UnCheckStr(UBBCode(webLogArr(10,PageCount),mid(webLogArr(14,PageCount),1,1),mid(webLogArr(14,PageCount),2,1),mid(webLogArr(14,PageCount),3,1),mid(webLogArr(14,PageCount),4,1),mid(webLogArr(14,PageCount),5,1)))%>
 					<%if webLogArr(10,PageCount)<>HtmlEncode(webLogArr(11,PageCount)) then%>
-						<p><a href="<%=aUrl%>" class="more">查看更多...</a></p>
+						<p class="readMore"><a href="<%=aUrl%>" class="more"><span>查看更多...</span></a></p>
 					<%end if%>
 			<%else%>
 					<div class="Content-body"><%=UnCheckStr(webLogArr(10,PageCount))%>
 					<%if webLogArr(10,PageCount)<>webLogArr(11,PageCount) then%>
-						<p><a href="default.asp?id=<%=webLogArr(0,PageCount)%>" class="more">查看更多...</a></p>
+						<p class="readMore"><a href="default.asp?id=<%=webLogArr(0,PageCount)%>" class="more"><span>查看更多...</span></a></p>
 					<%End If
 End If
 If Len(webLogArr(15, PageCount))>0 Then
 
 %>
-			 <p>Tags: <%=getTag.filterHTML(webLogArr(15,PageCount))%></p>
+			 <p class="tags">Tags: <%=getTag.filterHTML(webLogArr(15,PageCount))%></p>
 			<%
 End If
 Else
