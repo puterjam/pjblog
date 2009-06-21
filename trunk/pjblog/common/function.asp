@@ -22,7 +22,7 @@ Function GetHttpPage(ByVal URL, ByVal StartStr, ByVal EndStr)
 		If err then
 			err.clear
 		Else
-			If Len(CreateXMLHTTP.responseBody) = 0 or CreateXMLHTTP.responseBody = "" or CreateXMLHTTP.responseBody = empty or CreateXMLHTTP.responseBody = null Then 
+			If Len(Bytestobstr(CreateXMLHTTP.responseBody)) = 0 or Bytestobstr(CreateXMLHTTP.responseBody) = "" or Bytestobstr(CreateXMLHTTP.responseBody) = empty or Bytestobstr(CreateXMLHTTP.responseBody) = null Then
 				GetHttpPage = "远程文件没有内容..."
 			Else
 				XMLHTTP = Bytestobstr(CreateXMLHTTP.responseBody)
