@@ -427,14 +427,46 @@
                                 }
                         }
                 }
-        e=e.replace(/\s/g,'');
+        if(arguments[1]==1){
+                e = e.toLowerCase();
+        }else{
+                e = changeCase(e);
+        }
         while(e.indexOf('__')>-1){
                 e=e.replace(/__/g,'');
         }
-        if(arguments[1]==1){
-                return e.toLowerCase();
-        }else{
-                return e;
-        }
+        e=e.replace(/\s/g,'');
+		return e;
         }
 }
+
+
+function changeCase(e) { 
+var index; 
+var tmpStr; 
+var tmpChar; 
+var preString; 
+var postString; 
+var strlen; 
+tmpStr = e; 
+strLen = tmpStr.length; 
+if (strLen > 0)  { 
+for (index = 0; index < strLen; index++)  { 
+if (index == 0)  { 
+tmpChar = tmpStr.substring(0,1).toUpperCase(); 
+postString = tmpStr.substring(1,strLen); 
+tmpStr = tmpChar + postString; 
+} 
+else { 
+tmpChar = tmpStr.substring(index, index+1); 
+if (tmpChar == " "  &&  index < (strLen-1))  { 
+tmpChar = tmpStr.substring(index+1, index+2).toUpperCase(); 
+preString = tmpStr.substring(0, index+1); 
+postString = tmpStr.substring(index+2,strLen); 
+tmpStr = preString + tmpChar + postString; 
+         } 
+      } 
+   } 
+} 
+return tmpStr;
+} 
