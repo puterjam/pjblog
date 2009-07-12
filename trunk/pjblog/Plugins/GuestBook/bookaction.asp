@@ -48,6 +48,10 @@ function postMsg
   validate=trim(request.form("validate"))
   hiddenreply=request.form("hiddenMsg")
   post_Message=CheckStr(request.form("Message"))
+dim email,tsiteURL
+  email=trim(CheckStr(request.form("myblogemail")))
+  tsiteURL=trim(CheckStr(request.form("myblogsiteurl")))
+
   FlowControl=false
   
   set LastMSG=conn.execute("select top 1 book_Content from blog_book order by book_ID desc")
@@ -56,6 +60,17 @@ function postMsg
    else
     if LastMSG("book_Content")=post_Message then FlowControl=true
   end if
+
+    if memName=empty and email<>"" and IsValidEmail(email)=false then
+        showmsg "留言发表错误信息","<b>邮箱格式错误</b><br/><a href=""javascript:history.go(-1);"">返回</a>","WarningIcon","plugins"
+        exit function
+    end if
+
+    if memName=empty and tsiteURL<>"" and tsiteURL<>"http://" and IsRightUrl(tsiteURL)=false then
+          showmsg "留言发表错误信息","<b>网址格式错误</b><br/><a href=""javascript:history.go(-1);"">返回</a>","WarningIcon","plugins"
+          exit function 
+    end if
+
 
   if filterSpam(post_Message,"../../spam.xml") and stat_Admin=false then
       showmsg "留言发表错误信息","<b>留言中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">返回</a>","WarningIcon","plugins"
@@ -121,12 +136,32 @@ function postMsg
 	 exit function
   end if
  '插入数据
- Conn.ExeCute("INSERT INTO blog_book(book_Messager,book_face,book_IP,book_Content,book_HiddenReply) VALUES ('"&username&"','"&face&"','"&getIP()&"','"&post_Message&"',"&hiddenreply&")")
+Conn.ExeCute("Insert INTO blog_book(book_Messager,book_face,book_IP,book_Content,book_HiddenReply,email,siteurl) VALUES ('"&username&"','"&face&"','"&getIP()&"','"&post_Message&"',"&hiddenreply&",'"&email&"','"&tsiteURL&"')")
+
  Conn.ExeCute("update blog_Info set blog_MessageNums=blog_MessageNums+1")
  if memName<>empty then
    conn.execute("update blog_Member set mem_PostMessageNums=mem_PostMessageNums+1 where mem_Name='"&memName&"'")
  end if
  Response.Cookies(CookieName)("bookLastPost")=DateToStr(now(),"Y-m-d H:I:S")
+ 
+	'留言邮件通知
+	If blog_Isjmail Then
+		Dim SQLcomm, log_commcomm
+		SQLcomm="Select TOP 1 * FROM blog_book Where book_Messager='"&username&"' order By book_ID Desc "
+		dim email_bookid
+		Set log_commcomm=conn.execute(SQLcomm) 
+			email_bookid=log_commcomm("book_ID")
+		log_commcomm.Close
+		Set log_commcomm=Nothing
+			dim emailcontent,emailtitle
+			emailtitle = "您的博客已有客人留言"
+			emailcontent = "["&username&"]在您的博客中发表了留言,请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&email_bookid&"。留言内容如下："&post_Message&""
+			call sendmail(blog_email,emailtitle,emailcontent)
+	'		call sendmail(username,"",email_bookid,"",0,post_Message)
+	End If
+	'留言邮件通知结束
+
+
  getInfo(2)
  EmptyEtag
  SQLQueryNums=SQLQueryNums+3
@@ -171,6 +206,24 @@ function replyMsg
 	            showmsg "错误信息","非法操作<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
 	   end if
    Conn.ExeCute("update blog_book set book_reply='"&MsgReplyContent&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(now(),"Y-m-d H:I:S")&"# where book_ID=" & MsgID)
+
+    '留言邮件通知
+       If blog_reply_Isjmail Then
+			Dim SQLcomm, log_commcomm
+			SQLcomm="Select TOP 1 * FROM blog_book Where book_ID="&MsgID
+			Set log_commcomm=conn.execute(SQLcomm) 
+			if trim(log_commcomm("email"))<>"" then
+				dim emailcontent,emailtitle
+				emailtitle = "您在"&siteName&"上发表的留言已被回复"
+				emailcontent = "尊敬的｛"&log_commcomm("book_Messager")&"｝，您好，您在["&siteName&"]上发表的留言，现已被["&memName&"]回复，回复内容为：["&MsgReplyContent&"]，请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&MsgID&"。谢谢您的留言，欢迎再次光临！系统自动发送，请勿直接回复。"
+				call sendmail(log_commcomm("email"),emailtitle,emailcontent)
+		'		call sendmail(username,"",email_bookid,"",0,post_Message)
+			end if
+			log_commcomm.Close
+			Set log_commcomm=Nothing
+		End If
+    '留言邮件通知结束
+
    showmsg "回复信息","回复留言成功!<br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">单击返回留言本</a>","MessageIcon","plugins" 
 end function 
 

@@ -81,7 +81,21 @@
        	           <%else%>
        	             <img src="images/icon_lock.gif" alt="隐藏" border="0" style="margin:0px 1px -3px 0px"/>
        	         <%end if%>
-       	         <a href="member.asp?action=view&memName=<%=Server.URLEncode(GuestDB("book_Messager"))%>"><b><%=GuestDB("book_Messager")%></b></a> <span class="commentinfo">[<%=DateToStr(GuestDB("book_PostTime"),"Y-m-d H:I:S")%>
+       	         <a href="member.asp?action=view&memName=<%=Server.URLEncode(GuestDB("book_Messager"))%>"><b><%=GuestDB("book_Messager")%></b></a> 
+<%
+if trim(GuestDB("email"))<>"" then
+    response.write " <a href=mailto:"&trim(GuestDB("email"))&" target=_blank><img src=images/email1.gif border=0></a>"
+else
+    response.write " <img src=images/noemail1.gif>"
+end if
+if trim(GuestDB("siteurl"))<>"" and trim(GuestDB("siteurl"))<>"http://" then
+    response.write " <a href="&trim(GuestDB("siteurl"))&" target=_blank><img src=images/url1.gif border=0></a>"
+else
+    response.write " <img src=images/nourl1.gif>"
+end if
+%>
+                 
+                 <span class="commentinfo">[<%=DateToStr(GuestDB("book_PostTime"),"Y-m-d H:I:S")%>
        	         <%if stat_Admin then response.write " | " & GuestDB("book_IP")%>
        	         <%if stat_Admin then%> | <a href="LoadMod.asp?plugins=GuestBookForPJBlog&amp;action=Reply&amp;id=<%=GuestDB("book_ID")%>"><img src="Plugins/<%=GBSet.GetPath%>/reply.gif" alt="回复" border="0" style="margin-bottom:-3px"/></a><%end if%>
        	         <%if (memName<>empty and stat_Admin) or (cbool(GBSet.getKeyValue("canDel")) and GuestDB("book_Messager")=memName) then%> | <a href="Plugins/<%=GBSet.GetPath%>/bookaction.asp?action=del&amp;id=<%=GuestDB("book_ID")%>" onclick="if (!confirm('确定删除该留言信息吗？')) return false "><img src="Plugins/<%=GBSet.GetPath%>/del.gif" alt="删除" border="0" style="margin-bottom:-3px"/></a><%end if%>
@@ -124,6 +138,9 @@
           <%if not replyMsg then%>	  
           	  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%if not memName=empty then response.write ("value="""&memName&""" readonly=""readonly""")%>/></td></tr>
           	  <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/></td></tr><%end if%>
+              <%if memName=empty then%><tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="myblogemail" type="text" size="18" class="userpass" maxlength="24"/> 请填写您的邮箱.</td></tr><%end if%>
+              <%if memName=empty then%><tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="myblogsiteurl" type="text" class="userpass" value="http://" size="18" maxlength="24"/> 请填写您的网址.</td></tr><%end if%>
+
           	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
           	  <tr><td align="right" width="70" valign="top" height="56"><strong>头　像:</strong></td>
           	  <td style="padding:2px;" align="left">

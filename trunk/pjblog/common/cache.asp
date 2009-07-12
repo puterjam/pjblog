@@ -14,7 +14,7 @@ Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, b
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
 Dim memoryCache, blog_UpLoadSet
-
+Dim blog_smtp, blog_smtpuser, blog_smtppassword, blog_jmail, IsObj, msg, objMail, VerObj, TestObj, blog_smtpmail, blog_Isjmail, blog_reply_Isjmail
 
 '一些初始化的值
 blog_version = "3.2.7.280" '当前PJBlog版本号
@@ -35,7 +35,9 @@ Sub getInfo(ByVal action)
               "blog_postFile,blog_postCalendar,blog_DefaultSkin,blog_SkinName,blog_SplitType," & _
               "blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
-              "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description,blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection,blog_AuditOpen,blog_GravatarOpen" & _
+			  "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description," & _
+			  "blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection,blog_AuditOpen,blog_GravatarOpen," & _
+			  "blog_smtp,blog_smtpuser,blog_smtppassword,blog_jmail,blog_smtpmail,blog_Isjmail,blog_reply_Isjmail" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -104,6 +106,13 @@ Sub getInfo(ByVal action)
 		blog_PasswordProtection = CBool(blog_Infos(49, 0))'找回密码功能
 		blog_AuditOpen = CBool(blog_Infos(50, 0))'是否开启评论审核功能 ' 0 就是让数据该字段为true ; 1 为 false 这里必须统一起来,不然会混乱
 		blog_GravatarOpen = CBool(blog_Infos(51, 0)) ' 是否开启Gravatar头像功能
+        blog_smtp=trim(blog_Infos(52, 0))'SMTP地址
+        blog_smtpuser=trim(blog_Infos(53, 0))'SMTP用户名
+        blog_smtppassword=trim(blog_Infos(54, 0))'SMTP密码
+        blog_jmail=trim(blog_Infos(55, 0))'发送邮件组件
+        blog_smtpmail=trim(blog_Infos(56, 0))'发送邮箱
+        blog_Isjmail=blog_Infos(57, 0)'是否邮件通知
+		blog_reply_Isjmail=blog_Infos(58, 0)'回复是否邮件通知
     End If
 End Sub
 

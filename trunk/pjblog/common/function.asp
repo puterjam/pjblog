@@ -1662,6 +1662,68 @@ Function lenNum(n)
 		lenNum=n
 	End If
 End Function
+
+'===============================================================
+'  邮件发送
+'===============================================================
+Function sendmail(blogemail,emailtitle,emailcontent)  '邮件发送
+    on error resume next
+    if trim(blog_jmail)="1" then
+            Set msg = Server.CreateObject("JMail.Message")
+            msg.silent = true
+            msg.Logging = true
+            msg.Charset = "gb2312"
+            msg.MailServerUserName = blog_smtpuser
+            msg.MailServerPassword = blog_smtppassword   
+            msg.From = blog_smtpmail
+            msg.FromName = sitename
+            msg.AddRecipient blogemail,sitename
+            msg.Subject = emailtitle
+            msg.Body = emailcontent
+            msg.Send(blog_smtp)
+            msg.close
+            set msg = nothing
+    Else
+            Set objMail = Server.CreateObject("CDONTS.NewMail")
+            objMail.To = blogemail
+            objMail.From =blog_smtpmail
+            objMail.Subject = emailtitle
+            objMail.Body = emailcontent
+            objMail.Send
+            Set objMail = Nothing
+    End If
+End Function
+
+
+'检查组件是否被支持及组件版本的子程序
+sub ObjTest(strObj)
+  on error resume next
+  IsObj=false
+  VerObj=""
+  set TestObj=server.CreateObject (strObj)
+  If -2147221005 <> Err then
+    IsObj = True
+    VerObj = TestObj.version
+    if VerObj="" or isnull(VerObj) then VerObj=TestObj.about
+  end if
+  set TestObj=nothing
+End sub
+
+Function IsRightUrl(UrlStrng)  '网址判断
+  Dim regEx, retVal
+  Set regEx = New RegExp
+  regEx.Pattern = "^((https|http|ftp|rtsp|mms)?://)?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(:[0-9]{1,4})?((/?)|(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$" 
+  regEx.IgnoreCase = False 
+  retVal = regEx.Test(UrlStrng)
+
+
+  If retVal Then
+    IsRightUrl = true
+  Else
+    IsRightUrl = false
+  End If
+End Function
+
 %>
 
 <script src="reg.js" Language="JScript" runat="server"></script>
