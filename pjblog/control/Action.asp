@@ -16,6 +16,24 @@ Sub doAction
             weblog("blog_email") = checkURL(CheckStr(Request.Form("blog_email")))
 			weblog("blog_KeyWords") = checkURL(CheckStr(Request.Form("blog_KeyWords")))
 			weblog("blog_Description") = checkURL(CheckStr(Request.Form("blog_Description")))
+    '评论留言邮件通知
+            weblog("blog_smtp")=trim(Request.form("blog_smtp"))
+            weblog("blog_smtpuser")=trim(Request.form("blog_smtpuser"))
+            weblog("blog_smtppassword")=trim(Request.form("blog_smtppassword"))
+            weblog("blog_jmail")=trim(Request.form("blog_jmail"))
+            weblog("blog_smtpmail")=trim(Request.form("blog_smtpmail"))
+            weblog("blog_reply_Isjmail")=trim(Request.form("blog_reply_Isjmail"))
+            If Int(Request.Form("blog_Isjmail")) = 1 Then 
+                weblog("blog_Isjmail")=1
+            Else
+                weblog("blog_Isjmail")=0
+            End If
+            If Int(Request.Form("blog_reply_Isjmail")) = 1 Then 
+                weblog("blog_reply_Isjmail")=1
+            Else
+                weblog("blog_reply_Isjmail")=0
+            End If
+    '评论留言邮件通知结束
 
             If Right(CheckStr(Request.Form("SiteURL")), 1)<>"/" Then
                 weblog("blog_URL") = checkURL(CheckStr(Request.Form("SiteURL")))&"/"

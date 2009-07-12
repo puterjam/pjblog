@@ -40,8 +40,9 @@ Sub replyComm
 		exit sub
 	end if
 	
-	set quest = Conn.Execute("select top 1 comm_Content from blog_Comment where comm_ID=" & cID)
-	
+'	set quest = Conn.Execute("select top 1 comm_Content from blog_Comment where comm_ID=" & cID)
+    set quest = Conn.Execute("select top 1 a.comm_Content,a.comm_Author,b.log_title,b.log_ID,a.comm_Email from blog_Comment a inner join blog_Content b on a.blog_ID=b.log_ID where a.comm_ID=" & cID)
+
  	If not quest.EOF Then
 		result = quest(0) & vbcrlf & "[reply=" + memName + "," & DateToStr(now(),"Y-m-d H:I A") & "]" & replay & "[/reply]"
   		conn.Execute("UPDATE blog_Comment SET comm_Content='"&result&"' WHERE comm_ID="&cID)
@@ -50,6 +51,20 @@ Sub replyComm
   		 ubbResult  = UBBCode(HtmlEncode(result),cBool(a1),blog_commUBB,blog_commIMG,cBool(a2),cBool(a3))
 		response.write ("<script>parent.$(""commcontent_"&cID&""").innerHTML = '"&output(ubbResult)&"';</script>")
 		
+
+       If blog_reply_Isjmail and trim(quest(4))<>"" Then
+            dim emailcontent,emailtitle
+            emailtitle = "您在"&siteName&"上发表的评论已被回复"
+            dim CommUrl
+            if blog_postFile = 2 then
+                CommUrl = "请点击查看"&siteurl&caload(quest(3))&"#comm_"&cID&"。"
+            else 
+                CommUrl = "请点击查看"&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&"。"
+            end if
+            emailcontent = "尊敬的｛"&quest(1)&"｝，您好，你在["&siteName&"]上发表的关于["&quest(2)&"]日志的评论，现已被["&memName&"]回复，回复内容为：["&replay&"]，"&CommUrl&"谢谢您的评论，欢迎再次光临！"
+            call sendmail(quest(4),emailtitle,emailcontent)
+	end if
+
 		 PostArticle logId, False
     End If
 

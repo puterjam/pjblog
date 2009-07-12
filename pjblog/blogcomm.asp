@@ -312,6 +312,33 @@ Function postcomm
         conn.Execute("update blog_Member set mem_PostComms=mem_PostComms+1 where mem_Name='"&memName&"'")
     End If
     SQLQueryNums = SQLQueryNums + 3
+	
+    '评论邮件通知
+    If blog_Isjmail Then
+		Dim email_commid, SQLcomm, log_commcomm
+		SQLcomm="Select TOP 1 * FROM blog_Comment Where comm_Author='"&username&"' order By comm_ID Desc "
+		Set log_commcomm=conn.execute(SQLcomm) 
+			email_commid=log_commcomm("comm_ID")
+		log_commcomm.Close
+		Set log_commcomm=Nothing
+		dim email_log_title
+		SQLcomm="Select * FROM blog_Content Where log_ID="&post_logID&""
+		Set log_commcomm=conn.execute(SQLcomm) 
+			email_log_title=log_commcomm("log_Title")
+		log_commcomm.Close
+		Set log_commcomm=Nothing
+        dim emailcontent,emailtitle
+        emailtitle = "您发表的文章《"&email_log_title&"》已有客人发表了评论"
+        if blog_postFile = 2 then
+            emailcontent = "["&username&"]在您的博客中发表了评论,请点击查"&siteURL&caload(post_logID)&"#comm_"&email_commid&"。评论内容如下："&post_Message&""
+        else 
+            emailcontent = "["&username&"]在您的博客中发表了评论,请点击查"&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&"。评论内容如下："&post_Message&""
+        end if
+        call sendmail(blog_email,emailtitle,emailcontent)
+    End If
+    '评论邮件通知结束
+
+	
     ReInfo(0) = "评论发表成功"
     ReInfo(1) = "<b>你成功地对该日志发表了评论</b><br/><a href=""default.asp?id="&post_logID&""">单击返回该日志</a>"
     ReInfo(2) = "MessageIcon"
