@@ -1666,7 +1666,7 @@ End Function
 '===============================================================
 '  邮件发送
 '===============================================================
-Function sendmail(blogemail,emailtitle,emailcontent)  '邮件发送
+Function sendmail(blogemail,emailtitle,emailcontent,toname)  '邮件发送
     on error resume next
     if trim(blog_jmail)="1" then
             Set msg = Server.CreateObject("JMail.Message")
@@ -1677,7 +1677,7 @@ Function sendmail(blogemail,emailtitle,emailcontent)  '邮件发送
             msg.MailServerPassword = blog_smtppassword   
             msg.From = blog_smtpmail
             msg.FromName = sitename
-            msg.AddRecipient blogemail,sitename
+            msg.AddRecipient blogemail,toname
             msg.Subject = emailtitle
             msg.Body = emailcontent
             msg.Send(blog_smtp)

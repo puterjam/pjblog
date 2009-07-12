@@ -334,7 +334,7 @@ Function postcomm
         else 
             emailcontent = "["&username&"]在您的博客中发表了评论,请点击查"&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&"。评论内容如下："&post_Message&""
         end if
-        call sendmail(blog_email,emailtitle,emailcontent)
+        call sendmail(blog_email,emailtitle,emailcontent,sitename)
     End If
     '评论邮件通知结束
 
