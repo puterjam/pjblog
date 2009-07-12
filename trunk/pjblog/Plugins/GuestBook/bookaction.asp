@@ -156,7 +156,7 @@ Conn.ExeCute("Insert INTO blog_book(book_Messager,book_face,book_IP,book_Content
 			dim emailcontent,emailtitle
 			emailtitle = "您的博客已有客人留言"
 			emailcontent = "["&username&"]在您的博客中发表了留言,请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&email_bookid&"。留言内容如下："&post_Message&""
-			call sendmail(blog_email,emailtitle,emailcontent)
+			call sendmail(blog_email,emailtitle,emailcontent,sitename)
 	'		call sendmail(username,"",email_bookid,"",0,post_Message)
 	End If
 	'留言邮件通知结束
@@ -216,7 +216,7 @@ function replyMsg
 				dim emailcontent,emailtitle
 				emailtitle = "您在"&siteName&"上发表的留言已被回复"
 				emailcontent = "尊敬的｛"&log_commcomm("book_Messager")&"｝，您好，您在["&siteName&"]上发表的留言，现已被["&memName&"]回复，回复内容为：["&MsgReplyContent&"]，请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&MsgID&"。谢谢您的留言，欢迎再次光临！系统自动发送，请勿直接回复。"
-				call sendmail(log_commcomm("email"),emailtitle,emailcontent)
+				call sendmail(log_commcomm("email"),emailtitle,emailcontent,log_commcomm("book_Messager"))
 		'		call sendmail(username,"",email_bookid,"",0,post_Message)
 			end if
 			log_commcomm.Close

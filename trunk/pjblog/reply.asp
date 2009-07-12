@@ -62,7 +62,7 @@ Sub replyComm
                 CommUrl = "请点击查看"&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&"。"
             end if
             emailcontent = "尊敬的｛"&quest(1)&"｝，您好，你在["&siteName&"]上发表的关于["&quest(2)&"]日志的评论，现已被["&memName&"]回复，回复内容为：["&replay&"]，"&CommUrl&"谢谢您的评论，欢迎再次光临！"
-            call sendmail(quest(4),emailtitle,emailcontent)
+            call sendmail(quest(4),emailtitle,emailcontent,quest(1))
 	end if
 
 		 PostArticle logId, False
