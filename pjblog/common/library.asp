@@ -181,8 +181,17 @@ Function userPanel()
             session(CookieName&"_draft_"&memName) = conn.Execute("select count(log_ID) from blog_Content where log_Author='"&memName&"' and log_IsDraft=true")(0)
             SQLQueryNums = SQLQueryNums + 1
         End If
-        If session(CookieName&"_draft_"&memName)>0 Then
-            userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D""><strong>编辑草稿 ["&session(CookieName&"_draft_"&memName)&"]</strong></a>"
+        Dim DraftCount
+        If stat_EditAll Then
+            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true")(0)
+        ElseIf stat_Edit Then
+            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true and log_Author='"&memName&"'")(0)
+        Else
+            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true and log_Author=''")(0)
+        End If
+        
+        If DraftCount > 0 Then
+            userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D""><strong>编辑草稿 ["&DraftCount&"]</strong></a>"
         Else
             userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D"">编辑草稿</a>"
         End If

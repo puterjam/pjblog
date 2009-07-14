@@ -89,10 +89,16 @@ Else
 End If
 
 'if stat_ShowHiddenCate or stat_Admin then
-
-If ViewDraft = "draft" And Len(memName)>0 Then
+If ViewDraft = "draft" Then
     ViewType = "list"
-    SQL = "SELECT "&strSQL&" FROM blog_Content "&SQLFiltrate&" log_IsDraft=true and log_Author='"&memName&"' ORDER BY log_IsTop ASC,log_PostTime DESC"
+	If stat_EditAll Then
+	    SQL = "SELECT "&strSQL&" FROM blog_Content "&SQLFiltrate&" log_IsDraft=true ORDER BY log_IsTop ASC,log_PostTime DESC"
+	ElseIf stat_Edit Then
+	    SQL = "SELECT "&strSQL&" FROM blog_Content "&SQLFiltrate&" log_IsDraft=true and log_Author='"&memName&"' ORDER BY log_IsTop ASC,log_PostTime DESC"
+	Else
+	    SQL = "SELECT "&strSQL&" FROM blog_Content "&SQLFiltrate&" log_IsDraft=true and log_Author='' ORDER BY log_IsTop ASC,log_PostTime DESC"
+	End If
+Else
 End If
 Set webLog = Server.CreateObject("Adodb.Recordset")
 
