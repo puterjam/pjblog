@@ -178,20 +178,19 @@ Function userPanel()
     If stat_AddAll = True Or stat_Add = True Then userPanel = userPanel + "<a href=""blogpost.asp"" class=""sideA"" accesskey=""N"">发表新日志</a>"
     If (stat_AddAll = True Or stat_Add = True) And (stat_EditAll Or stat_Edit) Then
         If IsEmpty(session(CookieName&"_draft_"&memName)) Then
-            session(CookieName&"_draft_"&memName) = conn.Execute("select count(log_ID) from blog_Content where log_Author='"&memName&"' and log_IsDraft=true")(0)
-            SQLQueryNums = SQLQueryNums + 1
-        End If
-        Dim DraftCount
-        If stat_EditAll Then
-            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true")(0)
-        ElseIf stat_Edit Then
-            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true and log_Author='"&memName&"'")(0)
-        Else
-            DraftCount = conn.Execute("SELECT count(*) FROM blog_Content Where log_IsDraft=true and log_Author=''")(0)
+            If stat_EditAll Then
+                session(CookieName&"_draft_"&memName) = conn.Execute("select count(log_ID) from blog_Content where log_IsDraft=true")(0)
+                SQLQueryNums = SQLQueryNums + 1
+            ElseIf stat_Edit Then
+                session(CookieName&"_draft_"&memName) = conn.Execute("select count(log_ID) from blog_Content where log_IsDraft=true and log_Author='"&memName&"'")(0)
+                SQLQueryNums = SQLQueryNums + 1
+            Else
+	            session(CookieName&"_draft_"&memName) = 0
+            End If
         End If
         
-        If DraftCount > 0 Then
-            userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D""><strong>编辑草稿 ["&DraftCount&"]</strong></a>"
+        If session(CookieName&"_draft_"&memName) > 0 Then
+            userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D""><strong>编辑草稿 ["&session(CookieName&"_draft_"&memName)&"]</strong></a>"
         Else
             userPanel = userPanel + "<a href=""default.asp?display=draft"" class=""sideA"" accesskey=""D"">编辑草稿</a>"
         End If
