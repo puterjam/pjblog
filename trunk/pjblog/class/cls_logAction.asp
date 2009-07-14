@@ -199,7 +199,11 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
-        weblog("log_Cname") = logCname
+		If conn.Execute("select count(log_ID) from blog_Content where log_Cname='"&logCname&"'")(0) > 0 Then
+    	    weblog("log_Cname") = logCname & "_1"
+		Else
+	        weblog("log_Cname") = logCname
+		End If
         weblog("log_Ctype") = logCtype
         weblog("log_Readpw") = logReadpw
         weblog("log_Pwtips") = logPwtips
@@ -449,7 +453,11 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
-        weblog("log_Cname")=logCname
+		If conn.Execute("select count(log_ID) from blog_Content where log_id<>"&id&" and log_Cname='"&logCname&"'")(0) > 0 Then
+    	    weblog("log_Cname") = logCname & "_1"
+		Else
+	        weblog("log_Cname") = logCname
+		End If
         weblog("log_Ctype")=logCtype
         weblog("log_Readpw") = logReadpw
         weblog("log_Pwtips") = logPwtips
