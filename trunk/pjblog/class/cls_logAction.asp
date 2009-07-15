@@ -178,7 +178,7 @@ Class logArticle
 		End If
 
         weblog.addNew
-        If len(logCname) < 1 or logCname = "" or logCname = empty or logCname = null Then
+        If IsBlank(logCname) Then
             logCname = weblog("log_ID")
         End If
         weblog("log_CateID") = CheckStr(categoryID)
@@ -433,7 +433,7 @@ Class logArticle
 			End If
 		End If
 
-        If len(logCname) < 1 or logCname = "" or logCname = empty or logCname = null Then
+        If IsBlank(logCname) Then
             logCname = weblog("log_ID")
         End If
         weblog("log_Title") = CheckStr(logTitle)
@@ -487,7 +487,7 @@ Class logArticle
 		oldctype = Checkxss(request.form("oldtype"))
 		D = conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
 		A = "article/"&D
-		If D = "" or len(D) = 0 then
+		If IsBlank(D) then
 			A = "article"
 		End If
 		B=oldcname
@@ -768,7 +768,7 @@ Class ArticleCache
         If not IsEmpty(Application(CookieName&"_introCache_"&id)) then
         	getIntro = Application(CookieName&"_introCache_"&id)
         Else 
-		    If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
+		    If IsBlank(Cpart) then
 			   getIntro = LoadFile("cache/" & id & ".asp")
 			Else
        	       getIntro = LoadFile("cache/" & id & ".asp")
@@ -800,7 +800,7 @@ Class ArticleCache
 			ceeurl2=""
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
+			   If IsBlank(Cpart) then
 			      ceeurl2 = ceeurl2&"article/"&cname&chtml2
 			   Else
 			      ceeurl2 = ceeurl2&"article/"&cpart&"/"&cname&chtml2
@@ -838,7 +838,7 @@ Class ArticleCache
 			ceeurl=""
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   If Cpart = "" or Cpart = empty or Cpart = null or len(Cpart) = 0 then
+			   If IsBlank(Cpart) then
 			      ceeurl = ceeurl&"article/"&cname&chtml
 			   Else
 			      ceeurl = ceeurl&"article/"&cpart&"/"&cname&chtml
@@ -980,7 +980,7 @@ Public Function SaveCache
     End If
     LogListArray = LogList.GetRows()
     Set LogList = Nothing
-    Dim i, AList, AListC, GList, GListC, outIndex, tempS, tempCS, hiddenC
+    Dim i, AList, AListC, GList, GListC, outIndex, tempS, tempCS, hiddenC, Cnames_l
     AList = ""
     AListC = 0
     GList = ""
@@ -994,16 +994,22 @@ Public Function SaveCache
         If Not LogListArray(3, i) Then
             tempCS = 0
             hiddenC = 0
-            GList = GList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & LogListArray(5, i) & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+			
+			If IsBlank(LogListArray(5, i)) Then
+				Cnames_l = LogListArray(0, i)
+			Else
+				Cnames_l = LogListArray(5, i)
+			End If
+			GList = GList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
             GListC = GListC + hiddenC
         End If
 
-        AList = AList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & LogListArray(5, i) & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+        AList = AList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
         AListC = AListC + hiddenC
         If Not CateDic.Exists("C"&LogListArray(1, i)) Then
-            CateDic.Add "C"&LogListArray(1, i), tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & LogListArray(5, i) & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) &","
+            CateDic.Add "C"&LogListArray(1, i), tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) &","
         Else
-            CateDic.Item("C"&LogListArray(1, i)) = CateDic.Item("C"&LogListArray(1, i)) & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & LogListArray(5, i) & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+            CateDic.Item("C"&LogListArray(1, i)) = CateDic.Item("C"&LogListArray(1, i)) & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
         End If
 
         If Not CateHDic.Exists("CH"&LogListArray(1, i)) Then
@@ -1386,7 +1392,6 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Dim LoadTemplate2, Temp2, comDesc, SaveArticle
     LoadTemplate2 = LoadFromFile("Template/ArticleList.asp")
     If LoadTemplate2(0) <> 0 Then Exit Sub
-
     Temp2 = LoadTemplate2(1)
     Temp2 = Replace(Temp2, "<$Cate_icon$>", getCate.cate_icon)
     Temp2 = Replace(Temp2, "<$Cate_Title$>", getCate.cate_Name)

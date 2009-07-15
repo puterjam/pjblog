@@ -287,12 +287,12 @@ End Sub
 	                  <div id="Div_Meta" class="tips_body" <%if not lArticle.logMeta Then response.write("style=""display:none;""")%>>
       	 				  - 自定义日志页面头的Meta信息，留空则默认为Tag和日志摘要<br/>
 		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
-						  <input name="log_KeyWords" type="text" id="log_KeyWords" size="80" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" value="<%=lArticle.logKeyWords%>" />
+						  <input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="填写你的keywords，利于搜索引擎，不需要则留空" value="<%=lArticle.logKeyWords%>" size="80" maxlength="254" />
 						  <br />
 						  <span style="font-weight: bold">Description:</span>
-						  <input name="log_Description" type="text" id="log_Description" size="80" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" value="<%=lArticle.logDescription%>" />
+						  <input name="log_Description" type="text" class="inputBox" id="log_Description" title="填写你的Description，利于搜索引擎，不需要则留空" value="<%=lArticle.logDescription%>" size="80" maxlength="254" />
 	                  </div>
-				  </td>
+			    </td>
              </tr>
              <tr>
                <td height="24" align="right" valign="top"><b>来源:</b></td>
@@ -300,7 +300,7 @@ End Sub
                    <input name="log_From" type="text" id="log_From" size="12" class="inputBox" value="<%=lArticle.logFrom%>" />
                    <span style="font-weight: bold">网址:</span>
                    <input name="log_FromURL" type="text" id="log_FromURL" size="38" class="inputBox" value="<%=lArticle.logFromURL%>"/>
-                 </td>
+                </td>
              </tr>
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">发表时间:</span></td>
