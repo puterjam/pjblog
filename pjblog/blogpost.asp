@@ -279,10 +279,10 @@ End Sub
 	                  <div id="Div_Meta" style="display:none;" class="tips_body">
       	 				  - 自定义日志页面头的Meta信息，留空则默认为Tag和日志摘要<br/>
 		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
-						  <input name="log_KeyWords" type="text" id="log_KeyWords" size="80" class="inputBox" title="填写你的keywords，利于搜索引擎，不需要则留空" />
+						  <input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="填写你的keywords，利于搜索引擎，不需要则留空" size="80" maxlength="254" />
 						  <br />
 						  <span style="font-weight: bold">Description:</span>
-						  <input name="log_Description" type="text" id="log_Description" size="80" class="inputBox" title="填写你的Description，利于搜索引擎，不需要则留空" />
+						  <input name="log_Description" type="text" class="inputBox" id="log_Description" title="填写你的Description，利于搜索引擎，不需要则留空" size="80" maxlength="254" />
 	                  </div>
 				  </td>
              </tr>

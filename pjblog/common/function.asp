@@ -260,13 +260,13 @@ function caload(id)
 		   ppid = pid(1)
 		      if int(ppid)=int(id) then
 			     recpart = pid(2)
-				  if recpart = "" or recpart = empty or recpart = null or len(recpart) = 0 then
+				  if IsBlank(recpart) then
 				     recpart = "article/"
 				  else
 				     recpart = "article/"&recpart&"/"
 				  end if
 				 recname = pid(3)
-				  if recname = "" or recname = empty or recname = null or len(recname)=0 then
+				  if IsBlank(recname) then
 				     recname = id
 				  else
 				     recname = recname
@@ -333,12 +333,12 @@ Function Alias(id)
 		ccate = ccateExec(0).value
 	end if
 	
-	if ccate="" or ccate=empty or ccate=null or len(ccate)=0 then
+	if IsBlank(ccate) then
 		ccate="article/"
 	else
 		ccate="article/"&ccate&"/"
 	end if
-	if len(cname)<1 or cname="" or cname=empty or cname=null then
+	if IsBlank(cname) then
 		cnames=trim(id)
 	else
 		cnames=cname
@@ -1704,7 +1704,7 @@ sub ObjTest(strObj)
   If -2147221005 <> Err then
     IsObj = True
     VerObj = TestObj.version
-    if VerObj="" or isnull(VerObj) then VerObj=TestObj.about
+    if IsBlank(VerObj) then VerObj=TestObj.about
   end if
   set TestObj=nothing
 End sub
@@ -1723,6 +1723,31 @@ Function IsRightUrl(UrlStrng)  '网址判断
     IsRightUrl = false
   End If
 End Function
+
+'*************************************
+'判断是否为空 by 静脉
+'*************************************
+Function IsBlank(ByRef TempVar) 
+	IsBlank = False 
+	select Case VarType(TempVar) 
+	Case 0, 1 'Empty & Null 
+	IsBlank = True 
+	Case 8 'String 
+	If Len(TempVar) = 0 Then 
+	IsBlank = True 
+	End If 
+	Case 9 'Object 
+	Dim tmpType 
+	tmpType = TypeName(TempVar) 
+	If (tmpType = "Nothing") or (tmpType = "Empty") Then 
+	IsBlank = True 
+	End If 
+	Case 8192, 8204, 8209 'Array 
+	If UBound(TempVar) = -1 Then 
+	IsBlank = True 
+	End If 
+	End select 
+End Function  
 
 %>
 
