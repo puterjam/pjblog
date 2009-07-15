@@ -1334,7 +1334,11 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
         Temp1 = Replace(Temp1, "<$log_Modify$>", "")
     End If
 
-    Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+	If Len(log_View("log_FromUrl")) > 0 Then
+	    Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+	Else
+	    Temp1 = Replace(Temp1, "<$log_FromUrl$>", "")
+	End If
     Temp1 = Replace(Temp1, "<$log_From$>", log_View("log_From"))
     Temp1 = Replace(Temp1, "<$trackback$>", SiteURL&"trackback.asp?tbID="&LogID&"&amp;action=view")
 
