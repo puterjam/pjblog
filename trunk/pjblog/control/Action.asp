@@ -22,7 +22,6 @@ Sub doAction
             weblog("blog_smtppassword")=trim(Request.form("blog_smtppassword"))
             weblog("blog_jmail")=trim(Request.form("blog_jmail"))
             weblog("blog_smtpmail")=trim(Request.form("blog_smtpmail"))
-            weblog("blog_reply_Isjmail")=trim(Request.form("blog_reply_Isjmail"))
             If Int(Request.Form("blog_Isjmail")) = 1 Then 
                 weblog("blog_Isjmail")=1
             Else
@@ -48,7 +47,11 @@ Sub doAction
             weblog("blog_BookPage") = 0 'CheckStr(Request.form("blogBookPage"))
             weblog("blog_commTimerout") = CheckStr(Request.Form("blog_commTimerout"))
             weblog("blog_commLength") = CheckStr(Request.Form("blog_commLength"))
-            weblog("blog_SaveTime") = CheckStr(Request.Form("blog_SaveTime"))
+			If Len(Request.Form("blog_SaveTime")) > 0 Then
+	            weblog("blog_SaveTime") = CheckStr(Request.Form("blog_SaveTime"))
+			Else
+	            weblog("blog_SaveTime") = 3600
+			End If
             If CheckObjInstalled("ADODB.Stream") Then
                 weblog("blog_postFile") = Request.Form("blog_postFile")
                 ' if CheckStr(Request.form("blog_postFile"))="1" then weblog("blog_postFile")=1 else weblog("blog_postFile")=0
