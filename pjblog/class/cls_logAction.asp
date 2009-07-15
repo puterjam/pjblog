@@ -200,7 +200,7 @@ Class logArticle
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
 		If conn.Execute("select count(log_ID) from blog_Content where log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = logCname & "_1"
+    	    weblog("log_Cname") = logCname & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
 		Else
 	        weblog("log_Cname") = logCname
 		End If
@@ -454,7 +454,7 @@ Class logArticle
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
 		If conn.Execute("select count(log_ID) from blog_Content where log_id<>"&id&" and log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = logCname & "_1"
+    	    weblog("log_Cname") = logCname & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
 		Else
 	        weblog("log_Cname") = logCname
 		End If
