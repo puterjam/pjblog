@@ -39,13 +39,13 @@ If ChkPost() Then
 %>
     <!--内容-->
    <%If Request.Form("action") = "post" Then
-    Dim pws, pwtips, pwtitle, pwcomm, IsShow, keyword, description
+    Dim pws, pwtips, pwtitle, pwcomm, IsShow, keyword, B_description
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
 		pwtitle = Request.Form("log_Pwtitle")
 		pwcomm = Request.Form("log_Pwcomm")
 		keyword = Trim(Request.Form("log_KeyWords"))
-		description = Trim(Request.Form("log_Description"))
+		B_description = Trim(Request.Form("log_Description"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
 			IsShow = False
 			If CheckStr(Request.Form("c_pws")) = "1" Then'如果密码更改了
@@ -68,7 +68,7 @@ If ChkPost() Then
     End If
     If CheckStr(Request.Form("log_Meta")) = "0" Then
 			keyword = ""
-			description = ""
+			B_description = ""
     End If
     
     lArticle.categoryID = request.Form("log_CateID")
@@ -105,7 +105,7 @@ If ChkPost() Then
     lArticle.logPwcomm = pwcomm
     lArticle.logMeta = request.Form("log_Meta")
     lArticle.logKeyWords = keyword
-    lArticle.logDescription = description
+    lArticle.logDescription = B_description
     EditLog = lArticle.editLog(request.Form("id"))
     Set lArticle = Nothing
 

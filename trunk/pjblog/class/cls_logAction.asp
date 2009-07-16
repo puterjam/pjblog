@@ -419,7 +419,7 @@ Class logArticle
 
 		'Meta特别属性
 		If logMeta <> true Then
-			logDescription = FilterHtmlTags(logdescriptionFilt)
+			logDescription = left(FilterHtmlTags(logdescriptionFilt),254)
 		Else
 			logDescription = FilterHtmlTags(logDescription)
 		End If
