@@ -9,7 +9,7 @@
   <div id="foot">
     <p>Powered By <a href="http://www.pjhome.net" target="_blank"><strong>PJBlog3 v<%=blog_version%></strong></a> CopyRight 2005 - 2008, <strong><%=SiteName%></strong> <a href="http://validator.w3.org/check/referer" target="_blank">xhtml</a> | <a href="http://jigsaw.w3.org/css-validator/validator-uri.html">css</a></p>
     <p style="font-size:11px;">Processed in <b><%=FormatNumber(Timer()-StartTime,6,-1)%></b> second(s) , <b><%=SQLQueryNums%></b> queries<%=SkinInfo%>
-    <br/><a href="http://www.miibeian.gov.cn" style="font-size:12px"><b><%=blogabout%></b></a>
+    <br/><a href="http://www.miibeian.gov.cn" style="font-size:12px" target="_blank"><b><%=blogabout%></b></a>
     </p>
    </div>
  </div>
