@@ -30,13 +30,13 @@ If ChkPost() Then
   <%else%>
    <!--内容-->
    <%If Request.Form("action") = "post" Then
-		Dim lArticle, postLog, pws, pwtips, pwtitle, pwcomm, IsShow, keyword, description
+		Dim lArticle, postLog, pws, pwtips, pwtitle, pwcomm, IsShow, keyword, B_description
 		pws = Trim(Request.Form("log_Readpw"))
 		pwtips = Trim(Request.Form("log_Pwtips"))
 		pwtitle = Request.Form("log_Pwtitle")
 		pwcomm = Request.Form("log_Pwcomm")
 		keyword = Trim(Request.Form("log_KeyWords"))
-		description = Trim(Request.Form("log_Description"))
+		B_description = Trim(Request.Form("log_Description"))
     If CheckStr(Request.Form("log_IsHidden")) = "1" Then
 			IsShow = False
 			If IsEmpty(pws) or IsNull(pws) or pws = "" Then
@@ -57,7 +57,7 @@ If ChkPost() Then
     End If
     If CheckStr(Request.Form("log_Meta")) = "0" Then
 			keyword = ""
-			description = ""
+			B_description = ""
     End If
    
 	Set lArticle = New logArticle
@@ -95,7 +95,7 @@ If ChkPost() Then
     lArticle.logPwcomm = pwcomm
     lArticle.logMeta = request.Form("log_Meta")
     lArticle.logKeyWords = keyword
-    lArticle.logDescription = description
+    lArticle.logDescription = B_description
     if request.form("FirstPost") = 1 then
 		lArticle.isajax = false
 		lArticle.logIsDraft = false
