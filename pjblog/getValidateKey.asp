@@ -29,12 +29,10 @@ If request("type") = "trackback" Then
     Dim tbID
     tbID = Request.QueryString("tbID")
     If IsInteger(tbID) Then
-        Dim tbKey, mi, baseUrl
+        Dim tbKey, mi
         mi = Int(Minute(Now()) / 10)
         tbKey = sha1(tbID & getServerKey & mi)
-		baseUrl = "http://" & Request.ServerVariables("HTTP_HOST") & Request.ServerVariables("URL")
-		baseUrl = Left(baseUrl, InStrRev(baseUrl,"/"))
-        response.Write "setTBKey('"&tbKey&"','"&baseUrl&"');"
+        response.Write "setTBKey('"&tbKey&"','"&GetbaseUrl&"');"
     Else
         response.Write "setTBKey('','');"
     End If
