@@ -510,7 +510,7 @@ function getTB(id){
 	tJS.src = "getValidateKey.asp?tbID=" + id + "&type=trackback&vcode=" + document.getElementById("vCode").value;
 }
 
-function setTBKey(code){
+function setTBKey(code,baseurl){
 	if (!code || code == "codeError"){
 		alert("验证码错误");
 		document.getElementById("vCode").select();
@@ -522,7 +522,8 @@ function setTBKey(code){
 	pBody.style.width = "400px";
 	document.getElementById("tbSpan").style.display = "none";
 	tURL.style.display = "";
-	tURL.value = /(.+\/)/i.exec(location.href)[0] + "trackback.asp?tbID=" + window._tBID + "&action=addtb&tbKey=" + code;
+//	tURL.value = /(.+\/)/i.exec(location.href)[0] + "trackback.asp?tbID=" + window._tBID + "&action=addtb&tbKey=" + code;
+	tURL.value = baseurl + "trackback.asp?tbID=" + window._tBID + "&action=addtb&tbKey=" + code;
 }
 
 //popup support
