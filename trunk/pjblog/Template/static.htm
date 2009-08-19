@@ -51,7 +51,6 @@
 		<!-- 导航位置 -->
       <$CategoryList$>
   </div>
-	<script type="text/javascript">var g_logID="<$LogID$>"</script>
   <!--内容-->
   <div id="Tbody">
     <div id="mainContent">
@@ -60,7 +59,6 @@
 		<!-- 内容开始 -->
 			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 				<div class="pageContent">
-					<div style="float:right;width:auto"><$log_Navigation$></div> 
 					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有【<$Cate_Title$>】的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有【<$Cate_Title$>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<$Cate_Title$>】的日志" style="margin-bottom:-1px"/></a>
 				</div>
 				<div class="Content">
@@ -83,6 +81,7 @@
 				</div>
 				<div class="Content-body">
 					<$log_Modify$>
+                    <$log_Navigation$>
 					<img src="images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<$log_FromUrl$>" target="_blank"><$log_From$></a><br/>
 					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
@@ -136,8 +135,7 @@
 		        </tr>
 		        <tr id="removevalidate">
 		          <td align="right" width="70"><strong>验证码:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/>
-		            <img id="vcodeImg" src="about:blank" onerror="this.onerror=null;this.src='common/getcode.asp?s='+Math.random();" alt="验证码" title="看不清楚？点击刷新验证码！" style="margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;" onclick="src='common/getcode.asp?s='+Math.random()"/></td>
+		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('validate');"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
 		        </tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
@@ -188,8 +186,9 @@
   </div>
   <!--底部-->
   <div id="foot">
-    <p>Powered By <a href="http://www.pjhome.net" target="_blank"><strong>PJBlog3 v<$blog_version$></strong></a> CopyRight 2005 - 2008, <strong><$siteName$></strong> <a href="http://validator.w3.org/check/referer" target="_blank">xhtml</a> | <a href="http://jigsaw.w3.org/css-validator/validator-uri.html">css</a></p>
-    <p><a href="http://www.miibeian.gov.cn" style="font-size:12px" target="_blank"><b><$blogabout$></b></a></p>
+    <p>Powered By <a href="http://www.pjhome.net" target="_blank"><strong>PJBlog3 v<$blog_version$></strong></a> CopyRight 2005 - 2009, <strong><$siteName$></strong> <a href="http://validator.w3.org/check/referer" target="_blank">xhtml</a> | <a href="http://jigsaw.w3.org/css-validator/validator-uri.html">css</a></p>
+    <p><a href="http://www.miibeian.gov.cn" style="font-size:12px" target="_blank"><b><$blogabout$></b></a>
+</p>
   </div>
 </div>
 

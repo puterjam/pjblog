@@ -399,11 +399,11 @@ Sub c_ceneral
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 首页 KeyWords 设置 </div></td>
-		          <td align="left"><input name="blog_KeyWords" type="text" size="50" class="text" value="<%=blog_KeyWords%>"/></td>
+		          <td align="left"><input name="blog_KeyWords" type="text" class="text" value="<%=blog_KeyWords%>" size="50" maxlength="123"/></td>
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 首页 Description 设置 </div></td>
-		          <td align="left"><input name="blog_Description" type="text" size="50" class="text" value="<%=blog_Description%>"/></td>
+		          <td align="left"><input name="blog_Description" type="text" class="text" value="<%=blog_Description%>" size="50" maxlength="176"/></td>
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 网站备案信息 </div></td>

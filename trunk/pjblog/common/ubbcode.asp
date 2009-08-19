@@ -303,15 +303,24 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
+            '-----------隐藏----------------
             re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
 			Dim HiddenRand1
-			HiddenRand1 = randomStr(10)
-				strContent= re.Replace(strContent,"<script>Hidden('"&HiddenRand1&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">$1</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+				HiddenRand1 = randomStr(10)
+				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand1&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">"&strMatch.SubMatches(0)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+            Next
+            Set strMatchs = Nothing
 			
 			re.Pattern="\[hidden=(.[^\]]*)\](.*?)\[\/hidden\]"
 			Dim HiddenRand2
-			HiddenRand2 = randomStr(10)
-				strContent= re.Replace(strContent,"<script>Hidden('"&HiddenRand2&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 $1""/> 显示被隐藏内容来自 $1</div><div class=""UBBContent"">$2</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 $1""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+            Set strMatchs = re.Execute(strContent)
+            For Each strMatch in strMatchs
+				HiddenRand2 = randomStr(10)
+				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand2&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 "&strMatch.SubMatches(0)&"""/> 显示被隐藏内容来自 "&strMatch.SubMatches(0)&"</div><div class=""UBBContent"">"&strMatch.SubMatches(1)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 "&strMatch.SubMatches(0)&"""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+            Next
+            Set strMatchs = Nothing
 
             If Not DisIMG = 1 Then
                 re.Pattern = "\[html\](.*?)\[\/html\]"
@@ -351,14 +360,18 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
         End If
 
         '-----------关键词识别----------------
+
         If AutoKEY = 1 Then
             Dim log_Keywords, log_KeywordsContent
             For Each log_Keywords IN Arr_Keywords
                 log_KeywordsContent = Split(log_Keywords, "$|$")
+				If Left(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Replace(log_KeywordsContent(1), "|", vbNullString,1,1)
+				If Right(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Left(log_KeywordsContent(1),Len(log_KeywordsContent(1))-1)
+				re.Pattern = "(\<(.*)\>)(" & Replace(log_KeywordsContent(1), "$", "\$") & ")"
                 If log_KeywordsContent(3)<>"None" Then
-                    strContent = Replace(strContent, log_KeywordsContent(1), "<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/> "&log_KeywordsContent(1)&"</a>")
+					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/>$2</a>")
                 Else
-                    strContent = Replace(strContent, log_KeywordsContent(1), "<a href="""&log_KeywordsContent(2)&""" target=""_blank"">"&log_KeywordsContent(1)&"</a>")
+					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank"">$2</a>")
                 End If
             Next
         End If

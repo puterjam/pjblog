@@ -37,7 +37,11 @@
               dim Article_Items,Article_Item
              	For Each Article_Items IN blog_Article
              	 Article_Item=Split(Article_Items,"|,|")
-             	 NewArticle=NewArticle&"<a class=""sideA"" href=""default.asp?id="&Article_Item(0)&""" title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
+				If blog_postFile>1 Then
+					 NewArticle=NewArticle&"<a class=""sideA"" href="&caload(Article_Item(0))&" title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
+				else
+					 NewArticle=NewArticle&"<a class=""sideA"" href=""article.asp?id=" & Article_Item(0) & """ title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
+				end if
              	Next
               end if
        end function

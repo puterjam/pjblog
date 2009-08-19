@@ -17,8 +17,8 @@ Dim memoryCache, blog_UpLoadSet
 Dim blog_smtp, blog_smtpuser, blog_smtppassword, blog_jmail, IsObj, msg, objMail, VerObj, TestObj, blog_smtpmail, blog_Isjmail, blog_reply_Isjmail
 
 '一些初始化的值
-blog_version = "3.2.7.299" '当前PJBlog版本号
-blog_UpdateDate = "2009-07-19" 'PJBlog最新更新时间
+blog_version = "3.2.7.300" '当前PJBlog版本号
+blog_UpdateDate = "2009-07-24" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
@@ -394,9 +394,9 @@ Function NewComment(ByVal action)
         dim url
         For i = 0 To Comment_Item_Len
 		    If blog_postFile = 2 Then
-		   		url = SiteURL&caload(blog_Comment(1, i))&"#comm_"&blog_Comment(0, i)
+		   		url = caload(blog_Comment(1, i))&"#comm_"&blog_Comment(0, i)
 		      else
-		   		url = SiteURL&"article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
+		   		url = "article.asp?id="&blog_Comment(1, i)&"#comm_"&blog_Comment(0, i)
 		    end if
 			If blog_AuditOpen Then
 				If blog_Comment(5, i) Then

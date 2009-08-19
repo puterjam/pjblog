@@ -39,8 +39,8 @@ Function gettag()
 	SQLQueryNums=SQLQueryNums+1
 	if not rs.eof then
 		related_tag=rs(0)
-		if Len(related_tag)>0 then
-			gettag = "log_tag like '%" & Replace(related_tag,"}{","}%' or log_tag like '%{")&"%' "
+		if not isblank(related_tag) then
+			gettag = "(log_tag like '%" & Replace(related_tag,"}{","}%' or log_tag like '%{")&"%') "
 		End If
 	End if
 	Set rs=nothing

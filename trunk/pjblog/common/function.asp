@@ -120,8 +120,8 @@ End Function
 '用途 : 过滤html标签
 '更新时间 : 2009-05-22
 '*************************************
-Function FilterHtmlTags(ByVal Description)
-	If len(Description) = 0 or Description = "" Then Exit Function
+Function FilterHtmlTags(ByVal s_Description)
+	If isblank(s_Description) Then Exit Function
 	Dim FaStr, re
 	Set re = New RegExp
        	re.IgnoreCase = True
@@ -129,7 +129,7 @@ Function FilterHtmlTags(ByVal Description)
        	re.Pattern = "<[^>]*?>"
        		
        	'去掉 尖括号和换行
-		FaStr = re.replace(Description, "")
+		FaStr = re.replace(s_Description, "")
 		FaStr = replace(FaStr,Chr(13), "")
 		FaStr = replace(FaStr,Chr(10), "")
 	Set re = nothing
@@ -259,20 +259,20 @@ function caload(id)
 		   pid = split(conrex(jstr),"|")
 		   ppid = pid(1)
 		      if int(ppid)=int(id) then
-			     recpart = pid(2)
+			     recpart = trim(pid(2))
 				  if IsBlank(recpart) then
 				     recpart = "article/"
 				  else
 				     recpart = "article/"&recpart&"/"
 				  end if
-				 recname = pid(3)
+				 recname = trim(pid(3))
 				  if IsBlank(recname) then
 				     recname = id
 				  else
 				     recname = recname
 				  end if
 				 rechtml = pid(4)
-				  if rechtml = "0" then
+				  if rechtml = "0" or IsBlank(rechtml) then
 				     rechtml = "htm"
 				  else
 				     rechtml = "html"
@@ -324,8 +324,8 @@ Function Alias(id)
 	set cc=conn.execute("select top 1 log_CateID,log_cname,log_ctype from blog_Content where log_ID="&id)
 	
 	ccateID = cc(0)
-	cname = cc(1)
-	ctype = cc(2)
+	cname = trim(cc(1))
+	ctype = trim(cc(2))
 
 	set ccateExec=conn.execute("select Cate_Part from blog_Category where cate_ID="&ccateID)
 
@@ -344,7 +344,7 @@ Function Alias(id)
 		cnames=cname
 	end if
 	
-	if ctype="0" then
+	If Ctype = "0" or isblank(Ctype) then
 		chtml="htm"
 	else
 		chtml="html"
@@ -1729,7 +1729,8 @@ End Function
 '*************************************
 Function IsBlank(ByRef TempVar) 
 	IsBlank = False 
-	select Case VarType(TempVar) 
+	TempVar = Trim(TempVar)
+	select Case VarType(TempVar)
 	Case 0, 1 'Empty & Null 
 	IsBlank = True 
 	Case 8 'String 

@@ -242,7 +242,7 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 			NRs("cate_local") = 0
 			NRs("cate_icon") = "images/icons/1.gif"
 			NRs("cate_Secret") = 0
-			NRs("cate_Part") = NewcatePart
+			NRs("cate_Part") = left(FilterHtmlTags(NewcatePart),50)
 			NRs.update
 		NRs.Close
 		Set NRs = Nothing

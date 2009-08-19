@@ -57,7 +57,7 @@ Else
 	  <input name="action" type="hidden" value="login"/>
 	   <label>用户名：<input name="username" type="text" size="18" class="userpass" maxlength="24"/></label><br/>
 	   <label>密　码：<input name="password" type="password" size="18" class="userpass" onfocus="this.select()"/></label><br/>
-	   <label>验证码：<input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></label><br/>
+	   <label>验证码：<input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('validate');"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></label><br/>
 	   　　<label><input name="KeepLogin" type="checkbox" value="1"/>记住我的登录信息</label><br/>
 	   <input type="submit" value="登　陆" class="userbutton"/>　<input type="button" value="用户注册" class="userbutton" onclick="location='register.asp'"/>
 	   </div>

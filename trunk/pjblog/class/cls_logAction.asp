@@ -170,7 +170,7 @@ Class logArticle
 		
 		If logMeta <> true Then
 			logKeyWords = CheckStr(TagMeta)
-			If len(logKeyWords) = 0 Then
+			If isblank(logKeyWords) Then
 				logKeyWords = CheckStr(logTitle)
 			Else
 				logKeyWords = Replace(Replace(Replace(logKeyWords, ",", "|"), " ", "|"), "|", ",")
@@ -200,7 +200,7 @@ Class logArticle
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
 		If conn.Execute("select count(log_ID) from blog_Content where log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = logCname & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
+    	    weblog("log_Cname") = left(logCname,36) & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
 		Else
 	        weblog("log_Cname") = logCname
 		End If
@@ -426,7 +426,7 @@ Class logArticle
 		
 		If logMeta <> true Then
 			logKeyWords = CheckStr(TagMeta)
-			If len(logKeyWords) = 0 Then
+			If isblank(logKeyWords) Then
 				logKeyWords = CheckStr(logTitle)
 			Else
 				logKeyWords = Replace(Replace(Replace(logKeyWords, ",", "|"), " ", "|"), "|", ",")
@@ -454,7 +454,7 @@ Class logArticle
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
 		If conn.Execute("select count(log_ID) from blog_Content where log_id<>"&id&" and log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = logCname & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
+    	    weblog("log_Cname") = left(logCname,36) & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
 		Else
 	        weblog("log_Cname") = logCname
 		End If
@@ -790,7 +790,7 @@ Class ArticleCache
             End If
 			'evio
 			dim ceeurl2,chtml2
-			If Ctype = "0" then
+			If Ctype = "0" or isblank(Ctype) then
 		        chtml2 = "htm"
 			Else
 		        chtml2 = "html"
@@ -828,7 +828,7 @@ Class ArticleCache
             End If
 			'evio
 			dim ceeurl,chtml
-			If Ctype = "0" then
+			If Ctype = "0" or isblank(Ctype) then
 		        chtml = "htm"
 			Else
 		        chtml = "html"
@@ -995,21 +995,21 @@ Public Function SaveCache
             tempCS = 0
             hiddenC = 0
 			
-			If IsBlank(LogListArray(5, i)) Then
-				Cnames_l = LogListArray(0, i)
+			If IsBlank(trim(LogListArray(5, i))) Then
+				Cnames_l = trim(LogListArray(0, i))
 			Else
-				Cnames_l = LogListArray(5, i)
+				Cnames_l = trim(LogListArray(5, i))
 			End If
-			GList = GList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+			GList = GList & tempS & "|" & LogListArray(0, i) & "|" & trim(LogListArray(4, i)) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
             GListC = GListC + hiddenC
         End If
 
-        AList = AList & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+        AList = AList & tempS & "|" & LogListArray(0, i) & "|" & trim(LogListArray(4, i)) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
         AListC = AListC + hiddenC
         If Not CateDic.Exists("C"&LogListArray(1, i)) Then
-            CateDic.Add "C"&LogListArray(1, i), tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) &","
+            CateDic.Add "C"&LogListArray(1, i), tempS & "|" & LogListArray(0, i) & "|" & trim(LogListArray(4, i)) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) &","
         Else
-            CateDic.Item("C"&LogListArray(1, i)) = CateDic.Item("C"&LogListArray(1, i)) & tempS & "|" & LogListArray(0, i) & "|" & LogListArray(4, i) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
+            CateDic.Item("C"&LogListArray(1, i)) = CateDic.Item("C"&LogListArray(1, i)) & tempS & "|" & LogListArray(0, i) & "|" & trim(LogListArray(4, i)) & "|" & Cnames_l & "|" & LogListArray(6, i) & "|" & LogListArray(2, i) & ","
         End If
 
         If Not CateHDic.Exists("CH"&LogListArray(1, i)) Then
@@ -1146,7 +1146,12 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
         Temp1 = Replace(Temp1, "<$log_Modify$>", "")
     End If
 
-    Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+    If Len(log_View("log_FromUrl"))>0 Then
+        Temp1 = Replace(Temp1, "<$log_FromUrl$>", log_View("log_FromUrl"))
+    Else
+        Temp1 = Replace(Temp1, "<$log_FromUrl$>", "")
+    End If
+
     Temp1 = Replace(Temp1, "<$log_From$>", log_View("log_From"))
     Temp1 = Replace(Temp1, "<$trackback$>", SiteURL&"trackback.asp?tbID="&LogID&"&amp;action=view")
 
@@ -1160,16 +1165,16 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Dim BTemp,urlLink
     BTemp = ""
-    
+
     If Not preLogC.EOF Then
     	If blog_postFile = 2 then
     		urlLink = Alias(preLogC("log_ID"))
     	Else 
     		urlLink = "?id="&preLogC("log_ID")
     	End If
-        BTemp = BTemp & "<a href="""&urlLink&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&urlLink&""" accesskey="","">"&preLogC("log_Title")&"</a><br>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> 这是最新一篇日志<br>"
     End If
 
     If Not nextLogC.EOF Then
@@ -1178,9 +1183,9 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     	Else 
     		urlLink = "?id="&nextLogC("log_ID")
     	End If
-        BTemp = BTemp & " | <a href="""&urlLink&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&urlLink&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br>"
     Else
-        BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> 这是最后一篇日志<br>"
     End If
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
@@ -1308,15 +1313,15 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
     Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
-	If len(log_View("log_KeyWords")) > 0 Then
-    Temp1 = Replace(Temp1, "<$keywords$>", log_View("log_KeyWords"))
+	If not isblank(log_View("log_KeyWords")) Then
+		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords"))&",")
     Else
-    Temp1 = Replace(Temp1, "<$keywords$>", "")
+		Temp1 = Replace(Temp1, "<$keywords$>", "")
 	End If
-	If len(log_View("log_Description")) > 0 Then
-    Temp1 = Replace(Temp1, "<$description$>", log_View("log_Description"))
+	If not isblank(log_View("log_Description")) Then
+		Temp1 = Replace(Temp1, "<$description$>", CheckStr(replace(UnCheckStr(trim(log_View("log_Description"))),vbcrlf,""))&",")
     Else
-    Temp1 = Replace(Temp1, "<$description$>", "")
+		Temp1 = Replace(Temp1, "<$description$>", "")
 	End If
 
     If Len(log_View("log_Tag"))>0 Then
@@ -1359,15 +1364,15 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim BTemp
     BTemp = ""
     If Not preLogC.EOF Then
-        BTemp = BTemp & "<a href="""&Alias(preLogC("log_ID"))&""" title=""上一篇日志: "&preLogC("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&Alias(preLogC("log_ID"))&""" accesskey="","">"&preLogC("log_Title")&"</a><br>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> 这是最新一篇日志<br>"
     End If
 
     If Not nextLogC.EOF Then
-        BTemp = BTemp & " | <a href="""&Alias(nextLogC("log_ID"))&""" title=""下一篇日志: "&nextLogC("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&Alias(nextLogC("log_ID"))&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br>"
     Else
-        BTemp = BTemp & " | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> 这是最后一篇日志<br>"
     End If
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
