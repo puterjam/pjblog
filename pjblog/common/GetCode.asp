@@ -34,12 +34,12 @@
 		Private Graph(), Margin(3)
 		Private Sub Class_Initialize()
 			Randomize 
-			Noisy = 3 ' 干扰点出现的概率 
+			Noisy = 0 ' 干扰点出现的概率 
 			Count = 4  ' 字符数量
-			Width = 40 ' 图片宽度
+			Width = 55 ' 图片宽度
 			Height = 20 ' 图片高度
-			Angle = 2  ' 角度随机变化量
-			Offset = 15 ' 偏移随机变化量
+			Angle = 0  ' 角度随机变化量
+			Offset = 1 ' 偏移随机变化量
 			Border = 1.5 ' 边框大小
 		End Sub 
 		

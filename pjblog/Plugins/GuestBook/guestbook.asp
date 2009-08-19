@@ -74,7 +74,45 @@
                  Do Until GuestDB.eof or PageCount=bookPage
                  if replyMsg then MsgReplyContent=GuestDB("book_reply") else MsgReplyContent=""
        	       %>
-       	       <div class="comment" style="margin-bottom:20px">
+       	       <div class="comment" style="margin-bottom:20px;
+<%
+			If blog_GravatarOpen Then
+				' Gravatar 头像基本设置
+					Dim NewGravatar, GravatarImg
+					Set NewGravatar = new Gravatar
+					If not isblank(GuestDB("email")) Then
+						NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GuestDB("email"))))
+					Else
+						NewGravatar.Gravatar_EmailMd5 = ""
+					End If
+					GravatarImg = lcase(NewGravatar.outPut())
+					Set NewGravatar = nothing
+%>
+				text-align:right
+<%
+			End If
+%>
+               ">
+<%
+			If blog_GravatarOpen Then
+%>
+                <div class="commentleft Gravatar" style="float:left" id="Gravatar_<%=MsgID%>">
+<%
+				If isblank(GuestDB("email")) Then
+%>
+					<img src="images/gravatar.gif" alt="<%=GuestDB("book_Messager")%>" border="0" />
+<%                    
+				Else
+%>
+					<img src="<%=GravatarImg%>" alt="<%=GuestDB("book_Messager")%>" border="0" />
+<%
+				End If
+%>				
+				    </div><div class="commentright" style="text-align:left">
+<%                    
+			End If
+%>
+
        	         <div class="commenttop"><a name="book_<%=GuestDB("book_ID")%>"></a>
        	         <%if not GuestDB("book_HiddenReply") then%>
        	             <img src="images/icon_quote.gif" alt="公开" border="0" style="margin:0px 1px -3px 0px"/>
@@ -101,6 +139,7 @@ end if
        	         <%if (memName<>empty and stat_Admin) or (cbool(GBSet.getKeyValue("canDel")) and GuestDB("book_Messager")=memName) then%> | <a href="Plugins/<%=GBSet.GetPath%>/bookaction.asp?action=del&amp;id=<%=GuestDB("book_ID")%>" onclick="if (!confirm('确定删除该留言信息吗？')) return false "><img src="Plugins/<%=GBSet.GetPath%>/del.gif" alt="删除" border="0" style="margin-bottom:-3px"/></a><%end if%>
        	         
        	         ]</span></div>
+                 
         	      <%if (GuestDB("book_HiddenReply") and Lcase(GuestDB("book_Messager"))=Lcase(memName)) Or stat_Admin or (not GuestDB("book_HiddenReply")) then %>
             	      <div class="commentcontent"> 
                 	       <table border="0" cellspacing="0" cellpadding="0">
@@ -117,6 +156,13 @@ end if
         	      <%else%>   
             	       <div class="commentcontent"><b>该留言为隐藏留言! 只有管理员和留言者可以查看.</b></div>
         	      <%end if%>
+<%
+			If blog_GravatarOpen Then
+%>
+				</div>
+<%
+			End If
+%>
         	     </div>
        	      <%
        	        GuestDB.movenext
@@ -141,7 +187,7 @@ end if
               <%if memName=empty then%><tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="myblogemail" type="text" size="18" class="userpass" maxlength="24"/> 请填写您的邮箱.</td></tr><%end if%>
               <%if memName=empty then%><tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="myblogsiteurl" type="text" class="userpass" value="http://" size="18" maxlength="24"/> 请填写您的网址.</td></tr><%end if%>
 
-          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr>
+          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('validate');"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr>
           	  <tr><td align="right" width="70" valign="top" height="56"><strong>头　像:</strong></td>
           	  <td style="padding:2px;" align="left">
           	   <input type="hidden" name="book_face" value="face1"/>

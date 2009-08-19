@@ -941,3 +941,7 @@ function LoadInformation(nStr){
 		if ($("LoadInfo")) {document.body.removeChild($("LoadInfo"));}
 	}
 }
+
+function get_checkcode() {
+	document.getElementById("checkcode").innerHTML = '<img  id="checkcodeimg" src="common/getcode.asp?t='+Math.random()+'" alt="点击刷新验证码" style="cursor:pointer;border:0;vertical-align:middle;height:18px;" onclick="this.src=\'common/getcode.asp?t=\'+Math.random()" />'
+}

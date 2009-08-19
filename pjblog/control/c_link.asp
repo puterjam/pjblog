@@ -37,7 +37,7 @@ If Request.QueryString("Smenu") = "LinkClass" Then
                     <tr align="center">
                     	<td><input type="checkbox" name="SelectID" value="<%=ClassLinkAdo("LinkClass_ID")%>" /><input type="hidden" value="<%=ClassLinkAdo("LinkClass_ID")%>" name="LinkClass_ID" /></td>
                         <td><input type="text" value="<%=ClassLinkAdo("LinkClass_Name")%>" name="LinkClass_Name" size="30" class="text" /></td>
-                        <td><input type="text" value="<%=ClassLinkAdo("LinkClass_Title")%>" name="LinkClass_Title" size="30" class="text" /></td>
+                        <td><input name="LinkClass_Title" type="text" class="text" value="<%=ClassLinkAdo("LinkClass_Title")%>" size="30" maxlength="255" /></td>
                         <td><input type="text" value="<%=ClassLinkAdo("LinkClass_Order")%>" name="LinkClass_Order" size="2" class="text" /></td>
                     </tr>
                     <%

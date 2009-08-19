@@ -327,7 +327,7 @@ ElseIf Request.Form("action") = "Categories" Then
             weblog.Open SQL, Conn, 1, 3
             weblog("cate_Name") = CheckStr(LCate_Name(i))
 			If blog_postFile = 2 Then
-			weblog("Cate_Part") = CheckStr(LCate_Part(i))
+			weblog("Cate_Part") = left(FilterHtmlTags(CheckStr(LCate_Part(i))),50)
 			end if
             weblog("cate_icon") = CheckStr(LCate_icons(i))
             weblog("Cate_Intro") = CheckStr(LCate_Intro(i))
@@ -347,7 +347,7 @@ ElseIf Request.Form("action") = "Categories" Then
         '判断添加新日志
         NCate_Name = Trim(CheckStr(Request.Form("New_Cate_Name")))
 		If blog_postFile = 2 Then
-		Ncate_Part = Trim(CheckStr(Request.Form("New_Cate_Part")))
+		Ncate_Part = left(FilterHtmlTags(Trim(CheckStr(Request.Form("New_Cate_Part")))),50)
 		end if
         NCate_icons = CheckStr(Request.Form("New_Cate_icons"))
         NCate_Intro = Trim(CheckStr(Request.Form("New_Cate_Intro")))
@@ -850,15 +850,17 @@ ElseIf Request.Form("action") = "smilies" Then
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(KeyWordID) + 1)&"关键字被删除!"
             RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
         Else
+            Dim key_Image
             KeyWordID = Split(Request.Form("KeyWordID"), ", ")
             KeyWord = Split(Request.Form("KeyWord"), ", ")
             KeyWordURL = Split(Request.Form("KeyWordURL"), ", ")
+            key_Image = Split(Request.Form("key_Image"), ", ")
             For i = 0 To UBound(KeyWordID)
                 If Int(KeyWordID(i))<> -1 Then
-                    conn.Execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"' where key_ID="&KeyWordID(i))
+                    conn.Execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"',key_Image='"&CheckStr(key_Image(i))&"' where key_ID="&KeyWordID(i))
                 Else
                     If Len(Trim(CheckStr(KeyWord(i))))>0 Then
-                        conn.Execute("insert into blog_Keywords (key_Text,key_URL) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"')")
+                        conn.Execute("insert into blog_Keywords (key_Text,key_URL,key_Image) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"','"&CheckStr(key_Image(i))&"')")
                         session(CookieName&"_MsgText") = "新关键字添加成功! "
                     End If
                 End If

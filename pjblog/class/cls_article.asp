@@ -287,27 +287,47 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
      		ShowComm = ShowComm&"<div class=""comment"" "
 			
 			If blog_GravatarOpen Then
-			ShowComm = ShowComm&"style=""text-align:right"" "
+				ShowComm = ShowComm&"style=""text-align:right"" "
 			End If
 			
 			ShowComm = ShowComm&">"
 			
 			If blog_GravatarOpen Then
-				ShowComm = ShowComm&"<div class=""commentleft Gravatar"" style=""float:left"" id=""Gravatar_"&blog_CommID&"""><a href="""&commArr(12, Pcount)&""" target=""_blank""><img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" /></a></div><div class=""commentright"" style=""text-align:left"">"
+				ShowComm = ShowComm&"<div class=""commentleft Gravatar"" style=""float:left"" id=""Gravatar_"&blog_CommID&""">"
+'				If isblank(commArr(12, Pcount)) or isblank(commArr(11, Pcount)) Then
+'					ShowComm = ShowComm&"<img src=""images/gravatar.gif"" alt="""&blog_CommAuthor&""" border=""0"" />"
+'				Else
+'					ShowComm = ShowComm&"<a href="""&commArr(12, Pcount)&""" target=""_blank""><img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" /></a>"
+'				End If
+				If isblank(commArr(11, Pcount)) Then
+					ShowComm = ShowComm&"<img src=""images/gravatar.gif"" alt="""&blog_CommAuthor&""" border=""0"" />"
+				Else
+					ShowComm = ShowComm&"<img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" />"
+				End If
+				ShowComm = ShowComm&"</div><div class=""commentright"" style=""text-align:left"">"
 			End If
 			
 			pjblogCommentEmail = commArr(11, Pcount)
 			pjblogCommentWebSite = commArr(12, Pcount)
 			
-			if len(pjblogCommentEmail) = 0 then pjblogCommentEmail = "javascript:void(0)" else pjblogCommentEmail = "mailto:" & pjblogCommentEmail
-			if len(pjblogCommentWebSite) = 0 then pjblogCommentWebSite = "javascript:void(0)"
-			if len(pjblogCommentEmail) = 0 then pjblogCommentEmailImg = "images/noCommentEmail.gif" else pjblogCommentEmailImg = "images/CommentEmail.gif"
-			if len(pjblogCommentWebSite) = 0 then pjblogCommentWebSiteImg = "images/nositeurl.gif" else pjblogCommentWebSiteImg = "images/siteurl.gif"
+			If IsBlank(pjblogCommentEmail) Then 
+				pjblogCommentEmail = "javascript:void(0)" 
+				pjblogCommentEmailImg = "images/noCommentEmail.gif" 
+			Else 
+				pjblogCommentEmail = "mailto:" & pjblogCommentEmail
+				pjblogCommentEmailImg = "images/CommentEmail.gif"
+			End If
+			If IsBlank(pjblogCommentWebSite) Then 
+				pjblogCommentWebSite = "javascript:void(0)"
+				pjblogCommentWebSiteImg = "images/nositeurl.gif" 
+			Else 
+				pjblogCommentWebSiteImg = "images/siteurl.gif"
+			End If
 			
 			ShowComm = ShowComm&"<div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
-     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | <a href="""&pjblogCommentEmail&"""><img src="""&pjblogCommentEmailImg&""" border=""0""></a> | <a href="""&pjblogCommentWebSite&"""><img src="""&pjblogCommentWebSiteImg&""" border=""0""></a><span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
+     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | <a href="""&pjblogCommentEmail&"""><img src="""&pjblogCommentEmailImg&""" border=""0""></a> | <a href="""&pjblogCommentWebSite&""" target=""_blank""><img src="""&pjblogCommentWebSiteImg&""" border=""0""></a><span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
 			'' 评论审核按钮部分
 			If blog_AuditOpen Then
 				'If stat_Admin Then
@@ -461,7 +481,8 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 				Response.write (UBBeditorCore("Message"))
 				%>
 			  </td></tr>
-			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onfocus="this.select()"/> <%=getcode()%></td></tr><%end if%>
+			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70">
+              <strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('validate');"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr><%end if%>
 			  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
 		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
 		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
