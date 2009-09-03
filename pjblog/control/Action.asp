@@ -2,7 +2,7 @@
 '==========================后台信息处理===============================
 
 Sub doAction
-    Dim weblog
+    Dim weblog, WebFso
     Set weblog = Server.CreateObject("ADODB.RecordSet")
     '==========================基本信息处理===============================
     If Request.Form("action") = "General" Then
@@ -263,12 +263,24 @@ ElseIf Request.Form("action") = "Categories" Then
         Cate_source_name = conn.Execute("select cate_Part from blog_Category where cate_ID="&Cate_source)(0)
         Cate_source_count = conn.Execute("select cate_count from blog_Category where cate_ID="&Cate_source)(0)
         Cate_target_name = conn.Execute("select cate_Part from blog_Category where cate_ID="&Cate_target)(0)
-		'批量移动开始
+		' ***********************************
+		'	批量移动开始
+		' ***********************************
 		If blog_postFile = 2 Then
-		moveall ".\article\"&Cate_source_name,".\article\"&Cate_target_name
-		DeleteFile(Cate_source_name)
+			Set WebFso = New cls_FSO
+				Dim ArticlesID, Articlei, ArticleSplit
+				ArticlesID = WebFso.FileItem("article/" & Cate_source_name & "/")
+				ArticleSplit = Split(ArticlesID, "|")
+				If Int(ArticleSplit(0)) > 0 Then
+					For Articlei = 1 To UBound(ArticleSplit)
+						WebFso.MoveFile "article/" & Cate_source_name & "/" & ArticleSplit(Articlei), "article/" & Cate_target_name & "/" & ArticleSplit(Articlei)
+					Next
+				End If
+			Set WebFso = Nothing
 		end if
-		'批量移动结束
+		' ***********************************
+		'	批量移动结束
+		' ***********************************
         conn.Execute ("update blog_Content set log_CateID="&Cate_target&" where log_CateID="&Cate_source)
         conn.Execute ("update blog_Category set cate_count=0 where cate_ID="&Cate_source)
         conn.Execute ("update blog_Category set cate_count=cate_count+"&Cate_source_count&" where cate_ID="&Cate_target)
@@ -297,38 +309,41 @@ ElseIf Request.Form("action") = "Categories" Then
         LCate_local = Split(Request.Form("Cate_local"), ", ")
         Lcate_Secret = Split(Request.Form("cate_Secret"), ", ")
         For i = 0 To UBound(LCate_Name)
-		    'evio
+		' ***********************************
+		'	判断是否改变了文件夹名 开始
+		' ***********************************
 			If blog_postFile = 2 Then
-		    if LOldCate_Name(i)="" and LCate_Part(i)<>"" then
-			   createfolder("article/"&LCate_Part(i))
-			   dim changDB,ChangID,vc,vb,vn
-			   ChangID = LCate_ID(i)
-			   set changDB = conn.execute("select * from blog_Content where log_CateID="&ChangID)
-			       if changDB.bof or changDB.eof then
-		           else
-		              do while not changDB.eof
-		              vc = Alias(changDB("log_ID"))
-	                  vb = replace(Alias(changDB("log_ID")),"article/","")
-		              vn = "article/"&LCate_Part(i)&"/"&vb
-                      moveone vc,vn
-		              DeleteFiles Server.MapPath(vc)
-	                  changDB.movenext
-	                  loop
-		           end if
-			   set changDB = nothing
-			elseif LOldCate_Name(i)<>"" and LCate_Part(i)<>LOldCate_Name(i) then
-		    ChangeFolderName LOldCate_Name(i),LCate_Part(i)
-			session(CookieName&"_MsgText") = "请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件。 "
-			else
-		    end if
-			end if
-		    'evio
+				Set WebFso = New cls_FSO
+				If LCate_Part(i) <> LOldCate_Name(i) Then
+					If LOldCate_Name(i) = "" Then
+						WebFso.CreateFolder("article/" & LCate_Part(i) & "/")
+						Dim ChangDb, dbDress, NewDress
+						Set ChangDb = Conn.Execute("Select * From blog_Content where log_CateID=" & LCate_ID(i))
+						If Not (ChangDb.Bof And ChangDb.Eof) Then
+							Do While Not ChangDb.Eof
+								dbDress = Alias(ChangDb("log_ID"))
+								NewDress = "article/" & LCate_Part(i) & "/" & Replace(dbDress, "article/", "")
+								WebFso.MoveFile dbDress, NewDress
+							ChangDb.MoveNext
+							Loop
+						End If
+						Set ChangDb = Nothing
+					Else
+						WebFso.FolderRename "article/" & LOldCate_Name(i), LCate_Part(i)
+					End If
+				End If
+				Set WebFso = Nothing
+				Session(CookieName&"_MsgText") = "请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件。 "
+			End if
+		    ' ***********************************
+			'	判断是否改变了文件夹名 结束
+			' ***********************************
             SQL = "SELECT * FROM blog_Category where cate_ID="&Int(CheckStr(LCate_ID(i)))
             weblog.Open SQL, Conn, 1, 3
             weblog("cate_Name") = CheckStr(LCate_Name(i))
 			If blog_postFile = 2 Then
-			weblog("Cate_Part") = left(FilterHtmlTags(CheckStr(LCate_Part(i))),50)
-			end if
+				weblog("Cate_Part") = left(FilterHtmlTags(CheckStr(LCate_Part(i))),50)
+			End if
             weblog("cate_icon") = CheckStr(LCate_icons(i))
             weblog("Cate_Intro") = CheckStr(LCate_Intro(i))
             If Len(Trim(Lcate_URL(i)))>1 And Int(Lcate_count(i))<1 Then
@@ -347,7 +362,7 @@ ElseIf Request.Form("action") = "Categories" Then
         '判断添加新日志
         NCate_Name = Trim(CheckStr(Request.Form("New_Cate_Name")))
 		If blog_postFile = 2 Then
-		Ncate_Part = left(FilterHtmlTags(Trim(CheckStr(Request.Form("New_Cate_Part")))),50)
+			Ncate_Part = left(FilterHtmlTags(Trim(CheckStr(Request.Form("New_Cate_Part")))),50)
 		end if
         NCate_icons = CheckStr(Request.Form("New_Cate_icons"))
         NCate_Intro = Trim(CheckStr(Request.Form("New_Cate_Intro")))
@@ -367,9 +382,11 @@ ElseIf Request.Form("action") = "Categories" Then
             If DBQuest("blog_Category", AddCateArray, "insert") = 0 Then session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"新日志分类添加成功，"
 			if Ncate_URL="" or Ncate_URL=empty or len(Ncate_URL)=0 then
 			If blog_postFile = 2 Then
-			createfolder("article/"&Ncate_Part)
-			end if
-			end if
+				Set WebFso = New cls_FSO
+					WebFso.CreateFolder("article/" & Ncate_Part & "/")
+				Set WebFso = Nothing
+			End if
+			End if
         End If
         FreeMemory
         session(CookieName&"_ShowMsg") = True
@@ -399,7 +416,8 @@ ElseIf Request.Form("action") = "Categories" Then
         P1 = 0
         p2 = 0
         DelCate = Request.Form("DelCate")
-        Set DelLog = Conn.Execute("select log_ID FROM blog_Content WHERE log_CateID="&DelCate)
+		Set WebFso = New cls_FSO
+        Set DelLog = Conn.Execute("select log_ID FROM blog_Content WHERE log_CateID=" & DelCate)
         Do While Not DelLog.EOF
             DelID = DelLog("log_ID")
             If DeleteLog(DelID) = 1 Then
@@ -410,12 +428,14 @@ ElseIf Request.Form("action") = "Categories" Then
             DelLog.movenext
         Loop
 		If blog_postFile = 2 Then
-			dim us : us = conn.execute("select cate_URL from blog_Category where cate_ID="&DelCate)(0)
+			Dim us : us = conn.execute("select cate_URL from blog_Category where cate_ID="&DelCate)(0)
 			if (len(us) = 0) or (us = "") or (us = empty) or (us = null) then
-				DeleteFolder conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0)
+				Dim uPa : uPa = Conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0)
+				If Len(uPa) > 0 Then WebFso.DeleteFolder "article/" & Conn.execute("select cate_Part from blog_Category where cate_ID="&DelCate)(0), True
 			end if
-		end if
+		End if
         Conn.Execute("DELETE * FROM blog_Category WHERE cate_ID="&DelCate)
+		Set WebFso = Nothing
         FreeMemory
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"日志分类删除成功! 日志删除状态:"&P1&"篇成功,"&P2&"篇失败! 批量删除后，请到 <a href=""ConContent.asp?Fmenu=General&Smenu=Misc"" style=""color:#00f"">站点基本设置-初始化数据</a> ,重新生成所有日志到文件"
