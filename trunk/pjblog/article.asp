@@ -55,7 +55,6 @@ End If
 getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(24, 0), log_ViewArr(25, 0)
 tKey = getTempKey
 %>
-	<script type="text/javascript">var g_logID="<%=id%>"</script>
  <!--内容-->
   <div id="Tbody">
   <div id="mainContent">

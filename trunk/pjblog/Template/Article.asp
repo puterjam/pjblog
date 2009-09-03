@@ -15,7 +15,6 @@
 				</div>
 				<div id="logPanel" class="Content-body">
 					<$ArticleContent$>
-                    <div id="qlwz-digg"></div><script type="text/javascript">digg();</script>
 					<br/><br/>
 				</div>
 				<div class="Content-body">
