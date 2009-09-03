@@ -13,37 +13,27 @@ Sub c_article
 	    <tr>
 		    <td align="center" bgcolor="#FFFFFF" height="48">
 		    <%
-		        Dim Log_Dele, Log_source_ID, fso, logTag
-		        If Request.form("moveto")=1 Then
-		            Log_Dele=split(Request.form("Log_Dele"),", ")
-		            for i=0 to ubound(Log_Dele)
-					If blog_postFile = 2 Then
-					dim mph,tname,thtml,ttype
-					mph=Alias(Log_Dele(i))	
-					tname=conn.execute("select log_cname from blog_Content where log_ID="&Log_Dele(i))(0)
-					if tname="" or tname=empty or tname=null or  len(tname)=0 then
-					tname=trim(year(now())&"-"&month(now())&"-"&day(now())&"-"&Log_Dele(i))
-					else
-					tname=tname
-					end if
-					ttype=conn.execute("select log_ctype from blog_Content where log_ID="&Log_Dele(i))(0)
-					if ttype="0" then
-					thtml="htm"
-					else
-					thtml="html"
-					end if
-					dim cpart
-					if conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)="" or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=empty or conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)=null or len(conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0))=0 then
-					cpart = ""
-					else
-					cpart = conn.execute("select cate_Part from blog_Category where cate_ID="&request.form("source"))(0)&"/"
-					end if
-					moveone mph,"article/"&cpart&tname&"."&thtml
-					end if
-					
-		                Log_source_ID=conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
-		                conn.execute ("update blog_Content set log_CateID="&Request.form("source")&" where log_ID="&Log_Dele(i))
-		                conn.execute ("update blog_Category set cate_count=cate_count+1 where cate_ID="&Request.form("source"))
+		        Dim Log_Dele, Log_source_ID, fso, logTag, WebFso
+		        If Request.form("moveto") = 1 Then
+		            Log_Dele = Split(Request.form("Log_Dele"),", ")
+		            For i = 0 To UBound(Log_Dele)
+						If blog_postFile = 2 Then
+							Dim p_targFolder, p_file, p_filename
+							p_targFolder = Conn.Execute("Select cate_Part From blog_Category Where cate_ID=" & CheckStr(Request.form("source")))(0)
+							p_file = Alias(Log_Dele(i))
+							p_file = Replace(p_file, "\", "/")
+							p_filename = Split(p_file, "/")(Ubound(Split(p_file, "/")))
+							Set WebFso = New cls_FSO
+							If Len(p_targFolder) = 0 Then
+								WebFso.MoveFile Alias(Log_Dele(i)), "article/" & p_filename
+							Else
+								WebFso.MoveFile Alias(Log_Dele(i)), "article/" & p_targFolder & "/" & p_filename
+							End If
+							Set WebFso = Nothing
+						End if
+		                Log_source_ID = conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
+		                conn.execute ("update blog_Content set log_CateID="&CheckStr(Request.form("source"))&" where log_ID="&Log_Dele(i))
+		                conn.execute ("update blog_Category set cate_count=cate_count+1 where cate_ID="&CheckStr(Request.form("source")))
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 						PostArticle Log_Dele(i), False
 		            next
@@ -54,19 +44,21 @@ Sub c_article
 		        Else
 		            Log_Dele=split(Request.form("Log_Dele"),", ")
 		            Set fso = CreateObject("Scripting.FileSystemObject")
+					Set WebFso = New cls_FSO
 		            for i=0 to ubound(Log_Dele)
 		                Log_source_ID = conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
 						logTag = conn.execute("select log_Tag from blog_Content where log_ID="&Log_Dele(i))(0)
 						if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
-		                    fso.DeleteFile(server.MapPath(Alias(Log_Dele(i))))
-							fso.DeleteFile(server.MapPath(".\cache/"&Log_Dele(i)&".asp"))
+		                    WebFso.DeleteFile(Alias(Log_Dele(i)))
+							WebFso.DeleteFile("cache/"&Log_Dele(i)&".asp")
 		                end if
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 						conn.execute ("update blog_Info set blog_LogNums=blog_LogNums-1 where blog_ID=1")
 		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
 		                autoDeleteTag logTag
 		            next
-		             session(CookieName&"_ShowMsg") = True
+					Set WebFso = Nothing
+		            session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志删除成功！"
 			        FreeMemory
 					Session(CookieName&"_LastDo")="DelArticle"

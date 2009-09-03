@@ -29,7 +29,7 @@ Else
       <frame src="ConMenu.asp" name="Menu">
        <frame src="ConContent.asp" name="MainContent" scrolling="yes" noresize>
      </frameset>
-    </frameset>
+    </frameset><noframes></noframes>
     <%
 Else
 

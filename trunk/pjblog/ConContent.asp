@@ -8,6 +8,7 @@
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
+<!--#include file="class/cls_fso.asp" -->
 <!--#include file="FCKeditor/fckeditor.asp" -->
 <%
 '***************PJblog3 后台管理页面*******************

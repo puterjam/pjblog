@@ -652,50 +652,52 @@ End Sub
 '====================删除日志方法======================
 
 Function DeleteLog(LogID)
-    Dim logDB, comCount, post_CateID, maph
-    Set logDB = conn.Execute("select log_IsDraft,log_CateID from blog_content where log_ID="&LogID)
-	maph=Alias(LogID)
-    If logDB.EOF And logDB.bof Then
+    Dim logDB, comCount, post_CateID, maph, LogDelfso
+    Set logDB = conn.Execute("select log_IsDraft, log_CateID, log_tag from blog_content where log_ID=" & LogID)
+	maph = Alias(LogID)
+    If logDB.EOF Or logDB.bof Then
         DeleteLog = 0
     Else
         comCount = Conn.Execute("select count(blog_ID) FROM blog_Comment WHERE blog_ID="&LogID)(0)
-        response.Write comCount&"<br/>"
         Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums-"&comCount)
         If logDB("log_IsDraft") = False Then
             Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums-1")
             Conn.Execute("UPDATE blog_Category SET cate_count=cate_count-1 where cate_ID="&logDB("log_CateID"))
         End If
-        Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&LogID)
-        Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&LogID)
-		AutoDeleteTag logDB("log_tag")
-        DeleteFiles Server.MapPath("post/"&LogID&".asp")
-        DeleteFiles Server.MapPath(maph)
-        DeleteLog = 1
+		AutoDeleteTag logDB("log_tag").value
+        Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID=" & LogID)
+        Conn.Execute("DELETE * FROM blog_Content WHERE log_ID=" & LogID)
+		Set LogDelfso = New cls_FSO
+			If LogDelfso.DeleteFile("cache/" & LogID & ".asp") And LogDelfso.DeleteFile(maph) Then DeleteLog = 1 Else DeleteLog = 0
+		Set LogDelfso = Nothing
     End If
+	Set logDB = Nothing
 End Function
 
 Function AutoDeleteTag(tags)
+	If Len(tags) = 0 Then Exit Function
 	dim Reg, Gomatch, Match, TagId, TagRs
 	set Reg = new RegExp
-	With Reg
-		.Global = True
-    	.IgnoreCase = True
-    	.MultiLine = True
-    	.Pattern = "\{(\d+?)\}"
-    Set Gomatch = .Execute(tags)
-    For Each Match In Gomatch
-		TagId = Match.submatches(0)
-		If IsNumeric(TagId) then
-			Set TagRs = Server.CreateObject("Adodb.RecordSet")
-			TagRs.Open "Select * From blog_tag where tag_id=" & TagId, Conn, 1, 3
-				If Not (TagRs.Eof And TagRs.Bof) Then TagRs("tag_count") = TagRs("tag_count") - 1
-				If TagRs("tag_count") = 0 Then TagRs.Delete
-				TagRs.UpDate
-			TagRs.Close
-			Set TagRs=nothing
-		End if
-    Next
-	End With
+	Reg.Global = True
+	Reg.IgnoreCase = True
+	Reg.MultiLine = True
+	Reg.Pattern = "\{(\d+?)\}"
+    Set Gomatch = Reg.Execute(tags)
+	If Gomatch.count > 0 Then
+		For Each Match In Gomatch
+			TagId = Match.submatches(0)
+			If IsNumeric(TagId) then
+				Set TagRs = Server.CreateObject("Adodb.RecordSet")
+				TagRs.Open "Select * From blog_tag where tag_id=" & TagId, Conn, 1, 3
+					If Not (TagRs.Eof And TagRs.Bof) Then TagRs("tag_count") = TagRs("tag_count") - 1
+					If TagRs("tag_count") = 0 Then TagRs.Delete
+					TagRs.UpDate
+				TagRs.Close
+				Set TagRs=nothing
+			End if
+		Next
+	End If
+	Set Gomatch = Nothing
 	set Reg = nothing
 End Function
 
