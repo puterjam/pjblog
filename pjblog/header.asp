@@ -103,11 +103,8 @@ End If
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/link.css" type="text/css" media="all" /><!--超链接样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/UBB/editor.css" type="text/css" media="all" /><!--UBB编辑器代码-->
 	<link rel="stylesheet" rev="stylesheet" href="FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" /><!--FCK块引用&代码样式-->
-    <link rel="stylesheet" href="skins/<%=Skins%>/digg.css" type="text/css"/><!--DIGG样式表-->
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<Script type="text/javascript" src="common/jquery.js"></script>
-    <Script type="text/javascript" src="common/digg.js"></script>
 	<script type="text/javascript" src="common/common.js"></script>
 	<script type="text/javascript" src="common/ajax.js"></script>
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>

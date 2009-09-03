@@ -161,7 +161,6 @@ Set nextLog = Nothing
 							Else
 							    response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
 							End If
-							response.write "<div id=""qlwz-digg""></div><script type=""text/javascript"">digg();</script>"
 						Else
 						%>
 						<div>
