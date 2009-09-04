@@ -973,3 +973,12 @@ function LoadInformation(nStr){
 function get_checkcode() {
 	document.getElementById("checkcode").innerHTML = '<img  id="checkcodeimg" src="common/getcode.asp?t='+Math.random()+'" alt="点击刷新验证码" style="cursor:pointer;border:0;vertical-align:middle;height:18px;" onclick="this.src=\'common/getcode.asp?t=\'+Math.random()" />'
 }
+
+function getAlias(){
+	var ccate;
+	var cname = document.forms['frm'].cname.value;
+	var ctype = document.forms['frm'].ctype.options[document.forms['frm'].ctype.options.selectedIndex].value;
+	var first = document.forms['frm'].FirstPost.value;
+	if (first == 1){ccate = document.forms['frm'].log_CateID.options[document.forms['frm'].log_CateID.options.selectedIndex].value;}else{ccate = $('log_CateID').value;}
+	CheckAlias(cname, ctype, ccate);
+}

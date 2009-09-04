@@ -10,7 +10,7 @@ Dim blog_VisitNums, blogBookPage, blog_MessageNums, blogcommpage, blogaffiche
 Dim blogabout, blogcolsize, blog_colNums, blog_TbCount, blog_showtotal, blog_commTimerout
 Dim blog_commUBB, blog_commImg, blog_version, blog_UpdateDate, blog_DefaultSkin, blog_SkinName, blog_SplitType
 Dim blog_ImgLink, blog_postFile, blog_postCalendar, log_SplitType, blog_introChar, blog_introLine
-Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime, blog_PasswordProtection, blog_AuditOpen, blog_GravatarOpen
+Dim blog_validate, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_Title, blog_KeyWords, blog_Description, blog_SaveTime, blog_PasswordProtection, blog_AuditOpen, blog_GravatarOpen, blog_html
 Dim blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum
 Dim blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_currentCategoryID
 Dim memoryCache, blog_UpLoadSet
@@ -37,7 +37,7 @@ Sub getInfo(ByVal action)
               "blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
 			  "blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords,blog_Description," & _
 			  "blog_SaveTime,blog_UpLoadSet,blog_PasswordProtection,blog_AuditOpen,blog_GravatarOpen," & _
-			  "blog_smtp,blog_smtpuser,blog_smtppassword,blog_jmail,blog_smtpmail,blog_Isjmail,blog_reply_Isjmail" & _
+			  "blog_smtp,blog_smtpuser,blog_smtppassword,blog_jmail,blog_smtpmail,blog_Isjmail,blog_reply_Isjmail,blog_html" & _
               " from blog_Info"
         Set log_Infos = Conn.Execute(SQL)
         SQLQueryNums = SQLQueryNums + 1
@@ -113,6 +113,7 @@ Sub getInfo(ByVal action)
         blog_smtpmail=trim(blog_Infos(56, 0))'发送邮箱
         blog_Isjmail=blog_Infos(57, 0)'是否邮件通知
 		blog_reply_Isjmail=blog_Infos(58, 0)'回复是否邮件通知
+		blog_html = blog_Infos(59, 0)'文章后缀列表
     End If
 End Sub
 

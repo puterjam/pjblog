@@ -202,7 +202,7 @@ Sub outCate
 End Sub
 
 %>
-         </select>&nbsp;<a href="javascript:void(0)" onclick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
+         </select>&nbsp;<a href="javascript:void(0)" onClick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
    	</td>
              </tr>
              <!--edit by evio-->
@@ -215,12 +215,21 @@ End Sub
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onBlur="check('Action.asp?action=checkAlias&cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onBlur="getAlias()" style="ime-mode:disabled"/>
 			   <span> . </span>
-			  <select name="ctype">
-			    <option value="0" <%if cdb("log_ctype")=0 then%>selected="selected" <%end if%>>htm</option> 
-				<option value="1" <%if cdb("log_ctype")=1 then%>selected="selected" <%end if%>>html</option>
-			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
+			  <select name="ctype" onBlur="getAlias()">
+              <%
+			  		Dim blog_html_option, blog_html_option_i
+					blog_html_option = Split(blog_html, ",")
+					For blog_html_option_i = 0 To Ubound(blog_html_option)
+						If cdb("log_ctype") = blog_html_option(blog_html_option_i) Then
+							Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """ selected=""selected"">" & blog_html_option(blog_html_option_i) & "</option>")
+						Else
+							Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """>" & blog_html_option(blog_html_option_i) & "</option>")
+						End If
+					Next
+			  %>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
               </td>
             </tr>
 			<input name="oldcname" type="hidden" value="<%=cdb("log_cname")%>">
@@ -271,7 +280,7 @@ End Sub
 				    <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" <%if not lArticle.logIsShow Then response.write ("checked=""checked""")%>/>
 	        设置日志隐私</label>
 	 				<label for="Meta">
-				    <input id="Meta" name="log_Meta" type="checkbox" value="1" onclick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'"  <%if lArticle.logMeta Then response.write ("checked=""checked""")%>/>
+				    <input id="Meta" name="log_Meta" type="checkbox" value="1" onClick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'"  <%if lArticle.logMeta Then response.write ("checked=""checked""")%>/>
 	        自定义日志页Meta信息</label></div>
 	                  <div id="Div_Password"  class="tips_body" <%if lArticle.logIsShow Then response.write("style=""display:none;""")%>>
                           <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
@@ -309,7 +318,7 @@ End Sub
                  <%if lArticle.logIsDraft Then%>
 	                  <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/>当前时间</label> 
 	                  <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" />自定义日期:</label>
-	                  <input onfocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(lArticle.logPubTime,"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
+	                  <input onFocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(lArticle.logPubTime,"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
                  <%else%>
 	                  <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" checked/>自定义日期:</label>
 	                  <input name="PubTime" type="text" value="<%=DateToStr(lArticle.logPubTime,"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
@@ -362,7 +371,7 @@ End If
                  <input name="log_DisKey" type="checkbox" id="label7" value="1" <%if lArticle.logDisableKeyWord=0 Then response.write ("checked")%>/>
    禁止自动转换关键字</label>
   <%else%>
-                 <strong>[&nbsp;&nbsp;<a herf="#" onclick="GetLength();" style="cursor:pointer">统计字数</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onclick="SetContents();" style="cursor:pointer">清空内容</a>&nbsp;&nbsp;]</strong>
+                 <strong>[&nbsp;&nbsp;<a herf="#" onClick="GetLength();" style="cursor:pointer">统计字数</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onClick="SetContents();" style="cursor:pointer">清空内容</a>&nbsp;&nbsp;]</strong>
   <%end if%></td></tr>
              <%
 Dim UseIntro

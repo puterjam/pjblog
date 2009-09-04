@@ -1,7 +1,25 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
 var GetFile = ["Action.asp?action="];
-var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&", "GetHttpURL&"];
+var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&", "GetHttpURL&", "checkAlias&"];
+
+// 日志别名检测
+function CheckAlias(cname, ctype, cateid){
+	var TempStr;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[0] + GetAction[12] + "Cname=" + escape(cname) + "&Ctype=" + escape(ctype) + "&cateid=" + escape(cateid) +"&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText.json();
+				 if ( TempStr.suc){
+					$("CheckAlias").innerHTML = TempStr.info;
+				 }else{
+					 $("CheckAlias").innerHTML = TempStr.info;
+					 $("titles").value = "";
+				 }
+			 }
+	 );
+}
 
 // 关于 [Hidden] 标签的修复代码
 function Hidden(i){

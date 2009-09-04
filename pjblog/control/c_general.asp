@@ -446,6 +446,7 @@ Sub c_ceneral
 		    <legend> 日志保存设置</legend>
 		    <div align="left">
 		      <table border="0" cellpadding="2" cellspacing="1">
+              <tr><td width="180" align="right" valign="top" style="padding-top:8px">日志后缀列表</td><td><input type="text" name="blog_html" value="<%=blog_html%>" class="text" style=" width:300px;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">自定义静态日志后缀列表<sup style="font-size:10px; color:#ff0000"><i>new</i></sup></span></td></tr>
 		 	  <tr><td width="180" align="right" valign="top" style="padding-top:8px">日志输出模式</td><td>
 		 	   
 		 	   <label for="p1" >
