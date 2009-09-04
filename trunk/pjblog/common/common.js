@@ -1,6 +1,34 @@
 //PBlog2 公用JS代码
 //Author:PuterJam
 
+/***************************************
+	重定义一些函数
+****************************************/
+  String.prototype.utf8 = function(){  
+	  return encodeURIComponent(this.toString());
+  }
+  
+  String.prototype.GB =function(){
+	  return decodeURIComponent(this.toString()).replace(/\+/g," ");
+  }
+  
+  String.prototype.reg = function(r){
+	  return r.test(this.toString());
+  };
+  
+  String.prototype.toNum = function(){
+	  return parseInt(this.toString());
+  };
+  
+  String.prototype.trim = function(){
+	  return this.toString().replace(/^(\s+)|(\s+)$/,"");
+  };
+  
+  String.prototype.json = function(){
+	  try{eval("var jsonStr = (" + this.toString() + ")");}catch(ex){var jsonStr = null;}
+	  return jsonStr;
+  };
+  
 //复制提交内容
 function CopyAll(A)
 {

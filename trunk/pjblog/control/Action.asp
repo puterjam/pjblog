@@ -1029,11 +1029,10 @@ Case "cancelIndex":
     End If
     '==========================附件管理===============================
 ElseIf Request.Form("action") = "Attachments" Then
-    '-------------------------------删除模块------------------------------
+    '-------------------------------删除附件------------------------------
     If Request.Form("whatdo") = "DelFiles" Then
         Dim getFolders, getFiles, GetFolder, GetFile, getFolderCount, getFileCount
-        Dim FSODel
-        Set FSODel = Server.CreateObject("Scripting.FileSystemObject")
+		Set WebFso = New cls_FSO
         getFolders = Split(Request.Form("folders"), ", ")
         getFiles = Split(Request.Form("Files"), ", ")
         getFolderCount = 0
@@ -1044,17 +1043,16 @@ ElseIf Request.Form("action") = "Attachments" Then
                 session(CookieName&"_MsgText") = "<span style=""color:#900"">“"&GetFolder&"”</span> 文件夹内含有文件，无法删除!"
                 RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")
             End If
-            If FSODel.FolderExists(Server.MapPath(GetFolder)) Then
-                FSODel.DeleteFolder Server.MapPath(GetFolder), True
+            If WebFso.DeleteFolder(GetFolder) Then
                 getFolderCount = getFolderCount + 1
             End If
         Next
         For Each GetFile in getFiles
-            If FSODel.FileExists(Server.MapPath(GetFile)) Then
-                FSODel.DeleteFile Server.MapPath(GetFile), True
+            If WebFso.DeleteFile(GetFile) Then
                 getFileCount = getFileCount + 1
             End If
         Next
+		Set WebFso = Nothing
         session(CookieName&"_ShowMsg") = True
         session(CookieName&"_MsgText") = "有 <span style=""color:#900"">"&getFileCount&" 文件, "&getFolderCount&" 个文件夹</span> 被删除!"
         RedirectUrl("ConContent.asp?Fmenu=SQLFile&Smenu=Attachments")

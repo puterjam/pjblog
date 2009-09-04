@@ -1820,7 +1820,13 @@ End Function
 	function UnEscape(str){
 		return unescape(str);
 	}
-	
+
+	function transHtml(html){
+		html = html.replace(/[\n\r]/g,"");
+		html = html.replace(/\\/g,"\\\\");
+		html = html.replace(/\'/g,"\\'");
+		return html;
+	}
 //*************************************
 //翻页函数，改成js
 //*************************************

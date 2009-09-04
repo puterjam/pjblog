@@ -93,18 +93,19 @@ function goTime(i){
         e_event = setTimeout("goTime("+i+");",1000);    
     }else{    
         PostSave();   
-		try{
-        	e_event = setTimeout('goTime('+(time+1)+')',3000); 
-		}catch(e){
-			if (e.description.length > 0){
-				e_event = setTimeout('goTime('+(time+1)+')',3000);
-			}
-		}
+//		try{
+//        	e_event = setTimeout('goTime('+(time+1)+')',3000); 
+//		}catch(e){
+//			if (e.description.length > 0){
+//				e_event = setTimeout('goTime('+(time+1)+')',3000);
+//			}
+//		}
     }    
 }    
    
 //发表时的保存    
-function PostSave(){    
+function PostSave(){
+	clearTimeout(e_event);
     var TempStr, left, right, ToWhere, postId;    
     var ajax = new AJAXRequest;    
     //var str = ReadCode();  	
@@ -121,15 +122,16 @@ function PostSave(){
              GetFile[0] + ToWhere + "TimeStamp=" + new Date().getTime(),
 			 ReadCode(),
              function(obj) {    
-                 TempStr = obj.responseText;    
-                 left = TempStr.split("|$|")[0];    
-                 right = TempStr.split("|$|")[1];    
-                 postId = TempStr.split("|$|")[2];    
+                 TempStr = obj.responseText.json();
+                 left = TempStr.info;    
+                 right = TempStr.right;    
+                 postId = TempStr.id;    
                  $("AjaxTimeSave").innerHTML = left;    
                  if ( right == 1 ){    
                      document.forms["frm"].FirstPost.value = 1;    
-                     document.forms["frm"].postbackId.value = postId;    
-                 }    
+                     document.forms["frm"].postbackId.value = postId;  
+                 }  
+				 e_event = setTimeout('goTime(' + (time+1) + ')', 1000);
              }    
      );    
 }    
