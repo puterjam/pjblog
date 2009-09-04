@@ -136,7 +136,7 @@ elseif request.QueryString("action") = "PostSave" then
         postLog = lArticle.postLog    
         Set lArticle = Nothing   
             
-        response.write "草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#9C0024'>保存</font>成功,请不要刷新本页,以免丢失信息!|$|1|$|"&postLog(2)    
+        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#9C0024'>保存</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 1, id : "&postLog(2) & "}"
     else    
         response.write "非法提交数据"   
     end if    
@@ -198,7 +198,7 @@ elseif request.QueryString("action") = "UpdateSave" then
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             
-        response.write "草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#AF5500'>更新</font>成功,请不要刷新本页,以免丢失信息!|$|0|$|"&SaveId    
+        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#AF5500'>更新</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 0 , id : " & SaveId & "}"  
     else    
         response.write "非法提交数据"   
     end if

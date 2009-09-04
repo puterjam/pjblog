@@ -166,7 +166,7 @@ Rs.Close : Set Rs = Nothing
 		Dim AccessFSO, AccessEngine, AccessSource
 		'-------------压缩数据库-----------------
 		If Request.QueryString("do") = "Compact" Then
-		    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
+		    Set AccessFSO = New cls_FSO
 		    If AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		        Response.Write "压缩数据库开始，网站暂停一切用户的前台操作...<br/>"
@@ -180,7 +180,7 @@ Rs.Close : Set Rs = Nothing
 		        Set AccessEngine = CreateObject("JRO.JetEngine")
 		        AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile & ".temp")
 		        AccessFSO.CopyFile Server.Mappath(AccessFile & ".temp"), Server.Mappath(AccessFile)
-		        AccessFSO.DeleteFile(Server.Mappath(AccessFile & ".temp"))
+		        AccessFSO.DeleteFile(AccessFile & ".temp")
 		        Set AccessFSO = Nothing
 		        Set AccessEngine = Nothing
 		        Application.Lock
@@ -199,8 +199,8 @@ Rs.Close : Set Rs = Nothing
 		End If
 		'-------------备份数据库数据库-----------------
 		If Request.QueryString("do") = "Backup" Then
-		    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
-		    If AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
+		    Set AccessFSO = New cls_FSO
+		    If AccessFSO.FileExists(AccessFile) Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		        Response.Write "备份数据库开始，网站暂停一切用户的前台操作...<br/>"
 		        Response.Write "关闭数据库操作...<br/>"
@@ -229,8 +229,8 @@ Rs.Close : Set Rs = Nothing
 		'---------------还原数据库------------
 		If Request.QueryString("do") = "Restore" Then
 		    AccessSource = Request.QueryString("source")
-		    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
-		    If AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
+		    Set AccessFSO = New cls_FSO
+		    If AccessFSO.FileExists(AccessSource) Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		        Response.Write "还原数据库开始，网站暂停一切用户的前台操作...<br/>"
 		        Response.Write "关闭数据库操作...<br/>"
@@ -241,10 +241,10 @@ Rs.Close : Set Rs = Nothing
 		        Application(CookieName & "_SiteDisbleWhy") = "网站暂停中，请稍候几分钟后再来..."
 		        Application.UnLock
 		        CopyFiles Server.Mappath(AccessFile), Server.Mappath(AccessFile & ".TEMP")
-		        If DeleteFiles(Server.Mappath(AccessFile)) Then response.Write ("原数据库删除成功<br/>")
+		        If AccessFSO.DeleteFile(AccessFile) Then response.Write ("原数据库删除成功<br/>")
 		        response.Write CopyFiles(Server.Mappath(AccessSource), Server.Mappath(AccessFile))
-		        If DeleteFiles(Server.MapPath(AccessSource)) Then response.Write ("数据库备份删除成功<br/>")
-		        If DeleteFiles(Server.Mappath(AccessFile & ".TEMP")) Then response.Write ("Temp备份删除成功<br/>")
+		        If AccessFSO.DeleteFile(AccessSource) Then response.Write ("数据库备份删除成功<br/>")
+		        If AccessFSO.DeleteFile(AccessFile & ".TEMP") Then response.Write ("Temp备份删除成功<br/>")
 		        Application.Lock
 		        Application(CookieName & "_SiteEnable") = 1
 		        Application(CookieName & "_SiteDisbleWhy") = ""
@@ -263,10 +263,10 @@ Rs.Close : Set Rs = Nothing
 		'---------------删除备份数据库------------
 		If Request.QueryString("do") = "DelFile" Then
 		    AccessSource = Request.QueryString("source")
-		    Set AccessFSO = Server.CreateObject("Scripting.FileSystemObject")
-		    If AccessFSO.FileExists(Server.Mappath(AccessSource)) Then
+		    Set AccessFSO = New cls_FSO
+		    If AccessFSO.FileExists(AccessSource) Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-		        If DeleteFiles(Server.MapPath(AccessSource)) Then response.Write ("数据库备份删除成功<br/>")
+		        If AccessFSO.DeleteFile(AccessSource) Then response.Write ("数据库备份删除成功<br/>")
 		        Response.Write "</div>"
 		    End If
 		    Set AccessFSO = Nothing
