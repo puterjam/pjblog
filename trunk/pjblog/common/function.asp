@@ -3,6 +3,14 @@
 '  Function For PJblog3
 '    更新时间: 2009-05-22
 '===============================================================
+Public Function CreateUrl(ByVal part, ByVal cname, ByVal ctype)
+	If Len(cname) = 0 Or Len(ctype) = 0 Then Exit Function
+	If Len(part) = 0 Then
+		CreateUrl = "article/" & cname & "." & ctype
+	Else
+		CreateUrl = "article/" & part & "/" & cname & "." & ctype
+	End If
+End Function
 '**********************************
 ' 模块名: 模块化抓取页面的方法
 ' 作 者: evio
@@ -220,18 +228,18 @@ End Function
 '自定义读取缓存路径 by evio
 '*************************************
 function caload(id)
-  if not isEmpty(Application(CookieName&"_articleUrl_"&id)) then
+  If not IsEmpty(Application(CookieName&"_articleUrl_"&id)) then
   	caload = Application(CookieName&"_articleUrl_"&id)
-  	exit function
-  end if
+  	Exit function
+  End if
 
   caload = ""
   dim rex, strrexs, strrex, conrex, istr, jstr, sestr, recname, recpart, rechtml, loadtype, cacheStream,pid,ppid
   Dim LoadList, cacheList
   
-  if not isEmpty(Application(CookieName&"_listCache")) then
+  If not IsEmpty(Application(CookieName&"_listCache")) then
    		cacheList = Application(CookieName&"_listCache")
-    else
+  Else
    		LoadList = LoadFromFile("cache/listCache.asp")
 	    If LoadList(0) = 0 Then
 			Application.Lock
@@ -239,49 +247,31 @@ function caload(id)
 			Application.UnLock
 			cacheList = LoadList(1)
 	    End If
-    end if
+  End If
     
-  If stat_Admin Or stat_ShowHiddenCate Then
- 	 loadtype = "A"
-  Else
-  	loadtype = "G"
-  End if
+  If stat_Admin Or stat_ShowHiddenCate Then loadtype = "A" Else loadtype = "G"
   
-  set rex = New RegExp
+  Set rex = New RegExp
   rex.IgnoreCase = True
   rex.Global = True
   rex.Pattern = "\[""([^\r]*?)"";([^\r]*?);\(([^\r]*?)\)\]"
-  set strrex = rex.Execute(cacheList)
-    for each strrexs in strrex
-     if loadtype = strrexs.SubMatches(0) then
+  Set strrex = rex.Execute(cacheList)
+    For Each strrexs In strrex
+     If loadtype = strrexs.SubMatches(0) Then
 	    conrex = split(strrexs.SubMatches(2),",")
-		for jstr = 0 to ubound(conrex)
-		   pid = split(conrex(jstr),"|")
+		For jstr = 0 To UBound(conrex)
+		   pid = Split(conrex(jstr),"|")
 		   ppid = pid(1)
-		      if int(ppid)=int(id) then
-			     recpart = trim(pid(2))
-				  if IsBlank(recpart) then
-				     recpart = "article/"
-				  else
-				     recpart = "article/"&recpart&"/"
-				  end if
-				 recname = trim(pid(3))
-				  if IsBlank(recname) then
-				     recname = id
-				  else
-				     recname = recname
-				  end if
-				 rechtml = pid(4)
-				  if rechtml = "0" or IsBlank(rechtml) then
-				     rechtml = "htm"
-				  else
-				     rechtml = "html"
-				  end if
-				 caload = caload&recpart&recname&"."&rechtml
-			  end if
-		next
-	 end if
-	next
+		      If Int(ppid) = int(id) then
+			     recpart = Trim(pid(2))
+				 recname = Trim(pid(3))
+				 rechtml = Trim(pid(4))
+				 If IsBlank(recname) Then recname = id Else recname = recname
+				 caload = caload & CreateUrl(recpart, recname, rechtml)
+			  End if
+		Next
+	 End if
+	Next
 	
 	Application.Lock
 	Application(CookieName&"_articleUrl_"&id) = caload
@@ -320,40 +310,18 @@ end sub
 '自定义路径 by evio
 '*************************************
 Function Alias(id)
-    dim cname,ccate,chtml,ccateID,ccateExec,cnames,ctype,cc
-	set cc=conn.execute("select top 1 log_CateID,log_cname,log_ctype from blog_Content where log_ID="&id)
-	
+    Dim cname,ccate,chtml,ccateID,ccateExec,cnames,ctype,cc
+	Set cc=conn.Execute("select log_CateID,log_cname,log_ctype from blog_Content where log_ID=" & id)
 	ccateID = cc(0)
 	cname = trim(cc(1))
 	ctype = trim(cc(2))
-
-	set ccateExec=conn.execute("select Cate_Part from blog_Category where cate_ID="&ccateID)
-
-	If not ccateExec.EOF and not ccateExec.bof Then
-		ccate = ccateExec(0).value
-	end if
-	
-	if IsBlank(ccate) then
-		ccate="article/"
-	else
-		ccate="article/"&ccate&"/"
-	end if
-	if IsBlank(cname) then
-		cnames=trim(id)
-	else
-		cnames=cname
-	end if
-	
-	If Ctype = "0" or isblank(Ctype) then
-		chtml="htm"
-	else
-		chtml="html"
-	end if
-	
-	chtml="."&chtml
+	Set ccateExec = conn.Execute("select Cate_Part from blog_Category where cate_ID="&ccateID)
+	If not ccateExec.EOF and not ccateExec.bof Then ccate = ccateExec(0).value Else ccate = ""
+	If IsBlank(cname) then cnames = Trim(id) Else cnames = cname
+	chtml = Ctype
 	set ccateExec = nothing
 	set cc = nothing
-	Alias=ccate&cnames&chtml
+	Alias = CreateUrl(ccate, cnames, chtml)
 End Function
 
 '*************************************

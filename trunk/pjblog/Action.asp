@@ -6,6 +6,7 @@
 <!--#include file="common/checkUser.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
+<!--#include file="class/cls_fso.asp" -->
 <!--#include file="common/ubbcode.asp" -->
 <!--#include file="control/f_control.asp" -->
 <%
@@ -18,19 +19,21 @@ response.cachecontrol="no-cache"
 '*************************************************
 Dim title, cname, Message, lArticle, postLog, SaveId, ReadForm, SplitReadForm
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
-Dim NewCateName, AType, BlogId, eSql
+Dim NewCateName, AType, BlogId, eSql, WebFso
 '-------------- [Alias] -----------------
 If request.QueryString("action") = "checkAlias" then
 	If ChkPost() Then
-   		dim strcname, checkcdb
-   		strcname = Checkxss(request.QueryString("cname"))
-   		set checkcdb = conn.execute("select * from [blog_Content] where [log_cname]="""&strcname&"""")
-       		if checkcdb.bof or checkcdb.eof then
-          		response.write "<img src=""images/check_right.gif"">"
-       		else
-          		response.write "<img src=""images/check_error.gif"">"
-       		end if
-    	set checkcdb=nothing
+   		dim strcname, checkcdb, strctype, cCatePart, cPaths
+   		strcname = Checkxss(request.QueryString("Cname"))
+		strctype = Checkxss(request.QueryString("Ctype"))
+		cCateID = Checkxss(request.QueryString("cateid"))
+   		Set eSql = Conn.Execute("Select cate_Part From blog_Category Where cate_ID=" & cCateID)
+		If eSql.Bof Or eSql.Eof Then cCatePart = "" Else cCatePart = eSql(0).value
+		Set eSql = Nothing
+		If Len(cCatePart) = 0 Then cPaths = "article/" & strcname & "." & strctype Else cPaths = "article/" & cCatePart & "/" & strcname & "." & strctype
+		Set WebFso = New cls_FSO
+			If Not WebFso.FileExists(cPaths) Then Response.Write("{suc : true, info : '" & transHtml("<img src=""images/check_right.gif"">") & "'}") Else Response.Write("{suc : true, info : '" & transHtml("<img src=""images/check_error.gif"">") & "'}")
+		Set WebFso = Nothing
 	End If
 '------------- [mdown] ---------------
 elseif request.QueryString("action") = "type1" then

@@ -22,6 +22,7 @@ Sub doAction
             weblog("blog_smtppassword")=trim(Request.form("blog_smtppassword"))
             weblog("blog_jmail")=trim(Request.form("blog_jmail"))
             weblog("blog_smtpmail")=trim(Request.form("blog_smtpmail"))
+			weblog("blog_html") = Trim(Request.Form("blog_html"))
             If Int(Request.Form("blog_Isjmail")) = 1 Then 
                 weblog("blog_Isjmail")=1
             Else

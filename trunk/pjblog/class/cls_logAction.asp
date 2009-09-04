@@ -41,10 +41,8 @@ Class logArticle
         logTags = ""
         logPubTime = "2006-1-1 00:00:00"
         logPublishTimeType = "now"
-    If blog_postFile = 2 Then
         logCname = ""
-        logCtype = "0"
-    End If
+        logCtype = "htm"
         logReadpw = ""
         logPwtips = ""
         logPwtitle = False
@@ -830,24 +828,16 @@ Class ArticleCache
                 tempI = getIntro(5)
             End If
 			'evio
-			dim ceeurl,chtml
-			If Ctype = "0" or isblank(Ctype) then
-		        chtml = "htm"
-			Else
-		        chtml = "html"
-			End If
-			chtml="."&chtml
+			Dim ceeurl, chtml
+		        chtml = Ctype
+				chtml="."&chtml
 			
 			ceeurl=""
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   If IsBlank(Cpart) then
-			      ceeurl = ceeurl&"article/"&cname&chtml
-			   Else
-			      ceeurl = ceeurl&"article/"&cpart&"/"&cname&chtml
-			   End If
+			   ceeurl = CreateUrl(cpart, cname, chtml)
 			Else
-			   ceeurl = ceeurl&"article.asp?id="&id
+			   ceeurl = ceeurl&"article.asp?id=" & id
 			End If
 			tempI = Replace(tempI, "<$log_ceeurl$>", ceeurl)
 			'evio
@@ -1208,7 +1198,7 @@ End Sub
 '======================================================
 
 Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
-    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category,baseUrl
+    Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category,baseUrl, SavesFso
     
     '读取日志模块
     LoadTemplate1 = LoadFromFile("Template/static.htm")
@@ -1231,6 +1221,10 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     blog_currentCategoryID = log_View("log_CateID")
     Dim blog_Cate, blog_CateArray, comDesc, CanRead
     Dim getCate, getTags
+	
+	Dim evio_cname
+	evio_cname = log_View("log_cname").value
+	If Len(evio_cname) = 0 Then evio_cname = LogID
 	
     Set getCate = New Category
     Set getTags = New Tag
@@ -1278,9 +1272,8 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     	"	}"& vbcrlf &_
     	"}"& vbcrlf &_
     	"</script>"& vbcrlf &_
-    	"</div></body></html>", Alias(LogID))
+    	"</div></body></html>", CreateUrl(getCate.cate_Part, evio_cname, log_View("log_ctype")))
     	PostHalfStatic LogID, UpdateListOnly
-	    
 	    Set log_View = Nothing
 	    exit Sub
 	End If
@@ -1380,9 +1373,11 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
 	
-	createfolder "article/"&getCate.cate_Part
+	Set SavesFso = New cls_FSO
+		If Len(getCate.cate_Part) > 0 Then SavesFso.CreateFolder("article/" & getCate.cate_Part & "/")
+	Set SavesFso = Nothing
 
-    SaveArticle = SaveToFile(Temp1, Alias(LogID))
+    SaveArticle = SaveToFile(Temp1, CreateUrl(getCate.cate_Part, evio_cname, log_View("log_ctype")))
 
     PostArticleListCache LogID, log_View, getCate , getTags
 

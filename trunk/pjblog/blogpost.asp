@@ -5,7 +5,7 @@
 <!--#include file="common/ModSet.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
-
+<!--#include file="class/cls_fso.asp" -->
 <div id="Tbody">
   <div style="text-align:center;">
   <br/>
@@ -134,7 +134,7 @@ Else
      return true
     }
    </script>
-    <form name="frm" action="blogpost.asp" method="post" onsubmit="return chkFrm()">
+    <form name="frm" action="blogpost.asp" method="post" onSubmit="return chkFrm()">
       <div id="MsgContent" style="width:350px">
         <div id="MsgHead">发表日志 - 选择分类</div>
         <div id="MsgBody">
@@ -172,7 +172,7 @@ Sub outCate
 End Sub
 
 %>
-        </select>&nbsp;<a href="javascript:void(0)" onclick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
+        </select>&nbsp;<a href="javascript:void(0)" onClick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
       </span></td>
     </tr>
     <tr>
@@ -182,7 +182,7 @@ End Sub
           FCKeditor</label></td>
     </tr>
     <tr>
-    <td colspan="2" align="center"><input name="submit" type="submit" class="userbutton" value="下一步" accesskey="N"/> <input name="button" type="button" class="userbutton" value="返回主页" onclick="location='default.asp'" accesskey="Q"/></td>
+    <td colspan="2" align="center"><input name="submit" type="submit" class="userbutton" value="下一步" accesskey="N"/> <input name="button" type="button" class="userbutton" value="返回主页" onClick="location='default.asp'" accesskey="Q"/></td>
     </tr>
   </table>
   
@@ -195,7 +195,7 @@ End Sub
 
 %>
   <!--第二步-->
-    <form name="frm" action="blogpost.asp" method="post" onsubmit="return CheckPost()">
+    <form name="frm" action="blogpost.asp" method="post" onSubmit="return CheckPost()">
       		    <input name="log_CateID" type="hidden" id="log_CateID" value="<%=Request.Form("log_CateID")%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
   				<input name="action" type="hidden" value="post"/>
@@ -216,12 +216,17 @@ End Sub
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="check('Action.asp?action=checkAlias&Cname='+document.forms['frm'].cname.value,'CheckAlias','CheckAlias')" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onBlur="getAlias()" style="ime-mode:disabled"/>
 			   <span> . </span>
-			  <select name="ctype">
-			    <option value="0">htm</option> 
-				<option value="1">html</option>
-			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onclick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
+			  <select name="ctype" onBlur="getAlias()">
+			  <%
+			  		Dim blog_html_option, blog_html_option_i
+					blog_html_option = Split(blog_html, ",")
+					For blog_html_option_i = 0 To Ubound(blog_html_option)
+						Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """>" & blog_html_option(blog_html_option_i) & "</option>")
+					Next
+			  %>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
               </td>
             </tr>
 			<%end if%>
@@ -263,7 +268,7 @@ End Sub
 	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
 	        设置日志隐私</label>
 	 				<label for="Meta">
-	                <input id="Meta" name="log_Meta" type="checkbox" value="1" onclick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" />
+	                <input id="Meta" name="log_Meta" type="checkbox" value="1" onClick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" />
 	        自定义日志页Meta信息</label></div>
 	                  <div id="Div_Password" style="display:none;" class="tips_body">
                           <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
@@ -299,13 +304,13 @@ End Sub
               <td align="left">
                   <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/>当前时间</label> 
                   <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" />自定义日期:</label>
-                  <input onfocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
+                  <input onFocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
                 </td>
             </tr>
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">Tags:</span></td>
               <td align="left">
-                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onclick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
+                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
                </td>
             </tr>
              <tr>
@@ -351,7 +356,7 @@ End If
   <%end if%></td></tr>
           <tr>
               <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
-              <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onclick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
+              <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onClick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
               <div id="Div_Intro" style="display:none">
               <%
 If log_editType = 0 Then
@@ -384,7 +389,7 @@ End If
             <tr>
               <td colspan="2" align="center">
                 <input name="SaveArticle" type="submit" class="userbutton" value="提交日志" accesskey="S"/>
-                <input name="SaveDraft" type="submit" class="userbutton" value="保存为草稿" accesskey="D" onclick="document.getElementById('log_IsDraft').value='True'"/>
+                <input name="SaveDraft" type="submit" class="userbutton" value="保存为草稿" accesskey="D" onClick="document.getElementById('log_IsDraft').value='True'"/>
                 <input name="ReturnButton" type="button" class="userbutton" value="返回" accesskey="Q" onClick="history.go(-1)"/></td>
             </tr>
             <tr>
