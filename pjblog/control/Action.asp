@@ -297,8 +297,8 @@ ElseIf Request.Form("action") = "Categories" Then
         LCate_Name = Split(Request.Form("Cate_Name"), ", ")
 		' New Add
 		If blog_postFile = 2 Then
-		LCate_Part = Split(Request.Form("Cate_Part"), ", ")
-		LOldCate_Name = Split(Request.Form("OldCate_Name"), ", ")
+			LCate_Part = Split(Request.Form("Cate_Part"), ", ")
+			LOldCate_Name = Split(Request.Form("OldCate_Name"), ", ")
 		end if
 		' New Add
         LCate_icons = Split(Request.Form("Cate_icons"), ", ")
@@ -383,7 +383,7 @@ ElseIf Request.Form("action") = "Categories" Then
 			if Ncate_URL="" or Ncate_URL=empty or len(Ncate_URL)=0 then
 			If blog_postFile = 2 Then
 				Set WebFso = New cls_FSO
-					WebFso.CreateFolder("article/" & Ncate_Part & "/")
+					If Len(Ncate_Part) > 0 Then WebFso.CreateFolder("article/" & Ncate_Part & "/")
 				Set WebFso = Nothing
 			End if
 			End if

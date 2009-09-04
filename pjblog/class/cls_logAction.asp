@@ -550,8 +550,9 @@ Class logArticle
     '*********************************************
 
     Public Function deleteLog(id)
-	    Dim pcmpad
-	    pcmpad=Alias(id)
+		If blog_postFile =2 Then
+	    	Dim pcmpad : pcmpad=Alias(id)
+		End If
         deleteLog = Array( -4, "准备删除!")
         If IsEmpty(id) Then
             getLog = Array( -5, "ID号不能为空!")
@@ -603,15 +604,17 @@ Class logArticle
         End If
         Call Tags(2)
         Set getTag = Nothing
-        Dim preLog, nextLog
+        Dim preLog, nextLog, WebFso
         Conn.Execute("DELETE * FROM blog_Content WHERE log_ID="&id)
         Conn.Execute("DELETE * FROM blog_Comment WHERE blog_ID="&id)
         
-        DeleteFiles Server.MapPath("post/"&logid&".asp")
-        DeleteFiles Server.MapPath("cache/"&logid&".asp")
-        DeleteFiles Server.MapPath("cache/c_"&logid&".js")
-        DeleteFiles Server.MapPath(pcmpad)
-		
+		Set WebFso = New cls_FSO
+			WebFso.DeleteFile("post/"&logid&".asp")
+			WebFso.DeleteFile("cache/"&logid&".asp")
+			WebFso.DeleteFile("cache/c_"&logid&".js")
+			If blog_postFile =2 Then WebFso.DeleteFile(pcmpad)
+		Set WebFso = Nothing
+	
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&Pdate&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&Pdate&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
         '输出附近的日志到文件
