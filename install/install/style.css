@@ -1,0 +1,25 @@
+﻿@charset "utf-8";
+/* CSS Document */
+*{font-family:"微软雅黑", Arial;  font-size:12px; margin:0; padding:0}
+div p span form { margin:0px; padding:0px;}
+#main{ padding:2px; margin-top:20px;}
+.title{ border-bottom:2px solid #78A230; line-height:30px; font-size:14px; font-weight:bold;}
+p.p2em{ text-indent:2em; padding:20px;}
+.font11{ font-size:11px;}
+.Textbutton{ border:1px solid #ccc; padding:2px 6px 2px 6px;}
+.Textbuttons{ border:1px solid #ccc; padding:2px 6px 2px 6px;}
+.Textbutton:hover{ border:1px solid #C30}
+.Textbuttons:hover{ border:1px solid #ccc}
+a:link, a:visited{ color:#000; }
+a:hover{ color:#C30}
+.Area{ text-align:center; margin:0 auto; padding:20px 10px 20px 10px;}
+#Ajax{ width:600px; height:200px; overflow: auto; border:1px solid #ccc; padding:20px 1px 20px 1px; text-align:left; font-size:10px; margin:0 auto}
+ul li{ color:#000;}
+#processBar {width:600px;height:14px;border:1px #C7C3C0 solid;padding:1px; position:absolute; text-align:left}
+#process { width:0px;background:#2CD400;text-align:center; height:14px; overflow:visible; text-align:left;filter:alpha(opacity=60); -moz-opacity:.60; opacity:0.6;}
+#percent{ color:#0000ff}
+#number{ margin-left:10px;}
+ul{ margin-left:10px;}
+li{ margin-left:20px;}
+.ehome{ padding-left:20px; padding-right:20px;}
+.post{ line-height:22px; margin-top:5px;}
