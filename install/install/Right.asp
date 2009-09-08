@@ -58,7 +58,7 @@
               <input type="hidden" name="step" value="11" />
               <h4 style=" margin-top:10px;"> <em>★ 安装前基本设置 (设置你的Cookie和AccessPath)</em></h4>
               <ul style="margin-top:10px;">
-              	<li>CookieName <input type="text" value="" name="Install_Cookie"></li>
+              	<li>CookieName <input type="text" value="evio" name="Install_Cookie"></li>
               	<li>AccessPath <input type="text" value="blogDB/PBLog3.asp" name="Install_Access"></li>
               </ul>
               </form>
