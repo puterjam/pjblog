@@ -11,6 +11,8 @@
 /******************************************************/
 // 请修改此处的数据库地址
 	var MsPath = "blogDB/PBLog3.asp";
+	try{MsPath = Request.Cookies("InstallAccess");}catch(e){}
+	//var MsPath = "blogDB/PBLog3.asp";
 /******************************************************/
 	var step = Request.Form("step");
 	var info = unescape(Request.Form("info"));
@@ -27,24 +29,33 @@
 	
 	//创建数据库
 	if (step == "2" || step == 2){
-		if (createObj(info)){
-			str = "{suc : true, info : '" + transHtml("<font color=green>创建数据库 [" + info + "] 成功...</font>") + "'}";
-		}else{str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>创建数据库 [" + info + "] 失败...</font>") + "'}"}
-		Response.Write(str)
+		if (MsPath.length == 0){
+			Response.Write("{suc : false, info : '数据库地址不能为空!'}")
+		}else{
+			var CmsPath = "../" + MsPath;
+			if (createObj(CmsPath)){
+				str = "{suc : true, info : '" + transHtml("<font color=green>创建数据库 [" + info + "] 成功...</font>") + "'}";
+			}else{str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>创建数据库 [" + info + "] 失败...</font>") + "'}"}
+			Response.Write(str)
+		}
 	}
 	
 	//连接数据库
 	if (step == "3" || step == 3){
-		var CmsPath = "../" + MsPath;
-		if (createConnection(CmsPath)){
-			var Re = UpdateSQL(info);
-			if (Re[0]){
-				str = "{suc : true, info : '" + transHtml("<font color=green>" + Re[1] + "</font>") + "'}";
-			}else{
-				str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>" + Re[1] + "</font>") + "'}"
-			}
-		}else{str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>连接数据库 [" + MsPath + "] 失败...</font>") + "'}"}
-		Response.Write(str)
+		if (MsPath.length == 0){
+			Response.Write("{suc : false, info : '数据库地址不能为空!'}")
+		}else{
+			var CmsPath = "../" + MsPath;
+			if (createConnection(CmsPath)){
+				var Re = UpdateSQL(info);
+				if (Re[0]){
+					str = "{suc : true, info : '" + transHtml("<font color=green>" + Re[1] + "</font>") + "'}";
+				}else{
+					str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>" + Re[1] + "</font>") + "'}"
+				}
+			}else{str = "{suc : false, info : '" + transHtml("<font color='#cccccc'>连接数据库 [" + MsPath + "] 失败...</font>") + "'}"}
+			Response.Write(str)
+		}
 	}
 	
 	//清除全局缓存
@@ -60,6 +71,17 @@
 	
 </script>
 <%
+	If step = "11" Or step = 11 Then
+		Dim Install_Cookie, Install_Access
+		Install_Cookie = Request.Form("Install_Cookie")
+		Install_Access = Request.Form("Install_Access")
+		Response.Cookies("InstallCookie") = Install_Cookie
+		Response.Cookies("InstallCookie").Expires = DateAdd("d", 1, now())
+		Response.Cookies("InstallAccess") = Install_Access
+		Response.Cookies("InstallAccess").Expires = DateAdd("d", 1, now())
+		Response.Redirect("Right.asp?misc=file")
+	End If
+	
 	If step = "0" Or step = 0 Then
 		On Error Resume Next
 		Dim id, appendStr, PJclass, cFn, Cfso, SplitFile, cFolder, cStream, Scontent, baseM, Str
