@@ -14,7 +14,7 @@
 </head>
 <!--#include file = "Pack.asp" -->
 <!--#include file = "misc.asp" -->
-<body class="ehome" marginwidth="0" marginheight="0" oncontextmenu="return false" ondragstart="return false" onselectstart ="return false" onselect="document.selection.empty()" oncopy="document.selection.empty()" onbeforecopy="return false" onmouseup="document.selection.empty()">
+<body class="ehome" marginwidth="0" marginheight="0">
 	<div id="main">
     	<div class="title">PJBlog 安装升级程序</div>
        	<%
@@ -25,7 +25,7 @@
 			ElseIf Request.QueryString("misc") = "complate" Then
 		%>
         	<p>
-            	<form action="Action.asp?step=10" method="post">
+            	<form action="Action.asp" method="post">
                 	<input type="hidden" name="step" value="10" />
                 	<ul style="margin-top:20px;">
                     	<li style="line-height:22px;"><label for="T1"><input type="checkbox" value="1" name="DelInstallFiles" id="T1" checked="checked" />&nbsp;删除安装文件(如果不删除, 请手动删除网站目录下的install.html 和 install文件夹!)</label></li>
@@ -36,7 +36,10 @@
             </p>
         <%
 			Else
-				Response.Cookies("install_step") = 0
+				Response.Cookies("InstallCookie") = ""
+				Response.Cookies("InstallCookie").Expires = DateAdd("d", 1, now())
+				Response.Cookies("InstallAccess") = ""
+				Response.Cookies("InstallAccess").Expires = DateAdd("d", 1, now())
 		%>
         <p class="p2em" style="font-size:14px;"></p>
         	  <h4> <em>★ 程序安装前必须注意的事项</em></h4>
@@ -50,8 +53,17 @@
               	<li>1. dasf</li>
               	<li>2. adsf</li>
               </ul>
+              
+              <form action="Action.asp?step=11" method="post" id="PostCookie">
+              <input type="hidden" name="step" value="11" />
+              <h4 style=" margin-top:10px;"> <em>★ 安装前基本设置 (设置你的Cookie和AccessPath)</em></h4>
+              <ul style="margin-top:10px;">
+              	<li>CookieName <input type="text" value="" name="Install_Cookie"></li>
+              	<li>AccessPath <input type="text" value="blogDB/PBLog3.asp" name="Install_Access"></li>
+              </ul>
+              </form>
         <p style="text-align:right; padding:3px 50px 3px 50px;">evio<br />2009-08-29</p>
-         <p style="text-align:right; padding:3px 50px 3px 50px;"><input type="checkbox" value="1" onclick="install.Agree(this)">我同意&nbsp;&nbsp;&nbsp;<a href="?misc=file" class="Textbuttons" disabled="disabled" onclick="return false;" id="next">下一步</a></p>
+         <p style="text-align:right; padding:3px 50px 3px 50px;"><input type="checkbox" value="1" onclick="install.Agree(this)">我同意&nbsp;&nbsp;&nbsp;<a href="?misc=file" class="Textbuttons" disabled="disabled" id="next" onclick="return false">下一步</a></p>
         <%
 			End If
 		%>

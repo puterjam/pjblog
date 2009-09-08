@@ -1,18 +1,20 @@
 ﻿// JavaScript Document
+var cookie={
+    SET	: function(name, value, days) {var expires = "";if (days) {var d = new Date();d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);expires = "; expires=" + d.toGMTString();}document.cookie = name + "=" + value + expires + "; path=/";},
+	GET	: function (name) {var re = new RegExp("(\;|^)[^;]*(" + name + ")\=([^;]*)(;|$)");var res = re.exec(document.cookie);return res != null ? res[3] : null;}
+};
+
 /************************************************************/
 // 这里的必须按照你站上的设置修改,由于是JS,无法从文件调用这些参数,所以请手动设置.
-var cookieName = "evio"; // cookie 名称
-var AccessPath = "blogDB/PBLog3.asp"; // 数据库地址,按需要修改.
+//var cookieName = "evio", AccessPath = "blogDB/PBLog3.asp";
+var cookieName = cookie.GET("InstallCookie"); // cookie 名称
+var AccessPath = cookie.GET("InstallAccess"); // 数据库地址,按需要修改.
+//alert(cookieName + "|" + AccessPath)
 /************************************************************/
 
 String.prototype.json = function(){
 	try{eval("var jsonStr = (" + this.toString() + ")");}catch(ex){var jsonStr = null;}
 	return jsonStr;
-};
-
-var cookie={
-    SET	: function(name, value, days) {var expires = "";if (days) {var d = new Date();d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);expires = "; expires=" + d.toGMTString();}document.cookie = name + "=" + value + expires + "; path=/";},
-	GET	: function (name) {var re = new RegExp("(\;|^)[^;]*(" + name + ")\=([^;]*)(;|$)");var res = re.exec(document.cookie);return res != null ? res[3] : null;}
 };
 
 /***************************************
@@ -374,7 +376,6 @@ var install = {
 	
 	// 开始执行的方法
 	Start : function(obj){
-		if (cookie.GET("install_step") != 1){location.href = "?"; return;}
 		if (!canSart) {try{$("button").disabled = false;return}catch(e){}};
 		$(obj).innerHTML = "";
 		var installArray = this.Step;
@@ -466,11 +467,15 @@ var install = {
 		if (obj.checked){
 			$("next").disabled = false;
 			$("next").className = "Textbutton";
-			$("next").onclick = function(){cookie.SET("install_step", 1, 1); return true;};
+			$("next").onclick = function(){
+				cookie.SET("InstallCookie", $("PostCookie").Install_Cookie.value, 1);
+				cookie.SET("InstallAccess", $("PostCookie").Install_Access.value, 1);
+				return true;
+			}
 		}else{
 			$("next").disabled = true;
 			$("next").className = "Textbuttons";
-			$("next").onclick = function(){cookie.SET("install_step", 0, 1); return false};
+			$("next").onclick = function(){return false;}
 		}
 	}
 }
@@ -478,7 +483,6 @@ var install = {
 
 var File = {
 	Start : function(){
-		if (cookie.GET("install_step") != 1){location.href = "?"; return;}
 		this.insTit("Ajax"); // 插入标题
 		var clen = xml;
 		this.SecAjax(0, clen);		
