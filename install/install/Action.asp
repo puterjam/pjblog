@@ -1,5 +1,6 @@
-﻿<% Option Explicit %>
-<% 'On Error Resume Next %>
+﻿<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
+<% Option Explicit %>
+<% Session.CodePage = 65001 %>
 <% Response.Charset="UTF-8" %>
 <!--#include file="misc.asp" -->
 <!--#include file="xml.asp" -->
