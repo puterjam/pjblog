@@ -275,9 +275,10 @@ function checkbox_model(A){
 
 function GoToCateAdd(){
 	var CateAddText = $("log_NewCate").value;
+	var log_NewPart = $("log_NewPart").value;
 	var ajax = new AJAXRequest;
 	ajax.get(
-			 GetFile[0]+GetAction[4]+"newcate="+escape(CateAddText)+"&TimeStamp="+new Date().getTime(),
+			 GetFile[0]+GetAction[4]+"newcate="+escape(CateAddText)+"&newpart="+escape(log_NewPart)+"&TimeStamp="+new Date().getTime(),
 			 function(obj) {
 				 TempStr = parseInt(obj.responseText);
 				 try{
