@@ -203,7 +203,7 @@ Set nextLog = Nothing
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
 						 <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
 						 <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
-						 <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<%=LogID%>&blog_postFile=1','related_tag','related_tag')</script>
+						 <script language="javascript" type="text/javascript">Related(<%=LogID%>, 1, 'related_tag');</script>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
@@ -442,35 +442,37 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		      </script>
               <%
 			  Dim Ts, Ts_UserName, Ts_Content, Ts_True, Ts_Email, Ts_WebSite
-			  Ts = Request.Cookies(CookieName)("Guest")
-			  If len(Ts) > 0 or Ts <> "" Then
-			  	If Instr(Ts, "|-|") > 0 Then
-					Ts_True = Split(Ts, "|-|")(0)
-					Ts_Content = Split(Split(Ts, "|-|")(1), "|+|")(0)
-					If Instr(Ts, "|-|") > 0 Then
-						If Ubound(Split(Ts_Content, "|$|")) = 2 Then
-			  				Ts_UserName = Split(Ts_Content, "|$|")(0)
-							Ts_Email = Split(Ts_Content, "|$|")(1)
-							Ts_WebSite = Split(Ts_Content, "|$|")(2)
-						End If
-					End If
-				End If
+			  Set Ts = toJson(Request.Cookies(CookieName)("Guest"))
+			  Ts_True = Ts.record ' 获得cookie中保存的布尔变量
+			  ' ------------------------------
+			  ' 初始化变量
+			  ' ------------------------------
+			  Ts_UserName = ""
+			  Ts_Email = ""
+			  Ts_WebSite = ""
+			  ' ------------------------------
+			  ' 变量赋值
+			  ' ------------------------------
+			  If Ts_True Then
+			  	Ts_UserName = Ts.username
+			  	Ts_Email = Ts.useremail
+			  	Ts_WebSite = Ts.userwebsite
 			  End If
 			  %>
 		      <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">	  
 			  <table width="100%" cellpadding="0" cellspacing="0">	  
 			  <tr><td align="right" width="70"><strong>昵　称:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" <%
-			  if not memName=empty then
+			  If not memName=empty then
 			  	response.write ("value="""&memName&""" readonly=""readonly""")
-			  else
-			  	if Ts_True = "true" then
+			  Else
+			  	If Ts_True = true Then
 					response.write ("value="""&Ts_UserName&"""")
-				end if
-			  end if
+				End if
+			  End if
 			  %>/></td></tr>
 		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
-              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_Email) Else Response.Write("")%>" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = "true" then response.write(Ts_WebSite) Else Response.Write("")%>" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = true then response.write(Ts_Email) Else Response.Write("")%>" /> 支持Gravatar头像.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = true then response.write(Ts_WebSite) Else Response.Write("")%>" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
 			   <%

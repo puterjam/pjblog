@@ -161,9 +161,9 @@ Class logArticle
 
 		'Meta特别属性
 		If logMeta <> true Then
-			logDescription = left(FilterHtmlTags(logdescriptionFilt),254)
+			logDescription = left(FilterUBBTags(FilterHtmlTags(logdescriptionFilt)),254)
 		Else
-			logDescription = FilterHtmlTags(logDescription)
+			logDescription = FilterUBBTags(FilterHtmlTags(logDescription))
 		End If
 		
 		If logMeta <> true Then
@@ -417,7 +417,7 @@ Class logArticle
 
 		'Meta特别属性
 		If logMeta <> true Then
-			logDescription = left(FilterHtmlTags(logdescriptionFilt),254)
+			logDescription = left(FilterUBBTags(FilterHtmlTags(logdescriptionFilt)),254)
 		Else
 			logDescription = FilterHtmlTags(logDescription)
 		End If
@@ -480,9 +480,9 @@ Class logArticle
 		
 		'之前如果调用过request.BinaryRead后，不能直接调用request.form了
 		'live write 就挂在这里
-		oldcname = Checkxss(request.form("oldcname"))
-		oldcate = Checkxss(request.form("oldcate"))
-		oldctype = Checkxss(request.form("oldtype"))
+		oldcname = CheckStr(request.form("oldcname"))
+		oldcate = CheckStr(request.form("oldcate"))
+		oldctype = CheckStr(request.form("oldtype"))
 		D = conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
 		A = "article/"&D
 		If IsBlank(D) then
@@ -789,25 +789,15 @@ Class ArticleCache
             Else
                 tempI = getIntro(6)
             End If
-			'evio
-			dim ceeurl2,chtml2
-			If Ctype = "0" or isblank(Ctype) then
-		        chtml2 = "htm"
-			Else
-		        chtml2 = "html"
-			End If
-			chtml2 ="."&chtml2
 			
-			ceeurl2=""
+			'evio
+			Dim ceeurl2, chtml2
+			chtml2 = Ctype
 
 			If blog_postFile = 2 and aisshow = "True" then
-			   If IsBlank(Cpart) then
-			      ceeurl2 = ceeurl2&"article/"&cname&chtml2
-			   Else
-			      ceeurl2 = ceeurl2&"article/"&cpart&"/"&cname&chtml2
-			   End If
+			   ceeurl2 = CreateUrl(cpart, cname, chtml2)
 			Else
-			   ceeurl2 = ceeurl2&"article.asp?id="&id
+			   ceeurl2 = "article.asp?id=" & id
 			End If
 			tempI = Replace(tempI, "<$log_ceeurl$>", ceeurl2)
 			'evio
@@ -830,14 +820,11 @@ Class ArticleCache
 			'evio
 			Dim ceeurl, chtml
 		        chtml = Ctype
-				chtml="."&chtml
-			
-			ceeurl=""
-
+				
 			If blog_postFile = 2 and aisshow = "True" then
 			   ceeurl = CreateUrl(cpart, cname, chtml)
 			Else
-			   ceeurl = ceeurl&"article.asp?id=" & id
+			   ceeurl = "article.asp?id=" & id
 			End If
 			tempI = Replace(tempI, "<$log_ceeurl$>", ceeurl)
 			'evio
@@ -1407,7 +1394,7 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     
     'article.asp?id=<$LogID$>
     If blog_postFile = 2  and log_View("log_IsShow") and not getCate.cate_Secret Then
-        Temp2 = Replace(Temp2, "<$pLink$>", Alias(LogID))
+        Temp2 = Replace(Temp2, "<$pLink$>", CreateUrl(getCate.cate_Part, log_View("log_cname"), log_View("log_ctype")))
     Else
 	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
     End If 

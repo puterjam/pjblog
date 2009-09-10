@@ -24,9 +24,9 @@ Dim NewCateName, AType, BlogId, eSql, WebFso
 If request.QueryString("action") = "checkAlias" then
 	If ChkPost() Then
    		dim strcname, checkcdb, strctype, cCatePart, cPaths
-   		strcname = Checkxss(request.QueryString("Cname"))
-		strctype = Checkxss(request.QueryString("Ctype"))
-		cCateID = Checkxss(request.QueryString("cateid"))
+   		strcname = CheckStr(request.QueryString("Cname"))
+		strctype = CheckStr(request.QueryString("Ctype"))
+		cCateID = CheckStr(request.QueryString("cateid"))
    		Set eSql = Conn.Execute("Select cate_Part From blog_Category Where cate_ID=" & cCateID)
 		If eSql.Bof Or eSql.Eof Then cCatePart = "" Else cCatePart = eSql(0).value
 		Set eSql = Nothing
@@ -39,8 +39,8 @@ If request.QueryString("action") = "checkAlias" then
 elseif request.QueryString("action") = "type1" then
     If ChkPost() Then
 		dim mainurl, main, mainstr
-        	mainurl = Checkxss(request.QueryString("mainurl"))
-        	main = trim(Checkxss(request.QueryString("main")))
+        	mainurl = CheckStr(request.QueryString("mainurl"))
+        	main = trim(CheckStr(request.QueryString("main")))
         	response.clear()
         	mainstr = ""
     	If Len(memName)>0 Then
@@ -53,7 +53,7 @@ elseif request.QueryString("action") = "type1" then
 elseif request.QueryString("action") = "type2" then
     If ChkPost() Then
 		dim main2, mstr
-        	main2 = Checkxss(request.QueryString("main"))
+        	main2 = CheckStr(request.QueryString("main"))
         	response.clear()
         	mstr = ""
     	If Len(memName) > 0 Then
@@ -74,7 +74,7 @@ elseif request.QueryString("action") = "Hidden" then
 elseif request.QueryString("action") = "checkname" then
 	If ChkPost() Then
 		dim strname, checkdb
-			strname = Checkxss(request.QueryString("usename"))
+			strname = CheckStr(request.QueryString("usename"))
 			set checkdb = conn.execute("select * from blog_Member where mem_Name='"&strname&"'")
 				if checkdb.bof or checkdb.eof then
 					response.write"<font color=""#0000ff"">用户名未注册！</font>|$|True"
@@ -210,7 +210,7 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 	If ChkPost() Then
 		Dim down, showdownstr, id
 			Session(CookieName & "Antimdown") = "pjblog_Antimdown"
-			id = Checkxss(request("id"))
+			id = CheckStr(request("id"))
 			if instr(id, "&") > 0 then id = split(id,"&")(0)
 			Set down = conn.execute("select FilesPath,FilesCounts from blog_Files where id="&id)
 				response.clear()
@@ -230,7 +230,7 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 		
 		NewcatePart = "newadd_" & randomStr(8)
 		IntCount = (conn.Execute("select count(*) from blog_Category")(0) + 1)
-		NewCateName = Checkxss(Request.QueryString("newcate"))
+		NewCateName = CheckStr(Request.QueryString("newcate"))
 		
 		'*********************************
 		Set NRs = Server.CreateObject("Adodb.Recordset")
@@ -368,13 +368,13 @@ ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then
 	Next
 	Response.Write(SplitStr & "end")
 ElseIf Request.QueryString("action") = "GetHttpURL" Then
-	Message = Checkxss(Request.QueryString("url"))
+	Message = CheckStr(Request.QueryString("url"))
 	Message = GetHttpPage(Message, "<!--StartGetHttpPage-->", "<!--EndGetHttpPage-->")
 	Message = "<!--StartGetHttpPage-->" & Message &"<!--EndGetHttpPage-->"
 	Response.Write(Message)
 '*************************************ajax重建日志**********************************
 ElseIf Request.QueryString("action") = "ReBuildArticle" Then
-	SaveId = Checkxss(Trim(Request.QueryString("id")))
+	SaveId = CheckStr(Trim(Request.QueryString("id")))
 	PostArticle SaveId, False
 	Message = "{suc:true}"
 	If Err Then Message = "{suc:false}"
