@@ -226,11 +226,12 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 '-------------[Ajax增加新分类]---------------
 ElseIf Request.QueryString("action") = "AddNewCate" then
 	If ChkPost() Then
-		Dim AddNewCateArray, IntCount, NewcatePart, NRs, ReturnID
+		Dim AddNewCateArray, IntCount, NewcatePart, NRs, ReturnID, NewCateFso
 		
-		NewcatePart = "newadd_" & randomStr(8)
 		IntCount = (conn.Execute("select count(*) from blog_Category")(0) + 1)
 		NewCateName = CheckStr(Request.QueryString("newcate"))
+		NewcatePart = CheckStr(Request.QueryString("newpart"))
+		If Len(NewcatePart) = 0 Then NewcatePart = "newadd_" & randomStr(8)
 		
 		'*********************************
 		Set NRs = Server.CreateObject("Adodb.Recordset")
@@ -249,6 +250,9 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 			NRs.update
 		NRs.Close
 		Set NRs = Nothing
+		Set NewCateFso = New cls_FSO
+			NewCateFso.CreateFolder "article/" & NewcatePart & "/"
+		Set NewCateFso = Nothing
 		CategoryList(2)
 		'*********************************
 		

@@ -889,7 +889,7 @@ function AddNewCate(){
 	var e = "";
 	e += "<table width='100%'>";
 	e += "<tr><td align='center' width='100%'>";
-	e += "<div style='text-align:center;width:100%;'>新分类名:&nbsp;<input type='text' value='' id='log_NewCate' /> <a href='javascript:void(0)' onclick='GoToCateAdd()'>确定</a></div>";
+	e += "<div style='text-align:center;width:100%;'>新分类名:&nbsp;<input type='text' value='' id='log_NewCate' /><br />新静态文件目录名:&nbsp;<input type=\"text\" value=\"\" id=\"log_NewPart\" onblur=\"ReplaceInput(this,window.event);\" onkeyup=\"ReplaceInput(this,window.event)\"> <a href='javascript:void(0)' onclick='GoToCateAdd()'>确定</a></div>";
 	e += "</td></tr>";
 	e += "</table>";
 	return e;
@@ -982,4 +982,17 @@ function getAlias(){
 	var first = document.forms['frm'].FirstPost.value;
 	if (first == 1){ccate = document.forms['frm'].log_CateID.options[document.forms['frm'].log_CateID.options.selectedIndex].value;}else{ccate = $('log_CateID').value;}
 	CheckAlias(cname, ctype, ccate);
+}
+
+
+//ig:
+//<input onblur="replaceInput(this,window.event)" onkeyup="replaceInput(this,window.event)" />
+function ReplaceInput(obj, event){
+	var str = ["<", ">", "/", "\\", ":", "*", "?", "|", "\"", /[\u4E00-\u9FA5]/g];
+	if(event.keyCode != 37 && event.keyCode != 39){
+		//obj.value = obj.value.replace(/[\u4E00-\u9FA5]/g,'');
+		for (var i = 0 ; i < str.length ; i++){
+			obj.value = obj.value.replace(str[i], "");
+		}
+	}
 }
