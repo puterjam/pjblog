@@ -499,3 +499,15 @@ function Related(logid, postfile, div){
 			 }
 	 );
 }
+
+function doAjax(url, div){
+	var TempStr;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 "Action.asp" + url + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 $(div).innerHTML = TempStr;
+			 }
+	 );
+}

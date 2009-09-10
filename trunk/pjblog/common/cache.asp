@@ -104,7 +104,7 @@ Sub getInfo(ByVal action)
         blog_SaveTime = blog_Infos(47, 0)'Ajax草稿自动保存时间间隔
         blog_UpLoadSet = blog_Infos(48, 0)'附件管理
 		blog_PasswordProtection = CBool(blog_Infos(49, 0))'找回密码功能
-		blog_AuditOpen = CBool(blog_Infos(50, 0))'是否开启评论审核功能 ' 0 就是让数据该字段为true ; 1 为 false 这里必须统一起来,不然会混乱
+		blog_AuditOpen = CBool(blog_Infos(50, 0))'是否开启评论审核功能
 		blog_GravatarOpen = CBool(blog_Infos(51, 0)) ' 是否开启Gravatar头像功能
         blog_smtp=trim(blog_Infos(52, 0))'SMTP地址
         blog_smtpuser=trim(blog_Infos(53, 0))'SMTP用户名
