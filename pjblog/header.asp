@@ -106,7 +106,6 @@ End If
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="common/common.js"></script>
-	<script type="text/javascript" src="common/ajax.js"></script>
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>
 	<script type="text/javascript" src="common/Action.js"></script>
     <script language="javascript" type="text/javascript">

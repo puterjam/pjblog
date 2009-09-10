@@ -59,7 +59,6 @@ End If
 	<link rel="stylesheet" rev="stylesheet" href="common/control.css" type="text/css" media="all" />
 	<script type="text/javascript" src="common/control.js"></script>
     <script type="text/javascript" src="common/common.js"></script>
-	<script type="text/javascript" src="common/ajax.js"></script>
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>
 	<script type="text/javascript" src="common/Action.js"></script>
 	<title>后台管理-内容</title>
