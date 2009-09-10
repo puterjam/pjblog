@@ -24,7 +24,7 @@
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
 					<img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
-                    <script language="javascript" type="text/javascript">check('Getarticle.asp?id=<$LogID$>&blog_postFile=1','related_tag','related_tag')</script>
+                    <script language="javascript" type="text/javascript">Related(<$LogID$>, 1, "related_tag");</script>
 				</div>
 				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <$log_ViewNums$></div>
 			</div>

@@ -2,6 +2,7 @@
 <!--#include file="header.asp" -->
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
+<!--#include file="class/cls_fso.asp" -->
 <div id="Tbody">
     <div style="text-align:center;"><br/>
 <%
@@ -291,11 +292,13 @@ Function postcomm
 
 	'记住信息
 	If GuestCanRemeberComment = 1 Then
-		Response.Cookies(CookieName)("Guest") = ("true|-|" & username & "|$|" & Post_Email & "|$|" & Post_WebSite & "|+|")
+		'Response.Cookies(CookieName)("Guest") = ("true|-|" & username & "|$|" & Post_Email & "|$|" & Post_WebSite & "|+|")
+		Response.Cookies(CookieName)("Guest") = ("{record:true,username:'" & username & "',useremail:'" & Post_Email & "',userwebsite:'" & Post_WebSite & "'}")
 		Response.Cookies(CookieName).Expires = Date+365
     	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
 	Else
-		Response.Cookies(CookieName)("Guest") = ("false|-|null|+|")
+		'Response.Cookies(CookieName)("Guest") = ("false|-|null|+|")
+		Response.Cookies(CookieName)("Guest") = ("{record:false,username:null,useremail:null,userwebsite:null}")
 		Response.Cookies(CookieName).Expires = Date+365
     	Response.Cookies(CookieName)("exp") = DateAdd("d", 365, date())
 	End If

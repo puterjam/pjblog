@@ -1,6 +1,6 @@
 //PJBlog 3 Ajax Action File
 //Author:evio
-var GetFile = ["Action.asp?action="];
+var GetFile = ["Action.asp?action=", "Getarticle.asp"];
 var GetAction = ["Hidden&", "checkname&", "PostSave&", "UpdateSave&", "AddNewCate&", "GetPassReturnInfo&", "UpdatePass&", "CheckPostName&", "updatepassto&", "IndexAudit&", "ReadArticleComentByCommentID&", "GetHttpURL&", "checkAlias&"];
 
 // 日志别名检测
@@ -484,4 +484,17 @@ function StopHtml(){
 function StartHTML(){
 	IsStop = false;
 	CreateHtml();
+}
+
+
+function Related(logid, postfile, div){
+	var TempStr;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 GetFile[1] + "?id=" + logid + "&blog_postFile=" + postfile + "&TimeStamp="+new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText;
+				 $(div).innerHTML = TempStr;
+			 }
+	 );
 }

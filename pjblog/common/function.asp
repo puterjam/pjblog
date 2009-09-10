@@ -85,44 +85,6 @@ Function RegMatch(ByVal Str, ByVal MatchStr)
 			End If
 	Set cRe = nothing
 End Function
-'**********************************
-' 模块名: 所有评论的XML化
-' 作 者: evio
-' 网 址: http://www.evio.name
-'**********************************
-Function SaveCommentListCache
-	Dim SaveCommentListCacheTempValue, CommentListCache, CommentListCacheSQL, CommentListCacheRow, CommentListCache_Len, CommentListCache_Goes, SaveCommentListToFile, CommentCacheApplication
-	SaveCommentListCacheTempValue = ""
-	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<?xml version=""1.0"" encoding=""utf-8""?>"
-	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<Comments>"
-		CommentListCacheSQL = "SELECT comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit FROM blog_Comment Where 1=1 Order By comm_ID ASC"
-		Set CommentListCache = Server.CreateObject("Adodb.RecordSet")
-		CommentListCache.open CommentListCacheSQL, Conn, 1, 1
-		SQLQueryNums = SQLQueryNums + 1
-		If CommentListCache.EOF Or CommentListCache.bof Then
-            ReDim CommentListCacheRow(0, 0)
-        Else
-            CommentListCacheRow = CommentListCache.GetRows()
-        End If
-		CommentListCache.Close
-        Set CommentListCache = Nothing
-		CommentCacheApplication = CommentListCacheRow
-	If UBound(CommentCacheApplication, 1) = 0 Then
-		SaveCommentListCache = False
-		Exit Function
-	End If
-	CommentListCache_Len = UBound(CommentCacheApplication, 2)
-	'comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit
-	'    0        1          2              3             4           5          6          7            8           9             10
-	For CommentListCache_Goes = 0 to CommentListCache_Len
-		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "<Comment id="""&CommentCacheApplication(0, CommentListCache_Goes)&"""><Content><![CDATA["
-		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & UBBCode(HtmlEncode(CommentCacheApplication(1, CommentListCache_Goes)),CommentCacheApplication(4, CommentListCache_Goes),blog_commUBB,blog_commIMG,CommentCacheApplication(7, CommentListCache_Goes),CommentCacheApplication(9, CommentListCache_Goes))
-		SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "]]></Content></Comment>"
-	Next
-	SaveCommentListCacheTempValue = SaveCommentListCacheTempValue & "</Comments>"
-	SaveCommentListToFile = SaveToFile(SaveCommentListCacheTempValue, "cache/CommentListCache.xml")
-	SaveCommentListCache = SaveCommentListToFile
-End Function
 '*************************************
 '函数名 : FilterHtmlTags()
 '用途 : 过滤html标签
@@ -143,11 +105,35 @@ Function FilterHtmlTags(ByVal s_Description)
 	Set re = nothing
 		FilterHtmlTags = FaStr
 End Function
+
 '*************************************
-'防XSS注入函数 更新于2009-04-21 by evio
-'与checkstr()相比, checkxss更加安全
+'函数名 : FilterHtmlTags()
+'用途 : 过滤html标签
+'更新时间 : 2009-05-22
 '*************************************
-Function Checkxss(byVal ChkStr)
+Function FilterUBBTags(ByVal s_Description)
+	If isblank(s_Description) Then Exit Function
+	Dim re, eHtml, eobj, en
+	Set re = New RegExp
+       	re.IgnoreCase = True
+       	re.Global = True
+       	re.Pattern = "\[(.+)(\=(.+))?\](.*)?\[\/\1\]"
+		Set eobj = re.Execute(s_Description)
+			For Each en In eobj
+				eHtml = eobj(0).SubMatches(3)
+				s_Description = Replace(s_Description, en.value, eHtml)
+				'去掉 尖括号和换行
+				s_Description = Replace(s_Description, Chr(13), "")
+				s_Description = Replace(s_Description, Chr(10), "")
+			Next
+		Set eobj = Nothing
+	Set re = nothing
+		FilterUBBTags = s_Description
+End Function
+'*************************************
+'	CheckStr
+'*************************************
+Function CheckStr(byVal ChkStr)
     Dim Str
     Str = ChkStr
     If IsNull(Str) Then
@@ -155,8 +141,8 @@ Function Checkxss(byVal ChkStr)
         Exit Function
     End If
     Str = Replace(Str, "&", "&amp;")
-    Str = Replace(Str, "'", "&acute;")
-    Str = Replace(Str, """", "&quot;")
+    Str = Replace(Str, "'", "&#39;")
+    Str = Replace(Str, """", "&#34;")
 	Str = Replace(Str, "<", "&lt;")
 	Str = Replace(Str, ">", "&gt;")
     Dim re
@@ -181,19 +167,17 @@ Function Checkxss(byVal ChkStr)
     Str = re.Replace(Str, "$1p&#100;ate")
     re.Pattern = "(\s)(or)"
     Str = re.Replace(Str, "$1o&#114;")
-	'----------------------------------
 	re.Pattern = "(java)(script)"
     Str = re.Replace(Str, "$1scri&#112;t")
 	re.Pattern = "(j)(script)"
     Str = re.Replace(Str, "$1scri&#112;t")
 	re.Pattern = "(vb)(script)"
     Str = re.Replace(Str, "$1scri&#112;t")
-	'----------------------------------
-	If Instr(Str, "expression") > 0 Then
+	If Instr(Str, "expression") <> 0 Then
 		Str = Replace(Str, "expression", "e&#173;xpression", 1, -1, 0) '防止xss注入
 	End If
     Set re = Nothing
-    Checkxss = Str
+    CheckStr = Str
 End Function
 '*************************************
 '获得基址
@@ -610,45 +594,6 @@ Function FixName(UpFileExt)
     FixName = Replace(FixName, "HTR", "")
 End Function
 
-'*************************************
-'过滤特殊字符
-'*************************************
-
-Function CheckStr(byVal ChkStr)
-    Dim Str
-    Str = ChkStr
-    If IsNull(Str) Then
-        CheckStr = ""
-        Exit Function
-    End If
-    Str = Replace(Str, "&", "&amp;")
-    Str = Replace(Str, "'", "&#39;")
-    Str = Replace(Str, """", "&#34;")
-    Dim re
-    Set re = New RegExp
-    re.IgnoreCase = True
-    re.Global = True
-    re.Pattern = "(w)(here)"
-    Str = re.Replace(Str, "$1h&#101;re")
-    re.Pattern = "(s)(elect)"
-    Str = re.Replace(Str, "$1el&#101;ct")
-    re.Pattern = "(i)(nsert)"
-    Str = re.Replace(Str, "$1ns&#101;rt")
-    re.Pattern = "(c)(reate)"
-    Str = re.Replace(Str, "$1r&#101;ate")
-    re.Pattern = "(d)(rop)"
-    Str = re.Replace(Str, "$1ro&#112;")
-    re.Pattern = "(a)(lter)"
-    Str = re.Replace(Str, "$1lt&#101;r")
-    re.Pattern = "(d)(elete)"
-    Str = re.Replace(Str, "$1el&#101;te")
-    re.Pattern = "(u)(pdate)"
-    Str = re.Replace(Str, "$1p&#100;ate")
-    re.Pattern = "(\s)(or)"
-    Str = re.Replace(Str, "$1o&#114;")
-    Set re = Nothing
-    CheckStr = Str
-End Function
 
 '*************************************
 '恢复特殊字符
@@ -1794,6 +1739,18 @@ End Function
 		html = html.replace(/\\/g,"\\\\");
 		html = html.replace(/\'/g,"\\'");
 		return html;
+	}
+	
+//*************************************
+// Json格式ASP化
+//*************************************
+	function toJson(Str){
+		try{
+			eval("var jsonStr = (" + Str + ")");
+		}catch(ex){
+			var jsonStr = null;
+		}
+		return jsonStr;
 	}
 //*************************************
 //翻页函数，改成js

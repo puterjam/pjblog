@@ -643,6 +643,7 @@ function fillSidebar(html){
 }
 
 //初始化登录状态的表现 ，for static mode
+// evio 优化于 09-09-10
 function initLogin(CookieName){
 	var n = getCookie(CookieName);
 	if (n) {
@@ -667,13 +668,13 @@ function initLogin(CookieName){
 				if (menvalidate[1] == "True" || menvalidate[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else{
 			//var escapeStr = escape("|$|")
-			var Guest = /Guest=true\|\-\|(.*)\|\+\|/.exec(unescape(decodeURI(n)));
-			if (Guest != null && Guest[1].indexOf("|$|") != -1){
-				var SplitGuest = Guest[1].split("|$|");
+			var Guest = /Guest=(.*)/.exec(unescape(decodeURI(n)));
+			var ComRe = Guest[1].json();
+			if (ComRe.record){
 				try{
-					if (document.forms[0].username) document.forms[0].username.value = SplitGuest[0];
-					if (document.forms[0].Email) document.forms[0].Email.value = SplitGuest[1];
-					if (document.forms[0].WebSite) document.forms[0].WebSite.value = SplitGuest[2];
+					if (document.forms[0].username) document.forms[0].username.value = ComRe.username;
+					if (document.forms[0].Email) document.forms[0].Email.value = ComRe.useremail;
+					if (document.forms[0].WebSite) document.forms[0].WebSite.value = ComRe.userwebsite;
 				}catch(e){if (e.description.length > 0) alert(e.description);}
 			}
 		}
