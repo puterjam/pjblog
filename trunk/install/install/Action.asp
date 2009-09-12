@@ -7,6 +7,28 @@
 <!--#include file="Stream.asp" -->
 <!--#include file="fso.asp" -->
 <!--#include file="Pack.asp" -->
+<%
+	Public Function BlogNotDown(ByVal DataBase)
+		BlogNotDown = False
+		If Len(DataBase) = 0 Then Exit Function
+		Dim BlogNotDownDataBase, Sql
+		BlogNotDownDataBase = DataBase '这里改成你的数据库地址，这是相对根目录的地址
+		Set Conn = server.createobject("Adodb.Connection")
+			Conn.open "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.MapPath(BlogNotDownDataBase)
+			Conn.execute("create table blog_Notdownload(blog_Nodownload OLEObject)")
+			Set Rs = Server.CreateObject("Adodb.RecordSet")
+				Sql = "Select * From blog_Notdownload"
+				Rs.open Sql, Conn, 1, 3
+				Rs.AddNew
+				Rs("blog_Nodownload").appendchunk(chrB(Asc("<")) & chrB(Asc("%")))
+				Rs.update
+			Rs.close
+			Set Rs = Nothing
+		Conn.Close
+		Set Conn = Nothing
+		BlogNotDown = True
+	End Function
+%>
 <script language="jscript" type="text/jscript" runat="server">
 /******************************************************/
 // 请修改此处的数据库地址
@@ -16,7 +38,7 @@
 /******************************************************/
 	var step = Request.Form("step");
 	var info = unescape(Request.Form("info"));
-	var check = false, str, Conn;
+	var check = false, str, Conn, Rs;
 	
 	//检测组件
 	if (step == "1" || step == 1){
@@ -71,6 +93,17 @@
 	
 </script>
 <%
+	'保护数据库操作
+	If step = "5" Or step = 5 Then
+		Dim cstrs
+		If BlogNotDown("../" & MsPath) Then
+			cstrs = "{suc : true, info : '" & transHtml("<font color=green>输出保存二进制数据流保护数据库成功...</font>") & "'}"
+		Else
+			cstrs = "{suc : false, info : '" & transHtml("<font color=red>输出保存二进制数据流保护数据库失败...</font>") & "'}"
+		End If
+		Response.Write(cstrs)
+	End If
+	
 	If step = "11" Or step = 11 Then
 		Dim Install_Cookie, Install_Access
 		Install_Cookie = Request.Form("Install_Cookie")

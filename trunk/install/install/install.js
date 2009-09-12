@@ -50,7 +50,6 @@ var Tables = [
 	"create table blog_Member",
 	"create table blog_ModSetting",
 	"create table blog_module",
-	"create table blog_Notdownload",
 	"create table blog_Smilies",
 	"create table blog_status",
 	"create table blog_tag",
@@ -179,7 +178,7 @@ var blog_Info = [
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_about ntext",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_showtotal bit default 1",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterName ntext",
-	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterIP ntext",
+	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterIP ntext default 10.0.0.1|10.0.1.2",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commTimerout Integer default 0",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commUBB Integer default 0",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commImg Integer default 0",
@@ -443,7 +442,7 @@ var insSysTem = [
 	"insert into blog_Smilies (sm_Image, sm_Text) values ('Face_78.gif', '[face78]')",
 	"insert into blog_Smilies (sm_Image, sm_Text) values ('Face_79.gif', '[face79]')",
 	// ------------------------------- blog_Notdownload -----------------------------------
-	"insert into blog_Notdownload",
+	"insert into blog_Notdownload (blog_Nodownload) values ('\<\%')",
 	// ------------------------------- blog_module -----------------------------------
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('User', 'User Panel', 'sidebar', False, 3, True, '$user_code$')",
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('BlogInfo', 'Statistics', 'sidebar', True, 4, True, '\"日志: <a href=\"\"default.asp\"\"><b>$blog_LogNums$</b> 篇</a><br/>评论: <a href=\"\"search.asp?searchType=Comments\"\"><b>$blog_CommNums$</b> 个</a><br/>引用: <a href=\"\"search.asp?searchType=trackback\"\"><b>$blog_TbCount$</b> 个</a><br/>留言: <b>$blog_MessageNums$</b> 个<br/>会员: <a href=\"\"member.asp\"\"><b>$blog_MemNums$</b> 人</a><br/>访问: <b>$blog_VisitNums$</b> 次<br/>在线: <b>$blog_OnlineNums$</b> 人<br/>建站时间: <strong>2005-06-20</strong>\"')",
@@ -496,7 +495,33 @@ var Arrays = [
 	// step three for pjblog, update datebase!
 	[
 	 	[3, "开始操作执行升级数据库"],
-		[Tables, blog_book, blog_Category, blog_Comment, blog_Content, blog_Counter, blog_Files, blog_Info, blog_Keywords, blog_LinkClass, blog_Links, blog_Member, blog_ModSetting, blog_module, blog_Notdownload, blog_Smilies, blog_status, blog_tag, blog_Trackback]
+		[
+		   Tables,
+		   blog_book,
+		   blog_Category,
+		   blog_Comment, 
+		   blog_Content,
+		   blog_Counter,
+		   blog_Files,
+		   blog_Info, 
+		   blog_Keywords,
+		   blog_LinkClass,
+		   blog_Links, 
+		   blog_Member,
+		   blog_ModSetting,
+		   blog_module,
+		   blog_Smilies, 
+		   blog_status, 
+		   blog_tag, 
+		   blog_Trackback, 
+		   insSysTem
+		 ]
+	],
+	
+	//step five for pjblog protect datebase!
+	[
+	 	[5, "开始创建保护数据库二进制代码"],
+		["Protect DataBase For PJBlog"]
 	],
 	
 	// step four for pjblog, clear Application
