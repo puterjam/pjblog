@@ -30,19 +30,16 @@
   };
   
 //复制提交内容
-function CopyAll(A)
-{
-A.focus() //使文本框得到焦点
-A.select() //把文本框中的内容全选
-if (document.all)
-{
-therange=A.createTextRange()
-therange.execCommand("Copy") //复制
-}
+function CopyAll(A){
+	A.focus() //使文本框得到焦点
+	A.select() //把文本框中的内容全选
+	if (document.all){
+		therange=A.createTextRange()
+		therange.execCommand("Copy") //复制
+	}
 }
 
-function $() 
-{ 
+function $(){ 
     var elements = new Array(); 
     for (var i = 0; i < arguments.length; i++) 
     { 
@@ -985,7 +982,7 @@ function getAlias(){
 }
 
 
-//ig:
+//创建文件夹规则 example:
 //<input onblur="replaceInput(this,window.event)" onkeyup="replaceInput(this,window.event)" />
 function ReplaceInput(obj, event){
 	var str = ["<", ">", "/", "\\", ":", "*", "?", "|", "\"", /[\u4E00-\u9FA5]/g];

@@ -187,7 +187,7 @@ end if
               <%if memName=empty then%><tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="myblogemail" type="text" size="18" class="userpass" maxlength="24"/> 请填写您的邮箱.</td></tr><%end if%>
               <%if memName=empty then%><tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="myblogsiteurl" type="text" class="userpass" value="http://" size="18" maxlength="24"/> 请填写您的网址.</td></tr><%end if%>
 
-          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('validate');"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr>
+          	  <tr><td align="right" width="70"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr>
           	  <tr><td align="right" width="70" valign="top" height="56"><strong>头　像:</strong></td>
           	  <td style="padding:2px;" align="left">
           	   <input type="hidden" name="book_face" value="face1"/>

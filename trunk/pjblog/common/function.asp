@@ -1834,18 +1834,6 @@ function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style, baseUrl, ev
     
     return pageCode;
 }
-////*************************************
-//// 设置Gravatar头像信息
-//// <img alt="Gravatar Icon" src="http://www.gravatar.com/avatar/email md5?d=identicon&s=80&r=g"/>
-////*************************************
-//function Gravatar(){
-//	this.Gravatar_d = "identicon"; // 默认图片，如d=http%3A%2F%2Fexample.com%2Fimages%2Fexample.jpg(其中“%3A”代“:”，“%2F”代“/”)，也可以用三个特殊参数：identicons、monsterids、wavatars
-//	this.Gravatar_s = "40"; // 图片大小，单位是px，默认是80，可以取1~512之间的整数值
-//	this.Gravatar_r = "g"; // 限制等级，默认为g，(G 普通级、PG 辅导级、R 和 X 为限制级)
-//	this.EmailMd5 = ""; // 邮箱的MD5值
-//	function getImg(d, s, r, e){return "http://www.gravatar.com/avatar/" + e + "?d=" + d + "&s=" + s + "&r=" + r ;}
-//	this.outPut = function(){getImg(this.Gravatar_d, this.Gravatar_s, this.Gravatar_r, this.EmailMd5);}
-//}
 </script>
 
 
