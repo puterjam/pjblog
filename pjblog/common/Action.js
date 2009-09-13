@@ -28,13 +28,13 @@ function Hidden(i){
 	ajax.get(
 			 GetFile[0]+GetAction[0]+"TimeStamp="+new Date().getTime(),
 			 function(obj) {
-				 TempStr = obj.responseText;
-				 if ( TempStr == "1" ){
-					 $("hidden1_"+i).style.display = "";
-					 $("hidden2_"+i).style.display = "none";
+				 TempStr = obj.responseText.json();
+				 if ( TempStr.suc ){
+					 $("hidden1_" + i).style.display = "";
+					 $("hidden2_" + i).style.display = "none";
 				 }else{
-					 $("hidden1_"+i).style.display = "none";
-					 $("hidden2_"+i).style.display = "";
+					 $("hidden1_" + i).style.display = "none";
+					 $("hidden2_" + i).style.display = "";
 				 }
 			 }
 	 );
