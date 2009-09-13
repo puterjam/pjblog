@@ -178,7 +178,7 @@ var blog_Info = [
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_about ntext",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_showtotal bit default 1",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterName ntext",
-	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterIP ntext default 10.0.0.1|10.0.1.2",
+	"ALTER TABLE [blog_Info] ADD COLUMN blog_FilterIP ntext",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commTimerout Integer default 0",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commUBB Integer default 0",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_commImg Integer default 0",
@@ -348,7 +348,7 @@ var insSysTem = [
 	"insert into blog_Category (cate_Name, cate_Order, cate_Intro, cate_OutLink, cate_URL, cate_Lock, cate_icon) values ('Index', -99, '日志首页', True, 'default.asp', True, 'images/icons/22.gif')",
 	"insert into blog_Category (cate_Name, cate_OutLink, cate_URL, cate_Lock, cate_icon) values ('TagsCloud', True, 'tag.asp', False, 'images/icons/10.gif')",
 	// ------------------------------- blog_info -----------------------------------
-	"insert into blog_Info (blog_Name, blog_Title, blog_URL, blog_MemNums, blog_showtotal, blog_FilterName, blog_commTimerout, blog_commImg, blog_SplitType, blog_introChar, blog_postFile, blog_DisMod, blog_master, blog_CountNum, blog_wap, blog_wapNum, blog_wapHTML, blog_wapLogin, blog_UpLoadSet, blog_html) values ('PJBlog3', '创造机会的人是勇者；等待机会的人是愚者', 'http://www.pjhome.net/', 1, 0, '游客|客人|Admin|SupAdmin|Fuck|', 30, 1, True, 2000, 2, 0, 'YourName', 0, -1, 5, -1, -1, '1|4|0|PJBlog|PJBlog|9|0|10|10|FFFFFF|0|10|10|0.5|images/WaterMaker.png|280|45|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0', 'html,htm,shtml,xhtml,do')",
+	"insert into blog_Info (blog_Name, blog_Title, blog_URL, blog_MemNums, blog_showtotal, blog_FilterName, blog_commTimerout, blog_commImg, blog_SplitType, blog_introChar, blog_postFile, blog_DisMod, blog_master, blog_CountNum, blog_wap, blog_wapNum, blog_wapHTML, blog_wapLogin, blog_UpLoadSet, blog_html, blog_FilterIP, blog_DefaultSkin) values ('PJBlog3', '创造机会的人是勇者；等待机会的人是愚者', 'http://www.pjhome.net/', 1, 0, '游客|客人|Admin|SupAdmin|Fuck|', 30, 1, True, 2000, 2, 0, 'YourName', 0, -1, 5, -1, -1, '1|4|0|PJBlog|PJBlog|9|0|10|10|FFFFFF|0|10|10|0.5|images/WaterMaker.png|280|45|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0', 'html,htm,shtml,xhtml,do', '10.0.1.10|10.0.1.12', 'default')",
 	// ------------------------------- blog_Keywords -----------------------------------
 	"insert into blog_Keywords (key_Text, key_URL) values ('puterjam', 'http://www.pjhome.net')",
 	"insert into blog_Keywords (key_Text, key_URL) values ('PJBlog', 'http://www.pjhome.net')",
