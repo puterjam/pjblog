@@ -766,13 +766,13 @@ ElseIf Request.Form("action") = "Links" Then
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
 	    '--------------------------批量删除友情链接----------------------------
 	ElseIf Request.Form("whatdo") = "DelLinks" Then
-        dim LinksID, PartLinks, LinksNum
+        Dim LinksID, PartLinks, LinksNum
         LinksID = Request.Form("checklinkID")
         PartLinks = split(LinksID, ", ")
         If int(ubound(PartLinks)) >= 0 then
-           for LinksNum = 0 to ubound(PartLinks)
+           For LinksNum = 0 to ubound(PartLinks)
                conn.Execute("DELETE * from blog_Links where link_ID="&PartLinks(LinksNum))
-           next
+           Next
         Session(CookieName&"_ShowMsg") = True
         Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"共"&ubound(PartLinks)+1&"条链接删除成功!"
         Bloglinks(2)
@@ -783,6 +783,21 @@ ElseIf Request.Form("action") = "Links" Then
         Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"您没有选择要删除的链接!"
         RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
         End If
+		'--------------------------批量取消通过友情链接----------------------------
+	ElseIf Request.Form("whatdo") = "ReSetLiks" Then
+		Dim ReSetSelectID, SplitReSetSelectID, SplitReSetCout
+		ReSetSelectID = Request.Form("checklinkID")
+		SplitReSetSelectID = Split(ReSetSelectID, ",")
+		If UBound(SplitReSetSelectID) >= 0 Then
+			For SplitReSetCout = 0 To UBound(SplitReSetSelectID)
+				Conn.Execute("Update blog_Links Set link_IsShow=False Where link_ID=" & SplitReSetSelectID(SplitReSetCout))
+			Next
+			Bloglinks(2)
+        	PostLink
+		End If
+		Session(CookieName&"_ShowMsg") = True
+        Session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&"批量取消友情链接成功!"
+		RedirectUrl("ConContent.asp?Fmenu=Link&Smenu=&page="&Request.Form("page"))
     '/////////////////////////////////////////////////////////////////////////////
 	'LinkClassID, LinkClassName, LinkClassOrder, LinkClassTitle
 		'--------------------------保存友情链接分类----------------------------

@@ -234,9 +234,9 @@ Class logArticle
         '-------------------输出静态日志档案--------------------
         Dim preLog, nextLog
         '输出日志到文件
-		if isajax = false then
+		If isajax = false then
         	PostArticle PostLogID, False
-		end if
+		End if
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
@@ -474,47 +474,31 @@ Class logArticle
         '-------------------输出静态日志档案--------------------
         '输出日志到文件
 		If blog_postFile = 2 Then
-		dim oldcate,oldctype,oldcname,A,B,C,D
-		
-		On Error Resume Next
-		
-		'之前如果调用过request.BinaryRead后，不能直接调用request.form了
-		'live write 就挂在这里
-		oldcname = CheckStr(request.form("oldcname"))
-		oldcate = CheckStr(request.form("oldcate"))
-		oldctype = CheckStr(request.form("oldtype"))
-		D = conn.execute("select cate_Part from blog_Category where cate_ID="&oldcate)(0)
-		A = "article/"&D
-		If IsBlank(D) then
-			A = "article"
-		End If
-		B=oldcname
-		If oldctype="0" Then
-			C="htm"
-		Else
-			C="html"
-		End If
-		If oldcname<>request.Form("Cname") or oldcate<>request.Form("log_CateID") or oldctype<>request.Form("Ctype") Then
-			DeleteFiles Server.MapPath(A&"/"&B&"."&C)
-		End If
-		
-		'用来检查是否有
-        If Err Then
-            Err.Clear
-        End If
-        
-        if isajax = false then
-			PostArticle id, False
-		end if
-		
+			Dim oldcate, oldctype, oldcname, Dpart, DeHie, DeClassFso
+			On Error Resume Next
+			'之前如果调用过request.BinaryRead后，不能直接调用request.form了
+			'live write 就挂在这里
+			oldcname = CheckStr(request.form("oldcname"))
+			oldcate = CheckStr(request.form("oldcate"))
+			oldctype = CheckStr(request.form("oldtype"))
+			If oldcname <> Request.Form("cname") Or oldcate <> Request.Form("log_CateID") Or oldctype <> Request.Form("ctype") Then
+				Dpart = Conn.Execute("select cate_Part from blog_Category where cate_ID=" & oldcate)(0)
+				DeHie = CreateUrl(Dpart, oldcname, oldctype)
+				Set DeClassFso = New cls_FSO
+					DeClassFso.DeleteFile(DeHie)
+				Set DeClassFso = Nothing
+			End If
+			'用来检查是否有
+			If Err Then Err.Clear
+			If isajax = False Then PostArticle id, False
         End If
         '输出附近的日志到文件
         Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
         Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE log_PostTime>#"&PubTime&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
-        if isajax = false then
+        If isajax = False Then
 			If Not preLog.EOF Then PostArticle preLog("log_ID"), False
         	If Not nextLog.EOF Then PostArticle nextLog("log_ID"), False
-		end if
+		End if
 		
         Call updateCache
 
@@ -536,11 +520,11 @@ Class logArticle
                 Trackback Trim(log_QuoteEvery), siteURL&"default.asp?id="&logid, logTitle, CutStr(CheckStr(logIntro), 252), siteName
             Next
         End If
-		if isajax = false then
+		If isajax = False Then
 			If blog_postFile = 1 Then
 				PostHalfStatic id,false
         	End If
-		end if
+		End if
     End Function
 
     '*********************************************
@@ -726,6 +710,7 @@ Class logArticle
         Call getInfo(2)
         Call NewComment(2)
         Call Calendar("", "", "", 2)
+		Call BlogArticleID(2)
 
         If blog_postFile>0 Then
             Dim lArticle

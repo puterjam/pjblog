@@ -246,7 +246,7 @@ Else
 		 	</table>
 	  </div>
 	  <div class="SubButton">
-	      <input type="submit" name="Submit" value="保存友情链接" class="button"/><input type="button" name="dellinks" value="删除友情链接" class="button" onclick="DelLiks()"/> 
+	      <input type="submit" name="Submit" value="保存友情链接" class="button"/><input type="button" name="dellinks" value="删除友情链接" class="button" onclick="DelLiks()"/> <input type="button" name="ReSetlinks" value="批量取消通过" class="button" onclick="ReSetLiks()"/>
 	     </div>
 		 <script language="javascript" type="text/javascript">
 		 function DelLiks(){
@@ -254,6 +254,13 @@ Else
 		    document.forms["Link"].whatdo.value = "DelLinks";
 			document.forms["Link"].submit();
 			}
+		 }
+		 
+		 function ReSetLiks(){
+			if (confirm("确定取消通过这些友情连接吗?")){
+				document.forms["Link"].whatdo.value = "ReSetLiks";
+				document.forms["Link"].submit();
+			} 
 		 }
 		 </script>
 	 </td>
