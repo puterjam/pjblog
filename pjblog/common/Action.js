@@ -439,8 +439,9 @@ function ReturnPage(URL, Obj){
 function CreateHtml(){
 	pWidth = $("processBar").offsetWidth;
 	if ($('AjaxRebuildButton').disabled == false) $('AjaxRebuildButton').disabled = true;
-	if(Lists.length<=0){
-		$("msgbox").innerHTML="没有文章需要静态化";
+	if(Lists.length <= 0){
+		$("msgbox").innerHTML = "没有文章需要静态化";
+		$('AjaxRebuildButton').disabled = false;
 	}else if(CurrentIndex == Lists.length){
 		$("msgbox").innerHTML = "静态化完毕";
 		$('AjaxRebuildButton').disabled = false;
@@ -451,12 +452,12 @@ function CreateHtml(){
 		var ajax=new AJAXRequest();
 		ajax.get("action.asp?action=ReBuildArticle&id=" + Lists[CurrentIndex] + "&TimeStamp="+new Date().getTime(),		
 			function(obj){
-					var msg=eval("("+obj.responseText+")");	
+					var msg = eval("("+obj.responseText+")");	
 					if(msg.suc){
 						CurrentIndex++;
-						window.setTimeout("CreateHtml()",10);	
+						window.setTimeout("CreateHtml()", 10);	
 					}else{
-						$("msgbox").innerHTML="静态化过程出现错误，已静态化" + CurrentIndex + "篇文章!";
+						$("msgbox").innerHTML = "静态化过程出现错误，已静态化" + CurrentIndex + "篇文章!";
 						return;
 					}
 					var CurrentWidth = Math.floor((CurrentIndex / Lists.length) * (pWidth - 2));
@@ -483,6 +484,8 @@ function StopHtml(){
 }
 
 function StartHTML(){
+	CurrentIndex = 0;
+	pWidth = 0;
 	IsStop = false;
 	CreateHtml();
 }

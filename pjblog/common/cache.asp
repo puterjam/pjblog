@@ -557,27 +557,28 @@ End Function
 '=====================End Function=======================
 
 Function BlogArticleID(ByVal action)
-	If Not IsArray(Application(CookieName&"_blog_ReBuildID")) Or action = 2 Then
+	If IsEmpty(Application(CookieName & "_blog_ReBuildID")) Or IsNull(Application(CookieName & "_blog_ReBuildID")) Or action = 2 Then
 		Dim BlogArticleDB, BlogArticleList
-		Set BlogArticleDB = Conn.Execute("SELECT log_ID FROM blog_Content ORDER BY log_ID ASC")
+		Set BlogArticleDB = Conn.Execute("SELECT log_ID FROM blog_Content Where log_IsDraft=False ORDER BY log_ID ASC")
 		SQLQueryNums = SQLQueryNums + 1
 		TempVar = ""
 		If BlogArticleDB.Bof Or BlogArticleDB.Eof Then
-			TempVar = ""
+			TempVar = "[]"
 		Else
 			TempVar = TempVar & "["
 			Do While Not BlogArticleDB.Eof
 				TempVar = TempVar & BlogArticleDB(0) & ","
 			BlogArticleDB.MoveNext
 			Loop
-			TempVar = TempVar & "end"
-			TempVar = Replace(TempVar, ",end", "")
+			TempVar = Mid(TempVar, 1, (Len(TempVar) - 1))
 			TempVar = TempVar & "]"
-			Application(CookieName&"_blog_ReBuildID") = TempVar
 		End If
+		Application.Lock()
+		Application(CookieName & "_blog_ReBuildID") = TempVar
+		Application.UnLock()
 		BlogArticleID = TempVar
 	Else
-		BlogArticleID = Application(CookieName&"_blog_ReBuildID")
+		BlogArticleID = Application(CookieName & "_blog_ReBuildID")
 	End If
 End Function
 

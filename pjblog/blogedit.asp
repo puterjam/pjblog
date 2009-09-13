@@ -215,7 +215,7 @@ End Sub
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onBlur="getAlias()" style="ime-mode:disabled"/>
+			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" value="<%=trim(cdb("log_cname"))%>" onblur="ReplaceInput(this,window.event);" onkeyup="ReplaceInput(this,window.event)" />
 			   <span> . </span>
 			  <select name="ctype" onBlur="getAlias()">
               <%
