@@ -21,7 +21,7 @@ Dim title, cname, Message, lArticle, postLog, SaveId, ReadForm, SplitReadForm
 Dim cCateID, e_tags, ctype, logWeather, logLevel, logcomorder, logDisComment, logIsTop, logIsHidden, logMeta, logFrom, logFromURL, logdisImg, logDisSM, logDisURL, logDisKey, logQuote
 Dim NewCateName, AType, BlogId, eSql, WebFso
 '-------------- [Alias] -----------------
-If request.QueryString("action") = "checkAlias" then
+If Request.QueryString("action") = "checkAlias" then
 	If ChkPost() Then
    		dim strcname, checkcdb, strctype, cCatePart, cPaths
    		strcname = CheckStr(request.QueryString("Cname"))
@@ -36,7 +36,7 @@ If request.QueryString("action") = "checkAlias" then
 		Set WebFso = Nothing
 	End If
 '------------- [mdown] ---------------
-elseif request.QueryString("action") = "type1" then
+Elseif request.QueryString("action") = "type1" Then
     If ChkPost() Then
 		dim mainurl, main, mainstr
         	mainurl = CheckStr(request.QueryString("mainurl"))
@@ -383,6 +383,15 @@ ElseIf Request.QueryString("action") = "ReBuildArticle" Then
 	Message = "{suc:true}"
 	If Err Then Message = "{suc:false}"
 	Response.Write(Message)
+'*************************************重写聊聊的AJAX检测验证码**********************************
+ElseIf Request.QueryString("action") = "validate" Then
+	Dim valent
+	valent = CheckStr(Request.QueryString("valent"))
+	If (memName=empty or blog_validate) and (cstr(lcase(Session("GetCode")))<>cstr(lcase(valent)) or IsEmpty(Session("GetCode"))) Then
+		Response.Write "{suc : false, info : '" & transHtml("<img src=""images/code_err.gif"" border=""0""/>") & "'}"
+	Else
+		Response.Write "{suc : true, info : '" & transHtml("<img src=""images/code_ok.gif"" border=""0""/>") & "'}"
+	End If
 Else
 	response.write "非法操作!"
 End If

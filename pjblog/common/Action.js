@@ -514,3 +514,16 @@ function doAjax(url, div){
 			 }
 	 );
 }
+
+function ajaxcheckcode(element, div){
+	if (div.value.length < 4) return;
+	var TempStr;
+	var ajax = new AJAXRequest;
+	ajax.get(
+			 "Action.asp?action=validate&valent=" + escape(div.value) + "&TimeStamp=" + new Date().getTime(),
+			 function(obj) {
+				 TempStr = obj.responseText.json();
+				 $(element).innerHTML = TempStr.info;
+			 }
+	 );
+}
