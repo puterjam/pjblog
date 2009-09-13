@@ -66,9 +66,9 @@ elseif request.QueryString("action") = "type2" then
 '--------------- [hidden] -----------------
 elseif request.QueryString("action") = "Hidden" then
     If Len(memName) > 0 Then
-	   response.write "1"
+	   response.write "{suc : true}"
 	Else
-	   response.Write "0"
+	   response.Write "{suc : false}"
 	End If
 '--------------- [用户名检测] -----------------
 elseif request.QueryString("action") = "checkname" then
