@@ -53,7 +53,8 @@ var Tables = [
 	"create table blog_Smilies",
 	"create table blog_status",
 	"create table blog_tag",
-	"create table blog_Trackback"
+	"create table blog_Trackback",
+	"create table blog_Ping"
 ];
 
 var blog_book = [
@@ -219,7 +220,8 @@ var blog_Info = [
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_smtppassword varchar(50)",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_jmail varchar(50)",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_smtpmail varchar(50)",
-	"ALTER TABLE [blog_Info] ADD COLUMN blog_html ntext"
+	"ALTER TABLE [blog_Info] ADD COLUMN blog_html ntext",
+	"ALTER TABLE [blog_Info] ADD COLUMN blog_Ping bit default 0"
 ];
 
 var blog_Keywords = [
@@ -328,6 +330,12 @@ var blog_Trackback = [
 	"ALTER TABLE [blog_Trackback] ADD COLUMN tb_SiteURL varchar(100)",
 	"ALTER TABLE [blog_Trackback] ADD COLUMN tb_Intro ntext",
 	"ALTER TABLE [blog_Trackback] ADD COLUMN tb_PostTime smalldatetime default Now()"
+];
+
+var blog_Ping = [
+	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_ID COUNTER(1, 1) PRIMARY KEY",
+	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_Name varchar(255)",
+	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_url ntext"		 
 ];
 
 /*****************************************************************/
@@ -523,6 +531,7 @@ var Arrays = [
 		   blog_status, 
 		   blog_tag, 
 		   blog_Trackback, 
+		   blog_Ping,
 		   insWhich
 		 ]
 	],
