@@ -1,7 +1,7 @@
 <%
 Class ping
 	
-	Private Pname, Purl, Rs
+	Private Pname, Purl, Pmethod, Rs
 	
 	' ********************************************
 	'	设置属性
@@ -12,6 +12,10 @@ Class ping
 	
 	Public property LET Ping_Url(ByVal values)
 		Purl = values
+	End property
+	
+	Public property LET Ping_Method(ByVal values)
+		Pmethod = values
 	End property
 	
 	' ********************************************
@@ -41,7 +45,7 @@ Class ping
 				ReDim Preserve PingArray(Int(PingCount) - 1)
 				i = 0
 				Do While Not Rs.Eof
-					PingArray(i) = Trim(Rs("Ping_url").value)
+					PingArray(i) = Array(Trim(Rs("Ping_url").value), Trim(Rs("Ping_Method").value), Trim(Rs("Ping_Name").value))
 					i = i + 1
 				Rs.MoveNext
 				Loop
@@ -60,6 +64,7 @@ Class ping
 			Rs.AddNew
 				Rs("Ping_Name") = Trim(Pname)
 				Rs("Ping_url") = Trim(Purl)
+				Rs("Ping_Method") = Trim(Pmethod)
 			Rs.Update
 			Rs.Close
 		Set Rs = Nothing
@@ -74,6 +79,7 @@ Class ping
 			Rs.open "Select * From blog_Ping Where Ping_ID=" & id, Conn, 1, 3
 				Rs("Ping_Name") = Trim(Pname)
 				Rs("Ping_url") = Trim(Purl)
+				Rs("Ping_Method") = Trim(Pmethod)
 			Rs.Update
 			Rs.Close
 		Set Rs = Nothing
@@ -90,14 +96,35 @@ Class ping
 	' ********************************************
 	'	单个发送Ping主函数
 	' ********************************************
-	Private Sub SendPingContent(ByVal CpingUrl, ByVal ArticleUrl)
+	Private Sub SendPingContent(ByVal CpingUrl, ByVal ArticleUrl, ByVal PingMethod, ByVal PingName)
 		On Error Resume Next
-		Dim xmlStr, xmlSite
+		Dim xmlStr, xmlSite, AtomSite
 		xmlSite = siteURL
 		xmlSite = Replace(xmlSite, "\", "/")
 		If Right(xmlSite, 1) = "/" Then xmlSite = Mid(xmlSite, 1, (Len(xmlSite) - 1))
+		AtomSite = xmlSite & "/atom.asp"
 		xmlSite = xmlSite & "/" & ArticleUrl
-		xmlStr = "<?xml version=""1.0""?><methodCall><methodName>weblogUpdates.ping</methodName><params><param><value>"&SiteName&"</value></param><param><value>"&xmlSite&"</value></param></params></methodCall>"
+		'xmlStr = "<?xml version=""1.0""?><methodCall><methodName>weblogUpdates.ping</methodName><params><param><value>"&SiteName&"</value></param><param><value>"&xmlSite&"</value></param></params></methodCall>"
+		xmlStr = ""
+		xmlStr = xmlStr & "<?xml version=""1.0""?>"
+		xmlStr = xmlStr & "<methodCall>"
+		xmlStr = xmlStr & "<methodName>" & PingMethod & "</methodName>"
+		xmlStr = xmlStr & "<params>"
+		xmlStr = xmlStr & "<param>"
+		xmlStr = xmlStr & "<value>" & PingName & "</value>"
+		xmlStr = xmlStr & "</param>"
+		xmlStr = xmlStr & "<param>"
+		xmlStr = xmlStr & "<value>" & SiteName & "</value>"
+		xmlStr = xmlStr & "</param>"
+		xmlStr = xmlStr & "<param>"
+		xmlStr = xmlStr & "<value>" & xmlSite & "</value>"
+		xmlStr = xmlStr & "</param>"
+		xmlStr = xmlStr & "<param>"
+		xmlStr = xmlStr & "<value>" & AtomSite & "</value>"
+		xmlStr = xmlStr & "</param>"
+		xmlStr = xmlStr & "</params>"
+		xmlStr = xmlStr & "</methodCall>"
+
 		Dim objPing
       	Set objPing = Server.CreateObject("MSXML2.ServerXMLHTTP")
 			objPing.SetTimeOuts 10000, 10000, 10000, 10000 
@@ -118,14 +145,15 @@ Class ping
 	'	批量发送Ping主函数
 	' ********************************************
 	Public Sub WebPing(ByVal LogUrl)
-		Dim WebArray, i, xmlSite
+		Dim WebArray, i, xmlSite, xmlArr
 		WebArray = GetPingContent
 		xmlSite = siteURL
 		xmlSite = Replace(xmlSite, "\", "/")
 		If Right(xmlSite, 1) = "/" Then xmlSite = Mid(xmlSite, 1, (Len(xmlSite) - 1))
 		LogUrl = xmlSite & "/" & LogUrl
 		For i = 0 To UBound(WebArray)
-			SendPingContent WebArray(i), LogUrl
+			xmlArr = WebArray(i)
+			SendPingContent xmlArr(0), LogUrl, xmlArr(1), xmlArr(2)
 		Next
 	End Sub
 	

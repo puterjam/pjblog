@@ -74,6 +74,7 @@ Sub c_ceneral
 		        <tr align="center">
 		          <td class="TDHead" nowrap>&nbsp;</td>
 		          <td class="TDHead" nowrap width="150">Ping名称</td>
+                  <td class="TDHead" nowrap width="200">Ping方法</td>
 		          <td class="TDHead" nowrap width="300">ping地址</td>
 		        </tr>
                 <%
@@ -84,6 +85,7 @@ Sub c_ceneral
                 <tr align="center">
 		          <td nowrap><input name="ping_id" type="hidden" value="<%=Trim(conPing("Ping_ID"))%>"><input type="checkbox" value="<%=conPing("Ping_ID")%>" name="pingSelectID" /></td>
 		          <td nowrap width="150"><input type="text" value="<%=Trim(conPing("Ping_Name"))%>" name="ping_name" class="text" style=" width:100%" /></td>
+                  <td nowrap width="200"><input type="text" value="<%=Trim(conPing("Ping_Method"))%>" name="ping_method" class="text" style=" width:100%" /></td>
 		          <td nowrap width="300"><input type="text" value="<%=Trim(conPing("Ping_Url"))%>" name="ping_url" class="text" style=" width:100%" /></td>
 		        </tr>
                 <%
@@ -93,11 +95,12 @@ Sub c_ceneral
 					Set conPing = Nothing
 				%>
                 <tr>
-                	<td colspan="3" class="TDHead"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>增加新的ping服务地址</td>
+                	<td colspan="4" class="TDHead"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>增加新的ping服务地址</td>
                 </tr>
                 <tr>
 		          <td nowrap>&nbsp;</td>
 		          <td nowrap width="150"><input type="text" value="" name="new_ping_name" class="text" style=" width:100%" /></td>
+                  <td nowrap width="200"><input type="text" value="" name="new_ping_method" class="text" style=" width:100%" /></td>
 		          <td nowrap width="300"><input type="text" value="" name="new_ping_url" class="text" style=" width:100%" /></td>
                 </tr>
                 <tr>

@@ -107,18 +107,21 @@ Sub doAction
             RedirectUrl("ConContent.asp?Fmenu=General&Smenu=")
 			' ping 提交
         ElseIf Request.Form("whatdo") = "pingupdate" Then
-			Dim ping_name, ping_url, Ping_Update_Class, ping_up_i, ping_id
-			Dim new_ping_name, new_ping_url
+			Dim ping_name, ping_url, ping_method, Ping_Update_Class, ping_up_i, ping_id
+			Dim new_ping_name, new_ping_url, new_ping_method
 			ping_name = Split(CheckStr(Request.Form("ping_name")), ",")
 			ping_url = Split(CheckStr(Request.Form("ping_url")), ",")
+			ping_method = Split(CheckStr(Request.Form("ping_method")), ",")
 			ping_id = Split(CheckStr(Request.Form("ping_id")), ",")
 			new_ping_name = CheckStr(Request.Form("new_ping_name"))
 			new_ping_url = CheckStr(Request.Form("new_ping_url"))
+			new_ping_method = CheckStr(Request.Form("new_ping_method"))
 			If UBound(ping_name) >= 0 Then
 				Set Ping_Update_Class = New ping
 					For ping_up_i = 0 To UBound(ping_name)
 						Ping_Update_Class.Ping_Name = ping_name(ping_up_i)
 						Ping_Update_Class.Ping_Url = ping_url(ping_up_i)
+						Ping_Update_Class.Ping_Method = ping_method(ping_up_i)
 						Ping_Update_Class.updatePingBase(ping_id(ping_up_i))
 					Next
 				Set Ping_Update_Class = Nothing
@@ -127,6 +130,7 @@ Sub doAction
 				Set Ping_Update_Class = New ping
 					Ping_Update_Class.Ping_Name = new_ping_name
 					Ping_Update_Class.Ping_Url = new_ping_url
+					Ping_Update_Class.Ping_Method = new_ping_method
 					Ping_Update_Class.insPingBase
 				Set Ping_Update_Class = Nothing
 			End If
