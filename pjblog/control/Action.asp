@@ -85,6 +85,7 @@ Sub doAction
 			If CheckStr(Request.Form("blog_PasswordProtection")) = "1" Then weblog("blog_PasswordProtection") = True Else weblog("blog_PasswordProtection") = False
 			If CheckStr(Request.Form("AuditOpen")) = "1" Then weblog("blog_AuditOpen") = True Else weblog("blog_AuditOpen") = False
 			If CheckStr(Request.Form("GravatarOpen")) = "1" Then weblog("blog_GravatarOpen") = True Else weblog("blog_GravatarOpen") = False
+			If CheckStr(Request.Form("PingOpen")) = "1" Then weblog("blog_IsPing") = True Else weblog("blog_IsPing") = False
 
             Response.Cookies(CookieNameSetting)("ViewType") = ""
             weblog.update
@@ -104,7 +105,49 @@ Sub doAction
             session(CookieName&"_ShowMsg") = True
             session(CookieName&"_MsgText") = "基本信息修改成功!"
             RedirectUrl("ConContent.asp?Fmenu=General&Smenu=")
-        ElseIf Request.Form("whatdo") = "Misc" Then
+			' ping 提交
+        ElseIf Request.Form("whatdo") = "pingupdate" Then
+			Dim ping_name, ping_url, Ping_Update_Class, ping_up_i, ping_id
+			Dim new_ping_name, new_ping_url
+			ping_name = Split(CheckStr(Request.Form("ping_name")), ",")
+			ping_url = Split(CheckStr(Request.Form("ping_url")), ",")
+			ping_id = Split(CheckStr(Request.Form("ping_id")), ",")
+			new_ping_name = CheckStr(Request.Form("new_ping_name"))
+			new_ping_url = CheckStr(Request.Form("new_ping_url"))
+			If UBound(ping_name) >= 0 Then
+				Set Ping_Update_Class = New ping
+					For ping_up_i = 0 To UBound(ping_name)
+						Ping_Update_Class.Ping_Name = ping_name(ping_up_i)
+						Ping_Update_Class.Ping_Url = ping_url(ping_up_i)
+						Ping_Update_Class.updatePingBase(ping_id(ping_up_i))
+					Next
+				Set Ping_Update_Class = Nothing
+			End If
+			If Len(new_ping_name) > 0 Then
+				Set Ping_Update_Class = New ping
+					Ping_Update_Class.Ping_Name = new_ping_name
+					Ping_Update_Class.Ping_Url = new_ping_url
+					Ping_Update_Class.insPingBase
+				Set Ping_Update_Class = Nothing
+			End If
+			session(CookieName&"_ShowMsg") = True
+            session(CookieName&"_MsgText") = "保存Ping服务信息成功!"
+            RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Ping")
+			' ping 删除
+        ElseIf Request.Form("whatdo") = "pingdelete" Then
+			Dim  ping_SelectId, Ping_Del_Class, Ping_Del_i
+			ping_SelectId = Split(CheckStr(Request.Form("pingSelectID")), ",")
+			If UBound(ping_SelectId) >= 0 Then
+				Set Ping_Del_Class = New ping
+					For Ping_Del_i = 0 To UBound(ping_SelectId)
+						Ping_Del_Class.DelPingBase(ping_SelectId(Ping_Del_i))
+					Next
+				Set Ping_Del_Class = Nothing
+				session(CookieName&"_ShowMsg") = True
+            	session(CookieName&"_MsgText") = "删除" & (UBound(ping_SelectId) + 1) & "条Ping服务信息成功!"
+			End If
+            RedirectUrl("ConContent.asp?Fmenu=General&Smenu=Ping")
+		ElseIf Request.Form("whatdo") = "Misc" Then
             If Request.Form("ReTatol") = 1 Then
                 Dim blog_Content_count, blog_Comment_count, ContentCount, TBCount, Count_Member
                 ContentCount = 0
