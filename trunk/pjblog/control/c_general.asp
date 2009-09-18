@@ -10,7 +10,7 @@ Sub c_ceneral
 		  </tr>
 		  <tr>
 		    <td class="CPanel">
-		    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=UpLoadSet">附件基本设置</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
+		    <div class="SubMenu"><a href="?Fmenu=General">设置基本信息</a> | <a href="?Fmenu=General&Smenu=Ping">Ping服务设置</a> | <a href="?Fmenu=General&Smenu=UpLoadSet">附件基本设置</a> | <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a></div>
 		<%
 		If Request.QueryString("Smenu") = "visitors" Then
 		%>
@@ -60,6 +60,52 @@ Sub c_ceneral
 		Set bCounter = Nothing
 		response.Write ("</table>")
 		End If
+		' ****************************************
+		' 	Ping 设置
+		' ****************************************
+		ElseIf Request.QueryString("Smenu") = "Ping" Then
+			Dim conPing
+			getMsg
+		%>
+        <form action="ConContent.asp" method="post" style="margin:0px" id="pingForm">
+        	<input type="hidden" name="action" value="General"/>
+			<input type="hidden" name="whatdo" value=""/>
+        	<table border="0" cellpadding="2" cellspacing="1" class="TablePanel">
+		        <tr align="center">
+		          <td class="TDHead" nowrap>&nbsp;</td>
+		          <td class="TDHead" nowrap width="150">Ping名称</td>
+		          <td class="TDHead" nowrap width="300">ping地址</td>
+		        </tr>
+                <%
+					Set conPing = Server.CreateObject("Adodb.RecordSet")
+						conPing.open "Select * From blog_Ping", Conn, 1, 1
+						Do While Not conPing.Eof
+				%>
+                <tr align="center">
+		          <td nowrap><input name="ping_id" type="hidden" value="<%=Trim(conPing("Ping_ID"))%>"><input type="checkbox" value="<%=conPing("Ping_ID")%>" name="pingSelectID" /></td>
+		          <td nowrap width="150"><input type="text" value="<%=Trim(conPing("Ping_Name"))%>" name="ping_name" class="text" style=" width:100%" /></td>
+		          <td nowrap width="300"><input type="text" value="<%=Trim(conPing("Ping_Url"))%>" name="ping_url" class="text" style=" width:100%" /></td>
+		        </tr>
+                <%
+						conPing.MoveNext
+						Loop
+						conPing.Close
+					Set conPing = Nothing
+				%>
+                <tr>
+                	<td colspan="3" class="TDHead"><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>增加新的ping服务地址</td>
+                </tr>
+                <tr>
+		          <td nowrap>&nbsp;</td>
+		          <td nowrap width="150"><input type="text" value="" name="new_ping_name" class="text" style=" width:100%" /></td>
+		          <td nowrap width="300"><input type="text" value="" name="new_ping_url" class="text" style=" width:100%" /></td>
+                </tr>
+                <tr>
+                	<td colspan="3" align="left"><input type="submit" value="保存" class="button" onclick="$('pingForm').whatdo.value='pingupdate'" /><input type="submit" value="删除" class="button" onclick="if (confirm('确定删除吗?\n删除后无法恢复!')){$('pingForm').whatdo.value='pingdelete';$('pingForm').onsubmit=function(){return true;}}else{$('pingForm').onsubmit=function(){return false;}}" /></td>
+                </tr>
+            </table>
+          </form>
+        <%
 		ElseIf Request.QueryString("Smenu") = "clear" Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		        Application.Lock
@@ -399,11 +445,11 @@ Sub c_ceneral
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 首页 KeyWords 设置 </div></td>
-		          <td align="left"><input name="blog_KeyWords" type="text" class="text" value="<%=blog_KeyWords%>" size="50" maxlength="123"/></td>
+		          <td align="left"><input name="blog_KeyWords" type="text" class="text" value="<%=blog_KeyWords%>" size="100" maxlength="123"/></td>
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 首页 Description 设置 </div></td>
-		          <td align="left"><input name="blog_Description" type="text" class="text" value="<%=blog_Description%>" size="50" maxlength="176"/></td>
+		          <td align="left"><input name="blog_Description" type="text" class="text" value="<%=blog_Description%>" size="100" maxlength="176"/></td>
 		        </tr>
 				<tr>
 		          <td width="180"><div align="right"> 网站备案信息 </div></td>
@@ -422,20 +468,25 @@ Sub c_ceneral
 		    <div align="left">
             	<table border="0" cellpadding="2" cellspacing="1">
                 	<tr>
-                    	<td width="180" align="right">使用密码保护功能</td>
+                    	<td width="180" align="right">是否开启密码保护功能</td>
                         <td><input name="blog_PasswordProtection" type="checkbox" value="1" <%if blog_PasswordProtection then response.write ("checked=""checked""")%>  /> </td>
-                        <td><div class="shuom"><strong>[勾选]</strong>表示开启密码保护功能.</div></td>
+                        <td><div class="shuom"><strong>[勾选]</strong>表示开启密码保护功能;密码保护功能的好处?[ 防止用户忘记密码而无法登入本站.可以通过密码保护的问题和答案进行取回密码,或者重设密码!]</div></td>
                     </tr>
                     <tr>
 		          		<td><div align="right"> 是否开启评论留言审核功能</div></td>
 		          		<td align="left"><input name="AuditOpen" type="checkbox" value="1" <%if blog_AuditOpen then Response.Write ("checked=""checked""")%>/></td>
-                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启评论留言审核功能</div></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启评论留言审核功能;评论审核功能的好处?[ 在一些特殊的时候可以使用开启此功能来防止垃圾信息的显示.]</div></td>
 		        	</tr>
                     <tr>
 		          		<td><div align="right"> 是否开启Gravatar头像功能</div></td>
 		          		<td align="left"><input name="GravatarOpen" type="checkbox" value="1" <%if blog_GravatarOpen then Response.Write ("checked=""checked""")%>/></td>
-                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启Gravatar头像功能</div></td>
-		        	</tr>  
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启Gravatar头像功能;Gravatar头像的优势?[Gravatar头像使得用户输入的邮箱对应成固定的头像,用户体验不错.效果不错.]</div></td>
+		        	</tr> 
+                    <tr>
+		          		<td><div align="right"> 是否开启ping服务功能</div></td>
+		          		<td align="left"><input name="PingOpen" type="checkbox" value="1" <%if blog_IsPing then Response.Write ("checked=""checked""")%>/></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启ping功能;什么是Ping服务(Ping Service)？[Ping服务，也称更新通知服务，是搜索引擎发现网友博客更新的一种方式。]Ping服务有什么好处？[使搜索引擎能更快，更全面地收录博客文章。搜索引擎在收到Ping后会在最短时间内对相应博客进行抓取。]<sup style="font-size:10px; color:#ff0000"><i>new</i></sup></div></td>
+		        	</tr> 
                 </table>
             </div>
             </fieldset>

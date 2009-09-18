@@ -4,7 +4,7 @@
 '    更新时间: 2006-1-22
 '==================================
 Class logArticle
-    Private weblog
+    Private weblog, Pingweb
     Public categoryID, logTitle, logAuthor, logEditType
     Public logIsShow, logIsDraft, logWeather, logLevel, logCommentOrder, logReadpw, logPwtips, logPwtitle, logPwcomm
     Public logDisableComment, logIsTop, logFrom, logFromURL, isajax, logdescriptionFilt
@@ -197,11 +197,13 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
+		Dim pingCname
 		If conn.Execute("select count(log_ID) from blog_Content where log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = left(logCname,36) & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
+    	    pingCname = Left(logCname, 36) & Year(now) & lenNum(Month(now)) & lenNum(Day(now)) & lenNum(Hour(now)) & lenNum(Minute(now)) & lenNum(Second(now))
 		Else
-	        weblog("log_Cname") = logCname
+	        pingCname = logCname
 		End If
+		weblog("log_Cname") = pingCname
         weblog("log_Ctype") = logCtype
         weblog("log_Readpw") = logReadpw
         weblog("log_Pwtips") = logPwtips
@@ -257,6 +259,17 @@ Class logArticle
             postLog = Array(1, "日志成功保存为草稿!", PostLogID)
         Else
             postLog = Array(0, "恭喜!日志发表成功!", PostLogID)
+			If blog_IsPing Then
+				Set Pingweb = New ping
+					Dim PiUrl
+					If blog_postFile = 2 Then
+						PiUrl = CreateUrl(Conn.Execute("Select cate_Part From blog_Category Where cate_ID=" & categoryID)(0), pingCname, logCtype)
+					Else
+						PiUrl = "default.asp?id=" & PostLogID
+					End If
+					Call Pingweb.WebPing(PiUrl)
+				Set Pingweb = Nothing
+			End If
         End If
 
         '-------------------引用通告-------------------
@@ -451,12 +464,14 @@ Class logArticle
         weblog("log_DisComment") = logDisableComment
         weblog("log_EditType") = logEditType
         weblog("log_ComOrder") = logCommentOrder
+		Dim pingCname
 		If conn.Execute("select count(log_ID) from blog_Content where log_id<>"&id&" and log_Cname='"&logCname&"'")(0) > 0 Then
-    	    weblog("log_Cname") = left(logCname,36) & Year(now)&lenNum(Month(now))&lenNum(Day(now))&lenNum(Hour(now))& lenNum(Minute(now))&lenNum(Second(now))
+    	    pingCname = left(logCname,36) & Year(now) & lenNum(Month(now)) & lenNum(Day(now)) & lenNum(Hour(now)) & lenNum(Minute(now)) & lenNum(Second(now))
 		Else
-	        weblog("log_Cname") = logCname
+	        pingCname = logCname
 		End If
-        weblog("log_Ctype")=logCtype
+		weblog("log_Cname") = pingCname
+        weblog("log_Ctype")= logCtype
         weblog("log_Readpw") = logReadpw
         weblog("log_Pwtips") = logPwtips
         weblog("log_Pwtitle") = logPwtitle
@@ -510,6 +525,17 @@ Class logArticle
             editLog = Array(1, "日志成功保存为草稿!", id)
         Else
             editLog = Array(0, "恭喜!日志编辑成功!", id)
+			If blog_IsPing Then
+				Set Pingweb = New ping
+					Dim PiUrl
+					If blog_postFile = 2 Then
+						PiUrl = CreateUrl(Conn.Execute("Select cate_Part From blog_Category Where cate_ID=" & categoryID)(0), pingCname, logCtype)
+					Else
+						PiUrl = "default.asp?id=" & id
+					End If
+					Call Pingweb.WebPing(PiUrl)
+				Set Pingweb = Nothing
+			End If
         End If
 
         '-------------------引用通告-------------------

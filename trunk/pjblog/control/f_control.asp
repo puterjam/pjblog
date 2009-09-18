@@ -707,6 +707,7 @@ Function categoryTitle()
     cTitle.Add "General.Misc" , "站点基本设置 - 初始化数据"
     cTitle.Add "General.visitors" , "站点基本设置 - 查看访客记录"
     cTitle.Add "General.UpLoadSet" , "站点基本设置 - 附件基本设置"
+	cTitle.Add "General.Ping" , "站点基本设置 - Ping服务设置"
     cTitle.Add "General." , "站点基本设置 - 设置基本信息"
 
     cTitle.Add "Categories.move" , "日志分类管理 - 批量移动日志"

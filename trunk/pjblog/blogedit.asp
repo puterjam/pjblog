@@ -6,6 +6,7 @@
 <!--#include file="class/cls_logAction.asp" -->
 <!--#include file="class/cls_article.asp" -->
 <!--#include file="class/cls_fso.asp" -->
+<!--#include file="class/cls_ping.asp" -->
 <div id="Tbody">
     <div style="text-align:center;"><br/>
 <%
