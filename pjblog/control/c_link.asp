@@ -77,6 +77,7 @@ If Request.QueryString("Smenu") = "LinkClass" Then
          </form>
 <%
 Else
+		If Int(Conn.Execute("Select count(*) From Blog_LinkClass")(0)) = 0 Then Response.Redirect("?Fmenu=Link&Smenu=LinkClass")
 		%>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
 		  <tr>
