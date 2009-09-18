@@ -470,9 +470,9 @@ var insSysTem = [
 */
 var insHome = [
 	"update blog_Content Set log_cname=iif(log_cname=\"\", log_ID, log_cname)",
-	"update blog_Content Set log_ctype=iif(log_ctype=\"\", \"html\", log_ctype)",
-	"update blog_Info Set blog_UpLoadSet=iif(blog_UpLoadSet=\"\", \"1|4|0|PJBlog|PJBlog|9|0|10|10|FFFFFF|0|10|10|0.5|images/WaterMaker.png|280|45|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0\", blog_UpLoadSet)",
-	"update blog_Info Set blog_html=iif(blog_html=\"\", \"html,htm,shtml,xhtml,do\", blog_html)"
+	"update blog_Content Set log_ctype='html'",
+	"update blog_Info Set blog_UpLoadSet='1|4|0|PJBlog|PJBlog|9|0|10|10|FFFFFF|0|10|10|0.5|images/WaterMaker.png|280|45|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0'",
+	"update blog_Info Set blog_html='html,htm,shtml,xhtml,do'"
 ];
 
 var insNone = [];

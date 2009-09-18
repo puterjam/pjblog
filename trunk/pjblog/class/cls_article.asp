@@ -442,21 +442,23 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		      </script>
               <%
 			  Dim Ts, Ts_UserName, Ts_Content, Ts_True, Ts_Email, Ts_WebSite
-			  Set Ts = toJson(Request.Cookies(CookieName)("Guest"))
-			  Ts_True = Ts.record ' 获得cookie中保存的布尔变量
 			  ' ------------------------------
 			  ' 初始化变量
 			  ' ------------------------------
 			  Ts_UserName = ""
 			  Ts_Email = ""
 			  Ts_WebSite = ""
-			  ' ------------------------------
-			  ' 变量赋值
-			  ' ------------------------------
-			  If Ts_True Then
-			  	Ts_UserName = Ts.username
-			  	Ts_Email = Ts.useremail
-			  	Ts_WebSite = Ts.userwebsite
+			  If Len(Request.Cookies(CookieName)("Guest")) > 0 Then
+				  Set Ts = toJson(Request.Cookies(CookieName)("Guest"))
+				  Ts_True = Ts.record ' 获得cookie中保存的布尔变量
+				  ' ------------------------------
+				  ' 变量赋值
+				  ' ------------------------------
+				  If Ts_True Then
+					Ts_UserName = Ts.username
+					Ts_Email = Ts.useremail
+					Ts_WebSite = Ts.userwebsite
+				  End If
 			  End If
 			  %>
 		      <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">	  

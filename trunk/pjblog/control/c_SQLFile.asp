@@ -167,7 +167,7 @@ Rs.Close : Set Rs = Nothing
 		'-------------压缩数据库-----------------
 		If Request.QueryString("do") = "Compact" Then
 		    Set AccessFSO = New cls_FSO
-		    If AccessFSO.FileExists(Server.Mappath(AccessFile)) Then
+		    If AccessFSO.FileExists(AccessFile) Then
 		        Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		        Response.Write "压缩数据库开始，网站暂停一切用户的前台操作...<br/>"
 		        Response.Write "关闭数据库操作...<br/>"
@@ -179,7 +179,7 @@ Rs.Close : Set Rs = Nothing
 		        Application.UnLock
 		        Set AccessEngine = CreateObject("JRO.JetEngine")
 		        AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(AccessFile & ".temp")
-		        AccessFSO.CopyFile Server.Mappath(AccessFile & ".temp"), Server.Mappath(AccessFile)
+		        AccessFSO.CopyFile AccessFile & ".temp", AccessFile
 		        AccessFSO.DeleteFile(AccessFile & ".temp")
 		        Set AccessFSO = Nothing
 		        Set AccessEngine = Nothing

@@ -285,7 +285,8 @@ function GoToCateAdd(){
 				 	document.forms[0].log_CateID.add(new Option(CateAddText, TempStr, false, true));
 					hidePopup();
 				 }catch(e){
-					if (e.description.length > 0){alert(e.description);hidePopup();}
+					alert(e.description);
+					hidePopup();
 				 }
 			 }
 	 );

@@ -984,9 +984,9 @@ function getAlias(){
 
 //创建文件夹规则 example:
 //<input onblur="ReplaceInput(this,window.event)" onkeyup="ReplaceInput(this,window.event)" />
-function ReplaceInput(obj, event){
+function ReplaceInput(obj, cevent){
 	var str = ["<", ">", "/", "\\", ":", "*", "?", "|", "\"", /[\u4E00-\u9FA5]/g];
-	if(event.keyCode != 37 && event.keyCode != 39){
+	if(cevent.keyCode != 37 && cevent.keyCode != 39){
 		//obj.value = obj.value.replace(/[\u4E00-\u9FA5]/g,'');
 		for (var i = 0 ; i < str.length ; i++){
 			obj.value = obj.value.replace(str[i], "");
