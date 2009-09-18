@@ -268,6 +268,7 @@ Class logArticle
 						PiUrl = "default.asp?id=" & PostLogID
 					End If
 					Call Pingweb.WebPing(PiUrl)
+					postLog = Array(0, "恭喜!日志发表成功!<br />发送PING服务成功!", PostLogID)
 				Set Pingweb = Nothing
 			End If
         End If
@@ -534,6 +535,7 @@ Class logArticle
 						PiUrl = "default.asp?id=" & id
 					End If
 					Call Pingweb.WebPing(PiUrl)
+					editLog = Array(0, "恭喜!日志编辑成功!<br />发送PING服务成功!", id)
 				Set Pingweb = Nothing
 			End If
         End If

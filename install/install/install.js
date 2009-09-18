@@ -335,7 +335,8 @@ var blog_Trackback = [
 var blog_Ping = [
 	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_ID COUNTER(1, 1) PRIMARY KEY",
 	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_Name varchar(255)",
-	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_url ntext"		 
+	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_url ntext",
+	"ALTER TABLE [blog_Ping] ADD COLUMN Ping_Method varchar(255)"
 ];
 
 /*****************************************************************/
@@ -460,12 +461,13 @@ var insSysTem = [
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('ContentList', 'ContentList', 'content', False, 0, True, '$Content_code$')",
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('Welcome', 'Welcome', 'content', True, -1, False, '<p style=&#34;line-height: 140%&#34; align=&#34;left&#34;><strong>致Blogger:<img style=&#34;width: 96px; height: 96px&#34; alt=&#34;&#34; align=&#34;right&#34; src=&#34;images/welcome.gif&#34; /></strong><br /><br />感谢你选择 <strong><font color=&#34;#006600&#34;>PJBlog3</font></strong> 。第一次使用，请用初始管理员账号登陆系统，然后到系统管理，设置<font color=&#34;#0000ff&#34;><strong>站点基本信息</strong></font>。<br />初次使用还需要到后台建立你的日志的分类。<br />建站时间可以到 <font color=&#34;#0000ff&#34;><strong>界面与插件-设置模块</strong></font> 编辑模块标识为 <strong>BlogInfo</strong> 的模块即可。<br /><br />祝你使用愉快。最后，请到 <font color=&#34;#0000ff&#34;><strong>界面与插件-设置模块</strong></font> 把模块标识为 <strong>Welcome </strong>模块删除。</p><p style=&#34;line-height: 140%&#34; align=&#34;left&#34;>PJBLOG基本使用教程：<a href=&#34;http://bbs.pjhome.net/thread-30520-1-1.html&#34;>http://bbs.pjhome.net/thread-30520-1-1.html</a><br />PJBLOG常见问题集：<a href=&#34;http://bbs.pjhome.net/forum-35-1.html&#34;>http://bbs.pjhome.net/forum-35-1.html</a></p><hr /><p>&nbsp;</p>')",
 	// ------------------------------- blog_Ping -----------------------------------
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('feedsky.com', 'http://www.feedsky.com/api/RPC2')",
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('yodao.com', 'http://blog.yodao.com/ping/RPC2')",
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('yahoo.com', 'http://api.my.yahoo.com/RPC2')",
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('google.com', 'http://blogsearch.google.com/ping/RPC2')",
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('xianguo.com', 'http://www.xianguo.com/xmlrpc/ping.php')",
-	"insert into blog_Ping (Ping_Name, Ping_url) values ('zhuaxia.com', 'http://www.zhuaxia.com/rpc/server.php')"
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('feedsky.com', 'http://www.feedsky.com/api/RPC2', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('yodao.com', 'http://blog.yodao.com/ping/RPC2', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('yahoo.com', 'http://api.my.yahoo.com/RPC2', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('baidu.com', 'http://ping.baidu.com/ping/RPC2', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('google.com', 'http://blogsearch.google.com/ping/RPC2', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('xianguo.com', 'http://www.xianguo.com/xmlrpc/ping.php', 'weblogUpdates.extendedPing')",
+	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('zhuaxia.com', 'http://www.zhuaxia.com/rpc/server.php', 'weblogUpdates.extendedPing')"
 ];
 
 var insHome = [];
