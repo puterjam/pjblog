@@ -5,11 +5,8 @@ var cookie={
 };
 
 /************************************************************/
-// 这里的必须按照你站上的设置修改,由于是JS,无法从文件调用这些参数,所以请手动设置.
-//var cookieName = "evio", AccessPath = "blogDB/PBLog3.asp";
 var cookieName = cookie.GET("InstallCookie"); // cookie 名称
-var AccessPath = cookie.GET("InstallAccess"); // 数据库地址,按需要修改.
-//alert(cookieName + "|" + AccessPath)
+var AccessPath = cookie.GET("InstallAccess"); // 数据库地址
 /************************************************************/
 
 String.prototype.json = function(){
@@ -446,8 +443,6 @@ var insSysTem = [
 	"insert into blog_Smilies (sm_Image, sm_Text) values ('Face_77.gif', '[face77]')",
 	"insert into blog_Smilies (sm_Image, sm_Text) values ('Face_78.gif', '[face78]')",
 	"insert into blog_Smilies (sm_Image, sm_Text) values ('Face_79.gif', '[face79]')",
-	// ------------------------------- blog_Notdownload -----------------------------------
-	"insert into blog_Notdownload (blog_Nodownload) values ('\<\%')",
 	// ------------------------------- blog_module -----------------------------------
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('User', 'User Panel', 'sidebar', False, 3, True, '$user_code$')",
 	"insert into blog_module (name, title, type, IndexOnly, SortID, IsSystem, HtmlCode) values ('BlogInfo', 'Statistics', 'sidebar', True, 4, True, '日志: <a href=\"\"default.asp\"\"><b>$blog_LogNums$</b> 篇</a><br/>评论: <a href=\"\"search.asp?searchType=Comments\"\"><b>$blog_CommNums$</b> 个</a><br/>引用: <a href=\"\"search.asp?searchType=trackback\"\"><b>$blog_TbCount$</b> 个</a><br/>留言: <b>$blog_MessageNums$</b> 个<br/>会员: <a href=\"\"member.asp\"\"><b>$blog_MemNums$</b> 人</a><br/>访问: <b>$blog_VisitNums$</b> 次<br/>在线: <b>$blog_OnlineNums$</b> 人<br/>建站时间: <strong>2005-06-20</strong>')",
@@ -470,7 +465,16 @@ var insSysTem = [
 	"insert into blog_Ping (Ping_Name, Ping_url, Ping_Method) values ('zhuaxia.com', 'http://www.zhuaxia.com/rpc/server.php', 'weblogUpdates.extendedPing')"
 ];
 
-var insHome = [];
+/*
+	更新时执行的SQL操作
+*/
+var insHome = [
+	"update blog_Content Set log_cname=iif(log_cname=\"\", log_ID, log_cname)",
+	"update blog_Content Set log_ctype=iif(log_ctype=\"\", \"html\", log_ctype)",
+	"update blog_Info Set blog_UpLoadSet=iif(blog_UpLoadSet=\"\", \"1|4|0|PJBlog|PJBlog|9|0|10|10|FFFFFF|0|10|10|0.5|images/WaterMaker.png|280|45|www.pjhome.net|FFFFFF|18|宋体|1|0|000000|0|0\", blog_UpLoadSet)",
+	"update blog_Info Set blog_html=iif(blog_html=\"\", \"html,htm,shtml,xhtml,do\", blog_html)"
+];
+
 var insNone = [];
 
 var insCookie = cookie.GET("insName");
