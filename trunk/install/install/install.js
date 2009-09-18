@@ -221,7 +221,7 @@ var blog_Info = [
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_jmail varchar(50)",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_smtpmail varchar(50)",
 	"ALTER TABLE [blog_Info] ADD COLUMN blog_html ntext",
-	"ALTER TABLE [blog_Info] ADD COLUMN blog_Ping bit default 0"
+	"ALTER TABLE [blog_Info] ADD COLUMN blog_IsPing bit default 0"
 ];
 
 var blog_Keywords = [
