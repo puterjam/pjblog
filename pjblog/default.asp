@@ -24,7 +24,6 @@
    </div>
    </div>
    <%Side_Module_Replace '处理系统侧栏模块信息%>
-   <%=lang.Action.Rss("a","b")%>
    <div id="sidebar">
 	   <div id="innersidebar">
 		     <div id="sidebar-topimg"><!--工具条顶部图象--></div>
