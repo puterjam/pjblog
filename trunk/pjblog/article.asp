@@ -32,7 +32,7 @@ If IsInteger(id) Then
     SQLQueryNums = SQLQueryNums + 1
     If log_View.EOF Or log_View.bof Then
         log_View.Close
-        showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+        showmsg lang.Tip.SysTem(1), "不存在当前日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
     End If
     viewCount = log_View("log_ViewNums") + 1
     log_View("log_ViewNums") = viewCount
@@ -50,7 +50,7 @@ If IsInteger(id) Then
         BlogTitle = log_ViewArr(2, 0) & " - " & siteName
     End If
 Else
-    showmsg "错误信息", lang.Err.info(999), "ErrorIcon", ""
+    showmsg lang.Tip.SysTem(1), lang.Err.info(999), "ErrorIcon", ""
 End If
 getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(24, 0), log_ViewArr(25, 0)
 tKey = getTempKey

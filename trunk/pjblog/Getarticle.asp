@@ -28,7 +28,7 @@ End If
 Dim totalPut,mpage
 
 if IsInteger(id) Then getart gettag
-If Not isrel Then response.write "无相关文章！"	'这里可以试着放上广告代码，在没有相关文章的情况下才显示。
+If Not isrel Then response.write lang.Action.logs.RetArticle(1)	'这里可以试着放上广告代码，在没有相关文章的情况下才显示。
 Set conn=Nothing
 'response.write SQLQueryNums
 
@@ -81,10 +81,10 @@ Function getart(ByVal strtagsql)
 	'OutPut = "<ul>"&OutPut&"</ul>"
 	If act<>"more" Then tgthml = tgthml & subpage(totalPut,mpage,CurPage,Perpage)
 	If act<>"more" And CurPage>1 then
-		tgthml=tgthml&"<br/><strong>模式:</strong> <a style='cursor:pointer'  onclick=""Related(" & id & ", 2, 'related_tag');"" >全部显示[共"&totalPut&"个相关文章]</a></div>"
+		tgthml=tgthml&"<br/><strong>" & lang.Action.logs.RetArticle(2) & ":</strong> <a style='cursor:pointer'  onclick=""Related(" & id & ", 2, 'related_tag');"" >" & lang.Action.logs.RetArticle(3) & "[" & lang.Action.logs.RetArticle(9)(totalPut) & "]</a></div>"
 	ElseIf  act="more" Then
-		tgthml=tgthml&"<div style='margin-top:10px;width:350px;'><strong>模式:</strong> <a style='cursor:pointer'  onclick=""Related(" & id & ", 2, 'related_tag');"" >分页显示[共"&totalPut&"个相关文章]</a></div>"
-	end if 
+		tgthml=tgthml&"<div style='margin-top:10px;width:350px;'><strong>" & lang.Action.logs.RetArticle(2) & ":</strong> <a style='cursor:pointer'  onclick=""Related(" & id & ", 2, 'related_tag');"" >" & lang.Action.logs.RetArticle(4) & "[" & lang.Action.logs.RetArticle(9)(totalPut) & "]</a></div>"
+	end if
 	tgthml=replace(tgthml,chr(39),chr(34))
 	response.Write tgthml
 	isrel = True
@@ -95,21 +95,21 @@ End Function
 '参数依次　记录总数，总页数，当前页数，每页记录数
 Function subpage(ByVal totalPut,ByVal mpage,ByVal CurPage,ByVal Perpage)
 	Dim tphtml,pi
-	tphtml = "<strong>分页:</strong>"
+	tphtml = "<strong>" & lang.Action.logs.RetArticle(5) & ":</strong>"
 	If CurPage-5>1 Then 
-		tphtml = tphtml & "<a style=""cursor:pointer""  title=""转到第1页"" onclick=""Related(" & id & ", 2, 'related_tag');"" >[1]</a>..."
+		tphtml = tphtml & "<a style=""cursor:pointer""  title=""" & lang.Action.logs.RetArticle(6) & """ onclick=""Related(" & id & ", 2, 'related_tag');"" >[1]</a>..."
 	End If 
 	For pi=CurPage-5 To CurPage+5
 		If pi>0 And pi< mpage+1 Then 
 			If pi = Int(CurPage) Then
-				tphtml = tphtml & "<strong style=""text-decoration:none"" title=""当前页"">["&pi&"]</strong>"
+				tphtml = tphtml & "<strong style=""text-decoration:none"" title=""" & lang.Action.logs.RetArticle(7) & """>["&pi&"]</strong>"
 			Else
-				tphtml = tphtml & "<a style=""cursor:pointer""  title=""转到第"&pi&"页"" onclick=""Related(" & id & ", 2, 'related_tag');"" >["&pi&"]</a>"
-			End If 
+				tphtml = tphtml & "<a style=""cursor:pointer""  title=""" & lang.Action.logs.RetArticle(8)(pi) & """ onclick=""Related(" & id & ", 2, 'related_tag');"" >["&pi&"]</a>"
+			End If
 		End If 
 	Next
 	If CurPage+5<Int(mpage) Then 
-		tphtml = tphtml & "...<a style=""cursor:pointer""  title=""转到第"&mpage&"页"" onclick=""Related(" & id & ", 2, 'related_tag');"" >["&mpage&"]</a>"
+		tphtml = tphtml & "...<a style=""cursor:pointer""  title=""" & lang.Action.logs.RetArticle(8)(mpage) & """ onclick=""Related(" & id & ", 2, 'related_tag');"" >["&mpage&"]</a>"
 	End If 
 	subpage = tphtml
 end Function

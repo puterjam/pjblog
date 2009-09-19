@@ -79,7 +79,7 @@ blog_Search.Open SQL, Conn, 1, 1
      </div>
 <%
 If blog_Search.EOF And blog_Search.BOF Then
-    response.Write ("<b>没有找到符合条件的数据</b><br/><br/><a href=""default.asp"">单击返回</a><br/><br/>")
+    response.Write ("<b>没有找到符合条件的数据</b><br/><br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a><br/><br/>")
 Else
     blog_Search.PageSize = 10
     blog_Search.AbsolutePage = CurPage

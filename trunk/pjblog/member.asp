@@ -26,10 +26,10 @@ If blog_Mem.EOF Or blog_Mem.bof Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
+         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
-           document.getElementById("MsgHead").innerText="错误信息"
+           document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>"
          </script>
        <%else%>
 	  <table width="100%" cellpadding="0" cellspacing="0">
@@ -83,10 +83,10 @@ If CheckStr(Request.QueryString("memName")) = Empty Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center"><%=lang.Err.info(999)%>无法完成您的请求！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
+         <div class="MessageText"  align="center"><%=lang.Err.info(999)%>无法完成您的请求！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
-           document.getElementById("MsgHead").innerText="错误信息"
+           document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>";
          </script>
          <%
 Else
@@ -95,10 +95,10 @@ Else
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
+         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
-           document.getElementById("MsgHead").innerText="错误信息"
+           document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>";
          </script>
        <%else%>
 	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
@@ -211,7 +211,7 @@ Function SaveMem
     Dim ReInfo
     Dim UID, username, Oldpassword, password, Confirmpassword, Gender, email, homepage, QQ, HideEmail, checkUser
     UID = CLng(Trim(CheckStr(request.Form("UID"))))
-    ReInfo = Array("错误信息", "", "MessageIcon")
+    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon")
     Oldpassword = Trim(CheckStr(request.Form("Oldpassword")))
     password = Trim(CheckStr(request.Form("password")))
     Confirmpassword = Trim(CheckStr(request.Form("Confirmpassword")))
@@ -226,8 +226,8 @@ Function SaveMem
     End If
 
     If IsInteger(Gender) = False Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>" & lang.Err.info(999) & "</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>" & lang.Err.info(999) & "</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -235,23 +235,23 @@ Function SaveMem
 
     Set checkUser = conn.Execute("select top 1 * from blog_Member where mem_id="&UID&" and mem_Name='"&CheckStr(memName)&"'")
     If checkUser.EOF Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>不存在此用户<br/>操作失败！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>不存在此用户<br/>操作失败！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
     End If
     If Len(password)>0 Then
         If Len(password)<6 Or Len(password)>16 Then
-            ReInfo(0) = "错误信息"
-            ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
             ReInfo(2) = "WarningIcon"
             SaveMem = ReInfo
             Exit Function
         End If
         If password<>Confirmpassword Then
-            ReInfo(0) = "错误信息"
-            ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
             ReInfo(2) = "ErrorIcon"
             SaveMem = ReInfo
             Exit Function
@@ -259,16 +259,16 @@ Function SaveMem
     End If
 
     If Len(QQ)>0 And IsInteger(QQ) = False Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>非法QQ号</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>非法QQ号</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
     End If
 
     If Len(email)>0 And IsValidEmail(email) = False Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -276,7 +276,7 @@ Function SaveMem
 
     Set checkUser = conn.Execute("select top 1 * from blog_Member where mem_id="&UID&" and mem_Name='"&CheckStr(memName)&"'")
     If checkUser("mem_Password")<>SHA1(Oldpassword&checkUser("mem_salt")) Then
-        ReInfo(0) = "错误信息"
+        ReInfo(0) = lang.Tip.SysTem(1)
         ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo

@@ -11,7 +11,7 @@ tags(2)
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Content-Language" content="UTF-8" />
-	<title>插入已经存在的Tag</title>
+	<title><%=lang.Action.logs.InsTags%></title>
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 	<style>
@@ -55,7 +55,7 @@ tags(2)
 	</script>
 </head>
 	<body scroll="no">
-		<div id="Top"><b>插入已经存在的Tag</b></div>
+		<div id="Top"><b><%=lang.Action.logs.InsTags%></b></div>
 	     <div id="Mid">
            <%
 Dim log_Tag, log_TagItem
@@ -63,11 +63,11 @@ For Each log_TagItem IN Arr_Tags
     log_Tag = Split(log_TagItem, "||")
 
 %>
-	       <a href="#" class="tagA" onclick="addTag('<%=log_Tag(1)%>')" title="插入<%=log_Tag(1)%>"><%=log_Tag(1)%> (<%=log_Tag(2)%>)</a>
+	       <a href="#" class="tagA" onClick="addTag('<%=log_Tag(1)%>')" title="<%=lang.Action.ins%><%=log_Tag(1)%>"><%=log_Tag(1)%> (<%=log_Tag(2)%>)</a>
 	       <%Next%>
 	     </div>
 		<div id="Bottom">
-		  <input type="button" value="关闭" onclick="window.close()"/>
+		  <input type="button" value="<%=lang.Action.Close%>" onClick="window.close()"/>
 		</div>
 	</body>
 </html>

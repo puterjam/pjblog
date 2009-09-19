@@ -7,7 +7,7 @@
 '  用户注册页面
 '    更新时间: 2006-5-29
 '==================================
-If blog_Disregister Then showmsg "错误信息", "站点不允许注册新用户<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+If blog_Disregister Then showmsg lang.Tip.SysTem(1), "站点不允许注册新用户<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
 %>
 
  <div id="Tbody">
@@ -75,7 +75,7 @@ Function register
     Dim ReInfo
     Dim username, password, Confirmpassword, Gender, email, homepage, validate, HideEmail, checkUser, Question, Answer
 
-    ReInfo = Array("错误信息", "", "MessageIcon")
+    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon")
     username = Trim(CheckStr(request.Form("username")))
     password = Trim(CheckStr(request.Form("password")))
     Confirmpassword = Trim(CheckStr(request.Form("Confirmpassword")))
@@ -96,24 +96,24 @@ Function register
     End If
 
     If Len(username) = 0 Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>请输入用户名(昵称)!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>请输入用户名(昵称)!</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "WarningIcon"
         register = ReInfo
         Exit Function
     End If
 
     If Len(username)<2 Or Len(username)>24 Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>用户名(昵称)不能小于2或<br/>大于24个字符！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>用户名(昵称)不能小于2或<br/>大于24个字符！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If IsValidUserName(username) = False Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
@@ -121,24 +121,24 @@ Function register
 
     Set checkUser = conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
     If Not checkUser.EOF Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>用户名已经被注册！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>用户名已经被注册！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If Len(password) = 0 Or (Len(password)<6 Or Len(password)>16) Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "WarningIcon"
         register = ReInfo
         Exit Function
     End If
 
     If password<>Confirmpassword Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
@@ -146,8 +146,8 @@ Function register
 	
 	If blog_PasswordProtection Then
 		If (len(Question) > 0 and len(Answer) = 0) or (len(Question) = 0 and len(Answer) > 0) Then
-			ReInfo(0) = "错误信息"
-        	ReInfo(1) = "<b>密码保护问题和答案未填写完整。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+			ReInfo(0) = lang.Tip.SysTem(1)
+        	ReInfo(1) = "<b>密码保护问题和答案未填写完整。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         	ReInfo(2) = "ErrorIcon"
         	register = ReInfo
         	Exit Function
@@ -155,16 +155,16 @@ Function register
 	End If
 
     If Len(email)>0 And IsValidEmail(email) = False Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If CStr(LCase(Session("GetCode")))<>CStr(LCase(validate)) Then
-        ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function

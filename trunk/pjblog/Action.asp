@@ -44,9 +44,9 @@ Elseif request.QueryString("action") = "type1" Then
         	response.clear()
         	mainstr = ""
     	If Len(memName)>0 Then
-        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(1) & """ style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
     	Else
-        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(2) & """ style=""margin:0px 2px -4px 0px""/> " & lang.Tip.UBB.Down(2) & " <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
     	End If
     	response.write mainstr
 	End If
@@ -57,9 +57,9 @@ elseif request.QueryString("action") = "type2" then
         	response.clear()
         	mstr = ""
     	If Len(memName) > 0 Then
-       		mstr=mstr&"<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">下载此文件</a>"
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(1) & """ style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">" & lang.Tip.UBB.Down(1) & "</a>"
     	Else
-       		mstr=mstr&"<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(2) & """ style=""margin:0px 2px -4px 0px""/> " & lang.Tip.UBB.Down(2) & " <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
     	End If
     	response.write mstr
 	End If
@@ -138,8 +138,8 @@ elseif request.QueryString("action") = "PostSave" then
 		lArticle.logTrackback = logQuote
         postLog = lArticle.postLog    
         Set lArticle = Nothing   
-            
-        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#9C0024'>保存</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 1, id : "&postLog(2) & "}"
+
+        response.write "{info : '" & transHtml(lang.Tip.logs.Ajax(1)(DateToStr(now(), "Y-m-d H:I:S"))) & "', right : 1, id : "&postLog(2) & "}"
     else    
         response.write lang.Err.info(999)
     end if    
@@ -201,10 +201,10 @@ elseif request.QueryString("action") = "UpdateSave" then
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             
-        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#AF5500'>更新</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 0 , id : " & SaveId & "}"  
-    else    
-        response.write lang.Err.info(999)   
-    end if
+        response.write "{info : '" & transHtml(lang.Tip.logs.Ajax(2)(DateToStr(now(), "Y-m-d H:I:S"))) & "', right : 0 , id : " & SaveId & "}"  
+    Else    
+        Response.write lang.Err.info(999)   
+    End if
 '-------------[防盗链]---------------
 ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 	If ChkPost() Then
@@ -215,9 +215,9 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 			Set down = conn.execute("select FilesPath,FilesCounts from blog_Files where id="&id)
 				response.clear()
 				If request("action") = "Antimdown" and memName = empty Then
-					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" 该文件只允许会员下载! <a href=""login.asp"" accesskey=""L"">登录</a> | <a href=""register.asp"">注册</a>"
+					showdownstr = getFileIcons(getFileInfo(down(0))(9)) & lang.Tip.UBB.Down(2) & " <a href=""login.asp"" accesskey=""L"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
 				Else
-					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; 下载次数:"&down(1)&"]</font>"
+					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; " & lang.Tip.UBB.Down(3) & ":"&down(1)&"]</font>"
 				End If
 			response.write showdownstr
 	else
@@ -355,13 +355,13 @@ ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then
 					If SplitRs(10) Then
 						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					Else
-						SplitStr = SplitStr & Escape("[未审核评论,仅管理员可见]:&nbsp;" & UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+						SplitStr = SplitStr & Escape("[" & lang.Tip.Comment(1) & "]:&nbsp;" & UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					End If
 				Else
 					If SplitRs(10) Then	
 						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					Else
-						SplitStr = SplitStr & "[未审核评论,仅管理员可见]|$|"
+						SplitStr = SplitStr & "[" & lang.Tip.Comment(1) & "]|$|"
 					End If
 				End If
 			Else

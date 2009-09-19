@@ -90,11 +90,11 @@ End If
 	<title><%=Title%></title>
 
 	<%if len(CateTitle)>0 and CategoryID>0 then %>
-	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CategoryID%>" title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(rss2)" />
-	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CategoryID%>"  title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(atom)"  />
+	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CategoryID%>" title="<%=lang.Action.Rss(siteName & " - " & CateTitle, "rss2")%>" />
+	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CategoryID%>"  title="<%=lang.Action.Rss(siteName & " - " & CateTitle, "atom")%>"  />
 	<%else%>
-	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="订阅 <%=siteName%> 所有文章(rss2)" />
-	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="订阅 <%=siteName%> 所有文章(atom)" />
+	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="<%=lang.Action.Rss(siteName, "rss2")%>" />
+	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="<%=lang.Action.Rss(siteName, "atom")%>" />
 	<%end if%>
 	
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/global.css" type="text/css" media="all" /><!--全局样式表-->
