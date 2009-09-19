@@ -98,18 +98,15 @@ Function Calendar(C_Year, C_Month, C_Day, update)
             RS_Month.MoveNext
         Loop
         Set RS_Month = Nothing
-        'response.write "<script>alert('动态日历')</script>"
         If upTime = C_Year&"-"&C_Month Then
             CalendarArray = Array(Link_Days, upTime)
             Application.Lock
             Application(CookieName&"_blog_Calendar") = CalendarArray
             Application.UnLock
-            'response.write "<script>alert('写日历缓存')</script>"
         End If
     Else
         Link_Days = Application(CookieName&"_blog_Calendar")(0)
         Link_Count = UBound(Link_Days, 2) + 1
-        'response.write "<script>alert('静态日历')</script>"
     End If
 
     If update = 2 Then Exit Function
@@ -196,7 +193,7 @@ Function userPanel()
         End If
     End If
     If memName<>Empty Then
-        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改个人资料</a><a href=""login.asp?action=logout"" class=""sideA"" accesskey=""Q"">退出系统</a>"
+        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改个人资料</a><a href=""login.asp?action=logout"" class=""sideA"" accesskey=""Q"">" & lang.Action.Logout & "</a>"
     Else
         userPanel = userPanel&"<a href=""login.asp"" class=""sideA"" accesskey=""L"">登录</a><a href=""register.asp"" class=""sideA"" accesskey=""U"">用户注册</a>"
         If blog_PasswordProtection Then

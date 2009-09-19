@@ -22,7 +22,7 @@ If Request.QueryString("action") = "agree" Then
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:520px">
-      <div id="MsgHead">用户注册</div>
+      <div id="MsgHead"><%=lang.Action.Register%></div>
       <div id="MsgBody">
 	  <table width="100%" cellpadding="0" cellspacing="0">
 	  <form name="frm" action="register.asp" method="post">
@@ -46,7 +46,7 @@ If Request.QueryString("action") = "agree" Then
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
               <input name="action" type="hidden" value="save"/>
-			  <input name="submit2" type="button" class="userbutton" value="注册新用户" onclick="IsPost()"/>
+			  <input name="submit2" type="button" class="userbutton" value="<%=lang.Action.Register%>" onclick="IsPost()"/>
               <input name="button" type="reset" class="userbutton" value="重写"/></td>
           </tr>
 		  </form>
@@ -207,7 +207,7 @@ Else
    <div style="text-align:center;">
   <form name="aform" action="login.asp" method="post">
     <div id="MsgContent">
-      <div id="MsgHead">用户注册</div>
+      <div id="MsgHead"><%=lang.Action.Register%></div>
       <div id="MsgBody">
 	  <div style="text-align:left;line-height:120%;">为维护网上公共秩序和社会稳定，请您自觉遵守以下条款： <br/><br/>
 

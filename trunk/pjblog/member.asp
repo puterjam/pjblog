@@ -83,7 +83,7 @@ If CheckStr(Request.QueryString("memName")) = Empty Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">非法操作！！无法完成您的请求！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
+         <div class="MessageText"  align="center"><%=lang.Err.info(999)%>无法完成您的请求！<br/><a href="javascript:history.go(-1)">单击返回</a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
            document.getElementById("MsgHead").innerText="错误信息"
@@ -227,7 +227,7 @@ Function SaveMem
 
     If IsInteger(Gender) = False Then
         ReInfo(0) = "错误信息"
-        ReInfo(1) = "<b>非法操作!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+        ReInfo(1) = "<b>" & lang.Err.info(999) & "</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function

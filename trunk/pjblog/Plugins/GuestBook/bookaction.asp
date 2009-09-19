@@ -35,7 +35,7 @@ if request.form("action")="post" then
  elseif Request.form("action")="reply" then 
    replyMsg '回复留言
  else
-   showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","plugins"
+   showmsg "错误信息", lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","plugins"
 end if
 
 '============================= 发表留言 ========================================
@@ -200,10 +200,10 @@ function replyMsg
                 showmsg "错误信息","你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins"
 	   end if
 	   If MsgID=Empty then 
-	            showmsg "错误信息","非法操作<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
+	            showmsg "错误信息", lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
 	   end if
 	   If IsInteger(MsgID)=False then 
-	            showmsg "错误信息","非法操作<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
+	            showmsg "错误信息", lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
 	   end if
    Conn.ExeCute("update blog_book set book_reply='"&MsgReplyContent&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(now(),"Y-m-d H:I:S")&"# where book_ID=" & MsgID)
 
