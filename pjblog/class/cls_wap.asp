@@ -357,11 +357,11 @@ End Sub
 '--------------------登录框----------------
 
 Sub outLogin
-    outCardHead ("登入Blog")
+    outCardHead (lang.Action.Login)
     response.Write "<p><a href=""wap.asp"">"&toUnicode(HTMLDecode(SiteName))&"</a><br/>&nbsp;</p><p>"
     response.Write toUnicode("用户名: ")&"<input emptyok=""false"" name=""userName"" size=""10"" maxlength=""20"" type=""text"" value="""" /><br/>"
     response.Write toUnicode("密　码: ")&"<input emptyok=""false"" name=""Password"" size=""10"" maxlength=""32"" type=""password"" /><br/>"
-    response.Write "<anchor>"&toUnicode("登入")&"<go href=""wap.asp?do=CheckUser"" method=""post"">"
+    response.Write "<anchor>"&toUnicode(lang.Action.Login)&"<go href=""wap.asp?do=CheckUser"" method=""post"">"
     response.Write "<postfield name=""userName"" value=""$(userName)"" />"
     response.Write "<postfield name=""Password"" value=""$(Password)"" />"
     response.Write "<postfield name=""validate"" value=""0000"" />"
@@ -426,7 +426,7 @@ Sub outControl
     If memName<>Empty Then
         response.Write "<br/><a href=""wap.asp?do=Logout"">"&toUnicode("登出")&"</a>"
     Else
-        If blog_wapLogin Then response.Write "<br/><a href=""wap.asp?do=Login"">"&toUnicode("登入")&"</a>"
+        If blog_wapLogin Then response.Write "<br/><a href=""wap.asp?do=Login"">"&toUnicode(lang.Action.Login)&"</a>"
     End If
     response.Write "</p>"
 End Sub

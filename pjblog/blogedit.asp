@@ -27,7 +27,7 @@ If ChkPost() Then
          <div id="MsgHead">出错信息</div>
          <div id="MsgBody">
    		 <div class="ErrorIcon"></div>
-           <div class="MessageText"><b>非法操作!</b><br/>
+           <div class="MessageText"><b><%=lang.Err.info(999)%></b><br/>
            <a href="javascript:history.go(-1)">单击返回上一页</a> 
    		 </div>
    	 </div>

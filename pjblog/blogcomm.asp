@@ -11,7 +11,7 @@
 '    更新时间: 2006-1-12
 '=====================================
 If Not ChkPost() Then
-    response.Write ("非法操作!!")
+    Response.Write (lang.Err.info(999))
 ElseIf Request.Form("action") = "post" Then
     '评论发表代码
     Dim PostBComm
@@ -42,7 +42,7 @@ ElseIf Request.QueryString("action") = "del" Then
   </div>
 <%
 Else
-    response.Write ("非法操作!!")
+    Response.Write (lang.Err.info(999))
 End If
 
 '============================ 删除评论函数 =================================================

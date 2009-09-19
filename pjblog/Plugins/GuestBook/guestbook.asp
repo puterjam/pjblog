@@ -33,10 +33,10 @@
                 showmsg "错误信息","你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon",""
 	          end if
 	          If MsgID=Empty then 
-	            showmsg "错误信息","非法操作<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
+	            showmsg "错误信息", lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
 	          end if
 	          If IsInteger(MsgID)=False then 
-	            showmsg "错误信息","非法操作<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
+	            showmsg "错误信息", lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
 	          end if
 	         end if
 	         

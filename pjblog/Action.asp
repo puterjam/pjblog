@@ -46,7 +46,7 @@ Elseif request.QueryString("action") = "type1" Then
     	If Len(memName)>0 Then
         	mainstr = mainstr & "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
     	Else
-        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
     	End If
     	response.write mainstr
 	End If
@@ -59,7 +59,7 @@ elseif request.QueryString("action") = "type2" then
     	If Len(memName) > 0 Then
        		mstr=mstr&"<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">下载此文件</a>"
     	Else
-       		mstr=mstr&"<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a>"
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""只允许会员下载"" style=""margin:0px 2px -4px 0px""/> 该文件只允许会员下载! <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
     	End If
     	response.write mstr
 	End If
@@ -77,9 +77,9 @@ elseif request.QueryString("action") = "checkname" then
 			strname = CheckStr(request.QueryString("usename"))
 			set checkdb = conn.execute("select * from blog_Member where mem_Name='"&strname&"'")
 				if checkdb.bof or checkdb.eof then
-					response.write"<font color=""#0000ff"">用户名未注册！</font>|$|True"
+					response.write"<font color=""#0000ff"">" & lang.Err.info(2) & "</font>|$|True"
 				else
-					response.write"<font color=""#ff0000"">用户名已注册！</font>|$|False"
+					response.write"<font color=""#ff0000"">" & lang.Err.info(1) & "</font>|$|False"
 				end if
 			set checkdb = nothing
 	End If
@@ -141,7 +141,7 @@ elseif request.QueryString("action") = "PostSave" then
             
         response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#9C0024'>保存</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 1, id : "&postLog(2) & "}"
     else    
-        response.write "非法提交数据"   
+        response.write lang.Err.info(999)
     end if    
 '--------------------------- [Ajax草稿保存 -- 编辑时保存] --------------------------    
 elseif request.QueryString("action") = "UpdateSave" then    
@@ -203,7 +203,7 @@ elseif request.QueryString("action") = "UpdateSave" then
             
         response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#AF5500'>更新</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 0 , id : " & SaveId & "}"  
     else    
-        response.write "非法提交数据"   
+        response.write lang.Err.info(999)   
     end if
 '-------------[防盗链]---------------
 ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
@@ -221,7 +221,7 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 				End If
 			response.write showdownstr
 	else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	end if
 '-------------[Ajax增加新分类]---------------
 ElseIf Request.QueryString("action") = "AddNewCate" then
@@ -258,7 +258,7 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 		
 		Response.Write(ReturnID)
 	Else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	End If
 '-------------[Ajax找回密码]---------------
 ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
@@ -278,7 +278,7 @@ ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
 		End If
 		Set Rs = Nothing
 	Else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	End If
 ElseIf Request.QueryString("action") = "UpdatePass" Then
 	If ChkPost() Then
@@ -289,7 +289,7 @@ ElseIf Request.QueryString("action") = "UpdatePass" Then
 		Conn.Execute("Update [blog_Member] Set [mem_Question]='"&u_q&"',[mem_Answer]='"&u_a&"' Where [mem_ID]="&u_ID)
 		Response.Write("1")
 	Else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	End If
 ElseIf Request.QueryString("action") = "CheckPostName" Then
 	If ChkPost() Then
@@ -302,7 +302,7 @@ ElseIf Request.QueryString("action") = "CheckPostName" Then
 			Response.Write(UnCheckStr(zName) & "|$|" & Zs("mem_Question"))
 		End If
 	Else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	End If
 ElseIf Request.QueryString("action") = "updatepassto" Then
 	If ChkPost() Then
@@ -320,15 +320,15 @@ ElseIf Request.QueryString("action") = "updatepassto" Then
 		Set e_Rs = nothing
 		response.Write("1")
 	Else
-		response.write "非法提交数据"
+		response.write lang.Err.info(999)
 	End If
 '-------------[Ajax首页评论审核]---------------
 ElseIf Request.QueryString("action") = "IndexAudit" Then
 	AType = Int(CheckStr(UnEscape(Request.QueryString("type"))))
 	SaveId = Int(CheckStr(UnEscape(Request.QueryString("id"))))
 	BlogId = Int(CheckStr(UnEscape(Request.QueryString("blogid"))))
-	If len(SaveId) = 0 Then Response.Write("评论参数错误") : Response.End()
-	If len(BlogId) = 0 Then Response.Write("日志参数错误") : Response.End()
+	If len(SaveId) = 0 Then Response.Write(lang.Err.info(3)) : Response.End()
+	If len(BlogId) = 0 Then Response.Write(lang.Err.info(3)) : Response.End()
 	If AType = 0 Then
 		Conn.Execute("Update [blog_Comment] Set comm_IsAudit=true Where [comm_ID]="&SaveId)
 		Response.Write("0")
@@ -393,6 +393,6 @@ ElseIf Request.QueryString("action") = "validate" Then
 		Response.Write "{suc : true, info : '" & transHtml("<img src=""images/code_ok.gif"" border=""0""/>") & "'}"
 	End If
 Else
-	response.write "非法操作!"
+	Response.write lang.Err.info(999)
 End If
 %>

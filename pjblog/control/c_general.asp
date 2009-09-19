@@ -389,56 +389,47 @@ Sub c_ceneral
 		          <td width="180"><div align="right"> 站长邮件地址 </div></td>
 		          <td align="left"><input name="blog_email" type="text" size="50" class="text" value="<%=blog_email%>"/></td>
 		        </tr>
-
+        		<tr>
+          			<td width="180"><div align="right"> 邮件发送组件 </div></td>
+          			<td align="left"><select name="blog_jmail">
+          				<option value="1" <%if trim(blog_jmail)="1" then response.write "selected"%>>
+          				<%
+            				ObjTest("JMail.SmtpMail")
+            				If IsObj then
+                				Response.write "支持JMail.SmtpMail"
+            				Else
+                				Response.write "不支持JMail.SmtpMail"
+            				End If
+          				%>
+          				</option>
+          				<option value="0" <%if trim(blog_jmail)="0" then response.write "selected"%>>
+          				<%
+            				ObjTest("CDONTS.NewMail")
+            				If IsObj then
+                				Response.write "支持CDONTS.NewMail"
+            				Else
+                				Response.write "不支持CDONTS.NewMail"
+            				End If
+          				%>
+          				</option>
+          				</select>请选择您的服务器所支持的邮件发送组件</td>
+        		</tr>
                 <tr>
-                  <td><div align="right">是否评论留言邮件通知博主</div></td>
-                  <td align="left"><input name="blog_Isjmail" type="checkbox" value="1" <%if blog_Isjmail then response.write ("checked=""checked""")%>/></td>
+                  	<td width="180"><div align="right"> SMTP服务器 </div></td>
+                  	<td align="left"><input name="blog_smtp" type="text" size="50" class="text" value="<%=blog_smtp%>"/></td>
                 </tr>
                 <tr>
-                  <td><div align="right">博主回复是否通知客人</div></td>
-                  <td align="left"><input name="blog_reply_Isjmail" type="checkbox" value="1" <%if blog_reply_Isjmail then response.write ("checked=""checked""")%>/></td>
+                  	<td width="180"><div align="right">发件信箱 </div></td>
+                  	<td align="left"><input name="blog_smtpmail" type="text" size="50" class="text" value="<%=blog_smtpmail%>"/></td>
                 </tr>
-        <tr>
-          <td width="180"><div align="right"> 邮件发送组件 </div></td>
-          <td align="left"><select name="blog_jmail">
-          <option value="1" <%if trim(blog_jmail)="1" then response.write "selected"%>>
-          <%
-            ObjTest("JMail.SmtpMail")
-            If IsObj then
-                response.write "支持JMail.SmtpMail"
-            Else
-                response.write "不支持JMail.SmtpMail"
-            End If
-          %>
-          </option>
-          <option value="0" <%if trim(blog_jmail)="0" then response.write "selected"%>>
-          <%
-            ObjTest("CDONTS.NewMail")
-            If IsObj then
-                response.write "支持CDONTS.NewMail"
-            Else
-                response.write "不支持CDONTS.NewMail"
-            End If
-          %>
-          </option>
-          </select>请选择您的服务器所支持的邮件发送组件</td>
-        </tr>
-        <tr>
-          <td width="180"><div align="right"> SMTP服务器 </div></td>
-          <td align="left"><input name="blog_smtp" type="text" size="50" class="text" value="<%=blog_smtp%>"/></td>
-        </tr>
-        <tr>
-          <td width="180"><div align="right">发件信箱 </div></td>
-          <td align="left"><input name="blog_smtpmail" type="text" size="50" class="text" value="<%=blog_smtpmail%>"/></td>
-        </tr>
-        <tr>
-          <td width="180"><div align="right"> SMTP用户名 </div></td>
-          <td align="left"><input name="blog_smtpuser" type="text" size="50" class="text" value="<%=blog_smtpuser%>"/></td>
-        </tr>
-        <tr>
-          <td width="180"><div align="right"> SMTP密码 </div></td>
-          <td align="left"><input name="blog_smtppassword" type="password" size="50" class="text" value="<%=blog_smtppassword%>"/></td>
-        </tr>
+                <tr>
+                  	<td width="180"><div align="right"> SMTP用户名 </div></td>
+                  	<td align="left"><input name="blog_smtpuser" type="text" size="50" class="text" value="<%=blog_smtpuser%>"/></td>
+                </tr>
+                <tr>
+                  	<td width="180"><div align="right"> SMTP密码 </div></td>
+                  	<td align="left"><input name="blog_smtppassword" type="password" size="50" class="text" value="<%=blog_smtppassword%>"/></td>
+                </tr>
 
 		        <tr>
 		          <td width="180"><div align="right"> BLOG 地址
@@ -490,6 +481,16 @@ Sub c_ceneral
 		          		<td align="left"><input name="PingOpen" type="checkbox" value="1" <%if blog_IsPing then Response.Write ("checked=""checked""")%>/></td>
                         <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启ping功能;什么是Ping服务(Ping Service)？[Ping服务，也称更新通知服务，是搜索引擎发现网友博客更新的一种方式。]Ping服务有什么好处？[使搜索引擎能更快，更全面地收录博客文章。搜索引擎在收到Ping后会在最短时间内对相应博客进行抓取。]<sup style="font-size:10px; color:#ff0000"><i>new</i></sup></div></td>
 		        	</tr> 
+                    <tr>
+                  		<td><div align="right">是否评论留言邮件通知博主</div></td>
+                  		<td align="left"><input name="blog_Isjmail" type="checkbox" value="1" <%if blog_Isjmail then response.write ("checked=""checked""")%>/></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启评论留言邮件通知博主功能;如果开启必须要Jmail组件的支持,否则无法使用此功能]</div></td>
+                	</tr>
+                	<tr>
+                  		<td><div align="right">博主回复是否通知客人</div></td>
+                  		<td align="left"><input name="blog_reply_Isjmail" type="checkbox" value="1" <%if blog_reply_Isjmail then response.write ("checked=""checked""")%>/></td>
+                        <td align="left"><div class="shuom"><strong>[勾选]</strong>表示开启博主回复是否通知客人功能;这个功能可以不开启,开启的话用户体验会好些.]</div></td>
+                	</tr>
                 </table>
             </div>
             </fieldset>

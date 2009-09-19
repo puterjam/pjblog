@@ -15,7 +15,7 @@ If Request.QueryString("action") = "logout" Then
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
-      <div id="MsgHead">退出系统</div>
+      <div id="MsgHead"><%=lang.Action.Logout%></div>
       <div id="MsgBody">
 		 <div class="MessageIcon"></div>
         <div class="MessageText"><b>退出登录成功</b><br/>

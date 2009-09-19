@@ -50,7 +50,7 @@ If IsInteger(id) Then
         BlogTitle = log_ViewArr(2, 0) & " - " & siteName
     End If
 Else
-    showmsg "错误信息", "非法操作", "ErrorIcon", ""
+    showmsg "错误信息", lang.Err.info(999), "ErrorIcon", ""
 End If
 getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(24, 0), log_ViewArr(25, 0)
 tKey = getTempKey
@@ -63,7 +63,7 @@ tKey = getTempKey
 	   <%=content_html_Top%>
 	   <%
 If id<>"" And IsInteger(id) = False Then
-    response.Write ("非法操作！！")
+    Response.Write (lang.Err.info(999))
 Else
     ShowArticle id '显示日志
 End If
