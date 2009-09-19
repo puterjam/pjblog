@@ -13,12 +13,12 @@ Dim Id, Rs, Antidown, Path
 Id = Request("id")
 Antidown = Split(blog_UpLoadSet,"|")(0)
 If id = "" or not IsInteger(id) then
-	showmsg "错误信息", "很抱歉，本站无此内容！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+	showmsg lang.Tip.SysTem(1), lang.Err.info(8) & "<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
 Else
     Set Rs = conn.execute("select FilesPath,FilesCounts from blog_Files where id ="&id)
 	If Rs.eof and Rs.bof then
 	  Set Rs = Nothing
-	  showmsg "错误信息", "很抱歉，本站无此内容！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+	  showmsg lang.Tip.SysTem(1), lang.Err.info(8) & "<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
 	Else
       Path = Rs(0)
 	  conn.Execute("update blog_Files set FilesCounts='"&Rs(1)+1&"' where id ="&id)
@@ -31,7 +31,7 @@ Else
 		  Response.AddHeader "Content-Disposition", "null;filename="&Year(now)&Month(now)&Day(now)&Hour(now)&Minute(now)&Second(now)&""&Mid(path,InStrRev(path,"."))&""
 		  Response.Binarywrite ReadBinaryFile(server.mappath(path))
         Else
-	      showmsg "错误信息", "很抱歉，未经允许请勿盗链本站资源！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+	      showmsg lang.Tip.SysTem(1), lang.Err.info(9) & "<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
         End If
 	  Else
 	    Response.Redirect path
@@ -91,12 +91,12 @@ End Select
 End Function
 
 Function ReadBinaryFile(FileName)
-Const adTypeBinary = 1
-Dim BinaryStream
-Set BinaryStream = CreateObject("ADODB.Stream")
-BinaryStream.Type = adTypeBinary
-BinaryStream.Open
-BinaryStream.LoadFromFile FileName
-ReadBinaryFile = BinaryStream.Read
+	Const adTypeBinary = 1
+	Dim BinaryStream
+	Set BinaryStream = CreateObject("ADODB.Stream")
+	BinaryStream.Type = adTypeBinary
+	BinaryStream.Open
+	BinaryStream.LoadFromFile FileName
+	ReadBinaryFile = BinaryStream.Read
 End Function
 %>

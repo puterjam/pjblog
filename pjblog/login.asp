@@ -18,9 +18,9 @@ If Request.QueryString("action") = "logout" Then
       <div id="MsgHead"><%=lang.Action.Logout%></div>
       <div id="MsgBody">
 		 <div class="MessageIcon"></div>
-        <div class="MessageText"><b>退出登录成功</b><br/>
-         <a href="default.asp">单击返回首页</a>&nbsp;|&nbsp;<a href="<%=Referer_Url%>">单击返回退出前页面</a>
-         <br/>三秒后自动返回登录前页面</div>
+        <div class="MessageText"><b><%=lang.Action.LoginSuc(1)%></b><br/>
+         <a href="default.asp"><%=lang.Tip.SysTem(4)%></a>&nbsp;|&nbsp;<a href="<%=Referer_Url%>"><%=lang.Tip.SysTem(8)%></a>
+         <br/><%=lang.Action.LoginSuc(2)%></div>
          <meta http-equiv="refresh" content="3;url=<%=Referer_Url%>"/>
 		</div>
 	  </div>

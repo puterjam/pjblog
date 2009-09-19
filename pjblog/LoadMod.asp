@@ -29,17 +29,17 @@ Call CloseDB '关闭数据库
 		try{
 			getPlugins = Request.QueryString("plugins");
 			if (!getPlugins)
-				Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">非法参数</div>');
+				Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">' + lang.Err.info(3) + '</div>');
 		    
 		    var loadMod = checkplugins(getPlugins);
 			if (loadMod) {
 			    var path = "Plugins/" + loadMod[2] + "/" + loadMod[1];
 				Server.Transfer(path);
 			}else{
-			  	Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">无法找到相应的模块!</div>');
+			  	Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">' + lang.Err.info(10) + '</div>');
 			}
 		}catch(e){
-		  	Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">加载模块发生异常!</div>');
+		  	Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">' + lang.Err.info(11) + '</div>');
 		}
 	}
 </script>

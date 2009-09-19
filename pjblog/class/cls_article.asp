@@ -36,11 +36,11 @@ End Sub
 Sub ShowArticle(LogID)
     If (log_ViewArr(5, 0) = memName And log_ViewArr(3, 0) = False) Or stat_Admin Or log_ViewArr(3, 0) = True or Trim(log_ViewArr(20, 0)) <> "" Then
     Else
-        showmsg "错误信息", "该日志为私密日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+        showmsg lang.Tip.SysTem(1), "该日志为私密日志，没有权限查看该日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
     End If
     If (Not getCate.cate_Secret) Or (log_ViewArr(5, 0) = memName And getCate.cate_Secret) Or stat_Admin Or (getCate.cate_Secret And stat_ShowHiddenCate) Then
     Else
-        showmsg "错误信息", "该日志分类为私密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
+        showmsg lang.Tip.SysTem(1), "该日志分类为私密类型，无法查看该日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
     End If
 
     If log_ViewArr(6, 0) Then comDesc = "Desc" Else comDesc = "Asc" End If
