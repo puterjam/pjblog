@@ -107,7 +107,7 @@ Function login(UserName, Password)
             End If
             memLogin.Update
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If
@@ -186,7 +186,7 @@ Function login2(UserName, Password)
             memName = memLogin("mem_Name")
             memStatus = memLogin("mem_Status")
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If

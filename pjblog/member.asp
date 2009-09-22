@@ -19,44 +19,44 @@ If Request.QueryString("action") = "edit" Then
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:520px">
-      <div id="MsgHead">修改用户信息</div>
+      <div id="MsgHead"><%=lang.Tip.MemBer.EditForm(1)%></div>
       <div id="MsgBody">
        <%Set blog_Mem = conn.Execute("select * from blog_Member where mem_Name='"&CheckStr(memName)&"'")
 If blog_Mem.EOF Or blog_Mem.bof Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
+         <div class="MessageText"  align="center"><%=lang.Tip.MemBer.EditForm(2)%><br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
            document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>"
          </script>
        <%else%>
 	  <table width="100%" cellpadding="0" cellspacing="0">
-	  <form name="frm" action="member.asp" method="post" onsubmit="if (this.Oldpassword.value.length<1){alert('请输入您的登录密码!');this.Oldpassword.focus();return false}">
+	  <form name="frm" action="member.asp" method="post" onsubmit="if (this.Oldpassword.value.length<1){alert('<%=lang.Tip.MemBer.EditForm(3)%>');this.Oldpassword.focus();return false}">
 	  <input name="UID" type="hidden" value="<%=blog_Mem("mem_ID")%>"/>
-	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
-	  <tr><td align="right" width="85"><strong>　旧密码:</strong></td><td align="left" style="padding:3px;"><input name="Oldpassword" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> 输入您的旧密码.下面的密码输入框为空则不修改密码</td></tr>
-	  <tr><td align="right" width="85"><strong>　密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
-      <tr><td align="right" width="85"><strong>密码强度:</strong></td><td align="left"> &nbsp;<img src="images/0.gif" id="strong"></td></tr>
-	  <tr><td align="right" width="85"><strong>密码重复:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16"/> 必须和上面的密码一样</td></tr>
+	  <tr><td align="right" width="85"><strong> <%=lang.Tip.MemBer.EditForm(4)%>:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
+	  <tr><td align="right" width="85"><strong>　<%=lang.Tip.MemBer.EditForm(5)%>:</strong></td><td align="left" style="padding:3px;"><input name="Oldpassword" type="password" size="18" class="userpass" maxlength="16"/><font color="#FF0000">&nbsp;*</font> <%=lang.Tip.MemBer.EditForm(6)%></td></tr>
+	  <tr><td align="right" width="85"><strong>　<%=lang.Action.PassWord%>:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/> <%=lang.Tip.MemBer.EditForm(7)%></td></tr>
+      <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(8)%>:</strong></td><td align="left"> &nbsp;<img src="images/0.gif" id="strong"></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(9)%>:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16"/> <%=lang.Tip.MemBer.EditForm(10)%></td></tr>
       <%
 	  	If blog_PasswordProtection Then
 	  %>
-      <tr><td align="right" width="85"><strong>密码保护:</strong></td><td align="left">&nbsp;<b><a href="javascript:;" onclick="ModiyPassProtect('<%=blog_Mem("mem_Name")%>', 350, '<%=blog_Mem("mem_Question")%>', <%=blog_Mem("mem_ID")%>)">点击这里修改您的密码保护问题和答案.</a></b></td></tr>
+      <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(11)%>:</strong></td><td align="left">&nbsp;<b><a href="javascript:;" onclick="ModiyPassProtect('<%=blog_Mem("mem_Name")%>', 350, '<%=blog_Mem("mem_Question")%>', <%=blog_Mem("mem_ID")%>)"><%=lang.Tip.MemBer.EditForm(12)%></a></b></td></tr>
       <%
 	  	End If
 	  %>
-	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" <%if blog_Mem("mem_Sex")=0 then response.write "checked"%>/> 保密 <input name="Gender" type="radio" value="1" <%if blog_Mem("mem_Sex")=1 then response.write "checked"%>/>男 <input name="Gender" type="radio" value="2" <%if blog_Mem("mem_Sex")=2 then response.write "checked"%>/>女</td></tr>
-	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_Email")%>"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" <%if blog_Mem("mem_HideEmail") then response.write "checked"%>/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
-	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_HomePage")%>"/></td></tr>
-	  <tr><td align="right" width="85"><strong>QQ号码:</strong></td><td align="left" style="padding:3px;"><input name="QQ" type="text" size="10" class="userpass" value="<%=blog_Mem("mem_QQ")%>"/></td></tr>
+	  <tr><td align="right" width="85"><strong>　<%=lang.Tip.MemBer.EditForm(13)%>:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" <%if blog_Mem("mem_Sex")=0 then response.write "checked"%>/> <%=lang.Tip.MemBer.EditForm(14)%> <input name="Gender" type="radio" value="1" <%if blog_Mem("mem_Sex")=1 then response.write "checked"%>/><%=lang.Tip.MemBer.EditForm(15)%> <input name="Gender" type="radio" value="2" <%if blog_Mem("mem_Sex")=2 then response.write "checked"%>/><%=lang.Tip.MemBer.EditForm(16)%></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(17)%>:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_Email")%>"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" <%if blog_Mem("mem_HideEmail") then response.write "checked"%>/> <label for="hiddenEmail"><%=lang.Tip.MemBer.EditForm(18)%></label></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(19)%>:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value="<%=blog_Mem("mem_HomePage")%>"/></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(20)%>:</strong></td><td align="left" style="padding:3px;"><input name="QQ" type="text" size="10" class="userpass" value="<%=blog_Mem("mem_QQ")%>"/></td></tr>
 
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
               <input name="action" type="hidden" value="save"/>
-			  <input name="submit2" type="submit" class="userbutton" value="修改资料"/>
-              <input name="button" type="reset" class="userbutton" value="重写"/></td>
+			  <input name="submit2" type="submit" class="userbutton" value="<%=lang.Tip.MemBer.EditForm(21)%>"/>
+              <input name="button" type="reset" class="userbutton" value="<%=lang.Action.ReSet%>"/></td>
           </tr>
 		  </form>
 	<%
@@ -75,7 +75,7 @@ ElseIf Request.QueryString("action") = "view" Then
 <br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:420px">
-      <div id="MsgHead">用户信息</div>
+      <div id="MsgHead"><%=lang.Tip.MemBer.EditForm(22)%></div>
       <div id="MsgBody">
 	  <table width="100%" cellpadding="0" cellspacing="0">
 	  <%
@@ -83,7 +83,7 @@ If CheckStr(Request.QueryString("memName")) = Empty Then
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center"><%=lang.Err.info(999)%>无法完成您的请求！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
+         <div class="MessageText"  align="center"><%=lang.Err.info(999)%><%=lang.Tip.MemBer.EditForm(23)%><br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
            document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>";
@@ -95,31 +95,31 @@ Else
 
 %>
 	     <div class="ErrorIcon"></div>
-         <div class="MessageText"  align="center">无法找到该用户信息！！<br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
+         <div class="MessageText"  align="center"><%=lang.Tip.MemBer.EditForm(2)%><br/><a href="javascript:history.go(-1)"><%=lang.Tip.SysTem(2)%></a></div>
          <script>
            document.getElementById("MsgContent").style.width="300px"
            document.getElementById("MsgHead").innerText = "<%=lang.Tip.SysTem(1)%>";
          </script>
        <%else%>
-	  <tr><td align="right" width="85"><strong>　昵　称:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
-	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><%
+	  <tr><td align="right" width="85"><strong>　<%=lang.Tip.MemBer.EditForm(4)%>:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_Name")%></td></tr>
+	  <tr><td align="right" width="85"><strong>　<%=lang.Tip.MemBer.EditForm(13)%>:</strong></td><td align="left" style="padding:3px;"><%
 Select Case Int(blog_Mem("mem_Sex"))
     Case 1
-        response.Write "我是GG"
+        response.Write lang.Tip.MemBer.EditForm(24)
     Case 2
-        response.Write "我是MM"
+        response.Write lang.Tip.MemBer.EditForm(25)
     Case Else
-        response.Write "保密"
+        response.Write lang.Tip.MemBer.EditForm(14)
 End Select
 
 %></td></tr>
-	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><%if (blog_Mem("mem_HideEmail") and (not stat_Admin)) or len(blog_Mem("mem_Email"))<1 or isnull(blog_Mem("mem_Email")) then response.write "该用户没有或不公开电子邮件" else response.write blog_Mem("mem_Email") end if%></td></tr>
-	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><a href="<%=blog_Mem("mem_HomePage")%>" target="_blank"><%=blog_Mem("mem_HomePage")%></a></td></tr>
-	  <tr><td align="right" width="85"><strong>　QQ号码:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_QQ")%></td></tr>
-	  <tr><td align="right" width="85"><strong>统计:</strong></td><td align="left" style="padding:3px;">日志共 <b><%=blog_Mem("mem_PostLogs")%></b> 篇，评论共 <b><%=blog_Mem("mem_PostComms")%></b> 篇，留言共 <b><%=blog_Mem("mem_PostMessageNums")%></b> 个。</td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(17)%>:</strong></td><td align="left" style="padding:3px;"><%if (blog_Mem("mem_HideEmail") and (not stat_Admin)) or len(blog_Mem("mem_Email"))<1 or isnull(blog_Mem("mem_Email")) then response.write lang.Tip.MemBer.EditForm(26) else response.write blog_Mem("mem_Email") end if%></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(19)%>:</strong></td><td align="left" style="padding:3px;"><a href="<%=blog_Mem("mem_HomePage")%>" target="_blank"><%=blog_Mem("mem_HomePage")%></a></td></tr>
+	  <tr><td align="right" width="85"><strong>　<%=lang.Tip.MemBer.EditForm(20)%>:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_QQ")%></td></tr>
+	  <tr><td align="right" width="85"><strong><%=lang.Tip.MemBer.EditForm(27)%>:</strong></td><td align="left" style="padding:3px;"><%=lang.Tip.MemBer.EditForm(28)(blog_Mem("mem_PostLogs"), blog_Mem("mem_PostComms"), blog_Mem("mem_PostMessageNums"))%></td></tr>
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
-			  <input type="button" class="userbutton" value="返回" onclick="history.go(-1)"/>
+			  <input type="button" class="userbutton" value="<%=lang.Tip.SysTem(6)%>" onclick="history.go(-1)"/>
           </tr>
         <%
 End If
@@ -164,29 +164,29 @@ Else
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:480px">
-      <div id="MsgHead">用户列表</div>
+      <div id="MsgHead"><%=lang.Tip.MemBer.EditForm(29)%></div>
       <div id="MsgBody" style="padding:0px">
 <%If blog_Mem.EOF Or blog_Mem.bof Then
-    response.Write "没找到任何注册用户!"
+    response.Write lang.Tip.MemBer.EditForm(30)
 Else
 %>
-	  <table width="100%" border="0" cellspacing="0"><tr><th width="80">用户名</th><th>邮件</th><th>主页</th><th>ＱＱ</th><th width="34">日志</th><th width="34">评论</th><th width="34">留言</th><th>注册时间</th></tr>
+	  <table width="100%" border="0" cellspacing="0"><tr><th width="80"><%=lang.Action.LoginForm(2)%></th><th><%=lang.Tip.MemBer.EditForm(17)%></th><th><%=lang.Tip.MemBer.EditForm(19)%></th><th><%=lang.Tip.MemBer.EditForm(20)%></th><th width="34"><%=lang.Tip.MemBer.EditForm(31)%></th><th width="34"><%=lang.Tip.MemBer.EditForm(32)%></th><th width="34"><%=lang.Tip.MemBer.EditForm(33)%></th><th><%=lang.Tip.MemBer.EditForm(34)%></th></tr>
  <%
 Do Until blog_Mem.EOF Or PageCount = blog_Mem.PageSize
     If blog_Mem("mem_HideEmail") Or Len(blog_Mem("mem_Email"))<1 Or IsNull(blog_Mem("mem_Email")) Then
-        BM = "<td><img border=""0"" src=""images/noemail.gif"" alt=""该用户没有或不公开电子邮件""/></td>"
+        BM = "<td><img border=""0"" src=""images/noemail.gif"" alt=""" & lang.Tip.MemBer.EditForm(35) & """/></td>"
     Else
         BM = "<td><img border=""0"" src=""images/email.gif"" alt="""&blog_Mem("mem_Email")&"""/></td>"
     End If
     If Len(blog_Mem("mem_HomePage"))<1 Or IsNull(blog_Mem("mem_HomePage")) Then
-        BM = BM&"<td><img border=""0"" src=""images/nourl.gif"" alt=""该用户没有个人主页""/></td>"
+        BM = BM&"<td><img border=""0"" src=""images/nourl.gif"" alt=""" & lang.Tip.MemBer.EditForm(36) & """/></td>"
     Else
         BM = BM&"<td><a href="""&blog_Mem("mem_HomePage")&""" target=""_blank""><img border=""0"" src=""images/url.gif"" alt="""&blog_Mem("mem_HomePage")&"""/></a></td>"
     End If
     If Len(blog_Mem("mem_QQ"))<1 Or IsNull(blog_Mem("mem_QQ")) Then
-        BM = BM&"<td><img border=""0"" src=""images/nooicq.gif"" alt=""该用户没有QQ号码""/></td>"
+        BM = BM&"<td><img border=""0"" src=""images/nooicq.gif"" alt=""" & lang.Tip.MemBer.EditForm(37) & """/></td>"
     Else
-        BM = BM&"<td><a href=""http://wpa.qq.com/msgrd?V=1&Uin="&blog_Mem("mem_QQ")&"&Site="&SiteName&""" target=""_blank""><img border=""0"" src=""images/oicq.gif"" alt=""给该用户发QQ信息""/></a></td>"
+        BM = BM&"<td><a href=""http://wpa.qq.com/msgrd?V=1&Uin="&blog_Mem("mem_QQ")&"&Site="&SiteName&""" target=""_blank""><img border=""0"" src=""images/oicq.gif"" alt=""" & lang.Tip.MemBer.EditForm(38) & """/></a></td>"
     End If
     response.Write "<tr><td align=""left""><a href=""member.asp?action=view&memName="&Server.URLEncode(blog_Mem("mem_Name"))&""">"&blog_Mem("mem_Name")&"</a></td>"&BM&"<td>"&blog_Mem("mem_PostLogs")&"</td><td>"&blog_Mem("mem_PostComms")&"</td><td>"&blog_Mem("mem_PostMessageNums")&"</td><td>"&DateToStr(blog_Mem("mem_RegTime"), "Y-m-d H:I A")&"</td>"
     PageCount = PageCount + 1
@@ -236,7 +236,7 @@ Function SaveMem
     Set checkUser = conn.Execute("select top 1 * from blog_Member where mem_id="&UID&" and mem_Name='"&CheckStr(memName)&"'")
     If checkUser.EOF Then
         ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>不存在此用户<br/>操作失败！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = lang.Tip.MemBer.EditForm(39) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -244,14 +244,14 @@ Function SaveMem
     If Len(password)>0 Then
         If Len(password)<6 Or Len(password)>16 Then
             ReInfo(0) = lang.Tip.SysTem(1)
-            ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1) = lang.Tip.MemBer.EditForm(40) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
             ReInfo(2) = "WarningIcon"
             SaveMem = ReInfo
             Exit Function
         End If
         If password<>Confirmpassword Then
             ReInfo(0) = lang.Tip.SysTem(1)
-            ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1) = lang.Tip.MemBer.EditForm(41) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
             ReInfo(2) = "ErrorIcon"
             SaveMem = ReInfo
             Exit Function
@@ -260,7 +260,7 @@ Function SaveMem
 
     If Len(QQ)>0 And IsInteger(QQ) = False Then
         ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>非法QQ号</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = lang.Tip.MemBer.EditForm(42) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -268,7 +268,7 @@ Function SaveMem
 
     If Len(email)>0 And IsValidEmail(email) = False Then
         ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = lang.Tip.MemBer.EditForm(43) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -277,7 +277,7 @@ Function SaveMem
     Set checkUser = conn.Execute("select top 1 * from blog_Member where mem_id="&UID&" and mem_Name='"&CheckStr(memName)&"'")
     If checkUser("mem_Password")<>SHA1(Oldpassword&checkUser("mem_salt")) Then
         ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a>"
+        ReInfo(1) = lang.Tip.MemBer.EditForm(44) & "<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.MemBer.EditForm(45) & "</a>"
         ReInfo(2) = "ErrorIcon"
         SaveMem = ReInfo
         Exit Function
@@ -292,15 +292,15 @@ Function SaveMem
         Conn.Execute("update blog_member set mem_Password='"&password&"',mem_salt='"&strSalt&"' where mem_id="&UID&" and mem_Name='"&CheckStr(memName)&"'")
         SQLQueryNums = SQLQueryNums + 1
         logout(True)
-        ReInfo(0) = "用户修改成功"
-        ReInfo(1) = "<b>您的资料已经修改成功</b><br/>由于您更改了密码所以必须 <a href=""login.asp"">重新登录</a><br/>三秒后自动返回登录页面<meta http-equiv=""refresh"" content=""3;url=login.asp""/>"
+        ReInfo(0) = lang.Tip.MemBer.EditForm(46)
+        ReInfo(1) = lang.Tip.MemBer.EditForm(47) & "<meta http-equiv=""refresh"" content=""3;url=login.asp""/>"
         ReInfo(2) = "MessageIcon"
         SaveMem = ReInfo
         Session(CookieName&"_LastDo") = "EditUser"
         Exit Function
     End If
     getInfo(2)
-    ReInfo(0) = "用户修改成功"
+    ReInfo(0) = lang.Tip.MemBer.EditForm(46)
     ReInfo(1) = "<b>您的资料已经修改成功</b><br/><a href=""default.asp"">返回首页</a>&nbsp;|&nbsp;<a href="""&Referer_Url&""">单击返回修改前页面</a><br/>三秒后自动返回修改前页面<meta http-equiv=""refresh"" content=""3;url="&Referer_Url&"""/>"
     ReInfo(2) = "MessageIcon"
     SaveMem = ReInfo
