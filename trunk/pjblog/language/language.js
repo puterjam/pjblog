@@ -47,6 +47,20 @@ var lang = {
 			}
 			return temp;
 		},
+		LoginForm : function(t){
+			var temp;
+			switch (t)
+			{
+				case 1 : temp = "用户登录"; break;
+				case 2 : temp = "用户名"; break;
+				case 3 : temp = "密　码"; break;
+				case 4 : temp = "验证码"; break;
+				case 5 : temp = "点击获取验证码"; break;
+				case 6 : temp = "记住我的登录信息"; break;
+				default : temp = "非法操作";
+			}
+			return temp;
+		},
 		Submit : "提交",
 		ReSet : "重写",
 		ins : "插入",
@@ -324,5 +338,63 @@ var lang = {
 			}
 			return temp;
 		}
+	},
+	MemBer : {
+		EditForm : function(t){
+			var temp;
+			switch (t)
+			{
+				case 1 : temp = "修改用户信息"; break;
+				case 2 : temp = "无法找到该用户信息！！"; break;
+				case 3 : temp = "请输入您的登录密码!"; break;
+				case 4 : temp = "昵　称"; break;
+				case 5 : temp = "旧密码"; break;
+				case 6 : temp = "输入您的旧密码.下面的密码输入框为空则不修改密码"; break;
+				case 7 : temp = "密码必须是6到16个字符，建议使用英文和符号混合"; break;
+				case 8 : temp = "密码强度"; break;
+				case 9 : temp = "密码重复"; break;
+				case 10 : temp = "必须和上面的密码一样"; break;
+				case 11 : temp = "密码保护"; break;
+				case 12 : temp = "点击这里修改您的密码保护问题和答案."; break;
+				case 13 : temp = "性　别"; break;
+				case 14 : temp = "保密"; break;
+				case 15 : temp = "男"; break;
+				case 16 : temp = "女"; break;
+				case 17 : temp = "电子邮件"; break;
+				case 18 : temp = "不公开我的电子邮件"; break;
+				case 19 : temp = "个人主页"; break;
+				case 20 : temp = "QQ号码"; break;
+				case 21 : temp = "修改资料"; break;
+				case 22 : temp = "用户信息"; break;
+				case 23 : temp = "无法完成您的请求！"; break;
+				case 24 : temp = "我是GG"; break;
+				case 25 : temp = "我是MM"; break;
+				case 26 : temp = "该用户没有或不公开电子邮件"; break;
+				case 27 : temp = "统计"; break;
+				case 28 : temp = function(a, b, c){return "日志共 <b>" + a + "</b> 篇，评论共 <b>" + b + "</b> 篇，留言共 <b>" + c + "</b> 个。"}
+				case 29 : temp = "用户列表"; break;
+				case 30 : temp = "没找到任何注册用户!"; break;
+				case 31 : temp = "日志"; break;
+				case 32 : temp = "评论"; break;
+				case 33 : temp = "留言"; break;
+				case 34 : temp = "注册时间"; break;
+				case 35 : temp = "该用户没有或不公开电子邮件"; break;
+				case 36 : temp = "该用户没有个人主页"; break;
+				case 37 : temp = "该用户没有QQ号码"; break;
+				case 38 : temp = "给该用户发QQ信息"; break;
+				case 39 : temp = "<b>不存在此用户<br/>操作失败！</b>"; break;
+				case 40 : temp = "<b>请输入6到16位密码！</b>"; break;
+				case 41 : temp = "<b>两次密码输入不一致！请重新输入。</b>"; break;
+				case 42 : temp = "<b>非法QQ号</b>"; break;
+				case 43 : temp = "<b>错误的电子邮件地址。</b>"; break;
+				case 44 : temp = "<b>用户名与密码错误</b>"; break;
+				case 45 : temp = "请返回重新输入"; break;
+				case 46 : temp = "用户修改成功"; break;
+				case 47 : temp = "<b>您的资料已经修改成功</b><br/>由于您更改了密码所以必须 <a href=\"login.asp\">重新登录</a><br/>三秒后自动返回登录页面"; break;
+				default : temp = "非法操作";
+			}
+			return temp;
+		}
 	}
+	//-------------------------------//
 }
