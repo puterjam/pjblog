@@ -606,6 +606,8 @@ Function UnCheckStr(ByVal Str)
     End If
     Str = Replace(Str, "&#39;", "'")
     Str = Replace(Str, "&#34;", """")
+	Str = Replace(Str, "&lt;", "<")
+	Str = Replace(Str, "&gt;", ">")
     Dim re
     Set re = New RegExp
     re.IgnoreCase = True
