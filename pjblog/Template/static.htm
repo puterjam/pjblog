@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -66,7 +66,7 @@
 					<div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
 					<div class="InfoAuthor"><img src="images/weather/hn2_<$log_weather$>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="images/weather/hn2_t_<$log_weather$>.gif" alt=""/> <img src="images/<$log_level$>.gif" style="margin:0px 2px -1px 0px" alt=""/>
 						<span class="ownerClassLog">
-						<a href="blogedit.asp?id=<$LogID$>" title="编辑该日志" accesskey="E"><img src="images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> <a href="blogedit.asp?action=del&amp;id=<$LogID$>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
+						<a href="blogedit.asp?id=<$LogID$>" title="编辑该日志" accesskey="E"><img src="images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> <a href="blogedit.asp?action=del&id=<$LogID$>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
 						</span>
 					</div>
 				</div>
@@ -78,13 +78,13 @@
 					<$log_Modify$>
                     <$log_Navigation$>
 					<img src="images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<$log_FromUrl$>" target="_blank"><$log_From$></a><br/>
-					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
+					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
                     <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
                     <script language="javascript" type="text/javascript">Related(<$LogID$>, 2, "related_tag");</script>
 				</div>
-				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&amp;action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
+				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
 			</div>
 		</div>
 		<!-- 内容结束 -->   
@@ -196,3 +196,4 @@
 </script>
 </body>
 </html>
+
