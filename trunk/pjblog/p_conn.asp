@@ -11,7 +11,7 @@
 			Conn.open();
 		}catch(e){
 		Response.Write (transferID)
-		    Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">数据库连接出错，请检查连接字串!</div>');
+		    Response.Write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><div style="font-size:12px;font-weight:bold;border:1px solid #006;padding:6px;background:#fcc">' + lang.Err.Conn + '</div>');
 		    Response.End
 		}
 	}
@@ -47,7 +47,7 @@ log_module(1)
 
 '禁止IP访问
 If MatchIP(getIP) Then
-    response.Write "<span style=""font-size:12px;font-weight:bold;margin:4px"">Blog不欢迎你的访问。</span>"
+    response.Write "<span style=""font-size:12px;font-weight:bold;margin:4px"">" & lang.Err.Enable & "</span>"
     response.End
 End If
 %>
