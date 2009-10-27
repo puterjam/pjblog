@@ -391,6 +391,27 @@ var lang = {
 				case 45 : temp = "请返回重新输入"; break;
 				case 46 : temp = "用户修改成功"; break;
 				case 47 : temp = "<b>您的资料已经修改成功</b><br/>由于您更改了密码所以必须 <a href=\"login.asp\">重新登录</a><br/>三秒后自动返回登录页面"; break;
+				case 48 : temp = "昵称由2到24个字符组成"; break;
+				case 49 : temp = "密保问题"; break;
+				case 50 : temp = "密保答案"; break;
+				case 51 : temp = "请输入用户名(昵称)!"; break;
+				case 52 : temp = "用户名(昵称)不能小于2或<br/>大于24个字符！"; break;
+				case 53 : temp = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/>"; break;
+				case 54 : temp = "<b>用户名已经被注册！<br/>请尝试使用其他用户名！<br />"; break;
+				case 55 : temp = "<b>请输入6到16位密码！</b><br/>"; break;
+				case 56 : temp = "<b>两次密码输入不一致！请重新输入。</b><br/>"; break;
+				case 57 : temp = "<b>密码保护问题和答案未填写完整。</b><br/>"; break;
+				case 58 : temp = "<b>错误的电子邮件地址。</b><br/>"; break;
+				case 59 : temp = "<b>验证码有误，请返回重新输入</b><br/>"; break;
+				case 60 : temp = "用户注册成功"; break;
+				case 61 : temp = "<b>注册并登录成功，三秒后返回首页！</b><br/><a href='default.asp'>如果您的浏览器没有自动跳转，请点击这里</a>"; break;
+				case 62 : temp = "注册并登录成功"; break;
+				case 63 : temp = "返回注册前页面"; break;
+				case 64 : temp = "三秒后自动返回登录前页面"; break;
+				case 65 : temp = "为维护网上公共秩序和社会稳定，请您自觉遵守以下条款： <br/><br/> 一、不得利用本站危害国家安全、泄露国家秘密，不得侵犯国家社会集体的和公民的合法权益，不得利用本站制作、复制和传播下列信息：<br/> （一）煽动抗拒、破坏宪法和法律、行政法规实施的； <br/>（二）煽动颠覆国家政权，推翻社会主义制度的； <br/>（三）煽动分裂国家、破坏国家统一的； <br/>（四）煽动民族仇恨、民族歧视，破坏民族团结的； <br/>（五）捏造或者歪曲事实，散布谣言，扰乱社会秩序的； <br/>（六）宣扬封建迷信、淫秽、色情、赌博、暴力、凶杀、恐怖、教唆犯罪的； <br/>（七）公然侮辱他人或者捏造事实诽谤他人的，或者进行其他恶意攻击的；<br/> （八）损害国家机关信誉的； <br/>（九）其他违反宪法和法律行政法规的； <br/>（十）进行商业广告行为的。 <br/> 二、互相尊重，对自己的言论和行为负责。 <br/><br/>"; break;
+				case 66 : temp = "我同意"; break;
+				case 67 : temp = "不同意"; break;
+				case 68 : temp = "请仔细阅读以上条款"; break;
 				default : temp = "非法操作";
 			}
 			return temp;
