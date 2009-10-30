@@ -378,10 +378,11 @@ ElseIf Request.QueryString("action") = "GetHttpURL" Then
 	Response.Write(Message)
 '*************************************ajax重建日志**********************************
 ElseIf Request.QueryString("action") = "ReBuildArticle" Then
+	On Error Resume Next
 	SaveId = CheckStr(Trim(Request.QueryString("id")))
 	PostArticle SaveId, False
 	Message = "{suc:true}"
-	If Err Then Message = "{suc:false}"
+	If Err Then Err.Clear : Message = "{suc:false}"
 	Response.Write(Message)
 '*************************************重写聊聊的AJAX检测验证码**********************************
 ElseIf Request.QueryString("action") = "validate" Then
