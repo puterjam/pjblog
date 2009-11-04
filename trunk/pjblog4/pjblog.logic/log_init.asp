@@ -1,0 +1,189 @@
+﻿<!--#include file = "../pjblog.data/cls_conn.asp" -->
+<!--#include file = "../pjblog.data/cls_Cache.asp" -->
+<%
+'*************** PJblog4 基本设置 *******************
+' PJblog4 Copyright 2009
+' Update: 2009-11-03
+' Author: evio
+' Owner : PuterJam
+' Mode  : Class
+' MoName: Enter Init
+'***************************************************
+Dim Init : Set Init = New log_Init
+
+Class log_Init
+	
+	Private GlobalCache
+	
+	' ***********************************************
+	'	整站初始化类初始化
+	' ***********************************************
+	Private Sub Class_Initialize
+		Call GlobalByte
+    End Sub 
+     
+	' ***********************************************
+	'	整站初始化类终结化
+	' ***********************************************
+    Private Sub Class_Terminate
+    End Sub
+	
+	' ***********************************************
+	'	加载整站变量
+	' ***********************************************
+	Private Sub GlobalByte
+		GlobalCache = Cache.GlobalCache(1)
+		SiteName = GlobalCache(0, 0)						'站点名字
+        SiteURL = GlobalCache(1, 0)							'站点地址
+        blogPerPage = Int(GlobalCache(2, 0))				'每页日志数
+        blog_LogNums = Int(GlobalCache(3, 0))				'日志总数
+        blog_CommNums = Int(GlobalCache(4, 0))				'评论总数
+        blog_MemNums = Int(GlobalCache(5, 0))				'会员总数
+        blog_VisitNums = Int(GlobalCache(6, 0))				'访问量
+        blogBookPage = Int(GlobalCache(7, 0))				'每页留言数(备用)
+        blog_MessageNums = Int(GlobalCache(8, 0))			'留言总数(备用)
+        blogcommpage = Int(GlobalCache(9, 0))				'每页评论数
+        blogaffiche = GlobalCache(10, 0)					'公告
+        blogabout = GlobalCache(11, 0)						'备案信息
+        blogcolsize = Int(GlobalCache(12, 0))				'每页书签数(备用)
+        blog_colNums = Int(GlobalCache(13, 0))				'书签总数(备用)
+        blog_TbCount = Int(GlobalCache(14, 0))				'引用通告总数
+        blog_showtotal = CBool(GlobalCache(15, 0))			'是否显示统计(备用)
+        Register_UserNames = GlobalCache(16, 0)				'注册名字过滤
+        Register_UserName = Split(Register_UserNames, "|")
+        FilterIPs = GlobalCache(17, 0)						'IP地址过滤
+        FilterIP = Split(FilterIPs, "|")
+        blog_commTimerout = Int(GlobalCache(18, 0))			'发表评论时间间隔
+        blog_commUBB = Int(GlobalCache(19, 0))				'是否禁用评论UBB代码
+        blog_commIMG = Int(GlobalCache(20, 0))				'是否禁用评论贴图
+        blog_postFile = GlobalCache(21, 0) 					'动态输出日志文件
+        blog_postCalendar = CBool(GlobalCache(22, 0)) 		'动态输出日志日历文件
+        blog_DefaultSkin = GlobalCache(23, 0)				'默认界面
+        blog_SkinName = GlobalCache(24, 0)					'界面名称
+        blog_SplitType = CBool(GlobalCache(25, 0))			'日志分割类型
+        blog_introChar = GlobalCache(26, 0)					'日志预览最大字符数
+        blog_introLine = GlobalCache(27, 0)					'日志预览切割行数
+        blog_validate = CBool(GlobalCache(28, 0))			'发表评论是否都需要验证
+        blog_Title = GlobalCache(29, 0)						'Blog副标题
+        blog_ImgLink = CBool(GlobalCache(30, 0))			'是否在首页显示图片友情链接
+        blog_commLength = Int(GlobalCache(31, 0))			'评论长度
+        blog_downLocal = CBool(GlobalCache(32, 0))			'是否使用防盗链下载
+        blog_DisMod = CBool(GlobalCache(33, 0))				'默认显示内容
+        blog_Disregister = CBool(GlobalCache(34, 0))		'是否允许注册
+        blog_master = GlobalCache(35, 0)					'blog管理员姓名
+        blog_email = GlobalCache(36, 0)						'blog管理员邮件地址
+        blog_CountNum = GlobalCache(37, 0)					'访客统计最大次数
+        blog_wapNum = Int(GlobalCache(38, 0))				'Wap 文章列表数量
+        blog_wapImg = CBool(GlobalCache(39, 0))				'Wap 文章显示图片
+        blog_wapHTML = CBool(GlobalCache(40, 0))			'Wap 文章使用简单HTML
+        blog_wapLogin = CBool(GlobalCache(41, 0))			'Wap 允许登录
+        blog_wapComment = CBool(GlobalCache(42, 0))			'Wap 允许评论
+        blog_wap = CBool(GlobalCache(43, 0))				'使用 wap
+        blog_wapURL = CBool(GlobalCache(44, 0))				'使用 wap 转换文章超链接
+        blog_KeyWords = GlobalCache(45, 0)					'站点首页KeyWords
+        blog_Description = GlobalCache(46, 0)				'站点首页Description
+        blog_SaveTime = GlobalCache(47, 0)					'Ajax草稿自动保存时间间隔
+		blog_IsPing = CBool(GlobalCache(48, 0)) 			'是否开启Ping功能
+	End Sub
+	
+	' ***********************************************
+	'	加载整站权限
+	' ***********************************************
+	Private Sub GlobalRight
+		Dim blog_Status_Len, i, blog_Status
+		blog_Status = Cache.UserRight(1)
+        blog_Status_Len = UBound(blog_Status, 2)
+        For i = 0 To blog_Status_Len
+            If blog_Status(0, i) = memStatus Then
+                stat_title = blog_Status(1, i)
+                FillRight blog_Status(2, i)
+                UP_FileSize = blog_Status(3, i)
+                UP_FileTypes = blog_Status(4, i)
+                UP_FileType = Split(UP_FileTypes, "|")
+            End If
+        Next
+	End Sub
+	
+	' ***********************************************
+	'	写入权限变量
+	' ***********************************************
+	Private Sub FillRight(StatusCode)
+		stat_AddAll = CBool(Mid(StatusCode, 1, 1))
+		stat_Add = CBool(Mid(StatusCode, 2, 1))
+		stat_EditAll = CBool(Mid(StatusCode, 3, 1))
+		stat_Edit = CBool(Mid(StatusCode, 4, 1))
+		stat_DelAll = CBool(Mid(StatusCode, 5, 1))
+		stat_Del = CBool(Mid(StatusCode, 6, 1))
+		stat_CommentAdd = CBool(Mid(StatusCode, 7, 1))
+		stat_CommentEdit = CBool(Mid(StatusCode, 8, 1))
+		stat_CommentDel = CBool(Mid(StatusCode, 9, 1))
+		stat_FileUpLoad = CBool(Mid(StatusCode, 10, 1))
+		stat_Admin = CBool(Mid(StatusCode, 11, 1))
+		stat_ShowHiddenCate = CBool(Mid(StatusCode, 12, 1))
+		
+		Response.Cookies(CookieName)("memRight") = StatusCode
+		If DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))>0 Then
+			Response.Cookies(CookieName).Expires = Date + DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))
+		End If
+	End Sub
+	
+	' ***********************************************
+	'	验证Cookie记录
+	' ***********************************************
+	Private Sub checkCookies
+		Dim Guest_IP, Guest_Browser, Guest_Refer
+		Guest_IP = getIP()
+		Guest_Browser = getBrowser(Request.ServerVariables("HTTP_USER_AGENT"))
+	
+		If Session("GuestIP")<>Guest_IP Then
+			Conn.Execute("UPDATE blog_Info SET blog_VisitNums=blog_VisitNums+1")
+			SQLQueryNums = SQLQueryNums + 1
+			getInfo(2)
+			Session("GuestIP") = Guest_IP
+			If blog_CountNum>0 And Guest_Browser(1)<>"Unkown" Then
+				Dim tmpC
+				tmpC = conn.Execute("select count(coun_ID) as cnt from [blog_Counter]")(0)
+				SQLQueryNums = SQLQueryNums + 1
+				Guest_Refer = Trim(Request.ServerVariables("HTTP_REFERER"))
+				If tmpC>= blog_CountNum Then
+					Dim tmpLC
+					tmpLC = conn.Execute("select top 1 coun_ID from [blog_Counter] order by coun_Time ASC")(0)
+					Conn.Execute("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
+					SQLQueryNums = SQLQueryNums + 2
+				Else
+					Conn.Execute("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&HTMLEncode(CheckStr(Guest_Refer))&"')")
+					SQLQueryNums = SQLQueryNums + 1
+				End If
+			End If
+		End If
+	
+		Dim tempName, tempHashKey
+		tempName = CheckStr(Request.Cookies(CookieName)("memName"))
+		tempHashKey = CheckStr(Request.Cookies(CookieName)("memHashKey"))
+		If tempHashKey = "" Then
+			logout(False)
+		Else
+			Dim CheckCookie
+			Set CheckCookie = Server.CreateObject("ADODB.RecordSet")
+			SQL = "SELECT Top 1 mem_ID,mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&tempName&"' AND mem_hashKey='"&tempHashKey&"' AND mem_hashKey<>''"
+			CheckCookie.Open SQL, Conn, 1, 1
+			SQLQueryNums = SQLQueryNums + 1
+			If CheckCookie.EOF And CheckCookie.BOF Then
+				logout(False)
+			Else
+				UserID = CheckCookie("mem_ID")
+	'            If CheckCookie("mem_LastIP")<>Guest_IP Or IsNull(CheckCookie("mem_LastIP")) Then
+	'                logout(True)
+	'            Else
+					memName = CheckStr(Request.Cookies(CookieName)("memName"))
+					memStatus = CheckCookie("mem_Status")
+	'            End If
+			End If
+			CheckCookie.Close
+			Set CheckCookie = Nothing
+		End If
+	
+	End Sub
+	
+End Class
+%>

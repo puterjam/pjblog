@@ -170,5 +170,12 @@ Class Sys_Connection
 		End If
 	End Function
 	
+	' ***********************************************
+	'	数据库查询单个信息
+	' ***********************************************
+	Public Function doGet(ByVal Str)
+		doGet = pj_Conn.Execute(Str)
+	End Function
+	
 End Class
 %>
