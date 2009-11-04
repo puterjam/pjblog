@@ -20,6 +20,7 @@ Session.LCID = 2057
 %>
 
 <!--#include file = "cls_const.asp" -->
+<script language="jscript" type="text/jscript" runat="server" src="../pjblog.common/language.js"></script>
 
 <%
 Dim Sys, Conn, memStatus, memName

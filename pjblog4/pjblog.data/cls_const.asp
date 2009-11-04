@@ -109,7 +109,7 @@ Class Sys_Connection
 		If LCase(Action) <> "insert" Or LCase(Action) <> "update" Then Action = "insert"
 		If LCase(Action) = "insert" Then v = 2 Else v = 3
 		If Not IsArray(DBArray) Then
-			doRecord = Array(False, "非法数组!")
+			doRecord = Array(False, lang.Set.Asp(3))
 			Exit Function
 		Else
 			pj_Conn.BeginTrans
@@ -133,7 +133,7 @@ Class Sys_Connection
 				doRecord = Array(False, Err.Description)
 			Else
 				pj_Conn.CommitTrans
-				doRecord = Array(True, "操作成功!")
+				doRecord = Array(True, lang.Set.Asp(1))
 			End If
 		End If
 	End Function
@@ -147,7 +147,7 @@ Class Sys_Connection
 		On Error Resume Next
 		Dim AddCount, i, TempDB, Sql
 		If Not IsArray(DBArray) Then
-			doRecDel = Array(False, "非法数组!")
+			doRecDel = Array(False, lang.Set.Asp(3))
 			Exit Function
 		Else
 			pj_Conn.BeginTrans
@@ -165,7 +165,7 @@ Class Sys_Connection
 				doRecDel = Array(False, Err.Description)
 			Else
 				pj_Conn.CommitTrans
-				doRecDel = Array(True, "操作成功!")
+				doRecDel = Array(True, lang.Set.Asp(1))
 			End If
 		End If
 	End Function
