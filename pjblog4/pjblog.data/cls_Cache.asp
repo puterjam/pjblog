@@ -27,8 +27,8 @@ Class Sys_Cache
 	'	全局缓存
 	' ***********************************************
 	Public Function GlobalCache(ByVal i)
+		Dim Sql, log_Infos, blog_Infos
 		If Not IsArray(Application(Sys.CookieName & "_blog_Infos")) Or Int(i) = 2 Then
-			Dim Sql, log_Infos
 				Sql = "select top 1 blog_Name,blog_URL,blog_PerPage,blog_LogNums,blog_CommNums,blog_MemNums," & _
               		"blog_VisitNums,blog_BookPage,blog_MessageNums,blog_commPage,blog_affiche," & _
               		"blog_about,blog_colPage,blog_colNums,blog_tbNums,blog_showtotal," & _
@@ -46,9 +46,9 @@ Class Sys_Cache
         		Application(Sys.CookieName & "_blog_Infos") = blog_Infos
        			Application.UnLock
 		Else
-			log_Infos = Application(Sys.CookieName & "_blog_Infos")
+			blog_Infos = Application(Sys.CookieName & "_blog_Infos")
 		End If
-		GlobalCache = log_Infos
+		GlobalCache = blog_Infos
 	End Function
 	
 	' ***********************************************
@@ -63,7 +63,7 @@ Class Sys_Cache
 				blog_Status = log_Status.GetRows()
 				Set log_Status = Nothing
 				Application.Lock
-				Application(CookieName&"_blog_rights") = blog_Status
+				Application(Sys.CookieName & "_blog_rights") = blog_Status
 				Application.UnLock
 		Else
 			blog_Status = Application(Sys.CookieName & "_blog_rights")

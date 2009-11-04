@@ -1,6 +1,6 @@
-﻿<!--#include file = "../pjblog.data/cls_conn.asp" -->
+﻿<!--#include file = "../include.asp" -->
 
 <%
-Response.Write("aaa")
+Response.Write(memName)
 Sys.Close
 %>

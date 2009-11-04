@@ -504,47 +504,6 @@ Class Sys_Asp
 		FixName = Replace(FixName, "HTR", "")
 	End Function
 	
-	
-	'*************************************
-	'恢复特殊字符
-	'*************************************
-	
-	Public Function UnCheckStr(ByVal Str)
-		If IsNull(Str) Then
-			UnCheckStr = ""
-			Exit Function
-		End If
-		Str = Replace(Str, "&#39;", "'")
-		Str = Replace(Str, "&#34;", """")
-		Str = Replace(Str, "&lt;", "<")
-		Str = Replace(Str, "&gt;", ">")
-		Dim re
-		Set re = New RegExp
-		re.IgnoreCase = True
-		re.Global = True
-		re.Pattern = "(w)(h&#101;re)"
-		Str = re.Replace(Str, "$1here")
-		re.Pattern = "(s)(el&#101;ct)"
-		Str = re.Replace(Str, "$1elect")
-		re.Pattern = "(i)(ns&#101;rt)"
-		Str = re.Replace(Str, "$1nsert")
-		re.Pattern = "(c)(r&#101;ate)"
-		Str = re.Replace(Str, "$1reate")
-		re.Pattern = "(d)(ro&#112;)"
-		Str = re.Replace(Str, "$1rop")
-		re.Pattern = "(a)(lt&#101;r)"
-		Str = re.Replace(Str, "$1lter")
-		re.Pattern = "(d)(el&#101;te)"
-		Str = re.Replace(Str, "$1elete")
-		re.Pattern = "(u)(p&#100;ate)"
-		Str = re.Replace(Str, "$1pdate")
-		re.Pattern = "(\s)(o&#114;)"
-		Str = re.Replace(Str, "$1or")
-		Set re = Nothing
-		Str = Replace(Str, "&amp;", "&")
-		UnCheckStr = Str
-	End Function
-	
 	'*************************************
 	'转换HTML代码
 	'*************************************
@@ -756,31 +715,6 @@ Class Sys_Asp
 			Content = Left(Content, i -1)
 		End If
 		SplitLines = Content
-	End Function
-	
-	'*************************************
-	'切割内容 - 按字符分割
-	'*************************************
-	
-	Public Function CutStr(byVal Str, byVal StrLen)
-		Dim l, t, c, i
-		If IsNull(Str) Then
-			CutStr = ""
-			Exit Function
-		End If
-		l = Len(Str)
-		StrLen = Int(StrLen)
-		t = 0
-		For i = 1 To l
-			c = Asc(Mid(Str, i, 1))
-			If c<0 Or c>255 Then t = t + 2 Else t = t + 1
-			If t>= StrLen Then
-				CutStr = Left(Str, i)&"..."
-				Exit For
-			Else
-				CutStr = Str
-			End If
-		Next
 	End Function
 	
 	'*************************************

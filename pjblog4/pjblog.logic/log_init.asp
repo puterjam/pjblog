@@ -1,6 +1,4 @@
-﻿<!--#include file = "../pjblog.data/cls_conn.asp" -->
-<!--#include file = "../pjblog.data/cls_Cache.asp" -->
-<%
+﻿<%
 '*************** PJblog4 基本设置 *******************
 ' PJblog4 Copyright 2009
 ' Update: 2009-11-03
@@ -14,12 +12,15 @@ Dim Init : Set Init = New log_Init
 Class log_Init
 	
 	Private GlobalCache
+	Public UserID
 	
 	' ***********************************************
 	'	整站初始化类初始化
 	' ***********************************************
 	Private Sub Class_Initialize
 		Call GlobalByte
+		Call checkCookies
+		Call GlobalRight
     End Sub 
      
 	' ***********************************************
@@ -121,9 +122,9 @@ Class log_Init
 		stat_Admin = CBool(Mid(StatusCode, 11, 1))
 		stat_ShowHiddenCate = CBool(Mid(StatusCode, 12, 1))
 		
-		Response.Cookies(CookieName)("memRight") = StatusCode
-		If DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))>0 Then
-			Response.Cookies(CookieName).Expires = Date + DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))
+		Response.Cookies(Sys.CookieName)("memRight") = StatusCode
+		If DateDiff("d",Date(),Request.Cookies(Sys.CookieName)("exp"))>0 Then
+			Response.Cookies(Sys.CookieName).Expires = Date + DateDiff("d",Date(),Request.Cookies(Sys.CookieName)("exp"))
 		End If
 	End Sub
 	
@@ -132,34 +133,30 @@ Class log_Init
 	' ***********************************************
 	Private Sub checkCookies
 		Dim Guest_IP, Guest_Browser, Guest_Refer
-		Guest_IP = getIP()
-		Guest_Browser = getBrowser(Request.ServerVariables("HTTP_USER_AGENT"))
+		Guest_IP = Asp.getIP
+		Guest_Browser = Asp.getBrowser(Request.ServerVariables("HTTP_USER_AGENT"))
 	
-		If Session("GuestIP")<>Guest_IP Then
+		If Session("GuestIP") <> Guest_IP Then
 			Conn.Execute("UPDATE blog_Info SET blog_VisitNums=blog_VisitNums+1")
-			SQLQueryNums = SQLQueryNums + 1
-			getInfo(2)
+			Cache.GlobalCache(2)
 			Session("GuestIP") = Guest_IP
-			If blog_CountNum>0 And Guest_Browser(1)<>"Unkown" Then
+			If blog_CountNum > 0 And Guest_Browser(1) <> "Unkown" Then
 				Dim tmpC
-				tmpC = conn.Execute("select count(coun_ID) as cnt from [blog_Counter]")(0)
-				SQLQueryNums = SQLQueryNums + 1
+				tmpC = Sys.doGet("select count(coun_ID) as cnt from [blog_Counter]")(0)
 				Guest_Refer = Trim(Request.ServerVariables("HTTP_REFERER"))
-				If tmpC>= blog_CountNum Then
+				If tmpC >= blog_CountNum Then
 					Dim tmpLC
-					tmpLC = conn.Execute("select top 1 coun_ID from [blog_Counter] order by coun_Time ASC")(0)
-					Conn.Execute("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
-					SQLQueryNums = SQLQueryNums + 2
+					tmpLC = Sys.doGet("select top 1 coun_ID from [blog_Counter] order by coun_Time ASC")(0)
+					Sys.doGet("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(Asp.CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
 				Else
-					Conn.Execute("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&HTMLEncode(CheckStr(Guest_Refer))&"')")
-					SQLQueryNums = SQLQueryNums + 1
+					Sys.doGet("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&HTMLEncode(Asp.CheckStr(Guest_Refer))&"')")
 				End If
 			End If
 		End If
 	
 		Dim tempName, tempHashKey
-		tempName = CheckStr(Request.Cookies(CookieName)("memName"))
-		tempHashKey = CheckStr(Request.Cookies(CookieName)("memHashKey"))
+		tempName = Asp.CheckStr(Request.Cookies(Sys.CookieName)("memName"))
+		tempHashKey = Asp.CheckStr(Request.Cookies(Sys.CookieName)("memHashKey"))
 		If tempHashKey = "" Then
 			logout(False)
 		Else
@@ -167,7 +164,6 @@ Class log_Init
 			Set CheckCookie = Server.CreateObject("ADODB.RecordSet")
 			SQL = "SELECT Top 1 mem_ID,mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&tempName&"' AND mem_hashKey='"&tempHashKey&"' AND mem_hashKey<>''"
 			CheckCookie.Open SQL, Conn, 1, 1
-			SQLQueryNums = SQLQueryNums + 1
 			If CheckCookie.EOF And CheckCookie.BOF Then
 				logout(False)
 			Else
@@ -175,7 +171,7 @@ Class log_Init
 	'            If CheckCookie("mem_LastIP")<>Guest_IP Or IsNull(CheckCookie("mem_LastIP")) Then
 	'                logout(True)
 	'            Else
-					memName = CheckStr(Request.Cookies(CookieName)("memName"))
+					memName = Asp.CheckStr(Request.Cookies(Sys.CookieName)("memName"))
 					memStatus = CheckCookie("mem_Status")
 	'            End If
 			End If
@@ -183,6 +179,19 @@ Class log_Init
 			Set CheckCookie = Nothing
 		End If
 	
+	End Sub
+	
+	' ***********************************************
+	'	退出登入
+	' ***********************************************
+	Private Sub logout(clearHashKey)
+		On Error Resume Next
+		Response.Cookies(Sys.CookieName)("DisValidate") = "False"
+		If clearHashKey Then Sys.doGet("UPDATE blog_member set mem_hashKey='' where mem_ID=" & UserID)
+		If Err Then Err.Clear
+		Response.Cookies(Sys.CookieName)("memName") = ""
+		Response.Cookies(Sys.CookieName)("memHashKey") = ""
+		memStatus = "Guest"
 	End Sub
 	
 End Class
