@@ -184,7 +184,7 @@ Class log_Init
 	' ***********************************************
 	'	退出登入
 	' ***********************************************
-	Private Sub logout(clearHashKey)
+	Public Sub logout(clearHashKey)
 		On Error Resume Next
 		Response.Cookies(Sys.CookieName)("DisValidate") = "False"
 		If clearHashKey Then Sys.doGet("UPDATE blog_member set mem_hashKey='' where mem_ID=" & UserID)

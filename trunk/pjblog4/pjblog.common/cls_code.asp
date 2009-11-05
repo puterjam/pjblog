@@ -23,6 +23,21 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	Public Function MessageInfo(ByVal Arrays)
+		If Not IsArray(Arrays) Then Exit Function
+		MessageInfo = ""
+		MessageInfo = MessageInfo & "<br/><br/>"
+   		MessageInfo = MessageInfo & "<div style=""text-align:center;"">"
+    	MessageInfo = MessageInfo & "<div id=""MsgContent"" style=""width:300px"">"
+      	MessageInfo = MessageInfo & "<div id=""MsgHead"">" & Arrays(0) & "</div>"
+      	MessageInfo = MessageInfo & "<div id=""MsgBody"">"
+	   	MessageInfo = MessageInfo & "<div class=""" & Arrays(2) & """></div>"
+       	MessageInfo = MessageInfo & "<div class=""MessageText"">" & Arrays(1) & "</div>"
+	  	MessageInfo = MessageInfo & "</div>"
+		MessageInfo = MessageInfo & "</div>"
+  		MessageInfo = MessageInfo & "</div><br/><br/>"
+	End Function
+	
 	' ***********************************************
 	'	过滤HTML标签
 	' ***********************************************
