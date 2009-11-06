@@ -14,10 +14,54 @@
 '		c.Flush															输出页面
 '	Set c = Nothing														实例终结
 '	Sys.Close															关闭数据库
+' --------------------------------------------------------------------------------------
+' 模板实例:
+' 支持无限级循环
+'<div>
+'模板循环实例一:
+'	<pjblog:1 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
+'    <Columns>
+'    	<ItemTemplate>
+'        	<li>
+'            $1
+'                <pjblog:2 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
+'                <Columns>
+'                    <ItemTemplate>
+'                        <li>$1
+'                        
+'                        </li>
+'                    </ItemTemplate>
+'                </Columns>
+'                </pjblog:2>
+'            </li>
+'        </ItemTemplate>
+'    </Columns>
+'    </pjblog:1>
+'    
+'模板循环实例二:
+'  <pjblog:3 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
+'    <Columns>
+'    	<ItemTemplate>
+'        	<li>$0</li>
+'        </ItemTemplate>
+'    </Columns>
+'    </pjblog:3>
+'    
+'模板循环实例三:
+'    <pjblog:4 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul" id="g" page="2">
+'    <Columns>
+'    	<ItemTemplate>
+'        	<li><function:Replace("$0", "SupAdmin", "3")/></li>
+'        </ItemTemplate>
+'    </Columns>
+'    </pjblog:4>
+'    <page:g/> 
+'    <function:Replace("<set:dd/>", "2", "7")/>
+'</div>
 ' ======================================================================================
 Class template
 
-	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr
+	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr, ReplacePageStr
 	Private TagName
 	
 	' ***************************************
@@ -92,6 +136,7 @@ Class template
 	Private Sub Class_Initialize
 		TagName = "pjblog"
 		c_Char = "UTF-8"
+		ReplacePageStr = Array("", "")
 	End Sub
 	
 	' ***************************************
@@ -170,13 +215,17 @@ Class template
 		Set Matches = GetMatch(o_Content, "\<" & TagName & "\:(\d+?)(.+?)\>([\s\S]+?)<\/" & TagName & "\:\1\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				Attribute = SubMatches.SubMatches(1) ' kocms
-				Content = SubMatches.SubMatches(2)   ' <Columns>...</Columns>
-				SubText = Process(Attribute, Content)
-				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & SubText(1) & "</" & SubText(2) & ">")
+				Attribute = SubMatches.SubMatches(1) 	' kocms
+				Content = SubMatches.SubMatches(2)   	' <Columns>...</Columns>
+				SubText = Process(Attribute, Content) 	' 返回所有过程执行后的结果
+				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & SubText(1) & "</" & SubText(2) & ">", 1, -1, 1)											' 替换标签变量
 			Next
 		End If
 		Set Matches = Nothing
+		If Len(ReplacePageStr(0)) > 0 Then				' 判断是否标签变量有值,如果有就替换掉.
+			o_Content = Replace(o_Content, ReplacePageStr(0), ReplacePageStr(1), 1, -1, 1)
+			ReplacePageStr = Array("", "")				' 替换后清空该数组变量
+		End If
 		GridView = o_Content
 	End Function
 	
@@ -191,20 +240,20 @@ Class template
 		Set Matches = GetMatch(Attribute, "\s(.+?)\=\""(.+?)\""")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				MatchTag = SubMatches.SubMatches(0)
-				MatchContent = SubMatches.SubMatches(1)
-				If Lcase(MatchTag) = "name" Then Name = MatchContent
-				If Lcase(MatchTag) = "datasource" Then datasource = MatchContent
-				If Lcase(MatchTag) = "element" Then Element = MatchContent
-				If Lcase(MatchTag) = "page" Then page = MatchContent
-				If Lcase(MatchTag) = "id" Then id = MatchContent
+				MatchTag = SubMatches.SubMatches(0)								' 取得属性名
+				MatchContent = SubMatches.SubMatches(1)							' 取得属性值
+				If Lcase(MatchTag) = "name" Then Name = MatchContent			' 取得name属性值
+				If Lcase(MatchTag) = "datasource" Then datasource = MatchContent' 取得datasource属性值
+				If Lcase(MatchTag) = "element" Then Element = MatchContent		' 取得element属性值
+				If Lcase(MatchTag) = "page" Then page = MatchContent			' 取得page属性值
+				If Lcase(MatchTag) = "id" Then id = MatchContent				' 取得id属性值
 			Next
 			If Len(Name) > 0 And Len(MatchContent) > 0 Then
-				Text = Analysis(datasource, Name, Content, page, id)
+				Text = Analysis(datasource, Name, Content, page, id)			' 执行解析属性
 				If Len(datasource) > 0 Then Attribute = Replace(Attribute, "datasource=""" & datasource & """", "")
 				If page > 0 Then Attribute = Replace(Attribute, "page=""" & page & """", "")
-				Attribute = Replace(Attribute, "name=""" & Name & """", "")
-				Attribute = Replace(Attribute, "element=""" & Element & """", "")
+				Attribute = Replace(Attribute, "name=""" & Name & """", "", 1, -1, 1)
+				Attribute = Replace(Attribute, "element=""" & Element & """", "", 1, -1, 1)
 				Process = Array(Attribute, Text, Element)
 			Else
 				Process = Array(Attribute, "", "div")
@@ -220,7 +269,7 @@ Class template
 	' ***************************************
 	Private Function Analysis(ByVal id, ByVal Name, ByVal Content, ByVal page, ByVal PageID)
 		Dim Data
-		Select Case Lcase(Name)
+		Select Case Lcase(Name)													' 选择数据源
 			Case "loop" Data = DataBind(id, Content, page, PageID)
 			Case "for"  Data = DataFor(id, Content, page, PageID)
 		End Select
@@ -232,12 +281,12 @@ Class template
 	' ***************************************
 	Private Function DataBind(ByVal id, ByVal Content, ByVal page, ByVal PageID)
 		Dim Text, Matches, SubMatches, SubText
-		Execute "Text = " & id & "(1)"
+		Execute "Text = " & id & "(1)"											' 加载数据源
 		Set Matches = GetMatch(Content, "\<Columns\>([\s\S]+)\<\/Columns\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				SubText = ItemTemplate(SubMatches.SubMatches(0), Text, page, PageID)
-				Content = Replace(Content, SubMatches.value, SubText)
+				SubText = ItemTemplate(SubMatches.SubMatches(0), Text, page, PageID)' 执行模块替换
+				Content = Replace(Content, SubMatches.value, SubText, 1, -1, 1)
 			Next
 			DataBind = Content
 		Else
@@ -280,10 +329,11 @@ Class template
 						If TextLeft < 0 Then TextLeft = 0
 						If TextRight > TextLen Then TextRight = TextLen
 						c_PageStr = MultiPage(TextLen + 1, page, CurrentPage, PageUrl, "float:right", "", False)
-						If Len(c_PageStr) > 0 Then
-							c_Content = Replace(c_Content, "<page:" & PageID & "/>", c_PageStr)
+
+						If Int(Len(c_PageStr)) > 0 Then
+							ReplacePageStr = Array("<page:" & Trim(PageID) & "/>", c_PageStr)
 						Else
-							c_Content = Replace(c_Content, "<page:" & PageID & "/>", "")
+							ReplacePageStr = Array("<page:" & Trim(PageID) & "/>", "")
 						End If
 					Else
 						TextLeft = 0
@@ -291,7 +341,7 @@ Class template
 					End If
 					
 					For i = TextLeft To TextRight
-						TempText = TempText & ItemReSec(i, SubMatchText, Text)
+						TempText = TempText & ItemReSec(i, SubMatchText, Text)		' 加载模板内容
 					Next
 				End If
 			Next
@@ -310,7 +360,7 @@ Class template
 		Set Matches = GetMatch(Text, "\$(\d+?)")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				Text = Replace(Text, SubMatches.value, doQuote(Arrays(SubMatches.SubMatches(0), i)))
+				Text = Replace(Text, SubMatches.value, doQuote(Arrays(SubMatches.SubMatches(0), i)), 1, -1, 1) '执行替换
 			Next
 			ItemReSec = Text
 		Else
@@ -329,7 +379,7 @@ Class template
 			For Each SubMatches In Matches
 				Text = SubMatches.SubMatches(0) & "(" & SubMatches.SubMatches(1) & """" & SubMatches.SubMatches(2) & """" & SubMatches.SubMatches(3) & ")"
 				Execute "ExeText=" & Text
-				c_Content = Replace(c_Content, SubMatches.value, ExeText)
+				c_Content = Replace(c_Content, SubMatches.value, ExeText, 1, -1, 1)
 			Next
 		End If
 		Set Matches = Nothing
@@ -344,14 +394,14 @@ Class template
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
 				Execute "Bstr = " & SetSubMatch.SubMatches(1) & "(" & SetSubMatch.SubMatches(3) & """" & s & """" & SetSubMatch.SubMatches(4) & ")"
-				c_Content = Replace(c_Content, SetSubMatch.Value, Bstr)
+				c_Content = Replace(c_Content, SetSubMatch.Value, Bstr, 1, -1, 1)
 			Next
 		End If
 		Set SetMatch = Nothing
 		Set SetMatch = GetMatch(c_Content, "(\<Set\:" + t + "\/\>)")
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
-				c_Content = Replace(c_Content, SetSubMatch.Value, s)
+				c_Content = Replace(c_Content, SetSubMatch.Value, s, 1, -1, 1)
 			Next
 		End If
 		Set SetMatch = Nothing
