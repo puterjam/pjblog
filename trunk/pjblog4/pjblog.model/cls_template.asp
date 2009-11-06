@@ -157,27 +157,28 @@ Class template
 	'	缓冲执行
 	' ***************************************
 	Public Sub Buffer
-		Call GridView
+		c_Content = GridView(c_Content)
 		Call ExecuteFunction
 	End Sub
 	
 	' ***************************************
 	'	GridView
 	' ***************************************
-	Private Sub GridView
+	Private Function GridView(ByVal o_Content)
 		Dim Matches, SubMatches, SubText
 		Dim Attribute, Content
-		Set Matches = GetMatch(c_Content, "\<(" & TagName & ")(.+?)\>([\s\S]+?)</(" & TagName & ")\>")
+		Set Matches = GetMatch(o_Content, "\<" & TagName & "\:(\d+?)(.+?)\>([\s\S]+?)<\/" & TagName & "\:\1\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
 				Attribute = SubMatches.SubMatches(1) ' kocms
 				Content = SubMatches.SubMatches(2)   ' <Columns>...</Columns>
 				SubText = Process(Attribute, Content)
-				c_Content = Replace(c_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & SubText(1) & "</" & SubText(2) & ">")
+				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & SubText(1) & "</" & SubText(2) & ">")
 			Next
 		End If
 		Set Matches = Nothing
-	End Sub
+		GridView = o_Content
+	End Function
 	
 	' ***************************************
 	'	确定属性
@@ -253,10 +254,17 @@ Class template
 		Dim SecMatch, SecSubMatch
 		Dim i, TempText
 		Dim TextLen, TextLeft, TextRight
-		Set Matches = GetMatch(TextTag, "\<ItemTemplate\>([\s\S]+?)\<\/ItemTemplate\>")
+		Set Matches = GetMatch(TextTag, "\<ItemTemplate\>([\s\S]+)\<\/ItemTemplate\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
 				SubMatchText = SubMatches.SubMatches(0)
+				' ---------------------------------------------
+				'	循环嵌套开始
+				' ---------------------------------------------
+				SubMatchText = GridView(SubMatchText)
+				' ---------------------------------------------
+				'	循环嵌套结束
+				' ---------------------------------------------
 				If UBound(Text, 1) = 0 Then
 					TempText = ""
 				Else
@@ -348,5 +356,13 @@ Class template
 		End If
 		Set SetMatch = Nothing
 	End Property
+	
+	' ***************************************
+	'	普通替换全局标签
+	' ***************************************
+	Private Function DataFor(ByVal DataSource, ByVal Content, ByVal page, ByVal PageID)
+		
+	End Function
+	
 End Class
 %>
