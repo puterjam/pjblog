@@ -23,6 +23,15 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	Public Function CheckPage(ByVal Pages)
+		If Not IsInteger(Pages) Then
+			Pages = 1
+		Else
+			If Pages = 0 Then Pages = 1
+		End If
+		CheckPage = Pages
+	End Function
+	
 	Public Function MessageInfo(ByVal Arrays)
 		If Not IsArray(Arrays) Then Exit Function
 		MessageInfo = ""
@@ -920,3 +929,83 @@ Class Sys_Asp
 			
 End Class
 %>
+<script language="jscript" type="text/jscript" runat="server">
+	function MultiPage(Numbers, Perpage, Curpage, Url, Style, event, FirstShortCut){
+		var _curPage = parseInt(Curpage);
+		var _numbers = parseInt(Numbers);
+		event = event || ""
+		//var Url = (baseUrl || Request.ServerVariables("URL"))+Url_Add;
+		
+		var Page, Offset, PageI;
+		//	If Int(_numbers)>Int(PerPage) Then
+		
+		Page = 9;
+		Offset = 4;
+		
+		var Pages, FromPage, ToPage;
+		
+		if (_numbers%Perpage == 0) {
+			Pages = parseInt(_numbers / Perpage);
+		}else{
+			Pages = parseInt(_numbers / Perpage) + 1;
+		}
+		
+		if (Pages < 2){
+			return "";
+		}
+		
+		FromPage = _curPage - Offset;
+		ToPage = _curPage + Page - Offset -1;
+		
+		if (Page>Pages) {
+			FromPage = 1;
+			ToPage = Pages;
+		}else{
+			if (FromPage<1) {
+				ToPage = _curPage+1 - FromPage;
+				FromPage = 1;
+				if ((ToPage - FromPage)<Page && (ToPage - FromPage)<Pages) {ToPage = Page}
+			}else if (ToPage>Pages) {
+				FromPage = _curPage - Pages + ToPage;
+				ToPage = Pages;
+				if ((ToPage - FromPage)<Page && (ToPage - FromPage)<Pages) {FromPage = Pages - Page+1}
+			}
+		}
+	
+		//html start
+		var pageCode = ['<div class="page" style="'+Style+'"><ul><li class="pageNumber">']; // & _curPage&"/"&Pages & " | "
+		
+		//第一页
+		if (_curPage!=1 && FromPage>1) {pageCode.push('<a href="'+Url.replace("{$page}", 1)+' title="第一页"  style="text-decoration:none" ' + event + '>«</a> | ')}
+			
+		if (!FirstShortCut) {ShortCut = ' accesskey=","'}else{ ShortCut = ''}
+		
+		//上一页
+		if (_curPage!=1) {pageCode.push('<a href="'+Url.replace("{$page}", (_curPage - 1))+'" title="上一页" style="text-decoration:none;"'+ShortCut+' ' + event + '>‹</a> | ')}
+		
+		//列表部分
+		for (PageI = FromPage;PageI<=ToPage;PageI++){
+			if (PageI!=_curPage) {
+				pageCode.push('<a href="'+Url.replace("{$page}", PageI) + '">'+PageI+'</a> | ');
+			}else{
+				pageCode.push('<strong>'+PageI+'</strong>');
+				if (PageI!=Pages) {pageCode.push(' | ')}
+			}
+		}
+		
+		if (!FirstShortCut) {ShortCut = ' accesskey="."'} else {ShortCut = ''}
+		
+		//下一页
+		if (_curPage!=Pages) {pageCode.push('<a href="'+Url.replace("{$page}", (_curPage+1))+'" title="下一页" style="text-decoration:none"'+ShortCut+' ' + event + '>›</a>')}
+		
+		//最后一页
+		if (_curPage!=Pages && ToPage<Pages) {pageCode.push(' | <a href="'+Url.replace("{$page}", (Pages+aname))+'" title="最后一页" style="text-decoration:none" ' + event + '>»</a>')}
+		
+		//html end
+		pageCode.push('</li></ul></div>');
+		pageCode = pageCode.join("");
+		FirstShortCut = true;
+		
+		return pageCode;
+	}
+</script>
