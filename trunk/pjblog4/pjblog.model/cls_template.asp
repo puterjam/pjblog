@@ -1,4 +1,20 @@
 ﻿<%
+' ======================================================================================
+'	全部使用方法:
+'	Dim c, page
+'	Set c = New template                                             	创建新对象实例
+'		c.Path = "tmp"													设置模板文件夹位置
+'		c.FileName = "temp.html"										设置模板文件名
+'		c.open															打开模板
+'		c.Sets("dd") = "123"											执行普通替换
+'		c.PageUrl = "?page={$page}"										分页URL样式
+'		page = Trim(Asp.CheckStr(Request.QueryString("page")))			获取当前页
+'		c.CurrentPage = Asp.CheckPage(page)								设置当前页
+'		c.Buffer														执行缓冲
+'		c.Flush															输出页面
+'	Set c = Nothing														实例终结
+'	Sys.Close															关闭数据库
+' ======================================================================================
 Class template
 
 	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr
@@ -74,7 +90,7 @@ Class template
 	'	类初始化
 	' ***************************************
 	Private Sub Class_Initialize
-		TagName = "kocms"
+		TagName = "pjblog"
 		c_Char = "UTF-8"
 	End Sub
 	
