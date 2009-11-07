@@ -17,13 +17,16 @@ Set doUser = Nothing
 
 Class do_User
 	
-	Private MsgInfo, outStr, Action
+	Private MsgInfo, outStr
+	
+	Public Property Get Action
+		Action = Request.QueryString("action")
+	End Property
 	
 	' ***********************************************
 	'	用户操作方法类初始化
 	' ***********************************************
 	Private Sub Class_Initialize
-		Action = Request.QueryString("action")
 		Select Case Action
 			Case "login" Call UserLogin
 			Case Else outStr = Asp.MessageInfo(Array(lang.Set.Asp(6), lang.Set.Asp(0), "ErrorIcon")) : Response.Write(outStr)

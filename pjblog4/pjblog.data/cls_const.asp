@@ -106,7 +106,7 @@ Class Sys_Connection
 	Public Function doRecord(ByVal table, ByVal DBArray, ByVal Action, ByVal Primarykey, ByVal ID)
 		On Error Resume Next
 		Dim AddCount, TempDB, i, v, Sql
-		If LCase(Action) <> "insert" Or LCase(Action) <> "update" Then Action = "insert"
+		If LCase(Action) <> "insert" And LCase(Action) <> "update" Then Action = "insert"
 		If LCase(Action) = "insert" Then v = 2 Else v = 3
 		If Not IsArray(DBArray) Then
 			doRecord = Array(False, lang.Set.Asp(3))
