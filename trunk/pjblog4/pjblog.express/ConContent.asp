@@ -1,27 +1,23 @@
 ﻿<!--#include file="../include.asp" -->
 <%
-'***************PJblog3 后台管理页面*******************
-' PJblog3 Copyright 2008
-' Update:2007-7-13
-'**************************************************
-'开始加载后台需要的各个模块
-
-%>
-<%
-'定义变量
-Dim i
-
-Dim blog_module
-Dim PluginsFolders, PluginsFolder, Bmodules, Bmodule, tempB, SubItemLen, tempI
-Dim PluginsXML, DBXML, TypeArray
-
+'*************** PJblog4 基本设置 *******************
+' PJblog4 Copyright 2009
+' Update: 2009-11-03
+' Author: evio
+' Owner : PuterJam
+' Mode  : Class
+' MoName: control
+'***************************************************
 '判断是否有权限访问
 If Not Asp.ChkPost() OR session(Sys.CookieName&"_System") <> True OR isEmpty(memName) Or stat_Admin <> True Then
 	Call Init.c_Logout
     Response.end
 End If
+'开始加载后台需要的各个模块
 %>
-
+<!--#include file = "log_control.asp" -->
+<!--#include file = "control/c_welcome.asp" -->
+<!--#include file = "control/c_general.asp" -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
 <head>
@@ -32,7 +28,7 @@ End If
 	<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,ccessibility,w3c,w3,w3cn" />
 	<meta name="description" content="PuterJam's BLOG" />
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.common/control.css" type="text/css" media="all" />
-	<title><%=lang.Action.Control%>-<%=lang.Action.logs.Content%></title>
+	<title>后台管理 - PJBlog4 v<%=Sys.version%></title>
 	<style type="text/css">
 		<!--
 		.style1 {color: #999}

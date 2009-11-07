@@ -14,13 +14,14 @@ Set Ajax = Nothing
 
 Class Sys_Ajax
 
-	Private Action
+	Public Property Get Action
+		Action = Request.QueryString("action")
+	End Property
 
 	' ***********************************************
 	'	整站初始化类初始化
 	' ***********************************************
 	Private Sub Class_Initialize
-		Action = Asp.CheckStr(Request.QueryString("action"))
 		Select Case Action
 			Case "CheckCode" Call CheckCode
 		End Select

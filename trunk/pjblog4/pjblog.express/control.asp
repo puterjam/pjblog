@@ -37,7 +37,7 @@ Else
    <div style="margin:auto;border:1px solid #999;padding:2px;background:#fff;width:350px;">
 
     <div style="border:1px solid #e5e5e5;padding:2px;">
-	    <div style="border-bottom:1px solid #e5e5e5;padding:5px;text-align:left"><img src="images/Control/logo.gif"/></div>
+	    <div style="border-bottom:1px solid #e5e5e5;padding:5px;text-align:left"><img src="../images/Control/logo.gif"/></div>
 	    <div style="padding:16px;padding-top:40px"><b style="margin-left:-146px;font-size:14px;"><%=lang.Set.Asp(23)%>: </b><br/><br/><input name="adpass" type="password" size="20" style="border:1px solid #999;font-size:18px"/></div>
 	    <input type="submit" value=" <%=lang.Set.Asp(21)%> " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
 	    <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(Sys.CookieName & "_ShowError")%></div><%session(Sys.CookieName & "_ShowError") = ""%>
