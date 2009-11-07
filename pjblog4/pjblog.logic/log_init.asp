@@ -132,7 +132,7 @@ Class log_Init
 	'	验证Cookie记录
 	' ***********************************************
 	Private Sub checkCookies
-		Dim Guest_IP, Guest_Browser, Guest_Refer
+		Dim Guest_IP, Guest_Browser, Guest_Refer, SQL
 		Guest_IP = Asp.getIP
 		Guest_Browser = Asp.getBrowser(Request.ServerVariables("HTTP_USER_AGENT"))
 	
@@ -192,6 +192,16 @@ Class log_Init
 		Response.Cookies(Sys.CookieName)("memName") = ""
 		Response.Cookies(Sys.CookieName)("memHashKey") = ""
 		memStatus = "Guest"
+	End Sub
+	
+	' ***********************************************
+	'	退出后台
+	' ***********************************************
+	Sub c_Logout
+		session(Sys.CookieName&"_System") = ""
+		session(Sys.CookieName&"_disLink") = ""
+		session(Sys.CookieName&"_disCount") = ""
+		Response.Write ("<script>try{top.location=""default.asp""}catch(e){location=""default.asp""}</script>")
 	End Sub
 	
 End Class

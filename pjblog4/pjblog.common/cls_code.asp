@@ -311,8 +311,8 @@ Class Sys_Asp
 	'*************************************
 	'获得注册码
 	'*************************************
-	Public Function getcode()
-		getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='common/getcode.asp?s='+Math.random();"" alt=""" & lang.Set.Asp(4) & """ title=""" & lang.Set.Asp(5) & """ style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='common/getcode.asp?s='+Math.random()""/>"
+	Public Function getcode(ByVal Str)
+		getcode = "<img id=""vcodeImg"" src=""about:blank"" onerror=""this.onerror=null;this.src='" & Str & "?s='+Math.random();"" alt=""" & lang.Set.Asp(4) & """ title=""" & lang.Set.Asp(5) & """ style=""margin-right:40px;cursor:pointer;width:40px;height:18px;margin-bottom:-4px;margin-top:3px;"" onclick=""src='" & Str & "?s='+Math.random()""/>"
 	End Function
 	
 	'*************************************
@@ -930,6 +930,33 @@ Class Sys_Asp
 End Class
 %>
 <script language="jscript" type="text/jscript" runat="server">
+//*************************************
+//检测系统组件是否安装
+//*************************************
+	function CheckObjInstalled(strClassString){
+		try{
+			var TmpObj = Server.CreateObject(strClassString);
+			return true
+		}catch(e){
+			return false
+		}
+	}
+//*************************************
+//关闭数据库
+//*************************************
+	function CloseDB(){
+		try{
+		  	Sys.close;
+		}catch(e){}
+	}
+	
+//*************************************
+//重定向函数
+//*************************************
+	function RedirectUrl(url){
+		CloseDB();
+		Response.Redirect(url);
+	}
 	function MultiPage(Numbers, Perpage, Curpage, Url, Style, event, FirstShortCut){
 		var _curPage = parseInt(Curpage);
 		var _numbers = parseInt(Numbers);

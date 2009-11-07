@@ -85,7 +85,7 @@ Class Sys_User
 		' -------------------------------------------------
 		'	定义hashkey随机数
 		' -------------------------------------------------
-		HashKey = SHA1(randomStr(6) & Now())
+		HashKey = SHA1(Asp.randomStr(6) & Now())
 		
 		' -------------------------------------------------
 		'	开始查询匹配数据库信息
@@ -134,8 +134,8 @@ Class Sys_User
 				memLogin("mem_LastIP") = Asp.getIP
 				memLogin("mem_lastVisit") = Now()
 				memLogin("mem_hashKey") = HashKey
-				Response.Cookies(CookieName)("memName") = memLogin("mem_Name")
-				Response.Cookies(CookieName)("memHashKey") = HashKey
+				Response.Cookies(Sys.CookieName)("memName") = memLogin("mem_Name")
+				Response.Cookies(Sys.CookieName)("memHashKey") = HashKey
 				If Int(KeepLogin) = 1 Then
 					Response.Cookies(Sys.CookieName).Expires = Date + 365
 					Response.Cookies(Sys.CookieName)("exp") = DateAdd("d", 365, date())

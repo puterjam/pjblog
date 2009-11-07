@@ -19,9 +19,17 @@ lang.Set = {
 			case 11 : _this = "验证码有误"; break;
 			case 12 : _this = "用户名与密码错误"; break;
 			case 13 : _this = "登录成功"; break;
-			case 14 : function(name){ _this = "<b>" + name + "</b>，欢迎你的再次光临。"}; break;
+			case 14 : _this = function(name){ return "<b>" + name + "</b>，欢迎你的再次光临。";}; break;
 			case 15 : _this = "点击返回"; break;
 			case 16 : _this = "点击返回登录前页面"; break;
+			case 17 : _this = "用户登录"; break;
+			case 18 : _this = "用户名"; break;
+			case 19 : _this = "密码"; break;
+			case 20 : _this = "保存我的登录信息"; break;
+			case 21 : _this = "登录"; break;
+			case 22 : _this = "注册新用户"; break;
+			case 23 : _this = "后台管理"; break;
+			case 24 : _this = "登录失败"; break;
 			default : _this = "非法操作!";
 		}
 		return _this;
