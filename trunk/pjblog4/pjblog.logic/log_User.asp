@@ -42,7 +42,7 @@ Class do_User
 	' ***********************************************
 	Private Sub UserLogin
 		Dim UserName, PassWord, validate, KeepLogin
-		RefUrl = Session(CookieName & "_Login_Referer_Url")
+		RefUrl = Session(Sys.CookieName & "_Login_Referer_Url")
 		If len(RefUrl) < 8 Then RefUrl = Cstr(Request.ServerVariables("HTTP_REFERER"))
     	If len(RefUrl) < 8 Then RefUrl = "http://" & Request.ServerVariables("HTTP_HOST")
 		
@@ -52,7 +52,7 @@ Class do_User
 		KeepLogin = Request.Form("KeepLogin")
 		
 		MsgInfo = User.UserLogin(UserName, PassWord, validate, KeepLogin)
-		MsgInfo(1) = Replace(Replace(MsgInfo(1), "default.asp", RefUrl), lang.Set.Asp(15) & "</a>", lang.Set.Asp(16) & "</a>&nbsp;|&nbsp;<a href=""default.asp"">" & lang.Tip.SysTem(15) & "</a><br/>" & lang.Set.Asp(13))
+		MsgInfo(1) = Replace(Replace(MsgInfo(1), "default.asp", RefUrl), lang.Set.Asp(15) & "</a>", lang.Set.Asp(16) & "</a>&nbsp;|&nbsp;<a href=""default.asp"">" & lang.Set.Asp(13) & "</a><br/>")
 		outStr = Asp.MessageInfo(MsgInfo)
 		Response.Write(outStr)
 	End Sub

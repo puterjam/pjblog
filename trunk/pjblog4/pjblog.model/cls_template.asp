@@ -390,7 +390,7 @@ Class template
 	' ***************************************
 	Public Property Let Sets(ByVal t, ByVal s)
 		Dim SetMatch, Bstr, SetSubMatch
-		Set SetMatch = GetMatch(c_Content, "(\<Set\:([0-9a-zA-Z_\.]*?)\(((.*?)" + t + "(.*?))?\)\/\>)")
+		Set SetMatch = GetMatch(c_Content, "(\<Set\:([0-9a-zA-Z_\.]*?)\(((.*?)" & t & "(.*?))?\)\/\>)")
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
 				Execute "Bstr = " & SetSubMatch.SubMatches(1) & "(" & SetSubMatch.SubMatches(3) & """" & s & """" & SetSubMatch.SubMatches(4) & ")"
@@ -398,7 +398,7 @@ Class template
 			Next
 		End If
 		Set SetMatch = Nothing
-		Set SetMatch = GetMatch(c_Content, "(\<Set\:" + t + "\/\>)")
+		Set SetMatch = GetMatch(c_Content, "(\<Set\:" & t & "\/\>)")
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
 				c_Content = Replace(c_Content, SetSubMatch.Value, s, 1, -1, 1)
@@ -406,13 +406,6 @@ Class template
 		End If
 		Set SetMatch = Nothing
 	End Property
-	
-	' ***************************************
-	'	普通替换全局标签
-	' ***************************************
-	Private Function DataFor(ByVal DataSource, ByVal Content, ByVal page, ByVal PageID)
-		
-	End Function
 	
 End Class
 %>
