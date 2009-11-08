@@ -28,6 +28,7 @@ End If
 	<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,ccessibility,w3c,w3,w3cn" />
 	<meta name="description" content="PuterJam's BLOG" />
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.common/control.css" type="text/css" media="all" />
+    <script language="javascript" type="text/javascript" src="../pjblog.common/common.js"></script>
 	<title>后台管理 - PJBlog4 v<%=Sys.version%></title>
 	<style type="text/css">
 		<!--

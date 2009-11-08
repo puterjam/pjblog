@@ -172,21 +172,23 @@ fieldset td {
 font-size:12px;
 }
 .shuom{
- padding:0px;
+ padding:0px 20px 0px 20px;
  color:#999;
  font-size:11px;
 }
+.shuom:hover{ color:#000}
+.Demo{ padding-left:20px; padding-right:20px;}
 select{font-size:12px;}
 input.text{
  border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;height:16px
 }
-
+input.text:hover{ border:1px solid #CC6600; background:#FFFFEA; color:#555}
 
 input.button{
- background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:2px 2px 0px 2px;margin:4px;
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 2px 0px 2px;margin:4px;height:22px; line-height:22px;
 }
 button{
- background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:2px 2px 0px 2px;margin:4px;
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 2px 0px 2px;margin:4px;height:22px; line-height:22px;
 }
 
 input.buttonActive{

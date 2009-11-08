@@ -85,6 +85,7 @@ Class log_Init
         blog_Description = GlobalCache(46, 0)				'站点首页Description
         blog_SaveTime = GlobalCache(47, 0)					'Ajax草稿自动保存时间间隔
 		blog_IsPing = CBool(GlobalCache(48, 0)) 			'是否开启Ping功能
+		blog_html = Trim(GlobalCache(49, 0))
 	End Sub
 	
 	' ***********************************************

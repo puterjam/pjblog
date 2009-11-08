@@ -37,7 +37,7 @@ Class Sys_Cache
               		"blog_introChar,blog_introLine,blog_validate,blog_Title,blog_ImgLink," & _
               		"blog_commLength,blog_downLocal,blog_DisMod,blog_Disregister,blog_master,blog_email,blog_CountNum," & _
 			  		"blog_wapNum,blog_wapImg,blog_wapHTML,blog_wapLogin,blog_wapComment,blog_wap,blog_wapURL,blog_KeyWords," & _
-			  		"blog_Description, blog_SaveTime, blog_IsPing" & _
+			  		"blog_Description, blog_SaveTime, blog_IsPing, blog_html" & _
               		" from blog_Info"
 			  	Set log_Infos = Conn.Execute(Sql)
 			  		blog_Infos = log_Infos.GetRows()

@@ -50,6 +50,7 @@ Class do_general
 			general.SiteURL = Asp.checkURL(Asp.CheckStr(Request.Form("SiteURL")))
 		End If
 		general.blog_about = Asp.checkURL(Asp.CheckStr(Request.Form("blog_about")))
+		general.blog_html = Asp.checkURL(Asp.CheckStr(Request.Form("blog_html")))
 		ReConSio = general.SaveGeneral
 		If ReConSio(0) Then Call Cache.GlobalCache(2)
 		Session(Sys.CookieName & "_ShowMsg") = True
