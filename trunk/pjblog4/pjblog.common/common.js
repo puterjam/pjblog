@@ -32,6 +32,7 @@ var REGEXP = {
 	REG_USERNAME : /^[0-9A-Za-z_]{5,16}$/, //用户名
 	REG_QQ : /^\d{5,11}$/, //QQ
 	REG_EMAIL : /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/, // Email
+	REG_WEBURL : /^(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/, //网址
 	REG_TELPHONE : /^0\d{2,3}-\d{1,}$/, //电话
 	REG_MOBILE : /^1\d{10}$/, // 手机
 	REG_POSTCODE : /^\d{6}$/, //邮政编码

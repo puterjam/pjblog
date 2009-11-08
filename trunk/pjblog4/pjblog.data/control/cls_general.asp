@@ -11,7 +11,7 @@ Dim general : Set general = New c_general
 
 Class c_general
 
-	Public SiteName, blog_Title, blog_master, blog_email, SiteURL, blog_KeyWords, blog_Description, blog_about
+	Public SiteName, blog_Title, blog_master, blog_email, SiteURL, blog_KeyWords, blog_Description, blog_about, blog_html
 	
 	Private ReConSio
 
@@ -32,7 +32,7 @@ Class c_general
 	' ***********************************************
 	Public Function SaveGeneral
 		Dim Arrays
-		Arrays = Array(Array("blog_Name", SiteName), Array("blog_Title", blog_Title), Array("blog_master", blog_master), Array("blog_email", blog_email), Array("blog_KeyWords", blog_KeyWords), Array("blog_Description", blog_Description), Array("blog_URL", SiteURL), Array("blog_affiche",""), Array("blog_about", blog_about))
+		Arrays = Array(Array("blog_Name", SiteName), Array("blog_Title", blog_Title), Array("blog_master", blog_master), Array("blog_email", blog_email), Array("blog_KeyWords", blog_KeyWords), Array("blog_Description", blog_Description), Array("blog_URL", SiteURL), Array("blog_affiche",""), Array("blog_about", blog_about), Array("blog_html", blog_html))
 		ReConSio = Sys.doRecord("blog_Info", Arrays, "update", "blog_ID", 1)
 		SaveGeneral = ReConSio
 	End Function
