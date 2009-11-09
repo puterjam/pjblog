@@ -2,7 +2,7 @@
 var Upload = {
 	Code : function(){
 		var c = "";
-		c += "<div style=\"text-align:center\">";
+		c += "<div style=\"text-align:left; float:left; margin:0px;\">";
 		c += "<div id=\"MsgContent\">";
 		c += "<div id=\"MsgHead\" style=\"text-align:right\"><span style=\"float:left\">PJBlog上传程式</span><a href=\"javascript:;\" onclick=\"$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))\">关闭</a></div>";
 		c += "<div id=\"MsgBody\">";
@@ -17,10 +17,10 @@ var Upload = {
 		Box.selfWidth = true;
 		Box.selefHeight = false;
 		var AjaxUp = null;
-		var c = Box.FollowBox($(inputID), 400, 0, 5, this.Code());
+		var c = Box.FollowBox($(inputID), 500, 0, 5, this.Code());
 		this.showUpload(obj, inputID, ReturnType, Path, fcount);
 		c.id = "pjblogdoupload";
-		c.style.cssText += "; border:1px solid #000;";
+		c.style.cssText += "; border:0px solid #000; text-align:left!important;";
 	},
 	showUpload : function(obj, inputID, ReturnType, Path, fcount){
 		/*
