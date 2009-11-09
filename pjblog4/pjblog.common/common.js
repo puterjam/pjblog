@@ -1,4 +1,5 @@
 ﻿// JavaScript Document
+// Author : evio 
 /*
 	重构一些内置方法
 */
@@ -65,4 +66,107 @@ function $(){
         }
     } 
     return elements; 
+}
+
+/* ------------------ 获取对象的绝对坐标 --------------------*/
+function ABS(a){
+	var b = { x: a.offsetLeft, y: a.offsetTop};
+	a = a.offsetParent;
+	while (a) {
+		b.x += a.offsetLeft;
+		b.y += a.offsetTop;
+		a = a.offsetParent;
+	}
+	return b;
+}
+/* ------------------ 8位窗口 --------------------*/
+var Box = {
+	selfWidth : false, // 是否自定义宽度
+	selefHeight : false, // 是否自定义高度
+	offsetBoder : {
+		HasBorder : true,
+		Border : 1
+	}, // 偏移量
+	FollowBox : function(obj, newlayerWidth, newlayerHeight, postion, html){
+	/*
+		@ obj 				被定位的对象
+		@ newlayerWidth		打开的新层的宽度
+		@ newlayerHeight 	打开新层的高度
+		@ postion 			打开新层的位置 共8个位置, 从顶部开始, 顺时针方向; 还有个位置是[0,0]
+		@ html 				HTML代码
+	*/
+		// 创建一个上传的层
+		var div = document.createElement("div");
+		document.body.appendChild(div);
+		div.innerHTML = html;
+		
+		var Ps = ABS(obj);
+		var left = Ps.x;
+		var top = Ps.y;
+		var width = obj.offsetWidth;
+		var height = obj.offsetHeight;
+		if (!this.selfWidth){newlayerWidth = div.offsetWidth;}
+		if (!this.selefHeight){newlayerHeight = div.offsetHeight;}
+		
+		var offPach = this.offsetBoder.HasBorder ? this.offsetBoder.Border : 0;
+		var pos = new Array();
+			pos.push(left);						// 0
+			pos.push(top);						// 1
+			pos.push(width);					// 2
+			pos.push(height);					// 3
+			pos.push(newlayerWidth);			// 4
+			pos.push(newlayerHeight);			// 5
+			pos.push(this.offsetBoder.Border); 	// 6
+		var newPos = this.ChoosePostion(postion, pos);
+		
+		if (this.selfWidth){div.style.width = newlayerWidth;}
+		if (this.selefHeight){div.style.height = newlayerHeight;}
+		/*div.style.cssText += ";position: absolute; left:" + (newPos[0]) + "px; top:" + (newPos[1]) + "px;";*/
+		div.style.position = "absolute";
+		div.style.display = "block";
+		div.style.left = newPos[0] + "px";
+		div.style.top = newPos[1] + "px";
+		return div; // 返回该新创建的对象,用于控制CSS
+	},
+	ChoosePostion : function(i, Arrays){
+		var left, top;
+		switch (i){
+			case 1 :
+				left = Arrays[0] - Arrays[6];
+				top = Arrays[1] - Arrays[5] - (Arrays[6] * 2 + 1);
+				break;
+			case 2 :
+				left = Arrays[0] + Arrays[2];
+				top = Arrays[1] - Arrays[5] - (Arrays[6] * 2 + 1);
+				break;
+			case 3 :
+				left = Arrays[0] + Arrays[2] + 1;
+				top = Arrays[1];
+				break;
+			case 4 :
+				left = Arrays[0] + Arrays[2] + 1;
+				top = Arrays[1] + Arrays[3] + 1;
+				break;
+			case 5 :
+				left = Arrays[0] - Arrays[6];
+				top = Arrays[1] + Arrays[3] + 1;
+				break;
+			case 6 :
+				left = Arrays[0] - Arrays[4] - (Arrays[6] * 2 + 1);
+				top = Arrays[1] + Arrays[3] + 1;
+				break;
+			case 7 :
+				left = Arrays[0] - Arrays[4] - (Arrays[6] * 2 + 2);
+				top = Arrays[1];
+				break;
+			case 8:
+				left = Arrays[0] - Arrays[4] - (Arrays[6] * 2 + 1);
+				top = Arrays[1] - Arrays[5] - (Arrays[6] * 2 + 1);
+				break;
+			default :
+				left = 0;
+				top = 0;
+		}
+		return [left, top];
+	}
 }
