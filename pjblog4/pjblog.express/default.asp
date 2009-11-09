@@ -15,6 +15,7 @@
 	   </div>
 	</div>
   </form>
+  <a href="blogpost.asp">发表日志</a>
 <%
 Sys.Close
 %>

@@ -23,7 +23,7 @@ Session.LCID = 2057
 <script language="jscript" type="text/jscript" runat="server" src="../pjblog.common/language.js"></script>
 
 <%
-Dim Sys, Conn, memStatus, memName, RefUrl, RedoUrl
+Dim Sys, Conn, memStatus, memName, RefUrl, RedoUrl, StartTime
 
 Dim SiteName, SiteURL, blogPerPage, blog_LogNums, blog_CommNums, blog_MemNums, blog_VisitNums, blogBookPage, blog_MessageNums, blogcommpage, blogaffiche, blogabout, blogcolsize, blog_colNums, blog_TbCount, blog_showtotal, Register_UserNames, Register_UserName, FilterIPs, FilterIP, blog_commTimerout, blog_commUBB, blog_commIMG, blog_postFile, blog_postCalendar, blog_DefaultSkin, blog_SkinName, blog_SplitType, blog_introChar, blog_introLine, blog_validate, blog_Title, blog_ImgLink, blog_commLength, blog_downLocal, blog_DisMod, blog_Disregister, blog_master, blog_email, blog_CountNum, blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL, blog_KeyWords, blog_Description, blog_SaveTime, blog_IsPing, blog_html
 
@@ -32,6 +32,7 @@ Dim stat_CommentDel, stat_Admin, stat_code, UP_FileType, UP_FileSize, UP_FileTyp
 Dim stat_CommentEdit, stat_ShowHiddenCate
 
 RedoUrl = Cstr(Request.ServerVariables("HTTP_REFERER"))
+StartTime = Timer()
 
 memStatus = "Guest"
 
