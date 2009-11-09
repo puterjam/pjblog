@@ -177,10 +177,13 @@ Class SysUpLoad
  End Sub
  
 Public sub setApp(stp,total,current,desc)
-    Application.lock()
-    Application(pID)="{ID:""" & pID & """,step:""" & stp & """,total:" & total & ",now:" & current & ",description:""" & desc & """,dt:""" & now() & """}"
-    Application.unlock()
-	Response.Write(Application(pID) & "<br />")
+	Dim Str
+	Str = "{ID:""" & pID & """,step:""" & stp & """,total:" & total & ",now:" & current & ",description:""" & desc & """,dt:""" & now() & """}"
+	Response.Cookies(pID) = Str
+	Response.Cookies(pID).Expires = Date + 365
+'    Application.lock()
+'    Application(pID)="{ID:""" & pID & """,step:""" & stp & """,total:" & total & ",now:" & current & ",description:""" & desc & """,dt:""" & now() & """}"
+'    Application.unlock()
 end sub
 '==============================
  '判断扩展名
