@@ -1,0 +1,75 @@
+ /*---其他样式---*/  
+ .userpass{border:1px solid;border-color:#9E9234 #fff #fff #9E9234;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
+ .userpass:hover,.userpass:focus{border-color:#9E9234;background:#FFFFEE}
+ .inputBox{border:1px solid;border-color:#9E9234 #fff #fff #9E9234;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
+ .inputBox:hover,.inputBox:focus{border-color:#9E9234;background:#FFFFEE}
+ .userbutton{border:1px solid;border-color:#fff #9E9234 #9E9234 #fff;height:22px;padding:0px 5px 2px 5px !important;padding:3px 2px 0px 2px;background:#E3CE96 url(menu_main.jpg) 0px -30px;}
+ .LinkTable{margin:5px 10px 5px 0px;}
+ .commentTable{}
+ .high1{font-weight:bold;color:#f00;background:#ff0}
+ /*日历样式*/
+  #Calendar_Body{margin:5px 10px 5px 5px;font-family:arial;line-height:120%}
+ /*日历样式-顶部*/
+  #Calendar_Body #Calendar_Top{padding:0px 2px 0px 2px;height:18px;text-align:center;font-weight:bold;}
+ /*日历样式-顶部按钮-左*/
+  #Calendar_Body #Calendar_Top #LeftB{background:url('../../images/BttnLeft.gif');width:9px;height:16px;float:left;cursor:pointer;overflow:hidden;}
+ /*日历样式-顶部按钮-右*/
+  #Calendar_Body #Calendar_Top #RightB{background:url('../../images/BttnRight.gif');width:9px;height:16px;float:right;cursor:pointer;overflow:hidden;}
+ /*日历样式-星期*/
+  #Calendar_Body #Calendar_week{text-align:center;height:20px;padding:0px 0px 0px 2%;font-weight:bold;}
+  ul.Week_UL{display:inline;list-style:none;margin:0px;padding:0px;}
+  ul.Week_UL li{display:inline;margin:3px 0px 2px 0px;padding:0px;float:left;color:#003;width:14%;}
+ /*日历样式-日期*/
+  .Calendar_Day {text-align:center;height:20px;padding:0px 0px 0px 2%;}
+  .Calendar_Day ul.Day_UL{display:inline;list-style:none;}
+  .Calendar_Day ul.Day_UL li{display:inline;float:left;width:14%;}
+
+ /*日历样式-日期-超链接样式*/
+  .DayA a{cursor:default;padding:2px 0px 3px 0px;display:block;border:1px solid #f0ecd0;font-size:11px;height:13px;}
+  .DayA a:link,.DayA a:visited{color:#574D31;}
+  .DayA a:hover{color:#574D31;}
+ /*日期选中*/
+  .DayA a.click{cursor:default;background:#D1BE96;color:#000;font-weight:bold;}
+  .DayA a.click:link,.DayA a.click:visited{cursor:pointer;font-weight:bold;text-decoration:none;}
+  .DayA a.click:hover{text-decoration:none;color:#996600;}
+ /*今天*/
+   .DayA a.today{cursor:default;background:#FFFFE1;color:#000;border:1px solid #513F24;}
+ /*非本月日期*/
+   .DayA a.otherday{cursor:default;color:#aaa;text-decoration:none;/*visibility:hidden*/}
+   .DayA a.otherday:link,.DayA a.otherday:visited{cursor:pointer;color:#aaa;font-weight:bold;}
+ /*本日存在日记*/
+   .DayA a.haveD{cursor:pointer;}
+   .DayA a.haveD:link,.DayA a.haveD:visited{color:#4A4024;font-weight:bold;}
+   .DayA a.haveD:hover{color:#996600;}
+ /*今天存在日记*/
+   .DayA a.DayD{cursor:pointer;}
+   .DayA a.DayD:link,.DayA a.DayD:visited{background:#FFFFE1;color:#000;border:1px solid #513F24;font-weight:bold;text-decoration:none;}
+   .DayA a.DayD:hover{color:#996600;}
+/*显示和隐藏置顶日志按钮*/
+   .BttnC{float:right;width:16px;height:16px;background:url(../../images/BttnCllps.gif) no-repeat;margin-top:0px;cursor:pointer}
+   .BttnE{float:right;width:16px;height:16px;background:url(../../images/BttnExpnd.gif) no-repeat;margin-top:0px;cursor:pointer}
+/*提示框CSS*/
+   div.nicetitle {
+    position: absolute;
+    padding: 4px !important;
+	padding: 6px 4px 4px 4px;
+    top: 0;
+    left: 0;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    width: 15em;
+    background: #FFFBD1 url(../../images/nicetitlebg.jpg);
+    color: #3D2C05;
+    border: 1px solid #715208;
+    text-align: left;
+}
+   div.nicetitle p {
+    margin: 0; padding: 0 3px;
+}
+   div.nicetitle p.destination {
+    font-size: 9px;
+    text-align: left;
+    padding:3px 0px 0px 3px;
+	color: #715208;
+	/*display:none;*/
+}
