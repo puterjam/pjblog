@@ -170,3 +170,85 @@ var Box = {
 		return [left, top];
 	}
 }
+
+/* JS 操作表格 */
+function TableAddRow(obj){ this._obj = obj ; this.Mark = "AddRowMark"; }
+
+TableAddRow.prototype.GetRowId = function(){
+	var arr = this._obj.rows, o = [false, 0];
+	for (var i = 0 ; i < arr.length ; i++){
+		if (arr[i].id == this.Mark){o = [true, i]; break;}
+	}
+	return o;
+}
+
+TableAddRow.prototype.AddRow = function(){
+	var arr = this.GetRowId();
+	if (arr[0]){
+		return this._obj.insertRow(arr[1]);
+	}else{
+		return null;
+	}
+}
+
+/* 添加新分类 */
+function AddNewCateRow(){
+	var NewCate = new TableAddRow($("CateTable"));
+	if (!$(NewCate.Mark + "_del")){
+		// 判断按钮
+		var button = $("Addbutton");
+		if (!button.disabled){button.disabled = true;}else{button.disabled = false;}
+		
+		var tr = NewCate.AddRow();//  插入一行
+		if (tr != null){
+			tr.id = NewCate.Mark + "_del";
+			tr.style.lineHeight = "30px";
+			tr.style.backgroundColor = "#FFFF99";
+			// 插入第一个数据 0 
+			var _td = tr.insertCell(0);
+			var div = document.createElement("div");
+			div.innerHTML = "<a href=\"javascript:;\" onclick=\"try{$('" + NewCate.Mark + "_del').parentNode.removeChild($('" + NewCate.Mark + "_del'));$('Addbutton').disabled=false;}catch(e){}\"><img src=\"../images/check_error.gif\" border=\"0\"></a>";
+			_td.appendChild(div);
+			//  插入第二个数据 1
+			_td = tr.insertCell(1);
+			div = document.createElement("<input type=\"text\" id=\"new_order\" class=\"text\" size=\"2\" />");
+			_td.appendChild(div);
+			//  插入第三个数据 2
+			_td = tr.insertCell(2);
+			div = document.createElement("div");
+			div.innerHTML = "<img id=\"iconimg\" src=\"" + carr[1] + "\" width=\"16\" height=\"16\" /> <select id=\"new_icon\" onchange=\"$('iconimg').src=this.options[this.options.selectedIndex].value\" style=\"width:120px;\">" + carr[0] + "</select>";
+			_td.appendChild(div);
+			// 插入第四个数据 3
+			_td = tr.insertCell(3);
+			div = document.createElement("<input name=\"new_name\" type=\"text\" class=\"text\" value=\"\" size=\"14\"/>");
+			_td.appendChild(div);
+			// 插入第五个数据 4
+			_td = tr.insertCell(4);
+			div = document.createElement("<input name=\"new_Intro\" type=\"text\" class=\"text\" size=\"20\"/>");
+			_td.appendChild(div);
+			// 插入第六个数据 5
+			_td = tr.insertCell(5);
+			div = document.createElement("<input name=\"new_Part\" type=\"text\" class=\"text\" size=\"16\" />");
+			_td.appendChild(div);
+			// 插入第七个数据 6
+			_td = tr.insertCell(6);
+			div = document.createElement("<input name=\"new_URL\" type=\"text\" size=\"30\" class=\"text\" />");
+			_td.appendChild(div);
+			// 插入第八个数据 7
+			_td = tr.insertCell(7);
+			div = document.createElement("div");
+			div.innerHTML = "<select name=\"new_local\"><option value=\"0\">同时</option><option value=\"1\">顶部</option><option value=\"2\">侧边</option></select>";
+			_td.appendChild(div);
+			// 插入第九个数据 8
+			_td = tr.insertCell(8);
+			div = document.createElement("div");
+			div.innerHTML = " <select name=\"new_Secret\"><option value=\"0\" style=\"background:#0f0\">公开</option><option value=\"1\" style=\"background:#f99\">保密</option></select>";
+			_td.appendChild(div);
+			// 插入第十个数据 9
+			_td = tr.insertCell(9);
+			div = document.createElement("div");
+			div.innerHTML = "<input type=\"button\" class=\"button\" value=\"保存\" onclick=\"this.value='保存...'; this.disabled=true;\">";
+			_td.appendChild(div);
+		}
+	}
+}

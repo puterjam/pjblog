@@ -1,8 +1,6 @@
 ﻿// JavaScript Document
 function Check(){
-	init(
-		 
-	);
+	init();
 	function init(){
 		
 	}

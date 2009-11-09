@@ -18,6 +18,15 @@ End If
 <!--#include file = "log_control.asp" -->
 <!--#include file = "control/c_welcome.asp" -->
 <!--#include file = "control/c_general.asp" -->
+<!--#include file = "control/c_categories.asp" -->
+
+<%
+' 加载功能类
+%>
+<!--#include file = "../pjblog.model/cls_fso.asp" -->
+<!--#include file = "../pjblog.model/cls_stream.asp" -->
+<!--#include file = "../pjblog.model/cls_xml.asp" -->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
 <head>

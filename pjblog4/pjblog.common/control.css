@@ -280,3 +280,9 @@ margin-top:-2px;
   .msgDiv .reply h5 .tip{color:#f00;font-weight:100;margin-left:5px;}
   .msgDiv textarea{width:100%;margin:auto !important;background:transparent;margin:3px;padding:1px;border:0px solid #fff;cursor:pointer;height:33px;overflow:hidden;line-height:140% !important;line-height:130%}
   
+  /*---Category Set---*/
+  .SecTd{ border-bottom: 1px dotted #9EA9C5; line-height:30px; padding-right:10px;}
+  .AddNew{ padding-left:55px; background:url(../images/control/bg_repno.gif) no-repeat -240px -600px;}
+  .AddA{padding-left:17px; line-height:25px; background:url(../images/control/bg_repno.gif) no-repeat 0 1px; *background:url(../images/control/bg_repno.gif) no-repeat 0 0; color:#F60;}
+  .AddNew a.AddA:link, .AddNew a.AddA:visited{ color:ff6600!important; text-decoration:none}
+  .AddNew a.AddA:hover{ text-decoration:underline}
