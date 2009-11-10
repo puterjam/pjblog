@@ -1,4 +1,4 @@
-﻿<!--#include file = "../include.asp" --><!--#include file = "../FCKeditor/fckeditor.asp" --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!--#include file = "../include.asp" --><!--#include file = "../FCKeditor/fckeditor.asp" --><!--#include file = "../pjblog.model/cls_ubbconfig.asp" --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -110,7 +110,19 @@ If Asp.ChkPost() Then
                         <td align="left"><span style="font-weight: bold">
                         <select name="log_CateID" id="select2">
                             <option value="" selected="selected" style="color:#333"><%=lang.Set.Js(1)%></option>
-                            <option value="3">dsaf</option>
+<%
+	Dim CateArr, Arr, Arri
+	CateArr = Cache.CategoryCache(1)
+	If UBound(CateArr, 1) = 0 Then
+		Arr = ""
+	Else
+		Arr = ""
+		For Arri = 0 To UBound(CateArr, 2)
+			If Not CateArr(4, Arri) Then Arr = Arr & "<option value=""" & CateArr(0, Arri) & """>" & CateArr(1, Arri) & "</option>"
+		Next
+	End If
+	Response.Write(Arr)
+%>
                         </select>
                         </span></td>
                     </tr>

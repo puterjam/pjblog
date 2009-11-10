@@ -71,5 +71,49 @@ Class Sys_Cache
 		UserRight = blog_Status
 	End Function
 	
+	' ***********************************************
+	'	分类缓存
+	' ***********************************************
+	Public Function CategoryCache(ByVal i)
+		Dim blog_Category
+		If Not IsArray(Application(Sys.CookieName & "_blog_Category")) Or Int(i) = 2 Then
+			Dim log_Category, SQL
+				SQL = "SELECT cate_ID,cate_Name,cate_Order,cate_Intro,cate_OutLink,cate_URL,cate_icon,cate_count,cate_Lock,cate_local,cate_Secret,cate_Folder FROM blog_Category ORDER BY cate_Order ASC"
+				Set log_Category = Conn.Execute(SQL)
+				blog_Category = log_Category.GetRows()
+				Set log_Category = Nothing
+				Application.Lock
+				Application(Sys.CookieName & "_blog_Category") = blog_Category
+				Application.UnLock
+		Else
+			blog_Category = Application(Sys.CookieName & "_blog_Category")
+		End If
+		CategoryCache = blog_Category
+	End Function
+	
+	' ***********************************************
+	'	分类缓存
+	' ***********************************************
+	Public Function SmiliesCache(ByVal i)
+    If Not IsArray(Application(Sys.CookieName & "_blog_Smilies")) Or Int(i) = 2 Then
+        Dim log_Smilies, log_SmiliesList, TempVar, Arr_Smilies
+        Set log_Smilies = Conn.Execute("SELECT sm_ID,sm_Image,sm_Text FROM blog_Smilies")
+        TempVar = ""
+        Do While Not log_Smilies.EOF
+            log_SmiliesList = log_SmiliesList&TempVar&log_Smilies("sm_ID")&"|"&log_Smilies("sm_Image")&"|"&log_Smilies("sm_Text")
+            TempVar = ","
+            log_Smilies.MoveNext
+        Loop
+        Set log_Smilies = Nothing
+        Arr_Smilies = Split(log_SmiliesList, ",")
+        Application.Lock
+        Application(Sys.CookieName & "_blog_Smilies") = Arr_Smilies
+        Application.UnLock
+    Else
+        Arr_Smilies = Application(Sys.CookieName & "_blog_Smilies")
+    End If
+	SmiliesCache = Arr_Smilies
+End Function
+	
 End Class
 %>
