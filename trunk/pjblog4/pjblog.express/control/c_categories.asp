@@ -19,6 +19,7 @@ If Request.QueryString("Smenu") = "move" Then
 
 Else
 %>
+			<form action="../pjblog.logic/control/log_category.asp?action=edit" method="post" onsubmit="if ($('AddRowMark_del')){alert('请先将新分类填写完整后提交,再更新所有分类!') ; return false;} else {return true}">
 			<table cellpadding="3" cellspacing="0" style="margin-top:10px; width:100%" id="CateTable">
             	<tr>
                 	<td class="SecTd" width="29">&nbsp;</td>
@@ -53,7 +54,7 @@ Else
 		For i = 0 To UBound(CateRow, 2)
 %>
                 <tr id="Catetr_<%=Int(CateRow(0, i))%>">
-                	<td class="SecTd" width="25"><%If Not CateRow(11, i) Then%><input type="checkbox" value="<%=Int(CateRow(0, i))%>" name="SelectID" /><%End If%></td>
+                	<td class="SecTd" width="25"><%If Not CateRow(11, i) Then%><input type="checkbox" value="<%=Int(CateRow(0, i))%>" name="SelectID" /><%End If%><input type="hidden" value="<%=Int(CateRow(0, i))%>" name="Cate_ID" /></td>
                 	<td class="SecTd" width="29"><input type="text" value="<%=Int(CateRow(1, i))%>" name="cate_Order" class="text" size="2" /></td>
                     <td class="SecTd">
                     <img id="CateImg_<%=Int(CateRow(0, i))%>" src="<%=Trim(CateRow(2, i))%>" width="16" height="16" />
@@ -77,13 +78,12 @@ Else
 		            	<option value="0" style="background:#0f0">公开</option>
 		            	<option value="1" style="background:#f99" <%if Int(CateRow(8, i)) then Response.Write "selected=""selected"""%>>保密</option>
 		           	</select>
+                    <%If CateRow(10, i) Then%><input type="hidden" value="<%=Int(CateRow(8, i))%>" name="cate_Secret"><%End If%>
                     </td>
                     <td class="SecTd"><input type="text" class="text" name="cate_count" value="<%=Int(CateRow(9, i))%>" size="2" readonly="readonly" style="background:#ffe"/> 篇</td>
                 </tr>
 <%
 		Next
-	End If
-End If
 %>
 				<tr style=" line-height:25px;" id="AddRowMark">
                 	<td colspan="2">&nbsp;</td>
@@ -93,11 +93,19 @@ End If
                 	<td>&nbsp;</td>
                     <td colspan="9"><input type="submit" value="保存分类" class="button"></td>
                 </tr>
+<%
+	End If
+%>
 			</table>
+            </form>
+<%
+End If
+%>
         </td>
 	</tr>
 </table>
 <%
+Control.getMsg
 End Sub
 
 Public Function Strinel

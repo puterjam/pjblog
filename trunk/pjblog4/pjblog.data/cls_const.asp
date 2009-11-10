@@ -120,7 +120,7 @@ Class Sys_Connection
 					Sql = "Select * From " & table & " Where " & Primarykey & "=" & ID
 				End If
 				TempDB.Open Sql, pj_Conn, 1, v
-				If LCase(Action) = "insert" Then TempDB.AddNew : BackPrimarykeyID = TempDB(Primarykey)
+				If LCase(Action) = "insert" Then TempDB.AddNew : BackPrimarykeyID = TempDB(Primarykey) Else BackPrimarykeyID = ID
 				AddCount = UBound(DBArray, 1)
 				For i = 0 To AddCount
 					TempDB(DBArray(i)(0)) = DBArray(i)(1)

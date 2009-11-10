@@ -68,7 +68,7 @@ function Check(){
 						_obj.disabled = false;
 						// --------------------------------------------------
 						var checkbox = document.createElement("div");
-						checkbox.innerHTML = "<input type=\"checkbox\" value=\"" + json.Info.trim() + "\" name=\"SelectID\" />";
+						checkbox.innerHTML = "<input type=\"checkbox\" value=\"" + json.Info.trim() + "\" name=\"SelectID\" /><input type=\"hidden\" value=\"" + json.Info.trim() + "\" name=\"Cate_ID\" />";
 						$("new_selectid").parentNode.replaceChild(checkbox, $("new_selectid"));
 						// --------------------------------------------------
 						var _div = document.createElement("div");
@@ -86,7 +86,7 @@ function Check(){
 						$("new_local").id = "";
 						$("new_Secret").id = "";
 						try{$("Addbutton").disabled = false}catch(e){}
-					}else{alert(json.Info);}
+					}else{alert(json.Info);_obj.disabled = false; _obj.innerHTML = "保存新分类" ;}
 				},
 				ononexception:function(obj){
 					alert(obj.state);
