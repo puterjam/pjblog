@@ -66,6 +66,14 @@ function Check(){
 						
 						$("AddRowMark_del").style.backgroundColor = "#ffffff";
 						_obj.disabled = false;
+						
+						if (new_URL.length > 0){
+							$("new_Secret").disabled = true;
+							var _hidden = document.createElement("div");
+							_hidden.innerHTML = "<input type=\"hidden\" value=\"0\" name=\"cate_Secret\">";
+							$("new_Secret").parentNode.appendChild(_hidden);
+						}
+						
 						// --------------------------------------------------
 						var checkbox = document.createElement("div");
 						checkbox.innerHTML = "<input type=\"checkbox\" value=\"" + json.Info.trim() + "\" name=\"SelectID\" /><input type=\"hidden\" value=\"" + json.Info.trim() + "\" name=\"Cate_ID\" />";
@@ -75,7 +83,6 @@ function Check(){
 						_div.innerHTML = "<input type=\"text\" class=\"text\" name=\"cate_count\" value=\"0\" size=\"2\" readonly=\"readonly\" style=\"background:#ffe\"/> 篇";
 						_obj.parentNode.replaceChild(_div, _obj);
 						
-						if (new_URL.length > 0) $("new_Secret").disabled = true;
 						$("AddRowMark_del").id = "";
 						$("new_order").id = "";
 						$("new_icon").id = "";
