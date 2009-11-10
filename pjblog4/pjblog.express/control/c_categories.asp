@@ -19,7 +19,7 @@ If Request.QueryString("Smenu") = "move" Then
 
 Else
 %>
-			<form action="../pjblog.logic/control/log_category.asp?action=edit" method="post" onsubmit="if ($('AddRowMark_del')){alert('请先将新分类填写完整后提交,再更新所有分类!') ; return false;} else {return true}">
+			<form action="#" method="post" onsubmit="if ($('AddRowMark_del')){alert('请先将新分类填写完整后提交,再更新所有分类!') ; return false;} else {return true}" id="CateList">
 			<table cellpadding="3" cellspacing="0" style="margin-top:10px; width:100%" id="CateTable">
             	<tr>
                 	<td class="SecTd" width="29">&nbsp;</td>
@@ -44,6 +44,10 @@ Else
 		var carr = new Array();
 		carr.push("<%=Replace(CommonTipPic(joinStr, "")(0), Chr(34), "'")%>");
 		carr.push("<%=Replace(CommonTipPic(joinStr, "")(1), Chr(34), "'")%>");
+		function SwitchSubmit(Str){
+			$("CateList").action = "../pjblog.logic/control/log_category.asp?action=" + Str.trim();
+			$("CateList").submit();
+		}
 	</script>
 <%
 	If UBound(CateRow, 1) = 0 Then
@@ -54,7 +58,7 @@ Else
 		For i = 0 To UBound(CateRow, 2)
 %>
                 <tr id="Catetr_<%=Int(CateRow(0, i))%>">
-                	<td class="SecTd" width="25"><%If Not CateRow(11, i) Then%><input type="checkbox" value="<%=Int(CateRow(0, i))%>" name="SelectID" /><%End If%><input type="hidden" value="<%=Int(CateRow(0, i))%>" name="Cate_ID" /></td>
+                	<td class="SecTd" width="25"><%If Not CateRow(11, i) Then%><input type="checkbox" value="<%=Int(CateRow(0, i))%>" name="SelectID" /><%else%>&nbsp;<%End If%><input type="hidden" value="<%=Int(CateRow(0, i))%>" name="Cate_ID" /></td>
                 	<td class="SecTd" width="29"><input type="text" value="<%=Int(CateRow(1, i))%>" name="cate_Order" class="text" size="2" /></td>
                     <td class="SecTd">
                     <img id="CateImg_<%=Int(CateRow(0, i))%>" src="<%=Trim(CateRow(2, i))%>" width="16" height="16" />
@@ -91,7 +95,7 @@ Else
                 </tr>
                 <tr style=" line-height:30px;">
                 	<td>&nbsp;</td>
-                    <td colspan="9"><input type="submit" value="保存分类" class="button"></td>
+                    <td colspan="9"><input type="button" value="保存分类" class="button" onclick="SwitchSubmit('edit')"><input type="button" value="批量删除" class="button" onclick="if (confirm('删除分类,将删除该分类下的所有文章!\n确定这样做吗?')){SwitchSubmit('del')}"></td>
                 </tr>
 <%
 	End If

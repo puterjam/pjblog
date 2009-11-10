@@ -185,10 +185,10 @@ input.text{
 input.text:hover{ border:1px solid #CC6600; background:#FFFFEA; color:#555}
 
 input.button{
- background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 2px 0px 2px;margin:4px;height:22px; line-height:22px;
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 12px 1px 12px;margin:4px;height:22px; line-height:22px;
 }
 button{
- background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 2px 0px 2px;margin:4px;height:22px; line-height:22px;
+ background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 12px 1px 12px;margin:4px;height:22px; line-height:22px;
 }
 
 input.buttonActive{
