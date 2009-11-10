@@ -286,3 +286,10 @@ margin-top:-2px;
   .AddA{padding-left:17px; line-height:25px; background:url(../images/control/bg_repno.gif) no-repeat 0 1px; *background:url(../images/control/bg_repno.gif) no-repeat 0 0; color:#F60;}
   .AddNew a.AddA:link, .AddNew a.AddA:visited{ color:ff6600!important; text-decoration:none}
   .AddNew a.AddA:hover{ text-decoration:underline}
+  .opacity{
+	  -moz-opacity:0.5;
+	  opacity:0.5;
+	  filter:alpha(opacity=50);
+	  -ms-filter:"alpha(opacity=50)";
+	  background-color: #C5EE48;
+  }
