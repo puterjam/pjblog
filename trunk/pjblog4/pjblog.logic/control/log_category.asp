@@ -23,6 +23,7 @@ Class do_Category
 		Select Case Action
 			Case "add" Call Add
 			Case "edit" Call edit
+			Case "del" Call del
 		End Select
     End Sub 
      
@@ -97,12 +98,28 @@ Class do_Category
 				Category.cate_Secret = CBool(cate_Secret(i))
 				Category.cate_count = Int(cate_count(i))
 				If Len(Trim(cate_URL(i))) > 0 Then Category.cate_OutLink = True Else Category.cate_OutLink = False
-				Category.cate_Lock = False
 				Str = Category.edit
 				If Not Str(0) Then ErrorJoin = ErrorJoin & Str(1) & " - "
 			Next
 			If len(ErrorJoin) > 0 Then ErrorJoin = Mid(ErrorJoin, 1, (Len(ErrorJoin) - 3))
 			If Len(ErrorJoin) > 0 Then Str = ErrorJoin Else Str = "更新分类信息成功!"
+			Session(Sys.CookieName & "_ShowMsg") = True
+			Session(Sys.CookieName & "_MsgText") = Str
+		End If
+		RedirectUrl(RedoUrl)
+	End Sub
+	
+	Private Sub del
+		ErrorJoin = ""
+		cate_ID = Split(Trim(Asp.CheckStr(Request.Form("SelectID"))), ",")
+		If UBound(cate_ID) >= 0 Then
+			For i = 0 To UBound(cate_ID)
+				Category.cate_ID = Int(cate_ID(i))
+				Str = Category.del
+				If Not Str(0) Then ErrorJoin = ErrorJoin & Str(1) & " - "
+			Next
+			If len(ErrorJoin) > 0 Then ErrorJoin = Mid(ErrorJoin, 1, (Len(ErrorJoin) - 3))
+			If Len(ErrorJoin) > 0 Then Str = ErrorJoin Else Str = "删除分类成功!"
 			Session(Sys.CookieName & "_ShowMsg") = True
 			Session(Sys.CookieName & "_MsgText") = Str
 		End If
