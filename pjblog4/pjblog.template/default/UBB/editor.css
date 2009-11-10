@@ -1,0 +1,74 @@
+#editorbody{
+	background-color: #EFEFDE;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ffffff #9B8424 #9B8424 #ffffff;
+}
+#editorHead{
+ padding:2px 6px 6px 6px;
+}
+.editorTools{
+
+}
+
+.Toolsbar{
+	background: url(bar.gif) no-repeat 2px 5px;
+	padding-left:8px;
+	height:24px;
+	float:left;
+}
+.ToolsUL{
+ display:inline;
+ list-style:none;
+ margin:0px;
+ padding:2px;
+}
+.ToolsUL Li{ 
+ float:left;
+ padding:2px;
+}
+.ToolsUL Li select{ 
+ font-size:13px;
+}
+
+.Toolsbutton:link,.Toolsbutton:visited{
+ border:1px solid #EFEFDE;
+ width:16px;
+ height:16px;
+ display:block;
+ padding:2px;
+}
+.Toolsbutton:hover{
+ background:#C1D2EE;
+ border:1px solid #316AC5;
+}
+.Smilie:link,.Smilie:visited{
+ border:1px solid #fff;
+ display:block;
+ padding:2px;
+ width:19px;
+ height:19px;
+}
+.Smilie:hover{
+ background:#C1D2EE;
+ border:1px solid #316AC5;
+}
+.UBBSmiliesPanel{
+background:#fff;border:1px solid #000;text-align:left;padding:0px;position: absolute;visibility:hidden;
+}
+.editorContent{
+ width:97%;
+ padding:0px 6px 6px 4px !important;
+ padding:0px 4px 6px 4px;
+ text-align:center;
+}
+.editTextarea{
+	border:1px solid #999;
+	font-size:12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding:1px;
+	height:250px;
+	overflow:auto;
+    width:100%;
+	text-align:left;
+}
