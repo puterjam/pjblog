@@ -41,6 +41,18 @@ var REGEXP = {
 	REG_ISCHINA : /^[\u4e00-\u9fa5]+$/ //是否包含汉字
 }
 
+/* ---------------------------- 创建文件夹规则 example: ------------------------------ */
+//<input onblur="ReplaceInput(this,window.event)" onkeyup="ReplaceInput(this,window.event)" />
+function ReplaceInput(obj, cevent){
+	var str = ["<", ">", "/", "\\", ":", "*", "?", "|", "\"", /[\u4E00-\u9FA5]/g];
+	if(cevent.keyCode != 37 && cevent.keyCode != 39){
+		//obj.value = obj.value.replace(/[\u4E00-\u9FA5]/g,'');
+		for (var i = 0 ; i < str.length ; i++){
+			obj.value = obj.value.replace(str[i], "");
+		}
+	}
+}
+
 /* ------------------ 定义Cookie的JS设置和获取 --------------------*/
 var cookie = {
     SET	: function(name, value, days) {var expires = "";if (days) {var d = new Date();d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);expires = "; expires=" + d.toGMTString();}document.cookie = name + "=" + value + expires + "; path=/";},
@@ -164,8 +176,8 @@ var Box = {
 				top = Arrays[1] - Arrays[5] - (Arrays[6] * 2 + 1);
 				break;
 			default :
-				left = 0;
-				top = 0;
+				left = Arrays[0];
+				top = Arrays[1];
 		}
 		return [left, top];
 	}
@@ -207,47 +219,52 @@ function AddNewCateRow(){
 			// 插入第一个数据 0 
 			var _td = tr.insertCell(0);
 			var div = document.createElement("div");
-			div.innerHTML = "<a href=\"javascript:;\" onclick=\"try{$('" + NewCate.Mark + "_del').parentNode.removeChild($('" + NewCate.Mark + "_del'));$('Addbutton').disabled=false;}catch(e){}\"><img src=\"../images/check_error.gif\" border=\"0\"></a>";
+			div.innerHTML = "<a href=\"javascript:;\" onclick=\"try{$('" + NewCate.Mark + "_del').parentNode.removeChild($('" + NewCate.Mark + "_del'));$('Addbutton').disabled=false;}catch(e){}\" id=\"new_selectid\"><img src=\"../images/check_error.gif\" border=\"0\"></a>";
 			_td.appendChild(div);
 			//  插入第二个数据 1
 			_td = tr.insertCell(1);
-			div = document.createElement("<input type=\"text\" id=\"new_order\" class=\"text\" size=\"2\" />");
+			div = document.createElement("div");
+			div.innerHTML = "<input type=\"text\" id=\"new_order\" class=\"text\" size=\"2\" name=\"cate_Order\" />";
 			_td.appendChild(div);
 			//  插入第三个数据 2
 			_td = tr.insertCell(2);
 			div = document.createElement("div");
-			div.innerHTML = "<img id=\"iconimg\" src=\"" + carr[1] + "\" width=\"16\" height=\"16\" /> <select id=\"new_icon\" onchange=\"$('iconimg').src=this.options[this.options.selectedIndex].value\" style=\"width:120px;\">" + carr[0] + "</select>";
+			div.innerHTML = "<img id=\"iconimg\" src=\"" + carr[1] + "\" width=\"16\" height=\"16\" /> <select id=\"new_icon\" onchange=\"$('iconimg').src=this.options[this.options.selectedIndex].value\" style=\"width:120px;\" name=\"Cate_icons\">" + carr[0] + "</select>";
 			_td.appendChild(div);
 			// 插入第四个数据 3
 			_td = tr.insertCell(3);
-			div = document.createElement("<input name=\"new_name\" type=\"text\" class=\"text\" value=\"\" size=\"14\"/>");
+			div = document.createElement("div");
+			div.innerHTML = "<input id=\"new_name\" type=\"text\" class=\"text\" value=\"\" size=\"14\" name=\"Cate_Name\" />";
 			_td.appendChild(div);
 			// 插入第五个数据 4
 			_td = tr.insertCell(4);
-			div = document.createElement("<input name=\"new_Intro\" type=\"text\" class=\"text\" size=\"20\"/>");
+			div = document.createElement("div");
+			div.innerHTML = "<input id=\"new_Intro\" type=\"text\" class=\"text\" size=\"20\" name=\"Cate_Intro\"/>";
 			_td.appendChild(div);
 			// 插入第六个数据 5
 			_td = tr.insertCell(5);
-			div = document.createElement("<input name=\"new_Part\" type=\"text\" class=\"text\" size=\"16\" />");
+			div = document.createElement("div");
+			div.innerHTML = "<input id=\"new_Part\" type=\"text\" class=\"text\" size=\"16\" onblur=\"ReplaceInput(this,window.event)\" onkeyup=\"ReplaceInput(this,window.event)\" name=\"Cate_Part\" />";
 			_td.appendChild(div);
 			// 插入第七个数据 6
 			_td = tr.insertCell(6);
-			div = document.createElement("<input name=\"new_URL\" type=\"text\" size=\"30\" class=\"text\" />");
+			div = document.createElement("div");
+			div.innerHTML = "<input id=\"new_URL\" type=\"text\" size=\"30\" class=\"text\" name=\"cate_URL\" />";
 			_td.appendChild(div);
 			// 插入第八个数据 7
 			_td = tr.insertCell(7);
 			div = document.createElement("div");
-			div.innerHTML = "<select name=\"new_local\"><option value=\"0\">同时</option><option value=\"1\">顶部</option><option value=\"2\">侧边</option></select>";
+			div.innerHTML = "<select id=\"new_local\" name=\"Cate_local\"><option value=\"0\">同时</option><option value=\"1\">顶部</option><option value=\"2\">侧边</option></select>";
 			_td.appendChild(div);
 			// 插入第九个数据 8
 			_td = tr.insertCell(8);
 			div = document.createElement("div");
-			div.innerHTML = " <select name=\"new_Secret\"><option value=\"0\" style=\"background:#0f0\">公开</option><option value=\"1\" style=\"background:#f99\">保密</option></select>";
+			div.innerHTML = " <select id=\"new_Secret\" name=\"cate_Secret\"><option value=\"0\" style=\"background:#0f0\">公开</option><option value=\"1\" style=\"background:#f99\">保密</option></select>";
 			_td.appendChild(div);
 			// 插入第十个数据 9
 			_td = tr.insertCell(9);
 			div = document.createElement("div");
-			div.innerHTML = "<input type=\"button\" class=\"button\" value=\"保存\" onclick=\"this.value='保存...'; this.disabled=true;\">";
+			div.innerHTML = "<a href=\"javascript:;\" onclick=\"CheckForm.Category.Add(this);\">保存新分类</a>";
 			_td.appendChild(div);
 		}
 	}

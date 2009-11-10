@@ -105,7 +105,7 @@ Class Sys_Connection
 	' ***********************************************
 	Public Function doRecord(ByVal table, ByVal DBArray, ByVal Action, ByVal Primarykey, ByVal ID)
 		On Error Resume Next
-		Dim AddCount, TempDB, i, v, Sql
+		Dim AddCount, TempDB, i, v, Sql, BackPrimarykeyID
 		If LCase(Action) <> "insert" And LCase(Action) <> "update" Then Action = "insert"
 		If LCase(Action) = "insert" Then v = 2 Else v = 3
 		If Not IsArray(DBArray) Then
@@ -120,7 +120,7 @@ Class Sys_Connection
 					Sql = "Select * From " & table & " Where " & Primarykey & "=" & ID
 				End If
 				TempDB.Open Sql, pj_Conn, 1, v
-				If LCase(Action) = "insert" Then TempDB.AddNew
+				If LCase(Action) = "insert" Then TempDB.AddNew : BackPrimarykeyID = TempDB(Primarykey)
 				AddCount = UBound(DBArray, 1)
 				For i = 0 To AddCount
 					TempDB(DBArray(i)(0)) = DBArray(i)(1)
@@ -133,7 +133,7 @@ Class Sys_Connection
 				doRecord = Array(False, Err.Description)
 			Else
 				pj_Conn.CommitTrans
-				doRecord = Array(True, lang.Set.Asp(1))
+				doRecord = Array(True, BackPrimarykeyID)
 			End If
 		End If
 	End Function
