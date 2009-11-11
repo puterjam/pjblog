@@ -13,18 +13,52 @@ Public Sub c_ceneral
             <div class="SubMenu">
                 <a href="?Fmenu=General">设置基本信息</a> | 
                 <a href="?Fmenu=General&Smenu=visitors">查看访客记录</a> | 
-                <a href="?Fmenu=General&Smenu=Misc">初始化数据</a> | 
-                <a href="?Fmenu=General&Smenu=clear">清理服务器缓存</a>
+                <a href="?Fmenu=General&Smenu=Misc">初始化数据</a>
             </div>
 <%
 	If Request.QueryString("Smenu") = "visitors" Then
-	ElseIf Request.QueryString("Smenu") = "clear" Then
-		Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
-		Application.Lock
-		Control.FreeApplicationMemory
-		Application.UnLock
-		Response.Write "<br/><span><b style='color:#040'>缓存清理完毕...	</b></span>"
-		Response.Write "</div>"
+	ElseIf Request.QueryString("Smenu") = "Misc" Then
+%>
+			<table cellpadding="3" cellspacing="0" width="100%" id="Static">
+            	<tr><td colspan="6"><strong>1. 清理服务器缓存</strong></td></tr>
+                <tr id="clearTr" style="display:none">
+                	<td width="10">&nbsp;</td>
+                	<td colspan="4"><div id="clear"></div></td>
+                    <td width="10">&nbsp;</td>
+                </tr>
+                <tr>
+                	<td width="10">&nbsp;</td>
+                	<td colspan="4"><input type="button" value="开始清理缓存" onclick="CheckForm.Clear(this)" class="button" /></td>
+                    <td width="10">&nbsp;</td>
+                </tr>
+                
+                <tr><td colspan="6"><strong>2. 静态化设置</strong></td></tr>
+                
+                <tr id="StaticIndex">
+                	<td width="10">&nbsp;</td>
+                	<td width="180"><div style="line-height:18px;"><label for="S1"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.index($('Static'), 'StaticIndex', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S1" style=" margin-right:10px;" />首页静态化</label></div></td>
+                    <td colspan="3">Static - index.html</td>
+                    <td width="10">&nbsp;</td>
+                </tr>
+                
+                <tr id="StaticArticle">
+                	<td width="10">&nbsp;</td>
+                	<td width="180"><div style="line-height:18px;"><label for="S2"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.Article($('Static'), 'StaticArticle', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S2" style=" margin-right:10px;" />内容页静态化</label></div></td>
+                    <td colspan="3">Static - index.html</td>
+                    <td width="10">&nbsp;</td>
+                </tr>
+                
+                <tr id="StaticCategory">
+                	<td width="10">&nbsp;</td>
+                	<td width="180"><div style="line-height:18px;"><label for="S3"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.Category($('Static'), 'StaticCategory', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S3" style=" margin-right:10px;" />分类列表静态化</label></div></td>
+                    <td colspan="3">Static - index.html</td>
+                    <td width="10">&nbsp;</td>
+                </tr>
+                
+                <tr><td colspan="6"><strong>3. 初始化整站信息.</strong></td></tr>
+                
+            </table>
+<%
 	Else
 ' ****************************************************************
 '	设置基本信息
@@ -100,6 +134,7 @@ Public Sub c_ceneral
                 <div class="SubButton">
 		      		<input type="submit" name="Submit" value="保存配置" class="button"/>
 		     	</div>
+            </div>
             </form>
 <%
 	End If

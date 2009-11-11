@@ -1,6 +1,7 @@
 ﻿<!--#include file = "../../include.asp" -->
 <!--#include file = "../../pjblog.data/control/cls_category.asp" -->
 <!--#include file = "../../pjblog.model/cls_fso.asp" -->
+<!--#include file = "../../pjblog.express/log_control.asp" -->
 <%
 Dim doCategory
 Set doCategory = New do_Category
@@ -24,6 +25,7 @@ Class do_Category
 			Case "add" Call Add
 			Case "edit" Call edit
 			Case "del" Call del
+			Case "clear" Call Clear
 		End Select
     End Sub 
      
@@ -124,6 +126,15 @@ Class do_Category
 			Session(Sys.CookieName & "_MsgText") = Str
 		End If
 		RedirectUrl(RedoUrl)
+	End Sub
+	
+	Private Sub Clear
+		Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
+		Application.Lock
+		Control.FreeApplicationMemory
+		Application.UnLock
+		Response.Write "<br/><span><b style='color:#040'>缓存清理完毕...	</b></span>"
+		Response.Write "</div>"
 	End Sub
 	
 End Class

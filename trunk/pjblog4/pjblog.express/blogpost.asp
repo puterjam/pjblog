@@ -81,6 +81,22 @@ If Asp.ChkPost() Then
 		</div>
 <%
 	else
+	If Request.QueryString("action") = "complete" Then
+%>
+		 <div id="MsgContent" style="width:300px">
+		     <div id="MsgHead"><%=lang.Set.Asp(26)%></div>
+		     <div id="MsgBody">
+		  		 <div class="<%if Request.QueryString("suc") = "false" Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
+		         <div class="MessageText"><%If Request.QueryString("suc") = "true" Then Response.Write(lang.Set.Asp(1)) Else Response.Write(Request.QueryString("info"))%><br/><a href="default.asp"><%=lang.Set.Asp(15)%></a><br/>
+		  		 <%If Request.QueryString("suc") = "true" Then %>
+			  		 <a href="default.asp?id=<%=Request.QueryString("id")%>"><%=lang.Set.Asp(92)%></a><br/>
+			  		 <meta http-equiv="refresh" content="3;url=default.asp?logID=<%=Request.QueryString("id")%>"/>
+			     <%end if%>
+		  	  	</div>
+			</div>
+		</div>
+<%
+	Else
 		If Request.Form("log_CateID") = Empty Then
 %>
    <!--第一步-->
@@ -145,12 +161,9 @@ If Asp.ChkPost() Then
 	CateRequestName = Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID=" & Request.Form("log_CateID"))(0)
 %>
   <!--第二步-->
-    <form name="frm" action="blogpost.asp" method="post" onSubmit="return CheckPost()">
+    <form name="frm" action="../pjblog.logic/log_Article.asp?action=add" method="post" onSubmit="return CheckPost()">
       		    <input name="log_CateID" type="hidden" id="log_CateID" value="<%=Request.Form("log_CateID")%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
-  				<input name="action" type="hidden" value="post"/>
-                <input name="FirstPost" type="hidden" value="0"/>   
-                <input name="postbackId" type="hidden" value="0"/>
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="False"/>
   	<div id="MsgContent" style="width:700px">
         <div id="MsgHead"><%=lang.Set.Asp(32)(CateRequestName)%></div>
@@ -158,15 +171,15 @@ If Asp.ChkPost() Then
           <table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td width="76" height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(33)%>:</span></td>
-              <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50"/>
+              <td align="left"><input name="log_Title" type="text" class="inputBox" id="log_Title" size="50" maxlength="50"/>
               </td>
             </tr>
 			<tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(34)%>:</span></td>
               <td align="left">
-			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50"/>
+			  <input name="log_cname" type="text" class="inputBox" id="log_cname" size="30" maxlength="50"/>
 			   <span> . </span>
-			  <select name="ctype" onBlur="getAlias()">
+			  <select name="log_ctype" onBlur="getAlias()" id="log_ctype">
 			  <%
 			  		Dim blog_html_option, blog_html_option_i
 					blog_html_option = Split(blog_html, ",")
@@ -174,12 +187,16 @@ If Asp.ChkPost() Then
 						Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """>" & blog_html_option(blog_html_option_i) & "</option>")
 					Next
 			  %>
-			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)"><%=lang.Set.Asp(36)%></a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)"><%=lang.Set.Asp(36)%></a></span>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)"><%=lang.Set.Asp(36)%></a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)"><%=lang.Set.Asp(37)%></a></span>
               </td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(35)%>:</span></td>
               <td align="left">
+              	<select name="log_IsShow">
+                  <option value="1" selected="selected"><%=lang.Set.Asp(93)%></option>
+                  <option value="0"><%=lang.Set.Asp(94)%></option>
+                </select>
                 <select name="log_weather" id="logweather">
                   <option value="sunny" selected="selected"><%=lang.Set.Asp(38)%> </option>
                   <option value="cloudy"><%=lang.Set.Asp(39)%> </option>
@@ -204,31 +221,19 @@ If Asp.ChkPost() Then
             </tr>
 			<tr>
                <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(49)%>:</span></td>
-               <td align="left"><div>
-	 				<label for="Secret">
-	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
-	        <%=lang.Set.Asp(50)%></label>
-	 				<label for="Meta">
-
-	                <input id="Meta" name="log_Meta" type="checkbox" value="1" onClick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" />
-	        <%=lang.Set.Asp(51)%></label></div>
-	                  <div id="Div_Password" style="display:none;" class="tips_body">
-                          <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b><%=lang.Set.Asp(52)%></b></label> - <%=lang.Set.Asp(53)%><br/>
-                          <label for="bpws2"><input id="bpws2" type="radio" name="log_pws" value="1"/><b><%=lang.Set.Asp(53)%></b></label> - <%=lang.Set.Asp(54)%>
-                          <br/>&nbsp;&nbsp;&nbsp;&nbsp;
-                          <span style="font-weight: bold"><%=lang.Set.Asp(19)%>:</span>
-                          <input onFocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="<%=lang.Set.Asp(56)%>" />
-                          <span style="font-weight: bold"><%=lang.Set.Asp(55)%>:</span>
-                          <input onFocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="35" class="inputBox" title="<%=lang.Set.Asp(57)%>" />
-	                  </div>
-	                  <div id="Div_Meta" style="display:none;" class="tips_body">
-      	 				  - <%=lang.Set.Asp(58)%><br/>
-		                  <span style="font-weight: bold"><%=lang.Set.Asp(59)%>&nbsp;&nbsp;:</span>
-						  <input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="<%=lang.Set.Asp(60)%>" size="80" maxlength="254" />
-						  <br />
-						  <span style="font-weight: bold"><%=lang.Set.Asp(61)%>:</span>
-						  <input name="log_Description" type="text" class="inputBox" id="log_Description" title="<%=lang.Set.Asp(62)%>" size="80" maxlength="254" />
-	                  </div>
+               <td align="left">
+               		<div>
+	 					<label for="Meta"><input id="log_Meta" name="log_Meta" type="checkbox" value="1" onClick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" /><%=lang.Set.Asp(51)%></label>
+                    </div>
+                    
+	                <div id="Div_Meta" style="display:none;" class="tips_body">
+      	 				- <%=lang.Set.Asp(58)%><br/>
+		                <span style="font-weight: bold"><%=lang.Set.Asp(59)%>&nbsp;&nbsp;:</span>
+						<input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="<%=lang.Set.Asp(60)%>" size="80" maxlength="254" />
+						<br />
+						<span style="font-weight: bold"><%=lang.Set.Asp(61)%>:</span>
+						<input name="log_Description" type="text" class="inputBox" id="log_Description" title="<%=lang.Set.Asp(62)%>" size="80" maxlength="254" />
+	                </div>
 				  </td>
              </tr>
             <tr>
@@ -250,7 +255,7 @@ If Asp.ChkPost() Then
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(70)%>:</span></td>
               <td align="left">
-                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="../images/insert.gif" alt="<%=lang.Set.Asp(71)%>" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (<%=lang.Set.Asp(72)%>)
+                      <input name="log_tag" type="text" value="" size="50" class="inputBox" id="log_tag" /> <img src="../images/insert.gif" alt="<%=lang.Set.Asp(71)%>" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (<%=lang.Set.Asp(72)%>)
                </td>
             </tr>
              <tr>
@@ -324,7 +329,7 @@ End If
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>
-              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" id="logQuote"/><br><%=lang.Set.Asp(84)%></td>
+              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" id="log_Quote"/><br><%=lang.Set.Asp(84)%></td>
             </tr>
             <tr>
               <td colspan="2" align="center">
@@ -342,7 +347,8 @@ End If
   	</div>
   </form>
   <%
-End If
+		End If
+	End If
 End If
 
 Else

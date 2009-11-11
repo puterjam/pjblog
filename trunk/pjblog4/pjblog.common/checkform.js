@@ -46,9 +46,12 @@ function Check(){
 			var new_local = $("new_local").options[$("new_local").options.selectedIndex].value;
 			var new_Secret = $("new_Secret").options[$("new_Secret").options.selectedIndex].value;
 			
+			
 			if ((new_order.legnth < 1) || (!/^\d+$/.test(new_order))){alert("您所填写的排序格式不正确!");$("new_order").select();obj.innerHTML = "保存新分类" ; obj.disabled = false; return;}
 			if (new_icon.length < 1){alert("您所选择的图标不正确!"); obj.innerHTML = "保存新分类" ; obj.disabled = false; return;}
 			if (new_name.length < 2){alert("标题格式不正确或为空, 标题应大于2位字符!"); $("new_name").select(); obj.innerHTML = "保存新分类" ; obj.disabled = false; return;}
+			
+			
 			Ajax({
 				url : "../pjblog.logic/control/log_category.asp?action=add&s=" + Math.random(),
 				method : "POST",
@@ -99,6 +102,97 @@ function Check(){
 					alert(obj.state);
 				}
 			});
+		}
+	},
+	this.Clear = function(obj){
+		var _obj = obj;
+		$("clearTr").style.display = "block";
+		_obj.disabled = true;
+		Ajax({
+		  url : "../pjblog.logic/control/log_category.asp?action=clear&s=" + Math.random(),
+		  method : "GET",
+		  content : "",
+		  oncomplete : function(obj){
+				var value = obj.responseText;
+				$("clear").innerHTML = value;
+				_obj.disabled = false;
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
+	},
+	this.Static = {
+		AddRow : function(obj, Mark, offset){
+			try{$("StaticPre").parentNode.removeChild($("StaticPre"));}catch(e){}
+			var Static = new TableAddRow(obj);
+			Static.Mark = Mark;
+			var Row = Static.AddRow(offset);
+			Row.id = "StaticPre";
+			var td = Row.insertCell(0);
+			var div = document.createElement("div")
+			td.appendChild(div);
+			div.innerHTML = "&nbsp;";
+			td = Row.insertCell(1);
+			td.setAttribute("colspan", 4); // 并列4行
+			div = document.createElement("div");
+			var t = div;
+			td.appendChild(div);
+			td = Row.insertCell(2);
+			div = document.createElement("div");
+			td.appendChild(div);
+			div.innerHTML = "&nbsp;";
+			return t;
+		},
+		CheckboxDisabled : function(T){ // 设置所有checkbox属性
+			var s = document.getElementsByTagName("input");
+			for (var i = 0 ; i < s.length ; i++){
+				if (s[i].type == "checkbox") s[i].disabled = T;
+			}
+		},
+		CheckboxChecked : function(_this){
+			var s = document.getElementsByTagName("input");
+			for (var i = 0 ; i < s.length ; i++){
+				if (s[i].checked) s[i].checked = false;
+			}
+			_this.checked = true;
+		},
+		index : function(obj, Mark, offset, _this){
+			this.CheckboxChecked(_this);
+			var element = this.AddRow(obj, Mark, offset);
+			element.style.cssText += "; border: 1px solid #7FCAE2; padding:10px 10px 10px 10px; max-height:200px; overflow:auto";
+			var c = "<div class=\"static\">";
+			c += "<div class=\"staticHead\"><span class=\"left\">首页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Saved : html/index.html</span></div>";
+			c += "<div class=\"staticBody\">正在生成首页静态文件...<br />生成首页静态文件成功!<br /><input type=\"button\" value=\"开始生成\" class=\"button\"></div>";
+			c += "</div>"
+			element.innerHTML = c;
+		},
+		Article : function(obj, Mark, offset, _this){
+			this.CheckboxChecked(_this);
+			var element = this.AddRow(obj, Mark, offset);
+			element.style.cssText += "; border: 1px solid #7FCAE2; padding:10px 10px 10px 10px;";
+			var c = "<div class=\"static\">";
+			c += "<div class=\"staticHead\"><span class=\"left\">内容页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Total : 8 piece Local : 2 </span></div>";
+			c += "<div class=\"staticBody\"><ol>";
+			c += "<li><span class=\"left\">我们那年孩提时的欢乐与快乐</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
+			c += "<li><span class=\"left\">我们是一群啊师傅很骄傲是阿使客户科技的罚款.</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
+			c += "<li><span class=\"left\">的萨菲哈市飞机的故事飞机干啥借古讽今尸鬼封尽的萨嘎飞机国际</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
+			c += "<li><span class=\"left\">阿瑟的饭局上好按时开放后开始的发行可还是阿海珐开始的恢复说得好</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
+			c += "<li><span class=\"left\">的说法很快分哈市开发和卡萨幅度十分看好爱的身份还是开发和卡斯</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
+			c += "</ol>";
+			c += "<div><input type=\"button\" value=\"开始生成\" class=\"button\"></div></div>";
+			c += "</div>";
+			element.innerHTML = c;
+		},
+		Category : function(obj, Mark, offset, _this){
+			this.CheckboxChecked(_this);
+			var element = this.AddRow(obj, Mark, offset);
+			element.style.cssText += "; border: 1px solid #7FCAE2; max-height:200px; overflow:auto; padding:10px 10px 10px 10px;";
+			var c = "<div class=\"static\">";
+			c += "<div class=\"staticHead\">首页静态化过程内容较多, 请耐心等待...</div>";
+			c += "<div class=\"staticBody\">adsfsdf</div>";
+			c += "</div>"
+			element.innerHTML = c;
 		}
 	}
 }
