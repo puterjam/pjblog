@@ -1,8 +1,44 @@
-﻿<!--#include file = "../include.asp" -->
+﻿<!--#include file = "../include.asp" --><!--#include file = "../pjblog.model/cls_ubbcode.asp" --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="../SyntaxHighlighter/Styles/SyntaxHighlighter.css"></link>
+<link type="text/css" rel="stylesheet" href="../SyntaxHighlighter/styles/shThemeDefault.css"/>
+<style>
+	body{ font-size:11px;}
+</style>
+<title>Untitled Document</title>
 <script language="javascript" type="text/javascript" src="../pjblog.common/common.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/Ajax.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/language.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/checkform.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushBash.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushCSharp.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushCss.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushDelphi.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushDiff.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushGroovy.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushJava.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushPhp.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushPlain.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushRuby.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushScala.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushSql.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushVb.js"></script>
+	<script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushXml.js"></script>
+	<link type="text/css" rel="stylesheet" href="../SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="../SyntaxHighlighter/styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+		SyntaxHighlighter.config.clipboardSwf = '../SyntaxHighlighter/scripts/clipboard.swf';
+		SyntaxHighlighter.all();
+	</script>
+</head>
+
+<body>
 <form id="checkUser" action="../pjblog.logic/log_User.asp?action=login" method="post">
     <div id="MsgContent">
       <div id="MsgHead"><%=lang.Set.Asp(17)%></div>
@@ -16,6 +52,31 @@
 	</div>
   </form>
   <a href="blogpost.asp">发表日志</a>
+  <%
+  Dim v
+  v = UBBCode("[code=js]function a()[/code]", 1, 0, 1, 1, 1, True)
+  Response.Write(v)
+  %>
+  <pre class="brush: vb">
+  	function test() : String  
+
+2 {  
+
+3     return 10;  
+
+4 } 
+
+  </pre>
+
+  <pre class="brush: c-sharp;">
+function test() : String
+{
+	return 10;
+}
+</pre>
+</body>
+</html>
+
 <%
 Sys.Close
 %>
