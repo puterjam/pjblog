@@ -55,4 +55,4 @@ SyntaxHighlighter.brushes.Vb = function()
 };
 
 SyntaxHighlighter.brushes.Vb.prototype	= new SyntaxHighlighter.Highlighter();
-SyntaxHighlighter.brushes.Vb.aliases	= ['vb', 'vbnet'];
+SyntaxHighlighter.brushes.Vb.aliases	= ['vb', 'vbnet', 'asp'];
