@@ -139,5 +139,33 @@ Class Sys_Cache
 		TagsCache = Arr_Tags
 	End Function
 	
+	' ***********************************************
+	'	关键字缓存
+	' ***********************************************
+	Public Function KeywordsCache(ByVal action)
+		If Not IsArray(Application(Sys.CookieName & "_blog_Keywords")) Or action = 2 Then
+			Dim log_Keywords, log_KeywordsList, TempVar, Arr_Keywords
+			Set log_Keywords = Conn.Execute("SELECT key_ID,key_Text,key_URL,key_Image FROM blog_Keywords")
+			TempVar = ""
+			Do While Not log_Keywords.EOF
+				If log_Keywords("key_Image")<>Empty Then
+					log_KeywordsList = log_KeywordsList&TempVar&log_Keywords("key_ID")&"$|$"&log_Keywords("key_Text")&"$|$"&log_Keywords("key_URL")&"$|$"&log_Keywords("key_Image")
+				Else
+					log_KeywordsList = log_KeywordsList&TempVar&log_Keywords("key_ID")&"$|$"&log_Keywords("key_Text")&"$|$"&log_Keywords("key_URL")&"$|$None"
+				End If
+				TempVar = "|$|"
+				log_Keywords.MoveNext
+			Loop
+			Set log_Keywords = Nothing
+			Arr_Keywords = Split(log_KeywordsList, "|$|")
+			Application.Lock
+			Application(Sys.CookieName & "_blog_Keywords") = Arr_Keywords
+			Application.UnLock
+		Else
+			Arr_Keywords = Application(Sys.CookieName & "_blog_Keywords")
+		End If
+		KeywordsCache = Arr_Keywords
+	End Function
+	
 End Class
 %>

@@ -298,6 +298,16 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, Html
                strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel codePanel""><div class=""UBBTitle""><a onClick=""copycode(" + rndID + ");"" style=""float:right;cursor: pointer;font-weight: normal; font-style: normal"">复制内容到剪贴板</a><img src=""images/code.gif"" style=""margin:0px 2px -3px 0px;"" alt=""程序代码""/> 程序代码</div><div class=""UBBContent"" id=" + rndID + ">"&strMatch.SubMatches(0)&"</div></div>")
             Next
             Set strMatchs = Nothing
+			
+			re.Pattern= "\[code=(.[^\]]*)\](.*?)\[\/code\]"  
+			Set strMatchs = re.Execute(strContent)   
+				For Each strMatch in strMatchs   
+    				tmpStr1 = strMatch.SubMatches(0)   
+    				tmpStr2 = Replace(strMatch.SubMatches(1), "<br/>", vbCrLf)   
+    				strContent=replace(strContent,strMatch.Value,"<pre name=""code"" class=""brush: " & tmpStr1 & """>" & tmpStr2 & "</pre>" ,1,-1,0)   
+				Next
+			Set strMatchs = Nothing
+			
             
             re.Pattern = "\[quote\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
@@ -364,7 +374,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, Html
 
         If AutoKEY = 1 Then
             Dim log_Keywords, log_KeywordsContent
-            For Each log_Keywords IN Arr_Keywords
+            For Each log_Keywords IN Cache.KeywordsCache(1)
                 log_KeywordsContent = Split(log_Keywords, "$|$")
 				If Left(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Replace(log_KeywordsContent(1), "|", vbNullString,1,1)
 				If Right(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Left(log_KeywordsContent(1),Len(log_KeywordsContent(1))-1)
