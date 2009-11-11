@@ -130,14 +130,13 @@ var Box = {
 			pos.push(newlayerHeight);			// 5
 			pos.push(this.offsetBoder.Border); 	// 6
 		var newPos = this.ChoosePostion(postion, pos);
-		
-		if (this.selfWidth){div.style.width = newlayerWidth;}
-		if (this.selefHeight){div.style.height = newlayerHeight;}
 		/*div.style.cssText += ";position: absolute; left:" + (newPos[0]) + "px; top:" + (newPos[1]) + "px;";*/
 		div.style.position = "absolute";
 		div.style.display = "block";
 		div.style.left = newPos[0] + "px";
 		div.style.top = newPos[1] + "px";
+		if (this.selfWidth){div.style.width = newlayerWidth + "px";}
+		if (this.selefHeight){div.style.height = newlayerHeight + "px";}
 		return div; // 返回该新创建的对象,用于控制CSS
 	},
 	ChoosePostion : function(i, Arrays){
@@ -194,10 +193,10 @@ TableAddRow.prototype.GetRowId = function(){
 	return o;
 }
 
-TableAddRow.prototype.AddRow = function(){
+TableAddRow.prototype.AddRow = function(offset){
 	var arr = this.GetRowId();
 	if (arr[0]){
-		return this._obj.insertRow(arr[1]);
+		return this._obj.insertRow(parseInt(arr[1] + parseInt(offset)));
 	}else{
 		return null;
 	}
@@ -211,7 +210,7 @@ function AddNewCateRow(){
 		var button = $("Addbutton");
 		if (!button.disabled){button.disabled = true;}else{button.disabled = false;}
 		
-		var tr = NewCate.AddRow();//  插入一行
+		var tr = NewCate.AddRow(0);//  插入一行
 		if (tr != null){
 			tr.id = NewCate.Mark + "_del";
 			tr.style.lineHeight = "30px";

@@ -95,25 +95,49 @@ Class Sys_Cache
 	'	分类缓存
 	' ***********************************************
 	Public Function SmiliesCache(ByVal i)
-    If Not IsArray(Application(Sys.CookieName & "_blog_Smilies")) Or Int(i) = 2 Then
-        Dim log_Smilies, log_SmiliesList, TempVar, Arr_Smilies
-        Set log_Smilies = Conn.Execute("SELECT sm_ID,sm_Image,sm_Text FROM blog_Smilies")
-        TempVar = ""
-        Do While Not log_Smilies.EOF
-            log_SmiliesList = log_SmiliesList&TempVar&log_Smilies("sm_ID")&"|"&log_Smilies("sm_Image")&"|"&log_Smilies("sm_Text")
-            TempVar = ","
-            log_Smilies.MoveNext
-        Loop
-        Set log_Smilies = Nothing
-        Arr_Smilies = Split(log_SmiliesList, ",")
-        Application.Lock
-        Application(Sys.CookieName & "_blog_Smilies") = Arr_Smilies
-        Application.UnLock
-    Else
-        Arr_Smilies = Application(Sys.CookieName & "_blog_Smilies")
-    End If
-	SmiliesCache = Arr_Smilies
-End Function
+		If Not IsArray(Application(Sys.CookieName & "_blog_Smilies")) Or Int(i) = 2 Then
+			Dim log_Smilies, log_SmiliesList, TempVar, Arr_Smilies
+			Set log_Smilies = Conn.Execute("SELECT sm_ID,sm_Image,sm_Text FROM blog_Smilies")
+			TempVar = ""
+			Do While Not log_Smilies.EOF
+				log_SmiliesList = log_SmiliesList&TempVar&log_Smilies("sm_ID")&"|"&log_Smilies("sm_Image")&"|"&log_Smilies("sm_Text")
+				TempVar = ","
+				log_Smilies.MoveNext
+			Loop
+			Set log_Smilies = Nothing
+			Arr_Smilies = Split(log_SmiliesList, ",")
+			Application.Lock
+			Application(Sys.CookieName & "_blog_Smilies") = Arr_Smilies
+			Application.UnLock
+		Else
+			Arr_Smilies = Application(Sys.CookieName & "_blog_Smilies")
+		End If
+		SmiliesCache = Arr_Smilies
+	End Function
+
+	' ***********************************************
+	'	标签缓存
+	' ***********************************************	
+	Public Function TagsCache(ByVal i)
+		If Not IsArray(Application(Sys.CookieName & "_blog_Tags")) Or Int(i) = 2 Then
+			Dim log_Tags, log_TagsList, TempVar, Arr_Tags
+			Set log_Tags = Conn.Execute("SELECT tag_id,tag_name,tag_count FROM blog_tag")
+			TempVar = ""
+			Do While Not log_Tags.EOF
+				log_TagsList = log_TagsList&TempVar&log_Tags("tag_id")&"||"&log_Tags("tag_name")&"||"&log_Tags("tag_count")
+				TempVar = ","
+				log_Tags.MoveNext
+			Loop
+			Set log_Tags = Nothing
+			Arr_Tags = Split(log_TagsList, ",")
+			Application.Lock
+			Application(Sys.CookieName & "_blog_Tags") = Arr_Tags
+			Application.UnLock
+		Else
+			Arr_Tags = Application(Sys.CookieName & "_blog_Tags")
+		End If
+		TagsCache = Arr_Tags
+	End Function
 	
 End Class
 %>

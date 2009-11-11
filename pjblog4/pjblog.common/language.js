@@ -30,7 +30,7 @@ lang.Set = {
 			case 22 : _this = "注册新用户"; break;
 			case 23 : _this = "后台管理"; break;
 			case 24 : _this = "登录失败"; break;
-			case 25 : _this = "您没有没有权限发表新日志!"; break;
+			case 25 : _this = "您没有权限发表新日志!"; break;
 			case 26 : _this = "反馈信息"; break;
 			case 27 : _this = "发表日志"; break;
 			case 28 : _this = "请选择编辑器"; break;
@@ -97,6 +97,9 @@ lang.Set = {
 			case 89 : _this = "删除该日志"; break;
 			case 90 : _this = "友情提示:保存草稿后，日志不会在日志列表中出现。只有再次编辑，<b>取消草稿</b>后才显示出来。"; break;
 			case 91 : _this = "上传"; break;
+			case 92 : _this = "返回你所发表的日志"; break;
+			case 93 : _this = "公开日志"; break;
+			case 94 : _this = "隐藏日志"; break;
 			default : _this = "非法操作!";
 		}
 		return _this;

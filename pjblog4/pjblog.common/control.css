@@ -293,3 +293,10 @@ margin-top:-2px;
 	  -ms-filter:"alpha(opacity=50)";
 	  background-color: #C5EE48;
   }
+  .static{}
+  .static .staticHead{ border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px;}
+  .left{ float:left}
+  .right{ float:right; color:#ccc; font-size:10px; font-weight:normal}
+  .static .staticBody{ line-height:30px; clear:both}
+  .static .staticBody ol{max-height:140px; overflow:auto;}
+  .static .staticBody ol li{ margin-right:50px; border-bottom:1px dotted #ccc; clear:both; display:block; list-style:none; height:30px; line-height:30px;}
