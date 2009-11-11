@@ -61,7 +61,7 @@
 ' ======================================================================================
 Class template
 
-	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr, ReplacePageStr
+	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr, ReplacePageStr, doForLeft, doForRight
 	Private TagName
 	
 	' ***************************************
@@ -137,6 +137,8 @@ Class template
 		TagName = "pjblog"
 		c_Char = "UTF-8"
 		ReplacePageStr = Array("", "")
+		doForLeft = ""
+		doForRight = ""
 	End Sub
 	
 	' ***************************************
@@ -150,6 +152,16 @@ Class template
 	'	类终结
 	' ***************************************
 	Private Sub Class_Terminate
+	End Sub
+	
+	' ***************************************
+	'	静态化方法
+	' ***************************************
+	Public Sub Save(ByVal File)
+		Dim Obj
+		Set Obj = New Stream
+			Obj.SaveToFile c_Content, File
+		Set Obj = Nothing
 	End Sub
 	
 	' ***************************************
@@ -196,6 +208,7 @@ Class template
 	' ***************************************
 	Public Sub open
 		c_Content = LoadFromFile(FilePath)
+		Call include
 	End Sub
 	
 	' ***************************************
@@ -204,21 +217,27 @@ Class template
 	Public Sub Buffer
 		c_Content = GridView(c_Content)
 		Call ExecuteFunction
+		Call IfelseEndif
 	End Sub
 	
 	' ***************************************
 	'	GridView
 	' ***************************************
 	Private Function GridView(ByVal o_Content)
-		Dim Matches, SubMatches, SubText
+		Dim Matches, SubMatches, SubText, LoopLeft, LoopRight
 		Dim Attribute, Content
+		LoopLeft = "" : LoopRight = ""
 		Set Matches = GetMatch(o_Content, "\<" & TagName & "\:(\d+?)(.+?)\>([\s\S]+?)<\/" & TagName & "\:\1\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
 				Attribute = SubMatches.SubMatches(1) 	' kocms
 				Content = SubMatches.SubMatches(2)   	' <Columns>...</Columns>
 				SubText = Process(Attribute, Content) 	' 返回所有过程执行后的结果
-				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & SubText(1) & "</" & SubText(2) & ">", 1, -1, 1)											' 替换标签变量
+				If len(doForLeft) > 0 Then LoopLeft = doForLeft : doForLeft = ""
+				If len(doForRight) > 0 Then LoopRight = doForRight : doForRight = ""
+				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & LoopLeft & SubText(1) & LoopRight & "</" & SubText(2) & ">", 1, -1, 1)	' 替换标签变量
+				LoopLeft = ""										
+				LoopRight = ""
 			Next
 		End If
 		Set Matches = Nothing
@@ -282,11 +301,13 @@ Class template
 	Private Function DataBind(ByVal id, ByVal Content, ByVal page, ByVal PageID)
 		Dim Text, Matches, SubMatches, SubText
 		Execute "Text = " & id & "(1)"											' 加载数据源
-		Set Matches = GetMatch(Content, "\<Columns\>([\s\S]+)\<\/Columns\>")
+		Set Matches = GetMatch(Content, "\<Columns\>([\s\S]*?)(\<ItemTemplate\>([\s\S]+)\<\/ItemTemplate\>)([\s\S]*?)\<\/Columns\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				SubText = ItemTemplate(SubMatches.SubMatches(0), Text, page, PageID)' 执行模块替换
+				SubText = ItemTemplate(SubMatches.SubMatches(1), Text, page, PageID)' 执行模块替换
 				Content = Replace(Content, SubMatches.value, SubText, 1, -1, 1)
+				doForLeft = SubMatches.SubMatches(0)
+				doForRight = SubMatches.SubMatches(3)
 			Next
 			DataBind = Content
 		Else
@@ -406,6 +427,55 @@ Class template
 		End If
 		Set SetMatch = Nothing
 	End Property
+	
+	' ***************************************
+	'	条件语句判断
+	' ***************************************
+	Public Sub IfelseEndif
+		Dim SetMatch, SetSubMatch
+		Dim Condition, TrueResult, ElseCondition, FalseResult, CheckTrue, Str
+		Set SetMatch = GetMatch(c_Content, "\<if\:(.+?)\>(.*?)(\<else\>(.+?))?\<end\sif\>")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				Condition = SetSubMatch.SubMatches(0)
+				TrueResult = SetSubMatch.SubMatches(1)
+				ElseCondition = SetSubMatch.SubMatches(2)
+				FalseResult = SetSubMatch.SubMatches(3)
+				Execute "CheckTrue = " & Condition
+				If Len(ElseCondition) > 0 Then
+					If CheckTrue Then
+						Str = TrueResult
+					Else
+						Str = FalseResult
+					End If
+				Else
+					If CheckTrue Then
+						Str = TrueResult
+					Else
+						Str = ""
+					End If
+				End If
+				c_Content = Replace(c_Content, SetSubMatch.Value, Str, 1, -1, 1)
+			Next
+		End If
+		Set SetMatch = Nothing
+	End Sub
+	
+	' ***************************************
+	'	匹配包含文件并替换
+	' ***************************************
+	Private Sub include
+		Dim SetMatch, SetSubMatch, mPath
+		Set SetMatch = GetMatch(c_Content, "\<include\:(.+?)\/\>")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				If Len(Path) > 0 Then Path = Replace(Path, "\", "/")
+				If Right(Path, 1) <> "/" Then Path = Path & "/"
+				mPath = Path & SetSubMatch.SubMatches(0)
+				c_Content = Replace(c_Content, SetSubMatch.value, LoadFromFile(mPath), 1, -1, 1)
+			Next
+		End If
+	End Sub
 	
 End Class
 %>

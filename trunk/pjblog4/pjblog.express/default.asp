@@ -54,7 +54,7 @@
   <a href="blogpost.asp">发表日志</a>
   <%
   Dim v
-  v = UBBCode("[code=js]function a()[/code]", 1, 0, 1, 1, 1, True)
+  v = UBBCode("[code=asp]function a() when[/code]", 1, 0, 1, 1, 1, True)
   Response.Write(v)
   %>
   <pre class="brush: vb">
