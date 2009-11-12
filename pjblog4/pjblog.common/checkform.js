@@ -266,19 +266,19 @@ function Check(){
 					var json = obj.responseText.json();
 					var Path = json.Path;
 					var Title = json.Title;
-					var str = "<span class=\"left\">" + id + "." + Title + "</span><span class=\"right\">" + Path + "</span>"
+					var str = function(doAs){return "<span class=\"left\">" + id + "." + Title + " (" + doAs + ")</span><span class=\"right\">" + Path + "</span>"}
 					$("Article_Local").innerHTML = _i;
+					if (json.Suc){
+						_this.CreateLi("Article_box", str("<font color=green>成功</font>"));
+					}else{
+						_this.CreateLi("Article_box", str("<font color=red>失败</font>"));
+					}
 					_i++;
 					if (parseInt(_i) > parseInt(_j)){
 						_this.CreateLi("Article_box", "静态化内容页完毕!");
 						_o.disabled = false;
+						AsFiled = new Array();
 					}else{
-						if (json.Suc){
-							_this.CreateLi("Article_box", str);
-						}else{
-							str = "<div style=\"color:#ff0000\">" + str + "</div>";
-							_this.CreateLi("Article_box", str);
-						}
 						_this.AjaxArticle(AsFiled[_i - 1], _i, _j, _o);
 					}
 			  },
