@@ -77,15 +77,18 @@ Class Sys_SoeData
 	' ***********************************************
 	Public Function GetCateInfo(Byval ID, ByVal i)
 			Dim Rs
-			Set Rs = Conn.Execute("Select * From blog_Category Where cate_ID=" & ID)
-			If Rs.Bof Or Rs.Eof Then
-			Response.Write(i & ",")
-				GetCateInfo = ""
+			If Len(ID) > 0 Then
+				Set Rs = Conn.Execute("Select * From blog_Category Where cate_ID=" & Int(ID))
+				If Rs.Bof Or Rs.Eof Then
+					GetCateInfo = ""
+				Else
+					GetCateInfo = Rs(i).value
+				End If
+				Set Rs = Nothing
 			Else
-			
-				GetCateInfo = Rs(i).value
+				GetCateInfo = ""
 			End If
-			Set Rs = Nothing
+			
 	End Function
 
 End Class
