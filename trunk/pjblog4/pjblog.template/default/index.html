@@ -1,0 +1,63 @@
+﻿<include:head.html/>
+ <!--内容-->
+  <div id="Tbody">
+  <div id="mainContent">
+   <div id="innermainContent">
+       <div id="mainContent-topimg"></div>
+	   
+	   <div id="Content_ContentList" class="content-width">
+	     
+ 
+<div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"></span>预览模式: <a href="" accesskey="1">普通</a> | <a href="" accesskey="2">列表</a></div>
+ 
+        <pjblog:2 datasource="Data.ArticleList" name="loop" element="div">
+            <Columns>
+                <ItemTemplate>
+                    <div class="Content">
+                        <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
+                             
+                             <h1 class="ContentTitle"><img src="{function:Data.GetCateInfo($6, "cate_icon")}" style="margin:0px 2px -4px 0px;" alt="" class="CateIcon"/><a class="titleA" href="article/diary/QiShiXiangMingBaiLe.html">$1</a></h1>
+                             <h2 class="ContentAuthor">作者:$2 日期:{function:Asp.DateToStr("$3", "Y-m-d")}</h2>
+                        </div>
+                        <div id="log_6">
+                            <div class="Content-body">
+                                 $4<br />
+                                 <if:{function:Asp.Max("$5", "$4", "string")}>more<end if>
+                            </div>
+                            <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>
+                                    分类:<a href="$6" title="">{function:Data.GetCateInfo($6, "cate_Name")}</a> | <a href="$0">固定链接</a> | <a href="$0#comment">评论: $7</a> | <a href="$0" target="_blank">引用: $9</a> | 查看次数: $8
+                                          | <a href="blogedit.asp?id=6"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> | <a href="$0" onclick="if (!window.confirm('是否要删除该日志')) return false"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
+                            </div>
+                        </div>
+                    </div>
+                </ItemTemplate>
+            </Columns>
+        </pjblog:2>
+	
+		
+	
+<div class="pageContent"><div class="page" style="float:Left"><ul><li class="pageNumber"><strong>1</strong> | <a href="/Default.asp?page=2"  page="2">2</a> | <a href="/Default.asp?page=3"  page="3">3</a> | <a href="/Default.asp?page=2" title="下一页" page="2" style="text-decoration:none" accesskey="." >›</a></li></ul></div></div>
+ 
+	   </div>
+	   
+       <div id="mainContent-bottomimg"></div>
+   </div>
+   </div>
+   
+   <div id="sidebar">
+	   <div id="innersidebar">
+		     <div id="sidebar-topimg"><!--工具条顶部图象--></div>
+			  <div id="Side_Category" class="sidepanel"><h4 class="Ptitle">Category</h4><div class="Pcontent"><img src="images/icons/22.gif" border="0" style="margin:3px 4px -4px 0px;" alt="日志首页"/><a class="CategoryA" href="default.asp" title="日志首页">思念前奏</a><br/><img src="images/icons/10.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/><a class="CategoryA" href="tag.asp" title="">思念云集</a><br/><img src="images/icons/8.gif" border="0" style="margin:3px 4px -4px 0px;" alt="diary"/><a class="CategoryA" href="default.asp?cateID=3" title="diary">思念记忆 [5]</a> <a href="feed.asp?cateID=3" title="订阅该分类内容"><img src="images/rss.png" border="0" style="margin:3px 4px -1px 0px;" alt=""/></a><br/><img src="images/icons/16.gif" border="0" style="margin:3px 4px -4px 0px;" alt="PJBLOG风格提取"/><a class="CategoryA" href="http://www.evio.name" title="PJBLOG风格提取">风格提取</a><br/><img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="kocms官方"/><a class="CategoryA" href="http://www.kocms.com" title="kocms官方">KoCms官方</a><br/><img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/><a class="CategoryA" href="http://bbs.kocms.com" title="">KoCms论坛</a><br/><img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="道卓科技"/><a class="CategoryA" href="http://www.daozhuo.net" title="道卓科技">道卓科技</a><br/><img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="ASP学院"/><a class="CategoryA" href="http://aspgov.cn" title="ASP学院">ASP学院</a><br/></div><div class="Pfoot"></div></div><div id="Side_User" class="sidepanel"><h4 class="Ptitle">User Panel</h4><div class="Pcontent"> <b>evio</b>，欢迎你!<br/>你的权限: 超级管理员<br/><br/><a href="control.asp" target="_blank" class="sideA" accesskey="3">系统管理</a><a href="blogpost.asp" class="sideA" accesskey="N">发表新日志</a><a href="default.asp?display=draft" class="sideA" accesskey="D">编辑草稿</a><a href="member.asp?action=edit" class="sideA" accesskey="M">修改个人资料</a><a href="login.asp?action=logout" class="sideA" accesskey="Q">退出系统</a></div><div class="Pfoot"></div></div><div id="Side_BlogInfo" class="sidepanel"><h4 class="Ptitle">Statistics</h4><div class="Pcontent">日志: <a href="default.asp"><b>5</b> 篇</a><br/>
+评论: <a href="search.asp?searchType=Comments"><b>3</b> 个</a><br/>
+引用: <a href="search.asp?searchType=trackback"><b>0</b> 个</a><br/>
+留言: <b>0</b> 个<br/>
+会员: <a href="member.asp"><b>1</b> 人</a><br/>
+访问: <b>841</b> 次<br/>
+在线: <b>2</b> 人<br/>
+建站时间: <strong>2009-10-29</strong></div><div class="Pfoot"></div></div><div id="Side_Links" class="sidepanel"><h4 class="Ptitle">Links</h4><div class="Pcontent"><div class="LinkTable"><a class="sideA" href="http://www.evio.name" target="_blank" title="etool ehome eblog">etool ehome eblog</a> </div><div align="right"><a href="bloglink.asp">更多链接… </a></div></div><div class="Pfoot"></div></div>
+		     <div id="sidebar-bottomimg"></div>
+	   </div>
+   </div>
+   <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
+ </div>
+<include:foot.html/>

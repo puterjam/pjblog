@@ -216,7 +216,7 @@ Class template
 	' ***************************************
 	Public Sub Buffer
 		c_Content = GridView(c_Content)
-		Call ExecuteFunction
+		c_Content = ExecuteFunction(c_Content)
 		Call IfelseEndif
 	End Sub
 	
@@ -377,11 +377,17 @@ Class template
 	'	替换模板字符串
 	' ***************************************
 	Private Function ItemReSec(ByVal i, ByVal Text, ByVal Arrays)
-		Dim Matches, SubMatches
-		Set Matches = GetMatch(Text, "\$(\d+?)")
+		Dim Matches, SubMatches, TempValue
+		Set Matches = GetMatch(Text, "\$([\d^\s^\<^\>^\{^\}^\""]+?)")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				Text = Replace(Text, SubMatches.value, doQuote(Arrays(SubMatches.SubMatches(0), i)), 1, -1, 1) '执行替换
+				TempValue = Arrays(SubMatches.SubMatches(0), i)
+				If TempValue <> Null And TempValue <> "" Then TempValue = doQuote(TempValue)
+				If Len(TempValue) > 0 Then
+					Text = Replace(Text, SubMatches.value, TempValue, 1, -1, 1) '执行替换
+				Else
+					Text = Replace(Text, SubMatches.value, "", 1, -1, 1) '执行替换
+				End If
 			Next
 			ItemReSec = Text
 		Else
@@ -393,18 +399,21 @@ Class template
 	' ***************************************
 	'	全局变量函数
 	' ***************************************
-	Private Sub ExecuteFunction
-		Dim Matches, SubMatches, Text, ExeText
-		Set Matches = GetMatch(c_Content, "\<function\:([0-9a-zA-Z_\.]*?)\((.*?)\""(.+?)\""(.*?)\)\/\>")
+	Private Function ExecuteFunction(ByVal o_Centent)
+		Dim Matches, SubMatches, Text, ExeText, val
+		Set Matches = GetMatch(o_Centent, "\{function\:([0-9a-zA-Z_\.]*?)\((.+)\)\}")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
-				Text = SubMatches.SubMatches(0) & "(" & SubMatches.SubMatches(1) & """" & SubMatches.SubMatches(2) & """" & SubMatches.SubMatches(3) & ")"
+				val = SubMatches.SubMatches(1)
+				val = ExecuteFunction(val)
+				Text = SubMatches.SubMatches(0) & "(" & SubMatches.SubMatches(1) & ")"
 				Execute "ExeText=" & Text
-				c_Content = Replace(c_Content, SubMatches.value, ExeText, 1, -1, 1)
+				o_Centent = Replace(o_Centent, SubMatches.value, ExeText, 1, -1, 1)
 			Next
 		End If
 		Set Matches = Nothing
-	End Sub
+		ExecuteFunction = o_Centent
+	End Function
 	
 	' ***************************************
 	'	普通替换全局标签
@@ -441,6 +450,7 @@ Class template
 				TrueResult = SetSubMatch.SubMatches(1)
 				ElseCondition = SetSubMatch.SubMatches(2)
 				FalseResult = SetSubMatch.SubMatches(3)
+				'Response.Write(Condition)
 				Execute "CheckTrue = " & Condition
 				If Len(ElseCondition) > 0 Then
 					If CheckTrue Then

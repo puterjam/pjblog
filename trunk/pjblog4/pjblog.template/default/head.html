@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="UTF-8" />
+	<meta name="robots" content="all" />
+	<meta name="author" content="<Set:email/>, <Set:master/>" />
+	<meta name="Copyright" content="PJBlog4 CopyRight 2009" />
+	<meta name="keywords" content="<Set:KeyWords/>" />
+	<meta name="description" content="<Set:Description/>" />
+	<meta name="generator" content="PJBlog4" />
+	<link rel="service.post" type="application/atom+xml" title="<Set:SiteName/> - Atom" href="<Set:SiteURL/>xmlrpc.asp" />
+	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<Set:SiteURL/>rsd.asp" />
+	<title><Set:SiteName/> - <Set:blogTitle/></title>
+	<link rel="alternate" type="application/rss+xml" href="<Set:SiteURL/>feed.asp" title="订阅 <Set:SiteName/> 所有文章(rss2)" />
+	<link rel="alternate" type="application/atom+xml" href="<Set:SiteURL/>atom.asp" title="订阅 <Set:SiteName/> 所有文章(atom)" />
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<Set:Skin/>/global.css" type="text/css" media="all" /><!--全局样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<Set:Skin/>/layout.css" type="text/css" media="all" /><!--层次样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<Set:Skin/>/typography.css" type="text/css" media="all" /><!--局部样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<Set:Skin/>/link.css" type="text/css" media="all" /><!--超链接样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<Set:Skin/>/UBB/editor.css" type="text/css" media="all" /><!--UBB编辑器代码-->
+	<link rel="stylesheet" rev="stylesheet" href="../FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" /><!--FCK块引用&代码样式-->
+    <link type="text/css" rev="stylesheet" rel="stylesheet" href="../SyntaxHighlighter/styles/shCore.css"/>
+	<link type="text/css" rev="stylesheet" rel="stylesheet" href="../SyntaxHighlighter/styles/shThemeDefault.css"/>
+	<link rel="icon" href="../favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+	<script language="javascript" type="text/javascript" src="../pjblog.common/common.js"></script>
+	<script language="javascript" type="text/javascript" src="../pjblog.common/Ajax.js"></script>
+	<script language="javascript" type="text/javascript" src="../pjblog.common/language.js"></script>
+	<script language="javascript" type="text/javascript" src="../pjblog.common/checkform.js"></script>
+    <script language="javascript" type="text/javascript" src="../SyntaxHighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushCss.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushJava.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushSql.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushVb.js"></script>
+    <script type="text/javascript" src="../SyntaxHighlighter/scripts/shBrushXml.js"></script>
+    <script type="text/javascript">
+		SyntaxHighlighter.config.clipboardSwf = '../SyntaxHighlighter/scripts/clipboard.swf';
+		SyntaxHighlighter.all();
+	</script>
+</head>
+<body>
+<a href="default.asp" accesskey="i"></a>
+<a href="javascript:history.go(-1)" accesskey="z"></a>
+ 
+ <div id="container">
+ <!--顶部-->
+  <div id="header">
+   <div id="blogname"><Set:SiteName/>
+    <div id="blogTitle"><Set:blogTitle/></div>
+   </div>
+   		<div id="menu">
+        	<div id="Left"></div>
+            <div id="Right"></div>
+                <pjblog:1 datasource="Data.NavList" name="loop" element="ul">
+    				<Columns>
+                    <li class="menuL"></li>
+    					<ItemTemplate>
+        					<li><a class="menuA menuB" href="<if:$3>$4<else>$0<end if>" title="$2">$1</a></li><li class="menuDiv"></li>
+        				</ItemTemplate>
+                    <li class="menuR"></li>
+    				</Columns>
+    			</pjblog:1>
+        </div>
+  </div>

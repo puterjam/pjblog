@@ -23,6 +23,14 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	Public Function Max(ByVal A, ByVal B, ByVal T)
+		If Lcase(T) = "int" Then
+			If A > B Then Max = True Else Max = False
+		ElseIf Lcase(T) = "string" Then
+			If Len(A) > Len(B) Then Max = True Else Max = True
+		End If
+	End Function
+	
 	Public Function CheckPage(ByVal Pages)
 		If Not IsInteger(Pages) Then
 			Pages = 1
@@ -635,6 +643,7 @@ Class Sys_Asp
 	'*************************************
 	
 	Public Function DateToStr(DateTime, ShowType)
+		If Len(DateTime) = 0 Then DateToStr = "" : Exit Function
 		Dim DateMonth, DateDay, DateHour, DateMinute, DateWeek, DateSecond
 		Dim FullWeekday, shortWeekday, Fullmonth, Shortmonth, TimeZone1, TimeZone2
 		TimeZone1 = "+0800"
@@ -643,7 +652,7 @@ Class Sys_Asp
 		shortWeekday = Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 		Fullmonth = Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 		Shortmonth = Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-	
+
 		DateMonth = Month(DateTime)
 		DateDay = Day(DateTime)
 		DateHour = Hour(DateTime)
