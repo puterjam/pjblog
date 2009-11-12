@@ -1,4 +1,5 @@
 ﻿// JavaScript Document
+var AsFiled = new Array();
 function Check(){
 	init();
 	function init(){
@@ -162,8 +163,8 @@ function Check(){
 			var element = this.AddRow(obj, Mark, offset);
 			element.style.cssText += "; border: 1px solid #7FCAE2; padding:10px 10px 10px 10px; max-height:200px; overflow:auto";
 			var c = "<div class=\"static\">";
-			c += "<div class=\"staticHead\"><span class=\"left\">首页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Saved : html/index.html</span></div>";
-			c += "<div class=\"staticBody\">正在生成首页静态文件...<br />生成首页静态文件成功!<br /><input type=\"button\" value=\"开始生成\" class=\"button\"></div>";
+			c += "<div class=\"staticHead\"><span class=\"left\">首页静态化过程内容较多, 请耐心等待...</span><span class=\"right\" id=\"index_File\">Saving...</span></div>";
+			c += "<div class=\"staticBody\"><div id=\"index_box\">点击按钮开始生成...</div><input type=\"button\" value=\"开始生成\" class=\"button\" onclick=\"CheckForm.Static.AjaxIndex(this)\"></div>";
 			c += "</div>"
 			element.innerHTML = c;
 		},
@@ -172,15 +173,15 @@ function Check(){
 			var element = this.AddRow(obj, Mark, offset);
 			element.style.cssText += "; border: 1px solid #7FCAE2; padding:10px 10px 10px 10px;";
 			var c = "<div class=\"static\">";
-			c += "<div class=\"staticHead\"><span class=\"left\">内容页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Total : 8 piece Local : 2 </span></div>";
-			c += "<div class=\"staticBody\"><ol>";
+			c += "<div class=\"staticHead\"><span class=\"left\">内容页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Total : <span id=\"Article_Total\">0</span> piece Local : <span id=\"Article_Local\">0</span> </span></div>";
+			c += "<div class=\"staticBody\"><ol id=\"Article_box\">";
 			c += "<li><span class=\"left\">我们那年孩提时的欢乐与快乐</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
 			c += "<li><span class=\"left\">我们是一群啊师傅很骄傲是阿使客户科技的罚款.</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
 			c += "<li><span class=\"left\">的萨菲哈市飞机的故事飞机干啥借古讽今尸鬼封尽的萨嘎飞机国际</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
 			c += "<li><span class=\"left\">阿瑟的饭局上好按时开放后开始的发行可还是阿海珐开始的恢复说得好</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
 			c += "<li><span class=\"left\">的说法很快分哈市开发和卡萨幅度十分看好爱的身份还是开发和卡斯</span><span class=\"right\">html/xxx/xxxxxx.html</span></li>";
 			c += "</ol>";
-			c += "<div><input type=\"button\" value=\"开始生成\" class=\"button\"></div></div>";
+			c += "<div><input type=\"button\" value=\"开始生成\" class=\"button\" onclick=\"CheckForm.Static.AjaxGetArticleID(this)\"></div></div>";
 			c += "</div>";
 			element.innerHTML = c;
 		},
@@ -193,6 +194,98 @@ function Check(){
 			c += "<div class=\"staticBody\">adsfsdf</div>";
 			c += "</div>"
 			element.innerHTML = c;
+		},
+		AjaxIndex : function(o){
+			o.disabled = true;
+			$("index_box").innerHTML = "正在生成首页静态文件...<br />";
+			Ajax({
+			  url : "../pjblog.logic/log_webconfig.asp?action=default&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){$("index_File").innerHTML = "Saved : " + json.Info.trim();}else{$("index_File").innerHTML = "Saved Error!"}
+					if (json.Suc) {$("index_box").innerHTML = $("index_box").innerHTML + "生成首页静态文件成功!<br />";}else{$("index_box").innerHTML = $("index_box").innerHTML + json.Info;}
+					o.disabled = false;
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		AjaxGetArticleID : function(o){
+			_this = this;
+			$("Article_Total").innerHTML = "0";
+			$("Article_Local").innerHTML = "0";
+			o.disabled = true;
+			var _o = o;
+			$("Article_box").innerHTML = "";
+			this.CreateLi("Article_box", "正在获取日志ID总数和ID结构...")
+			Ajax({
+			  url : "../pjblog.logic/log_webconfig.asp?action=getarticleid&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						var total = json.total;
+						var id = json.id;
+						$("Article_Total").innerHTML = total;
+						_this.CreateLi("Article_box", "获取日志ID总数和ID结构成功, 开始静态化!");
+						var sSplit = id.split(",");
+						for (var c = 0 ; c < sSplit.length ; c++){
+							AsFiled.push(sSplit[c]);
+						}
+						if (total > 0){
+							_this.AjaxArticle(AsFiled[0], 1, total, _o);
+						}else{_this.CreateLi("Article_box", "没有数据需要静态化!");o.disabled = false;}
+					}else{
+						_this.CreateLi("Article_box", "获取日志ID总数和ID结构失败!");
+						_o.disabled = false;
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		CreateLi : function(obj, html){
+			var li = document.createElement("li");
+			$(obj).appendChild(li);
+			li.innerHTML = html;
+			$(obj).scrollTop = parseInt($(obj).scrollHeight);
+		},
+		AjaxArticle : function(id, i, j, o){
+			var _this = this, _o = o;
+			var _i = i, _j = j;
+			Ajax({
+			  url : "../pjblog.logic/log_webconfig.asp?action=article&id=" + id + "&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					var Path = json.Path;
+					var Title = json.Title;
+					var str = "<span class=\"left\">" + id + "." + Title + "</span><span class=\"right\">" + Path + "</span>"
+					$("Article_Local").innerHTML = _i;
+					_i++;
+					if (parseInt(_i) > parseInt(_j)){
+						_this.CreateLi("Article_box", "静态化内容页完毕!");
+						_o.disabled = false;
+					}else{
+						if (json.Suc){
+							_this.CreateLi("Article_box", str);
+						}else{
+							str = "<div style=\"color:#ff0000\">" + str + "</div>";
+							_this.CreateLi("Article_box", str);
+						}
+						_this.AjaxArticle(AsFiled[_i - 1], _i, _j, _o);
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
 		}
 	}
 }

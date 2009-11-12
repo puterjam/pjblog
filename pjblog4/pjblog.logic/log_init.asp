@@ -198,12 +198,23 @@ Class log_Init
 	' ***********************************************
 	'	退出后台
 	' ***********************************************
-	Sub c_Logout
+	Public Sub c_Logout
 		session(Sys.CookieName&"_System") = ""
 		session(Sys.CookieName&"_disLink") = ""
 		session(Sys.CookieName&"_disCount") = ""
 		Response.Write ("<script>try{top.location=""default.asp""}catch(e){location=""default.asp""}</script>")
 	End Sub
+	
+	' ***********************************************
+	'	组成日志也连接
+	' ***********************************************
+	Public Function ArticleUrl(Deep, cCate, cname, ctype)
+		If Len(cCate) = 0 Then
+			ArticleUrl = Deep & "html/" & cname & "." & ctype
+		Else
+			ArticleUrl = Deep & "html/" & cCate & "/" & cname & "." & ctype
+		End If
+	End Function
 	
 End Class
 %>

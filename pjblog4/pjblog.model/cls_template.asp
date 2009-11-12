@@ -408,7 +408,11 @@ Class template
 				val = ExecuteFunction(val)
 				Text = SubMatches.SubMatches(0) & "(" & SubMatches.SubMatches(1) & ")"
 				Execute "ExeText=" & Text
-				o_Centent = Replace(o_Centent, SubMatches.value, ExeText, 1, -1, 1)
+				If Len(ExeText) > 0 Then
+					o_Centent = Replace(o_Centent, SubMatches.value, ExeText, 1, -1, 1)
+				Else
+					o_Centent = Replace(o_Centent, SubMatches.value, "", 1, -1, 1)
+				End If
 			Next
 		End If
 		Set Matches = Nothing
@@ -431,7 +435,11 @@ Class template
 		Set SetMatch = GetMatch(c_Content, "(\<Set\:" & t & "\/\>)")
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
-				c_Content = Replace(c_Content, SetSubMatch.Value, s, 1, -1, 1)
+				If Len(s) > 0 Then
+					c_Content = Replace(c_Content, SetSubMatch.Value, s, 1, -1, 1)
+				Else
+					c_Content = Replace(c_Content, SetSubMatch.Value, "", 1, -1, 1)
+				End If
 			Next
 		End If
 		Set SetMatch = Nothing

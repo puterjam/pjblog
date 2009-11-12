@@ -1,7 +1,4 @@
 ﻿<%
-Dim web
-Set web = New webConfig
-
 Class webConfig
 
 	Private Mud, Deep
@@ -11,22 +8,21 @@ Class webConfig
 	' ***********************************************
 	Private Sub Class_Initialize
 		Set Mud = New template
+		Deep = "../"
+		Mud.Path = Deep & "pjblog.template/" & Trim(blog_DefaultSkin)
     End Sub 
      
 	' ***********************************************
 	'	类终结化
 	' ***********************************************
     Private Sub Class_Terminate
-		Deep = "../"
-		Set Mud =  = Nothing
-		Mud.Path = Deep & "pjblog.template/" & Trim(blog_DefaultSkin)
-		Sys.Close
+		Set Mud = Nothing
     End Sub
 	
 	' ***********************************************
 	'	全局变量
 	' ***********************************************
-	Public Sub General(ByRef Mud)
+	Public Sub General
 		Mud.Sets("SiteName") = SiteName
 		Mud.Sets("SiteURL") = SiteURL
 		Mud.Sets("blogabout") = blogabout
@@ -36,14 +32,79 @@ Class webConfig
 		Mud.Sets("email") = blog_email
 	End Sub
 	
-	Public Sub default(ByRef Mud)
+	' ***********************************************
+	'	静态化首页方法
+	' ***********************************************
+	Public Function default
+		On Error Resume Next
 		Mud.FileName = "index.html"
 		Mud.open
+		Call General
 		Mud.Sets("KeyWords") = blog_KeyWords
 		Mud.Sets("Description") = blog_Description
 		Mud.Buffer
 		Mud.Save(Deep & "html/index.html")
+		If Err.Number > 0 Then
+			default = Array(False, Err.Description)
+		Else
+			default = Array(True, "html/index.html")
+		End If
+	End Function
+	
+	' ***********************************************
+	'	内容页静态化方法
+	' ***********************************************
+	Public Function Article(ByVal id)
+		'On Error Resume Next
+		Dim cPath, Rs, CateFolder, Ts, cCate, Title
+		Set Rs = Conn.Execute("Select log_CateID, log_cname, log_ctype, log_Title From blog_Content Where log_ID=" & Int(id) & " And log_IsShow=True And log_IsDraft=False")
+		If Rs.Bof Or Rs.Eof Then
+			cPath = ""
+		Else
+			Title = Rs(3).value
+			Set Ts = Server.CreateObject("Adodb.RecordSet")
+			Ts.open "Select cate_Folder From blog_Category Where cate_ID=" & Int(Rs(0).value), Conn, 1, 1
+			If Ts.Bof Or Ts.Eof Then
+				cPath = ""
+			Else
+				cCate = Ts(0).value
+				cPath = Init.ArticleUrl("../", cCate, Rs(1).value, Rs(2).value)
+			End If
+			Ts.Close
+			Set Ts = Nothing
+		End If
+		If Len(cPath) > 0 Then
+			Mud.FileName = "Article.html"
+			Mud.open
+			Call General
+			Call ArticleFlied(id, Mud)
+			Mud.Buffer
+			Mud.Save(cPath)
+			Article = Array(True, cPath, Title)
+		Else
+			Article = Array(False, "路径不正确", Title)
+		End If
+		'If Err.Number > 0 Then
+			'Article = Array(False, Err.Description, Title)
+		'End If
+	End Function
+	
+	Private Sub ArticleFlied(ByVal i, ByRef o)
+		Dim Rs, j
+		Set Rs = Conn.Execute("Select * From blog_Content Where log_ID=" & Int(i))
+			If Rs.Bof Or Rs.Eof Then
+				Exit Sub
+			Else
+				o.Sets("KeyWord") = Rs("log_KeyWords").value
+				o.Sets("Description") = Rs("log_KeyWords").value
+				For j = 0 To Rs.Fields.Count - 1
+					o.Sets(Rs(j).Name) = Rs(j).value
+					'Response.Write(Rs(j).Name & " : " & Rs(j).value & "<br />")
+				Next
+			End If
+		Set Rs = Nothing
 	End Sub
+	
 	
 End Class
 %>
