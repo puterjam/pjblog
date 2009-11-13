@@ -35,6 +35,7 @@ Class Sys_Category
 				Add = Sys.doRecord("blog_Category", Arrays, "insert", "cate_ID", "")
 				DirPath = "../../html/" & cate_Folder
 				fso.CreateFolder(DirPath)
+				Call Data.NavList(2)
 			End If
 		Set fso = Nothing
 	End Function
@@ -78,6 +79,7 @@ Class Sys_Category
 			End If
 			Arrays = Array(Array("cate_Order", cate_Order), Array("cate_icon", cate_icon), Array("cate_Name", cate_Name), Array("cate_Intro", cate_Intro), Array("cate_Folder", cate_Folder), Array("cate_URL", cate_URL), Array("cate_local", cate_local), Array("cate_Secret", cate_Secret), Array("cate_count", cate_count), Array("cate_OutLink", cate_OutLink))
 			edit = Sys.doRecord("blog_Category", Arrays, "update", "cate_ID", cate_ID)
+			Call Data.NavList(2)
 		Else
 			edit = Array(False, Check(1))
 		End If
@@ -113,6 +115,7 @@ Class Sys_Category
 			Set fso = Nothing
 			Arrays = Array(Array("blog_Category", "cate_ID", cate_ID))
 			del = Sys.doRecDel(Arrays)
+			Call Data.NavList(2)
 		Else
 			del = Array(False, Check(1))
 		End If

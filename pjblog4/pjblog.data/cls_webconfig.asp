@@ -1,7 +1,9 @@
 ﻿<%
+Dim web
+Set web = New webConfig
 Class webConfig
 
-	Private Mud, Deep
+	Private Mud, Deep, page
 	
 	' ***********************************************
 	'	类初始化
@@ -30,6 +32,8 @@ Class webConfig
 		Mud.Sets("blogTitle") = blog_Title
 		Mud.Sets("master") = blog_master
 		Mud.Sets("email") = blog_email
+		Mud.Sets("cookie") = Sys.CookieName
+		Mud.Sets("blogPerPage") = blogPerPage
 	End Sub
 	
 	' ***********************************************
@@ -37,13 +41,25 @@ Class webConfig
 	' ***********************************************
 	Public Function default
 		On Error Resume Next
-		Mud.FileName = "index.html"
-		Mud.open
-		Call General
-		Mud.Sets("KeyWords") = blog_KeyWords
-		Mud.Sets("Description") = blog_Description
-		Mud.Buffer
-		Mud.Save(Deep & "html/index.html")
+		Dim PageCount, c
+		If Int(blog_LogNums) Mod Int(blogPerPage) = 0 Then
+			PageCount = Int(blog_LogNums) / Int(blogPerPage)
+		Else
+			PageCount = Int(Int(blog_LogNums) / Int(blogPerPage)) + 1
+		End If
+		For c = 1 To PageCount
+			Mud.FileName = "index.html"
+			Mud.TemplateContent = ""
+			Mud.open
+			Call General
+			Mud.Sets("KeyWords") = blog_KeyWords
+			Mud.Sets("Description") = blog_Description
+			Mud.PageUrl = "index_{$page}.html"
+			page = Trim(Asp.CheckStr(c))
+			Mud.CurrentPage = Asp.CheckPage(page)
+			Mud.Buffer
+			Mud.Save(Deep & "html/index_" & c & ".html")
+		Next
 		If Err.Number > 0 Then
 			default = Array(False, Err.Description)
 		Else

@@ -268,3 +268,24 @@ function AddNewCateRow(){
 		}
 	}
 }
+
+/* --------------- JS操作权限 ------------------ */
+var JsCopy = {
+	index :{
+		edit : function(){
+			var c = document.getElementsByTagName("span");
+			for (var i = 0 ; i < c.length ; i++){
+				if (c[i].className == "index_edit") c[i].parentNode.removeChild(c[i]);
+			}
+		},
+		del : function(){
+			var c = document.getElementsByTagName("span");
+			for (var i = 0 ; i < c.length ; i++){
+				if (c[i].className == "index_del") c[i].parentNode.removeChild(c[i]);
+			}
+		},
+		enterArticle : function(id){
+			cookie.SET(cookies + "_enterArticle", id, 1);
+		}
+	}
+}

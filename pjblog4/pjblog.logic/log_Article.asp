@@ -1,6 +1,10 @@
 <!--#include file = "../include.asp" -->
 <!--#include file = "../pjblog.data/cls_article.asp" -->
 <!--#include file = "../pjblog.model/cls_tag.asp" -->
+<!--#include file = "../pjblog.data/cls_webconfig.asp" -->
+<!--#include file = "../pjblog.model/cls_template.asp" -->
+<!--#include file = "../pjblog.model/cls_fso.asp" -->
+<!--#include file = "../pjblog.model/cls_Stream.asp" -->
 <%
 Dim doArticle
 Set doArticle = New do_Article
@@ -189,7 +193,9 @@ Class do_Article
 		Article.log_Intro = log_Intro
 		
 		Str = Article.Add
+		Call Data.ArticleList(2)
 		If Str(0) Then
+			Call web.default
 			RedirectUrl("../pjblog.express/blogpost.asp?action=complete&suc=true&id=" & Str(1))
 		Else
 			RedirectUrl("../pjblog.express/blogpost.asp?action=complete&suc=false&info=" & Str(1) & "&id=0")
