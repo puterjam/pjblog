@@ -193,9 +193,11 @@ Class do_Article
 		Article.log_Intro = log_Intro
 		
 		Str = Article.Add
+		Call Cache.GlobalCache(2)
 		Call Data.ArticleList(2)
 		If Str(0) Then
 			Call web.default
+			Call web.Article(Str(1))
 			RedirectUrl("../pjblog.express/blogpost.asp?action=complete&suc=true&id=" & Str(1))
 		Else
 			RedirectUrl("../pjblog.express/blogpost.asp?action=complete&suc=false&info=" & Str(1) & "&id=0")

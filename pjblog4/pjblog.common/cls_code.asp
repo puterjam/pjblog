@@ -980,12 +980,11 @@ End Class
 		
 		var Pages, FromPage, ToPage;
 		
-		if (_numbers%Perpage == 0) {
+		if (_numbers % Perpage == 0) {
 			Pages = parseInt(_numbers / Perpage);
 		}else{
 			Pages = parseInt(_numbers / Perpage) + 1;
 		}
-		
 		if (Pages < 2){
 			return "";
 		}
