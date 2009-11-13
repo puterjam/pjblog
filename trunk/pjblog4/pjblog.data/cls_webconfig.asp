@@ -47,6 +47,7 @@ Class webConfig
 		Else
 			PageCount = Int(Int(blog_LogNums) / Int(blogPerPage)) + 1
 		End If
+		Response.Write(PageCount)
 		For c = 1 To PageCount
 			Mud.FileName = "index.html"
 			Mud.TemplateContent = ""
