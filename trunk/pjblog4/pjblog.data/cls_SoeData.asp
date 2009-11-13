@@ -29,7 +29,7 @@ Class Sys_SoeData
 	'	导航数据
 	' ***********************************************
 	Public Function NavList(ByVal i)
-		If Not IsArray(Application(Sys.CookieName & "_NavList")) Then
+		If Not IsArray(Application(Sys.CookieName & "_NavList")) Or Int(i) = 2 Then
 			SQL = "cate_ID, cate_Name, cate_Intro, cate_OutLink, cate_URL, cate_Folder"
 			'			0		1			2			3			4			5
 			Set Rs = Conn.Execute("Select " & SQL & " From blog_Category Where cate_local in(0, 1) And cate_Secret=False Order By cate_Order ASC")
@@ -52,7 +52,7 @@ Class Sys_SoeData
 	'	首页日志数据
 	' ***********************************************
 	Public Function ArticleList(ByVal i)
-		If Not IsArray(Application(Sys.CookieName & "_ArticleList")) Then
+		If Not IsArray(Application(Sys.CookieName & "_ArticleList")) Or Int(i) = 2 Then
 			SQL = "log_ID, log_Title, log_Author, log_PostTime, log_Intro, log_Content, log_CateID, log_CommNums, log_ViewNums, log_QuoteNums"
 			'			0		1			2			3			4			5			6			7				8	
 '		9			

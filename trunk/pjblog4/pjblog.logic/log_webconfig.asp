@@ -1,7 +1,7 @@
 ﻿<!--#include file = "../include.asp" -->
-<!--#include file = "../pjblog.data/cls_webconfig.asp" -->
 <!--#include file = "../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../pjblog.data/cls_webconfig.asp" -->
 <!--#include file = "../pjblog.model/cls_template.asp" -->
 <%
 Dim Config
@@ -10,7 +10,7 @@ Set Config = Nothing
 
 Class log_webConfig
 
-	Private web, OK
+	Private OK
 	
 	Public property Get Action
 		Action = Request.QueryString("action")
@@ -20,7 +20,6 @@ Class log_webConfig
 	'	类初始化
 	' ***********************************************
 	Private Sub Class_Initialize
-		Set web = New webConfig
 		Select Case Lcase(action)
 			Case "default" Call default
 			Case "article" Call Article
@@ -32,7 +31,6 @@ Class log_webConfig
 	'	类终结化
 	' ***********************************************
     Private Sub Class_Terminate
-		Set web = Nothing
 		Sys.Close
     End Sub
 	

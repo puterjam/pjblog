@@ -52,10 +52,12 @@
 	</div>
   </form>
   <a href="blogpost.asp">发表日志</a>
+  <span class="chk_edit">dfasf</span>
   <%
   Dim v
   v = UBBCode("[code=asp]function a() when[/code]", 1, 0, 1, 1, 1, True)
   Response.Write(v)
+  Response.Write(stat_EditAll)
   %>
   <pre class="brush: vb">
   	function test() : String  
@@ -74,6 +76,7 @@ function test() : String
 	return 10;
 }
 </pre>
+<script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=default"></script>
 </body>
 </html>
 

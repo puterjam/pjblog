@@ -11,22 +11,8 @@ var UBBrange
 function tellPoint()     
 {  
 //--获取坐标----   
-   UBBrange = UBBTextArea[0].createTextRange();
-   var oSel = document.selection.createRange();
-   var textLength = UBBTextArea[0].innerText.length;
-   var line, Mchar, total, cl;
-   UBBrange.moveToPoint(oSel.offsetLeft, oSel.offsetTop);
-   UBBrange.moveStart("character", -1*textLength);
-   cl = UBBrange.getClientRects();
-   line = cl.length;
-   total = UBBrange.text.length;
-   UBBrange.moveToPoint(cl[cl.length-1].left, cl[cl.length-1].top);
-   UBBrange.moveStart("character", -1*textLength);
-   Mchar = total - UBBrange.text.length;
-   if (oSel.offsetTop != cl[cl.length-1].top) {line++; Mchar = 0}
-   else if (UBBTextArea[0].createTextRange().text.substr(UBBrange.text.length, 2) == "\r\n") Mchar -= 2;
-   UBBrange.moveToPoint(oSel.offsetLeft, oSel.offsetTop);
-   UBBrange.moveStart("character",-UBBTextArea[0].value.length);
+   UBBrange = UBBTextArea[0].createTextRange()
+
 //-------------    
 }
 
@@ -41,7 +27,7 @@ function loadUBB(UBB_Content){
 	var me=document.getElementById("editMask")
 	me.parentNode.removeChild(me);
 	
-	UBBScriptLoader.AddScript('../pjblog.model/cls_ubbtools.asp');
+	UBBScriptLoader.AddScript('ubb_toolbar.asp');
 	UBBScriptLoader.CheckQueue();
 }
 
@@ -565,6 +551,7 @@ function UBB_mediaplayer(){
    UBBSelectrange.text="[wmv]"+UBBSelectrange.text+"[/wmv]"
    return
   }	
+  
  if (EditMethod=="normal")
  {
 	 var PopText

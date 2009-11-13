@@ -62,7 +62,17 @@
 Class template
 
 	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr, ReplacePageStr, doForLeft, doForRight
-	Private TagName
+	Private TagName, c_DeBug
+	
+	' ***************************************
+	'	设置编码
+	' ***************************************
+	Public Property Let DeBug(ByVal Str)
+		c_DeBug = Str
+	End Property
+	Public Property Get DeBug
+		DeBug = c_DeBug
+	End Property
 	
 	' ***************************************
 	'	设置编码
@@ -124,6 +134,16 @@ Class template
 	End Property
 	
 	' ***************************************
+	'	设置获取当前页面所有内容
+	' ***************************************
+	Public Property Let TemplateContent(ByVal Str)
+		c_Content = Str
+	End Property
+	Public Property Get TemplateContent
+		TemplateContent = c_Content
+	End Property
+	
+	' ***************************************
 	'	输出内容
 	' ***************************************
 	Public Property Get Flush
@@ -139,6 +159,7 @@ Class template
 		ReplacePageStr = Array("", "")
 		doForLeft = ""
 		doForRight = ""
+		c_DeBug = False
 	End Sub
 	
 	' ***************************************
@@ -227,7 +248,7 @@ Class template
 		Dim Matches, SubMatches, SubText, LoopLeft, LoopRight
 		Dim Attribute, Content
 		LoopLeft = "" : LoopRight = ""
-		Set Matches = GetMatch(o_Content, "\<" & TagName & "\:(\d+?)(.+?)\>([\s\S]+?)<\/" & TagName & "\:\1\>")
+		Set Matches = GetMatch(o_Content, "\<" & TagName & "\:(\d+?)([^\/^\>]+?)\>([\s\S]+?)<\/" & TagName & "\:\1\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
 				Attribute = SubMatches.SubMatches(1) 	' kocms
@@ -238,6 +259,7 @@ Class template
 				o_Content = Replace(o_Content, SubMatches.value, "<" & SubText(2) & SubText(0) & ">" & LoopLeft & SubText(1) & LoopRight & "</" & SubText(2) & ">", 1, -1, 1)	' 替换标签变量
 				LoopLeft = ""										
 				LoopRight = ""
+				If DeBug Then Response.Write(Asp.CheckStr(o_Content) & "<br />")
 			Next
 		End If
 		Set Matches = Nothing
@@ -280,6 +302,7 @@ Class template
 		Else
 			Process = Array(Attribute, "", "div")
 		End If
+		If DeBug Then Response.Write(Asp.CheckStr(Text) & "<br />")
 		Set Matches = Nothing
 	End Function
 	
@@ -308,6 +331,7 @@ Class template
 				Content = Replace(Content, SubMatches.value, SubText, 1, -1, 1)
 				doForLeft = SubMatches.SubMatches(0)
 				doForRight = SubMatches.SubMatches(3)
+				If DeBug Then Response.Write(Asp.CheckStr(Content) & "<br />")
 			Next
 			DataBind = Content
 		Else
@@ -365,6 +389,7 @@ Class template
 						TempText = TempText & ItemReSec(i, SubMatchText, Text)		' 加载模板内容
 					Next
 				End If
+				If DeBug Then Response.Write(Asp.CheckStr(TempText) & "<br />")
 			Next
 			ItemTemplate = TempText
 		Else
@@ -381,10 +406,11 @@ Class template
 		Set Matches = GetMatch(Text, "\$([\d^\s^\<^\>^\{^\}^\""]+?)")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
+			'Response.Write(SubMatches.SubMatches(0) &"," & i & "| ")
+			'if Int(SubMatches.SubMatches(0)) = 6 Then Response.Write(TempValue)
 				TempValue = Arrays(SubMatches.SubMatches(0), i)
-				If TempValue <> Null And TempValue <> "" Then TempValue = doQuote(TempValue)
 				If Len(TempValue) > 0 Then
-					Text = Replace(Text, SubMatches.value, TempValue, 1, -1, 1) '执行替换
+					Text = Replace(Text, SubMatches.value, doQuote(TempValue), 1, -1, 1) '执行替换
 				Else
 					Text = Replace(Text, SubMatches.value, "", 1, -1, 1) '执行替换
 				End If
@@ -407,6 +433,7 @@ Class template
 				val = SubMatches.SubMatches(1)
 				val = ExecuteFunction(val)
 				Text = SubMatches.SubMatches(0) & "(" & SubMatches.SubMatches(1) & ")"
+				'Response.Write(Text & "|")
 				Execute "ExeText=" & Text
 				If Len(ExeText) > 0 Then
 					o_Centent = Replace(o_Centent, SubMatches.value, ExeText, 1, -1, 1)
