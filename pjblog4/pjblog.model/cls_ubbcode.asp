@@ -5,7 +5,7 @@
 '         Update: 2005-12-29
 '===========================================
 
-Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, HtmlRun)
+Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVal AutoURL, ByVal AutoKEY, ByVal HtmlRun)
 	' 增加一处在HTML运行时不转换连接 HtmlRun ? true(转换) : false(不转换)
     If IsEmpty(strContent) Or IsNull(strContent) Then
         Exit Function
@@ -299,7 +299,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, Html
             Next
             Set strMatchs = Nothing
 			
-			re.Pattern= "\[code=(.[^\]]*)\](.*?)\[\/code\]"  
+			re.Pattern= "\[code=(\w+?)\]([\s\S]*?)\[\/code\]"  
 			Set strMatchs = re.Execute(strContent)   
 				For Each strMatch in strMatchs   
     				tmpStr1 = strMatch.SubMatches(0)   
@@ -364,7 +364,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, Html
         '-----------表情图标----------------
         If Not DisSM = 1 Then
             Dim log_Smilies, log_SmiliesContent
-            For Each log_Smilies IN Arr_Smilies
+            For Each log_Smilies IN Cache.SmiliesCache(1)
                 log_SmiliesContent = Split(log_Smilies, "|")
                 strContent = Replace(strContent, log_SmiliesContent(2), " <img src=""images/smilies/"&log_SmiliesContent(1)&""" border=""0"" style=""margin:0px 0px -2px 0px"" alt=""""/>")
             Next
