@@ -63,7 +63,7 @@ Class ChkCode
 	End Sub
 	
 	Private Sub FillSideBar
-		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}")
+		Response.Write("if (PluginOutPutString.length > 0){for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}}else{alert(PluginOutPutString.length)}")
 	End Sub
 
 End Class

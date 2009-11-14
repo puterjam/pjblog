@@ -77,6 +77,10 @@ Class log_webConfig
 		Dim CateID, Folder
 		CateID = Asp.CheckStr(Trim(Request.QueryString("id")))
 		Folder = Asp.CheckStr(Trim(Request.QueryString("folder")))
+		Call doCategory(CateID, Folder)
+	End Sub
+	
+	Private Sub doCategory(ByVal CateID, ByVal Folder)
 		OK = web.category(CateID, Folder)
 		If OK(0) Then
 			Response.Write("{Suc : true, Info : '" & OK(1) & "', folder : '" & OK(2) & "'}")
@@ -84,6 +88,8 @@ Class log_webConfig
 			Response.Write("{Suc : false, Info : '" & OK(1) & "', folder : '" & OK(2) & "'}")
 		End If
 	End Sub
+	
+	
 	
 	Private Sub GetCategoryID
 		Dim Rs, Str, Counts, id

@@ -50,12 +50,9 @@ Function userPanel
         End If
     End If
     If memName<>Empty Then
-        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改个人资料</a><a href=""login.asp?action=logout"" class=""sideA"" accesskey=""Q"">退出系统</a>"
+        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改个人资料</a><a href=""../pjblog.express/login.asp?action=logout"" class=""sideA"" accesskey=""Q"">退出系统</a>"
     Else
-        userPanel = userPanel&"<a href=""login.asp"" class=""sideA"" accesskey=""L"">登录</a><a href=""register.asp"" class=""sideA"" accesskey=""U"">用户注册</a>"
-        If blog_PasswordProtection Then
-        	userPanel = userPanel&"<a href=""javascript:void(0)"" class=""sideA"" accesskey=""P"" onclick=""PasswordProtection();"">忘记密码</a>"
-        End If
+        userPanel = userPanel&"<a href=""../pjblog.express/login.asp"" class=""sideA"" accesskey=""L"">登录</a><a href=""register.asp"" class=""sideA"" accesskey=""U"">用户注册</a>"
     End If
 End Function
 %>

@@ -140,11 +140,19 @@ Class webConfig
 			Mud.Sets("CateID") = Int(CateID)
 			Mud.Sets("KeyWords") = blog_KeyWords
 			Mud.Sets("Description") = blog_Description
-			Mud.PageUrl = "cate_" & Folder & "_" & c & ".html"
+			If Len(Folder) > 0 Then
+				Mud.PageUrl = "cate_" & Folder & "_" & c & ".html"
+			Else
+				Mud.PageUrl = "cate_" & CateID & "_" & c & ".html"
+			End If
 			page = Trim(Asp.CheckStr(c))
 			Mud.CurrentPage = Asp.CheckPage(page)
 			Mud.Buffer
-			Mud.Save(Deep & "html/cate_" & Folder & "_" & c & ".html")
+			If Len(Folder) > 0 Then
+				Mud.Save(Deep & "html/cate_" & Folder & "_" & c & ".html")
+			Else
+				Mud.Save(Deep & "html/cate_" & CateID & "_" & c & ".html")
+			End If
 		Next
 		If Err.Number > 0 Then
 			category = Array(False, Err.Description, Folder)

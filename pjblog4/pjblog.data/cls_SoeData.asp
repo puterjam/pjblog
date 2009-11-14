@@ -132,6 +132,21 @@ Class Sys_SoeData
 		End If
 		CategoryList = Arrays
 	End Function
+	
+	' ***********************************************
+	'	静态页面导航链接
+	' ***********************************************
+	Public Function HeadNav(ByVal outlink, ByVal url, ByVal id, ByVal folder)
+		If outlink Then
+			HeadNav = url
+		Else
+			If Len(folder) > 0 Then
+				HeadNav = "cate_" & folder & "_1.html"
+			Else
+				HeadNav = "cate_" & id & "_1.html"
+			End If
+		End If
+	End Function
 
 End Class
 %>

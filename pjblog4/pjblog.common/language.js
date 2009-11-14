@@ -100,6 +100,14 @@ lang.Set = {
 			case 92 : _this = "返回你所发表的日志"; break;
 			case 93 : _this = "公开日志"; break;
 			case 94 : _this = "隐藏日志"; break;
+			case 95 : _this = "恭喜您,发表日志成功! 下一步将为您生成静态页面!"; break;
+			case 96 : _this = "不允许外部链接提交数据"; break;
+			case 97 : _this = "静态化日志"; break;
+			case 98 : _this = "更新首页成功! 更新分类页成功!"; break;
+			case 99 : _this = "退出系统"; break;
+			case 100 : _this = "退出登录成功"; break;
+			case 101 : _this = "单击返回退出前页面"; break;
+			case 102 : _this = "三秒后自动返回退出前页面"; break;
 			default : _this = "非法操作!";
 		}
 		return _this;
