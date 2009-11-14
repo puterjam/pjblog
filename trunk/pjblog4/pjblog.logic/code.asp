@@ -40,6 +40,11 @@ Class ChkCode
 			Loop
 		End If
 		Set Rs = Nothing
+		Call FillSideBar
+	End Sub
+	
+	Private Sub FillSideBar
+		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}")
 	End Sub
 
 End Class

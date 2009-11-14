@@ -230,6 +230,7 @@ Class template
 	Public Sub open
 		c_Content = LoadFromFile(FilePath)
 		Call include
+		c_Content = Plugin(c_Content)
 	End Sub
 	
 	' ***************************************
@@ -521,6 +522,21 @@ Class template
 			Next
 		End If
 	End Sub
+	
+	' ***************************************
+	'	插件支持
+	' ***************************************
+	Private Function Plugin(ByVal Con)
+		Dim SetMatch, SetSubMatch
+		Set SetMatch = GetMatch(Con, "\<plugin\:(.+?)\/\>")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				Con = Replace(Con, SetSubMatch.value, "<div id=""" & SetSubMatch.SubMatches(0) & """></div>", 1, -1, 1)
+			Next
+		End If 
+		Set SetMatch = Nothing
+		Plugin = Con
+	End Function
 	
 End Class
 %>

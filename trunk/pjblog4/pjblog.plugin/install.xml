@@ -4,8 +4,8 @@
 	<Name>PJBlog激活留言本</Name>
 	<Info><![CDATA[PJBlog4内置留言本插件]]></Info>
 	<Version>1.0.0.0</Version>
-	<PJBlogSuitVersion>4.1.2.339 - *</PJBlogSuitVersion>
-	<pubDate>2009-11-12</pubDate>
+	<PJBlogSuitVersion>4.2.8.478 - 4.2.8.479</PJBlogSuitVersion>
+	<pubDate>2009-11-12</Plugin>
 	<ModDate>2009-11-13</ModDate>
 	<Author>
 		<Name>evio</Name>
@@ -33,16 +33,16 @@
 			</item>
 		</InstallNav>
 		<Template do="true">
-			<BackenterPole do="false">.../dsaf.asp</BackenterPole>
-			<IndexenterPole do="false">../sdafsdaf.asp</IndexenterPole>
-			<append do="false">
+			<BackenterPole do="true">.../dsaf.asp</BackenterPole>
+			<IndexenterPole do="true">../sdafsdaf.asp</IndexenterPole>
+			<append do="true">
 				<value type="script">xxxxx/xxxx/xxxx.js/asp</value>
 				<value type="link">xxxxx/xxxx/xxxx.css</value>
 				<value type="include">asfsdfsd.asp</value>
 			</append>
 			<mode do="true">
 				<item>
-					<mark>category</mark>
+					<mark>ABC</mark>
 					<value>
 						<![CDATA[
 							<%
@@ -51,7 +51,7 @@
 							end fucntion
 							%>
 							<sctipt>
-								var c = ["category", "<%=a()%>"]
+								var c = ["ABC", "<%=a()%>"]
 								PluginOutPutString.push(c)
 							</sctipt>
 						]]>

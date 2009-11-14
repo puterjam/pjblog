@@ -19,6 +19,7 @@ End If
 <!--#include file = "control/c_welcome.asp" -->
 <!--#include file = "control/c_general.asp" -->
 <!--#include file = "control/c_categories.asp" -->
+<!--#include file = "control/c_skins.asp" -->
 
 <%
 ' 加载功能类
