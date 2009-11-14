@@ -286,11 +286,11 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             Next
 
             '-----------CC Video标签------------
-            re.Pattern = "\[cc\](.*?)\[\/cc\]"
+            re.Pattern = "\[cc\]([\s\S]*?)\[\/cc\]"
             strContent = re.Replace(strContent, "<embed src=""http://union.bokecc.com/$1"" width=""438"" height=""387"" type=""application/x-shockwave-flash""></embed>")
 
             '-----------代码标签----------------
-            re.Pattern = "\[code\](.*?)\[\/code\]"
+            re.Pattern = "\[code\]([\s\S]*?)\[\/code\]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
                Randomize
@@ -311,7 +311,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             
             re.Pattern = "\[quote\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
-            re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
+            re.Pattern = "\[quote=(.+?)\]([\s\S]*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
             '-----------隐藏----------------
