@@ -238,6 +238,7 @@ Class template
 	' ***************************************
 	Public Sub Buffer
 		c_Content = GridView(c_Content)
+		c_Content = UBB(c_Content)
 		c_Content = ExecuteFunction(c_Content)
 		Call IfelseEndif
 	End Sub
@@ -404,7 +405,7 @@ Class template
 	' ***************************************
 	Private Function ItemReSec(ByVal i, ByVal Text, ByVal Arrays)
 		Dim Matches, SubMatches, TempValue
-		Set Matches = GetMatch(Text, "\$([\d^\s^\<^\>^\{^\}^\""]+?)")
+		Set Matches = GetMatch(Text, "\$(\d+?)\$")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
 			'Response.Write(SubMatches.SubMatches(0) &"," & i & "| ")
@@ -536,6 +537,26 @@ Class template
 		End If 
 		Set SetMatch = Nothing
 		Plugin = Con
+	End Function
+	
+	' ***************************************
+	'	UBB插件支持
+	' ***************************************
+	Private Function UBB(ByVal Con)
+		Dim SetMatch, SetSubMatch, co
+		Set SetMatch = GetMatch(Con, "\{UBB\:\""([\s\S]+?)\""\s?\,\s?\""(.+?)\""\s?\,\s?\""(.+?)\""\s?\}")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				co = Data.ArticleContent(SetSubMatch.SubMatches(0), SetSubMatch.SubMatches(1), SetSubMatch.SubMatches(2))
+				If Len(co) > 0 Then
+					Con = Replace(Con, SetSubMatch.value, co, 1, -1, 1)
+				Else
+					Con = ""
+				End If
+			Next
+		End If 
+		Set SetMatch = Nothing
+		UBB = Con
 	End Function
 	
 End Class
