@@ -23,7 +23,9 @@ Class log_webConfig
 		Select Case Lcase(action)
 			Case "default" Call default
 			Case "article" Call Article
-			cASE "getarticleid" Call GetArticleID
+			Case "category" Call Category
+			Case "getarticleid" Call GetArticleID
+			Case "getcategoryid" Call GetCategoryID
 		End Select
     End Sub 
      
@@ -61,6 +63,39 @@ Class log_webConfig
 			Counts = Rs.RecordCount
 			Do While Not Rs.Eof
 				id = id & Rs(0).value & ","
+			Rs.MoveNext
+			Loop
+			If Len(id) > 0 Then id = Mid(id, 1, (Len(id) - 1))
+			Str = "{Suc : true, total : " & Counts & ", id : '" & id & "'}"
+		End If
+		Rs.Close
+		Set Rs = Nothing
+		Response.Write(Str)
+	End Sub
+	
+	Private Sub Category
+		Dim CateID, Folder
+		CateID = Asp.CheckStr(Trim(Request.QueryString("id")))
+		Folder = Asp.CheckStr(Trim(Request.QueryString("folder")))
+		OK = web.category(CateID, Folder)
+		If OK(0) Then
+			Response.Write("{Suc : true, Info : '" & OK(1) & "', folder : '" & OK(2) & "'}")
+		Else
+			Response.Write("{Suc : false, Info : '" & OK(1) & "', folder : '" & OK(2) & "'}")
+		End If
+	End Sub
+	
+	Private Sub GetCategoryID
+		Dim Rs, Str, Counts, id
+		id = ""
+		Set Rs = Server.CreateObject("Adodb.RecordSet")
+		Rs.open "Select cate_ID, cate_Folder From blog_Category Where cate_OutLink=False And cate_Secret=False", Conn, 1, 1
+		If Rs.Bof Or Rs.Eof Then
+			Str = "{Suc : false, total : 0, id : ''}"
+		Else
+			Counts = Rs.RecordCount
+			Do While Not Rs.Eof
+				id = id & Rs(0).value & "|" & Rs(1).value & ","
 			Rs.MoveNext
 			Loop
 			If Len(id) > 0 Then id = Mid(id, 1, (Len(id) - 1))

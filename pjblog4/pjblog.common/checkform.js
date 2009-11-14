@@ -188,10 +188,15 @@ function Check(){
 		Category : function(obj, Mark, offset, _this){
 			this.CheckboxChecked(_this);
 			var element = this.AddRow(obj, Mark, offset);
-			element.style.cssText += "; border: 1px solid #7FCAE2; max-height:200px; overflow:auto; padding:10px 10px 10px 10px;";
+			element.style.cssText += "; border: 1px solid #7FCAE2; padding:10px 10px 10px 10px;";
 			var c = "<div class=\"static\">";
-			c += "<div class=\"staticHead\">首页静态化过程内容较多, 请耐心等待...</div>";
-			c += "<div class=\"staticBody\">adsfsdf</div>";
+			c += "<div class=\"staticHead\"><span class=\"left\">内容页静态化过程内容较多, 请耐心等待...</span><span class=\"right\">Total : <span id=\"Category_Total\">0</span> piece Local : <span id=\"Category_Local\">0</span> </span></div>";
+			c += "<div class=\"staticBody\">" // AjaxGetCategoryID
+			c += "<ol id=\"categoryBox\">"
+			c += "<li>点击开始静态化</li>"
+			c += "</ol>"
+			c += "<div><input type=\"button\" value=\"开始生成\" class=\"button\" onclick=\"CheckForm.Static.AjaxGetCategoryID(this)\"></div></div>";
+			"</div>";
 			c += "</div>"
 			element.innerHTML = c;
 		},
@@ -233,6 +238,7 @@ function Check(){
 						$("Article_Total").innerHTML = total;
 						_this.CreateLi("Article_box", "获取日志ID总数和ID结构成功, 开始静态化!");
 						var sSplit = id.split(",");
+						AsFiled = new Array();
 						for (var c = 0 ; c < sSplit.length ; c++){
 							AsFiled.push(sSplit[c]);
 						}
@@ -280,6 +286,75 @@ function Check(){
 						AsFiled = new Array();
 					}else{
 						_this.AjaxArticle(AsFiled[_i - 1], _i, _j, _o);
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		AjaxGetCategoryID : function(o){
+			$("Category_Total").innerHTML = "";
+			$("Category_Local").innerHTML = "";
+			_this = this;
+			var _o = o;
+			_o.disabled = true;
+			_this.CreateLi("categoryBox", "正在获取分类总数和分类结构...");
+			Ajax({
+			  url : "../pjblog.logic/log_webconfig.asp?action=getcategoryid&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						_this.CreateLi("categoryBox", "开始静态化分类列表");
+						var total = json.total;
+						var id = json.id;
+						$("Category_Total").innerHTML = total;
+						AsFiled = new Array();
+						var sSplit = id.split(",");
+						for (var c = 0 ; c < sSplit.length ; c++){
+							var d = sSplit[c].split("|");
+							var h = [d[0], d[1]]
+							AsFiled.push(h);
+						}
+						if (parseInt(total) > 0){
+							_this.AjaxCategory(AsFiled[0], 1, total, _o);
+						}else{_this.CreateLi("categoryBox", "没有数据需要静态化!");o.disabled = false;}
+					}else{
+						_this.CreateLi("categoryBox", "获取分类信息失败!");
+						_o.disabled = false;
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		AjaxCategory : function(arr, i, j, o){
+			var _o = o, _this = this;
+			var _i = i, _j = j;
+			Ajax({
+			  url : "../pjblog.logic/log_webconfig.asp?action=category&id=" + escape(arr[0]) + "&folder=" + escape(arr[1]) + "&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					var info = json.Info;
+					var folder = json.folder;
+					$("Category_Local").innerHTML = _i;
+					if (json.Suc){
+						_this.CreateLi("categoryBox", "<span class=\"left\">创建" + folder + "文件夹分类 (<font color=green>成功</font>)</span><span class=\"right\">" + info + "</span>");
+					}else{
+						_this.CreateLi("categoryBox", "创建" + folder + "文件夹分类 (<font color=red>失败</font>)");
+					}
+					_i++;
+					if (parseInt(_i) > parseInt(_j)){
+						_this.CreateLi("categoryBox", "静态化分类页完毕!");
+						_o.disabled = false;
+						AsFiled = new Array();
+					}else{
+						_this.AjaxCategory(AsFiled[_i - 1], _i, _j, _o);
 					}
 			  },
 			  ononexception:function(obj){

@@ -14,7 +14,7 @@
  
 <div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"></span>预览模式: <a href="" accesskey="1">普通</a> | <a href="" accesskey="2">列表</a></div>
  
-        <pjblog:2 datasource="Data.ArticleList(1)" name="loop" element="div" page="<Set:blogPerPage/>" id="articlelist">
+        <pjblog:2 datasource="Data.CategoryList(1, <Set:CateID/>)" name="loop" element="div" page="<Set:blogPerPage/>" id="categorylist">
             <Columns>
                 <ItemTemplate>
                 <script language="javascript" type="text/javascript">
@@ -51,7 +51,7 @@
 	
 		
 	
-<div class="pageContent"><page:articlelist/></div>
+<div class="pageContent"><page:categorylist/></div>
  
 	   </div>
 	   

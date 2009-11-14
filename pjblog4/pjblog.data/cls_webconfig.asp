@@ -121,6 +121,38 @@ Class webConfig
 		Set Rs = Nothing
 	End Sub
 	
+	' ***********************************************
+	'	静态化分类页方法
+	' ***********************************************
+	Public Function category(ByVal CateID, ByVal Folder)
+		On Error Resume Next
+		Dim PageCount, c
+		If Int(blog_LogNums) Mod Int(blogPerPage) = 0 Then
+			PageCount = Int(blog_LogNums) / Int(blogPerPage)
+		Else
+			PageCount = Int(Int(blog_LogNums) / Int(blogPerPage)) + 1
+		End If
+		For c = 1 To PageCount
+			Mud.FileName = "category.html"
+			Mud.TemplateContent = ""
+			Mud.open
+			Call General
+			Mud.Sets("CateID") = Int(CateID)
+			Mud.Sets("KeyWords") = blog_KeyWords
+			Mud.Sets("Description") = blog_Description
+			Mud.PageUrl = "cate_" & Folder & "_" & c & ".html"
+			page = Trim(Asp.CheckStr(c))
+			Mud.CurrentPage = Asp.CheckPage(page)
+			Mud.Buffer
+			Mud.Save(Deep & "html/cate_" & Folder & "_" & c & ".html")
+		Next
+		If Err.Number > 0 Then
+			category = Array(False, Err.Description, Folder)
+		Else
+			category = Array(True, "html/cate_" & Folder & ".html", Folder)
+		End If
+	End Function
+	
 	
 End Class
 %>

@@ -108,6 +108,30 @@ Class Sys_SoeData
 			ArticleContent = Content
 		End If
 	End Function
+	
+	' ***********************************************
+	'	首页分类页数据
+	' ***********************************************
+	Public Function CategoryList(ByVal i, ByVal j)
+		If Not IsArray(Application(Sys.CookieName & "_CategoryList")) Or Int(i) = 2 Then
+			SQL = "log_ID, log_Title, log_Author, log_PostTime, log_Intro, log_Content, log_CateID, log_CommNums, log_ViewNums, log_QuoteNums, log_ubbFlags, log_edittype"
+			'			0		1			2			3			4			5			6			7				8	
+'		9			10				11
+			Set Rs = Conn.Execute("Select " & SQL & " From blog_Content Where log_CateID=" & j & " And log_IsShow=True And log_IsDraft=False Order By log_PostTime Desc")
+			If Rs.Bof or Rs.Eof Then
+				ReDim Arrays(0, 0)
+			Else
+				Arrays = Rs.GetRows
+			End If
+			Set Rs = Nothing
+			Application.Lock()
+			Application(Sys.CookieName & "_CategoryList") = Arrays
+			Application.UnLock()
+		Else
+			Arrays = Application(Sys.CookieName & "_CategoryList")
+		End If
+		CategoryList = Arrays
+	End Function
 
 End Class
 %>
