@@ -238,5 +238,38 @@ Class log_Init
 		Set Rs = Nothing
 	End Function
 	
+	'**********************************************
+	'获取在线人数
+	'**********************************************
+	
+	Public Function getOnline
+		getOnline = 1
+		If Len(Application(Sys.CookieName&"_onlineCount"))>0 Then
+			If DateDiff("s", Application(Sys.CookieName&"_userOnlineCountTime"), Now())>60 Then
+				Application.Lock()
+				Application(Sys.CookieName&"_online") = Application(Sys.CookieName&"_onlineCount")
+				Application(Sys.CookieName&"_onlineCount") = 1
+				Application(Sys.CookieName&"_onlineCountKey") = Asp.randomStr(2)
+				Application(Sys.CookieName&"_userOnlineCountTime") = Now()
+				Application.Unlock()
+			Else
+				If Session(Sys.CookieName&"userOnlineKey")<>Application(Sys.CookieName&"_onlineCountKey") Then
+					Application.Lock()
+					Application(Sys.CookieName&"_onlineCount") = Application(Sys.CookieName&"_onlineCount") + 1
+					Application.Unlock()
+					Session(Sys.CookieName&"userOnlineKey") = Application(Sys.CookieName&"_onlineCountKey")
+				End If
+			End If
+		Else
+			Application.Lock
+			Application(Sys.CookieName&"_online") = 1
+			Application(Sys.CookieName&"_onlineCount") = 1
+			Application(Sys.CookieName&"_onlineCountKey") = Asp.randomStr(2)
+			Application(Sys.CookieName&"_userOnlineCountTime") = Now()
+			Application.Unlock
+		End If
+		getOnline = Application(Sys.CookieName&"_online")
+	End Function
+	
 End Class
 %>
