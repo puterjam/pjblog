@@ -53,9 +53,9 @@ Class Sys_SoeData
 	' ***********************************************
 	Public Function ArticleList(ByVal i)
 		If Not IsArray(Application(Sys.CookieName & "_ArticleList")) Or Int(i) = 2 Then
-			SQL = "log_ID, log_Title, log_Author, log_PostTime, log_Intro, log_Content, log_CateID, log_CommNums, log_ViewNums, log_QuoteNums"
+			SQL = "log_ID, log_Title, log_Author, log_PostTime, log_Intro, log_Content, log_CateID, log_CommNums, log_ViewNums, log_QuoteNums, log_ubbFlags, log_edittype"
 			'			0		1			2			3			4			5			6			7				8	
-'		9			
+'		9			10				11
 			Set Rs = Conn.Execute("Select " & SQL & " From blog_Content Where log_IsShow=True And log_IsDraft=False Order By log_PostTime Desc")
 			If Rs.Bof or Rs.Eof Then
 				ReDim Arrays(0, 0)
@@ -76,19 +76,37 @@ Class Sys_SoeData
 	'	获取分类信息
 	' ***********************************************
 	Public Function GetCateInfo(Byval ID, ByVal i)
-			Dim Rs
-			If Len(ID) > 0 Then
-				Set Rs = Conn.Execute("Select * From blog_Category Where cate_ID=" & Int(ID))
-				If Rs.Bof Or Rs.Eof Then
-					GetCateInfo = ""
-				Else
-					GetCateInfo = Rs(i).value
-				End If
-				Set Rs = Nothing
-			Else
+		Dim Rs
+		If Len(ID) > 0 Then
+			Set Rs = Conn.Execute("Select * From blog_Category Where cate_ID=" & Int(ID))
+			If Rs.Bof Or Rs.Eof Then
 				GetCateInfo = ""
+			Else
+				GetCateInfo = Rs(i).value
 			End If
-			
+			Set Rs = Nothing
+		Else
+			GetCateInfo = ""
+		End If
+	End Function
+	
+	' ***********************************************
+	'	转换日志内容
+	' ***********************************************
+	Public Function ArticleContent(ByVal Content, ByVal UbbFlag, ByVal EditType)
+		'Response.Write(Content & "|" & UbbFlag & "|" & EditType & ", ")
+		If Int(EditType) <> 0 Then ' UBB
+			Dim DisSM, DisUBB, DisIMG, AutoURL, AutoKEY
+			UbbFlag = Trim(UbbFlag)
+			DisSM = Int(Mid(UbbFlag, 1, 1))
+			DisUBB = Int(Mid(UbbFlag, 2, 1))
+			DisIMG = Int(Mid(UbbFlag, 3, 1))
+			AutoURL = Int(Mid(UbbFlag, 4, 1))
+			AutoKEY = Int(Mid(UbbFlag, 5, 1))
+			ArticleContent = UBBCode(Content, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, True)
+		Else
+			ArticleContent = Content
+		End If
 	End Function
 
 End Class

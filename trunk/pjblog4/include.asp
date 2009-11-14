@@ -3,3 +3,4 @@
 <!--#include file = "pjblog.data/cls_Cache.asp" -->
 <!--#include file = "pjblog.logic/log_init.asp" -->
 <!--#include file = "pjblog.data/cls_SoeData.asp" -->
+<!--#include file = "pjblog.model/cls_ubbcode.asp" -->

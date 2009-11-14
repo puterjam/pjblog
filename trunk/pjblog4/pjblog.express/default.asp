@@ -55,9 +55,15 @@
   <span class="chk_edit">dfasf</span>
   <%
   Dim v
-  v = UBBCode("[code=asp]function a() when[/code]", 1, 0, 1, 1, 1, True)
+  v = ""
+  v = v & "[code=vb]" & vbcrlf
+  v = v & "function c()" & vbcrlf
+  v = v & "dim a = string(c)" & vbcrlf
+  v = v & "end function" & vbcrlf
+  v = v & "[/code]"
+  v = UBBCode(v, 1, 0, 1, 1, 1, True)
   Response.Write(v)
-  Response.Write(Init.doArticleUrl(5))
+  Response.Write Data.ArticleContent("[code=vb] function c() dim a = string(c) end function [/code]","000000","1")
   %>
   <pre class="brush: vb">
   	function test() : String  

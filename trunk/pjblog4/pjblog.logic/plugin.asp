@@ -1,6 +1,8 @@
 ﻿<!--#include file = "../include.asp" -->
 <%
-'分类管理
+' *****************************************************
+' 	分类管理
+' *****************************************************
 Dim Plugin_Category, Plugin_Category_String, Plugin_loop_i
 Plugin_Category = Cache.CategoryCache(1)
 If UBound(Plugin_Category, 1) = 0 Then
@@ -22,7 +24,9 @@ End If
 	PluginTempValue = ['plugin_Category', '<%=outputSideBar(Plugin_Category_String)%>'];
 	PluginOutPutString.push(PluginTempValue);
 <%
-' 用户控制面板
+' *****************************************************
+' 	用户控制面板
+' *****************************************************
 Function userPanel
     userPanel = ""
     If memName <> Empty Then userPanel = userPanel&" <b>"&memName&"</b>，欢迎你!<br/>你的权限: "&stat_title&"<br/><br/>"
@@ -56,6 +60,24 @@ Function userPanel
 End Function
 %>
 	PluginTempValue = ['plugin_UserPannel', '<%=outputSideBar(userPanel)%>'];
+	PluginOutPutString.push(PluginTempValue);
+<%
+' *****************************************************
+' 	用户控制面板
+' *****************************************************
+Public Function BlogInfo
+	BlogInfo = ""
+	BlogInfo = BlogInfo & "日志: <a href=""index_1.html""><b>" & blog_LogNums & "</b> 篇</a><br/>"
+	BlogInfo = BlogInfo & "评论: <a href=""search.asp?searchType=Comments""><b>" & blog_CommNums & "</b> 个</a><br/>"
+	BlogInfo = BlogInfo & "引用: <a href=""search.asp?searchType=trackback""><b>" & blog_TbCount & "</b> 个</a><br/>"
+	BlogInfo = BlogInfo & "留言: <b>" & blog_MessageNums & "</b> 个<br/>"
+	BlogInfo = BlogInfo & "会员: <a href=""member.asp""><b>" & blog_MemNums & "</b> 人</a><br/>"
+	BlogInfo = BlogInfo & "访问: <b>" & blog_VisitNums & "</b> 次<br/>"
+	BlogInfo = BlogInfo & "在线: <b>" & Init.getOnline & "</b> 人<br/>"
+	BlogInfo = BlogInfo & "建站时间: <strong>2009-10-29</strong>"
+End Function
+%>
+	PluginTempValue = ['plugin_BlogInfo', '<%=outputSideBar(BlogInfo)%>'];
 	PluginOutPutString.push(PluginTempValue);
 <%
 Sys.Close
