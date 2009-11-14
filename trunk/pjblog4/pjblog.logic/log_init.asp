@@ -206,7 +206,7 @@ Class log_Init
 	End Sub
 	
 	' ***********************************************
-	'	组成日志也连接
+	'	组成日志也连接(后台)
 	' ***********************************************
 	Public Function ArticleUrl(Deep, cCate, cname, ctype)
 		If Len(cCate) = 0 Then
@@ -214,6 +214,28 @@ Class log_Init
 		Else
 			ArticleUrl = Deep & "html/" & cCate & "/" & cname & "." & ctype
 		End If
+	End Function
+	
+	' ***********************************************
+	'	组成日志也连接(前台)
+	' ***********************************************
+	Public Function doArticleUrl(ByVal c_id)
+		If Not Asp.IsInteger(c_id) Then Exit Function
+		Dim Rs, cname, ctype, cfolder
+		Set Rs = Conn.Execute("Select Top 1 T.log_cname, T.log_ctype, B.cate_Folder From blog_Content As T, blog_Category As B Where  T.log_CateID=B.cate_ID And T.log_ID=" & c_id)
+		If Rs.Bof Or Rs.Eof Then
+			Exit Function
+		Else
+			cname = Rs(0).value
+			ctype = Rs(1).value
+			cfolder = Rs(2).value
+			If Len(cfolder) = 0 Then
+				doArticleUrl = cname & "." & ctype
+			Else
+				doArticleUrl = cfolder & "/" & cname & "." & ctype
+			End If
+		End If
+		Set Rs = Nothing
 	End Function
 	
 End Class
