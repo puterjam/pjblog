@@ -1043,4 +1043,11 @@ End Class
 		
 		return pageCode;
 	}
+	
+	function outputSideBar(html){
+		html = html.replace(/[\n\r]/g,"");
+		html = html.replace(/\\/g,"\\\\");
+		html = html.replace(/\'/g,"\\'");
+		return html;
+	}				
 </script>

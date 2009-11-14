@@ -64,17 +64,7 @@
 			  <div id="Side_Category" class="sidepanel">
               	<h4 class="Ptitle">Category</h4>
                 <div class="Pcontent">
-                	<img src="images/icons/22.gif" border="0" style="margin:3px 4px -4px 0px;" alt="日志首页"/>
-                    <a class="CategoryA" href="default.asp" title="日志首页">思念前奏</a><br/>
-                    <img src="images/icons/10.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/>
-                    <a class="CategoryA" href="tag.asp" title="">思念云集</a><br/>
-                    <img src="images/icons/8.gif" border="0" style="margin:3px 4px -4px 0px;" alt="diary"/>
-                    <a class="CategoryA" href="default.asp?cateID=3" title="diary">思念记忆 [5]</a> <a href="feed.asp?cateID=3" title="订阅该分类内容"><img src="images/rss.png" border="0" style="margin:3px 4px -1px 0px;" alt=""/></a><br/>
-                    <img src="images/icons/16.gif" border="0" style="margin:3px 4px -4px 0px;" alt="PJBLOG风格提取"/><a class="CategoryA" href="http://www.evio.name" title="PJBLOG风格提取">风格提取</a><br/>
-                    <img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="kocms官方"/><a class="CategoryA" href="http://www.kocms.com" title="kocms官方">KoCms官方</a><br/>
-                    <img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt=""/><a class="CategoryA" href="http://bbs.kocms.com" title="">KoCms论坛</a><br/>
-                    <img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="道卓科技"/><a class="CategoryA" href="http://www.daozhuo.net" title="道卓科技">道卓科技</a><br/>
-                    <img src="images/icons/23.gif" border="0" style="margin:3px 4px -4px 0px;" alt="ASP学院"/><a class="CategoryA" href="http://aspgov.cn" title="ASP学院">ASP学院</a><br/>
+                	<plugin:plugin_Category/>
                 </div>
                 <div class="Pfoot"></div>
             </div>
@@ -83,12 +73,7 @@
             <div id="Side_User" class="sidepanel">
             	<h4 class="Ptitle">User Panel</h4>
             	<div class="Pcontent">
-                 	<b>evio</b>，欢迎你!<br/>你的权限: 超级管理员<br/><br/>
-                    <a href="control.asp" target="_blank" class="sideA" accesskey="3">系统管理</a>
-                    <a href="blogpost.asp" class="sideA" accesskey="N">发表新日志</a>
-                    <a href="default.asp?display=draft" class="sideA" accesskey="D">编辑草稿</a>
-                    <a href="member.asp?action=edit" class="sideA" accesskey="M">修改个人资料</a>
-                    <a href="login.asp?action=logout" class="sideA" accesskey="Q">退出系统</a>
+                 	<plugin:plugin_UserPannel/>
                 </div>
                 <div class="Pfoot"></div>
             </div>
@@ -125,5 +110,6 @@
    
    <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
  </div>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
  <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=default"></script>
 <include:foot.html/>

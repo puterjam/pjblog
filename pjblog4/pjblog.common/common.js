@@ -1,5 +1,8 @@
 ﻿// JavaScript Document
 // Author : evio 
+// 特殊数组 : 用来压缩插件的信息
+var PluginOutPutString = new Array(), PluginTempValue;
+
 /*
 	重构一些内置方法
 */
@@ -90,6 +93,13 @@ function ABS(a){
 		a = a.offsetParent;
 	}
 	return b;
+}
+
+function outputSideBar(html){
+	html = html.replace(/[\n\r]/g,"");
+	html = html.replace(/\\/g,"\\\\");
+	html = html.replace(/\'/g,"\\'");
+	return html;
 }
 /* ------------------ 8位窗口 --------------------*/
 var Box = {
