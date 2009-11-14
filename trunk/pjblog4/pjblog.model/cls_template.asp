@@ -325,7 +325,7 @@ Class template
 	' ***************************************
 	Private Function DataBind(ByVal id, ByVal Content, ByVal page, ByVal PageID)
 		Dim Text, Matches, SubMatches, SubText
-		Execute "Text = " & id & "(1)"											' 加载数据源
+		Execute "Text = " & id											' 加载数据源
 		Set Matches = GetMatch(Content, "\<Columns\>([\s\S]*?)(\<ItemTemplate\>([\s\S]+)\<\/ItemTemplate\>)([\s\S]*?)\<\/Columns\>")
 		If Matches.Count > 0 Then
 			For Each SubMatches In Matches
