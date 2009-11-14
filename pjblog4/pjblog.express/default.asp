@@ -57,7 +57,7 @@
   Dim v
   v = UBBCode("[code=asp]function a() when[/code]", 1, 0, 1, 1, 1, True)
   Response.Write(v)
-  Response.Write(stat_EditAll)
+  Response.Write(Init.doArticleUrl(5))
   %>
   <pre class="brush: vb">
   	function test() : String  
