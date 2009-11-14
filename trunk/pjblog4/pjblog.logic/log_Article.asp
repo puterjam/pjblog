@@ -59,7 +59,7 @@ Class do_Article
 		PubTimeType = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("PubTimeType"))))
 		PubTime = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("PubTime"))))
 		log_tag = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_tag"))))
-		Message = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message"))))
+		Message = Asp.HTMLEncode(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message")))))
 		log_IsShow = CBool(Int(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_IsShow"))))))
 		
 		If log_editType <> 0 Then
@@ -70,7 +70,7 @@ Class do_Article
 		End If
 		
 		log_IntroC = Asp.CheckUrl(Asp.CheckStr(Request.Form("log_IntroC")))
-		log_Intro = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_Intro"))))
+		log_Intro = Asp.HTMLEncode(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_Intro")))))
 		
 		'--------------------------------判断-------------------------------
 		If log_IsDraft = "true" Then log_IsDraft = True Else log_IsDraft = False
