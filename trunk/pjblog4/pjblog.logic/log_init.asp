@@ -271,5 +271,27 @@ Class log_Init
 		getOnline = Application(Sys.CookieName&"_online")
 	End Function
 	
+	Public Sub HeadNav
+		Dim NavArray, i
+		NavArray = Data.NavList(1)
+		If UBound(NavArray, 1) = 0 Then
+			Exit Sub
+		Else
+			Response.Write("<ul><li class=""menuL""></li>")
+			For i = 0 To UBound(NavArray, 2)
+				If NavArray(3, i) Then
+					Response.Write("<li><a class=""menuA menuB"" href=""../html/" & NavArray(4, i) & """ title=""" & NavArray(2, i) & """>" & NavArray(1, i) & "</a></li><li class=""menuDiv""></li>")
+				Else
+					If Len(NavArray(5, i)) > 0 Then
+						Response.Write("<li><a class=""menuA menuB"" href=""../html/cate_" & NavArray(5, i) & "_1.html"" title=""" & NavArray(2, i) & """>" & NavArray(1, i) & "</a></li><li class=""menuDiv""></li>")
+					Else
+						Response.Write("<li><a class=""menuA menuB"" href=""../html/cate_" & NavArray(0, i) & "_1.html"" title=""" & NavArray(2, i) & """>" & NavArray(1, i) & "</a></li><li class=""menuDiv""></li>")
+					End If
+				End If
+			Next
+			Response.Write("<li class=""menuR""></li></ul>")
+		End If
+	End Sub
+	
 End Class
 %>

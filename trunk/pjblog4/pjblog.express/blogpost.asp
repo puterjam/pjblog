@@ -1,4 +1,11 @@
-﻿<!--#include file = "../include.asp" --><!--#include file = "../FCKeditor/fckeditor.asp" --><!--#include file = "../pjblog.model/cls_ubbconfig.asp" --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!--#include file = "../include.asp" -->
+<!--#include file = "../FCKeditor/fckeditor.asp" -->
+<!--#include file = "../pjblog.model/cls_ubbconfig.asp" -->
+<!--#include file = "../pjblog.model/cls_fso.asp" -->
+<!--#include file = "../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../pjblog.data/cls_webconfig.asp" -->
+<!--#include file = "../pjblog.model/cls_template.asp" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -83,15 +90,23 @@ If Asp.ChkPost() Then
 	else
 	If Request.QueryString("action") = "complete" Then
 %>
-		 <div id="MsgContent" style="width:300px">
+		 <div id="MsgContent" style="width:400px; height:120px;">
 		     <div id="MsgHead"><%=lang.Set.Asp(26)%></div>
 		     <div id="MsgBody">
 		  		 <div class="<%if Request.QueryString("suc") = "false" Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
-		         <div class="MessageText"><%If Request.QueryString("suc") = "true" Then Response.Write(lang.Set.Asp(1)) Else Response.Write(Request.QueryString("info"))%><br/><a href="default.asp"><%=lang.Set.Asp(15)%></a><br/>
-		  		 <%If Request.QueryString("suc") = "true" Then %>
-			  		 <a href="default.asp?id=<%=Request.QueryString("id")%>"><%=lang.Set.Asp(92)%></a><br/>
-			  		 <meta http-equiv="refresh" content="3;url=default.asp?logID=<%=Request.QueryString("id")%>"/>
+		         <div class="MessageText" style="float:right; display:block; text-align:left; padding-top:10px;">
+				 	<%
+						If Request.QueryString("suc") = "true" Then
+							Response.Write(lang.Set.Asp(95))
+						Else
+							Response.Write(Request.QueryString("info"))
+						End If
+					%>
+                    <br/>
+		  		 	<%If Request.QueryString("suc") = "true" Then %>
+			  		 <input type="button" value="<%=lang.Set.Asp(31)%>" onclick="location='?action=Static&id=<%=Request.QueryString("id")%>'" class="userbutton" /><br/>
 			     <%end if%>
+                 </div>
 		  	  	</div>
 			</div>
 		</div>
@@ -350,15 +365,37 @@ End If
 		End If
 	End If
 End If
-
+ElseIf Request.QueryString("action") = "Static" Then
+	Call web.default
+	Dim Rs
+	Set Rs = Conn.Execute("Select T.cate_ID, T.cate_Folder From blog_Category AS T, blog_Content AS B Where B.log_ID=" & Asp.CheckStr(Request.QueryString("id")) & " And B.log_CateID=T.cate_ID")
+	If Not (Rs.Bof And Rs.Eof) Then
+		Call web.category(Rs(0).value, Rs(1).value)
+	End If
+	Set Rs = Nothing
+%>
+	 <div id="MsgContent" style="width:500px;">
+		     <div id="MsgHead"><%=lang.Set.Asp(97)%></div>
+		     <div id="MsgBody">
+		  		 <div class="MessageIcon"></div>
+		         <div class="MessageText">
+                 <%=lang.Set.Asp(98)%>
+                    <br/>
+		  		 	<a href="../default.asp"><%=lang.Set.Asp(15)%></a> | <a href="../default.asp?id=<>"><%=lang.Set.Asp(92)%></a>
+                    <meta http-equiv="refresh" content="3;url=default.asp"/>
+                 </div>
+		  	  	</div>
+			</div>
+		</div>
+<%
 Else
 %>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
-      <div id="MsgHead"><%=lang.Action.logs.LogeditErr%></div>
+      <div id="MsgHead"><%=lang.Set.Asp(26)%></div>
       <div id="MsgBody">
 		 <div class="ErrorIcon"></div>
-        <div class="MessageText"><%=lang.Err.info(4)%><br/><a href="default.asp"><%=lang.Tip.SysTem(4)%></a>
+        <div class="MessageText"><%=lang.Set.Asp(96)%><br/><a href="default.asp"><%=lang.Set.Asp(15)%></a>
 		 <meta http-equiv="refresh" content="3;url=default.asp"/></div>
 	  </div>
 	</div>
