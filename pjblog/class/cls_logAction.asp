@@ -107,37 +107,28 @@ Class logArticle
 
         '---------------分割日志--------------------
 		If logIntroCustom = 1 Then
-			If Int(logEditType) = 1 Then
-				logdescriptionFilt = closeUBB(logIntro)
-			Else
-				logdescriptionFilt = closeHTML(logIntro)
-			End If
-		Else
-			If Int(logEditType) = 1 Then
-                If blog_SplitType Then
-                    logdescriptionFilt = closeUBB(SplitLines(logMessage, blog_introLine))
-                Else
-                    logdescriptionFilt = closeUBB(CutStr(logMessage, blog_introChar))
-                End If
-            Else
-                logdescriptionFilt = closeHTML(SplitLines(logMessage, blog_introLine))
-            End If
-		End If
-        If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
-                logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
+				If IsBlank(logIntro) Then
+					logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
+				Else
+                	logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
+				End If
             Else
-                logIntro = closeHTML(CheckStr(logIntro))
+				If IsBlank(logIntro) Then
+					logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
+				Else
+                	logIntro = closeHTML(CheckStr(logIntro))
+				End If
             End If
         Else
             If Int(logEditType) = 1 Then
                 If blog_SplitType Then
-                    logIntro = closeUBB(SplitLines(CheckStr(HTMLEncode(logMessage)), blog_introLine))
+                    logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
                 Else
-                    logIntro = closeUBB(CutStr(CheckStr(HTMLEncode(logMessage)), blog_introChar))
+                    logIntro = closeUBB(CheckStr(CutStr(HTMLEncode(logMessage), blog_introChar)))
                 End If
             Else
-                logIntro = closeHTML(SplitLines(CheckStr(logMessage), blog_introLine))
+                logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
             End If
         End If
 
@@ -368,37 +359,28 @@ Class logArticle
 
         '---------------分割日志--------------------
 		If logIntroCustom = 1 Then
-			If Int(logEditType) = 1 Then
-				logdescriptionFilt = closeUBB(logIntro)
-			Else
-				logdescriptionFilt = closeHTML(logIntro)
-			End If
-		Else
-			If Int(logEditType) = 1 Then
-                If blog_SplitType Then
-                    logdescriptionFilt = closeUBB(SplitLines(logMessage, blog_introLine))
-                Else
-                    logdescriptionFilt = closeUBB(CutStr(logMessage, blog_introChar))
-                End If
-            Else
-                logdescriptionFilt = closeHTML(SplitLines(logMessage, blog_introLine))
-            End If
-		End If
-        If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
-                logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
+				If IsBlank(logIntro) Then
+					logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
+				Else
+                	logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
+				End If
             Else
-                logIntro = closeHTML(CheckStr(logIntro))
+				If IsBlank(logIntro) Then
+					logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
+				Else
+                	logIntro = closeHTML(CheckStr(logIntro))
+				End If
             End If
         Else
             If Int(logEditType) = 1 Then
                 If blog_SplitType Then
-                    logIntro = closeUBB(SplitLines(CheckStr(HTMLEncode(logMessage)), blog_introLine))
+                    logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
                 Else
-                    logIntro = closeUBB(CutStr(CheckStr(HTMLEncode(logMessage)), blog_introChar))
+                    logIntro = closeUBB(CheckStr(CutStr(HTMLEncode(logMessage), blog_introChar)))
                 End If
             Else
-                logIntro = closeHTML(SplitLines(CheckStr(logMessage), blog_introLine))
+                logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
             End If
         End If
 

@@ -225,7 +225,7 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 	end if
 '-------------[Ajax增加新分类]---------------
 ElseIf Request.QueryString("action") = "AddNewCate" then
-	If ChkPost() Then
+	If ChkPost() And stat_Admin Then
 		Dim AddNewCateArray, IntCount, NewcatePart, NRs, ReturnID, NewCateFso
 		
 		IntCount = (conn.Execute("select count(*) from blog_Category")(0) + 1)
@@ -281,7 +281,7 @@ ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
 		response.write lang.Err.info(999)
 	End If
 ElseIf Request.QueryString("action") = "UpdatePass" Then
-	If ChkPost() Then
+	If ChkPost() And stat_Admin Then
 		Dim u_ID, u_q, u_a
 		u_ID = CheckStr(UnEscape(Request.QueryString("id")))
 		u_q = CheckStr(UnEscape(Request.QueryString("q")))
@@ -305,7 +305,7 @@ ElseIf Request.QueryString("action") = "CheckPostName" Then
 		response.write lang.Err.info(999)
 	End If
 ElseIf Request.QueryString("action") = "updatepassto" Then
-	If ChkPost() Then
+	If ChkPost() And stat_Admin Then
 		Dim e_Pass, e_RePass, e_ID, e_Rs, e_hash, d_pass
 		e_ID = CheckStr(UnEscape(Request.QueryString("id")))
 		e_Pass = CheckStr(UnEscape(Request.QueryString("pass")))

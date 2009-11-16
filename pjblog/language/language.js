@@ -182,7 +182,7 @@ var lang = {
 				var temp;
 				switch (t)
 				{
-					case 1 : temp = "FCK在线编辑器"; break;
+					case 1 : temp = "UBB在线编辑器"; break;
 					case 2 : temp = "FCKeditor"; break;
 					default : temp = "非法操作";
 				}
