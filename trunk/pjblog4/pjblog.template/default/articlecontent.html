@@ -1,0 +1,34 @@
+﻿<pjblog:2 datasource="Data.ArticleList(1)" name="loop" element="div" page="<Set:blogPerPage/>" id="articlelist">
+    <Columns>
+        <ItemTemplate>
+        <script language="javascript" type="text/javascript">
+            ArticleArrayIDJoin.push($0$);
+            cookie.SET(cookies + "_IndexArticleList", ArticleArrayIDJoin, 1);
+        </script>
+            <div class="Content">
+                <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
+                     
+                     <h1 class="ContentTitle"><img src="{function:Data.GetCateInfo($6$, "cate_icon")}" style="margin:0px 2px -4px 0px;" alt="" class="CateIcon"/>
+                     <a class="titleA" href="{function:Init.doArticleUrl($0$)}" class="enterArticle_$0$">$1$</a></h1>
+                     <h2 class="ContentAuthor">作者:$2$ 日期:{function:Asp.DateToStr("$3$", "Y-m-d")}</h2>
+                </div>
+                <div id="log_6">
+                    <div class="Content-body">
+                         {UBB:"$4$", "$10$", "$11$"}
+                         <br />
+                         <if:{function:Asp.Max("$5$", "$4$", "string")}>more<end if>
+                    </div>
+                    <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>
+                            分类:<a href="$6$" title="">{function:Data.GetCateInfo($6$, "cate_Name")}</a> | 
+                            <a href="$0$">固定链接</a> | 
+                            <a href="$0$#comment">评论: <span id="indexComment_$0$"></span></a> | 
+                            <a href="$0$" target="_blank">引用: <span id="indexQuote_$0$"></span></a> | 
+                            查看次数: <span id="indexView_$0"></span>
+                            <span class="index_edit">| <a href="../pjblog.express/blogedit.asp?id=6"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
+                            <span class="index_del">| <a href="$0$" onclick="if (!window.confirm('是否要删除该日志')) return false"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
+                    </div>
+                </div>
+            </div>
+        </ItemTemplate>
+    </Columns>
+</pjblog:2>
