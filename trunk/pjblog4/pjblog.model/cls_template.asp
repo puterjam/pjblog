@@ -1,64 +1,4 @@
 ﻿<%
-' ======================================================================================
-'	全部使用方法:
-'	Dim c, page
-'	Set c = New template                                             	创建新对象实例
-'		c.Path = "tmp"													设置模板文件夹位置
-'		c.FileName = "temp.html"										设置模板文件名
-'		c.open															打开模板
-'		c.Sets("dd") = "123"											执行普通替换
-'		c.PageUrl = "?page={$page}"										分页URL样式
-'		page = Trim(Asp.CheckStr(Request.QueryString("page")))			获取当前页
-'		c.CurrentPage = Asp.CheckPage(page)								设置当前页
-'		c.Buffer														执行缓冲
-'		c.Flush															输出页面
-'	Set c = Nothing														实例终结
-'	Sys.Close															关闭数据库
-' --------------------------------------------------------------------------------------
-' 模板实例:
-' 支持无限级循环
-'<div>
-'模板循环实例一:
-'	<pjblog:1 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
-'    <Columns>
-'    	<ItemTemplate>
-'        	<li>
-'            $1
-'                <pjblog:2 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
-'                <Columns>
-'                    <ItemTemplate>
-'                        <li>$1
-'                        
-'                        </li>
-'                    </ItemTemplate>
-'                </Columns>
-'                </pjblog:2>
-'            </li>
-'        </ItemTemplate>
-'    </Columns>
-'    </pjblog:1>
-'    
-'模板循环实例二:
-'  <pjblog:3 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul">
-'    <Columns>
-'    	<ItemTemplate>
-'        	<li>$0</li>
-'        </ItemTemplate>
-'    </Columns>
-'    </pjblog:3>
-'    
-'模板循环实例三:
-'    <pjblog:4 width="1000" height="300" style=" border:1px solid #000; background:#ccc" datasource="Cache.UserRight" name="loop" element="ul" id="g" page="2">
-'    <Columns>
-'    	<ItemTemplate>
-'        	<li><function:Replace("$0", "SupAdmin", "3")/></li>
-'        </ItemTemplate>
-'    </Columns>
-'    </pjblog:4>
-'    <page:g/> 
-'    <function:Replace("<set:dd/>", "2", "7")/>
-'</div>
-' ======================================================================================
 Class template
 
 	Private c_Char, c_Path, c_FileName, c_Content, c_PageUrl, c_CurrentPage, c_PageStr, ReplacePageStr, doForLeft, doForRight
@@ -230,6 +170,8 @@ Class template
 	Public Sub open
 		c_Content = LoadFromFile(FilePath)
 		Call include
+		c_Content = Fame(c_Content)
+		c_Content = done(c_Content)
 		c_Content = Plugin(c_Content)
 	End Sub
 	
@@ -557,6 +499,46 @@ Class template
 		End If 
 		Set SetMatch = Nothing
 		UBB = Con
+	End Function
+	
+	' ***************************************
+	'	拖拽支持 fame
+	' ***************************************
+	Private Function Fame(ByVal o_Content)
+		Dim SetMatch, SetSubMatch, TempId, TempValue, c
+		Set SetMatch = GetMatch(o_Content, "\<fame\:(\d+?)\>([\s\S]+?)<\/fame\:\1>")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				TempId = SetSubMatch.SubMatches(0)
+				TempValue = SetSubMatch.SubMatches(1)
+				c = "<div id=""fame_" & TempId & """>" & vbcrlf
+				c = c & TempValue & vbcrlf
+				c = c & "</div>"
+				o_Content = Replace(o_Content, SetSubMatch.value, c, 1, -1, 1)
+			Next
+		End If
+		Set SetMatch = Nothing
+		Fame = o_Content
+	End Function
+	
+	' ***************************************
+	'	拖拽支持 do
+	' ***************************************
+	Private Function done(ByVal o_Content)
+		Dim SetMatch, SetSubMatch, TempId, TempValue, c
+		Set SetMatch = GetMatch(o_Content, "\<do\:(.+?)\>([\s\S]+?)<\/do\:\1>")
+		If SetMatch.Count > 0 Then
+			For Each SetSubMatch In SetMatch
+				TempId = SetSubMatch.SubMatches(0)
+				TempValue = SetSubMatch.SubMatches(1)
+				c = "<div id=""" & TempId & """ class=""drag"">" & vbcrlf
+				c = c & TempValue & vbcrlf
+				c = c & "</div>"
+				o_Content = Replace(o_Content, SetSubMatch.value, c, 1, -1, 1)
+			Next
+		End If
+		Set SetMatch = Nothing
+		done = o_Content
 	End Function
 	
 End Class
