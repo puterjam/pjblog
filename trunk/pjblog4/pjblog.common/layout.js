@@ -1,13 +1,7 @@
 ﻿// JavaScript Document
-function addEvent(oElement,sEvent,func){ 
-	if (oElement.attachEvent){ 
-		oElement.attachEvent(sEvent,func); 
-	} 
-	else{ 
-		sEvent=sEvent.substring(2,sEvent.length); 
-		oElement.addEventListener(sEvent,func,false); 
-	} 
-} 
+function $(el){
+	return document.getElementById(el);	
+}
  
 
 var Dragtemplate = {
@@ -16,7 +10,7 @@ var Dragtemplate = {
 	DivPole : {x : 0, y : 0},
 	DivCss : {width : 0, height : 0},
 	DivBorder : "",
-	DivDom : {box : new Array(), frame : 2},
+	DivDom : {box : new Array(), frame : 4},
 	parent : null,
 	filter : "-moz-opacity:0.5;opacity:0.5;filter:alpha(opacity=50);-ms-filter:'alpha(opacity=50)';background-color: #E1E1E1",
 	pressdown : function(obj){
@@ -185,5 +179,5 @@ var Dragtemplate = {
 	},
 	AddArrElement : function(obj){this.DivDom.box.push(obj);}
 }
-window.onerror=function(){return false}
+window.onerror=function(){return false};
 window.onload = function(){Dragtemplate.AddEvent();}

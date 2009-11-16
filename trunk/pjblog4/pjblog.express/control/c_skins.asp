@@ -14,7 +14,7 @@ Public Sub c_skins
 		<tr>
 			<td class="CPanel">
 			<div class="SubMenu2">
-				<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <b>模板: </b> <a href="?Fmenu=CodeEditor&file=Template\static.htm&referer=skins">编辑静态页面模板</a>  <br/> 
+				<b>风格设置: </b> <a href="?Fmenu=Skins">设置外观</a> <b>模板: </b> <a href="?Fmenu=Skins&Smenu=CodeEdit">编辑静态页面模板</a>  <br/> 
 				<b>插件相关: </b> <a href="?Fmenu=Skins&Smenu=module">设置模块</a> | <a href="?Fmenu=Skins&Smenu=Plugins">已装插件管理</a> | <a href="?Fmenu=Skins&Smenu=PluginsInstall">安装模块插件</a>
             </div>
 <%
@@ -69,6 +69,10 @@ Public Sub c_skins
 <%
 		Set cxml = Nothing
 		Set fso = Nothing
+	ElseIf Request.QueryString("Smenu") = "CodeEdit" Then
+%>
+<iframe src="log_styleEdit.asp?action=default" width="100%" height="800"></iframe>
+<%
 	Else
 	
 	End If

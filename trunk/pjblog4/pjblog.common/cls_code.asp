@@ -23,6 +23,26 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	' ***********************************************
+	'	获取正则匹配对象
+	' ***********************************************
+	Public Function GetMatch(ByVal Str, ByVal Rex)
+		Dim Reg, Mag
+		Set Reg = New RegExp
+		With Reg
+			.IgnoreCase = True
+			.Global = True
+			.Pattern = Rex
+			Set Mag = .Execute(Str)
+			If Mag.Count > 0 Then
+				Set GetMatch = Mag
+			Else
+				Set GetMatch = Server.CreateObject("Scripting.Dictionary")
+			End If
+		End With
+		Set Reg = nothing
+	End Function
+	
 	Public Function Max(ByVal A, ByVal B, ByVal T)
 		If Lcase(T) = "int" Then
 			If A > B Then Max = True Else Max = False
