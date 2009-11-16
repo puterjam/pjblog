@@ -55,13 +55,9 @@ End If
 Sub getBlogHead(Title, CateTitle, CategoryID, KeyWords, s_Description)
 If not isblank(KeyWords) then
 	blog_KeyWords = trim(KeyWords)&","
-Else
-	blog_KeyWords = ""
 End If
 If not isblank(s_Description) then
 	blog_Description = trim(s_Description)&","
-Else
-	blog_Description = ""
 End If
 '高亮分类for首页
 If IsInteger(cateID) = True Then
@@ -83,7 +79,7 @@ End If
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
 	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
 	<meta name="keywords" content="<%=blog_KeyWords%>PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
-	<meta name="description" content="<%=blog_Description%><%=SiteName%> - <%=blog_Title%>" />
+	<meta name="description" content="<%=blog_Description%> <%=SiteName%> - <%=blog_Title%>" />
 	<meta name="generator" content="PJBlog3" />
 	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=siteURL%>xmlrpc.asp" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />
