@@ -49,6 +49,7 @@ Class ChkCode
 	
 	Private Sub Article
 		Dim Rs, cookie
+		Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1")
 		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
 		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
 		cookie = Request.Cookies(Sys.CookieName & "_IndexArticleList")
@@ -86,7 +87,7 @@ Class ChkCode
 	End Sub
 	
 	Private Sub FillSideBar
-		Response.Write("if (PluginOutPutString.length > 0){for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}}else{alert(PluginOutPutString.length)}")
+		Response.Write("if (PluginOutPutString.length > 0){for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}}else{}")
 	End Sub
 
 End Class
