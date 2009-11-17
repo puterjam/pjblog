@@ -44,25 +44,7 @@
         <div id="blogname"><%=SiteName%><div id="blogTitle"><%=blog_Title%></div></div>
         <div id="menu">
             <div id="Left"></div><div id="Right"></div>
-            <ul>
-                <li class="menuL"></li>
-                <li><a class="menuA menuB" href="default.asp" title="日志首页">思念前奏</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="tag.asp" title="">思念云集</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="default.asp?cateID=3" title="diary">思念记忆</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="http://www.evio.name" title="PJBLOG风格提取">风格提取</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="http://www.kocms.com" title="kocms官方">KoCms官方</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="http://bbs.kocms.com" title="">KoCms论坛</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="http://www.daozhuo.net" title="道卓科技">道卓科技</a></li>
-                <li class="menuDiv"></li>
-                <li><a class="menuA" href="http://aspgov.cn" title="ASP学院">ASP学院</a></li>
-                <li class="menuR"></li>
-            </ul>
+            <%Init.HeadNav%>
         </div>
  	</div>
     
@@ -298,22 +280,15 @@ End If
             <tr>
               <td align="right" valign="top">&nbsp;</td>
                <td align="left">
-  <%if log_editType<>0 then %>
-               <label for="label4">
-                <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" />
-  <%=lang.Set.Asp(74)%></label>
-                <label for="label5">
-                <input name="log_DisSM" type="checkbox" id="label5" value="1" />
-  <%=lang.Set.Asp(75)%></label>
-                <label for="label6">
-                <input name="log_DisURL" type="checkbox" id="label6" value="1" />
-  <%=lang.Set.Asp(76)%></label>
-                <label for="label7">
-                <input name="log_DisKey" type="checkbox" id="label7" value="1" />
-  <%=lang.Set.Asp(77)%></label>
-  <%else%>
+ 			<%if log_editType<>0 then %>
+                <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" /><%=lang.Set.Asp(74)%></label>
+                <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" /><%=lang.Set.Asp(75)%></label>
+                <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" /><%=lang.Set.Asp(76)%></label>
+                <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" /><%=lang.Set.Asp(77)%></label>
+  			<%else%>
                 <strong>[&nbsp;&nbsp;<a herf="#" onClick="GetLength();" style="cursor:pointer"><%=lang.Set.Asp(78)%></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onClick="SetContents();" style="cursor:pointer"><%=lang.Set.Asp(79)%></a>&nbsp;&nbsp;]</strong>
-  <%end if%></td></tr>
+  			<%end if%>
+            	</td></tr>
           <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(80)%>:</span></td>
               <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onClick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/><%=lang.Set.Asp(81)%></label></div>

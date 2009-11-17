@@ -37,7 +37,7 @@ Class Tag
             filterHTML = Str
         Else
             Dim log_Tag, log_TagItem
-            For Each log_TagItem IN Arr_Tags
+            For Each log_TagItem IN Cache.TagsCache(1)
                 log_Tag = Split(log_TagItem, "||")
                 Str = Replace(Str, "{"&log_Tag(0)&"}", "<a href=""default.asp?tag="&Server.URLEncode(log_Tag(1))&""">"&log_Tag(1)&"</a>")
             Next
@@ -57,7 +57,7 @@ Class Tag
             filterEdit = Str
         Else
             Dim log_Tag, log_TagItem
-            For Each log_TagItem IN Arr_Tags
+            For Each log_TagItem IN Cache.TagsCache(1)
                 log_Tag = Split(log_TagItem, "||")
                 Str = Replace(Str, "{"&log_Tag(0)&"}", log_Tag(1)&" ")
             Next
@@ -86,7 +86,7 @@ Class Tag
     Private Function checkTagID(tagID) '检测是否存在此标签（根据ID）
         checkTagID = False
         Dim log_Tag, log_TagItem
-        For Each log_TagItem IN Arr_Tags
+        For Each log_TagItem IN Cache.TagsCache(1)
             log_Tag = Split(log_TagItem, "||")
             If Int(log_Tag(0)) = Int(tagID) Then
                 checkTagID = True
@@ -98,7 +98,7 @@ Class Tag
     Public Function getTagID(tagName) '获得Tag的ID
         getTagID = 0
         Dim log_Tag, log_TagItem
-        For Each log_TagItem IN Arr_Tags
+        For Each log_TagItem IN Cache.TagsCache(1)
             log_Tag = Split(log_TagItem, "||")
             If LCase(log_Tag(1)) = LCase(ClearHTML(tagName)) Then
                 getTagID = log_Tag(0)

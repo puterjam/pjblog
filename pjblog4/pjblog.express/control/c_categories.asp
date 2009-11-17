@@ -57,7 +57,7 @@ Else
 	Else
 		For i = 0 To UBound(CateRow, 2)
 %>
-                <tr id="Catetr_<%=Int(CateRow(0, i))%>">
+                <tr id="Catetr_<%=Int(CateRow(0, i))%>" class="ceo">
                 	<td class="SecTd" width="25"><%If Not CateRow(11, i) Then%><input type="checkbox" value="<%=Int(CateRow(0, i))%>" name="SelectID" /><%else%>&nbsp;<%End If%><input type="hidden" value="<%=Int(CateRow(0, i))%>" name="Cate_ID" /></td>
                 	<td class="SecTd" width="29"><input type="text" value="<%=Int(CateRow(1, i))%>" name="cate_Order" class="text" size="2" /></td>
                     <td class="SecTd">
