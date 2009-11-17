@@ -304,14 +304,14 @@ var JsCopy = {
 var Pos = 0, Dir = 2, len = 0;
 function animate()
 {
-var elem = document.getElementById('progress');
+var elem = $('progress');
 	if(elem != null) {
-		if (Pos==0) len += Dir;
-		if (len>32 || Pos>249) Pos += Dir;
-		if (Pos>249) len -= Dir;
-		if (Pos>249 && len==0) Pos=0;
-		elem.style.left = Pos;
-		elem.style.width = len;
+		if (Pos == 0) len += Dir;
+		if (len > 32 || Pos > 249) Pos += Dir;
+		if (Pos > 249) len -= Dir;
+		if (Pos > 249 && len == 0) Pos = 0;
+		elem.style.left = Pos + "px";
+		elem.style.width = len + "px";
 	}
 }
 var Tip = {
@@ -345,6 +345,6 @@ var Tip = {
 	},
 	remove : function(){
 		clearInterval(this.coint);
-		document.body.removeChild(document.getElementById("loader_container"));
+		document.body.removeChild($("loader_container"));
 	}
 }
