@@ -217,7 +217,7 @@ Class log_Init
 	End Function
 	
 	' ***********************************************
-	'	组成日志也连接(前台)
+	'	组成日志页连接(前台)
 	' ***********************************************
 	Public Function doArticleUrl(ByVal c_id)
 		If Not Asp.IsInteger(c_id) Then Exit Function
@@ -238,8 +238,31 @@ Class log_Init
 		Set Rs = Nothing
 	End Function
 	
+	' ***********************************************
+	'	组成分类页连接(前台)
+	' ***********************************************
+	Public Function doCategoryUrl(ByVal c_id)
+		If Not Asp.IsInteger(c_id) Then Exit Function
+		Dim Rs, cname, ctype, cfolder
+		Set Rs = Conn.Execute("Select Top 1 cate_Folder, cate_OutLink, cate_URL From blog_Category Where cate_ID=" & c_id)
+		If Rs.Bof Or Rs.Eof Then
+			Exit Function
+		Else
+			If Rs(1).value Then
+				doCategoryUrl = Rs(2).value
+			Else
+				If Len(Rs(0).value) > 0 Then
+					doCategoryUrl = "cate_" & Rs(0).value & "_1.html"
+				Else
+					doCategoryUrl = "cate_" & c_id & "_1.html"
+				End If
+			End If
+		End If
+		Set Rs = Nothing
+	End Function
+	
 	'**********************************************
-	'获取在线人数
+	'	获取在线人数
 	'**********************************************
 	
 	Public Function getOnline

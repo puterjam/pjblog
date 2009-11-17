@@ -1,6 +1,7 @@
 body{
 	margin:0px;
 }
+/*.ceo:hover{ background:#F2F9FD;}*/
 a:link,a:visited{
  text-decoration:none;
  color:#006
@@ -153,7 +154,7 @@ background-repeat:no-repeat;
  font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 legend{
-	color: #2c3e67;
+	color: #000066;
 	font-weight:bold;
 }
 fieldset{
@@ -179,10 +180,8 @@ font-size:12px;
 .shuom:hover{ color:#000}
 .Demo{ padding-left:20px; padding-right:20px;}
 select{font-size:12px;}
-input.text{
- border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;height:16px
-}
-input.text:hover{ border:1px solid #CC6600; background:#FFFFEA; color:#555}
+input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
+input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
 
 input.button{
  background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 12px 1px 12px;margin:4px;height:22px; line-height:22px;
@@ -216,6 +215,8 @@ textarea{ border:1px solid #4f6480;font-size:12px;font-family: Verdana, Arial, H
 	*height:30px;
 	overflow:hidden
 }
+/*.SubMenu a:link, .SubMenu a:visited{ color:#666666}
+.SubMenu a:hover{ color:#2366A8}*/
 .SubMenu select{
 font-size:10px;
 margin-top:-2px;

@@ -92,7 +92,7 @@ Class Sys_Cache
 	End Function
 	
 	' ***********************************************
-	'	分类缓存
+	'	表情缓存
 	' ***********************************************
 	Public Function SmiliesCache(ByVal i)
 		If Not IsArray(Application(Sys.CookieName & "_blog_Smilies")) Or Int(i) = 2 Then

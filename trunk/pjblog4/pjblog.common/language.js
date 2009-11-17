@@ -108,6 +108,10 @@ lang.Set = {
 			case 100 : _this = "退出登录成功"; break;
 			case 101 : _this = "单击返回退出前页面"; break;
 			case 102 : _this = "三秒后自动返回退出前页面"; break;
+			case 103 : _this = "编辑日志"; break;
+			case 104 : _this = "是否要删除该日志"; break;
+			case 105 : _this = "取消编辑"; break;
+			case 106 : _this = "您没有权限编辑该日志!"; break;
 			default : _this = "非法操作!";
 		}
 		return _this;
