@@ -5,7 +5,7 @@
 '===============================================================
 Public Function CreateUrl(ByVal part, ByVal cname, ByVal ctype)
 	If Len(cname) = 0 Or Len(ctype) = 0 Then Exit Function
-	If Len(part) = 0 Then
+	If IsNull(part) Or Len(part) = 0 Then
 		CreateUrl = "article/" & cname & "." & ctype
 	Else
 		CreateUrl = "article/" & part & "/" & cname & "." & ctype
