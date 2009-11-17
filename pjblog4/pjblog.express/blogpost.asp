@@ -184,7 +184,7 @@ If Asp.ChkPost() Then
 						Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """>" & blog_html_option(blog_html_option_i) & "</option>")
 					Next
 			  %>
-			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)"><%=lang.Set.Asp(36)%></a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)"><%=lang.Set.Asp(37)%></a></span>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('log_cname').value= pinyin.go($('log_Title').value)"><%=lang.Set.Asp(36)%></a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('log_cname').value= pinyin.go($('log_Title').value,1)"><%=lang.Set.Asp(37)%></a></span>
               </td>
             </tr>
             <tr>

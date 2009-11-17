@@ -299,3 +299,52 @@ var JsCopy = {
 		}
 	}
 }
+
+/* --------------- JS提示框 ------------------ */
+var Pos = 0, Dir = 2, len = 0;
+function animate()
+{
+var elem = document.getElementById('progress');
+	if(elem != null) {
+		if (Pos==0) len += Dir;
+		if (len>32 || Pos>249) Pos += Dir;
+		if (Pos>249) len -= Dir;
+		if (Pos>249 && len==0) Pos=0;
+		elem.style.left = Pos;
+		elem.style.width = len;
+	}
+}
+var Tip = {
+	coint : null,
+	timer : 3,
+	create : function(obj, id){
+		var temp = document.createElement(obj);
+		temp.id = id;
+		return temp;
+	},
+	CreateLayer : function(title, html){
+		var _this = this;
+		var loader_container = this.create("div", "loader_container");
+		var loader = this.create("div", "loader");
+		var load_title = this.create("div", "load_title");
+		var load_body = this.create("div", "load_body");
+		var loader_bg = this.create("div", "loader_bg");
+		var progress = this.create("div", "progress");
+		load_title.style.textAlign = "center";
+		load_body.style.textAlign = "center";
+		load_title.innerHTML = title;
+		load_body.innerHTML = html;
+		loader_bg.appendChild(progress);
+		loader.appendChild(load_title);
+		loader.appendChild(load_body);
+		loader.appendChild(loader_bg);
+		loader_container.appendChild(loader);
+		document.body.appendChild(loader_container);
+		this.coint = setInterval(animate, 10);
+		setTimeout(_this.remove, 3000)
+	},
+	remove : function(){
+		clearInterval(this.coint);
+		document.body.removeChild(document.getElementById("loader_container"));
+	}
+}

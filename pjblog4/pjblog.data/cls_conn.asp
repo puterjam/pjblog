@@ -41,5 +41,5 @@ Set Sys = New Sys_Connection
 	Sys.UpdateTime = "2009-11-03"					' 设置当前版本更新日期
 	Sys.CookieName = "PJBlog4"						' 设置你的Cookie名称
 	Sys.AccessFile = "pjblog/PBLog4.asp"			' 设置你的数据库名称
-	Set Conn = Sys.open
+	Set Conn = Sys.open								' 打开数据库
 %>

@@ -42,7 +42,7 @@
 					<div class="InfoAuthor"><img src="../images/weather/hn2_<Set:log_weather/>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="../images/weather/hn2_t_<Set:log_weather/>.gif" alt=""/> <img src="../images/<Set:log_level/>.gif" style="margin:0px 2px -1px 0px" alt=""/>
 						<span class="ownerClassLog">
 						<span class="index_edit"><a href="blogedit.asp?id=<Set:log_ID/>" title="编辑该日志" accesskey="E"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
-                        <span class="index_del"><a href="blogedit.asp?action=del&id=<Set:log_ID/>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
+                        <span class="index_del"><a href="blogedit.asp?action=del&id=<Set:log_ID/>" onClick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
 						</span>
 					</div>
 				</div>
@@ -53,7 +53,7 @@
 				<div class="Content-body">
 					<Set:log_Modify/>
 					<img src="../images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="log_FromUrl" target="_blank"><Set:log_From/></a><br/>
-					<img src="../images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<Set:log_ID/>)">我要引用此文章</a><br/>
+					<img src="../images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onClick="getTrackbackURL(<Set:log_ID/>)">我要引用此文章</a><br/>
 					<img src="../images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> log_tag<br/>
                     <img src="../images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
@@ -75,7 +75,7 @@
 				      			return true
 				      		}
 				      </script>
-		    <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">
+		    <form name="frm" action="blogcomm.asp" method="post" onSubmit="return checkCommentPost()" style="margin:0px;">
 		      <table width="100%" cellpadding="0" cellspacing="0">
 		        <tr>
 		          <td align="right" width="70"><strong>昵　称:</strong></td>
@@ -86,14 +86,14 @@
 		      	  <td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
 		        </tr>
                 <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onFocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onBlur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>内　容:</strong><br/></td>
 		          <td style="padding:2px;">
 		          	<script language="javascript" type="text/javascript" src="common/UBBCode.js"></script>
 		            <script language="javascript" type="text/javascript" src="common/UBBCode_help.js"></script>
 		            <div id="UBBSmiliesPanel" class="UBBSmiliesPanel"></div>
-		            <textarea id="editMask" class="editTextarea" style="width:99%;height:100px" onfocus="loadUBB('Message')"></textarea>
+		            <textarea id="editMask" class="editTextarea" style="width:99%;height:100px" onFocus="loadUBB('Message')"></textarea>
 		            <div id="editorbody" style="display:none">
 		              <div id="editorHead">正在加载编辑器...</div>
 		              <div class="editorContent">
@@ -181,6 +181,6 @@
 <include:foot.html/>
  </div>
  <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
- <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=article"></script>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=article&id=<Set:log_ID/>"></script>
 </body>
 </html>

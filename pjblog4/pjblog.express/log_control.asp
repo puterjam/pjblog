@@ -26,8 +26,7 @@ Class Sys_Control
 	'----------- 显示操作信息 ----------------------------
 	Public Sub getMsg
 		If Session(Sys.CookieName & "_ShowMsg") = True Then
-			Response.Write ("<div id=""msgInfo"" align=""center""><img src=""../images/Control/aL.gif"" style=""margin-bottom:-11px;""/><span class=""alertTxt"">" & Session(Sys.CookieName & "_MsgText") & "</span><img src=""../images/Control/aR.gif"" style=""margin-bottom:-11px;""/></div>")
-			Response.Write ("<script>setTimeout('hiddenMsg()',3000);function hiddenMsg(){document.getElementById('msgInfo').style.display='none';}</script>")
+			Response.Write ("<script>window.onload = function(){Tip.CreateLayer(""反馈信息"", """ & Session(Sys.CookieName & "_MsgText") & """);}</script>")
 			Session(Sys.CookieName & "_ShowMsg") = False
 			Session(Sys.CookieName & "_ShowMsg") = ""
 		End If
