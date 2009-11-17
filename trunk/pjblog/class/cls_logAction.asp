@@ -1312,9 +1312,9 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
 
     If log_View("log_EditType") = 1 Then
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1)))
     Else
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", log_View("log_Content"))
     End If
 
     If Len(log_View("log_Modify"))>0 Then
