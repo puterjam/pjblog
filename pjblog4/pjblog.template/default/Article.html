@@ -1,4 +1,21 @@
 ﻿<include:head.html/>
+<body>
+<a href="default.asp" accesskey="i"></a>
+<a href="javascript:history.go(-1)" accesskey="z"></a>
+<div id="container">
+<!--顶部-->
+<fame:1>
+  <div id="header">
+   	<div id="blogname"><Set:SiteName/>
+    	<div id="blogTitle"><Set:blogTitle/></div>
+   </div>
+   		<div id="menu">
+        	<div id="Left"></div>
+            <div id="Right"></div>
+            <do:p_navlist><include:p_navlist.html/></do:p_navlist>
+        </div>
+  </div>
+</fame:1>
   <!--内容-->
   <div id="Tbody">
     <div id="mainContent">
@@ -161,6 +178,9 @@
     </div>
     <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
   </div>
+<include:foot.html/>
+ </div>
  <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
  <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=article"></script>
-<include:foot.html/>
+</body>
+</html>

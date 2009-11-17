@@ -113,6 +113,7 @@ Class Sys_SoeData
 	'	首页分类页数据
 	' ***********************************************
 	Public Function CategoryList(ByVal i, ByVal j)
+		If Not Asp.IsInteger(j) Then Exit Function
 		If Not IsArray(Application(Sys.CookieName & "_CategoryList")) Or Int(i) = 2 Then
 			SQL = "log_ID, log_Title, log_Author, log_PostTime, log_Intro, log_Content, log_CateID, log_CommNums, log_ViewNums, log_QuoteNums, log_ubbFlags, log_edittype"
 			'			0		1			2			3			4			5			6			7				8	
@@ -125,10 +126,10 @@ Class Sys_SoeData
 			End If
 			Set Rs = Nothing
 			Application.Lock()
-			Application(Sys.CookieName & "_CategoryList") = Arrays
+			Application(Sys.CookieName & "_CategoryList_" & j) = Arrays
 			Application.UnLock()
 		Else
-			Arrays = Application(Sys.CookieName & "_CategoryList")
+			Arrays = Application(Sys.CookieName & "_CategoryList_" & j)
 		End If
 		CategoryList = Arrays
 	End Function
