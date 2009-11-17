@@ -1,4 +1,21 @@
 ﻿<include:head.html/>
+<body>
+<a href="default.asp" accesskey="i"></a>
+<a href="javascript:history.go(-1)" accesskey="z"></a>
+<div id="container">
+<!--顶部-->
+<fame:1>
+  <div id="header">
+   	<div id="blogname"><Set:SiteName/>
+    	<div id="blogTitle"><Set:blogTitle/></div>
+   </div>
+   		<div id="menu">
+        	<div id="Left"></div>
+            <div id="Right"></div>
+            <do:p_navlist><include:p_navlist.html/></do:p_navlist>
+        </div>
+  </div>
+</fame:1>
  <!--内容-->
  <script language="javascript" type="text/javascript">
  	var ArticleArrayIDJoin = new Array();
@@ -18,9 +35,9 @@
             <Columns>
                 <ItemTemplate>
                 <script language="javascript" type="text/javascript">
-					ArticleArrayIDJoin.push($0$);
-					cookie.SET(cookies + "_IndexArticleList", ArticleArrayIDJoin, 1);
-				</script>
+                    ArticleArrayIDJoin.push($0$);
+                    cookie.SET(cookies + "_categoryArticleList", ArticleArrayIDJoin, 1);
+                </script>
                     <div class="Content">
                         <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
                              
@@ -39,8 +56,8 @@
                                     <a href="$0$">固定链接</a> | 
                                     <a href="$0$#comment">评论: <span id="indexComment_$0$"></span></a> | 
                                     <a href="$0$" target="_blank">引用: <span id="indexQuote_$0$"></span></a> | 
-                                    查看次数: <span id="indexView_$0"></span>
-                                    <span class="index_edit">| <a href="blogedit.asp?id=6"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
+                                    查看次数: <span id="indexView_$0$"></span>
+                                    <span class="index_edit">| <a href="../pjblog.express/blogedit.asp?id=6"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
                                     <span class="index_del">| <a href="$0$" onclick="if (!window.confirm('是否要删除该日志')) return false"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
                             </div>
                         </div>
@@ -105,6 +122,9 @@
    
    <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
  </div>
- <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
- <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=default"></script>
 <include:foot.html/>
+ </div>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=category"></script>
+</body>
+</html>

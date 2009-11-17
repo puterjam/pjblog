@@ -141,9 +141,9 @@ Class webConfig
 			Mud.Sets("KeyWords") = blog_KeyWords
 			Mud.Sets("Description") = blog_Description
 			If Len(Folder) > 0 Then
-				Mud.PageUrl = "cate_" & Folder & "_" & c & ".html"
+				Mud.PageUrl = "cate_" & Folder & "_{$page}.html"
 			Else
-				Mud.PageUrl = "cate_" & CateID & "_" & c & ".html"
+				Mud.PageUrl = "cate_" & CateID & "_{$page}.html"
 			End If
 			page = Trim(Asp.CheckStr(c))
 			Mud.CurrentPage = Asp.CheckPage(page)

@@ -16,6 +16,7 @@ Class ChkCode
 		Select Case Lcase(Action)
 			Case "default" Call default
 			Case "article" Call Article
+			Case "category" Call category
 		End Select
     End Sub 
      
@@ -28,6 +29,7 @@ Class ChkCode
 	
 	Private Sub default
 		Dim Rs, cookie
+		Response.Write("function load(){")
 		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
 		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
 		cookie = Request.Cookies(Sys.CookieName & "_IndexArticleList")
@@ -42,6 +44,7 @@ Class ChkCode
 		End If
 		Set Rs = Nothing
 		Call FillSideBar
+		Response.Write("}" & vbcrlf & "window.onload = function(){load();}")
 	End Sub
 	
 	Private Sub Article
@@ -60,6 +63,26 @@ Class ChkCode
 		End If
 		Set Rs = Nothing
 		Call FillSideBar
+	End Sub
+	
+	Private Sub category
+		Dim Rs, cookie
+		Response.Write("function load(){")
+		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
+		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
+		cookie = Request.Cookies(Sys.CookieName & "_categoryArticleList")
+		Set Rs = Conn.Execute("Select log_ID, log_CommNums, log_ViewNums, log_QuoteNums From blog_Content Where log_ID in (" & cookie & ")")
+		If Not (Rs.Bof And Rs.Eof) Then
+			Do While Not Rs.Eof
+				Response.Write("try{$('indexComment_" & Rs(0).value & "').innerHTML = '" & Rs(1).value & "'}catch(e){}")
+				Response.Write("try{$('indexQuote_" & Rs(0).value & "').innerHTML = '" & Rs(3).value & "'}catch(e){}")
+				Response.Write("try{$('indexView_" & Rs(0).value & "').innerHTML = '" & Rs(2).value & "'}catch(e){}")
+			Rs.MoveNext
+			Loop
+		End If
+		Set Rs = Nothing
+		Call FillSideBar
+		Response.Write("}" & vbcrlf & "window.onload = function(){load();}")
 	End Sub
 	
 	Private Sub FillSideBar
