@@ -70,7 +70,7 @@ Class log_Init
         blog_commLength = Int(GlobalCache(31, 0))			'评论长度
         blog_downLocal = CBool(GlobalCache(32, 0))			'是否使用防盗链下载
         blog_DisMod = CBool(GlobalCache(33, 0))				'默认显示内容
-        blog_Disregister = CBool(GlobalCache(34, 0))		'是否允许注册
+        blog_Disregister = Int(GlobalCache(34, 0))				'是否允许注册
         blog_master = GlobalCache(35, 0)					'blog管理员姓名
         blog_email = GlobalCache(36, 0)						'blog管理员邮件地址
         blog_CountNum = GlobalCache(37, 0)					'访客统计最大次数
