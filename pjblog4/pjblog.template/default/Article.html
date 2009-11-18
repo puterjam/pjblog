@@ -59,12 +59,12 @@
                     <img src="../images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
 				</div>
-				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <Set:log_CommNums/> | <a href="trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">引用: log_QuoteNums</a> | 查看次数: <span id="countNum">-</span> </div>
+				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <span id="indexComment"></span> | <a href="../trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">引用: <span id="indexQuote"></span></a> | 查看次数: <span id="indexView"></span> </div>
 			</div>
 		</div>
 		<!-- 内容结束 -->   
         <!--评论区域-->
-        <div id="commentBox">评论区域</div>
+        <div id="commentBox"></div>
         <!-- 评论输入框 -->
 		 <div id="MsgContent" style="width:94%;">
 		  <div id="MsgHead">发表评论</div>
@@ -76,46 +76,46 @@
 				      			return true
 				      		}
 				      </script>
-		    <form name="frm" action="blogcomm.asp" method="post" onSubmit="return checkCommentPost()" style="margin:0px;">
+		    <form name="frm" action="../pjblog.logic/log_comment.asp?action=add" method="post" style="margin:0px;" id="postform">
 		      <table width="100%" cellpadding="0" cellspacing="0">
 		        <tr>
 		          <td align="right" width="70"><strong>昵　称:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" /></td>
+		          <td align="left" style="padding:3px;"><input name="comm_Author" id="comm_Author" type="text" size="18" class="userpass" maxlength="24" /></td>
 		        </tr>
 		        <tr id="passArea">
 		      	  <td align="right" width="70"><strong>密　码:</strong></td>
-		      	  <td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
+		      	  <td align="left" style="padding:3px;"><input name="password" type="password" id="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
 		        </tr>
-                <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onFocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onBlur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+                <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="comm_Email" id="comm_Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="comm_WebSite" id="comm_WebSite" type="text" size="30" class="userpass" value="" onFocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onBlur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>内　容:</strong><br/></td>
 		          <td style="padding:2px;">
-		          	<script language="javascript" type="text/javascript" src="common/UBBCode.js"></script>
-		            <script language="javascript" type="text/javascript" src="common/UBBCode_help.js"></script>
+		          	<!--<script language="javascript" type="text/javascript" src="../pjblog.common/UBBCode.js"></script>
+		            <script language="javascript" type="text/javascript" src="../pjblog.common/UBBCode_help.js"></script>
 		            <div id="UBBSmiliesPanel" class="UBBSmiliesPanel"></div>
 		            <textarea id="editMask" class="editTextarea" style="width:99%;height:100px" onFocus="loadUBB('Message')"></textarea>
 		            <div id="editorbody" style="display:none">
 		              <div id="editorHead">正在加载编辑器...</div>
-		              <div class="editorContent">
-		                <textarea name="Message" class="editTextarea" style="height:150px;;" cols="1" rows="1" accesskey="R"></textarea>
-		              </div>
-		            </div></td>
+		              <div class="editorContent">-->
+		                <textarea name="comm_Content" id="comm_Content" class="editTextarea" style="height:150px;;" cols="1" rows="1" accesskey="R"></textarea>
+		             <!-- </div>
+		            </div>--></td>
 		        </tr>
 		        <tr id="removevalidate">
 		          <td align="right" width="70"><strong>验证码:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
+		          <td align="left" style="padding:3px;"><input name="validate" id="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
 		        </tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
 		          <td align="left" style="padding:3px;"><label for="label5">
-		              <input name="log_DisSM" type="checkbox" id="label5" value="1" />
+		              <input name="comm_DisSM" type="checkbox" id="label5" value="1" id="comm_DisSM" />
 		              禁止表情转换</label>
 		            <label for="label6">
-		              <input name="log_DisURL" type="checkbox" id="label6" value="1" />
+		              <input name="comm_AutoURL" type="checkbox" id="label6" value="1" id="comm_AutoURL" />
 		              禁止自动转换链接</label>
 		            <label for="label7">
-		              <input name="log_DisKey" type="checkbox" id="label7" value="1" />
+		              <input name="comm_AutoKEY" type="checkbox" id="label7" value="1" id="comm_AutoKEY" />
 		              禁止自动转换关键字</label>
                     <span id="GuestCanRemeberComment"><br />
                     <label for="label8">
@@ -124,9 +124,8 @@
 		        </tr>
 		        <tr>
 		          <td colspan="2" align="center" style="padding:3px;">
-		          	<input name="logID" type="hidden" value="<Set:log_ID/>"/>
-		            <input name="action" type="hidden" value="post"/>
-		            <input name="submit2" type="submit" class="userbutton" value="发表评论" accesskey="S"/>
+		          	<input name="blog_ID" id="blog_ID" type="hidden" value="<Set:log_ID/>"/>
+		            <input name="submit2" type="button" class="userbutton" value="发表评论" accesskey="S" onClick="CheckForm.comment.post();"/>
 		            <input name="button" type="reset" class="userbutton" value="重写"/></td>
 		        </tr>
 		        <tr>

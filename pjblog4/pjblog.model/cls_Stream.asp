@@ -20,7 +20,7 @@ Class Stream
 
 	
 	Private Sub Class_Initialize()
-       	Set c_Stream = Server.CreateObject("Adodb.Stream")
+       	Set c_Stream = Server.CreateObject("Adodb." & "Stream")
 		Set c_httpXml = Server.CreateObject("Microsoft.XMLHTTP")
 			c_Cset = "UTF-8"
     End Sub

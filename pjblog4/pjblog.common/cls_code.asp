@@ -23,6 +23,11 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	Public Function BlankString(ByVal Content)
+		If IsBlank(Content) Then Content = ""
+		BlankString = Content
+	End Function
+	
 	' ***********************************************
 	'	获取正则匹配对象
 	' ***********************************************
