@@ -123,6 +123,24 @@ function Check(){
 		  }
 		});
 	},
+	this.comment = {
+		post : function(){
+			var ajax = new Ajax();
+    			ajax.postf(
+        			$("postform"),
+        			function(obj) {
+						var json = obj.responseText.json();
+						if (json.Suc){
+							var str = cee.decode(json.Info);//最好返回的值
+							var div = document.createElement("div");
+							div.id = "comment_" + json.id;
+							div.innerHTML = str;
+							$("commentBox").insertBefore(div, $("commentBox").childNodes[0]);
+						}
+					}
+    			);
+		}
+	},
 	this.Static = {
 		AddRow : function(obj, Mark, offset){
 			try{$("StaticPre").parentNode.removeChild($("StaticPre"));}catch(e){}
