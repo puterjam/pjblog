@@ -136,6 +136,10 @@ function Check(){
 							div.id = "comment_" + json.id;
 							div.innerHTML = str;
 							$("commentBox").insertBefore(div, $("commentBox").childNodes[0]);
+							location = "#comment_" + json.id;
+							Source = "#ffffff";
+							Target = "#C2D6D6";
+							flash("commenttop_" + json.id);
 						}
 					}
     			);
