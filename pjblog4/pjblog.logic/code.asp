@@ -49,6 +49,7 @@ Class ChkCode
 	End Sub
 	
 	Private Sub Article
+		'Response.Write("alert('" & Request.QueryString("id") & "');")
 		Dim Rs, ID, doo, local, Str, Str2, Str3
 		Dim GetRow, i, RowLeft, RowRight, PageSize, PageLen, CurrtPage, PageStr
 		ID = Asp.CheckStr(Request.QueryString("id"))
@@ -66,6 +67,9 @@ Class ChkCode
 			Loop
 		End If
 		Set Rs = Nothing
+		' ---------------------------------------------------
+		' 	加载评论
+		' ---------------------------------------------------
 		local = "../pjblog.template/" & blog_DefaultSkin & "/"
 		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime From blog_Comment Where blog_ID=" & ID)
 		'								0			1			2				3			4			5			6				
@@ -77,9 +81,8 @@ Class ChkCode
 			GetRow = Rs.GetRows	
 		End If
 		Set Rs = Nothing
-		'Response.Write("alert('" & UBound(GetRow, 1) & "');")
 		If UBound(GetRow, 1) > 0 Then
-			PageStr = "{$page}"
+			PageStr = "javascript:CheckForm.comment.page({$page}, false, '../pjblog.logic/code.asp?action=article&id=" & ID & "');"
 			CurrtPage = Request.QueryString("page")
 			If Not Asp.Isinteger(CurrtPage) Then CurrtPage = 1
 			If CurrtPage < 1 Then CurrtPage = 1
@@ -90,7 +93,6 @@ Class ChkCode
 			If RowLeft < 0 Then RowLeft = 0
 			If RowRight > PageLen Then RowRight = PageLen
 			Str3 = ""
-			'response.Write("alert('" & PageLen & "," & RowLeft & ", " & RowRight & "');")
 			For i = RowLeft To RowRight
 				Str2 = Str
 				Str2 = Replace(Str2, "<#comm_id#>", Asp.BlankString(GetRow(0, i)), 1, -1, 1)
