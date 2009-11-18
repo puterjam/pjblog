@@ -25,7 +25,7 @@
 			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 				<div class="pageContent">
 					<img src="{function:Data.GetCateInfo(<Set:log_CateID/>, "cate_icon")}" style="margin:0px 2px -4px 0px" alt=""/> 
-                    <strong><a href="default.asp?cateID=log_CateID" title="查看所有【{function:Data.GetCateInfo(<Set:log_CateID/>, "cate_Name")}】的日志">
+                    <strong><a href="../default.asp?cate=<Set:log_CateID/>" title="查看所有【{function:Data.GetCateInfo(<Set:log_CateID/>, "cate_Name")}】的日志">
                     {function:Data.GetCateInfo(<Set:log_CateID/>, "cate_Name")}</a>
                     </strong>
                      <a href="feed.asp?cateID=<Set:log_CateID/>" target="_blank" title="订阅所有【 {function:Data.GetCateInfo(<Set:log_CateID/>, "cate_Name")} 】的日志" accesskey="O">
@@ -41,8 +41,8 @@
 					<div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
 					<div class="InfoAuthor"><img src="../images/weather/hn2_<Set:log_weather/>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="../images/weather/hn2_t_<Set:log_weather/>.gif" alt=""/> <img src="../images/<Set:log_level/>.gif" style="margin:0px 2px -1px 0px" alt=""/>
 						<span class="ownerClassLog">
-						<span class="index_edit"><a href="blogedit.asp?id=<Set:log_ID/>" title="编辑该日志" accesskey="E"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
-                        <span class="index_del"><a href="blogedit.asp?action=del&id=<Set:log_ID/>" onClick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
+						<span class="index_edit"><a href="../pjblog.express/blogedit.asp?id=<Set:log_ID/>" title="编辑该日志" accesskey="E"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
+                        <span class="index_del"><a href="../pjblog.logic/log_Article.asp?action=del&id=<Set:log_ID/>" onClick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
 						</span>
 					</div>
 				</div>
@@ -52,9 +52,10 @@
 				</div>
 				<div class="Content-body">
 					<Set:log_Modify/>
-					<img src="../images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="log_FromUrl" target="_blank"><Set:log_From/></a><br/>
-					<img src="../images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onClick="getTrackbackURL(<Set:log_ID/>)">我要引用此文章</a><br/>
-					<img src="../images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> log_tag<br/>
+					<img src="../images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<Set:log_FromUrl/>" target="_blank"><Set:log_From/></a><br/>
+					<img src="../images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="../trackback.asp?tbID=<Set:log_ID/>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onClick="getTrackbackURL(<Set:log_ID/>)">我要引用此文章</a><br/>
+					<img src="../images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> 
+                    <Set:tag/><br/>
                     <img src="../images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
 				</div>

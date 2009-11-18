@@ -33,13 +33,13 @@ Class Tag
 
     Public Function filterHTML(Str) '过滤标签
         If IsEmpty(Str) Or IsNull(Str) Or Len(Str) = 0 Then
-            Exit Function
             filterHTML = Str
+			Exit Function
         Else
             Dim log_Tag, log_TagItem
             For Each log_TagItem IN Cache.TagsCache(1)
                 log_Tag = Split(log_TagItem, "||")
-                Str = Replace(Str, "{"&log_Tag(0)&"}", "<a href=""default.asp?tag="&Server.URLEncode(log_Tag(1))&""">"&log_Tag(1)&"</a>")
+                Str = Replace(Str, "{"&log_Tag(0)&"}", "<a href=""../default.asp?tag="&Server.URLEncode(log_Tag(1))&""">"&log_Tag(1)&"</a>")
             Next
             Dim re
             Set re = New RegExp

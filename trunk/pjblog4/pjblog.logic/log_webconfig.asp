@@ -1,6 +1,7 @@
 ﻿<!--#include file = "../include.asp" -->
 <!--#include file = "../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../pjblog.model/cls_tag.asp" -->
 <!--#include file = "../pjblog.data/cls_webconfig.asp" -->
 <!--#include file = "../pjblog.model/cls_template.asp" -->
 <%

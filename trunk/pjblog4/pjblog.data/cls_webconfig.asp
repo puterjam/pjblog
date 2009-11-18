@@ -3,7 +3,7 @@ Dim web
 Set web = New webConfig
 Class webConfig
 
-	Private Mud, Deep, page
+	Private Mud, Deep, page, ctag
 	
 	' ***********************************************
 	'	类初始化
@@ -33,6 +33,8 @@ Class webConfig
 		Mud.Sets("master") = blog_master
 		Mud.Sets("email") = blog_email
 		Mud.Sets("cookie") = Sys.CookieName
+		Mud.Sets("version") = Sys.version
+		Mud.Sets("UpdateTime") = Sys.UpdateTime
 		Mud.Sets("blogPerPage") = blogPerPage
 	End Sub
 	
@@ -113,6 +115,9 @@ Class webConfig
 			Else
 				o.Sets("KeyWord") = Rs("log_KeyWords").value
 				o.Sets("Description") = Rs("log_KeyWords").value
+				Set ctag = New Tag
+					o.Sets("tag") = ctag.filterHTML(Rs("log_tag").value)
+				Set ctag = Nothing
 				For j = 0 To Rs.Fields.Count - 1
 					o.Sets(Rs(j).Name) = Rs(j).value
 					'Response.Write(Rs(j).Name & " : " & Rs(j).value & "<br />")
