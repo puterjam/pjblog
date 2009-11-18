@@ -28,6 +28,22 @@ Class Sys_Asp
 		BlankString = Content
 	End Function
 	
+	Function RegMatch(ByVal Str, ByVal MatchStr)
+		If Len(Str) = 0 Or Len(MatchStr) = 0 Then Exit Function
+		Dim cRe, cReCount
+		Set cRe = New RegExp
+				cRe.IgnoreCase = True
+				cRe.Global = True
+				cRe.Pattern = MatchStr
+				Set cReCount = cRe.Execute(Str)
+				If cReCount.count then
+					RegMatch = True
+				Else
+					RegMatch = False
+				End If
+		Set cRe = nothing
+	End Function
+	
 	' ***********************************************
 	'	获取正则匹配对象
 	' ***********************************************

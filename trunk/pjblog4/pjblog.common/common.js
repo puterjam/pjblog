@@ -355,6 +355,7 @@ var Tip = {
 		loader.appendChild(loader_bg);
 		loader_container.appendChild(loader);
 		document.body.appendChild(loader_container);
+		loader_container.style.top = (document.documentElement.clientHeight - loader_container.offsetHeight)/2 + document.documentElement.scrollTop + "px";
 		this.coint = setInterval(animate, 10);
 		setTimeout(_this.remove, 3000)
 	},
