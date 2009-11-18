@@ -77,6 +77,7 @@ Class ChkCode
 			GetRow = Rs.GetRows	
 		End If
 		Set Rs = Nothing
+		'Response.Write("alert('" & UBound(GetRow, 1) & "');")
 		If UBound(GetRow, 1) > 0 Then
 			PageStr = "{$page}"
 			CurrtPage = Request.QueryString("page")
@@ -89,6 +90,7 @@ Class ChkCode
 			If RowLeft < 0 Then RowLeft = 0
 			If RowRight > PageLen Then RowRight = PageLen
 			Str3 = ""
+			'response.Write("alert('" & PageLen & "," & RowLeft & ", " & RowRight & "');")
 			For i = RowLeft To RowRight
 				Str2 = Str
 				Str2 = Replace(Str2, "<#comm_id#>", Asp.BlankString(GetRow(0, i)), 1, -1, 1)

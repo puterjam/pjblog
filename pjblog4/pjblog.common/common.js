@@ -302,6 +302,21 @@ var JsCopy = {
 
 /* --------------- JS提示框 ------------------ */
 var Pos = 0, Dir = 2, len = 0;
+var time = 0, en = null, limit = 6, Source = null, Target = null;
+function flash(obj){
+	if (time % 2 == 0){
+		$(obj).style.cssText += ";background:" + Target;
+	}else{
+		$(obj).style.cssText += ";background:" + Source;
+	}
+	if (time > limit){
+		clearTimeout(en);
+	}else{
+		time++;
+		en = setTimeout("flash(\"" + obj + "\")", 100);
+	}
+}
+
 function animate()
 {
 var elem = $('progress');
