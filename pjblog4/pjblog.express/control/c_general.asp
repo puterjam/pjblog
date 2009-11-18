@@ -220,7 +220,7 @@ Public Sub c_ceneral
                         <div align="left">
                           <table border="0" cellpadding="2" cellspacing="1">
                             <tr>
-                            	<td width="180" align="right" valign="top">注册新用户</td>
+                            	<td width="180" align="right" valign="middle">注册新用户</td>
                                 <td align="left" colspan="2">
                                 <div>
                                     <label for="p4" ><input id="p4" name="blog_Disregister" type="radio" value="0" <%if blog_Disregister = 0 then response.write ("checked=""checked""")%>/> 不允许注册 (不推荐)<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">用户将无法在您站上注册!</span> <br/></label>

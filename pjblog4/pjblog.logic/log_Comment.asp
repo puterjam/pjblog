@@ -34,13 +34,33 @@ Class do_Comment
     End Sub
 	
 	Private Sub Add
+		Dim LastMSG, FlowControl, validate
 		blog_ID = Asp.CheckUrl(Asp.CheckStr(Request.Form("blog_ID")))
 		comm_Author = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Author"))))
 		comm_Content = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Content"))))
 		comm_IsAudit = True
 		comm_Email = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Email"))))
 		comm_WebSite = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_WebSite"))))
+		validate = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("validate"))))
 		comm_PostTime = Now()
+		
+		If (memName = empty or blog_validate = true) Or CStr(LCase(Session("GetCode"))) <> CStr(LCase(validate)) Then
+			Response.Write("{Suc : false, Info : '验证码有误，请返回重新输入！'}")
+			Exit Sub
+		End If
+		
+		Set LastMSG = conn.Execute("select top 1 comm_Content from blog_Comment order by comm_ID desc")
+    		If LastMSG.EOF Then
+        		FlowControl = False
+    		Else
+        		If Trim(LastMSG("comm_Content")) = Trim(comm_Content) Then FlowControl = True
+    		End If
+		Set LastMSG = Nothing
+		
+		If FlowControl Then
+			Response.Write("{Suc : false, Info : '禁止恶意灌水！'}")
+			Exit Sub
+		End If
 		
 		If Not Asp.IsInteger(blog_ID) Then
 			Response.Write("{Suc : false, Info : '非法参数'}")
@@ -79,11 +99,6 @@ Class do_Comment
 			Exit Sub
 		End If
 		
-		'If DateDiff("s", Request.Cookies(Sys.CookieName)("memLastPost"), Asp.DateToStr(now(),"Y-m-d H:I:S")) < blog_commTimerout Then
-			'Response.Write("{Suc : false, Info : '发言太快,请 " & blog_commTimerout & " 秒后再发表评论'}")
-			'Exit Sub
-		'End If
-		
 		If Len(comm_Author) < 1 Then
 			Response.Write("{Suc : false, Info : '请输入你的昵称'}")
 			Exit Sub
@@ -93,6 +108,45 @@ Class do_Comment
 			Response.Write("{Suc : false, Info : '<b>非法用户名！</b><br/>请尝试使用其他用户名！'}")
 			Exit Sub
 		End If
+		
+		If Not stat_CommentAdd Then
+			Response.Write("{Suc : false, Info : '您没有权限发表评论'}")
+			Exit Sub
+		End If
+		
+		If Conn.Execute("select log_DisComment from blog_Content where log_ID=" & blog_ID)(0) Then
+			Response.Write("{Suc : false, Info : '该日志不允许发表任何评论'}")
+			Exit Sub
+		End If
+		
+		If Len(comm_Content) < 1 Then
+			Response.Write("{Suc : false, Info : '不允许发表空评论'}")
+			Exit Sub
+		End If
+		
+		If Len(comm_Content) > blog_commLength Then
+			Response.Write("{Suc : false, Info : '评论超过最大字数限制'}")
+			Exit Sub
+		End If
+		
+		If Len(comm_Email) > 0 Then
+			If Not Asp.RegMatch(comm_Email, "\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*") Then
+				Response.Write("{Suc : false, Info : '验证邮箱格式错误'}")
+				Exit Sub
+			End If
+		End If
+		
+		If Len(comm_WebSite) > 0 Then
+			If Not Asp.RegMatch(comm_WebSite, "(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?") Then
+				Response.Write("{Suc : false, Info : '网址格式错误,请用http://开头'}")
+				Exit Sub
+			End If
+		End If
+
+		'If DateDiff("s", Request.Cookies(Sys.CookieName)("memLastPost"), Asp.DateToStr(now(),"Y-m-d H:I:S")) < blog_commTimerout Then
+'			Response.Write("{Suc : false, Info : '发言太快,请 " & blog_commTimerout & " 秒后再发表评论'}")
+'			Exit Sub
+'		End If
 		
 		If Int(blog_commUBB) <> 0 Then blog_commUBB = 1
 		If Int(blog_commIMG) <> 0 Then blog_commIMG = 1

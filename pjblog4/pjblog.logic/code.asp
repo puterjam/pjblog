@@ -49,7 +49,6 @@ Class ChkCode
 	End Sub
 	
 	Private Sub Article
-		'Response.Write("alert('" & Request.QueryString("id") & "');")
 		Dim Rs, ID, doo, local, Str, Str2, Str3
 		Dim GetRow, i, RowLeft, RowRight, PageSize, PageLen, CurrtPage, PageStr
 		ID = Asp.CheckStr(Request.QueryString("id"))
@@ -67,6 +66,7 @@ Class ChkCode
 			Loop
 		End If
 		Set Rs = Nothing
+		If Len(memName) > 0 Then Response.Write("try{if ($('passArea')){$('comm_Author').value='" & memName & "';$('comm_Author').readOnly = true;$('passArea').parentNode.removeChild($('passArea'))}}catch(e){};")
 		' ---------------------------------------------------
 		' 	加载评论
 		' ---------------------------------------------------
@@ -79,6 +79,8 @@ Class ChkCode
 				Str = doo.LoadFile(local & "l_comment.html")
 			Set doo = Nothing
 			GetRow = Rs.GetRows	
+		Else
+			Redim GetRow(0, 0)
 		End If
 		Set Rs = Nothing
 		If UBound(GetRow, 1) > 0 Then
@@ -102,7 +104,7 @@ Class ChkCode
 				Str2 = Replace(Str2, "<#comm_weburl#>", Asp.BlankString(GetRow(9, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_ip#>", Asp.BlankString(GetRow(10, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
-				Str2 = "<div id=""comment_" & Asp.BlankString(GetRow(0, i)) & """>" & Str2 & "</div>"
+				Str2 = "<div id=""comment_" & Asp.BlankString(GetRow(0, i)) & """ class=""CommPart"">" & Str2 & "</div>"
 				Str3 = Str3 & Str2
 			Next
 			Str3 = Str3 & MultiPage(PageLen + 1, blogcommpage, CurrtPage, PageStr, "float:right", "", False)

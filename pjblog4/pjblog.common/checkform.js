@@ -131,15 +131,35 @@ function Check(){
         			function(obj) {
 						var json = obj.responseText.json();
 						if (json.Suc){
+							//alert(CommPageSize);
+							var w = 0, karr = new Array();
+							var lens = document.getElementsByTagName("div");
+							for (var k = 0 ; k < lens.length ; k++){
+								if (lens[k].className == "CommPart"){
+									w++;
+									karr.push(lens[k]);
+								}
+							}
+							if (k >= CommPageSize){
+								$("commentBox").removeChild(karr[w - 1]);
+							}
+							$("postform").reset();
 							var str = cee.decode(json.Info);//最好返回的值
 							var div = document.createElement("div");
 							div.id = "comment_" + json.id;
+							div.className = "CommPart";
 							div.innerHTML = str;
-							$("commentBox").insertBefore(div, $("commentBox").childNodes[0]);
-							location = "#comment_" + json.id;
+							if ($("commentBox").childNodes.length > 0){
+								$("commentBox").insertBefore(div, $("commentBox").childNodes[0]);
+							}else{
+								$("commentBox").appendChild(div);
+							}
 							Source = "#ffffff";
 							Target = "#C2D6D6";
 							flash("commenttop_" + json.id);
+							location = "#comment_" + json.id;
+						}else{
+							Tip.CreateLayer("错误信息", json.Info)
 						}
 					}
     			);

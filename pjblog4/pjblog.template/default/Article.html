@@ -69,18 +69,14 @@
 		 <div id="MsgContent" style="width:94%;">
 		  <div id="MsgHead">发表评论</div>
 		  <div id="MsgBody">
-		    <script type="text/javascript">
-				      		function checkCommentPost(){
-				      			if (!CheckPost) return false
-								// 备用方法
-				      			return true
-				      		}
-				      </script>
+          <script language="javascript">
+		  	var CommPageSize = <Set:blogcommpage/>;
+		  </script>
 		    <form name="frm" action="../pjblog.logic/log_comment.asp?action=add" method="post" style="margin:0px;" id="postform">
 		      <table width="100%" cellpadding="0" cellspacing="0">
 		        <tr>
 		          <td align="right" width="70"><strong>昵　称:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="comm_Author" id="comm_Author" type="text" size="18" class="userpass" maxlength="24" /></td>
+		          <td align="left" style="padding:3px;"><input name="comm_Author" id="comm_Author" type="text" size="18" class="userpass" maxlength="24" value="" /></td>
 		        </tr>
 		        <tr id="passArea">
 		      	  <td align="right" width="70"><strong>密　码:</strong></td>
@@ -104,7 +100,7 @@
 		        </tr>
 		        <tr id="removevalidate">
 		          <td align="right" width="70"><strong>验证码:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="validate" id="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
+		          <td align="left" style="padding:3px;"><input name="validate" id="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="CheckForm.User.GetCode('../pjblog.common/GetCode.asp', 'checkcode')" onKeyUp="CheckForm.User.CheckCode('validate', 'isok_checkcode')"/> <span id="checkcode"><label style="cursor:pointer;" onClick="CheckForm.User.GetCode('../pjblog.common/GetCode.asp', 'checkcode')">点击输入验证码</label></span> <span id="isok_checkcode"></span></label></td>
 		        </tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
