@@ -356,7 +356,7 @@ ElseIf Request.QueryString("action") = "Static" Then
 		         <div class="MessageText">
                  <%=lang.Set.Asp(98)%>
                     <br/>
-		  		 	<a href="../default.asp"><%=lang.Set.Asp(15)%></a> | <a href="../default.asp?id=<>"><%=lang.Set.Asp(92)%></a>
+		  		 	<a href="../default.asp"><%=lang.Set.Asp(15)%></a> | <a href="../default.asp?id=<%=Asp.CheckStr(Request.QueryString("id"))%>"><%=lang.Set.Asp(92)%></a>
                     <meta http-equiv="refresh" content="3;url=default.asp"/>
                  </div>
 		  	  	</div>

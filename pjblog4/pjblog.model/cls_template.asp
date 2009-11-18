@@ -422,7 +422,7 @@ Class template
 	Public Sub IfelseEndif
 		Dim SetMatch, SetSubMatch
 		Dim Condition, TrueResult, ElseCondition, FalseResult, CheckTrue, Str
-		Set SetMatch = GetMatch(c_Content, "\<if\:(.+?)\>(.*?)(\<else\>(.+?))?\<end\sif\>")
+		Set SetMatch = GetMatch(c_Content, "\<if\:([\s\S]+?)\>([\s\S]*?)(\<else\>([\s\S]+?))?\<end\sif\>")
 		If SetMatch.Count > 0 Then
 			For Each SetSubMatch In SetMatch
 				Condition = SetSubMatch.SubMatches(0)

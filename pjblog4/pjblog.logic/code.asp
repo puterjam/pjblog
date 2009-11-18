@@ -87,7 +87,10 @@ Class ChkCode
 	End Sub
 	
 	Private Sub FillSideBar
-		Response.Write("if (PluginOutPutString.length > 0){for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}}else{}")
+		Response.Write("function doSide(){" & vbcrlf)
+		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}" & vbcrlf)
+		Response.Write("}" & vbcrlf)
+		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{fillSide();doSide();}")
 	End Sub
 
 End Class

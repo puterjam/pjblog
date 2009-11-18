@@ -43,12 +43,8 @@ Class Sys_Asp
 		Set Reg = nothing
 	End Function
 	
-	Public Function Max(ByVal A, ByVal B, ByVal T)
-		If Lcase(T) = "int" Then
-			If A > B Then Max = True Else Max = False
-		ElseIf Lcase(T) = "string" Then
-			If Len(A) > Len(B) Then Max = True Else Max = True
-		End If
+	Public Function Max(ByVal A, ByVal B)
+		If A = B Then Max = True Else Max = False
 	End Function
 	
 	Public Function CheckPage(ByVal Pages)

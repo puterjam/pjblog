@@ -1,4 +1,5 @@
 ﻿<!--#include file = "../include.asp" -->
+function fillSide(){
 <%
 ' *****************************************************
 ' 	分类管理
@@ -76,6 +77,11 @@ End Function
 %>
 	PluginTempValue = ['plugin_BlogInfo', '<%=outputSideBar(BlogInfo)%>'];
 	PluginOutPutString.push(PluginTempValue);
+/* -------------------- pluginstart -------------------- */
+
+/* -------------------- pluginend -------------------- */
+}
+fillSide();
 <%
 Sys.Close
 %>
