@@ -1055,7 +1055,7 @@ End Class
 		if (_curPage!=Pages) {pageCode.push('<a href="'+Url.replace("{$page}", (_curPage+1))+'" title="下一页" style="text-decoration:none"'+ShortCut+' ' + event + '>›</a>')}
 		
 		//最后一页
-		if (_curPage!=Pages && ToPage<Pages) {pageCode.push(' | <a href="'+Url.replace("{$page}", (Pages+aname))+'" title="最后一页" style="text-decoration:none" ' + event + '>»</a>')}
+		if (_curPage!=Pages && ToPage<Pages) {pageCode.push(' | <a href="'+Url.replace("{$page}", (Pages))+'" title="最后一页" style="text-decoration:none" ' + event + '>»</a>')}
 		
 		//html end
 		pageCode.push('</li></ul></div>');

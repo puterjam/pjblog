@@ -143,6 +143,13 @@ function Check(){
 						}
 					}
     			);
+		},
+		page : function(id, needTip, url){
+			if (needTip){$("commentBox").innerHTML = "正在加载评论, 请稍后..."}
+			var cJS = document.createElement("script");
+			cJS.chatset = "utf-8";
+			cJS.src = url + "&page=" + id + "&s=" + Math.random();
+			document.getElementsByTagName("HEAD")[0].appendChild(cJS);
 		}
 	},
 	this.Static = {
