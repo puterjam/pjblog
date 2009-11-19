@@ -1,8 +1,13 @@
 ﻿	<div class="comment">
 		<div class="commenttop" id="commenttop_<#comm_id#>">
-			<span class="ownerClassComment" style="float:right;cursor:pointer"><img src="../images/reply.gif" alt="回复" style="margin-bottom:-2px;"/>回复</span>
+			<span class="ownerClassComment" style="float:right;cursor:pointer"><#comm_reply#></span>
 			<a name="comm_6" href="javascript:addQuote('admin','commcontent_6')"><img border="0" src="../images/icon_quote.gif" alt="" style="margin:0px 4px -3px 0px"/></a><a href="../member.asp?action=view&memName=admin"><strong><#comm_author#></strong></a>
-			<span class="commentinfo">[<#comm_posttime#> | <a href="javascript:void(0)"><img src="../images/noCommentEmail.gif" border="0"></a> | <a href="<#comm_weburl#>" target="_blank"><img src="../images/nositeurl.gif" border="0"></a><span class="ownerClassComment"> | <a href="javascript:CheckForm.comment.del(<#comm_id#>);" onclick="return confirm('确定删除?\n删除后无法恢复')"><img src="../images/icon_del.gif" alt="del" border="0"/></a> <#comm_Aduit#></span>]</span>
+			<span class="commentinfo">[<#comm_posttime#> | <a href="javascript:void(0)"><img src="../images/noCommentEmail.gif" border="0"></a> | <a href="<#comm_weburl#>" target="_blank"><img src="../images/nositeurl.gif" border="0"></a> <#comm_del#> <#comm_Aduit#>]</span>
 		</div>
-		<div class="commentcontent" id="commcontent_6"><#comm_Content#></div>
+		<div class="commentcontent" id="commcontent_<#comm_id#>">
+        	<#comm_Content#>
+        	<div id="commentcontentreply_<#comm_id#>">
+            <#comm_replycontent#>
+            </div>
+        </div>
 	</div>

@@ -2,7 +2,7 @@
 // Author : evio 
 // 特殊数组 : 用来压缩插件的信息
 var PluginOutPutString = new Array(), PluginTempValue;
-
+var temp;
 /*
 	重构一些内置方法
 */

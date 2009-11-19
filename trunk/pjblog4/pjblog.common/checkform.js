@@ -131,7 +131,6 @@ function Check(){
         			function(obj) {
 						var json = obj.responseText.json();
 						if (json.Suc){
-							//alert(CommPageSize);
 							var w = 0, karr = new Array();
 							var lens = document.getElementsByTagName("div");
 							for (var k = 0 ; k < lens.length ; k++){
@@ -226,6 +225,75 @@ function Check(){
 				  alert(obj.state);
 			  }
 			});
+		},
+		reply : function(id){
+			var _this = this;
+			this.replyRemove();
+			try{
+				$("commentcontentreply_" + temp).style.display = "block";
+			}catch(e){}
+			var _id = id;
+			Ajax({
+			  url : "../pjblog.logic/log_comment.asp?action=replybox&id=" + escape(id) + "&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						try{
+							$("commentcontentreply_" + _id).style.display = "none";
+							temp = _id;
+						}catch(e){}
+						var div = document.createElement("div");
+						var Str = cee.decode(json.Info);
+						div.innerHTML = Str;
+						div.id = "replyBox"
+						if ($("commcontent_" + _id)){
+							var parentid = $("commcontent_" + _id);
+							parentid.appendChild(div);
+						}else{
+							Tip.CreateLayer("错误信息", "加载回复框失败");
+							_this.replyRemove();
+							try{
+								$("commentcontentreply_" + temp).style.display = "block";
+							}catch(e){}
+						}
+					}else{
+						Tip.CreateLayer("错误信息", "获取回复内容失败");
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		replyRemove : function(){
+			try{$("replyBox").parentNode.removeChild($("replyBox"));}catch(e){}
+		},
+		doReply : function(id){
+			var _id = id, _this = this;
+			var content = $("replyBox_" + id).value;
+			if (content.length > 0){
+				Ajax({
+				  url : "../pjblog.logic/log_comment.asp?action=savereply&s=" + Math.random(),
+				  method : "POST",
+				  content : "id=" + escape(id) + "&content=" + escape(content),
+				  oncomplete : function(obj){
+						var json = obj.responseText.json();
+						if (json.Suc){
+							Tip.CreateLayer("恭喜 发表回复成功", "-_-!");
+							try{
+								_this.replyRemove();
+								$("commentcontentreply_" + _id).style.display = "block";
+								$("commentcontentreply_" + _id).innerHTML = cee.decode(json.Info);//这里改
+							}catch(e){}
+						}else{Tip.CreateLayer("错误信息", json.Info);}
+				  },
+				  ononexception:function(obj){
+					  alert(obj.state);
+				  }
+				});
+			}
 		}
 	},
 	this.Static = {

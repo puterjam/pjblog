@@ -28,6 +28,8 @@ Class do_Comment
 			Case "add" Call Add
 			Case "del" Call del
 			Case "Aduit" Call Aduit
+			Case "replybox" Call ReplyBox
+			Case "savereply" Call SaveReply
 		End Select
     End Sub 
      
@@ -196,11 +198,26 @@ Class do_Comment
 			Set doo = Nothing
 			Str = Replace(Str, "<#comm_id#>", Int(OK(1)), 1, -1, 1)
 			Str = Replace(Str, "<#comm_author#>", memName, 1, -1, 1)
-			Str = Replace(Str, "<#comm_Content#>", UBBCode(comm_Content, DisSM, blog_commUBB, blog_commIMG, AutoURL, AutoKEY, True), 1, -1, 1)
+			
+			If blog_commAduit Then
+				If comm_Author = memName Then
+					Str = Replace(Str, "<#comm_Content#>", UBBCode(comm_Content, DisSM, blog_commUBB, blog_commIMG, AutoURL, AutoKEY, True), 1, -1, 1)
+				Else
+					Str = Replace(Str, "<#comm_Content#>", "评论正在审核中...", 1, -1, 1)
+				End If
+			Else
+				Str = Replace(Str, "<#comm_Content#>", UBBCode(comm_Content, DisSM, blog_commUBB, blog_commIMG, AutoURL, AutoKEY, True), 1, -1, 1)
+			End If
+			
+			Str = Replace(Str, "<#comm_del#>", "| <a href=""javascript:CheckForm.comment.del(" & OK(1) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')""><img src=""../images/icon_del.gif"" alt=""删除该条评论"" border=""0""/></a>", 1, -1, 1)
+			
+			Str = Replace(Str, "<#comm_Aduit#>", "")			
+			
 			Str = Replace(Str, "<#comm_mail#>", comm_Email, 1, -1, 1)
 			Str = Replace(Str, "<#comm_weburl#>", comm_WebSite, 1, -1, 1)
 			Str = Replace(Str, "<#comm_ip#>", Asp.getIP, 1, -1, 1)
 			Str = Replace(Str, "<#comm_posttime#>", Asp.DateToStr(comm_PostTime, "Y-m-d H:I:S"), 1, -1, 1)
+			Str = Replace(Str, "<#comm_replycontent#>", "", 1, -1, 1)
 			Response.Write("{Suc : true, Info : '" & cee.encode(Str) & "', id : " & OK(1) & "}")
 		Else
 			Response.Write("{Suc : false, Info : '" & OK(1) & "', id : 0}")
@@ -228,6 +245,48 @@ Class do_Comment
 		OK = Comment.Aduit
 		If OK(0) Then
 			Response.Write("{Suc : true, Info : '修改审核成功'}")
+		Else
+			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+		End If
+	End Sub
+	
+	Private Sub ReplyBox
+		Dim id, Rs, Content, doo, Str
+		id = Trim(Asp.CheckUrl(Asp.CheckStr(Request.QueryString("id"))))
+		If Not Asp.IsInteger(id) Then Response.Write("{Suc : false, Info : '非法参数'}") : Exit Sub
+		Set Rs = Conn.Execute("Select * From blog_Comment Where comm_ID=" & id)
+			If Rs.Bof Or Rs.Eof Then
+				Response.Write("{Suc : false, Info : '找不到该评论'}") : Exit Sub
+			Else
+				Content = Rs("replay_content").value
+			End If
+		Set Rs = Nothing
+		Set doo = New Stream
+			Str = doo.LoadFile(local & "l_replybox.html")
+		Set doo = Nothing
+		Str = Replace(Str, "<#replyContent#>", Asp.BlankString(Content), 1, -1, 1)
+		Str = Replace(Str, "<#replyBoxid#>", Asp.BlankString(id), 1, -1, 1)
+		Response.Write("{Suc : true, Info : '" & cee.encode(Str) & "'}")
+	End Sub
+	
+	Private Sub SaveReply
+		Dim id, content, cc, doo, Strs, TempReply
+		id = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("id"))))
+		content = Trim(Asp.CheckStr(Request.Form("content")))
+		cc = UBBCode(content, 0, 0, 1, 0, 0, False)
+		If Not Asp.IsInteger(id) Then Response.Write("{Suc : false, Info : '非法参数'}") : Exit Sub
+		Comment.comm_ID = id
+		Comment.replay_content = content
+		OK = Comment.PostReply
+		If OK(0) Then
+			Set doo = New Stream
+				Strs = doo.LoadFile(local & "l_replylayout.html")
+			Set doo = Nothing
+			TempReply = Strs
+			TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(memName), 1, -1, 1)
+			TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(Asp.DateToStr(now(), "Y-m-d H:I:S")), 1, -1, 1)
+			TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(cc), 1, -1, 1)
+			Response.Write("{Suc : true, Info : '" & cee.encode(TempReply) & "'}")
 		Else
 			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
 		End If
