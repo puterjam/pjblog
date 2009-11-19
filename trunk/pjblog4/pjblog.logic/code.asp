@@ -66,7 +66,7 @@ Class ChkCode
 			Loop
 		End If
 		Set Rs = Nothing
-		If Len(memName) > 0 Then Response.Write("try{if ($('passArea')){$('comm_Author').value='" & memName & "';$('comm_Author').readOnly = true;$('passArea').parentNode.removeChild($('passArea'))}}catch(e){};")
+		If Len(memName) > 0 Then Response.Write("try{if ($('passArea')){$('comm_Author').value='" & memName & "';$('comm_Author').readOnly = true;$('passArea').parentNode.removeChild($('passArea'));$('removevalidate').parentNode.removeChild($('removevalidate'))}}catch(e){};")
 		' ---------------------------------------------------
 		' 	加载评论
 		' ---------------------------------------------------
