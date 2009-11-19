@@ -1,6 +1,9 @@
 ﻿<!--#include file = "../include.asp" -->
 <!--#include file = "../pjblog.data/cls_comment.asp" -->
 <!--#include file = "../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../pjblog.data/cls_User.asp" -->
+<!--#include file = "../pjblog.common/md5.asp" -->
+<!--#include file = "../pjblog.common/sha1.asp" -->
 <%
 Dim Comm
 Set Comm = New do_Comment
@@ -34,7 +37,7 @@ Class do_Comment
     End Sub
 	
 	Private Sub Add
-		Dim LastMSG, FlowControl, validate
+		Dim LastMSG, FlowControl, validate, password
 		blog_ID = Asp.CheckUrl(Asp.CheckStr(Request.Form("blog_ID")))
 		comm_Author = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Author"))))
 		comm_Content = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Content"))))
@@ -42,30 +45,9 @@ Class do_Comment
 		comm_Email = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Email"))))
 		comm_WebSite = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_WebSite"))))
 		validate = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("validate"))))
+		password = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("password"))))
 		comm_PostTime = Now()
-		
-		If (memName = empty or blog_validate = true) Or CStr(LCase(Session("GetCode"))) <> CStr(LCase(validate)) Then
-			Response.Write("{Suc : false, Info : '验证码有误，请返回重新输入！'}")
-			Exit Sub
-		End If
-		
-		Set LastMSG = conn.Execute("select top 1 comm_Content from blog_Comment order by comm_ID desc")
-    		If LastMSG.EOF Then
-        		FlowControl = False
-    		Else
-        		If Trim(LastMSG("comm_Content")) = Trim(comm_Content) Then FlowControl = True
-    		End If
-		Set LastMSG = Nothing
-		
-		If FlowControl Then
-			Response.Write("{Suc : false, Info : '禁止恶意灌水！'}")
-			Exit Sub
-		End If
-		
-		If Not Asp.IsInteger(blog_ID) Then
-			Response.Write("{Suc : false, Info : '非法参数'}")
-			Exit Sub
-		End If
+		FlowControl = False
 		
 		If Asp.IsInteger(Request.Form("comm_DisSM")) And Int(Request.Form("comm_DisSM")) = 1 Then
 			DisSM = 1
@@ -89,13 +71,43 @@ Class do_Comment
 		comm_AutoURL = AutoURL
 		comm_AutoKEY = AutoKEY
 		
-		If Left(comm_Content, 1)= Chr(32) then
-			Response.Write("{Suc : false, Info : '评论内容中不允许首字空格'}")
-			Exit Sub
+		If stat_Admin = False Then
+			If (memName = empty or blog_validate = true) And CStr(LCase(Session("GetCode"))) <> CStr(LCase(validate)) Then
+				Response.Write("{Suc : false, Info : '验证码有误，请返回重新输入！'}")
+				Exit Sub
+			End If
+			
+			Set LastMSG = conn.Execute("select top 1 comm_Content from blog_Comment order by comm_ID desc")
+				If LastMSG.EOF Then
+					FlowControl = False
+				Else
+					If Trim(LastMSG("comm_Content")) = Trim(comm_Content) Then FlowControl = True
+				End If
+			Set LastMSG = Nothing
+			
+			If Left(comm_Content, 1)= Chr(32) then
+				Response.Write("{Suc : false, Info : '评论内容中不允许首字空格'}")
+				Exit Sub
+			End If
+			
+			If Left(comm_Content,1)= Chr(13) then
+				Response.Write("{Suc : false, Info : '评论内容中不允许首字换行'}")
+				Exit Sub
+			End If
+			
+			If FlowControl Then
+				Response.Write("{Suc : false, Info : '禁止恶意灌水！'}")
+				Exit Sub
+			End If
+			
+			If DateDiff("s", Request.Cookies(Sys.CookieName)("memLastPost"), Asp.DateToStr(now(),"Y-m-d H:I:S")) < blog_commTimerout Then
+				Response.Write("{Suc : false, Info : '发言太快,请 " & blog_commTimerout & " 秒后再发表评论'}")
+				Exit Sub
+			End If
 		End If
-		
-		If Left(comm_Content,1)= Chr(13) then
-			Response.Write("{Suc : false, Info : '评论内容中不允许首字换行'}")
+	
+		If Not Asp.IsInteger(blog_ID) Then
+			Response.Write("{Suc : false, Info : '非法参数'}")
 			Exit Sub
 		End If
 		
@@ -142,11 +154,21 @@ Class do_Comment
 				Exit Sub
 			End If
 		End If
-
-		'If DateDiff("s", Request.Cookies(Sys.CookieName)("memLastPost"), Asp.DateToStr(now(),"Y-m-d H:I:S")) < blog_commTimerout Then
-'			Response.Write("{Suc : false, Info : '发言太快,请 " & blog_commTimerout & " 秒后再发表评论'}")
-'			Exit Sub
-'		End If
+		
+		' --------------------------------------------------------------
+		' 	验证密码
+		' --------------------------------------------------------------
+		Dim CheckMem
+		If Not stat_Admin Then
+			If Len(password) > 0 Then
+				CheckMem = User.UserLogin(comm_Author, password, CStr(LCase(validate)), 1)
+				If Not CheckMem(3) Then
+					Response.Write("{Suc : false, Info : '用户名或密码错误'}")
+					Exit Sub
+				End If
+			End If
+		End If
+		
 		
 		If Int(blog_commUBB) <> 0 Then blog_commUBB = 1
 		If Int(blog_commIMG) <> 0 Then blog_commIMG = 1
