@@ -103,7 +103,7 @@ Class Sys_SoeData
 			DisIMG = Int(Mid(UbbFlag, 3, 1))
 			AutoURL = Int(Mid(UbbFlag, 4, 1))
 			AutoKEY = Int(Mid(UbbFlag, 5, 1))
-			ArticleContent = UBBCode(Content, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, True)
+			ArticleContent = Asp.UnCheckStr(UBBCode(Asp.HTMLEncode(Content), DisSM, DisUBB, DisIMG, AutoURL, AutoKEY, True))
 		Else
 			ArticleContent = Content
 		End If
