@@ -302,7 +302,7 @@ var JsCopy = {
 
 /* --------------- JS提示框 ------------------ */
 var Pos = 0, Dir = 2, len = 0;
-var time = 0, en = null, limit = 6, Source = null, Target = null;
+var time = 0, en = null, limit = 6, Source = "#ffffff", Target = "#C2D6D6";
 function flash(obj){
 	if (time % 2 == 0){
 		$(obj).style.cssText += ";background:" + Target;
@@ -311,6 +311,7 @@ function flash(obj){
 	}
 	if (time > limit){
 		clearTimeout(en);
+		time = 0;
 	}else{
 		time++;
 		en = setTimeout("flash(\"" + obj + "\")", 100);
@@ -338,6 +339,7 @@ var Tip = {
 		return temp;
 	},
 	CreateLayer : function(title, html){
+		try{this.remove();}catch(e){}
 		var _this = this;
 		var loader_container = this.create("div", "loader_container");
 		var loader = this.create("div", "loader");
