@@ -170,6 +170,26 @@ function Check(){
 			cJS.chatset = "utf-8";
 			cJS.src = url + "&page=" + id + "&s=" + Math.random();
 			document.getElementsByTagName("HEAD")[0].appendChild(cJS);
+		},
+		del : function(id){
+			var _id = id;
+			Ajax({
+			  url : "../pjblog.logic/log_comment.asp?action=del&id=" + escape(id) + "&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						Tip.CreateLayer("恭喜 操作成功", json.Info);
+						$("comment_" + _id).parentNode.removeChild($("comment_" + _id));
+					}else{
+						Tip.CreateLayer("错误信息", json.Info);
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
 		}
 	},
 	this.Static = {

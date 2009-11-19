@@ -26,6 +26,7 @@ Class do_Comment
 		local = "../pjblog.template/" & blog_DefaultSkin & "/"
 		Select Case Action
 			Case "add" Call Add
+			Case "del" Call del
 		End Select
     End Sub 
      
@@ -202,6 +203,18 @@ Class do_Comment
 			Response.Write("{Suc : true, Info : '" & cee.encode(Str) & "', id : " & OK(1) & "}")
 		Else
 			Response.Write("{Suc : false, Info : '" & OK(1) & "', id : 0}")
+		End If
+	End Sub
+	
+	Private Sub del
+		Dim id
+		id = Trim(Asp.CheckUrl(Asp.CheckStr(Request.QueryString("id"))))
+		Comment.comm_ID = id
+		OK = Comment.del
+		If OK(0) Then
+			Response.Write("{Suc : true, Info : '删除评论成功'}")
+		Else
+			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
 		End If
 	End Sub
 	

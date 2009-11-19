@@ -53,7 +53,7 @@ Class ChkCode
 		Dim GetRow, i, RowLeft, RowRight, PageSize, PageLen, CurrtPage, PageStr
 		ID = Asp.CheckStr(Request.QueryString("id"))
 		If Not Asp.IsInteger(ID) Then Exit Sub
-		Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1 Where log_ID=" & ID)
+		If Not Asp.IsInteger(Request.QueryString("page")) Then Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1 Where log_ID=" & ID)
 		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
 		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
 		Set Rs = Conn.Execute("Select log_ID, log_CommNums, log_ViewNums, log_QuoteNums From blog_Content Where log_ID=" & ID)
@@ -71,7 +71,7 @@ Class ChkCode
 		' 	加载评论
 		' ---------------------------------------------------
 		local = "../pjblog.template/" & blog_DefaultSkin & "/"
-		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime From blog_Comment Where blog_ID=" & ID)
+		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime From blog_Comment Where blog_ID=" & ID & " Order By comm_PostTime Desc")
 		'								0			1			2				3			4			5			6				
 '	7				8			9			10			11				
 		If Not (Rs.Bof And Rs.Eof) Then
