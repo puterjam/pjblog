@@ -34,7 +34,7 @@ Class Sys_Category
 				Arrays = Array(Array("cate_Order", cate_Order), Array("cate_icon", cate_icon), Array("cate_Name", cate_Name), Array("cate_Intro", cate_Intro), Array("cate_Folder", cate_Folder), Array("cate_URL", cate_URL), Array("cate_local", cate_local), Array("cate_Secret", cate_Secret), Array("cate_count", cate_count), Array("cate_OutLink", cate_OutLink), Array("cate_Lock", cate_Lock))
 				Add = Sys.doRecord("blog_Category", Arrays, "insert", "cate_ID", "")
 				DirPath = "../../html/" & cate_Folder
-				fso.CreateFolder(DirPath)
+				If Not cate_OutLink Then fso.CreateFolder(DirPath)
 				Call Data.NavList(2)
 				Call Cache.CategoryCache(2)
 			End If

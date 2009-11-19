@@ -58,7 +58,7 @@ Public Sub c_skins
                     <td class="SecTd"><%=PluginVersion%></td>
                     <td class="SecTd"><%=PJBlogSuitVersion%> (<%If CheckVersion(PJBlogSuitVersion) Then Response.Write("<font color=green>可用</font>") Else Response.Write("<font color=red>不可用</font>")%>)</td>
                     <td class="SecTd"><%=ModDate%></td>
-                    <td class="SecTd">安装插件</td>
+                    <td class="SecTd"><a href="../pjblog.logic/control/log_plugin.asp?action=install&folder=<%=cee.encode(SplitName(i))%>">安装插件</a></td>
                 </tr>
 <%
 					End If
