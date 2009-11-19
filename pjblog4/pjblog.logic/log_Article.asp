@@ -73,7 +73,7 @@ Class do_Article
 		End If
 		
 		log_IntroC = Asp.CheckUrl(Asp.CheckStr(Request.Form("log_IntroC")))
-		log_Intro = Asp.HTMLEncode(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_Intro")))))
+		log_Intro = Trim(Request.Form("log_Intro"))
 		
 		'--------------------------------判断-------------------------------
 		If log_IsDraft = "true" Then log_IsDraft = True Else log_IsDraft = False
@@ -123,33 +123,33 @@ Class do_Article
 			If Int(log_editType) = 1 Then ' 如果是UBB编辑器
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
+                    	log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine)))
                 	Else
-                    	log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
+                    	log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar)))
                 	End If
 				Else
-					log_Intro = Asp.closeUBB(log_Intro)
+					log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.HTMLEncode(log_Intro)))
 				End If
 			Else
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
+                    	log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.SplitLines(Message, blog_introLine)))
                 	Else
-                    	log_Intro = Asp.closeHTML(Asp.CutStr(Message, blog_introChar))
+                    	log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.CutStr(Message, blog_introChar)))
                 	End If
 				Else
-					log_Intro = Asp.closeHTML(log_Intro)
+					log_Intro = Asp.closeHTML(Asp.CheckStr(log_Intro))
 				End If
 			End If
 		Else
 			If Int(log_editType) = 1 Then
                 If blog_SplitType Then
-                    log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
+                    log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine)))
                 Else
-                    log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
+                    log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar)))
                 End If
             Else
-                log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
+                log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.SplitLines(Message, blog_introLine)))
             End If
 		End If
 		'-----------------关键字描述------------------
@@ -323,33 +323,33 @@ Class do_Article
 			If Int(log_editType) = 1 Then ' 如果是UBB编辑器
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
+                    	log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine)))
                 	Else
-                    	log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
+                    	log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar)))
                 	End If
 				Else
-					log_Intro = Asp.closeUBB(log_Intro)
+					log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.HTMLEncode(log_Intro)))
 				End If
 			Else
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
+                    	log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.SplitLines(Message, blog_introLine)))
                 	Else
-                    	log_Intro = Asp.closeHTML(Asp.CutStr(Message, blog_introChar))
+                    	log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.CutStr(Message, blog_introChar)))
                 	End If
 				Else
-					log_Intro = Asp.closeHTML(log_Intro)
+					log_Intro = Asp.closeHTML(Asp.CheckStr(log_Intro))
 				End If
 			End If
 		Else
 			If Int(log_editType) = 1 Then
                 If blog_SplitType Then
-                    log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
+                    log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine)))
                 Else
-                    log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
+                    log_Intro = Asp.closeUBB(Asp.CheckStr(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar)))
                 End If
             Else
-                log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
+                log_Intro = Asp.closeHTML(Asp.CheckStr(Asp.SplitLines(Message, blog_introLine)))
             End If
 		End If
 		'-----------------关键字描述------------------
