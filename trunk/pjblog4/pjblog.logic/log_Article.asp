@@ -60,7 +60,7 @@ Class do_Article
 		PubTimeType = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("PubTimeType"))))
 		PubTime = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("PubTime"))))
 		log_tag = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_tag"))))
-		If log_editType = 1 Then Message = Asp.HTMLEncode(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message"))))) Else Message = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message"))))
+		If log_editType = 1 Then Message = Trim(Asp.CheckStr(Request.Form("Message"))) Else Message = Trim(Asp.CheckStr(Request.Form("Message")))
 		log_IsShow = CBool(Int(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_IsShow"))))))
 		
 		If Len(log_cname) = 0 Then log_cname = DateTime
@@ -123,9 +123,9 @@ Class do_Article
 			If Int(log_editType) = 1 Then ' 如果是UBB编辑器
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Message, blog_introLine))
+                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
                 	Else
-                    	log_Intro = Asp.closeUBB(Asp.CutStr(Message, blog_introChar))
+                    	log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
                 	End If
 				Else
 					log_Intro = Asp.closeUBB(log_Intro)
@@ -144,9 +144,9 @@ Class do_Article
 		Else
 			If Int(log_editType) = 1 Then
                 If blog_SplitType Then
-                    log_Intro = Asp.closeUBB(Asp.SplitLines(Message, blog_introLine))
+                    log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
                 Else
-                    log_Intro = Asp.closeUBB(Asp.CutStr(Message, blog_introChar))
+                    log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
                 End If
             Else
                 log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
@@ -232,7 +232,7 @@ Class do_Article
 		log_FromURL = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_FromURL"))))
 		PubTime = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("PubTime"))))
 		log_tag = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_tag"))))
-		If log_editType = 1 Then Message = Asp.HTMLEncode(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message"))))) Else Message = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("Message"))))
+		If log_editType = 1 Then Message = Trim(Asp.CheckStr(Request.Form("Message"))) Else Message = Trim(Asp.CheckStr(Request.Form("Message")))
 		log_IsShow = CBool(Int(Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("log_IsShow"))))))
 		
 		' 获取该文章的所有信息
@@ -323,9 +323,9 @@ Class do_Article
 			If Int(log_editType) = 1 Then ' 如果是UBB编辑器
 				If Asp.IsBlank(log_Intro) Then ' 如果内容为空
 					If blog_SplitType Then ' 分割类型
-                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Message, blog_introLine))
+                    	log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
                 	Else
-                    	log_Intro = Asp.closeUBB(Asp.CutStr(Message, blog_introChar))
+                    	log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
                 	End If
 				Else
 					log_Intro = Asp.closeUBB(log_Intro)
@@ -344,9 +344,9 @@ Class do_Article
 		Else
 			If Int(log_editType) = 1 Then
                 If blog_SplitType Then
-                    log_Intro = Asp.closeUBB(Asp.SplitLines(Message, blog_introLine))
+                    log_Intro = Asp.closeUBB(Asp.SplitLines(Asp.HTMLEncode(Message), blog_introLine))
                 Else
-                    log_Intro = Asp.closeUBB(Asp.CutStr(Message, blog_introChar))
+                    log_Intro = Asp.closeUBB(Asp.CutStr(Asp.HTMLEncode(Message), blog_introChar))
                 End If
             Else
                 log_Intro = Asp.closeHTML(Asp.SplitLines(Message, blog_introLine))
