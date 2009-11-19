@@ -214,8 +214,12 @@ Class do_Comment
 			
 			Str = Replace(Str, "<#comm_del#>", "| <a href=""javascript:CheckForm.comment.del(" & OK(1) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')""><img src=""../images/icon_del.gif"" alt=""删除该条评论"" border=""0""/></a>", 1, -1, 1)
 			
-			Str = Replace(Str, "<#comm_Aduit#>", "")			
-			
+			Str = Replace(Str, "<#comm_Aduit#>", "", 1, -1, 1)			
+			If stat_Admin Then
+				Str = Replace(Str, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & OK(1) & ")""><img src=""../images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;"" border=""0""/></a>", 1, -1, 1)
+			Else
+				Str = Replace(Str, "<#comm_reply#>", "", 1, -1, 1)
+			End If
 			Str = Replace(Str, "<#comm_mail#>", comm_Email, 1, -1, 1)
 			Str = Replace(Str, "<#comm_weburl#>", comm_WebSite, 1, -1, 1)
 			Str = Replace(Str, "<#comm_ip#>", Asp.getIP, 1, -1, 1)
