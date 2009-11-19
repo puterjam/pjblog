@@ -270,6 +270,10 @@ function Check(){
 		replyRemove : function(){
 			try{$("replyBox").parentNode.removeChild($("replyBox"));}catch(e){}
 		},
+		replyBoxRemove : function(id){
+			this.replyRemove();
+			$("commentcontentreply_" + id).style.display = "block";
+		},
 		doReply : function(id){
 			var _id = id, _this = this;
 			var content = $("replyBox_" + id).value;
