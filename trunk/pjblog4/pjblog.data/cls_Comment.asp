@@ -78,5 +78,14 @@ Class Sys_Comment
 		delReply = PostReply
 	End Function
 	
+	Public Function Aduit
+		If Not stat_Admin Then
+			Aduit = Array(False, "您没有权限审核评论")
+			Exit Function
+		End If
+		Arrays = Array(Array("comm_IsAudit", comm_IsAudit))
+		Aduit = Sys.doRecord("blog_Comment", Arrays, "update", "comm_ID", comm_ID)
+	End Function
+	
 End Class
 %>

@@ -53,7 +53,9 @@ Class ChkCode
 		Dim GetRow, i, RowLeft, RowRight, PageSize, PageLen, CurrtPage, PageStr
 		ID = Asp.CheckStr(Request.QueryString("id"))
 		If Not Asp.IsInteger(ID) Then Exit Sub
-		If Not Asp.IsInteger(Request.QueryString("page")) Then Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1 Where log_ID=" & ID)
+		If Not Asp.IsInteger(Request.QueryString("page")) Then
+			Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1 Where log_ID=" & ID)
+		End If
 		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
 		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
 		Set Rs = Conn.Execute("Select log_ID, log_CommNums, log_ViewNums, log_QuoteNums From blog_Content Where log_ID=" & ID)
@@ -71,9 +73,9 @@ Class ChkCode
 		' 	加载评论
 		' ---------------------------------------------------
 		local = "../pjblog.template/" & blog_DefaultSkin & "/"
-		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime From blog_Comment Where blog_ID=" & ID & " Order By comm_PostTime Desc")
+		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime, comm_IsAudit From blog_Comment Where blog_ID=" & ID & " Order By comm_PostTime Desc")
 		'								0			1			2				3			4			5			6				
-'	7				8			9			10			11				
+'	7				8			9			10			11				12		
 		If Not (Rs.Bof And Rs.Eof) Then
 			Set doo = New Stream
 				Str = doo.LoadFile(local & "l_comment.html")
@@ -99,11 +101,24 @@ Class ChkCode
 				Str2 = Str
 				Str2 = Replace(Str2, "<#comm_id#>", Asp.BlankString(GetRow(0, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_author#>", Asp.BlankString(GetRow(1, i)), 1, -1, 1)
-				Str2 = Replace(Str2, "<#comm_Content#>", Asp.BlankString(UBBCode(GetRow(2, i), GetRow(3, i), GetRow(4, i), GetRow(5, i), GetRow(6, i), GetRow(7, i), True)), 1, -1, 1)
+				If (blog_commAduit And Asp.BlankString(GetRow(1, i)) = memName) Or (Not blog_commAduit) Then
+					Str2 = Replace(Str2, "<#comm_Content#>", Asp.BlankString(UBBCode(GetRow(2, i), GetRow(3, i), GetRow(4, i), GetRow(5, i), GetRow(6, i), GetRow(7, i), True)), 1, -1, 1)
+				Else
+					Str2 = Replace(Str2, "<#comm_Content#>", "评论正在审核中...", 1, -1, 1)
+				End If
 				Str2 = Replace(Str2, "<#comm_mail#>", Asp.BlankString(GetRow(8, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_weburl#>", Asp.BlankString(GetRow(9, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_ip#>", Asp.BlankString(GetRow(10, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
+				If blog_commAduit And stat_Admin Then
+					If GetRow(12, i) Then
+						Str2 = Replace(Str2, "<#comm_Aduit#>", " | <a href=""javascript:void(0);"" onclick=""CheckForm.comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 0, this)"">取消审核</a>")
+					Else
+						Str2 = Replace(Str2, "<#comm_Aduit#>", " | <a href=""javascript:void(0);"" onclick=""CheckForm.comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 1, this)"">通过审核</a>")
+					End If
+				Else
+					Str2 = Replace(Str2, "<#comm_Aduit#>", "")
+				End If
 				Str2 = "<div id=""comment_" & Asp.BlankString(GetRow(0, i)) & """ class=""CommPart"">" & Str2 & "</div>"
 				Str3 = Str3 & Str2
 			Next

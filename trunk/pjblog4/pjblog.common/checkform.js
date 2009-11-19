@@ -154,8 +154,6 @@ function Check(){
 							}else{
 								$("commentBox").appendChild(div);
 							}
-							Source = "#ffffff";
-							Target = "#C2D6D6";
 							flash("commenttop_" + json.id);
 							location = "#comment_" + json.id;
 						}else{
@@ -182,6 +180,44 @@ function Check(){
 					if (json.Suc){
 						Tip.CreateLayer("恭喜 操作成功", json.Info);
 						$("comment_" + _id).parentNode.removeChild($("comment_" + _id));
+					}else{
+						Tip.CreateLayer("错误信息", json.Info);
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		Aduit : function(id, static, _obj){
+			var _s = static, _this = this, _id = id, __obj = _obj;
+			Ajax({
+			  url : "../pjblog.logic/log_comment.asp?action=Aduit&id=" + escape(id) + "&which=" + escape(static) + "&s=" + Math.random(),
+			  method : "GET",
+			  content : "",
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						flash("commenttop_" + _id);
+						var __this = _this, __id = _id;
+						var ___obj = __obj;
+						/*
+							@ 1 : 通过审核
+							@ 0 : 取消审核
+						*/
+						if (_s == 0){
+							Tip.CreateLayer("恭喜 操作成功", "<strong>取消</strong> 审核成功!");
+							__obj.innerHTML = "通过审核";
+							__obj.onclick = function(){
+								CheckForm.comment.Aduit(__id, 1, ___obj);
+							}
+						}else{
+							Tip.CreateLayer("恭喜 操作成功", "<strong>通过</strong> 审核成功!");
+							__obj.innerHTML = "取消审核";
+							__obj.onclick = function(){
+								CheckForm.comment.Aduit(__id, 0, ___obj);
+							}
+						}
 					}else{
 						Tip.CreateLayer("错误信息", json.Info);
 					}

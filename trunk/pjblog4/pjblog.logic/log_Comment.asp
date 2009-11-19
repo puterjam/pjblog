@@ -27,6 +27,7 @@ Class do_Comment
 		Select Case Action
 			Case "add" Call Add
 			Case "del" Call del
+			Case "Aduit" Call Aduit
 		End Select
     End Sub 
      
@@ -213,6 +214,20 @@ Class do_Comment
 		OK = Comment.del
 		If OK(0) Then
 			Response.Write("{Suc : true, Info : '删除评论成功'}")
+		Else
+			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+		End If
+	End Sub
+	
+	Private Sub Aduit
+		Dim id, which
+		id = Trim(Asp.CheckUrl(Asp.CheckStr(Request.QueryString("id"))))
+		which = Trim(Asp.CheckUrl(Asp.CheckStr(Request.QueryString("which"))))
+		Comment.comm_ID = id
+		Comment.comm_IsAudit = CBool(which)
+		OK = Comment.Aduit
+		If OK(0) Then
+			Response.Write("{Suc : true, Info : '修改审核成功'}")
 		Else
 			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
 		End If

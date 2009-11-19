@@ -79,6 +79,11 @@ Class do_general
 		Else
 			general.blog_commIMG = False
 		End If
+		If Asp.IsInteger(Request.Form("blog_commAduit")) And Int(Request.Form("blog_commAduit")) = 1 Then
+			general.blog_commAduit = True
+		Else
+			general.blog_commAduit = False
+		End If
 		general.blog_Disregister = Int(Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_Disregister")))))
 		general.blog_CountNum = Int(Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_CountNum")))))
 		general.blog_FilterName = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_FilterName"))))
