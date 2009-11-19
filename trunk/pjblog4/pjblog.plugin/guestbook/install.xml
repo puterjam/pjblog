@@ -33,29 +33,12 @@
 			</item>
 		</InstallNav>
 		<Template do="true">
+			<BaseenterPole do="true">...adaf.asp?</BaseenterPole>
 			<BackenterPole do="false">.../dsaf.asp</BackenterPole>
-			<IndexenterPole do="false">../sdafsdaf.asp</IndexenterPole>
-			<append do="false">
-				<value type="script">xxxxx/xxxx/xxxx.js/asp</value>
-				<value type="link">xxxxx/xxxx/xxxx.css</value>
-				<value type="include">asfsdfsd.asp</value>
-			</append>
 			<mode do="true">
 				<item>
 					<mark>category</mark>
-					<value>
-						<![CDATA[
-							<%
-							function a()
-							dsaff
-							end fucntion
-							%>
-							<sctipt>
-								var c = ["category", "<%=a()%>"]
-								PluginOutPutString.push(c)
-							</sctipt>
-						]]>
-					</value>
+					<include>.../dsfas.asp</include>
 				</item>
 			</mode>
 		</Template>
