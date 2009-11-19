@@ -49,7 +49,7 @@ Class ChkCode
 	End Sub
 	
 	Private Sub Article
-		Dim Rs, ID, doo, local, Str, Str2, Str3
+		Dim Rs, ID, doo, local, Str, Str2, Str3, ReplyStr, TempReply
 		Dim GetRow, i, RowLeft, RowRight, PageSize, PageLen, CurrtPage, PageStr
 		ID = Asp.CheckStr(Request.QueryString("id"))
 		If Not Asp.IsInteger(ID) Then Exit Sub
@@ -70,15 +70,16 @@ Class ChkCode
 		Set Rs = Nothing
 		If Len(memName) > 0 Then Response.Write("try{if ($('passArea')){$('comm_Author').value='" & memName & "';$('comm_Author').readOnly = true;$('passArea').parentNode.removeChild($('passArea'));$('removevalidate').parentNode.removeChild($('removevalidate'))}}catch(e){};")
 		' ---------------------------------------------------
-		' 	加载评论
+		' 	加载评论 - 开始
 		' ---------------------------------------------------
 		local = "../pjblog.template/" & blog_DefaultSkin & "/"
-		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime, comm_IsAudit From blog_Comment Where blog_ID=" & ID & " Order By comm_PostTime Desc")
+		Set Rs = Conn.Execute("Select comm_ID, comm_Author, comm_Content, comm_DisSM, comm_DisUBB, comm_DisIMG, comm_AutoURL, comm_AutoKEY, comm_Email, comm_WebSite, comm_PostIP, comm_PostTime, comm_IsAudit, replay_content, reply_author, reply_time From blog_Comment Where blog_ID=" & ID & " Order By comm_PostTime Desc")
 		'								0			1			2				3			4			5			6				
-'	7				8			9			10			11				12		
+'	7				8			9			10			11				12				13				14			15
 		If Not (Rs.Bof And Rs.Eof) Then
 			Set doo = New Stream
 				Str = doo.LoadFile(local & "l_comment.html")
+				ReplyStr = doo.LoadFile(local & "l_replylayout.html")
 			Set doo = Nothing
 			GetRow = Rs.GetRows	
 		Else
@@ -101,15 +102,49 @@ Class ChkCode
 				Str2 = Str
 				Str2 = Replace(Str2, "<#comm_id#>", Asp.BlankString(GetRow(0, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_author#>", Asp.BlankString(GetRow(1, i)), 1, -1, 1)
-				If (blog_commAduit And Asp.BlankString(GetRow(1, i)) = memName) Or (Not blog_commAduit) Then
-					Str2 = Replace(Str2, "<#comm_Content#>", Asp.BlankString(UBBCode(GetRow(2, i), GetRow(3, i), GetRow(4, i), GetRow(5, i), GetRow(6, i), GetRow(7, i), True)), 1, -1, 1)
+				
+				If blog_commAduit Then
+					If Asp.BlankString(GetRow(1, i)) = memName Or GetRow(12, i) Or stat_Admin Then
+						Str2 = Replace(Str2, "<#comm_Content#>", Asp.BlankString(UBBCode(GetRow(2, i), GetRow(3, i), GetRow(4, i), GetRow(5, i), GetRow(6, i), GetRow(7, i), True)), 1, -1, 1)
+					Else
+						Str2 = Replace(Str2, "<#comm_Content#>", "评论正在审核中...", 1, -1, 1)
+					End If
 				Else
-					Str2 = Replace(Str2, "<#comm_Content#>", "评论正在审核中...", 1, -1, 1)
+					Str2 = Replace(Str2, "<#comm_Content#>", Asp.BlankString(UBBCode(GetRow(2, i), GetRow(3, i), GetRow(4, i), GetRow(5, i), GetRow(6, i), GetRow(7, i), True)), 1, -1, 1)
 				End If
+
 				Str2 = Replace(Str2, "<#comm_mail#>", Asp.BlankString(GetRow(8, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_weburl#>", Asp.BlankString(GetRow(9, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_ip#>", Asp.BlankString(GetRow(10, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
+				
+				If stat_CommentDel Then
+					Str2 = Replace(Str2, "<#comm_del#>", "| <a href=""javascript:CheckForm.comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')""><img src=""../images/icon_del.gif"" alt=""删除该条评论"" border=""0""/></a>", 1, -1, 1)				
+				Else
+					Str2 = Replace(Str2, "<#comm_del#>", "", 1, -1, 1)
+				End If
+				
+				If stat_Admin Then
+					Str2 = Replace(Str2, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & GetRow(0, i) & ")""><img src=""../images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;"" border=""0""/></a>", 1, -1, 1)
+				Else
+					Str2 = Replace(Str2, "<#comm_reply#>", "", 1, -1, 1)
+				End If
+				' -----------------------------------------------------
+				'	回复样式 开始
+				' -----------------------------------------------------
+				TempReply = ReplyStr
+				TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(GetRow(14, i)), 1, -1, 1)
+				TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(GetRow(15, i)), 1, -1, 1)
+				TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(GetRow(13, i)), 1, -1, 1)
+				If GetRow(13, i) = null Or Len(GetRow(13, i)) = 0 Or GetRow(13, i) = "" Or GetRow(13, i) = Empty Then
+					Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
+				Else
+					Str2 = Replace(Str2, "<#comm_replycontent#>", Asp.BlankString(TempReply), 1, -1, 1)
+				End If
+				' -----------------------------------------------------
+				'	回复样式 结束
+				' -----------------------------------------------------
+				
 				If blog_commAduit And stat_Admin Then
 					If GetRow(12, i) Then
 						Str2 = Replace(Str2, "<#comm_Aduit#>", " | <a href=""javascript:void(0);"" onclick=""CheckForm.comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 0, this)"">取消审核</a>")
@@ -125,7 +160,14 @@ Class ChkCode
 			Str3 = Str3 & MultiPage(PageLen + 1, blogcommpage, CurrtPage, PageStr, "float:right", "", False)
 			Response.Write("try{$('commentBox').innerHTML = '" & outputSideBar(Str3) & "';}catch(e){}")
 		End If
+		' ---------------------------------------------------
+		' 	加载评论 - 结束
+		'	加载侧边 - 开始
+		' ---------------------------------------------------
 		Call FillSideBar
+		' ---------------------------------------------------
+		' 	加载评论 - 结束
+		' ---------------------------------------------------
 	End Sub
 	
 	Private Sub category
