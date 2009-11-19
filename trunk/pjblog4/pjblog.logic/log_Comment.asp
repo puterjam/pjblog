@@ -192,6 +192,9 @@ Class do_Comment
 
 		OK = Comment.Add
 		If OK(0) Then
+			Sys.doGet("Update blog_Content Set log_CommNums = log_CommNums + 1 Where log_ID=" & blog_ID)
+			Sys.doGet("Update blog_Info Set blog_CommNums = blog_CommNums + 1")
+			Cache.GlobalCache(2)
 			Response.Cookies(Sys.CookieName)("memLastpost") = Asp.DateToStr(comm_PostTime, "Y-m-d H:I:S")
 			Set doo = New Stream
 				Str = doo.LoadFile(local & "l_comment.html")
@@ -225,11 +228,22 @@ Class do_Comment
 	End Sub
 	
 	Private Sub del
-		Dim id
+		Dim id, Rs, Blog_ID
 		id = Trim(Asp.CheckUrl(Asp.CheckStr(Request.QueryString("id"))))
+		Set Rs = Conn.Execute("Select blog_ID From blog_Comment Where comm_ID=" & id)
+		If Rs.Bof OR Rs.Eof Then
+			Response.Write("{Suc : false, Info : '非法参数'}")
+			Exit Sub
+		Else
+			Blog_ID = Int(Rs(0).value)
+		End If
+		Set Rs = Nothing
 		Comment.comm_ID = id
 		OK = Comment.del
 		If OK(0) Then
+			Sys.doGet("Update blog_Content Set log_CommNums = log_CommNums - 1 Where log_ID=" & Blog_ID)
+			Sys.doGet("Update blog_Info Set blog_CommNums = blog_CommNums - 1")
+			Cache.GlobalCache(2)
 			Response.Write("{Suc : true, Info : '删除评论成功'}")
 		Else
 			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
