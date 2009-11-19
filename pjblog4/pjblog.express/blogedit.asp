@@ -89,7 +89,7 @@ If Asp.ChkPost() Then
 					%>
                     <br/>
 		  		 	<%If Request.QueryString("suc") = "true" Then %>
-			  		 <input type="button" value="<%=lang.Set.Asp(31)%>" onclick="location='?action=Static&id=<%=Request.QueryString("id")%>'" class="userbutton" /><br/>
+			  		 <input type="button" value="<%=lang.Set.Asp(31)%>" onClick="location='?action=Static&id=<%=Request.QueryString("id")%>'" class="userbutton" /><br/>
 			     <%end if%>
                  </div>
 		  	  	</div>
@@ -247,7 +247,7 @@ If Article.log_editType = 0 Then
 Else
     UBB_TextArea_Height = "200px;"
     UBB_AutoHidden = False
-	UBB_Msg_Value = Asp.UBBFilter(Asp.UnCheckStr(Article.log_Content))
+	UBB_Msg_Value = Asp.UBBFilter(Article.log_Content)
     UBBeditor("Message")
 End If
 
@@ -301,7 +301,7 @@ End If
               </td>
           </tr>          <tr>
               <td align="right" valign="top" nowrap><span style="font-weight: bold"><%=lang.Set.Asp(82)%>:</span></td>
-              <td align="left"><input type="text" value="" id="upload" class="inputBox" size="80" />&nbsp;&nbsp;<input type="button" value="<%=lang.Set.Asp(91)%>" onclick="Upload.open(this, 'upload', 0, '../upload', 10)" class="userbutton"></td>
+              <td align="left"><input type="text" value="" id="upload" class="inputBox" size="80" />&nbsp;&nbsp;<input type="button" value="<%=lang.Set.Asp(91)%>" onClick="Upload.open(this, 'upload', 0, '../upload', 10)" class="userbutton"></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>
@@ -311,9 +311,9 @@ End If
               <td colspan="2" align="center">
                 	<input name="SaveArticle" type="submit" class="userbutton" value="<%=lang.Set.Asp(85)%>" accesskey="S"/>
                  	<%if Article.log_IsDraft then%>
-                    <input name="SaveDraft" type="submit" class="userbutton" value="<%=lang.Set.Asp(87)%>" accesskey="D" onclick="document.getElementById('log_IsDraft').value='False'"/>
+                    <input name="SaveDraft" type="submit" class="userbutton" value="<%=lang.Set.Asp(87)%>" accesskey="D" onClick="document.getElementById('log_IsDraft').value='False'"/>
                  	<%end if%>
-                 	<input name="DelArticle" type="button" class="userbutton" value="<%=lang.Set.Asp(89)%>" accesskey="K" onclick="if (window.confirm('<%=lang.Set.Asp(104)%>')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
+                 	<input name="DelArticle" type="button" class="userbutton" value="<%=lang.Set.Asp(89)%>" accesskey="K" onClick="if (window.confirm('<%=lang.Set.Asp(104)%>')) {document.getElementById('action').value='del';document.forms['frm'].submit()}"/>
                  	<input name="CancelEdit" type="button" class="userbutton" value="<%=lang.Set.Asp(105)%>" accesskey="Q" onClick="location='default.asp?id=<%=logid%>'"/>
                 </td>
             </tr>
