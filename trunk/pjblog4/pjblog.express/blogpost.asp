@@ -86,7 +86,7 @@ If Asp.ChkPost() Then
 					%>
                     <br/>
 		  		 	<%If Request.QueryString("suc") = "true" Then %>
-			  		 <input type="button" value="<%=lang.Set.Asp(31)%>" onclick="location='?action=Static&id=<%=Request.QueryString("id")%>'" class="userbutton" /><br/>
+			  		 <input type="button" value="<%=lang.Set.Asp(31)%>" onClick="location='?action=Static&id=<%=Request.QueryString("id")%>'" class="userbutton" /><br/>
 			     <%end if%>
                  </div>
 		  	  	</div>
@@ -158,7 +158,7 @@ If Asp.ChkPost() Then
 	CateRequestName = Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID=" & Request.Form("log_CateID"))(0)
 %>
   <!--第二步-->
-    <form name="frm" action="../pjblog.logic/log_Article.asp?action=add" method="post" onSubmit="return CheckPost()">
+    <form name="frm" action="../pjblog.logic/log_Article.asp?action=add" method="post">
       		    <input name="log_CateID" type="hidden" id="log_CateID" value="<%=Request.Form("log_CateID")%>"/>
                 <input name="log_editType" type="hidden" id="log_editType" value="<%=log_editType%>"/>
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="False"/>
@@ -315,7 +315,7 @@ End If
               </td>
           </tr>          <tr>
               <td align="right" valign="top" nowrap><span style="font-weight: bold"><%=lang.Set.Asp(82)%>:</span></td>
-              <td align="left"><input type="text" value="" id="upload" class="inputBox" size="80" />&nbsp;&nbsp;<input type="button" value="<%=lang.Set.Asp(91)%>" onclick="Upload.open(this, 'upload', 0, '../upload', 10)" class="userbutton"></td>
+              <td align="left"><input type="text" value="" id="upload" class="inputBox" size="80" />&nbsp;&nbsp;<input type="button" value="<%=lang.Set.Asp(91)%>" onClick="Upload.open(this, 'upload', 0, '../upload', 10)" class="userbutton"></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>

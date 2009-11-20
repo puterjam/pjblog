@@ -65,6 +65,7 @@ Class Sys_Control
 		cTitle.Add "Skins.editModule" , "界面设置 - 可视化编辑HTML代码"
 		cTitle.Add "Skins.editModuleNormal" , "界面设置 - 编辑HTML源代码"
 		cTitle.Add "Skins.PluginsOptions" , "界面设置 - 插件配置"
+		cTitle.Add "Skins.BaseSetting" , "界面设置 - 插件基本设置"
 		cTitle.Add "Skins." , "界面设置 - 设置外观"
 	
 		cTitle.Add "SQLFile.Attachment" , "数据库与附件 - 附件信息"

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Plugin>
-	<Mark>sys.guestbook</Mark>
-	<Name>留言本</Name>
-	<Info><![CDATA[留言本]]></Info>
+	<Mark>sys.bloginfo</Mark>
+	<Name>博客信息面板</Name>
+	<Info><![CDATA[前台用户信息模块插件]]></Info>
 	<Version>1.0.0.0</Version>
 	<PJBlogSuitVersion>4.1.2.339 - *</PJBlogSuitVersion>
 	<pubDate>2009-11-12</pubDate>
@@ -33,9 +33,9 @@
 			</item>
 		</InstallNav>
 		<Template do="true">
-			<BaseenterPole do="true">setting.xml</BaseenterPole>
+			<BaseenterPole do="false"></BaseenterPole>
 			<BackenterPole do="false"></BackenterPole>
-			<mode do="false">
+			<mode do="true">
 				<item>
 					<mark>ins.bloginfo</mark>
 					<include>ins_bloginfo.asp</include>
