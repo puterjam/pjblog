@@ -180,8 +180,6 @@ font-size:12px;
 .shuom:hover{ color:#000}
 .Demo{ padding-left:20px; padding-right:20px;}
 select{font-size:12px;}
-input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
-input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
 
 input.button{
  background:#fff url(../images/Control/button.png);border:1px solid #9EA9C5;padding:0px 12px 1px 12px;margin:4px;height:22px; line-height:22px;
@@ -294,10 +292,3 @@ margin-top:-2px;
 	  -ms-filter:"alpha(opacity=50)";
 	  background-color: #C5EE48;
   }
-  .static{}
-  .static .staticHead{ border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px;}
-  .left{ float:left}
-  .right{ float:right; color:#ccc; font-size:10px; font-weight:normal}
-  .static .staticBody{ line-height:30px; clear:both}
-  .static .staticBody ol{max-height:140px; overflow:auto;}
-  .static .staticBody ol li{ margin-right:50px; border-bottom:1px dotted #ccc; clear:both; display:block; list-style:none; height:30px; line-height:30px;}

@@ -2,11 +2,11 @@
 var Upload = {
 	Code : function(){
 		var c = "";
-		c += "<div style=\"text-align:left; float:left; margin:0px;\">";
-		c += "<div id=\"MsgContent\">";
-		c += "<div id=\"MsgHead\" style=\"text-align:right\"><span style=\"float:left\">PJBlog上传程式</span><a href=\"javascript:;\" onclick=\"$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))\">关闭</a></div>";
-		c += "<div id=\"MsgBody\">";
-		c += "<div id=\"MessageText\"><div id=\"uploadContenter\" style=\"\"></div></div>";
+		c += "<div style=\"border: 2px solid #7FCAE2; padding:10px 10px 10px 10px; max-height:200px; overflow:auto\">";
+		c += "<div id=\"static\">";
+		  c += "<div id=\"staticHead\" style=\"border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px; text-align:right\"><span style=\"float:left\">PJBlog上传程式</span><a href=\"javascript:;\" onclick=\"$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))\"><img src=\"../images/check_error.gif\" border=\"0\"></a></div>";
+		c += "<div id=\"staticBody\" style=\"margin-top:10px\">";
+		c += "<div id=\"UploadMessageText\"><div id=\"uploadContenter\" style=\"\"></div></div>";
 		c += "</div>";
 		c += "</div>";
 		c += "</div>";
@@ -16,11 +16,12 @@ var Upload = {
 	open : function(obj, inputID, ReturnType, Path, fcount){
 		Box.selfWidth = true;
 		Box.selefHeight = false;
+		Box.offsetBoder.Border = 2;
 		var AjaxUp = null;
-		var c = Box.FollowBox($(inputID), 500, 0, 5, this.Code());
+		var c = Box.FollowBox($(inputID), $("Message").offsetWidth, 0, 5, this.Code());
 		this.showUpload(obj, inputID, ReturnType, Path, fcount);
 		c.id = "pjblogdoupload";
-		c.style.cssText += "; border:0px solid #000; text-align:left!important;";
+		c.style.cssText += "; text-align:left!important; background:#ffffff; top:" + (parseInt(c.style.top.replace("px", "")) + 4) + "px; left:" + (parseInt(c.style.left.replace("px", "")) + 2) + "px";
 	},
 	showUpload : function(obj, inputID, ReturnType, Path, fcount){
 		/*
@@ -55,11 +56,15 @@ var Upload = {
 			//下面遍历所有的文件，files是一个数组，数组元素的数目就是上传文件的个数，每个元素包含的信息为文件名字和文件大小
 			var info = "";
 			for(var i = 0 ; i < files.length ; i++){
-				info += files[i].path + ";";
+				//info += files[i].path + ";";
+				var eviopath = files[i].path;
+				var eviotype = eviopath.substr(eviopath.lastIndexOf("."), eviopath.length);
+				var ctypes = eviotype.replace(".", "");
+				addUploadItem(eviotype, eviopath, temp);
 			}
-			info = info.substr(0, info.length - 1);
-			$(inputID).value = info; 
-			setTimeout("$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))", 1000);
+			//info = info.substr(0, info.length - 1);
+			//$(inputID).value = $(inputID).value + info; 
+			//$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'));
 		}
 		
 		//上传失败时运行的程序
@@ -107,14 +112,14 @@ AjaxProcesser.prototype.addFile=function(){  //对象方法--添加一个文件
 	file.type = "file";
 	file.name = "file" + getID();
 	file.size = 40;
-	if(!this.defaultStyle){file.style.cssText = "font-size:9pt;border:1px #dddddd solid;padding:3px 0px 1px 3px;height:20px;";}
+	if(!this.defaultStyle){file.className = "text";}
 	var b = document.createElement("br");
 	this.frm.insertBefore(b, this.split);
 	this.frm.insertBefore(file, this.split);//添加到表单	
 	var remove = document.createElement("input");//生成一个移除按钮
 	remove.value = "移除";
 	remove.type = "button";
-	if(!this.defaultStyle){remove.style.cssText = "font-size:9pt;border:1px #dddddd solid;padding:3px 3px 1px 3px;height:20px;margin-left:3px;";}
+	if(!this.defaultStyle){remove.className = "text";}
 	remove.onclick = function(){
 		_this.frm.removeChild(this.previousSibling.previousSibling);
 		_this.frm.removeChild(this.previousSibling);
@@ -139,7 +144,7 @@ AjaxProcesser.prototype.createUploader = function(){
 	file.type = "file";
 	file.name = "file" + getID();
 	file.size = 40;
-	if(!this.defaultStyle){file.style.cssText = "font-size:9pt;border:1px #A69588 solid;padding:3px 0px 1px 3px;height:20px;";}
+	if(!this.defaultStyle){file.className = "text";}
 	this.files[file.name] = file; //添加到文件集合
 	frm.appendChild(file);//添加到表单
 	var split = document.createElement("br")
@@ -149,7 +154,7 @@ AjaxProcesser.prototype.createUploader = function(){
 	var button = document.createElement("input");//创建一个按钮,用于上传
 	button.value = "上传";
 	button.type = "button";
-	if(!this.defaultStyle){button.style.cssText = "font-size:9pt;border:1px #A69588 solid;padding:3px 3px 1px 3px;height:20px;margin-top:3px;";}
+	if(!this.defaultStyle){button.className = "text";}
 	button.onclick = function(){
 		_this.processID = "pjblog" + getID();
 		var action = "";
@@ -162,9 +167,9 @@ AjaxProcesser.prototype.createUploader = function(){
 		_this.interValID = window.setInterval("_this.getProcess()", _this.timeTick);
 	};
 	var add=document.createElement("input");//创建一个按钮
-	add.value = "添加文件";
+	add.value = "添加更多文件";
 	add.type = "button";
-	if(!_this.defaultStyle){add.style.cssText = "font-size:9pt;border:1px #A69588 solid;padding:3px 3px 1px 3px;height:20px;margin-top:3px;margin-left:3px;";}
+	if(!_this.defaultStyle){add.className = "text";}
 	add.onclick = function(){
 		_this.addFile();
 	};
@@ -354,3 +359,88 @@ var getID=function (){
     r=r.substr(r.length-4);
     return y + m + d + h + mm + s + r;
 };
+
+
+
+//插入上传附件
+function addUploadItem(type,path,memberDown){
+	var EditType=""
+	try{
+	  var oEditor = parent.FCKeditorAPI.GetInstance('Message')
+	  EditType="FCkEditor"
+	  var hrefLen=location.href.lastIndexOf("/")
+      var Fhref=location.href.substr(0,hrefLen+1)
+      path=Fhref+path
+	}
+	catch(e){
+	  EditType="UBBEditor"
+	}
+	type=type.toLowerCase()
+ 	 switch(type){
+ 	  case 'gif':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[img]'+path+'[/img]\n'}
+        else{oEditor.InsertHtml('<img src="'+path+'" alt=""/>')}
+ 	  	break;
+ 	  case 'jpg':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[img]'+path+'[/img]\n'}
+        else{oEditor.InsertHtml('<img src="'+path+'" alt=""/>')}
+ 	  	break;
+ 	  case 'png':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[img]'+path+'[/img]\n'}
+        else{oEditor.InsertHtml('<img src="'+path+'" alt=""/>')}
+ 	  	break;
+ 	  case 'bmp':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[img]'+path+'[/img]\n'}
+        else{oEditor.InsertHtml('<img src="'+path+'" alt=""/>')}
+ 	  	break;
+ 	  case 'jpeg':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[img]'+path+'[/img]\n'}
+        else{oEditor.InsertHtml('<img src="'+path+'" alt=""/>')}
+ 	  	break;
+ 	  case 'mp3':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[wma]'+path+'[/wma]\n'}
+        else{oEditor.InsertHtml('<object classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"  id="MediaPlayer" width="450" height="70"><param name=""showStatusBar" value="-1"><param name="AutoStart" value="False"><param name="Filename" value="'+path+'"></object>')}
+ 	  	break;
+ 	  case 'wma':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[wma]'+path+'[/wma]\n'}
+        else{oEditor.InsertHtml('<object classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"  id="MediaPlayer" width="450" height="70"><param name=""showStatusBar" value="-1"><param name="AutoStart" value="False"><param name="Filename" value="'+path+'"></object>')}
+ 	  	break;
+ 	  case 'rm':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[rm]'+path+'[/rm]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="300"><param name="SRC" value="'+path+'" /><param name="CONTROLS" VALUE="ImageWindow" /><param name="CONSOLE" value="one" /><param name="AUTOSTART" value="true" /><embed src="'+path+'" nojava="true" controls="ImageWindow" console="one" width="400" height="300"></object><br/><object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="32" /><param name="CONTROLS" value="StatusBar" /><param name="AUTOSTART" value="true" /><param name="CONSOLE" value="one" /><embed src="'+path+'" nojava="true" controls="StatusBar" console="one" width="400" height="24" /></object><br/><object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="32" /><param name="CONTROLS" value="ControlPanel" /><param name="AUTOSTART" value="true" /><param name="CONSOLE" value="one" /><embed src="'+path+'" nojava="true" controls="ControlPanel" console="one" width="400" height="24" autostart="true" loop="false" /></object>')}
+ 	  	break;
+ 	  case 'rmvb':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[rm]'+path+'[/rm]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="300"><param name="SRC" value="'+path+'" /><param name="CONTROLS" VALUE="ImageWindow" /><param name="CONSOLE" value="one" /><param name="AUTOSTART" value="true" /><embed src="'+path+'" nojava="true" controls="ImageWindow" console="one" width="400" height="300"></object><br/><object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="32" /><param name="CONTROLS" value="StatusBar" /><param name="AUTOSTART" value="true" /><param name="CONSOLE" value="one" /><embed src="'+path+'" nojava="true" controls="StatusBar" console="one" width="400" height="24" /></object><br/><object classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="32" /><param name="CONTROLS" value="ControlPanel" /><param name="AUTOSTART" value="true" /><param name="CONSOLE" value="one" /><embed src="'+path+'" nojava="true" controls="ControlPanel" console="one" width="400" height="24" autostart="true" loop="false" /></object>')}
+ 	  	break;
+ 	  case 'ra':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[ra]'+path+'[/ra]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA" id="RAOCX" width="450" height="60"><param name="_ExtentX" value="6694"><param name="_ExtentY" value="1588"><param name="AUTOSTART" value="true"><param name="SHUFFLE" value="0"><param name="PREFETCH" value="0"><param name="NOLABELS" value="0"><param name="SRC" value="'+path+'"><param name="CONTROLS" value="StatusBar,ControlPanel"><param name="LOOP" value="0"><param name="NUMLOOP" value="0"><param name="CENTER" value="0"><param name="MAINTAINASPECT" value="0"><param name="BACKGROUNDCOLOR" value="#000000"><embed src="'+path+'" width="450" autostart="true" height="60"></embed></object>')}
+ 	  	break;
+ 	  case 'asf':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[wmv]'+path+'[/wmv]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,0,02,902" type="application/x-oleobject" standby="Loading..." width="400" height="300"><param name="FileName" VALUE="'+path+'" /><param name="ShowStatusBar" value="-1" /><param name="AutoStart" value="true" /><embed type="application/x-mplayer2" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/" src="'+path+'" autostart="true" width="400" height="300" /></object>')}
+ 	  	break;
+ 	  case 'avi':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[wmv]'+path+'[/wmv]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,0,02,902" type="application/x-oleobject" standby="Loading..." width="400" height="300"><param name="FileName" VALUE="'+path+'" /><param name="ShowStatusBar" value="-1" /><param name="AutoStart" value="true" /><embed type="application/x-mplayer2" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/" src="'+path+'" autostart="true" width="400" height="300" /></object>')}
+ 	  	break;
+ 	  case 'wmv':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[wmv]'+path+'[/wmv]\n'}
+        else{oEditor.InsertHtml('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,0,02,902" type="application/x-oleobject" standby="Loading..." width="400" height="300"><param name="FileName" VALUE="'+path+'" /><param name="ShowStatusBar" value="-1" /><param name="AutoStart" value="true" /><embed type="application/x-mplayer2" pluginspage="http://www.microsoft.com/Windows/MediaPlayer/" src="'+path+'" autostart="true" width="400" height="300" /></object>')}
+ 	  	break;
+ 	  case 'swf':
+        if (EditType=="UBBEditor"){parent.document.forms[0].Message.value+='[swf]'+path+'[/swf]\n'}
+        else{oEditor.InsertHtml('<object codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="400" height="300"><param name="movie" value="'+path+'" /><param name="quality" value="high" /><param name="AllowScriptAccess" value="never" /><embed src="'+path+'" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="400" height="300" /></object>')}
+ 	  	break;
+ 	  default :
+        if (EditType=="UBBEditor"){
+        if (memberDown==1)
+	         {parent.document.forms[0].Message.value+='[mDown='+path+']点击下载此文件[/mDown]\n'}
+         else
+	         {parent.document.forms[0].Message.value+='[down='+path+']点击下载此文件[/down]\n'}
+        }
+        else{oEditor.InsertHtml('<a href="'+path+'"><img border="0" src="'+Fhref+'images/download.gif" alt="" style="margin:0px 2px -4px 0px"/>点击下载此文件</a>')}
+        break;
+     }
+}

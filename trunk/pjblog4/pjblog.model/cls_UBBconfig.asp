@@ -64,7 +64,7 @@ Function UBBeditorCore(TextName)
         UBBeditorCore = UBBeditorCore&"<div id=""editorbody""><div id=""editorHead"">"&ToolsToCode&"</div>"
     End If
     
-    UBBeditorCore = UBBeditorCore&"<div class=""editorContent""><textarea name="""&TextName&""" class=""editTextarea"""&TempStyle&" cols=""1"" rows=""1"" accesskey=""R"">"&UBB_Msg_Value&"</textarea></div></div>"
+    UBBeditorCore = UBBeditorCore&"<div class=""editorContent""><textarea name="""&TextName&""" class=""editTextarea"""&TempStyle&" cols=""1"" rows=""1"" accesskey=""R"" id=""" & TextName & """>"&UBB_Msg_Value&"</textarea></div></div>"
     UBBeditorCore = UBBeditorCore&"<script language=""javascript"" type=""text/javascript"">setTimeout(""initUBB(\"""&TextName&"\"")"", 100)</script>"
 End Function
 
