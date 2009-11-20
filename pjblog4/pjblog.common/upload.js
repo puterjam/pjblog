@@ -59,8 +59,8 @@ var Upload = {
 				//info += files[i].path + ";";
 				var eviopath = files[i].path;
 				var eviotype = eviopath.substr(eviopath.lastIndexOf("."), eviopath.length);
-				var ctypes = eviotype.replace(".", "");
-				addUploadItem(eviotype, eviopath, temp);
+				var ctypes = eviotype.replace(".", "").toLowerCase();
+				addUploadItem(ctypes, eviopath, temp);
 			}
 			//info = info.substr(0, info.length - 1);
 			//$(inputID).value = $(inputID).value + info; 

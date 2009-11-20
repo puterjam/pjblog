@@ -15,8 +15,8 @@ Class Sys_Upload
 		Set Upload = New SysUpLoad
 			Upload.openProcesser = true  '打开进度条显示
 			Upload.SingleSize = 512*1024*1024  '设置单个文件最大上传限制,按字节计；默认为不限制，本例为512M
-			Upload.MaxSize = 1024*1024*1024 '设置最大上传限制,按字节计；默认为不限制，本例为1G
-			Upload.Exe = "bmp|jpg|gif|png|rar|doc|pdf|txt"  '设置允许上传的扩展名
+			Upload.MaxSize = Int(UP_FileSize) '设置最大上传限制,按字节计；默认为不限制，本例为1G
+			Upload.Exe = Lcase(UP_FileTypes)'"bmp|jpg|gif|png|rar|doc|pdf|txt"  '设置允许上传的扩展名
 			Upload.GetData()
 		If Upload.ErrorID > 0 Then
 			upload.setApp "faild", 1, 0, Upload.description
