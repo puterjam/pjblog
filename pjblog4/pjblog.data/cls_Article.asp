@@ -27,6 +27,9 @@ Class Sys_Article
         End If
 		Arrays = Array(Array("log_CateID", log_CateID), Array("log_editType", log_editType), Array("log_IsDraft", log_IsDraft), Array("log_Title", log_Title), Array("log_cname", log_cname), Array("log_ctype", log_ctype), Array("log_weather", log_weather), Array("log_Level", log_Level), Array("log_comorder", log_comorder), Array("log_DisComment", log_DisComment), Array("log_IsTop", log_IsTop), Array("log_KeyWords", log_KeyWords), Array("log_Description", log_Description), Array("log_From", log_From), Array("log_FromURL", log_FromURL), Array("log_Intro", log_Intro), Array("log_Content", log_Content), Array("log_PostTime", log_PostTime), Array("log_ubbFlags", log_ubbFlags), Array("log_IsShow", log_IsShow), Array("log_tag", log_tag), Array("log_Meta", log_Meta), Array("log_Author", memName))
 		Add = Sys.doRecord("blog_Content", Arrays, "insert", "log_ID", "")
+		Application.Lock()
+		Application(Sys.CookieName & "_Article_Edit") = True
+		Application.UnLock()
 	End Function
 	
 	Public Function edit
@@ -36,10 +39,15 @@ Class Sys_Article
 		End If
 		Arrays = Array(Array("log_CateID", log_CateID), Array("log_IsDraft", log_IsDraft), Array("log_Title", log_Title), Array("log_cname", log_cname), Array("log_ctype", log_ctype), Array("log_weather", log_weather), Array("log_Level", log_Level), Array("log_comorder", log_comorder), Array("log_DisComment", log_DisComment), Array("log_IsTop", log_IsTop), Array("log_KeyWords", log_KeyWords), Array("log_Description", log_Description), Array("log_From", log_From), Array("log_FromURL", log_FromURL), Array("log_Intro", log_Intro), Array("log_Content", log_Content), Array("log_PostTime", log_PostTime), Array("log_ubbFlags", log_ubbFlags), Array("log_IsShow", log_IsShow), Array("log_tag", log_tag), Array("log_Meta", log_Meta), Array("log_Author", memName))
 		edit = Sys.doRecord("blog_Content", Arrays, "update", "log_ID", log_ID)
+		Application.Lock()
+		Application(Sys.CookieName & "_Article_Edit") = True
+		Application.UnLock()
 	End Function
 	
 	Public Function del
-		
+		Application.Lock()
+		Application(Sys.CookieName & "_Article_Edit") = True
+		Application.UnLock()
 	End Function
 	
 	Public Sub Articleopen(ByVal id)
