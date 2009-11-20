@@ -149,9 +149,9 @@ Class log_Init
 				If tmpC >= blog_CountNum Then
 					Dim tmpLC
 					tmpLC = Sys.doGet("select top 1 coun_ID from [blog_Counter] order by coun_Time ASC")(0)
-					Sys.doGet("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(Asp.CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
+					Sys.doGet("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&Asp.HTMLEncode(Asp.CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
 				Else
-					Sys.doGet("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&HTMLEncode(Asp.CheckStr(Guest_Refer))&"')")
+					Sys.doGet("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&Asp.HTMLEncode(Asp.CheckStr(Guest_Refer))&"')")
 				End If
 			End If
 		End If
