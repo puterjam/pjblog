@@ -106,7 +106,7 @@ If Asp.ChkPost() Then
 	Article.Articleopen(logid)
 %>
   <!--第二步-->
-    <form name="frm" action="../pjblog.logic/log_Article.asp?action=edit" method="post" onSubmit="return CheckPost()">
+    <form name="frm" action="../pjblog.logic/log_Article.asp?action=edit" method="post">
     <input name="log_ID" type="hidden" id="log_ID" value="<%=logid%>"/>
     <input name="log_editType" type="hidden" id="log_editType" value="<%=Article.log_editType%>"/>
     <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="<%=Article.log_IsDraft%>"/>
@@ -215,7 +215,7 @@ If Asp.ChkPost() Then
             <tr>
               <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(66)%>:</span></td>
               <td align="left">
-                  <input onFocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=Asp.DateToStr(Article.log_PostTime, "Y-m-d H:I:S")%>" size="21" class="inputBox" /> (<%=lang.Set.Asp(69)%>)
+                  <input name="PubTime" type="text" value="<%=Asp.DateToStr(Article.log_PostTime, "Y-m-d H:I:S")%>" size="21" class="inputBox" /> (<%=lang.Set.Asp(69)%>)
                 </td>
             </tr>
             <tr>

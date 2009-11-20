@@ -216,7 +216,7 @@ Public Sub c_ceneral
                             <tr>
                             	<td width="180" align="right">评论审核</td>
                                 <td width="300"><input name="blog_commAduit" type="checkbox" value="1" <%if blog_commAduit then response.write ("checked=""checked""")%> /></td>
-                                <td>&nbsp;</td>
+                                <td class="shuom">[√] 会员或者游客发表的评论都需要通过管理员审核</td>
                             </tr>
                         </table>
                     </fieldset>
