@@ -28,6 +28,7 @@
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/typography.css" type="text/css" media="all" /><!--局部样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/link.css" type="text/css" media="all" /><!--超链接样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/UBB/editor.css" type="text/css" media="all" /><!--UBB编辑器代码-->
+    <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/common.css" type="text/css" media="all" /><!--系统样式-->
 	<link rel="stylesheet" rev="stylesheet" href="../FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" /><!--FCK块引用&代码样式-->
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -301,7 +302,10 @@ End If
               </td>
           </tr>          <tr>
               <td align="right" valign="top" nowrap><span style="font-weight: bold"><%=lang.Set.Asp(82)%>:</span></td>
-              <td align="left"><input type="text" value="" id="upload" class="inputBox" size="80" />&nbsp;&nbsp;<input type="button" value="<%=lang.Set.Asp(91)%>" onClick="Upload.open(this, 'upload', 0, '../upload', 10)" class="userbutton"></td>
+              <script language="javascript">
+			  	temp = 0;
+			  </script>
+              <td align="left"><input type="hidden" value="" id="upload"/><label for="memberCanDown"><input type="checkbox" id="memberCanDown" onclick="if (this.checked){temp = 1;}else{temp = 0;}" />只允许会员下载</label>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="Upload.open(this, 'Message', 0, '../upload/<%="month_" & Asp.DateToStr(Now(), "ym")%>', 10)"  onfocus="this.blur()">点击上传附件</a></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>
