@@ -70,7 +70,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 Set strMatchs = re.Execute(strContent)
                 For Each strMatch in strMatchs
                     tmpStr1 = checkURL(strMatch.SubMatches(1))
-                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr1&""" target=""_blank"" title="""&tmpStr1&"""><img src=""images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr1&""" target=""_blank"" title="""&tmpStr1&"""><img src=""../images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
                 Next
 
                 re.Pattern = "\[img=(left|right|center|absmiddle|)\](.[^\]]*)(\[\/img\])"
@@ -78,7 +78,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 For Each strMatch in strMatchs
                     tmpStr1 = strMatch.SubMatches(0)
                     tmpStr2 = checkURL(strMatch.SubMatches(1))
-                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr2&""" target=""_blank"" title="""&tmpStr2&"""><img src=""images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr2&""" target=""_blank"" title="""&tmpStr2&"""><img src=""../images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
                 Next
 
                 re.Pattern = "\[img=(\d*|),(\d*|)\](.[^\]]*)\[\/img\]"
@@ -87,7 +87,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                     tmpStr1 = strMatch.SubMatches(0)
                     tmpStr2 = strMatch.SubMatches(1)
                     tmpStr3 = checkURL(strMatch.SubMatches(2))
-                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr3&""" target=""_blank"" title="""&tmpStr3&"""><img src=""images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr3&""" target=""_blank"" title="""&tmpStr3&"""><img src=""../images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
                 Next
 
                 re.Pattern = "\[img=(\d*|),(\d*|),(left|right|center|absmiddle|)\](.[^\]]*)(\[\/img\])"
@@ -97,7 +97,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                     tmpStr2 = strMatch.SubMatches(1)
                     tmpStr3 = strMatch.SubMatches(2)
                     tmpStr4 = checkURL(strMatch.SubMatches(3))
-                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr4&""" target=""_blank"" title="""&tmpStr4&"""><img src=""images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<a href="""&tmpStr4&""" target=""_blank"" title="""&tmpStr4&"""><img src=""../images/image.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>查看图片</a>", 1, -1, 0)
                 Next
             End If
 
@@ -109,17 +109,17 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 Randomize
                 strType = strMatch.SubMatches(0)
                 If strType = "swf" Then
-                    TitleText = "<img src=""images/flash.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>Flash动画"
+                    TitleText = "<img src=""../images/flash.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>Flash动画"
                 ElseIf strType = "wma" Then
-                    TitleText = "<img src=""images/music.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放音频文件"
+                    TitleText = "<img src=""../images/music.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放音频文件"
                 ElseIf strType = "wmv" Then
-                    TitleText = "<img src=""images/mediaplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放视频文件"
+                    TitleText = "<img src=""../images/mediaplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放视频文件"
                 ElseIf strType = "rm" Then
-                    TitleText = "<img src=""images/realplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放real视频流文件"
+                    TitleText = "<img src=""../images/realplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放real视频流文件"
                 ElseIf strType = "ra" Then
-                    TitleText = "<img src=""images/realplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放real音频流文件"
+                    TitleText = "<img src=""../images/realplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放real音频流文件"
                 ElseIf strType = "qt" Then
-                    TitleText = "<img src=""images/mediaplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放mov视频文件"
+                    TitleText = "<img src=""../images/mediaplayer.gif"" alt="""" style=""margin:0px 2px -3px 0px"" border=""0""/>播放mov视频文件"
                 End If
                 strWidth = strMatch.SubMatches(1)
                 strHeight = strMatch.SubMatches(2)
@@ -135,7 +135,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 End If
                 strSRC = checkURL(strMatch.SubMatches(3))
                 rndID = "temp"&Int(100000 * Rnd)
-                strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle"">"&TitleText&"</div><div class=""UBBContent""><a id=""" + rndID + "_href"" href=""javascript:MediaShow('" + strType+"','" + rndID + "','" + strSRC + "','" + strWidth + "','" + strHeight + "')""><img name=""" + rndID + "_img"" src=""images/mm_snd.gif"" style=""margin:0px 3px -2px 0px"" border=""0"" alt=""""/><span id=""" + rndID + "_text"">在线播放</span></a><div id=""" + rndID + """></div></div></div>")
+                strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle"">"&TitleText&"</div><div class=""UBBContent""><a id=""" + rndID + "_href"" href=""javascript:MediaShow('" + strType+"','" + rndID + "','" + strSRC + "','" + strWidth + "','" + strHeight + "')""><img name=""" + rndID + "_img"" src=""../images/mm_snd.gif"" style=""margin:0px 3px -2px 0px"" border=""0"" alt=""""/><span id=""" + rndID + "_text"">在线播放</span></a><div id=""" + rndID + """></div></div></div>")
             Next
             Set strMatchs = Nothing
 
@@ -162,14 +162,14 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
-                strContent = Replace(strContent, strMatch.Value, "<img border="""" src=""images/ed2k.gif"" alt=""""/><a target=""_blank"" href="""&tmpStr1&""">"&tmpStr2&"</a>", 1, -1, 0)
+                strContent = Replace(strContent, strMatch.Value, "<img border="""" src=""../images/ed2k.gif"" alt=""""/><a target=""_blank"" href="""&tmpStr1&""">"&tmpStr2&"</a>", 1, -1, 0)
             Next
 
             re.Pattern = "\[ed2k]([^\r]*?)\[\/ed2k]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
-                strContent = Replace(strContent, strMatch.Value, "<img border="""" src=""images/ed2k.gif"" alt=""""/><a target=""_blank"" href="""&tmpStr1&""">"&tmpStr1&"</a>", 1, -1, 0)
+                strContent = Replace(strContent, strMatch.Value, "<img border="""" src=""../images/ed2k.gif"" alt=""""/><a target=""_blank"" href="""&tmpStr1&""">"&tmpStr1&"</a>", 1, -1, 0)
             Next
 
             re.Pattern = "\[email=(.[^\]]*)\](.[^\[]*)\[\/email]"
@@ -253,19 +253,29 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 strContent = Replace(strContent, strMatch.Value, "<span id=""mdown_"&rndnum44&"""></span><script language=""javascript"" type=""text/javascript"">doAjax('?action=Antimdown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode("点击下载此文件")&"','mdown_"&rndnum44&"');</script>", 1, -1, 0)
             Next
 
-            re.Pattern = "\[down=(.[^\]]*)\](.[^\[]*)\[\/down]"
+            re.Pattern = "\[down=([\s\S]+?)\](.+?)\[\/down]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
                 tmpStr1 = Asp.checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
-                strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">"&tmpStr2&"</a>", 1, -1, 0)
+				Dim cc
+				cc = Split(tmpStr1, "?id=")(1)
+'				Set ccc = Asp.GetMatch(tmpStr1, "\.\.\/download\.asp\?id\=(\d+?)")
+'				If ccc.Count > 0 Then
+'					If ccc.Count = 1 Then
+'						cc = ccc.SubMatches(0)
+'						strContent = Replace(strContent, strMatch.Value, "<img src=""../images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"" onmouseover=""CheckForm.over(" & cc & ")"">"&tmpStr2&"</a>", 1, -1, 0)
+'					End If
+'				Else
+                	strContent = Replace(strContent, strMatch.Value, "<img src=""../images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"" onmouseover=""CheckForm.over(" & cc & ", this)"">"&tmpStr2&"</a>", 1, -1, 0)
+'				End If
             Next
 
             re.Pattern = "\[down\](.[^\[]*)\[\/down]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
-                tmpStr1 = checkURL(strMatch.SubMatches(0))
-                strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">下载此文件</a>", 1, -1, 0)
+                tmpStr1 = Asp.checkURL(strMatch.SubMatches(0))
+                strContent = Replace(strContent, strMatch.Value, "<img src=""../images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">下载此文件</a>", 1, -1, 0)
             Next
 
             re.Pattern = "\[mDown=(.[^\]]*)\](.[^\[]*)\[\/mDown]"
@@ -295,7 +305,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             For Each strMatch in strMatchs
                Randomize
                rndID = "code"&Int(100000 * Rnd)
-               strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel codePanel""><div class=""UBBTitle""><a onClick=""copycode(" + rndID + ");"" style=""float:right;cursor: pointer;font-weight: normal; font-style: normal"">复制内容到剪贴板</a><img src=""images/code.gif"" style=""margin:0px 2px -3px 0px;"" alt=""程序代码""/> 程序代码</div><div class=""UBBContent"" id=" + rndID + ">"&strMatch.SubMatches(0)&"</div></div>")
+               strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel codePanel""><div class=""UBBTitle""><a onClick=""copycode(" + rndID + ");"" style=""float:right;cursor: pointer;font-weight: normal; font-style: normal"">复制内容到剪贴板</a><img src=""../images/code.gif"" style=""margin:0px 2px -3px 0px;"" alt=""程序代码""/> 程序代码</div><div class=""UBBContent"" id=" + rndID + ">"&strMatch.SubMatches(0)&"</div></div>")
             Next
             Set strMatchs = Nothing
 			
@@ -310,9 +320,9 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
 			
             
             re.Pattern = "\[quote\](.*?)\[\/quote\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
+            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用内容""/> 引用内容</div><div class=""UBBContent"">$1</div></div>")
             re.Pattern = "\[quote=(.+?)\]([\s\S]*?)\[\/quote\]"
-            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
+            strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
             '-----------隐藏----------------
             re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
@@ -320,7 +330,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
 				HiddenRand1 = randomStr(10)
-				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand1&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">"&strMatch.SubMatches(0)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand1&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容""/> 显示被隐藏内容</div><div class=""UBBContent"">"&strMatch.SubMatches(0)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand1&"""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
             Next
             Set strMatchs = Nothing
 			
@@ -329,7 +339,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
 				HiddenRand2 = randomStr(10)
-				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand2&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 "&strMatch.SubMatches(0)&"""/> 显示被隐藏内容来自 "&strMatch.SubMatches(0)&"</div><div class=""UBBContent"">"&strMatch.SubMatches(1)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 "&strMatch.SubMatches(0)&"""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
+				strContent = Replace(strContent, strMatch.Value, "<script>Hidden('"&HiddenRand2&"')</script><div class=""UBBPanel"" id=""hidden1_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""显示被隐藏内容 "&strMatch.SubMatches(0)&"""/> 显示被隐藏内容来自 "&strMatch.SubMatches(0)&"</div><div class=""UBBContent"">"&strMatch.SubMatches(1)&"</div></div><div class=""UBBPanel"" id=""hidden2_"&HiddenRand2&"""><div class=""UBBTitle""><img src=""../images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""隐藏内容 "&strMatch.SubMatches(0)&"""/> 隐藏内容</div><div class=""UBBContent"">该内容已经被作者隐藏,只有会员才允许查阅 <a href=""login.asp"">登录</a> | <a href=""register.asp"">注册</a></div></div>")
             Next
             Set strMatchs = Nothing
 
@@ -339,7 +349,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
                 For Each strMatch in strMatchs
                     Randomize
                     rndID = "temp"&Int(100000 * Rnd)
-                    strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""images/html.gif"" style=""margin:0px 2px -3px 0px""> HTML代码</div><div class=""UBBContent""><TEXTAREA rows=""8"" id="""&rndID&""">"&UBBFilter(HTMLDecode(strMatch.SubMatches(0)))& "</TEXTAREA><br/><INPUT onclick=""runEx('"&rndID&"')""  type=""button"" class=""userbutton"" value=""运行此代码""/> <INPUT onclick=""doCopy('"&rndID&"')""  type=""button"" class=""userbutton"" value=""复制此代码""/> <INPUT onclick=""saveCode('"&rndID&"')"" type=""button"" class=""userbutton"" value=""保存此代码""><br/> [Ctrl+A 全部选择 提示：你可先修改部分代码，再按运行]</div></div>", 1, -1, 0)
+                    strContent = Replace(strContent, strMatch.Value, "<div class=""UBBPanel""><div class=""UBBTitle""><img src=""../images/html.gif"" style=""margin:0px 2px -3px 0px""> HTML代码</div><div class=""UBBContent""><TEXTAREA rows=""8"" id="""&rndID&""">"&UBBFilter(HTMLDecode(strMatch.SubMatches(0)))& "</TEXTAREA><br/><INPUT onclick=""runEx('"&rndID&"')""  type=""button"" class=""userbutton"" value=""运行此代码""/> <INPUT onclick=""doCopy('"&rndID&"')""  type=""button"" class=""userbutton"" value=""复制此代码""/> <INPUT onclick=""saveCode('"&rndID&"')"" type=""button"" class=""userbutton"" value=""保存此代码""><br/> [Ctrl+A 全部选择 提示：你可先修改部分代码，再按运行]</div></div>", 1, -1, 0)
                 Next
                 Set strMatchs = Nothing
             End If
@@ -355,10 +365,10 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""../images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
 
         re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
+        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""../images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
 
 
         '-----------表情图标----------------
@@ -366,7 +376,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             Dim log_Smilies, log_SmiliesContent
             For Each log_Smilies IN Cache.SmiliesCache(1)
                 log_SmiliesContent = Split(log_Smilies, "|")
-                strContent = Replace(strContent, log_SmiliesContent(2), " <img src=""images/smilies/"&log_SmiliesContent(1)&""" border=""0"" style=""margin:0px 0px -2px 0px"" alt=""""/>")
+                strContent = Replace(strContent, log_SmiliesContent(2), " <img src=""../images/smilies/"&log_SmiliesContent(1)&""" border=""0"" style=""margin:0px 0px -2px 0px"" alt=""""/>")
             Next
         End If
 
@@ -380,7 +390,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
 				If Right(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Left(log_KeywordsContent(1),Len(log_KeywordsContent(1))-1)
 				re.Pattern = "(\<(.*)\>)(" & Replace(log_KeywordsContent(1), "$", "\$") & ")"
                 If log_KeywordsContent(3)<>"None" Then
-					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/>$2</a>")
+					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""../images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/>$2</a>")
                 Else
 					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank"">$2</a>")
                 End If
