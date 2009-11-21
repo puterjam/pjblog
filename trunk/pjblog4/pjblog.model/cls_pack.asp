@@ -181,6 +181,11 @@ end function
 ' -------------------------------------------------------------
 ' 	使用方法
 ' -------------------------------------------------------------
+' include.asp
+' pjblog.model/cls_stream.asp
+' pjblog.model/cls_fso.asp
+' pjblog.model/cls_xml.asp
+' pjblog.model/cls_pack.asp
 'Dim cStream, c, cxml, a, b, d
 'dim filepath, filecontent, pack, tt
 'Set cStream = New Stream
