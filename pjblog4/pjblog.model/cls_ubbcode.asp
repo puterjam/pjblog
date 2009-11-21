@@ -256,7 +256,7 @@ Function UBBCode(ByVal strContent, ByVal DisSM, ByVal DisUBB, ByVal DisIMG, ByVa
             re.Pattern = "\[down=(.[^\]]*)\](.[^\[]*)\[\/down]"
             Set strMatchs = re.Execute(strContent)
             For Each strMatch in strMatchs
-                tmpStr1 = checkURL(strMatch.SubMatches(0))
+                tmpStr1 = Asp.checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
                 strContent = Replace(strContent, strMatch.Value, "<img src=""images/download.gif"" alt=""下载文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&tmpStr1&""" target=""_blank"">"&tmpStr2&"</a>", 1, -1, 0)
             Next
