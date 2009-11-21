@@ -199,6 +199,7 @@ Class do_Article
 		Call Cache.GlobalCache(2)
 		Call Data.ArticleList(2)
 		If Str(0) Then
+			Call InToAttBase(Int(Str(1)))
 			Sys.doGet("Update blog_Info Set blog_LogNums = blog_LogNums + 1")
 			Sys.doGet("Update blog_Category Set cate_count = cate_count + 1 Where cate_ID=" & log_CateID)
 			Call web.Article(Str(1))
@@ -398,6 +399,7 @@ Class do_Article
 		Call Cache.GlobalCache(2)
 		Call Data.ArticleList(2)
 		If Str(0) Then
+			Call InToAttBase(log_ID)
 			Sys.doGet("Update blog_Category Set cate_count = cate_count + 1 Where cate_ID=" & log_CateID)
 			Call web.Article(log_ID)
 			RedirectUrl("../pjblog.express/blogedit.asp?action=complete&suc=true&id=" & log_ID)
@@ -426,6 +428,34 @@ Class do_Article
 		If Len(s) = 1 Then s = "0" & s
 		DateTime = y & m & d & h & i & s
 	End Function
+	
+	Private Sub InToAttBase(ByVal id)
+		If Not Asp.IsInteger(id) Then Exit Sub
+		Dim UploadFiles, SetMatch, SubMatch, Attid, AttRs
+		UploadFiles = Trim(Asp.CheckStr(Request.Form("UploadFiles")))
+		Set SetMatch = Asp.GetMatch(UploadFiles, "\{(\d+?)\}")
+		If SetMatch.Count > 0 Then
+			For Each SubMatch In SetMatch
+				Attid = Trim(SubMatch.SubMatches(0))
+				If Asp.IsInteger(Attid) And (Int(Attid) <> 0) Then
+					Set AttRs = Server.CreateObject("Adodb.RecordSet")
+					AttRs.open "Select * From blog_Attment Where Att_ID=" & Attid, Conn, 1, 3
+					If Not (AttRs.Bof And AttRs.Eof) Then
+						Do While Not AttRs.Eof
+							'If Int(AttRs("Blog_ID")) = 0 Then
+								AttRs("Blog_ID") = Int(id)
+								AttRs.Update
+							'End If
+						AttRs.MoveNext
+						Loop
+					End If
+					AttRs.Close
+					Set AttRs = Nothing
+				End If
+			Next
+		End If
+		Set SetMatch = Nothing
+	End Sub
 
 End Class
 %>
