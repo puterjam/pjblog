@@ -1,4 +1,5 @@
 ﻿<!--#include file = "../include.asp" -->
+<!--#include file = "../pjblog.data/cls_modset.asp" -->
 function fillSide(){
 /* -------------------- pluginstart -------------------- */
 /*---------------------------------plugin_Start_ins.category------------------------------------*/
@@ -10,6 +11,9 @@ function fillSide(){
 /*---------------------------------plugin_Start_ins.bloginfo------------------------------------*/
 <!--#include file="../pjblog.plugin/bloginfo/ins_bloginfo.asp" -->
 /*---------------------------------plugin_End_ins.bloginfo------------------------------------*/
+
+
+
 /*---------------------------------plugin_Start_NewTopArticle------------------------------------*/
 <!--#include file="../pjblog.plugin/NewTopArticle/NewTopArticle.asp" -->
 /*---------------------------------plugin_End_NewTopArticle------------------------------------*/

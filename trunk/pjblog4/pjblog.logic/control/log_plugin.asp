@@ -13,7 +13,7 @@ Class do_Plugin
 
 	Private cxml, local, InstallFolder, this, UnInstallMark, sxml
 	
-	Private Mark, Name, Info, Version, PJBlogSuitVersion, pubDate, ModDate, Author_Name, Author_Url, Author_Email, Author_pubUrl, BaseenterPole, BackenterPole
+	Private Mark, Name, Info, Version, PJBlogSuitVersion, pubDate, ModDate, Author_Name, Author_Url, Author_Email, Author_pubUrl, BaseenterPole, BackenterPole, objSetting
 	
 	Private Config_Template, obj_BaseenterPole, obj_BackenterPole
 	Private obj_mode, temp, temp_mark,temp_include, subtemp, WriteTemp, WriteInclude
@@ -255,7 +255,19 @@ Class do_Plugin
 							End If
 						Next
 					End If
+					' ----------------------------------------------------------------
+					'	清理基本设置
+					' ----------------------------------------------------------------
+					Set objSetting = Config_Template.selectSingleNode("BaseenterPole")
+					If Lcase(cxml.GetAttribute(objSetting, "do")) = "true" Then
+						Mark = cxml.GetNodeText(cxml.FindNode("//Plugin/Mark"))
+							If Err Then Err.Clear : Mark = ""
+						If len(Mark) > 0 Then
+							Sys.doGet("Delete From blog_modsetting Where xml_name='" & Mark & "'")
+						End If
+					End If
 				End If
+
 				' ----------------------------------------------------------------
 				'	从数据库中删除
 				' ----------------------------------------------------------------
@@ -306,6 +318,15 @@ Class do_Plugin
 					this.update
 				this.MoveNext
 				Loop
+				If Len(Trim(Asp.CheckStr(Request.Form("PluginSettingCache")))) > 0 Then
+					If Asp.IsInteger(Trim(Asp.CheckStr(Request.Form("PluginSettingCache")))) Then
+						If CBool(Int(Trim(Asp.CheckStr(Request.Form("PluginSettingCache"))))) Then
+							Application.Lock()
+							Application(Sys.CookieName & "_plugin_Setting_" & ResMark) = True
+							Application.UnLock()
+						End If
+					End If
+				End If
 				Session(Sys.CookieName & "_ShowMsg") = True
 				Session(Sys.CookieName & "_MsgText") = "更新数据成功."
 				RedirectUrl(RedoUrl)
