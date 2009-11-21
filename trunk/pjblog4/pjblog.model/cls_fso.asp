@@ -21,7 +21,7 @@
 '		.CopyFolder "2", "3/2"
 '		.FolderRename "2", "4"
 '		Response.Write(.FolderItem("3"))
-'		Response.Write(.FileItem("./"))
+'		Response.Write(.FileItem("."))
 '	End With
 'Set e = Nothing
 '**************** 使用实例 *******************
