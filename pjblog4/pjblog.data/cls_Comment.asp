@@ -32,6 +32,9 @@ Class Sys_Comment
 		End If
 		Arrays = Array(Array("blog_ID", blog_ID), Array("comm_Content", comm_Content), Array("comm_Author", comm_Author), Array("comm_PostTime", comm_PostTime), Array("comm_DisSM", comm_DisSM), Array("comm_DisUBB", comm_DisUBB), Array("comm_DisIMG", comm_DisIMG), Array("comm_AutoURL", comm_AutoURL), Array("comm_PostIP", Asp.getIP), Array("comm_AutoKEY", comm_AutoKEY), Array("comm_IsAudit", comm_IsAudit), Array("comm_Email", comm_Email), Array("comm_WebSite", comm_WebSite))
 		Add = Sys.doRecord("blog_Comment", Arrays, "insert", "comm_ID", "")
+		Application.Lock()
+		Application(Sys.CookieName & "_Comment_Edit") = True
+		Application.UnLock()
 	End Function
 	
 	Public Function edit
@@ -42,6 +45,9 @@ Class Sys_Comment
 		If stat_CommentEdit And (memName = comm_Author) Then
 			Arrays = Array(Array("comm_Content", comm_Content), Array("comm_DisSM", comm_DisSM), Array("comm_DisUBB", comm_DisUBB), Array("comm_DisIMG", comm_DisIMG), Array("comm_AutoURL", comm_AutoURL), Array("comm_AutoKEY", comm_AutoKEY), Array("comm_Email", comm_Email), Array("comm_WebSite", comm_WebSite))
 			edit = Sys.doRecord("blog_Comment", Arrays, "update", "comm_ID", comm_ID)
+			Application.Lock()
+			Application(Sys.CookieName & "_Comment_Edit") = True
+			Application.UnLock()
 		Else
 			edit = Array(False, "您没有权限编辑该评论")
 		End If
@@ -55,6 +61,9 @@ Class Sys_Comment
 		If (stat_CommentDel And (memName = comm_Author)) Or stat_Admin Then
 			Arrays = Array(Array("blog_Comment", "comm_ID", comm_ID))
 			del = Sys.doRecDel(Arrays)
+			Application.Lock()
+			Application(Sys.CookieName & "_Comment_Edit") = True
+			Application.UnLock()
 		Else
 			del = Array(False, "您没有权限删除该评论")
 		End If
@@ -85,6 +94,9 @@ Class Sys_Comment
 		End If
 		Arrays = Array(Array("comm_IsAudit", comm_IsAudit))
 		Aduit = Sys.doRecord("blog_Comment", Arrays, "update", "comm_ID", comm_ID)
+		Application.Lock()
+		Application(Sys.CookieName & "_Comment_Edit") = True
+		Application.UnLock()
 	End Function
 	
 End Class

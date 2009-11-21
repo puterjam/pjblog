@@ -17,6 +17,9 @@ function fillSide(){
 /*---------------------------------plugin_Start_NewTopArticle------------------------------------*/
 <!--#include file="../pjblog.plugin/NewTopArticle/NewTopArticle.asp" -->
 /*---------------------------------plugin_End_NewTopArticle------------------------------------*/
+/*---------------------------------plugin_Start_NewComment------------------------------------*/
+<!--#include file="../pjblog.plugin/NewComment/NewComment.asp" -->
+/*---------------------------------plugin_End_NewComment------------------------------------*/
 /* -------------------- pluginend -------------------- */
 }
 fillSide();

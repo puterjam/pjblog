@@ -1,0 +1,137 @@
+﻿
+<include:head.html/><body>
+<a href="default.asp" accesskey="i"></a>
+<a href="javascript:history.go(-1)" accesskey="z"></a>
+<div id="container">
+<!--顶部-->
+<fame:1>
+  <div id="header">
+   	<div id="blogname"><Set:SiteName/>
+    	<div id="blogTitle"><Set:blogTitle/></div>
+   </div>
+   		<div id="menu">
+        	<div id="Left"></div>
+            <div id="Right"></div>
+            <do:p_navlist><include:p_navlist.html/></do:p_navlist>
+        </div>
+  </div>
+</fame:1>
+ <!--内容-->
+ <script language="javascript" type="text/javascript">
+ 	var ArticleArrayIDJoin = new Array();
+	var cookies = "<Set:cookie/>";
+ </script>
+  <div id="Tbody">
+  <div id="mainContent">
+   <div id="innermainContent">
+       <div id="mainContent-topimg"></div>
+	   
+	   <div id="Content_ContentList" class="content-width">
+	     
+ 
+<div class="pageContent" style="text-align:Right;overflow:hidden;height:18px;line-height:140%"><span style="float:left"></span>预览模式: <a href="" accesskey="1">普通</a> | <a href="" accesskey="2">列表</a></div>
+ 
+        <pjblog:2 datasource="Data.CategoryList(1, <Set:CateID/>)" name="loop" element="div" page="<Set:blogPerPage/>" id="categorylist">
+            <Columns>
+                <ItemTemplate>
+                <script language="javascript" type="text/javascript">
+                    ArticleArrayIDJoin.push($0$);
+                    cookie.SET(cookies + "_categoryArticleList", ArticleArrayIDJoin, 1);
+                </script>
+                    <div class="Content">
+                        <div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
+                             
+                             <h1 class="ContentTitle"><img src="{function:Data.GetCateInfo($6$, "cate_icon")}" style="margin:0px 2px -4px 0px;" alt="" class="CateIcon"/>
+                             <a class="titleA" href="{function:Init.doArticleUrl($0$)}" class="enterArticle_$0$">$1$</a></h1>
+                             <h2 class="ContentAuthor">作者:$2$ 日期:{function:Asp.DateToStr("$3$", "Y-m-d")}</h2>
+                        </div>
+                        <div id="log_6">
+                            <div class="Content-body">
+                                 {UBB:"$4$", "$10$", "$11$"}
+                                 <br />
+                                 <if:{function:Asp.Max("$5$", "$4$", "string")}>more<end if>
+                            </div>
+                            <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>
+                                    分类:<a href="$6$" title="">{function:Data.GetCateInfo($6$, "cate_Name")}</a> | 
+                                    <a href="$0$">固定链接</a> | 
+                                    <a href="$0$#comment">评论: <span id="indexComment_$0$"></span></a> | 
+                                    <a href="$0$" target="_blank">引用: <span id="indexQuote_$0$"></span></a> | 
+                                    查看次数: <span id="indexView_$0$"></span>
+                                    <span class="index_edit">| <a href="../pjblog.express/blogedit.asp?id=$0$"><img src="../images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span> 
+                                    <span class="index_del">| <a href="$0$" onClick="if (!window.confirm('是否要删除该日志')) return false"><img src="../images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </ItemTemplate>
+            </Columns>
+        </pjblog:2>
+	
+		
+	
+<div class="pageContent"><page:categorylist/></div>
+ 
+	   </div>
+	   
+       <div id="mainContent-bottomimg"></div>
+   </div>
+   </div>
+   
+   <div id="sidebar">
+	   <div id="innersidebar">
+		     <div id="sidebar-topimg"><!--工具条顶部图象--></div>
+             
+			 <div id="Side_Category" class="sidepanel">
+              	<h4 class="Ptitle">Category</h4>
+                <div class="Pcontent">
+                	<plugin:plugin_NewTopArticle/>
+                </div>
+                <div class="Pfoot"></div>
+            </div>
+			
+			 <div id="Side_Category" class="sidepanel">
+              	<h4 class="Ptitle">Category</h4>
+                <div class="Pcontent">
+                	<plugin:plugin_Category/>
+                </div>
+                <div class="Pfoot"></div>
+            </div>
+            
+            <div id="Side_User" class="sidepanel">
+            	<h4 class="Ptitle">User Panel</h4>
+            	<div class="Pcontent">
+                 	<plugin:plugin_UserPannel/>
+                </div>
+                <div class="Pfoot"></div>
+            </div>
+            
+            <div id="Side_BlogInfo" class="sidepanel">
+            	<h4 class="Ptitle">Statistics</h4>
+                <div class="Pcontent">
+                <plugin:plugin_BlogInfo/>
+				</div>
+                <div class="Pfoot"></div>
+            </div>
+            
+            <div id="Side_Links" class="sidepanel">
+            	<h4 class="Ptitle">Links</h4>
+                <div class="Pcontent">
+                	<div class="LinkTable"><a class="sideA" href="http://www.evio.name" target="_blank" title="etool ehome eblog">etool ehome eblog</a> </div><div align="right"><a href="bloglink.asp">更多链接… </a></div>
+                </div>
+                <div class="Pfoot"></div>
+            </div>
+            
+		     <div id="sidebar-bottomimg"></div>
+	   </div>
+       
+       
+   </div>
+   
+   
+   <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
+ </div>
+<include:foot.html/>
+ </div>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=category"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-﻿<include:head.html/>
-<body>
+﻿
+<include:head.html/><body>
 <a href="default.asp" accesskey="i"></a>
 <a href="javascript:history.go(-1)" accesskey="z"></a>
 <div id="container">
@@ -40,20 +40,7 @@
 	   <div id="innersidebar">
 		    <div id="sidebar-topimg"><!--工具条顶部图象--></div>
             <fame:3>
-            	<div id="Side_NewTopArticle" class="sidepanel">
-              	<h4 class="Ptitle">NewTopArticle</h4>
-                <div class="Pcontent">
-                	<plugin:plugin_NewTopArticle/>
-                </div>
-                <div class="Pfoot"></div>
-            </div>
-            <div id="Side_NewComment" class="sidepanel">
-              	<h4 class="Ptitle">NewComment</h4>
-                <div class="Pcontent">
-                	<plugin:plugin_NewComment/>
-                </div>
-                <div class="Pfoot"></div>
-            </div>
+				<do:p_category><include:p_RecentArticle.html/></do:p_category>
 				<do:p_category><include:p_category.html/></do:p_category>
             	<do:p_user><include:p_user.html/></do:p_user>
             	<do:p_Statistics><include:p_Statistics.html/></do:p_Statistics>
