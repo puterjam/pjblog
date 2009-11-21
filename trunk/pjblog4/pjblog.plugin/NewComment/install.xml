@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Plugin>
+	<Mark>NewComment</Mark>
+	<Name>最新评论</Name>
+	<Info><![CDATA[Recent Comments For PJBlog4]]></Info>
+	<Version>1.0.1.101</Version>
+	<PJBlogSuitVersion>4.1.2.339 - *</PJBlogSuitVersion>
+	<pubDate>2009-11-21</pubDate>
+	<ModDate>2009-11-21</ModDate>
+	<Author>
+		<Name>lyowbeen</Name>
+		<Url>http://www.yb13.cn</Url>
+		<Email>lyowbeen@163.com</Email>
+		<pubUrl>http://www.yb13.cn/article.asp?id=73</pubUrl>
+	</Author>
+	<Config>
+		<InstallSQL do="false">
+			<install>
+				<sql></sql>
+				<sql></sql>
+			</install>
+			<Uninstall>
+				<sql></sql>
+				<sql></sql>
+			</Uninstall>
+		</InstallSQL>
+		<InstallNav do="false">
+			<item>
+				<title></title>
+				<intro></intro>
+				<url></url>
+				<local></local>
+			</item>
+		</InstallNav>
+		<Template do="true">
+			<BaseenterPole do="true">setting.xml</BaseenterPole>
+			<BackenterPole do="false"></BackenterPole>
+			<mode do="true">
+				<item>
+					<mark>NewComment</mark>
+					<include>NewComment.asp</include>
+				</item>
+			</mode>
+		</Template>
+	</Config>
+</Plugin>

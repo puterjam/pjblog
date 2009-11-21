@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginOptions>
+   <Key name="IsShowHidden" value="0" type="select" description="显示隐藏日志分类和隐藏日志">
+    <option value="0">显示</option>
+	<option value="1">不显示</option>
+  </Key>
+   <Key name="IsShowAuthor" value="0" type="select" description="显示作者">
+    <option value="0">显示</option>
+	<option value="1">不显示</option>
+  </Key>
+  <Key name="TopNum" value="10" type="text" description="显示日志数量"/>
+  <Key name="TitleLen" value="35" type="text" description="显示日志标题长度"/>
+   <Key name="PluginSettingCache" value="1" type="select" description="是否马上更新缓存">
+    <option value="0">否</option>
+	<option value="1">是</option>
+  </Key>
+</PluginOptions>
