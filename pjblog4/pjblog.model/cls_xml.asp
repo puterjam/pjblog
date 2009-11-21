@@ -210,6 +210,10 @@ Class xml
 		ProcessingInstruction() 
 		e_xml.save(Server.MapPath(SavePath)) 
 	End Function
+	
+	Public Function SaveToXml(ByVal SavePath)
+		e_xml.save(Server.MapPath(SavePath))
+	End Function
 
 End Class
 %>

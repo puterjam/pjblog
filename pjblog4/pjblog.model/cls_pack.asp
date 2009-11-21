@@ -1,15 +1,18 @@
 ﻿<%
 Class Sys_Pack
 
-	Private xDom, tStream, fileList, baseM, upl, fso
-	Public fileTotal, xmlPath, parentPath, NeedOut
+	Private xDom, tStream, fileList, baseM, upl, fso, cxml, cstream, temp
+	Public fileTotal, xmlPath, parentPath, NeedOut, xmlfirstvalue, SubMatch, SetMatch, AllFilePathText
 	
 	Private Sub Class_Initialize()
 		NeedOut = True
+		xmlfirstvalue = "<?xml version=""1.0""?><files xmlns:dt=""urn:schemas-microsoft-com:datatypes""></files>"
 	   	On Error Resume Next
 	   	fileTotal=0
 	   	Set baseM = New packbase64
 		Set fso = New cls_fso
+		Set cxml = New xml
+		Set cstream = New Stream
 	   	Set tStream = Server.CreateObject("adodb.stream")
 	   		If Err<>0 Then
 	     		Err.clear
@@ -21,6 +24,8 @@ Class Sys_Pack
 	End Sub
   
 	Private Sub Class_Terminate()
+		If IsObject(cstream) Then Set cstream = Nothing
+	   If IsObject(cxml) Then Set cxml = Nothing
 	   If IsObject(fso) Then Set fso = Nothing
 	   If IsObject(xDom) Then Set xDom = nothing
 	   If IsObject(tStream) Then Set tStream = nothing
@@ -53,6 +58,77 @@ Class Sys_Pack
 			tStream.Close
 		Next
 	End sub
+	
+	Public Function GetDir(ByVal Dir) ' 无/
+		Dim DirFileList, DirFolderList, FileSplit, FolderSplit, i, Str, j
+		Str = ""
+		DirFileList = fso.FileItem(Dir)
+		DirFolderList = fso.FolderItem(Dir)
+		FileSplit = Split(DirFileList, "|")
+		FolderSplit = Split(DirFolderList, "|")
+		If Int(FileSplit(0)) > 0 Then
+			For i = 1 To UBound(FileSplit)
+				If Dir = "." Then
+					Str = Str & "<" & FileSplit(i) & ">" ' 返回文件路径
+				Else
+					Str = Str & "<" & Dir & "/" & FileSplit(i) & ">" ' 返回文件路径
+				End If
+			Next
+		End If
+		If Int(FolderSplit(0)) > 0 Then
+			For j = 1 To UBound(FolderSplit)
+				If Dir = "." Then
+					Str = Str & GetDir(FolderSplit(j))
+				Else
+					Str = Str & GetDir(Dir & "/" & FolderSplit(j))
+				End If
+			Next
+		End If
+		GetDir = Str
+	End Function
+	
+	Public Function doPack(ByVal ceePath, ByVal ToPath)
+		cxml.Str = xmlfirstvalue
+		If cxml.openxml Then
+			AllFilePathText = GetDir(ceePath)
+			Set SetMatch = Asp.GetMatch(AllFilePathText, "\<(.*?)\>")
+				If SetMatch.Count > 0 Then
+					Dim RootFiles : Set RootFiles = cxml.Root
+					Dim A, B, ContentText
+					On Error Resume Next
+					For Each SubMatch In SetMatch
+						ContentText = "error"
+						tStream.Open
+						tStream.LoadFromFile Server.MapPath(SubMatch.SubMatches(0))
+						tStream.Position = 0
+						If Err Then
+                			tStream.Close
+               		 		Err.Clear
+            			End If
+						ContentText = tStream.Read
+						tStream.Close
+						ContentText = baseM.encode(ContentText)
+						If NeedOut Then
+							Response.Write(SubMatch.SubMatches(0) & "<br />")
+							Response.Flush()
+						End If
+						Set A = cxml.AddChildNode("f", RootFiles)
+						Set B = cxml.AddChildNode("fn", A)
+							cxml.AddText B, SubMatch.SubMatches(0), False
+						Set B = cxml.AddChildNode("fb", A)
+							cxml.AddText B, ContentText, False
+					Next
+					cxml.SaveToXml(ToPath)
+					doPack = Array(True, "打包成功!")
+				Else
+					doPack = Array(False, "加载文件数据出错!")
+				End If
+			Set SetMatch = Nothing
+		Else
+			doPack = Array(False, "加载文件出错!")
+		End If
+	End Function
+	
 End Class
 
 '=====================base64 encode/decode==============
@@ -105,11 +181,25 @@ end function
 ' -------------------------------------------------------------
 ' 	使用方法
 ' -------------------------------------------------------------
+'Dim cStream, c, cxml, a, b, d
+'dim filepath, filecontent, pack, tt
+'Set cStream = New Stream
+'	c = cStream.SaveToLocal("http://www.evio.name/eBak/123.rar", "ee/1.pbd")
+'Set cStream = Nothing
+'if c(0) = 0 Then
 '	set pack = New Sys_Pack
-'		pack.NeedOut = False
+'		pack.NeedOut = True
 '		pack.parentPath = "ee/" '生成在哪个文件夹中
 '		pack.xmlPath = "ee/1.pbd" ' 被解压对象
 '		pack.open	' 打开对象
 '		pack.UnPack	' 安装
 '	set pack = nothing
+'	Response.Write("OK")
+'End If
+'
+'Dim fso, pack, c
+'set pack = New Sys_Pack
+'c = pack.doPack("pj", "123.pbd")
+'Response.Write("OK")
+'Set pack = nothing
 %>
