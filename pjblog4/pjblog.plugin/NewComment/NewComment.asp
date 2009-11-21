@@ -1,7 +1,7 @@
 <%
 If Application(Sys.CookieName & "_Comment_Edit") Or Application(Sys.CookieName & "_plugin_Setting_NewComment") Then
 	Application.Lock()
-	Application(Sys.CookieName & "_Article_Edit") = False
+	Application(Sys.CookieName & "_Comment_Edit") = False
 	Application(Sys.CookieName & "_plugin_Setting_NewComment") = False
 	Application.UnLock()
 	NewComment(2)
