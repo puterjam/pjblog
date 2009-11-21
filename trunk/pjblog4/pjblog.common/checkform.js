@@ -1,9 +1,43 @@
 ﻿// JavaScript Document
 var AsFiled = new Array();
+var cid = 0;
 function Check(){
 	init();
 	function init(){
 		
+	}
+	//显示下载数据状态
+	this.over = function(id, _obj){
+		if (cid == id){return;}
+		try{this.close();}catch(e){}
+		var cobj = _obj, _id = id;
+		Ajax({
+		  url : "../pjblog.logic/log_Ajax.asp?action=downloadInfo&id=" + escape(id) + "&s=" + Math.random(),
+		  method : "GET",
+		  content : "",
+		  oncomplete : function(obj){
+				var json = obj.responseText.json();
+				Box.selfWidth = false;
+				Box.selefHeight = false;
+				Box.offsetBoder.HasBorder = true;
+				Box.Border = 1;
+				//timeoutTip = setTimeout("Box.FollowBox(" + cobj + ", 0, 0, 0, '" + json.Info + "')", 300)
+				var m = Box.FollowBox(cobj, 0, 0, 5, json.Info);
+				cid = _id;
+				m.style.cssText += "; text-align:left; background:#fff; border:1px solid #000; padding:8px; width:auto; font-size:11px;";
+				m.id = "downloadTip";
+				m.onmouseout = function(){
+					timeoutTip = setTimeout("try{CheckForm.close(); cid = 0;}catch(e){}", 500);
+				}
+				m.onmouseover = function(){clearTimeout(timeoutTip)}
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
+	}
+	this.close = function(){
+		$("downloadTip").parentNode.removeChild($("downloadTip"));
 	}
 	// 用户
 	this.User = {
