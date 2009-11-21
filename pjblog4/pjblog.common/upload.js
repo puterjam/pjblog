@@ -58,6 +58,8 @@ var Upload = {
 			for(var i = 0 ; i < files.length ; i++){
 				//info += files[i].path + ";";
 				var eviopath = files[i].path;
+				var attid = files[i].attid;
+				try{$("upload").value += "{"+attid+"}"}catch(e){}
 				var eviotype = eviopath.substr(eviopath.lastIndexOf("."), eviopath.length);
 				var ctypes = eviotype.replace(".", "").toLowerCase();
 				addUploadItem(ctypes, eviopath, temp);
