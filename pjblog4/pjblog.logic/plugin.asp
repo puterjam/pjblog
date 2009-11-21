@@ -10,6 +10,9 @@ function fillSide(){
 /*---------------------------------plugin_Start_ins.bloginfo------------------------------------*/
 <!--#include file="../pjblog.plugin/bloginfo/ins_bloginfo.asp" -->
 /*---------------------------------plugin_End_ins.bloginfo------------------------------------*/
+/*---------------------------------plugin_Start_NewTopArticle------------------------------------*/
+<!--#include file="../pjblog.plugin/NewTopArticle/NewTopArticle.asp" -->
+/*---------------------------------plugin_End_NewTopArticle------------------------------------*/
 /* -------------------- pluginend -------------------- */
 }
 fillSide();

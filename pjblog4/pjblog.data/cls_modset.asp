@@ -34,7 +34,7 @@ Class ModSet
 	
 	Public Sub ReLoad
 		Dim Folder, Counts
-		If len(PluginName) = 0 Then
+		If len(ModName) = 0 Then
 			GetError = -18903
 			Exit Sub
 		End If

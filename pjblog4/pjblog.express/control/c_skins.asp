@@ -151,7 +151,7 @@ Public Sub c_skins
 					End If
 				%>
             </td>
-            <td><a href="../pjblog.logic/control/log_plugin.asp?action=UnInstall&folder=<%=cee.encode(Rs("plugin_folder").value) & "&mark=" & cee.encode(Rs("plugin_Mark").value)%>">卸载该插件</a>  插件升级</td>
+            <td><a href="../pjblog.logic/control/log_plugin.asp?action=UnInstall&folder=<%=cee.encode(Rs("plugin_folder").value) & "&mark=" & cee.encode(Rs("plugin_Mark").value)%>" onclick="return confirm('危险操作\n卸载插件将删除所有该插件的安装信息!!')">卸载该插件</a>  插件升级</td>
         </tr>
 <%
 			Rs.MoveNext
