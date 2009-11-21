@@ -388,7 +388,6 @@ Class do_Article
 		Article.log_Description = log_Description
 		Article.log_From = log_From
 		Article.log_FromURL = log_FromURL
-		Article.log_PostTime = log_PostTime
 		Article.log_tag = logTags
 		Article.log_Content = Message
 		Article.log_IsShow = log_IsShow

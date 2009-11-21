@@ -209,6 +209,24 @@ Class cls_fso
 			FolderRename = False
 		End If
 	End Function
+	
+	'文件夹不存在自动创建
+	Public Sub WholeFolder(ByVal Str)
+		Dim i, c, j, s
+		s = ""
+		Str = Replace(Str, "\", "/")
+		i = InstrRev(Str, "/")
+		Str = Mid(Str, 1, i - 1)
+		c = Split(Str, "/")
+		For j = 0 To UBound(c)
+			s = s & c(j) & "/"
+			If s <> "../" Then
+				If Not FolderExists(s) Then
+					Call CreateFolder(s)
+				End If
+			End If
+		Next
+	End Sub
 
 ' ***************************************
 ' 文件及文件夹的循环操作  开始
