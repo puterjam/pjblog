@@ -323,6 +323,7 @@ Class do_Plugin
 						If CBool(Int(Trim(Asp.CheckStr(Request.Form("PluginSettingCache"))))) Then
 							Application.Lock()
 							Application(Sys.CookieName & "_plugin_Setting_" & ResMark) = True
+							Application(Sys.CookieName & "_mod_" & ResMark) = ""
 							Application.UnLock()
 						End If
 					End If
