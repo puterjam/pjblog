@@ -49,7 +49,9 @@
                             <div class="Content-body">
                                  {UBB:"$4$", "$10$", "$11$"}
                                  <br />
-                                 <if:{function:Asp.Max("$5$", "$4$", "string")}>more<end if>
+                                 	<if:Not {function:Asp.Max("$5$", "$4$")}>
+                         			<p class="readMore"><a href="{function:Init.doArticleUrl($0$)}" class="more"><span>查看更多...</span></a></p>
+                         			<end if>
                             </div>
                             <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>
                                     分类:<a href="$6$" title="">{function:Data.GetCateInfo($6$, "cate_Name")}</a> | 
