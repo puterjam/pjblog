@@ -2,9 +2,9 @@
 var Upload = {
 	Code : function(){
 		var c = "";
-		c += "<div style=\"border: 2px solid #7FCAE2; padding:10px 10px 10px 10px; max-height:200px; overflow:auto\">";
+		c += "<div style=\"border: 1px solid #7FCAE2; padding:10px 10px 10px 10px; max-height:200px; overflow:auto\">";
 		c += "<div id=\"static\">";
-		  c += "<div id=\"staticHead\" style=\"border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px; text-align:right\"><span style=\"float:left\">PJBlog上传程式</span><a href=\"javascript:;\" onclick=\"$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))\"><img src=\"../images/check_error.gif\" border=\"0\"></a></div>";
+		  c += "<div id=\"staticHead\" style=\"border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px; text-align:right\"><span style=\"float:left\">PJBlog上传程式</span><a href=\"javascript:;\" onclick=\"$('pjblogdoupload').parentNode.removeChild($('pjblogdoupload'))\" class=\"close\" style=\"width:12px;height:12px;\">&nbsp;&nbsp;&nbsp;</a></div>";
 		c += "<div id=\"staticBody\" style=\"margin-top:10px\">";
 		c += "<div id=\"UploadMessageText\"><div id=\"uploadContenter\" style=\"\"></div></div>";
 		c += "</div>";
@@ -16,12 +16,55 @@ var Upload = {
 	open : function(obj, inputID, ReturnType, Path, fcount){
 		Box.selfWidth = true;
 		Box.selefHeight = false;
-		Box.offsetBoder.Border = 2;
+		Box.offsetBoder.Border = 0;
 		var AjaxUp = null;
 		var c = Box.FollowBox($(inputID), $("Message").offsetWidth, 0, 5, this.Code());
 		this.showUpload(obj, inputID, ReturnType, Path, fcount);
 		c.id = "pjblogdoupload";
 		c.style.cssText += "; text-align:left!important; background:#ffffff; top:" + (parseInt(c.style.top.replace("px", "")) + 4) + "px; left:" + (parseInt(c.style.left.replace("px", "")) + 2) + "px";
+	},
+	ShowFilesBox : function(id){
+		Ajax({
+		  url : "../pjblog.logic/log_Ajax.asp?action=GetArticledownloadInfo&id=" + escape(id) + "&s=" + Math.random(),
+		  method : "GET",
+		  content : "",
+		  oncomplete : function(obj){
+				var div = obj.responseText.json();
+				try{
+					var c = document.createElement("div");
+					$("AttUpload").appendChild(c);
+					c.id = "ArticleAttmentBox";
+					c.innerHTML = div.Info;
+				}catch(e){}
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
+	},
+	DelFile : function(id){
+		var _id = id;
+		Ajax({
+		  url : "../pjblog.logic/log_Ajax.asp?action=delfile&id=" + escape(id) + "&s=" + Math.random(),
+		  method : "GET",
+		  content : "",
+		  oncomplete : function(obj){
+				var div = obj.responseText.json();
+				try{
+					if (div.Suc){
+						$("upBox_" + _id).parentNode.removeChild($("upBox_" + _id));
+						var n = $("upload").value;
+						$("upload").value = n.replace("{" + _id + "}", "");
+						Tip.CreateLayer("恭喜 操作成功", "删除附件成功<br /><font color=red>请将文本框中对应的UBB标签手动删除!</font>");
+					}else{
+						Tip.CreateLayer("错误信息", div.Info);
+					}
+				}catch(e){}
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
 	},
 	showUpload : function(obj, inputID, ReturnType, Path, fcount){
 		/*

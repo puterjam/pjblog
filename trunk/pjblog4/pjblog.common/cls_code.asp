@@ -23,6 +23,18 @@ Class Sys_Asp
     Private Sub Class_Terminate
     End Sub
 	
+	Public Function CheckExe(ByVal Str)
+		CheckExe = True
+		Dim Arr, i
+		Arr = Array("jpg", "gif", "png", "bmp", "jpeg")
+		For Each i In Arr
+			If Lcase(Str) = i Then
+				CheckExe = False
+				Exit Function
+			End If
+		Next
+	End Function
+	
 	Public Function BlankString(ByVal Content)
 		If IsBlank(Content) Then Content = ""
 		BlankString = Content
