@@ -42,7 +42,7 @@
   }
   
   .static{}
-  .static .staticHead{ border-bottom:1px solid #E6E7E1; line-height:30px; color:#444; font-weight:700; font-size:12px; height:30px;}
+  .static .staticHead{ border-bottom:1px solid #E6E7E1; line-height:22px; color:#444; font-weight:700; font-size:12px; height:22px;}
   .left{ float:left}
   .right{ float:right; color:#ccc; font-size:10px; font-weight:normal}
   .static .staticBody{ line-height:30px; clear:both}
@@ -51,4 +51,5 @@
   
   input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
 input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
-  
+  .close:link, .close:visited{ width:12px; height:12px; background:url(../images/close.gif) 0px 0px no-repeat; text-decoration:none}
+  .close:hover{ width:12px; height:12px;background:url(../images/close.gif) 0px -12px no-repeat; text-decoration:none}

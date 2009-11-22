@@ -319,7 +319,7 @@ End If
 				End If
 				Set AttRs = Nothing
 			  %>
-              <td align="left"><input type="hidden" value="<%=AttStr%>" id="upload" name="UploadFiles"/><label for="memberCanDown"><input type="checkbox" id="memberCanDown" onClick="if (this.checked){temp = 1;}else{temp = 0;}" />只允许会员下载</label>&nbsp;&nbsp;日志附件管理&nbsp;&nbsp;<a href="javascript:void(0);" onClick="Upload.open(this, 'Message', 0, '../upload/<%="month_" & Asp.DateToStr(Now(), "ym")%>', 10)"  onfocus="this.blur()">点击上传附件</a><span style=" margin-left:10px; color:#ccc">支持多附件批量上传, 附件统一管理...</span></td>
+              <td align="left" id="AttUpload"><input type="hidden" value="<%=AttStr%>" id="upload" name="UploadFiles"/><label for="memberCanDown"><input type="checkbox" id="memberCanDown" onClick="if (this.checked){temp = 1;}else{temp = 0;}" />只允许会员下载</label>&nbsp;&nbsp;<a href="javascript:;" onclick="Upload.ShowFilesBox(<%=logid%>);">日志附件管理(测试版)</a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="Upload.open(this, 'Message', 0, '../upload/<%="month_" & Asp.DateToStr(Now(), "ym")%>', 10)"  onfocus="this.blur()">点击上传附件</a><span style=" margin-left:10px; color:#ccc">支持多附件批量上传, 附件统一管理...</span></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>
