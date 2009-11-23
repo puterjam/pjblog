@@ -21,12 +21,12 @@
 	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=SiteURL%>xmlrpc.asp" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=SiteURL%>rsd.asp" />
 	<title><%=SiteName%> - <%=blog_Title%></title>
-	<link rel="alternate" type="application/rss+xml" href="<%=SiteURL%>feed.asp" title="订阅 I Miss You 所有文章(rss2)" />
-	<link rel="alternate" type="application/atom+xml" href="<%=SiteURL%>atom.asp" title="订阅 I Miss You 所有文章(atom)" />
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/global.css" type="text/css" media="all" /><!--全局样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/layout.css" type="text/css" media="all" /><!--层次样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/typography.css" type="text/css" media="all" /><!--局部样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/link.css" type="text/css" media="all" /><!--超链接样式表-->
+	<link rel="alternate" type="application/rss+xml" href="<%=SiteURL%>feed.asp" title="订阅 <%=SiteName%> 所有文章(rss2)" />
+	<link rel="alternate" type="application/atom+xml" href="<%=SiteURL%>atom.asp" title="订阅 <%=SiteName%> 所有文章(atom)" />
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/global.css" type="text/css" media="all" /><!--全局样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/layout.css" type="text/css" media="all" /><!--层次样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/typography.css" type="text/css" media="all" /><!--局部样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/link.css" type="text/css" media="all" /><!--超链接样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/UBB/editor.css" type="text/css" media="all" /><!--UBB编辑器代码-->
     <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/common.css" type="text/css" media="all" /><!--系统样式-->
 	<link rel="stylesheet" rev="stylesheet" href="../FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" /><!--FCK块引用&代码样式-->
@@ -319,7 +319,7 @@ End If
 				End If
 				Set AttRs = Nothing
 			  %>
-              <td align="left" id="AttUpload"><input type="hidden" value="<%=AttStr%>" id="upload" name="UploadFiles"/><label for="memberCanDown"><input type="checkbox" id="memberCanDown" onClick="if (this.checked){temp = 1;}else{temp = 0;}" />只允许会员下载</label>&nbsp;&nbsp;<a href="javascript:;" onclick="Upload.ShowFilesBox(<%=logid%>);">日志附件管理(测试版)</a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="Upload.open(this, 'Message', 0, '../upload/<%="month_" & Asp.DateToStr(Now(), "ym")%>', 10)"  onfocus="this.blur()">点击上传附件</a><span style=" margin-left:10px; color:#ccc">支持多附件批量上传, 附件统一管理...</span></td>
+              <td align="left" id="AttUpload"><input type="hidden" value="<%=AttStr%>" id="upload" name="UploadFiles"/><label for="memberCanDown"><input type="checkbox" id="memberCanDown" onClick="if (this.checked){temp = 1;}else{temp = 0;}" />只允许会员下载</label>&nbsp;&nbsp;<a href="javascript:;" onClick="Upload.ShowFilesBox(<%=logid%>);">日志附件管理(测试版)</a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="Upload.open(this, 'Message', 0, '../upload/<%="month_" & Asp.DateToStr(Now(), "ym")%>', 10)"  onfocus="this.blur()">点击上传附件</a><span style=" margin-left:10px; color:#ccc">支持多附件批量上传, 附件统一管理...</span></td>
             </tr>
             <tr>
               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Set.Asp(83)%>:</span></td>
