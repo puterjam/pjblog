@@ -8,15 +8,15 @@ function fillSide(){
 /*---------------------------------plugin_Start_ins.category------------------------------------*/
 <!--#include file="../pjblog.plugin/category/ins_category.asp" -->
 /*---------------------------------plugin_End_ins.category------------------------------------*/
-/*---------------------------------plugin_Start_NewComment------------------------------------*/
-<!--#include file="../pjblog.plugin/NewComment/NewComment.asp" -->
-/*---------------------------------plugin_End_NewComment------------------------------------*/
 /*---------------------------------plugin_Start_NewTopArticle------------------------------------*/
 <!--#include file="../pjblog.plugin/NewTopArticle/NewTopArticle.asp" -->
 /*---------------------------------plugin_End_NewTopArticle------------------------------------*/
 /*---------------------------------plugin_Start_ins.userpannel------------------------------------*/
 <!--#include file="../pjblog.plugin/userpannel/ins_userpannel.asp" -->
 /*---------------------------------plugin_End_ins.userpannel------------------------------------*/
+/*---------------------------------plugin_Start_NewComment------------------------------------*/
+<!--#include file="../pjblog.plugin/NewComment/NewComment.asp" -->
+/*---------------------------------plugin_End_NewComment------------------------------------*/
 /* -------------------- pluginend -------------------- */
 }
 fillSide();
