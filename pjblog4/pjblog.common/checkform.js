@@ -573,6 +573,41 @@ function Check(){
 			  }
 			});
 		}
+	},
+	this.Theme = {
+		Choose : function(f1, objs){
+			try{$('templateTip').parentNode.removeChild($('templateTip'))}catch(e){}
+			var _f1 = f1, _objs = objs;
+			Ajax({
+			  url : "../pjblog.logic/control/log_template.asp?action=Choose&s=" + Math.random(),
+			  method : "POST",
+			  content : "f1=" + escape(f1),
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						var c = "<div style=\"padding:1px 20px 0px 20px;\">";
+						c += "<form action=\"../pjblog.logic/control/log_template.asp?action=update\" method=\"post\" style=\"font-size:12px;\">";
+						c += "<input type=\"hidden\" value=\"" + _f1 + "\" name=\"f1\">";
+						c += "<div>请选择样式</div>";
+						c += "<div style=\"list-style:none\">";
+						c += json.Info;
+						c += "</div>";
+						c += "<input type=\"submit\" value=\"确定\"> &nbsp; <input type=\"button\" value=\"关闭\"onclick=\"$('templateTip').parentNode.removeChild($('templateTip'))\">";
+						c += "</form></div>";
+						Box.selfWidth = false;
+						Box.selefHeight = false;
+						Box.offsetBoder.HasBorder = true;
+						Box.Border = 1;
+						var d = Box.FollowBox(_objs, 0, 0, 2, c);
+						d.style.cssText += "; border:1px solid #000; z-index:99;  background:#fff";
+						d.id = "templateTip";
+					}else{alert(json.Info)}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		}
 	}
 }
 var CheckForm = new Check();

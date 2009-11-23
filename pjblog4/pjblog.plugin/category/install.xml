@@ -39,6 +39,7 @@
 				<item>
 					<mark>ins.category</mark>
 					<include>ins_category.asp</include>
+					<templatePath></templatePath>
 				</item>
 			</mode>
 		</Template>

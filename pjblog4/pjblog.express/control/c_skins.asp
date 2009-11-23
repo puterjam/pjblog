@@ -261,8 +261,110 @@ Public Sub c_skins
 %>
 <iframe src="log_styleEdit.asp?action=default" width="100%" height="800"></iframe>
 <%
+
+	' -----------------------------------------------------
+	'	主题选择
+	' -----------------------------------------------------
 	Else
-	
+		Set cxml = New xml
+		Set fso = New cls_fso
+			'FileItems, FolderItems
+			FolderItems = fso.FolderItem("../pjblog.template")
+%>
+	<table cellpadding="3" cellspacing="0" width="100%">
+<%
+		Dim TempFolderArray, tempi, tempj, m, cleft, cright, ztrue
+		Dim SkinName, SkinDesigner, pubDate, DesignerURL, DesignerMail, version, smallpic, bigpic
+		TempFolderArray = Split(FolderItems, "|")
+		If Int(TempFolderArray(0)) = 0 Then ' 是否有文件夹
+			Response.Write("<tr><td align=""center"">找不到模板, 请上传模板!</td></tr>")
+		Else
+			tempi = 0
+			m = Int(TempFolderArray(0))
+			On Error Resume Next
+			For tempj = 1 To Ubound(TempFolderArray)
+				If fso.FileExists("../pjblog.template/" & TempFolderArray(tempj) & "/skin.xml") Then ' 是否文件存在
+					cxml.FilePath = "../pjblog.template/" & TempFolderArray(tempj) & "/skin.xml"
+					If cxml.open Then ' 是否正常加载
+						tempi = tempi + 1
+						If tempi Mod 3 = 1 Then
+							cleft = "<tr>"
+							cright = ""
+						ElseIf tempi Mod 3 = 0 Then
+							cleft = ""
+							cright = "</tr>"
+						Else
+							cleft = ""
+							cright = ""
+						End If
+						' ---------------------------------------------
+						' 	获取信息
+						' ---------------------------------------------
+						SkinName = cxml.GetNodeText(cxml.FindNode("//SkinSet/SkinName"))
+							If Err Then Err.Clear : SkinName = ""
+						SkinDesigner = cxml.GetNodeText(cxml.FindNode("//SkinSet/SkinDesigner"))
+							If Err Then Err.Clear : SkinDesigner = ""
+						pubDate = cxml.GetNodeText(cxml.FindNode("//SkinSet/pubDate"))
+							If Err Then Err.Clear : pubDate = ""
+						DesignerURL = cxml.GetNodeText(cxml.FindNode("//SkinSet/DesignerURL"))
+							If Err Then Err.Clear : DesignerURL = ""
+						DesignerMail = cxml.GetNodeText(cxml.FindNode("//SkinSet/DesignerMail"))
+							If Err Then Err.Clear : DesignerMail = ""
+						version = cxml.GetNodeText(cxml.FindNode("//SkinSet/version"))
+							If Err Then Err.Clear : version = ""
+						smallpic = cxml.GetNodeText(cxml.FindNode("//SkinSet/smallpic"))
+							If Err Then Err.Clear : smallpic = ""
+						bigpic = cxml.GetNodeText(cxml.FindNode("//SkinSet/bigpic"))
+							If Err Then Err.Clear : bigpic = ""
+							
+					ztrue = (blog_DefaultSkin = TempFolderArray(tempj))
+%>
+    	<%=cleft%><td align="center">
+        
+        <table width="50%" cellpadding="3" cellspacing="0" style=" padding:3px; border:1px solid #ABA9C5;<%If ztrue Then Response.Write("background:#FFFFCC; border-color:#500000")%>">
+        	<tr>
+            	<td><img src="../pjblog.template/<%=TempFolderArray(tempj)%>/<%=smallpic%>" width="277"; height="170" style="border:1px dotted #ccc" onerror="this.src='../images/control/skin.jpg'"></td>
+            </tr>
+            <tr>
+            	<td align="left">
+                <div style="padding:0px 6px 0px 6px">
+                	<h5 style="color:#004000"><%=SkinName%></h5>
+                    <ul style="list-style: square">
+                    	<li>作者 : <%=SkinDesigner%></li>
+                        <li>发布时间 : <%=pubDate%></li>
+                        <li>作者网址 : <%=DesignerURL%></li>
+                        <li>作者邮箱 : <%=DesignerMail%></li>
+                        <li>风格版本 : <%=version%></li>
+                    </ul>
+                    <p style="margin-bottom:8px;">
+                    	<%If ztrue Then%>
+                    		<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">当前主题</a> 
+                        <%Else%>
+                        	<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="CheckForm.Theme.Choose('<%=TempFolderArray(tempj)%>', this)">应用主题</a> 
+                        <%End If%>
+                        <a href="javascript:;" style="background:url(../images/icon_apply.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">为该模板添加插件</a> 
+						<%If Not ztrue Then%>
+                        	<a href="javascript:;" style="background:url(../images/hidden.gif) no-repeat 0px 0px; padding-left:20px; line-height:20px;">删除模板</a>
+						<%Else%>
+                            <a href="javascript:;" style="background:url(../images/icon_edit.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="CheckForm.Theme.Choose('<%=TempFolderArray(tempj)%>', this)">选择样式</a>
+						<%End If%>
+                    </p>
+                </div>
+                </td>
+            </tr>
+        </table>
+        
+        </td><%=cright%>
+<%
+					End If
+				End If
+			Next
+		End If
+		Set fso = Nothing
+		Set cxml = Nothing
+%>
+    </table>
+<%
 	End If
 %>
             </td>
