@@ -81,7 +81,7 @@ Class Sys_Ajax
 					s = Rs("Att_Path").value
 					varStr = Mid(s, InStrRev(s, "/") + 1, Len(s)) & " (" & Rs("Att_Size").value & ")"
 				End If
-				Str = Str & "<div style=""line-height:20px;clear:both"" id=""upBox_" & Rs("Att_ID").value & """><div style=""margin-right:120px; float:left"">" & i & ". " & varStr & "</div><div style=""width:100px; float:right"">更新 <a href=""javascript:;"" onclick=""Upload.DelFile(" & Rs("Att_ID").value & ")"">删除</a></div></div>"
+				Str = Str & "<div style=""line-height:20px;clear:both"" id=""upBox_" & Rs("Att_ID").value & """><div style=""margin-right:120px; float:left"">" & i & ". " & varStr & "</div><div style=""width:100px; float:right""><a href=""javascript:;"" onClick=""Upload.open(this, \'Message\', 0, \'../upload/month_" & Asp.DateToStr(Now(), "ym") & "\', 1)"">更新</a> <a href=""javascript:;"" onclick=""Upload.DelFile(" & Rs("Att_ID").value & ")"">删除</a></div></div>"
 			Rs.MoveNext
 			Loop
 			Str = Str & "<div style=""clear:both; text-align:right; color:#bbb; font-size:10px; border-top:1px solid #ddd; line-height:22px;"">CopyRight @ 2009 PJBlog4 " & Sys.version & "&nbsp;&nbsp;&nbsp;&nbsp;<a href=""javascript:;"" onclick=""$(\'AttUpload\').removeChild($(\'ArticleAttmentBox\'))"" class=""close"">&nbsp;&nbsp;&nbsp;</a></div>"
