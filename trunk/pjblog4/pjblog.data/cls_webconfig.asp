@@ -37,6 +37,7 @@ Class webConfig
 		Mud.Sets("UpdateTime") = Sys.UpdateTime
 		Mud.Sets("blogPerPage") = blogPerPage
 		Mud.Sets("blogcommpage") = blogcommpage
+		Mud.Sets("blog_style") = blog_style
 	End Sub
 	
 	' ***********************************************
