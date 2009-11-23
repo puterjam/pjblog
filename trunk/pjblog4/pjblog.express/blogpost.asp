@@ -21,10 +21,10 @@
 	<title><%=SiteName%> - <%=blog_Title%></title>
 	<link rel="alternate" type="application/rss+xml" href="<%=SiteURL%>feed.asp" title="订阅 I Miss You 所有文章(rss2)" />
 	<link rel="alternate" type="application/atom+xml" href="<%=SiteURL%>atom.asp" title="订阅 I Miss You 所有文章(atom)" />
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/global.css" type="text/css" media="all" /><!--全局样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/layout.css" type="text/css" media="all" /><!--层次样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/typography.css" type="text/css" media="all" /><!--局部样式表-->
-	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/link.css" type="text/css" media="all" /><!--超链接样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/global.css" type="text/css" media="all" /><!--全局样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/layout.css" type="text/css" media="all" /><!--层次样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/typography.css" type="text/css" media="all" /><!--局部样式表-->
+	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/style/link.css" type="text/css" media="all" /><!--超链接样式表-->
 	<link rel="stylesheet" rev="stylesheet" href="../pjblog.template/<%=blog_DefaultSkin%>/UBB/editor.css" type="text/css" media="all" /><!--UBB编辑器代码-->
     <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/common.css" type="text/css" media="all" /><!--系统样式-->
 	<link rel="stylesheet" rev="stylesheet" href="../FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" /><!--FCK块引用&代码样式-->
