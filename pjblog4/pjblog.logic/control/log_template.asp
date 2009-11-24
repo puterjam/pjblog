@@ -4,6 +4,7 @@
 <!--#include file = "../../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../../pjblog.model/cls_xml.asp" -->
 <!--#include file = "../../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../../pjblog.data/cls_plus.asp" -->
 <%
 Dim doTemp
 Set doTemp = New do_Template
@@ -26,6 +27,8 @@ Class do_Template
 			Case "update" Call doUpdate
 			Case "AddPlus" Call AddPlus
 			Case "ImportPlus" Call ImportPlus
+			Case "GetPlusCode" Call GetPlusCode
+			Case "SavePlusCode" Call SavePlusCode
 		End Select
     End Sub 
      
@@ -170,6 +173,40 @@ Class do_Template
 			End If
 		End If
 		Response.Write(dd)
+	End Sub
+	
+	Private Sub GetPlusCode
+		Dim id, Rs
+		id = Asp.CheckStr(Request.QueryString("id"))
+		If Not Asp.IsInteger(id) Then
+			Response.Write("{Suc:false,Info:'找到该标签'}")
+			Exit Sub
+		End If
+		Set Rs = Conn.Execute("Select tp_pluginSingleTempValue From blog_tempPlugin Where tp_ID=" & id)
+		If Rs.Bof Or Rs.Eof Then
+			Response.Write("{Suc:false,Info:'找到该标签'}")
+		Else
+			Response.Write("{Suc:true,Info:'" & cee.encode(Rs(0).value) & "'}")
+		End If
+		Set Rs = Nothing
+	End Sub
+	
+	Public Sub SavePlusCode
+		Dim id, Content, OK, Arrays
+		id = Trim(Asp.CheckStr(Request.QueryString("id")))
+		If Not Asp.IsInteger(id) Then
+			Response.Write("{Suc:false,Info:'找不到该模板代码'}")
+			Exit Sub
+		End If
+		Content = Trim(Asp.CheckStr(Request.Form("Content")))
+		Arrays = Array(Array("tp_pluginSingleTempValue", Content))
+		OK = Sys.doRecord("blog_tempPlugin", Arrays, "update", "tp_ID", id)
+		If Ok(0) Then
+			plus.Reload
+			Response.Write("{Suc:true,Info:'保存模板代码成功!'}")
+		Else
+			Response.Write("{Suc:false,Info:'" & OK(1) & "'}")
+		End If
 	End Sub
 	
 End Class

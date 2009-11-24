@@ -366,3 +366,65 @@ var Tip = {
 		document.body.removeChild($("loader_container"));
 	}
 }
+
+var center = {
+	Box : function(html){
+		var div = document.createElement("div");
+		div.style.position = "absolute";
+		div.style.display = "block";
+		div.innerHTML = html;
+		document.body.appendChild(div);
+		div.style.top = (document.documentElement.clientHeight - div.offsetHeight)/2 + document.documentElement.scrollTop + "px";
+		div.style.left = (document.documentElement.clientWidth - div.offsetWidth)/2 + document.documentElement.scrollLeft + "px";
+		return div;
+	},
+	Plusinsert : function(html){
+		try{$("PlusCode").parentNode.removeChild($("PlusCode"))}catch(e){}
+		var c = this.Box(html);
+		c.style.cssText += ";border:2px solid #9EB3E0; background:#fff; font-size:12px; padding:4px 4px 4px 4px;";
+		c.id = "PlusCode";
+	},
+	PlusCode : function(id){
+		var _this = this;
+		var _id = id;
+		Ajax({
+		  url : "../pjblog.logic/control/log_template.asp?action=GetPlusCode&id=" + id + "&s=" + Math.random(),
+		  method : "GET",
+		  content : "",
+		  oncomplete : function(obj){
+				var json = obj.responseText.json();
+				if (json.Suc){
+					var c = "";
+					c += "<div style=\"width:500px;\"><div style=\"float:left; width:80px;\"><input type=\"button\" value=\"保存代码\" onclick=\"center.SavePlusCode(" + _id + ")\" class=\"button\"></div><div style=\"float:right; line-height:12px; width:12px; margin-top:6px\"><a href=\"javascript:;\" class=\"close\" onclick=\"try{$('PlusCode').parentNode.removeChild($('PlusCode'))}catch(e){}\">&nbsp;&nbsp;&nbsp;</a></div></div>";
+					c += "<textarea id=\"doSave\">" + cee.decode(json.Info) + "</textarea>";
+					_this.Plusinsert(c);
+				}else{
+					alert(json.Info)
+				}
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
+	},
+	SavePlusCode : function(id){
+		var c = $("doSave").value
+		Ajax({
+		  url : "../pjblog.logic/control/log_template.asp?action=SavePlusCode&id=" + id + "&s=" + Math.random(),
+		  method : "POST",
+		  content : "Content=" + escape(c),
+		  oncomplete : function(obj){
+				var json = obj.responseText.json();
+				if (json.Suc){
+					try{$('PlusCode').parentNode.removeChild($('PlusCode'))}catch(e){}
+					Tip.CreateLayer("恭喜, 操作成功", json.Info);
+				}else{
+					alert(json.Info)
+				}
+		  },
+		  ononexception:function(obj){
+			  alert(obj.state);
+		  }
+		});
+	}
+}
