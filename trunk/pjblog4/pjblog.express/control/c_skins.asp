@@ -289,7 +289,7 @@ Public Sub c_skins
                 <td>加载插件路径</td>
                 <td>插件所在文件夹</td>
                 <td>&nbsp;</td>
-                <td>获取页面标签</td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
 <%
@@ -311,7 +311,11 @@ Public Sub c_skins
 				Response.Write("<td>" & Plus("tp_pluginSinglePath") & "<input type=""hidden"" name=""pluginSinglePath"" value=""" & Plus("tp_pluginSinglePath") & """></td>")
 				Response.Write("<td>" & Plus("tp_pluginPath") & "<input type=""hidden"" name=""pluginPath"" value=""" & Plus("tp_pluginPath") & """></td>")
 				Response.Write("<td><a href=""javascript:;"" onclick=""center.PlusCode(" & Plus("tp_ID") & ")"">编辑插件模板代码</a></td>")
-				Response.Write("<td>获取页面标签</td>")
+				If Len(Plus("tp_plugintag").value) > 0 Then
+					Response.Write("<td><a href=""javascript:;"" onclick=""center.GetPlusTag('" & Plus("tp_plugintag") & "')"">获取页面标签</a></td>")
+				Else
+					Response.Write("<td><span style=""color:#ccc"">获取页面标签</span></td>")
+				End If
 				Response.Write("<td>删除</td>")
 				Response.Write("</tr>")
 				ms = ms + 1

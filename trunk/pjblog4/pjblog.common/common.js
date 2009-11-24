@@ -426,5 +426,12 @@ var center = {
 			  alert(obj.state);
 		  }
 		});
+	},
+	GetPlusTag : function(value){
+		var c = "";
+		c += "<div style=\"width:500px;\"><div style=\"float:left; width:400px;\">将以下代码插入到页面中即可</div><div style=\"float:right; line-height:12px; width:12px; margin-top:6px\"><a href=\"javascript:;\" class=\"close\" onclick=\"try{$('PlusCode').parentNode.removeChild($('PlusCode'))}catch(e){}\">&nbsp;&nbsp;&nbsp;</a></div></div>";
+		c += "<div style=\" margin:4px 0px 8px 0px; text-align:ccenter\"><input type=\"text\" class=\"text\"value=\"" + value + "\" style=\"width:500px; margin:0 auto; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;line-height:16px;font-style:oblique\" /></div>";
+		c += "<div style=\"text-align:right; padding:0px 5px 0px 20px; color:#ccc; font-family:Arial, Helvetica, sans-serif; font-size:10px;font-style:oblique\">CopyRight @ PJBlog4</div>";
+		this.Plusinsert(c);
 	}
 }
