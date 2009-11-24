@@ -51,5 +51,8 @@
   
   input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
 input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
-  .close:link, .close:visited{ width:12px; height:12px; background:url(../images/close.gif) 0px 0px no-repeat; text-decoration:none}
+  .close:link, .close:visited{ width:12px; height:12px; background:url(../images/close.gif) 0px 0px no-repeat; text-decoration:none; display:block; overflow:hidden;}
   .close:hover{ width:12px; height:12px;background:url(../images/close.gif) 0px -12px no-repeat; text-decoration:none}
+  
+  #doSave{ width:500px; height:180px; font-family: "Trebuchet MS", Arial, Helvetica, sans-serif}
+  .clear{ clear:both}

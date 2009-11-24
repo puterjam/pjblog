@@ -41,8 +41,9 @@ End If
     <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/common.css" type="text/css" media="all" />
     <script language="javascript" type="text/javascript" src="../pjblog.common/language.js"></script>
     <script language="javascript" type="text/javascript" src="../pjblog.common/common.js"></script>
-     <script language="javascript" type="text/javascript" src="../pjblog.common/Ajax.js"></script>
+    <script language="javascript" type="text/javascript" src="../pjblog.common/Ajax.js"></script>
     <script language="javascript" type="text/javascript" src="../pjblog.common/checkform.js"></script>
+    <script language="javascript" type="text/javascript" src="../pjblog.model/base64.js"></script>
 	<title>后台管理 - PJBlog4 v<%=Sys.version%></title>
 	<style type="text/css">
 		<!--
