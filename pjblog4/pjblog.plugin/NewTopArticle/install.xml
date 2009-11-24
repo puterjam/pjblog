@@ -38,7 +38,10 @@
 			<mode do="true">
 				<item>
 					<mark>NewTopArticle</mark>
+					<name>最新日志列表</name>
 					<include>NewTopArticle.asp</include>
+					<templatePath>p_RecentArticle.html</templatePath>
+					<tag><![CDATA[<plugin:NewTopArticle/>]]></tag>
 				</item>
 			</mode>
 		</Template>

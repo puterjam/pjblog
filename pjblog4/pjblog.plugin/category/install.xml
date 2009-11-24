@@ -38,8 +38,10 @@
 			<mode do="true">
 				<item>
 					<mark>ins.category</mark>
+					<name>分类列表</name>
 					<include>ins_category.asp</include>
-					<templatePath></templatePath>
+					<templatePath>..asaf.asp</templatePath>
+					<tag><![CDATA[<plugin:ins.category/>]]></tag>
 				</item>
 			</mode>
 		</Template>

@@ -37,8 +37,11 @@
 			<BackenterPole do="false">.../dsaf.asp</BackenterPole>
 			<mode do="true">
 				<item>
-					<mark>category</mark>
+					<mark>userPannel</mark>
+					<name>用户信息</name>
 					<include>.../dsfas.asp</include>
+					<templatePath></templatePath>
+					<tag><![CDATA[<plugin:userPannel/>]]></tag>
 				</item>
 			</mode>
 		</Template>

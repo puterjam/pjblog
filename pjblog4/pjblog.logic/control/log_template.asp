@@ -1,7 +1,9 @@
 ﻿<!--#include file = "../../include.asp" -->
 <!--#include file = "../../pjblog.data/control/cls_template.asp" -->
+<!--#include file = "../../pjblog.data/control/cls_plugin.asp" -->
 <!--#include file = "../../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../../pjblog.model/cls_xml.asp" -->
+<!--#include file = "../../pjblog.model/cls_Stream.asp" -->
 <%
 Dim doTemp
 Set doTemp = New do_Template
@@ -22,6 +24,8 @@ Class do_Template
 		Select Case Action
 			Case "Choose" Call Choose
 			Case "update" Call doUpdate
+			Case "AddPlus" Call AddPlus
+			Case "ImportPlus" Call ImportPlus
 		End Select
     End Sub 
      
@@ -87,6 +91,85 @@ Class do_Template
 			Session(Sys.CookieName & "_MsgText") = OK(1)
 		End If
 		RedirectUrl(RedoUrl)
+	End Sub
+	
+	Private Sub AddPlus
+		Dim f1, folder, pluginSingleMark, cStream
+		Dim xmlPath, dc, cc, bb
+		Dim Config_Template, obj_mode, temps, subtemp
+		Dim tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleName, tp_pluginSingleTempPath, Plugin_Mark, tp_pluginSingleTempValue
+		dc = "{Suc : false, Info : '操作失败'}"
+		cc = Array(False, "操作失败")
+		f1 = Trim(Asp.CheckUrl(Request.Form("f1")))
+		folder = Trim(Asp.CheckUrl(Request.Form("folder")))
+		pluginSingleMark = Trim(Asp.CheckUrl(Request.Form("tp_pluginSingleMark")))
+		xmlPath = "../../pjblog.plugin/" & folder & "/install.xml"
+		Set fso = New cls_fso
+		Set cxml = New xml
+		Set cStream = New Stream
+			If fso.FileExists(xmlPath) Then
+				cxml.FilePath = xmlPath
+				If cxml.open Then
+					Plugin_Mark = cxml.GetNodeText(cxml.FindNode("//Plugin/Mark"))
+					If Err Then Err.Clear : Plugin_Mark = "&nbsp;"
+					Set Config_Template = cxml.FindNode("//Plugin/Config/Template")
+							If Lcase(cxml.GetAttribute(Config_Template, "do")) = "true" Then
+								Set obj_mode = Config_Template.selectSingleNode("mode")
+									If Lcase(cxml.GetAttribute(obj_mode, "do")) = "true" Then
+										Set temps = obj_mode.getElementsByTagName("item")
+											On Error Resume Next
+											For Each subtemp In temps
+												tp_pluginSingleMark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
+													If Err Then Err.Clear : tp_pluginSingleMark = "&nbsp;"
+												tp_pluginSinglePath = cxml.GetNodeText(subtemp.selectSingleNode("include"))
+													If Err Then Err.Clear : tp_pluginSinglePath = "&nbsp;"
+												tp_pluginSingleName = cxml.GetNodeText(subtemp.selectSingleNode("name"))
+													If Err Then Err.Clear : tp_pluginSingleName = "&nbsp;"
+												tp_pluginSingleTempPath = cxml.GetNodeText(subtemp.selectSingleNode("templatePath"))
+													If Err Then Err.Clear : tp_pluginSingleTempPath = "&nbsp;"
+												bb = cStream.LoadFile("../../pjblog.plugin/" & folder & "/" & tp_pluginSingleTempPath)
+												tp_pluginSingleTempValue = Asp.CheckStr(bb) ' uncheckstr
+													If Err Then Err.Clear : tp_pluginSingleTempValue = ""
+												If 	tp_pluginSingleMark = pluginSingleMark Then
+													cc = Temp.AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue)
+													If cc(0) Then dc = "{Suc : true, Info : '操作成功'}"
+												End If	
+											Next
+									End If
+							End If
+				End If
+			End If
+		Set cStream = Nothing
+		Set cxml = Nothing
+		Set fso = Nothing
+		Session(Sys.CookieName & "_ShowMsg") = True
+		If cc(0) Then
+			Session(Sys.CookieName & "_MsgText") = "添加插件成功!"
+		Else
+			Session(Sys.CookieName & "_MsgText") = cc(1)
+		End If
+		Response.Write(dc)
+	End Sub
+	
+	Private Sub ImportPlus
+		Dim pluginSinglePath, i, Paths, PluginPath, dd, key
+		dd = "{Suc:false,Info:'操作失败'}"
+		pluginSinglePath = Split(Request.Form("pluginSinglePath"), ",")
+		PluginPath = Split(Request.Form("PluginPath"), ",")
+		key = Split(Request.Form("key"), ",")
+		If UBound(pluginSinglePath) >= 0 Then
+			On Error Resume Next
+			For i = 0 To UBound(pluginSinglePath)
+				Paths = "<!--" & chr(35) & "include file=""../pjblog.plugin/" & PluginPath(i) & "/" & pluginSinglePath(i) & """ -->"
+				Plugin.WritePluginAsp key(i), Paths
+			Next
+			If Err.Number > 0 Then
+				dd = "{Suc:false,Info:'" & Err.Description & "'}"
+			Else
+				dd = "{Suc:true,Info:'导入成功!'}"
+			End If
+		End If
+		Response.Write(dd)
 	End Sub
 	
 End Class
