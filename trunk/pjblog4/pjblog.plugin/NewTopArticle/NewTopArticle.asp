@@ -11,11 +11,16 @@ Function NewArticle(i)
 If Not IsArray(Application(Sys.CookieName & "_NewArticle")) Or Int(i) = 2 Then
 	dim TopNum, IsShowHidden, TitleLen, IsShowAuthor, Article(), TmpNum, Articles, ArticleTitle
 	
+	Dim temps, tempStr
+	
 	Model.open("NewTopArticle")
+	Plus.open("NewTopArticle")
+	
 	TopNum = Model.getKeyvalue("TopNum")
 	IsShowHidden = Model.getKeyValue("IsShowHidden")
 	TitleLen = Model.getKeyValue("TitleLen")
 	IsShowAuthor = Model.getKeyValue("IsShowAuthor")
+	temps = Asp.UnCheckStr(Plus.getSingleTemplate("NewTopArticle"))
 	
 	TmpNum = 0 : ReDim Article(-1)   '下标从0开始, 如果没有记录则下标为-1#
 	If IsShowHidden="0" Then    '显示隐藏分类和隐藏日志#
@@ -37,7 +42,12 @@ If Not IsArray(Application(Sys.CookieName & "_NewArticle")) Or Int(i) = 2 Then
 				ArticleTitle = Asp.CutStr(Articles("log_title"), TitleLen)
 			End If
 		End If
-		Article(TmpNum)="<a href="""&Init.doArticleUrl(Articles("log_id"))&""" class=""sideA"" title="" "&Articles("log_Author")&" 发表于 "&Articles("log_postTime")&" "">"&ArticleTitle&"</a>"
+		tempStr = temps
+		tempStr = Replace(tempStr, "<#id#>", Init.doArticleUrl(Articles("log_id")))
+		tempStr = Replace(tempStr, "<#Author#>", Articles("log_Author"))
+		tempStr = Replace(tempStr, "<#Time#>", Articles("log_postTime"))
+		tempStr = Replace(tempStr, "<#Title#>", ArticleTitle)
+		Article(TmpNum)=tempStr
 		Articles.MoveNext
 		TmpNum = TmpNum+1
 	Loop	

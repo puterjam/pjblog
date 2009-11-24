@@ -261,7 +261,133 @@ Public Sub c_skins
 %>
 <iframe src="log_styleEdit.asp?action=default" width="100%" height="800"></iframe>
 <%
-
+	' -----------------------------------------------------
+	'	主题增加插件
+	' -----------------------------------------------------
+	ElseIf Request.QueryString("Smenu") = "AddPlus" Then
+		Dim f1 : f1 = Asp.CheckStr(Request.QueryString("f1")) ' 路径做标识
+		Dim Plus, Plus_Str
+'		Set Plus = Conn.Execute("Select * From blog_Module")
+'		If Plus.Bof Or Plus.Eof Then
+'			Plus_Str = ""
+'		Else
+'			Plus_Str = ""
+'			Do While Not Plus.Eof
+'				Plus_Str = Plus_Str & "<input type=""checkbox"" name=""plusMark"" value="""" />"
+'			Plus.MoveNext
+'			Loop
+'		End If
+'		Set Plus = Nothing
+%>
+		<div>
+        <h5>※ 已支持的插件</h5>
+        <form action="../pjblog.logic/control/log_template.asp?action=ImportPlus" method="post" id="import">
+		<table cellpadding="3" cellspacing="0" width="100%">
+        	<tr>
+            	<td>插件模板名</td>
+                <td>插件模板标识</td>
+                <td>加载插件路径</td>
+                <td>插件所在文件夹</td>
+                <td>编辑插件模板代码</td>
+                <td>获取页面标签</td>
+                <td>&nbsp;</td>
+            </tr>
+<%
+		Dim Ass, AsCount, ms
+		AsCount = Int(Sys.doGet("Select Count(*) From blog_tempPlugin Where tp_templateName='" & f1 & "'")(0))
+		AsCount = AsCount - 1
+		ReDim Ass(AsCount)
+		Set Plus = Conn.Execute("Select * From blog_tempPlugin Where tp_templateName='" & f1 & "'")
+		If Plus.Bof Or Plus.Eof Then
+			Response.Write("<tr><td align=""center"" colspan=""7"" style=""border-top:1px dotted #ccc"">该主题暂无插件支持</td></tr>")
+		Else
+			ms = 0
+			Do While Not Plus.Eof
+				Ass(ms) = Plus("tp_pluginSingleMark")
+				Response.Write("<tr>")
+				Response.Write("<input type=""hidden"" value=""" & Plus("tp_PluginMark") & "." & Plus("tp_pluginSingleMark") & """ name=""key"">")
+				Response.Write("<td>" & Plus("tp_pluginSingleName") & "</td>")
+				Response.Write("<td>" & Plus("tp_pluginSingleMark") & "</td>")
+				Response.Write("<td>" & Plus("tp_pluginSinglePath") & "<input type=""hidden"" name=""pluginSinglePath"" value=""" & Plus("tp_pluginSinglePath") & """></td>")
+				Response.Write("<td>" & Plus("tp_pluginPath") & "<input type=""hidden"" name=""pluginPath"" value=""" & Plus("tp_pluginPath") & """></td>")
+				Response.Write("<td>编辑插件模板代码</td>")
+				Response.Write("<td>获取页面标签</td>")
+				Response.Write("<td>删除</td>")
+				Response.Write("</tr>")
+				ms = ms + 1
+			Plus.MoveNext
+			Loop
+		End If
+		Set Plus = Nothing
+		Response.Write("<tr><td align=""right"" colspan=""6"" style=""border-top:1px dotted #ccc; padding-right:30px;""><a href=""javascript:;"" onclick=""CheckForm.Theme.ImportPlus('import')"">将以上插件导入到本主题中</a></td><td>&nbsp;</td></tr>")
+%>
+		</table>
+        </form>
+        
+        <h5>※ 为此主题增加更多插件支持</h5>
+        <table cellpadding="3" cellspacing="0" width="100%">
+        	<tr>
+            	<td>插件模板名</td>
+                <td>插件模板标识</td>
+                <td>加载插件路径</td>
+                <td>插件所在文件夹</td>
+                <td>&nbsp;</td>
+            </tr>
+<%
+	Dim addi
+		Set fso = New cls_fso
+		Set cxml = New xml
+		Dim tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, tp_pluginPath, tp_pluginSingleName, tp_PluginMark, tp_templateName, Plugin_Mark
+		Dim Config_Template, obj_mode, temp, subtemp
+			'FileItems, FolderItems
+			FolderItems = fso.FolderItem("../pjblog.plugin")
+			SplitName = Split(FolderItems, "|")
+			If Int(SplitName(0)) > 0 Then
+				For addi = 1 To UBound(SplitName)
+					If fso.FileExists("../pjblog.plugin/" & SplitName(addi) & "/install.xml") Then
+						cxml.FilePath = "../pjblog.plugin/" & SplitName(addi) & "/install.xml"
+						If cxml.open Then
+							Plugin_Mark = cxml.GetNodeText(cxml.FindNode("//Plugin/Mark"))
+							If Err Then Err.Clear : Plugin_Mark = ""
+							If Int(Sys.doGet("Select Count(*) From blog_Module Where plugin_Mark='" & Plugin_Mark & "'")(0)) > 0 Then
+							Set Config_Template = cxml.FindNode("//Plugin/Config/Template")
+							If Lcase(cxml.GetAttribute(Config_Template, "do")) = "true" Then
+								Set obj_mode = Config_Template.selectSingleNode("mode")
+									If Lcase(cxml.GetAttribute(obj_mode, "do")) = "true" Then
+										Set temp = obj_mode.getElementsByTagName("item")
+											On Error Resume Next
+											For Each subtemp In temp
+												tp_pluginSingleMark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
+													If Err Then Err.Clear : tp_pluginSingleMark = "&nbsp;"
+												tp_pluginSinglePath = cxml.GetNodeText(subtemp.selectSingleNode("include"))
+													If Err Then Err.Clear : tp_pluginSinglePath = "&nbsp;"
+												tp_pluginSingleName = cxml.GetNodeText(subtemp.selectSingleNode("name"))
+													If Err Then Err.Clear : tp_pluginSingleName = "&nbsp;"
+												tp_pluginSingleTempPath = cxml.GetNodeText(subtemp.selectSingleNode("templatePath"))
+													If Err Then Err.Clear : tp_pluginSingleTempPath = "&nbsp;"
+												If Not CheckAddPlus(Ass, tp_pluginSingleMark) Then
+													Response.Write("<tr>")
+													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSingleName & "</td>")
+													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSingleMark & "</td>")
+													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSinglePath & "</td>")
+													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSingleTempPath & "</td>")
+													Response.Write("<td style=""border-top:1px dotted #ccc""><a href=""javascript:;"" onclick=""CheckForm.Theme.AddPlus('" & f1 & "', '" & SplitName(addi) & "', '" & tp_pluginSingleMark & "', this)"">添加</a></td>")
+													Response.Write("</tr>")
+												End If
+											Next
+									End If
+							End If
+							End If
+						End If
+					End If
+				Next
+			End If
+		Set cxml = Nothing
+		Set fso = Nothing
+%>
+		</table>
+        </div>
+<%
 	' -----------------------------------------------------
 	'	主题选择
 	' -----------------------------------------------------
@@ -342,7 +468,7 @@ Public Sub c_skins
                         <%Else%>
                         	<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="CheckForm.Theme.Choose('<%=TempFolderArray(tempj)%>', this)">应用主题</a> 
                         <%End If%>
-                        <a href="javascript:;" style="background:url(../images/icon_apply.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">为该模板添加插件</a> 
+                        <a href="?Fmenu=Skins&Smenu=AddPlus&f1=<%=TempFolderArray(tempj)%>" style="background:url(../images/icon_apply.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">为该主题添加插件</a> 
 						<%If Not ztrue Then%>
                         	<a href="javascript:;" style="background:url(../images/hidden.gif) no-repeat 0px 0px; padding-left:20px; line-height:20px;">删除模板</a>
 						<%Else%>
@@ -410,6 +536,17 @@ Public Function CheckExe(ByVal Str, ByVal Arrays)
 	For i = 0 To UBound(SplitArray)
 		If SplitArray(i) = Str Then
 			CheckExe = False
+			Exit For
+		End If
+	Next
+End Function
+
+Public Function CheckAddPlus(Arrays, Str)
+	CheckAddPlus = False
+	Dim i
+	For Each i In Arrays
+		If i = Str Then
+			CheckAddPlus = True
 			Exit For
 		End If
 	Next

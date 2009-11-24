@@ -38,7 +38,10 @@
 			<mode do="true">
 				<item>
 					<mark>ins.bloginfo</mark>
+					<name>博客信息列表</name>
 					<include>ins_bloginfo.asp</include>
+					<templatePath></templatePath>
+					<tag><![CDATA[<plugin:ins.bloginfo/>]]></tag>
 				</item>
 			</mode>
 		</Template>

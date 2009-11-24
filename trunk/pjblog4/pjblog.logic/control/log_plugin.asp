@@ -132,20 +132,20 @@ Class do_Plugin
 					' ----------------------------------------------------------------
 					'	判断写入文件数据
 					' ----------------------------------------------------------------	
-					Set obj_mode = Config_Template.selectSingleNode("mode")
-					If Lcase(cxml.GetAttribute(obj_mode, "do")) = "true" Then
-						Set temp = obj_mode.getElementsByTagName("item")
-						For Each subtemp In temp
-							temp_mark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
-								If Err Then Err.Clear : temp_mark = ""
-							temp_include = cxml.GetNodeText(subtemp.selectSingleNode("include"))
-								If Err Then Err.Clear : temp_include = ""
-							If Len(temp_mark) > 0 And Len(temp_include) > 0 Then
-								WriteInclude = "<!--" & chr(35) & "include file=""../pjblog.plugin/" & InstallFolder & "/" & temp_include & """ -->"
-								WriteTemp = Plugin.WritePluginAsp(temp_mark, WriteInclude)
-							End If
-						Next
-					End If
+'					Set obj_mode = Config_Template.selectSingleNode("mode")
+'					If Lcase(cxml.GetAttribute(obj_mode, "do")) = "true" Then
+'						Set temp = obj_mode.getElementsByTagName("item")
+'						For Each subtemp In temp
+'							temp_mark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
+'								If Err Then Err.Clear : temp_mark = ""
+'							temp_include = cxml.GetNodeText(subtemp.selectSingleNode("include"))
+'								If Err Then Err.Clear : temp_include = ""
+'							If Len(temp_mark) > 0 And Len(temp_include) > 0 Then
+'								WriteInclude = "<!--" & chr(35) & "include file=""../pjblog.plugin/" & InstallFolder & "/" & temp_include & """ -->"
+'								WriteTemp = Plugin.WritePluginAsp(temp_mark, WriteInclude)
+'							End If
+'						Next
+'					End If
 				End If
 				' ----------------------------------------------------------------
 				'	判断导航数据

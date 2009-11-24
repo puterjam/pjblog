@@ -165,30 +165,31 @@ function Check(){
         			function(obj) {
 						var json = obj.responseText.json();
 						if (json.Suc){
-							var w = 0, karr = new Array();
-							var lens = document.getElementsByTagName("div");
-							for (var k = 0 ; k < lens.length ; k++){
-								if (lens[k].className == "CommPart"){
-									w++;
-									karr.push(lens[k]);
-								}
-							}
-							if (k >= CommPageSize){
-								$("commentBox").removeChild(karr[w - 1]);
-							}
 							$("postform").reset();
 							var str = cee.decode(json.Info);//最好返回的值
 							var div = document.createElement("div");
 							div.id = "comment_" + json.id;
 							div.className = "CommPart";
 							div.innerHTML = str;
-							if ($("commentBox").childNodes.length > 0){
+							if (hasChildNodes($("commentBox"))){
 								$("commentBox").insertBefore(div, $("commentBox").childNodes[0]);
 							}else{
 								$("commentBox").appendChild(div);
 							}
 							flash("commenttop_" + json.id);
 							location = "#comment_" + json.id;
+							
+//							var w = 0, karr = new Array();
+//							var lens = document.getElementsByTagName("div");
+//							for (var k = 0 ; k < lens.length ; k++){
+//								if (lens[k].className == "CommPart"){
+//									w++;
+//									karr.push(lens[k]);
+//								}
+//							}
+//							if (k >= CommPageSize){
+//								$("commentBox").removeChild(karr[w - 1]);
+//							}
 						}else{
 							Tip.CreateLayer("错误信息", json.Info)
 						}
@@ -607,6 +608,42 @@ function Check(){
 				  alert(obj.state);
 			  }
 			});
+		},
+		AddPlus : function(f1, folder, tp_pluginSingleMark, _obj){
+			_obj.innerHTML = "正在添加...";
+			_obj.disabled = true;
+			var __obj = _obj;
+			_obj.onclick = function(){return false;}
+			Ajax({
+			  url : "../pjblog.logic/control/log_template.asp?action=AddPlus&s=" + Math.random(),
+			  method : "POST",
+			  content : "f1=" + escape(f1) + "&folder=" + escape(folder) + "&tp_pluginSingleMark=" + escape(tp_pluginSingleMark),
+			  oncomplete : function(obj){
+					var json = obj.responseText.json();
+					if (json.Suc){
+						__obj.disabled = false;
+						__obj.innerHTML = "操作成功!";
+						setTimeout("location.reload()", 500);
+					}
+			  },
+			  ononexception:function(obj){
+				  alert(obj.state);
+			  }
+			});
+		},
+		ImportPlus : function(id){
+			var ajax = new Ajax();
+    			ajax.postf(
+        			$(id),
+        			function(obj) {
+						var json = obj.responseText.json();
+						if (json.Suc){
+							Tip.CreateLayer("恭喜 操作完毕", json.Info);
+						}else{
+							Tip.CreateLayer("错误信息", json.Info);
+						}
+					}
+    			);
 		}
 	}
 }
