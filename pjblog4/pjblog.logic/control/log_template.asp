@@ -100,7 +100,7 @@ Class do_Template
 		Dim f1, folder, pluginSingleMark, cStream
 		Dim xmlPath, dc, cc, bb
 		Dim Config_Template, obj_mode, temps, subtemp
-		Dim tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleName, tp_pluginSingleTempPath, Plugin_Mark, tp_pluginSingleTempValue
+		Dim tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleName, tp_pluginSingleTempPath, Plugin_Mark, tp_pluginSingleTempValue, tp_plugintag
 		dc = "{Suc : false, Info : '操作失败'}"
 		cc = Array(False, "操作失败")
 		f1 = Trim(Asp.CheckUrl(Request.Form("f1")))
@@ -130,11 +130,13 @@ Class do_Template
 													If Err Then Err.Clear : tp_pluginSingleName = "&nbsp;"
 												tp_pluginSingleTempPath = cxml.GetNodeText(subtemp.selectSingleNode("templatePath"))
 													If Err Then Err.Clear : tp_pluginSingleTempPath = "&nbsp;"
+												tp_plugintag = cxml.GetNodeText(subtemp.selectSingleNode("tag"))
+													If Err Then Err.Clear : tp_plugintag = ""
 												bb = cStream.LoadFile("../../pjblog.plugin/" & folder & "/" & tp_pluginSingleTempPath)
 												tp_pluginSingleTempValue = Asp.CheckStr(bb) ' uncheckstr
 													If Err Then Err.Clear : tp_pluginSingleTempValue = ""
 												If 	tp_pluginSingleMark = pluginSingleMark Then
-													cc = Temp.AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue)
+													cc = Temp.AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue, tp_plugintag)
 													If cc(0) Then dc = "{Suc : true, Info : '操作成功'}"
 												End If	
 											Next

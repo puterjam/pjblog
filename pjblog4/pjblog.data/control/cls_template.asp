@@ -23,8 +23,8 @@ Class Sys_Template
 		doUpdate = Sys.doRecord("blog_Info", Arrays, "update", "blog_ID", 1)
 	End Function
 	
-	Public Function AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue)
-		Arrays = Array(Array("tp_templateName", f1), Array("tp_pluginSingleMark", tp_pluginSingleMark), Array("tp_pluginSinglePath", tp_pluginSinglePath), Array("tp_pluginSingleTempPath", tp_pluginSingleTempPath), Array("tp_pluginPath", folder), Array("tp_pluginSingleName", tp_pluginSingleName), Array("tp_PluginMark", Plugin_Mark), Array("tp_pluginSingleTempValue", tp_pluginSingleTempValue))
+	Public Function AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue, tp_plugintag)
+		Arrays = Array(Array("tp_templateName", f1), Array("tp_pluginSingleMark", tp_pluginSingleMark), Array("tp_pluginSinglePath", tp_pluginSinglePath), Array("tp_pluginSingleTempPath", tp_pluginSingleTempPath), Array("tp_pluginPath", folder), Array("tp_pluginSingleName", tp_pluginSingleName), Array("tp_PluginMark", Plugin_Mark), Array("tp_pluginSingleTempValue", tp_pluginSingleTempValue), Array("tp_plugintag", tp_plugintag))
 		AddPlus = Sys.doRecord("blog_tempPlugin", Arrays, "insert", "tp_ID", "")
 	End Function
 	
