@@ -310,7 +310,12 @@ Public Sub c_skins
 				Response.Write("<td>" & Plus("tp_pluginSingleMark") & "</td>")
 				Response.Write("<td>" & Plus("tp_pluginSinglePath") & "<input type=""hidden"" name=""pluginSinglePath"" value=""" & Plus("tp_pluginSinglePath") & """></td>")
 				Response.Write("<td>" & Plus("tp_pluginPath") & "<input type=""hidden"" name=""pluginPath"" value=""" & Plus("tp_pluginPath") & """></td>")
-				Response.Write("<td><a href=""javascript:;"" onclick=""center.PlusCode(" & Plus("tp_ID") & ")"">编辑插件模板代码</a></td>")
+				If Len(Trim(Plus("tp_pluginSingleTempValue").value)) > 0 Then
+					Response.Write("<td><a href=""javascript:;"" onclick=""center.PlusCode(" & Plus("tp_ID") & ")"">编辑插件模板代码</a></td>")
+				Else
+					Response.Write("<td>&nbsp;</td>")
+				End If
+				
 				If Len(Plus("tp_plugintag").value) > 0 Then
 					Response.Write("<td><a href=""javascript:;"" onclick=""center.GetPlusTag('" & Plus("tp_plugintag") & "')"">获取页面标签</a></td>")
 				Else

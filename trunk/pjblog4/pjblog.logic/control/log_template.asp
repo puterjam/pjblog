@@ -124,16 +124,20 @@ Class do_Template
 											On Error Resume Next
 											For Each subtemp In temps
 												tp_pluginSingleMark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
-													If Err Then Err.Clear : tp_pluginSingleMark = "&nbsp;"
+													If Err Then Err.Clear : tp_pluginSingleMark = ""
 												tp_pluginSinglePath = cxml.GetNodeText(subtemp.selectSingleNode("include"))
-													If Err Then Err.Clear : tp_pluginSinglePath = "&nbsp;"
+													If Err Then Err.Clear : tp_pluginSinglePath = ""
 												tp_pluginSingleName = cxml.GetNodeText(subtemp.selectSingleNode("name"))
-													If Err Then Err.Clear : tp_pluginSingleName = "&nbsp;"
+													If Err Then Err.Clear : tp_pluginSingleName = ""
 												tp_pluginSingleTempPath = cxml.GetNodeText(subtemp.selectSingleNode("templatePath"))
-													If Err Then Err.Clear : tp_pluginSingleTempPath = "&nbsp;"
+													If Err Then Err.Clear : tp_pluginSingleTempPath = ""
 												tp_plugintag = cxml.GetNodeText(subtemp.selectSingleNode("tag"))
 													If Err Then Err.Clear : tp_plugintag = ""
-												bb = cStream.LoadFile("../../pjblog.plugin/" & folder & "/" & tp_pluginSingleTempPath)
+												If Len(tp_pluginSingleTempPath) > 0 Then
+													bb = cStream.LoadFile("../../pjblog.plugin/" & folder & "/" & tp_pluginSingleTempPath)
+												Else
+													bb = ""
+												End If
 												tp_pluginSingleTempValue = Asp.CheckStr(bb) ' uncheckstr
 													If Err Then Err.Clear : tp_pluginSingleTempValue = ""
 												If 	tp_pluginSingleMark = pluginSingleMark Then
@@ -166,12 +170,13 @@ Class do_Template
 		If UBound(pluginSinglePath) >= 0 Then
 			On Error Resume Next
 			For i = 0 To UBound(pluginSinglePath)
-				Paths = "<!--" & chr(35) & "include file=""../pjblog.plugin/" & PluginPath(i) & "/" & pluginSinglePath(i) & """ -->"
+				Paths = "<!--" & chr(35) & "include file=""../pjblog.plugin/" & Trim(PluginPath(i)) & "/" & Trim(pluginSinglePath(i)) & """ -->"
 				Plugin.WritePluginAsp key(i), Paths
 			Next
 			If Err.Number > 0 Then
 				dd = "{Suc:false,Info:'" & Err.Description & "'}"
 			Else
+				plus.Reload
 				dd = "{Suc:true,Info:'导入成功!'}"
 			End If
 		End If

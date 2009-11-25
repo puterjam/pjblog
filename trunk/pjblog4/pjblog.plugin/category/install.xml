@@ -40,7 +40,7 @@
 					<mark>ins.category</mark>
 					<name>分类列表</name>
 					<include>ins_category.asp</include>
-					<templatePath>..asaf.asp</templatePath>
+					<templatePath>p_category.html</templatePath>
 					<tag><![CDATA[<plugin:ins.category/>]]></tag>
 				</item>
 			</mode>

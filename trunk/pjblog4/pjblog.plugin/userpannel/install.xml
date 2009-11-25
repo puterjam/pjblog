@@ -38,7 +38,10 @@
 			<mode do="true">
 				<item>
 					<mark>ins.userpannel</mark>
+					<name>用户面板</name>
 					<include>ins_userpannel.asp</include>
+					<templatePath></templatePath>
+					<tag><![CDATA[<plugin:ins.userpannel/>]]></tag>
 				</item>
 			</mode>
 		</Template>

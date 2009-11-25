@@ -24,7 +24,7 @@ Class Sys_Template
 	End Function
 	
 	Public Function AddPlus(f1, tp_pluginSingleMark, tp_pluginSinglePath, tp_pluginSingleTempPath, folder, tp_pluginSingleName, Plugin_Mark, tp_pluginSingleTempValue, tp_plugintag)
-		Arrays = Array(Array("tp_templateName", f1), Array("tp_pluginSingleMark", tp_pluginSingleMark), Array("tp_pluginSinglePath", tp_pluginSinglePath), Array("tp_pluginSingleTempPath", tp_pluginSingleTempPath), Array("tp_pluginPath", folder), Array("tp_pluginSingleName", tp_pluginSingleName), Array("tp_PluginMark", Plugin_Mark), Array("tp_pluginSingleTempValue", tp_pluginSingleTempValue), Array("tp_plugintag", tp_plugintag))
+		Arrays = Array(Array("tp_templateName", Trim(f1)), Array("tp_pluginSingleMark", Trim(tp_pluginSingleMark)), Array("tp_pluginSinglePath", Trim(tp_pluginSinglePath)), Array("tp_pluginSingleTempPath", Trim(tp_pluginSingleTempPath)), Array("tp_pluginPath", Trim(folder)), Array("tp_pluginSingleName", Trim(tp_pluginSingleName)), Array("tp_PluginMark", Trim(Plugin_Mark)), Array("tp_pluginSingleTempValue", Trim(tp_pluginSingleTempValue)), Array("tp_plugintag", Trim(tp_plugintag)))
 		AddPlus = Sys.doRecord("blog_tempPlugin", Arrays, "insert", "tp_ID", "")
 	End Function
 	
