@@ -29,6 +29,7 @@ Class do_Template
 			Case "ImportPlus" Call ImportPlus
 			Case "GetPlusCode" Call GetPlusCode
 			Case "SavePlusCode" Call SavePlusCode
+			Case "delPlus" Call DelPlus
 		End Select
     End Sub 
      
@@ -193,7 +194,7 @@ Class do_Template
 		Set Rs = Nothing
 	End Sub
 	
-	Public Sub SavePlusCode
+	Private Sub SavePlusCode
 		Dim id, Content, OK, Arrays
 		id = Trim(Asp.CheckStr(Request.QueryString("id")))
 		If Not Asp.IsInteger(id) Then
@@ -209,6 +210,39 @@ Class do_Template
 		Else
 			Response.Write("{Suc:false,Info:'" & OK(1) & "'}")
 		End If
+	End Sub
+	
+	Private Sub DelPlus
+		Dim id, Arrays, Ok, this
+		Dim tp_PluginMark, tp_pluginSingleMark
+		id = Trim(Asp.CheckStr(Request.QueryString("id")))
+		Session(Sys.CookieName & "_ShowMsg") = True
+		If Not Asp.IsInteger(id) Then
+			Session(Sys.CookieName & "_MsgText") = "非法参数!"
+		Else
+			Conn.BeginTrans	
+			Set this = Server.CreateObject("Adodb.RecordSet")
+			this.open "blog_tempPlugin", Conn, 1, 3
+			If this.Bof or this.Eof Then
+				Session(Sys.CookieName & "_MsgText") = "找不到该插件"
+			Else
+				tp_PluginMark = this("tp_PluginMark").value
+				tp_pluginSingleMark = this("tp_pluginSingleMark").value
+				this.Delete
+			End If
+			this.Close
+			Set this = Nothing
+			If Conn.Errors.Count > 0 Then
+				Conn.RollBackTrans
+				Session(Sys.CookieName & "_MsgText") = Err.Description
+			Else
+				Conn.CommitTrans
+				plus.Reload
+				Plugin.RemovePluginAsp(tp_PluginMark & "." & tp_pluginSingleMark)
+				Session(Sys.CookieName & "_MsgText") = "删除成功!"
+			End If
+		End If
+		RedirectUrl(RedoUrl)
 	End Sub
 	
 End Class
