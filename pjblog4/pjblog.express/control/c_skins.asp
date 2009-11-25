@@ -4,7 +4,7 @@ Public Sub c_skins
 	Dim FileItems, FolderItems
 	Dim SplitName
 	
-	Dim PluginName, AuthorName, PluginVersion, PJBlogSuitVersion, ModDate
+	Dim PluginName, AuthorName, PluginVersion, PJBlogSuitVersion, ModDate, PluginInfo
 	
 %>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
@@ -38,16 +38,23 @@ Public Sub c_skins
 			FolderItems = fso.FolderItem("../pjblog.plugin/")' 获取总的文件夹数和名
 			SplitName = Split(FolderItems, "|")
 %>
-			<table cellpadding="3" cellspacing="0" width="100%">
-            	<tr>
-                	<td>&nbsp;</td>
-                    <td>插件名</td>
-                    <td>作者</td>
-                    <td>当前版本号</td>
-                    <td>适用博客版本</td>
-                    <td>最后修改</td>
-                    <td>&nbsp;</td>
-                </tr>
+			<div style="margin:10px 20px 10px 20px">
+            <table cellpadding="3" cellspacing="0"class="CeeTable" width="100%">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th class="act">未安装插件</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>未安装插件</th>
+                        <th>描述</th>
+                    </tr>
+                </tfoot>
+                <tbody>
 <%
 			For i = 1 To UBound(SplitName)
 			If CheckExe(SplitName(i), PluginInstalledArray) Then
@@ -64,15 +71,30 @@ Public Sub c_skins
 						If Err Then Err.Clear : PJBlogSuitVersion = ""
 					ModDate = cxml.GetNodeText(cxml.FindNode("//Plugin/ModDate"))
 						If Err Then Err.Clear : ModDate = ""
+					PluginInfo = cxml.GetNodeText(cxml.FindNode("//Plugin/Info"))
+						If Err Then Err.Clear : ModDate = ""
 %>
-				<tr>
-                	<td class="SecTd"><%=i%></td>
-                    <td class="SecTd"><%=PluginName%></td>
-                    <td class="SecTd"><%=AuthorName%></td>
-                    <td class="SecTd"><%=PluginVersion%></td>
-                    <td class="SecTd"><%=PJBlogSuitVersion%> (<%If CheckVersion(PJBlogSuitVersion) Then Response.Write("<font color=green>可用</font>") Else Response.Write("<font color=red>不可用</font>")%>)</td>
-                    <td class="SecTd"><%=ModDate%></td>
-                    <td class="SecTd"><a href="../pjblog.logic/control/log_plugin.asp?action=install&folder=<%=cee.encode(SplitName(i))%>">安装插件</a></td>
+
+				<tr class="active">
+                    <td><input type="checkbox" value="" name="SelectID"></td>
+                    <td><%=PluginName%></td>
+                    <td><%=PluginInfo%></td>
+                </tr>
+                <tr class="active second">
+                    <td>&nbsp;</td>
+                    <td class="act"><a href="../pjblog.logic/control/log_plugin.asp?action=install&folder=<%=cee.encode(SplitName(i))%>">安装</a> | 检测</td>
+                    <td>
+                        <div class="left">
+                        版本 <%=PluginVersion%> | 
+                        作者 <%=AuthorName%> | 
+                        发布时间 <%=ModDate%> | 
+                        使用版本 <%=PJBlogSuitVersion%>
+                        </div>
+                        <div class="cright cs">
+                            <a href="javascript:;">删除插件</a>
+                        </div>
+                        <div class="clear"></div>
+                    </td>
                 </tr>
 <%
 					End If
@@ -80,7 +102,9 @@ Public Sub c_skins
 			End If
 			Next
 %>
+			</tbody>
 			</table>
+            </div>
 <%
 		Set cxml = Nothing
 		Set fso = Nothing
@@ -89,19 +113,23 @@ Public Sub c_skins
 	' -----------------------------------------------------
 	ElseIf Request.QueryString("Smenu") = "Plugins" Then
 %>
-	<table cellpadding="3" cellspacing="0" width="100%">
-    	<tr>
-        	<td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>插件标识</td>
-            <td>版本号</td>
-            <td>适用号</td>
-            <td>最后修改时间</td>
-            <td>作者</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
+	<div style="margin:10px 20px 10px 20px">
+	<table cellpadding="3" cellspacing="0"class="CeeTable" width="100%">
+        <thead>
+        	<tr>
+        		<th>&nbsp;</th>
+            	<th class="act">已安装插件</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tfoot>
+        	<tr>
+        		<th>&nbsp;</th>
+            	<th>已安装插件</th>
+                <th>描述</th>
+            </tr>
+        </tfoot>
+        <tbody>
 <%
 		Set Rs = Conn.Execute("Select * From blog_Module")
 		If Rs.Bof Or Rs.Eof Then
@@ -109,57 +137,49 @@ Public Sub c_skins
 		Else
 			Do While Not Rs.Eof
 %>
-		<tr>
-        	<td><%=Rs("plugin_ID").value%></td>
+		<tr class="active">
+        	<td><input type="checkbox" value="" name="SelectID"></td>
             <td><%=Rs("plugin_name").value%></td>
-            <td><%=Rs("plugin_Mark").value%></td>
-            <td><%=Rs("plugin_version").value%></td>
-            <td><%=Rs("plugin_PJBlogSuitVersion").value%></td>
-            <td><%=Rs("plugin_ModDate").value%></td>
-            <td><%If Len(Rs("plugin_author_url").value) > 0 Then%><a href="<%=Rs("plugin_author_url").value%>" target="_blank"><%=Rs("plugin_author_name").value%></a><%Else%><%=Rs("plugin_author_name").value%><%End If%></td>
-            <td>
-				<%
-					If Rs("plugin_stop").value Then
-						If Rs("plugin_system").value Then
-							Response.Write("<font color=""#cccccc"">停用中</font>")
-						Else
-							Response.Write("停用中")
-						End If
-					Else
-						If Rs("plugin_system").value Then
-							Response.Write("<font color=""#cccccc"">启用中</font>")
-						Else
-							Response.Write("启用中")
-						End If
-					End If
-				%>
-            </td>
-            <td>
-            	<%
-					If Len(Rs("plugin_setPath").value) > 0 Then
-						Response.Write("<a href=""?Fmenu=Skins&Smenu=BaseSetting&SetPath=" & Rs("plugin_setPath").value & "&mark=" & Rs("plugin_Mark").value & "&Folder=" & Rs("plugin_folder").value & "&name=" & Rs("plugin_name").value & """>基本设置</a>")
-					Else
-						Response.Write("<font color=""#cccccc"">基本设置</font>")
-					End If
-				%>
-                &nbsp;&nbsp;
-                <%
-					If Len(Rs("plugin_backPath").value) > 0 Then
-						Response.Write("<a href=""" & Rs("plugin_backPath").value & """>高级设置</a>")
-					Else
-						Response.Write("<font color=""#cccccc"">高级设置</font>")
-					End If
-				%>
-            </td>
-            <td><a href="../pjblog.logic/control/log_plugin.asp?action=UnInstall&folder=<%=cee.encode(Rs("plugin_folder").value) & "&mark=" & cee.encode(Rs("plugin_Mark").value)%>" onclick="return confirm('危险操作\n卸载插件将删除所有该插件的安装信息!!')">卸载该插件</a>  插件升级</td>
+            <td><%=Rs("plugin_info").value%></td>
         </tr>
+        <tr class="active second">
+        	<td>&nbsp;</td>
+            <td class="act"><%If Rs("plugin_stop").value Then%>启用<%Else%>停用<%End If%> | <a href="../pjblog.logic/control/log_plugin.asp?action=UnInstall&folder=<%=cee.encode(Rs("plugin_folder").value) & "&mark=" & cee.encode(Rs("plugin_Mark").value)%>" onclick="return confirm('危险操作\n卸载插件将删除所有该插件的安装信息!!')">卸载</a> | 升级</td>
+            <td>
+            	<div class="left">版本 <%=Rs("plugin_version").value%> | 
+                作者 <%If Len(Rs("plugin_author_url").value) > 0 Then%><a href="<%=Rs("plugin_author_url").value%>" target="_blank"><%=Rs("plugin_author_name").value%></a><%Else%><%=Rs("plugin_author_name").value%><%End If%> | 
+                适用版本 <%=Rs("plugin_PJBlogSuitVersion").value%> | 
+                发布时间 <%=Rs("plugin_ModDate").value%></div>
+                <div class="cright cs">
+                	<%
+						If Len(Rs("plugin_setPath").value) > 0 Then
+							Response.Write("<a href=""?Fmenu=Skins&Smenu=BaseSetting&SetPath=" & Rs("plugin_setPath").value & "&mark=" & Rs("plugin_Mark").value & "&Folder=" & Rs("plugin_folder").value & "&name=" & Rs("plugin_name").value & """>基本设置</a>")
+						Else
+							Response.Write("<font color=""#cccccc"">基本设置</font>")
+						End If
+					%>
+                     | 
+                    <%
+						If Len(Rs("plugin_backPath").value) > 0 Then
+							Response.Write("<a href=""" & Rs("plugin_backPath").value & """>高级设置</a>")
+						Else
+							Response.Write("<font color=""#cccccc"">高级设置</font>")
+						End If
+					%>
+                </div>
+                <div class="clear"></div>
+            </td>
+        </tr>
+		
 <%
 			Rs.MoveNext
 			Loop
 		End If
 		Set Rs = Nothing
 %>
+		</tbody>
 	</table>
+    </div>
 <%
 	' -----------------------------------------------------
 	'	插件基本设置

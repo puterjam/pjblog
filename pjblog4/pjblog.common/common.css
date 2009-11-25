@@ -56,3 +56,28 @@ input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
   
   #doSave{ width:500px; height:180px; font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;}
   .clear{ clear:both}
+  
+  .CeeTable{empty-cells: show;border-collapse: collapse;border:1px solid #DFDFDF; font-size:11px; text-align:left; }
+  .CeeTable thead, .CeeTable tfoot{ background:#E3E3E3 url(../images/control/gray-grad.png) repeat-x; line-height:20px; height:20px}
+  .CeeTable tr, .CeeTable th {
+	margin-bottom: 0;
+	border-spacing: 0;
+}
+.CeeTable td{ line-height:26px}
+.CeeTable td .left{ float:left}
+.CeeTable td .cright{ float: right}
+.cs{ padding-right:10px; color:#000}
+.CeeTable th input {
+	margin: 0 0 0 5px;
+}
+
+.CeeTable .check-column {
+	padding: 6px 0 2px;
+}
+
+.CeeTable tbody th.check-column {
+	padding: 4px 0 22px;
+}
+.CeeTable tbody .active{}
+.act{ width:150px;}
+.CeeTable tbody tr.second td{ border-bottom:1px solid #dfdfdf;}
