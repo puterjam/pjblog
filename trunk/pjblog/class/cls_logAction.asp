@@ -106,19 +106,11 @@ Class logArticle
         End If
 
         '---------------分割日志--------------------
-		If logIntroCustom = 1 Then
+        If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
-				If IsBlank(logIntro) Then
-					logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
-				Else
-                	logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
-				End If
+                logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
             Else
-				If IsBlank(logIntro) Then
-					logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
-				Else
-                	logIntro = closeHTML(CheckStr(logIntro))
-				End If
+                logIntro = closeHTML(CheckStr(logIntro))
             End If
         Else
             If Int(logEditType) = 1 Then
@@ -358,29 +350,21 @@ Class logArticle
         End If
 
         '---------------分割日志--------------------
-		If logIntroCustom = 1 Then
+        If logIntroCustom = 1 Then
             If Int(logEditType) = 1 Then
-				If IsBlank(logIntro) Then
-					logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
-				Else
-                	logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
-				End If
+                logIntro = closeUBB(CheckStr(HTMLEncode(logIntro)))
             Else
-				If IsBlank(logIntro) Then
-					logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
-				Else
-                	logIntro = closeHTML(CheckStr(logIntro))
-				End If
+                logIntro = closeHTML(CheckStr(logIntro))
             End If
         Else
             If Int(logEditType) = 1 Then
                 If blog_SplitType Then
-                    logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
+                    logIntro = closeUBB(SplitLines(CheckStr(HTMLEncode(logMessage)), blog_introLine))
                 Else
-                    logIntro = closeUBB(CheckStr(CutStr(HTMLEncode(logMessage), blog_introChar)))
+                    logIntro = closeUBB(CutStr(CheckStr(HTMLEncode(logMessage)), blog_introChar))
                 End If
             Else
-                logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
+                logIntro = closeHTML(SplitLines(CheckStr(logMessage), blog_introLine))
             End If
         End If
 
@@ -1311,10 +1295,10 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
 
-    If log_View("log_EditType") = 1 Then
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1)))
+    If log_View("log_edittype") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
     Else
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", log_View("log_Content"))
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
     End If
 
     If Len(log_View("log_Modify"))>0 Then
@@ -1432,14 +1416,14 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 
     If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If
 
-    If log_View("log_EditType") = 1 Then
-        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
+    If log_View("log_edittype") = 1 Then
+        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
-            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
-          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href="""&Alias(LogID)&""" class=""more""><span>查看更多...</span></a></p>")
-			Else
-          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href=""article.asp?id="&LogID&""" class=""more""><span>查看更多...</span></a></p>")
+            If blog_postFile = 1 Then
+       	     Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
+			else
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
   			End If
   			
         Else
@@ -1448,11 +1432,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
-             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href="""&Alias(LogID)&""" class=""more""><span>查看更多...</span></a></p>")
-            Else
-             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href=""article.asp?id="&LogID&""" class=""more""><span>查看更多...</span></a></p>")
-            End If
+            If blog_postFile = 1 Then
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
+         	else
+         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+         	end if           
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")
         End If
