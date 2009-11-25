@@ -21,11 +21,11 @@ Class Sys_Plugin
     End Sub
 	
 	Private Function PluginHead(ByVal Str)
-		PluginHead = "/*---------------------------------plugin_Start_" & Str & "------------------------------------*/"
+		PluginHead = "/*---------------------------------plugin_Start_" & Trim(Str) & "------------------------------------*/"
 	End Function
 	
 	Private Function PluginBottom(ByVal Str)
-		PluginBottom = "/*---------------------------------plugin_End_" & Str & "------------------------------------*/"
+		PluginBottom = "/*---------------------------------plugin_End_" & Trim(Str) & "------------------------------------*/"
 	End Function
 	
 	Private Function ContentHead
@@ -71,12 +71,12 @@ Class Sys_Plugin
 			Dim Content
 			Content = cStream.LoadFile("../plugin.asp")
 			If (InStr(Content, ContentHead) = 0) Or (InStr(Content, ContentBottom) = 0) Then
-				WritePluginAsp = Array(False, "系统插件配置文件损坏!")
+				RemovePluginAsp = Array(False, "系统插件配置文件损坏!")
 				Exit Function
 			End If
 			Dim PluginContent, Top, Bottom, AspBody, SaveFile
 			If (InStr(Content, PluginHead(Key)) = 0) Or (InStr(Content, PluginBottom(Key)) = 0) Then
-				WritePluginAsp = Array(False, "插件未安装!")
+				RemovePluginAsp = Array(False, "插件未安装!")
 				Exit Function
 			End If
 			Top = Split(Content, PluginHead(Key))(0)
