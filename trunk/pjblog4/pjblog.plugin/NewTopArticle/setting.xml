@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginOptions>
-   <Key name="IsShowHidden" value="0" type="select" description="显示隐藏日志分类和隐藏日志">
+   <Key name="IsShowHidden" value="0" type="select" description="显示隐藏日志">
     <option value="0">显示</option>
 	<option value="1">不显示</option>
   </Key>
