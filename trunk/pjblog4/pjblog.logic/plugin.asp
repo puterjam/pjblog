@@ -23,6 +23,9 @@ function fillSide(){
 <!--#include file="../pjblog.plugin/category/ins_category.asp" -->
 /*---------------------------------plugin_End_sys.category.ins.category------------------------------------*/
 
+/*---------------------------------plugin_Start_NewComment.NewComment------------------------------------*/
+<!--#include file="../pjblog.plugin/NewComment/NewComment.asp" -->
+/*---------------------------------plugin_End_NewComment.NewComment------------------------------------*/
 /* -------------------- pluginend -------------------- */
 }
 fillSide();
