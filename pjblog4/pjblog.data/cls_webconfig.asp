@@ -51,7 +51,7 @@ Class webConfig
 		Else
 			PageCount = Int(Int(blog_LogNums) / Int(blogPerPage)) + 1
 		End If
-		For c = 1 To PageCount
+		If Int(PageCount) = 0 Then
 			Mud.FileName = "index.html"
 			Mud.TemplateContent = ""
 			Mud.open
@@ -62,8 +62,22 @@ Class webConfig
 			page = Trim(Asp.CheckStr(c))
 			Mud.CurrentPage = Asp.CheckPage(page)
 			Mud.Buffer
-			Mud.Save(Deep & "html/index_" & c & ".html")
-		Next
+			Mud.Save(Deep & "html/index_1.html")
+		Else
+			For c = 1 To PageCount
+				Mud.FileName = "index.html"
+				Mud.TemplateContent = ""
+				Mud.open
+				Call General
+				Mud.Sets("KeyWords") = blog_KeyWords
+				Mud.Sets("Description") = blog_Description
+				Mud.PageUrl = "index_{$page}.html"
+				page = Trim(Asp.CheckStr(c))
+				Mud.CurrentPage = Asp.CheckPage(page)
+				Mud.Buffer
+				Mud.Save(Deep & "html/index_" & c & ".html")
+			Next
+		End If
 		If Err.Number > 0 Then
 			default = Array(False, Err.Description)
 		Else
