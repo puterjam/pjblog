@@ -223,6 +223,8 @@ Class do_Plugin
 			Session(Sys.CookieName & "_MsgText") = "参数无效"
 			RedirectUrl(RedoUrl)
 		End If
+		'On Error Resume Next
+		'Conn.BeginTrans
 		Set cxml = New xml
 			cxml.FilePath = local & InstallFolder & "/install.xml"
 			If cxml.open Then
@@ -251,7 +253,7 @@ Class do_Plugin
 							temp_mark = cxml.GetNodeText(subtemp.selectSingleNode("mark"))
 								If Err Then Err.Clear : temp_mark = ""
 							If Len(temp_mark) > 0 Then
-								WriteTemp = Plugin.RemovePluginAsp(temp_mark)
+								WriteTemp = Plugin.RemovePluginAsp(UnInstallMark & "." & temp_mark)
 							End If
 						Next
 					End If
@@ -260,10 +262,8 @@ Class do_Plugin
 					' ----------------------------------------------------------------
 					Set objSetting = Config_Template.selectSingleNode("BaseenterPole")
 					If Lcase(cxml.GetAttribute(objSetting, "do")) = "true" Then
-						Mark = cxml.GetNodeText(cxml.FindNode("//Plugin/Mark"))
-							If Err Then Err.Clear : Mark = ""
-						If len(Mark) > 0 Then
-							Sys.doGet("Delete From blog_modsetting Where xml_name='" & Mark & "'")
+						If len(UnInstallMark) > 0 Then
+							Sys.doGet("Delete From blog_modsetting Where xml_name='" & UnInstallMark & "'")
 						End If
 					End If
 				End If
@@ -293,6 +293,14 @@ Class do_Plugin
 			Else
 				Ok = Array(False, "打开插件配置文件失败")
 			End If
+			Sys.doRecDel(Array(Array("blog_tempPlugin", "tp_PluginMark", "'" & UnInstallMark & "'")))
+			'If Err.Number > 0 Then
+				'Conn.RollBackTrans
+				'Ok = Array(False, Err.Description)
+			'Else
+				'Conn.CommitTrans
+				'Ok = Array(True, "卸载插件成功")
+			'End If
 		Set cxml = Nothing
 		Session(Sys.CookieName & "_ShowMsg") = True
 		If (OK(0)) Then

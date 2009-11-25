@@ -316,14 +316,14 @@ Public Sub c_skins
 				Else
 					Response.Write("<td><span style=""color:#ccc"">获取页面标签</span></td>")
 				End If
-				Response.Write("<td>删除</td>")
+				Response.Write("<td><a href=""../pjblog.logic/control/log_template.asp?action=delPlus&id=" & Plus("tp_ID") & """>删除</a></td>")
 				Response.Write("</tr>")
 				ms = ms + 1
 			Plus.MoveNext
 			Loop
 		End If
 		Set Plus = Nothing
-		Response.Write("<tr><td align=""right"" colspan=""6"" style=""border-top:1px dotted #ccc; padding-right:30px;""><a href=""javascript:;"" onclick=""CheckForm.Theme.ImportPlus('import')"">将以上插件导入到本主题中</a></td><td>&nbsp;</td></tr>")
+		Response.Write("<tr><td align=""right"" colspan=""7"" style=""border-top:1px dotted #ccc; padding-right:30px;""><a href=""javascript:;"" onclick=""CheckForm.Theme.ImportPlus('import')"">将以上插件导入到本主题中</a></td><td>&nbsp;</td></tr>")
 %>
 		</table>
         </form>
