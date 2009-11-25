@@ -1,0 +1,25 @@
+﻿<pjblog:8 datasource="GuestBook" name="loop" element="div" id="GuestBook" class="comment" style="margin-bottom:20px">
+	<Columns>
+    <ItemTemplate>
+       <div class="commenttop"><a name="book_$0$"></a>
+       	  <img src="../images/icon_quote.gif" alt="公开" border="0" style="margin:0px 1px -3px 0px"/>
+       	  <a href="../member.asp?action=view&memName=$1$"><b>$1$</b></a> 
+			<span class="commentinfo">{function:Asp.DateToStr("$8$", "Y-m-d H:I:S")}</span></div>
+        	<div class="commentcontent"> 
+              	<table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                    	<td width="60" valign="top" align="center"><img src="face/$5$.gif" alt="" border="0" style="margin-left:-4px"/><div style="height:6px"></div></td>
+                    	<td valign="top">$7$</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="commenttop">
+            	<img src="../images/reply.gif" alt="" border="0" style="margin:0px 3px -3px 0px"/>
+                <a href="../member.asp?action=view&memName=<Set:master/>"><b><Set:master/></b></a> 
+                <span class="commentinfo">{function:Asp.DateToStr("$11$", "Y-m-d H:I:S")}</span>
+            </div>
+            <div class="commentcontent">$9$<img src="../images/smilies/Face_15.gif" border="0" style="margin:0px 0px -2px 0px" alt=""/></div>        	       
+    </ItemTemplate>
+    </Columns>
+</pjblog:8>
+	<div class="pageContent"><page:GuestBook/></div>
