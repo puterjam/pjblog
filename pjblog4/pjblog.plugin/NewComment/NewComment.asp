@@ -42,10 +42,10 @@ If IsEmpty(Application(Sys.CookieName & "_NewComment")) Or Int(i) = 2 Then
 	' ----------------------------
 	' 从缓存读取模板内容
 	' ----------------------------
-	Dim Template, TmpStr, Str
+	Dim Template, TmpStr
 	Plus.open("NewComment")
 	Template = Split(Asp.UnCheckStr(Plus.getSingleTemplate("NewComment")), "|$|")
-
+		
 	Do While Not Comments.Eof
 		ReDim preserve Comment(TmpNum)
 		If Comments("comm_IsAudit") then
@@ -74,14 +74,12 @@ If IsEmpty(Application(Sys.CookieName & "_NewComment")) Or Int(i) = 2 Then
 	' 得到最新评论并写入缓存
 	' ----------------------------	
 	TmpStr = ""
-	Response.Write(Template(0))
 	For TmpNum = 0 to Ubound(Comment)
 		TmpStr = TmpStr & Comment(TmpNum)
 	Next
-	Str = Template(0) & TmpStr & Template(2)
-	NewComment = Str
+	NewComment = Template(0) & TmpStr & Template(2)
 	Application.Lock()
-	Application(Sys.CookieName & "_NewComment") = Str
+	Application(Sys.CookieName & "_NewComment") = NewComment
 	Application.UnLock()
 Else
 	NewComment = Application(Sys.CookieName & "_NewComment")

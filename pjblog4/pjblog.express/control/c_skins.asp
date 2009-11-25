@@ -287,17 +287,6 @@ Public Sub c_skins
 	ElseIf Request.QueryString("Smenu") = "AddPlus" Then
 		Dim f1 : f1 = Asp.CheckStr(Request.QueryString("f1")) ' 路径做标识
 		Dim Plus, Plus_Str
-'		Set Plus = Conn.Execute("Select * From blog_Module")
-'		If Plus.Bof Or Plus.Eof Then
-'			Plus_Str = ""
-'		Else
-'			Plus_Str = ""
-'			Do While Not Plus.Eof
-'				Plus_Str = Plus_Str & "<input type=""checkbox"" name=""plusMark"" value="""" />"
-'			Plus.MoveNext
-'			Loop
-'		End If
-'		Set Plus = Nothing
 %>
 		<div>
         <h5>※ 已支持的插件</h5>
@@ -423,13 +412,25 @@ Public Sub c_skins
 	Else
 		Set cxml = New xml
 		Set fso = New cls_fso
-			'FileItems, FolderItems
 			FolderItems = fso.FolderItem("../pjblog.template")
 %>
+	<div style="margin:20px 20px 10px 50px">
 	<table cellpadding="3" cellspacing="0" width="100%">
+    	<tr>
+        	<td style=" width:150px" valign="top">
+            	<ul style="list-style:square;">
+                	<li>本地主题</li>
+                    <li>推荐主题</li>
+                    <li>所有主题</li>
+                    <li>个性主题</li>
+                </ul>
+            </td>
+            <td style="border-left:1px solid #dfdfdf;">
+            <div style="margin:10px">
+            <table width="100%">
 <%
 		Dim TempFolderArray, tempi, tempj, m, cleft, cright, ztrue
-		Dim SkinName, SkinDesigner, pubDate, DesignerURL, DesignerMail, version, smallpic, bigpic
+		Dim SkinName, SkinDesigner, pubDate, DesignerURL, DesignerMail, version, smallpic, bigpic, Intro
 		TempFolderArray = Split(FolderItems, "|")
 		If Int(TempFolderArray(0)) = 0 Then ' 是否有文件夹
 			Response.Write("<tr><td align=""center"">找不到模板, 请上传模板!</td></tr>")
@@ -471,14 +472,16 @@ Public Sub c_skins
 							If Err Then Err.Clear : smallpic = ""
 						bigpic = cxml.GetNodeText(cxml.FindNode("//SkinSet/bigpic"))
 							If Err Then Err.Clear : bigpic = ""
+						Intro = cxml.GetNodeText(cxml.FindNode("//SkinSet/Intro"))
+							If Err Then Err.Clear : Intro = ""
 							
 					ztrue = (blog_DefaultSkin = TempFolderArray(tempj))
 %>
-    	<%=cleft%><td align="center">
-        
-        <table width="50%" cellpadding="3" cellspacing="0" style=" padding:3px; border:1px solid #ABA9C5;<%If ztrue Then Response.Write("background:#FFFFCC; border-color:#500000")%>">
+			<%=cleft%>
+    			<td width="33%">
+				<table cellpadding="3" cellspacing="0" style=" padding:3px;<%If ztrue Then Response.Write("background:#FFFFCC;")%> ">
         	<tr>
-            	<td><img src="../pjblog.template/<%=TempFolderArray(tempj)%>/<%=smallpic%>" width="277"; height="170" style="border:1px dotted #ccc" onerror="this.src='../images/control/skin.jpg'"></td>
+            	<td><img src="../pjblog.template/<%=TempFolderArray(tempj)%>/<%=smallpic%>" width="250"; height="150" style="border:1px dotted #ccc" onerror="this.src='../images/control/skin.jpg'"></td>
             </tr>
             <tr>
             	<td align="left">
@@ -508,8 +511,8 @@ Public Sub c_skins
                 </td>
             </tr>
         </table>
-        
-        </td><%=cright%>
+                </td>
+ 			<%=cright%>  
 <%
 					End If
 				End If
@@ -518,7 +521,12 @@ Public Sub c_skins
 		Set fso = Nothing
 		Set cxml = Nothing
 %>
+				</table>
+			</div>
+		</td>
+	</tr>
     </table>
+    </div>
 <%
 	End If
 %>
