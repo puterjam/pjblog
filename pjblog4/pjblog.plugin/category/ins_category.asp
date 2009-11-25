@@ -34,7 +34,8 @@ Else
 		tempStr = Replace(tempStr, "<#title#>", Plugin_Category(1, Plugin_loop_i))
 		Plugin_Category_String = Plugin_Category_String & tempStr
 	Next
+	Plugin_Category_String = temps1 & Plugin_Category_String & temps3
 End If
 %>
-	PluginTempValue = ['plugin_Category', '<%=outputSideBar(Plugin_Category_String)%>'];
+	PluginTempValue = ['ins.category', '<%=outputSideBar(Plugin_Category_String)%>'];
 	PluginOutPutString.push(PluginTempValue);
