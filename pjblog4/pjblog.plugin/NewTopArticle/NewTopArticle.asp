@@ -1,4 +1,13 @@
 <%
+' **********************************
+' 最新日志 Recent Article For PJBlog4
+' Author: lyowbeen 
+' WebSite: http://www.yb13.cn
+' **********************************
+
+' --------------------------------
+' 判断是否需要更新缓存
+' --------------------------------
 If Application(Sys.CookieName & "_Article_Edit") Or Application(Sys.CookieName & "_plugin_Setting_NewTopArticle") Then
 	Application.Lock()
 	Application(Sys.CookieName & "_Article_Edit") = False
@@ -8,35 +17,39 @@ If Application(Sys.CookieName & "_Article_Edit") Or Application(Sys.CookieName &
 End If
 
 Function NewArticle(i)
-If Not IsArray(Application(Sys.CookieName & "_NewArticle")) Or Int(i) = 2 Then
-	dim TopNum, IsShowHidden, TitleLen, IsShowAuthor, Article(), TmpNum, Articles, ArticleTitle
+If IsEmpty(Application(Sys.CookieName & "_NewArticle")) Or Int(i) = 2 Then    '更新缓存#
 	
-	Dim temps, tempStr, temp1, temp2, temp3
-	
+	' ----------------------------
+	' 读取插件基本设置信息
+	' ----------------------------
+	Dim TopNum, IsShowHidden, TitleLen, IsShowAuthor
 	Model.open("NewTopArticle")
-	Plus.open("NewTopArticle")
-	
 	TopNum = Model.getKeyvalue("TopNum")
 	IsShowHidden = Model.getKeyValue("IsShowHidden")
 	TitleLen = Model.getKeyValue("TitleLen")
 	IsShowAuthor = Model.getKeyValue("IsShowAuthor")
-	temps = Split(Asp.UnCheckStr(Plus.getSingleTemplate("NewTopArticle")), "|$|")
-	temp1 = temps(0)
-	temp2 = temps(1)
-	temp3 = temps(2)
-	
+
+	' ----------------------------
+	' 从数据库读取内容
+	' ----------------------------	
+	Dim Article(), TmpNum, Articles, ArticleTitle
 	TmpNum = 0 : ReDim Article(-1)   '下标从0开始, 如果没有记录则下标为-1#
-	If IsShowHidden="0" Then    '显示隐藏分类和隐藏日志#
+	If IsShowHidden="0" Then    '显示隐藏日志#
 		Set Articles = Conn.Execute("SELECT top "&TopNum&" C.log_ID,C.log_Author,C.log_IsShow,C.log_PostTime,C.log_title,L.cate_ID,L.cate_Secret FROM blog_Content AS C,blog_Category AS L where L.cate_ID=C.log_CateID and L.cate_Secret=false and C.log_IsDraft=false order by log_PostTime Desc")
-	Else     '不显示隐藏分类和隐藏日志#
-		Set Articles = Conn.Execute("SELECT top "&TopNum&" C.log_ID,C.log_Author,C.log_IsShow,C.log_PostTime,C.log_title,L.cate_ID,L.cate_Secret FROM blog_Content AS C,blog_Category AS L where L.cate_ID=C.log_CateID and L.cate_Secret=false and C.log_IsDraft=false and L.cate_Secret=false and C.log_IsShow=false order by log_PostTime Desc")
+	Else     '不显示隐藏日志#
+		Set Articles = Conn.Execute("SELECT top "&TopNum&" C.log_ID,C.log_Author,C.log_IsShow,C.log_PostTime,C.log_title,L.cate_ID,L.cate_Secret FROM blog_Content AS C,blog_Category AS L where L.cate_ID=C.log_CateID and L.cate_Secret=false and C.log_IsDraft=false and C.log_IsShow=false order by log_PostTime Desc")
 	End If
-	
+
+	' ----------------------------
+	' 从缓存读取模板内容
+	' ----------------------------	
+	Dim Template, TmpStr			
+	Plus.open("NewTopArticle")
+	Template = Split(Asp.UnCheckStr(Plus.getSingleTemplate("NewTopArticle")), "|$|")
+			
 	Do While Not Articles.Eof
-		redim preserve Article(TmpNum)
-		If Articles("cate_Secret") then
-			ArticleTitle = "[隐藏分类日志]"
-		ElseIf Articles("log_IsShow")=false then
+		ReDim preserve Article(TmpNum)
+		If Articles("log_IsShow")=false then
 			ArticleTitle = "[隐藏日志]"
 		Else
 			If IsShowAuthor = "0" Then    '显示作者#
@@ -45,29 +58,36 @@ If Not IsArray(Application(Sys.CookieName & "_NewArticle")) Or Int(i) = 2 Then
 				ArticleTitle = Asp.CutStr(Articles("log_title"), TitleLen)
 			End If
 		End If
-		tempStr = temp2
-		tempStr = Replace(tempStr, "<#id#>", Init.doArticleUrl(Articles("log_id")))
-		tempStr = Replace(tempStr, "<#Author#>", Articles("log_Author"))
-		tempStr = Replace(tempStr, "<#Time#>", Articles("log_postTime"))
-		tempStr = Replace(tempStr, "<#Title#>", ArticleTitle)
-		tempStr = temp1 & tempStr & temp3
-		Article(TmpNum)=tempStr
+		
+		' ----------------------------
+		' 替换模板内容
+		' ----------------------------		
+		TmpStr = Template(1)
+		TmpStr = Replace(TmpStr, "<#id#>", Init.doArticleUrl(Articles("log_id")))
+		TmpStr = Replace(TmpStr, "<#Author#>", Articles("log_Author"))
+		TmpStr = Replace(TmpStr, "<#Time#>", Articles("log_postTime"))
+		TmpStr = Replace(TmpStr, "<#Title#>", ArticleTitle)
+		Article(TmpNum)=TmpStr
 		Articles.MoveNext
 		TmpNum = TmpNum+1
-	Loop	
+	Loop
 	
-	dim TmpStr : TmpStr = ""
+	' ----------------------------
+	' 得到最新文章并写入缓存
+	' ----------------------------		
+	TmpStr = ""
 	For TmpNum = 0 to Ubound(Article)
 		TmpStr = TmpStr & Article(TmpNum)
 	Next
-	NewArticle = TmpStr
+	NewArticle = Template(0) & TmpStr & Template(2)
 	Application.Lock()
 	Application(Sys.CookieName & "_NewArticle") = NewArticle
 	Application.UnLock()
-Else
+Else      '从缓存中读取#
 	NewArticle = Application(Sys.CookieName & "_NewArticle")
 End If
 End Function
 %>
+<!--以下代码用于输出插件内容到页面<plugin:NewTopArticle/>-->
 	PluginTempValue = ['NewTopArticle', '<%=outputSideBar(NewArticle(1))%>'];
 	PluginOutPutString.push(PluginTempValue);
