@@ -39,20 +39,15 @@
    <div id="sidebar">
 	   <div id="innersidebar">
 		    <div id="sidebar-topimg"><!--工具条顶部图象--></div>
-            <fame:3>
-            <plugin:plugin_NewTopArticle/>
-            <div id="Side_NewComment" class="sidepanel">
-              	<h4 class="Ptitle">NewComment</h4>
-                <div class="Pcontent">
-                	<plugin:plugin_NewComment/>
-                </div>
-                <div class="Pfoot"></div>
-            </div>
-				<do:p_category><include:p_category.html/></do:p_category>
-            	<do:p_user><include:p_user.html/></do:p_user>
-            	<do:p_Statistics><include:p_Statistics.html/></do:p_Statistics>
-            	<do:p_link><include:p_link.html/></do:p_link>
-            </fame:3>
+            
+            <plugin:ins.category/>
+            
+            <plugin:ins.userpannel/>
+            
+            <plugin:NewTopArticle/>
+            
+            <plugin:ins.bloginfo/>
+            
 		   	<div id="sidebar-bottomimg"></div>
 	   </div> 
    </div>
