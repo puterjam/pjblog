@@ -137,6 +137,7 @@ Class template
 				.Open
 				.Charset = Char
 				.Position = .Size
+				'Response.Write(cPath)
 				.LoadFromFile Server.MapPath(cPath)
 				LoadFromFile = .ReadText
 				.close

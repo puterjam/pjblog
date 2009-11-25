@@ -50,7 +50,7 @@ Class StyleEdit
 		Mud.FileName = "index.html"
 		Mud.TemplateContent = ""
 		Mud.open
-		Call General
+		Call General(Mud)
 		Mud.Sets("KeyWords") = blog_KeyWords
 		Mud.Sets("Description") = blog_Description
 		Mud.PageUrl = "index_{$page}.html"
@@ -89,7 +89,7 @@ Class StyleEdit
 		If Len(cPath) > 0 Then
 			Mud.FileName = "Article.html"
 			Mud.open
-			Call General
+			Call General(Mud)
 			Call ArticleFlied(id, Mud)
 			Mud.Buffer
 			Mud.Save(cPath)
@@ -133,7 +133,7 @@ Class StyleEdit
 			Mud.FileName = "category.html"
 			Mud.TemplateContent = ""
 			Mud.open
-			Call General
+			Call General(Mud)
 			Mud.Sets("CateID") = Int(CateID)
 			Mud.Sets("KeyWords") = blog_KeyWords
 			Mud.Sets("Description") = blog_Description

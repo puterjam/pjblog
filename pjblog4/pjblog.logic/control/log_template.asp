@@ -243,7 +243,7 @@ Class do_Template
 			Else
 				Conn.CommitTrans
 				plus.Reload
-				Plugin.RemovePluginAsp(tp_PluginMark & "." & tp_pluginSingleMark)
+				Plugin.RemovePluginAsp(Trim(tp_PluginMark & "." & tp_pluginSingleMark))
 				Session(Sys.CookieName & "_MsgText") = "删除成功!"
 			End If
 		End If

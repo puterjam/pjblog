@@ -24,6 +24,14 @@
    <option value="1">开放</option>
    <option value="0">关闭</option>
  </Key>
+ <Key name="PluginSettingCache" value="1" type="select" description="是否马上更新缓存">
+    <option value="0">否</option>
+	<option value="1">是</option>
+ </Key>
+ <Key name="GuestBookAduit" value="0" type="select" description="是否需要审核">
+    <option value="0">否</option>
+	<option value="1">是</option>
+ </Key>
  <Key name="face1" value="Plugins/GuestBook/face/face1.gif" type="input" description="用户头像1地址(48X48)" size="40"/>
  <Key name="face2" value="Plugins/GuestBook/face/face2.gif" type="input" description="用户头像2地址(48X48)" size="40"/>
  <Key name="face3" value="Plugins/GuestBook/face/face3.gif" type="input" description="用户头像3地址(48X48)" size="40"/>
