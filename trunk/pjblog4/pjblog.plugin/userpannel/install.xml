@@ -40,7 +40,7 @@
 					<mark>ins.userpannel</mark>
 					<name>用户面板</name>
 					<include>ins_userpannel.asp</include>
-					<templatePath></templatePath>
+					<templatePath>p_userpannel.html</templatePath>
 					<tag><![CDATA[<plugin:ins.userpannel/>]]></tag>
 				</item>
 			</mode>

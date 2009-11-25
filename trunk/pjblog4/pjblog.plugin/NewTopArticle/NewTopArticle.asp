@@ -69,5 +69,5 @@ Else
 End If
 End Function
 %>
-	PluginTempValue = ['plugin_NewTopArticle', '<%=outputSideBar(NewArticle(1))%>'];
+	PluginTempValue = ['NewTopArticle', '<%=outputSideBar(NewArticle(1))%>'];
 	PluginOutPutString.push(PluginTempValue);

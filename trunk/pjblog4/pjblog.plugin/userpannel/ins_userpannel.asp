@@ -30,6 +30,10 @@ Function userPanel
         userPanel = userPanel&"<a href=""../pjblog.express/login.asp"" class=""sideA"" accesskey=""L"">登录</a><a href=""register.asp"" class=""sideA"" accesskey=""U"">用户注册</a>"
     End If
 End Function
+plus.open("sys.userpannel")
+Dim te
+te = Trim(Asp.UnCheckStr(plus.getSingleTemplate("ins.userpannel")))
+te = Replace(te, "<#user#>", userPanel)
 %>
-	PluginTempValue = ['plugin_UserPannel', '<%=outputSideBar(userPanel)%>'];
+	PluginTempValue = ['ins.userpannel', '<%=outputSideBar(te)%>'];
 	PluginOutPutString.push(PluginTempValue);

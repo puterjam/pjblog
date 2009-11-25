@@ -40,7 +40,7 @@
 					<mark>ins.bloginfo</mark>
 					<name>博客信息列表</name>
 					<include>ins_bloginfo.asp</include>
-					<templatePath></templatePath>
+					<templatePath>p_Statistics.html</templatePath>
 					<tag><![CDATA[<plugin:ins.bloginfo/>]]></tag>
 				</item>
 			</mode>
