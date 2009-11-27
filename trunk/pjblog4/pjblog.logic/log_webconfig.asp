@@ -59,7 +59,7 @@ Class log_webConfig
 		Set Rs = Server.CreateObject("Adodb.RecordSet")
 		Rs.open "Select log_ID From blog_Content Where log_IsShow=True And log_IsDraft=False", Conn, 1, 1
 		If Rs.Bof Or Rs.Eof Then
-			Str = "{Suc : false, total : 0, id : ''}"
+			Str = "{Suc : false, total : 0, id : []}"
 		Else
 			Counts = Rs.RecordCount
 			Do While Not Rs.Eof
@@ -67,7 +67,7 @@ Class log_webConfig
 			Rs.MoveNext
 			Loop
 			If Len(id) > 0 Then id = Mid(id, 1, (Len(id) - 1))
-			Str = "{Suc : true, total : " & Counts & ", id : '" & id & "'}"
+			Str = "{Suc : true, total : " & Counts & ", id : [" & id & "]}"
 		End If
 		Rs.Close
 		Set Rs = Nothing
@@ -98,15 +98,15 @@ Class log_webConfig
 		Set Rs = Server.CreateObject("Adodb.RecordSet")
 		Rs.open "Select cate_ID, cate_Folder From blog_Category Where cate_OutLink=False And cate_Secret=False", Conn, 1, 1
 		If Rs.Bof Or Rs.Eof Then
-			Str = "{Suc : false, total : 0, id : ''}"
+			Str = "{Suc : false, total : 0, id : []}"
 		Else
 			Counts = Rs.RecordCount
 			Do While Not Rs.Eof
-				id = id & Rs(0).value & "|" & Rs(1).value & ","
+				id = id & "[" & Rs(0).value & ",'" & Rs(1).value & "'],"
 			Rs.MoveNext
 			Loop
 			If Len(id) > 0 Then id = Mid(id, 1, (Len(id) - 1))
-			Str = "{Suc : true, total : " & Counts & ", id : '" & id & "'}"
+			Str = "{Suc : true, total : " & Counts & ", id : [" & id & "]}"
 		End If
 		Rs.Close
 		Set Rs = Nothing

@@ -19,42 +19,54 @@ Public Sub c_ceneral
 	If Request.QueryString("Smenu") = "visitors" Then
 	ElseIf Request.QueryString("Smenu") = "Misc" Then
 %>
-			<table cellpadding="3" cellspacing="0" width="100%" id="Static">
-            	<tr><td colspan="6"><strong>1. 清理服务器缓存</strong></td></tr>
-                <tr id="clearTr" style="display:none">
-                	<td width="10">&nbsp;</td>
-                	<td colspan="4"><div id="clear"></div></td>
-                    <td width="10">&nbsp;</td>
-                </tr>
-                <tr>
-                	<td width="10">&nbsp;</td>
-                	<td colspan="4"><input type="button" value="开始清理缓存" onclick="CheckForm.Clear(this)" class="button" /></td>
-                    <td width="10">&nbsp;</td>
-                </tr>
-                
-                <tr><td colspan="6"><strong>2. 静态化设置</strong></td></tr>
-                
-                <tr id="StaticIndex" class="ceo">
-                	<td width="10">&nbsp;</td>
-                	<td width="180"><div style="line-height:18px;"><label for="S1"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.index($('Static'), 'StaticIndex', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S1" style=" margin-right:10px;" />首页静态化</label></div></td>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                
-                <tr id="StaticArticle" class="ceo">
-                	<td width="10">&nbsp;</td>
-                	<td width="180"><div style="line-height:18px;"><label for="S2"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.Article($('Static'), 'StaticArticle', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S2" style=" margin-right:10px;" />内容页静态化</label></div></td>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                
-                <tr id="StaticCategory" class="ceo">
-                	<td width="10">&nbsp;</td>
-                	<td width="180"><div style="line-height:18px;"><label for="S3"><input type="checkbox" onclick="if (this.checked){CheckForm.Static.Category($('Static'), 'StaticCategory', 1, this)}else{try{$('StaticPre').parentNode.removeChild($('StaticPre'));}catch(e){}}" id="S3" style=" margin-right:10px;" />分类列表静态化</label></div></td>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                
-                <tr><td colspan="6"><strong>3. 初始化整站信息.</strong></td></tr>
-                
-            </table>
+	<script language="javascript">
+		var ci = false, cArray = new Array(), ArtArray = new Array()/*日志ID集合*/;
+		function fadeout(){
+			if (ci) $("#flade").fadeOut(
+				"fast",
+				function(){
+					fadein();
+				}
+			);	
+		};
+		function fadein(){
+			if (ci) $("#flade").fadeIn(
+				"fast",
+				function(){
+					fadeout();
+				}
+			)
+		}
+		function cChecked(obj){
+			for (var i = 0; i < cArray.length; i++){
+				cArray[i].checked = false;
+			}
+			obj.checked = true;
+			cArray = new Array();
+			cArray.push(obj);
+		}
+		function scollbottom(){
+			$("#Sbox").scrollTop(document.getElementById("Sbox").scrollHeight);
+		}
+	</script>
+		<div style=" margin:30px 50px 30px 50px">
+        	<h2>初始化数据</h2>
+        	<div style=" line-height:30px;">
+        		初始化数据包括  清理缓存 重建页面 整站信息初始化
+        	</div>
+            <div id="clear" class="tip1">你可以通过选择以下选项进行数据操作</div>
+            
+            <div class="stbox CeeTable">
+                <div class="content" id="Sbox"></div>
+            </div>
+            
+            <div style=" margin-top:20px">
+            	<label for="s1" class="las"><input type="checkbox" onclick="if (this.checked){ceeevio.clearApplication(this);}" id="s1">清理缓存</label>
+                <label for="s2" class="las"><input type="checkbox" onclick="if (this.checked){ceeevio.Static.s_defailt(this);}" id="s2">重建首页及分页</label>
+                <label for="s3" class="las"><input type="checkbox" onclick="if (this.checked){ceeevio.Static.s_Article.getID(this);}" id="s3">重建日志页面</label>
+                <label for="s4" class="las"><input type="checkbox" onclick="if (this.checked){ceeevio.Static.s_category.getID(this);}" id="s4">重建分类页面及分页</label>
+            </div>
+        </div>
 <%
 	Else
 ' ****************************************************************
@@ -84,12 +96,12 @@ Public Sub c_ceneral
 		        			</tr>
                             <tr class="ceo">
 		          				<td width="180"><div align="right"> BLOG 地址</div></td>
-		          				<td align="left"><input name="SiteURL" type="text" size="50" class="text" value="<%=SiteURL%>" onblur="if (this.value.reg(REGEXP.REG_WEBURL)){$('checkweburl').innerHTML = '<font color=green>博客地址格式正确</font>';}else{$('checkweburl').innerHTML = '<font color=red>您所填写的博客地址格式不正确!</font>';}"/></td>
+		          				<td align="left"><input name="SiteURL" type="text" size="50" class="text" value="<%=SiteURL%>" onblur="if (this.value.reg(REGEXP.REG_WEBURL)){$('#checkweburl').html('<font color=green>博客地址格式正确</font>');}else{$('#checkweburl').html('<font color=red>您所填写的博客地址格式不正确!</font>');}"/></td>
                                 <td class="shuom">关系到<strong>RSS</strong>地址的可读性和静态页面<strong>CSS</strong>的正确加载<span id="checkweburl" class="Demo"></span></td>
 		        			</tr>
                             <tr class="ceo">
                                 <td width="180"><div align="right"> 站长邮件地址 </div></td>
-                                <td align="left"><input name="blog_email" type="text" size="50" class="text" value="<%=blog_email%>" onblur="if (this.value.reg(REGEXP.REG_EMAIL)){$('checkemail').innerHTML = '<font color=green>邮箱格式正确</font>';}else{$('checkemail').innerHTML = '<font color=red>您所填写的邮箱格式不正确!</font>';}"/></td>
+                                <td align="left"><input name="blog_email" type="text" size="50" class="text" value="<%=blog_email%>" onblur="if (this.value.reg(REGEXP.REG_EMAIL)){$('#checkemail').html('<font color=green>邮箱格式正确</font>');}else{$('#checkemail').html('<font color=red>您所填写的邮箱格式不正确!</font>');}"/></td>
                                 <td class="shuom">关系到发送邮件的默认账户和GRA头像的显示<span id="checkemail" class="Demo"></span></td>
                             </tr>
 							<tr class="ceo">
