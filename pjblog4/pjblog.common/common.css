@@ -81,3 +81,13 @@ input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
 .CeeTable tbody .active{}
 .act{ width:150px;}
 .CeeTable tbody tr.second td{ border-bottom:1px solid #dfdfdf;}
+
+.tip1{ height:20px; line-height:20px; border:1px solid #3399CC; background:#E7F3F9; padding:1px 10px 1px 10px}
+
+.stbox{ margin-top:20px;padding:10px}
+.stbox .title{ height:26px; line-height:26px;}
+.stbox .content{ max-height:180px; overflow:auto; padding:10px 4px 10px 4px}
+.las{ margin-right:10px}
+.las input{ margin-right:1px}
+#flade{ width:100px;}
+.rebuilt{ width:150px;float:left;}

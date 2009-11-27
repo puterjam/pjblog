@@ -84,6 +84,7 @@ Class do_Category
 		
 		If UBound(cate_ID) >= 0 Then
 			ErrorJoin = ""
+			On Error Resume Next
 			For i = 0 To UBound(cate_ID)
 				Category.cate_ID = Int(cate_ID(i))
 				If Len(cate_Order(i)) > 0 Then
@@ -105,16 +106,21 @@ Class do_Category
 			Next
 			If len(ErrorJoin) > 0 Then ErrorJoin = Mid(ErrorJoin, 1, (Len(ErrorJoin) - 3))
 			If Len(ErrorJoin) > 0 Then Str = ErrorJoin Else Str = "更新分类信息成功!"
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = Str
+			If Err.Number > 0 Then
+				Response.Write("{Suc : false, Info : '" & Err.Description & "'}")
+			Else
+				Response.Write("{Suc : true, Info : '" & Str & "'}")
+			End If
+		Else
+			Response.Write("{Suc : false, Info : '不需要更新数据'}")
 		End If
-		RedirectUrl(RedoUrl)
 	End Sub
 	
 	Private Sub del
 		ErrorJoin = ""
 		cate_ID = Split(Trim(Asp.CheckStr(Request.Form("SelectID"))), ",")
 		If UBound(cate_ID) >= 0 Then
+			On Error Resume Next
 			For i = 0 To UBound(cate_ID)
 				Category.cate_ID = Int(cate_ID(i))
 				Str = Category.del
@@ -122,19 +128,21 @@ Class do_Category
 			Next
 			If len(ErrorJoin) > 0 Then ErrorJoin = Mid(ErrorJoin, 1, (Len(ErrorJoin) - 3))
 			If Len(ErrorJoin) > 0 Then Str = ErrorJoin Else Str = "删除分类成功!"
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = Str
+			If Err.Number > 0 Then
+				Response.Write("{Suc : false, Info : '" & Err.Description & "'}")
+			Else
+				Response.Write("{Suc : true, Info : '" & Str & "'}")
+			End If
+		Else
+			Response.Write("{Suc : false, Info : '不需要删除数据'}")
 		End If
-		RedirectUrl(RedoUrl)
 	End Sub
 	
 	Private Sub Clear
-		Response.Write "<div style='padding:4px 0px 4px 10px;border: 1px dotted #999;margin:2px;background:#ffffee'>"
 		Application.Lock
 		Control.FreeApplicationMemory
 		Application.UnLock
 		Response.Write "<br/><span><b style='color:#040'>缓存清理完毕...	</b></span>"
-		Response.Write "</div>"
 	End Sub
 	
 End Class

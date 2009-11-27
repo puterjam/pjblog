@@ -290,6 +290,17 @@ Public Sub c_skins
 %>
 		<div>
         <h5>※ 已支持的插件</h5>
+		<script language="javascript">
+		$(document).ready(function() {
+			var options = {
+				success: ceeevio.theme.ImportPlus
+			};
+			$('#import').submit(function() {  
+				$(this).ajaxSubmit(options);
+				return false; 
+			}); 
+		});
+		</script>
         <form action="../pjblog.logic/control/log_template.asp?action=ImportPlus" method="post" id="import">
 		<table cellpadding="3" cellspacing="0" width="100%">
         	<tr>
@@ -319,14 +330,14 @@ Public Sub c_skins
 				Response.Write("<td>" & Plus("tp_pluginSingleMark") & "</td>")
 				Response.Write("<td>" & Plus("tp_pluginSinglePath") & "<input type=""hidden"" name=""pluginSinglePath"" value=""" & Plus("tp_pluginSinglePath") & """></td>")
 				Response.Write("<td>" & Plus("tp_pluginPath") & "<input type=""hidden"" name=""pluginPath"" value=""" & Plus("tp_pluginPath") & """></td>")
-				If Len(Trim(Plus("tp_pluginSingleTempValue").value)) > 0 Then
-					Response.Write("<td><a href=""javascript:;"" onclick=""center.PlusCode(" & Plus("tp_ID") & ")"">编辑插件模板代码</a></td>")
+				If Len(Trim(Plus("tp_pluginSingleTempValue").value)) > 0 Then 'Plus("tp_ID")
+					Response.Write("<td><a href=""javascript:;"" onclick=""effect.MakeBox.PlusCode(" & Plus("tp_ID") & ")"">编辑插件模板代码</a></td>")
 				Else
 					Response.Write("<td>&nbsp;</td>")
 				End If
 				
 				If Len(Plus("tp_plugintag").value) > 0 Then
-					Response.Write("<td><a href=""javascript:;"" onclick=""center.GetPlusTag('" & Plus("tp_plugintag") & "')"">获取页面标签</a></td>")
+					Response.Write("<td><a href=""javascript:;"" onclick=""effect.MakeBox.GetPlusTag('" & Plus("tp_plugintag") & "')"">获取页面标签</a></td>")
 				Else
 					Response.Write("<td><span style=""color:#ccc"">获取页面标签</span></td>")
 				End If
@@ -337,7 +348,7 @@ Public Sub c_skins
 			Loop
 		End If
 		Set Plus = Nothing
-		Response.Write("<tr><td align=""right"" colspan=""7"" style=""border-top:1px dotted #ccc; padding-right:30px;""><a href=""javascript:;"" onclick=""CheckForm.Theme.ImportPlus('import')"">将以上插件导入到本主题中</a></td><td>&nbsp;</td></tr>")
+		Response.Write("<tr><td align=""right"" colspan=""7"" style=""border-top:1px dotted #ccc; padding-right:30px;""><a href=""javascript:;"" onclick=""$('#import').submit();"">将以上插件导入到本主题中</a></td><td>&nbsp;</td></tr>")
 %>
 		</table>
         </form>
@@ -389,7 +400,7 @@ Public Sub c_skins
 													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSingleMark & "</td>")
 													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSinglePath & "</td>")
 													Response.Write("<td style=""border-top:1px dotted #ccc"">" & tp_pluginSingleTempPath & "</td>")
-													Response.Write("<td style=""border-top:1px dotted #ccc""><a href=""javascript:;"" onclick=""CheckForm.Theme.AddPlus('" & f1 & "', '" & SplitName(addi) & "', '" & tp_pluginSingleMark & "', this)"">添加</a></td>")
+													Response.Write("<td style=""border-top:1px dotted #ccc""><a href=""javascript:;"" onclick=""ceeevio.theme.AddPlus('" & f1 & "', '" & SplitName(addi) & "', '" & tp_pluginSingleMark & "', this)"" class=""doAddplus"">添加</a></td>")
 													Response.Write("</tr>")
 												End If
 											Next
@@ -498,13 +509,13 @@ Public Sub c_skins
                     	<%If ztrue Then%>
                     		<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">当前主题</a> 
                         <%Else%>
-                        	<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="CheckForm.Theme.Choose('<%=TempFolderArray(tempj)%>', this)">应用主题</a> 
+                        	<a href="javascript:;" style="background:url(../images/notify.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="ceeevio.theme.layout('<%=TempFolderArray(tempj)%>', this)">应用主题</a> 
                         <%End If%>
                         <a href="?Fmenu=Skins&Smenu=AddPlus&f1=<%=TempFolderArray(tempj)%>" style="background:url(../images/icon_apply.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;">为该主题添加插件</a> 
 						<%If Not ztrue Then%>
                         	<a href="javascript:;" style="background:url(../images/hidden.gif) no-repeat 0px 0px; padding-left:20px; line-height:20px;">删除模板</a>
 						<%Else%>
-                            <a href="javascript:;" style="background:url(../images/icon_edit.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="CheckForm.Theme.Choose('<%=TempFolderArray(tempj)%>', this)">选择样式</a>
+                            <a href="javascript:;" style="background:url(../images/icon_edit.gif) no-repeat 0px 0px; padding-left:17px; line-height:20px;" onclick="ceeevio.theme.layout('<%=TempFolderArray(tempj)%>', this)">选择样式</a>
 						<%End If%>
                     </p>
                 </div>

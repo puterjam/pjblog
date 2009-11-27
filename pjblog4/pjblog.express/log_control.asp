@@ -26,7 +26,7 @@ Class Sys_Control
 	'----------- 显示操作信息 ----------------------------
 	Public Sub getMsg
 		If Session(Sys.CookieName & "_ShowMsg") = True Then
-			Response.Write ("<script>window.onload = function(){Tip.CreateLayer(""反馈信息"", """ & Session(Sys.CookieName & "_MsgText") & """);}</script>")
+			Response.Write ("<script>$(document).ready(function(){effect.WarnTip.open({title : '反馈信息', html : '" & Session(Sys.CookieName & "_MsgText") & "'})});</script>")
 			Session(Sys.CookieName & "_ShowMsg") = False
 			Session(Sys.CookieName & "_ShowMsg") = ""
 		End If
