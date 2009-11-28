@@ -233,7 +233,7 @@ Class do_Template
 			Else
 				tp_PluginMark = this("tp_PluginMark").value
 				tp_pluginSingleMark = this("tp_pluginSingleMark").value
-				this.Delete
+				this.Delete()
 			End If
 			this.Close
 			Set this = Nothing

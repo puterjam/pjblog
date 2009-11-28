@@ -11,7 +11,7 @@ Else
 	'	打开插件模板缓存
 	' --------------------------------------------------
 	plus.open("sys.category")
-	temps = Split(Asp.UnCheckStr(Plus.getSingleTemplate("ins.category")), "|$|")
+	temps = Split(Asp.UnCheckStr(Plus.getSingleTemplate("Sidecategory")), "|$|")
 	temps1 = temps(0)
 	temps2 = temps(1)
 	temps3 = temps(2)
@@ -37,5 +37,5 @@ Else
 	Plugin_Category_String = temps1 & Plugin_Category_String & temps3
 End If
 %>
-	PluginTempValue = ['ins.category', '<%=outputSideBar(Plugin_Category_String)%>'];
+	PluginTempValue = ['Sidecategory', '<%=outputSideBar(Plugin_Category_String)%>'];
 	PluginOutPutString.push(PluginTempValue);

@@ -31,21 +31,21 @@ Class ChkCode
 	Private Sub default
 		Dim Rs, cookie
 		Response.Write("function load(){")
-		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
-		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
+		If Not stat_EditAll Then Response.Write("try{$('.index_edit').remove();}catch(e){}")
+		If Not stat_DelAll Then Response.Write("try{$('.index_del').remove();}catch(e){}")
 		cookie = Request.Cookies(Sys.CookieName & "_IndexArticleList")
 		Set Rs = Conn.Execute("Select log_ID, log_CommNums, log_ViewNums, log_QuoteNums From blog_Content Where log_ID in (" & cookie & ")")
 		If Not (Rs.Bof And Rs.Eof) Then
 			Do While Not Rs.Eof
-				Response.Write("try{$('indexComment_" & Rs(0).value & "').innerHTML = '" & Rs(1).value & "'}catch(e){}")
-				Response.Write("try{$('indexQuote_" & Rs(0).value & "').innerHTML = '" & Rs(3).value & "'}catch(e){}")
-				Response.Write("try{$('indexView_" & Rs(0).value & "').innerHTML = '" & Rs(2).value & "'}catch(e){}")
+				Response.Write("try{$('#indexComment_" & Rs(0).value & "').text('" & Rs(1).value & "')}catch(e){}")
+				Response.Write("try{$('#indexQuote_" & Rs(0).value & "').text('" & Rs(3).value & "')}catch(e){}")
+				Response.Write("try{$('#indexView_" & Rs(0).value & "').text('" & Rs(2).value & "')}catch(e){}")
 			Rs.MoveNext
 			Loop
 		End If
 		Set Rs = Nothing
 		Call FillSideBar
-		Response.Write("}" & vbcrlf & "window.onload = function(){load();}")
+		Response.Write("}" & vbcrlf & "$(document).ready(function(){load();})")
 	End Sub
 	
 	Private Sub Article
@@ -56,14 +56,14 @@ Class ChkCode
 		If Not Asp.IsInteger(Request.QueryString("page")) Then
 			Sys.doGet("Update blog_Content Set log_ViewNums = log_ViewNums + 1 Where log_ID=" & ID)
 		End If
-		If Not stat_EditAll Then Response.Write("try{JsCopy.index.edit();}catch(e){}")
-		If Not stat_DelAll Then Response.Write("try{JsCopy.index.del();}catch(e){}")
+		If Not stat_EditAll Then Response.Write("try{$('.index_edit').remove();}catch(e){}")
+		If Not stat_DelAll Then Response.Write("try{$('.index_del').remove();}catch(e){}")
 		Set Rs = Conn.Execute("Select log_ID, log_CommNums, log_ViewNums, log_QuoteNums From blog_Content Where log_ID=" & ID)
 		If Not (Rs.Bof And Rs.Eof) Then
 			Do While Not Rs.Eof
-				Response.Write("try{$('indexComment').innerHTML = '" & Rs(1).value & "'}catch(e){}")
-				Response.Write("try{$('indexQuote').innerHTML = '" & Rs(3).value & "'}catch(e){}")
-				Response.Write("try{$('indexView').innerHTML = '" & Rs(2).value & "'}catch(e){}")
+				Response.Write("try{$('#indexComment').text('" & Rs(1).value & "')}catch(e){}")
+				Response.Write("try{$('#indexQuote').text('" & Rs(3).value & "')}catch(e){}")
+				Response.Write("try{$('#indexView').text('" & Rs(2).value & "')}catch(e){}")
 			Rs.MoveNext
 			Loop
 		End If
@@ -119,13 +119,13 @@ Class ChkCode
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
 				
 				If stat_CommentDel Then
-					Str2 = Replace(Str2, "<#comm_del#>", "| <a href=""javascript:CheckForm.comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')""><img src=""../images/icon_del.gif"" alt=""删除该条评论"" border=""0""/></a>", 1, -1, 1)				
+					Str2 = Replace(Str2, "<#comm_del#>", "<a href=""javascript:CheckForm.comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')"">删除</a>", 1, -1, 1)				
 				Else
 					Str2 = Replace(Str2, "<#comm_del#>", "", 1, -1, 1)
 				End If
 				
 				If stat_Admin Then
-					Str2 = Replace(Str2, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & GetRow(0, i) & ")""><img src=""../images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;"" border=""0""/></a>", 1, -1, 1)
+					Str2 = Replace(Str2, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & GetRow(0, i) & ")"">回复</a>", 1, -1, 1)
 				Else
 					Str2 = Replace(Str2, "<#comm_reply#>", "", 1, -1, 1)
 				End If
@@ -158,10 +158,18 @@ Class ChkCode
 				Str3 = Str3 & Str2
 			Next
 			Str3 = Str3 & MultiPage(PageLen + 1, blogcommpage, CurrtPage, PageStr, "float:right", "", False)
-			Response.Write("try{$('commentBox').innerHTML = '" & outputSideBar(Str3) & "';}catch(e){}")
+			Response.Write("try{$('#commentBox').html('" & outputSideBar(Str3) & "');}catch(e){}")
 		End If
 		' ---------------------------------------------------
 		' 	加载评论 - 结束
+		'	加载评论框 - 开始
+		' ---------------------------------------------------
+		Set doo = New Stream
+			Str = doo.LoadFile(local & "l_commBox.html")
+		Set doo = Nothing
+		Response.Write("try{$('#CommPostBox').html('" & outputSideBar(Str) & "')}catch(e){}")
+		' ---------------------------------------------------
+		' 	加载评论框 - 结束
 		'	加载侧边 - 开始
 		' ---------------------------------------------------
 		Call FillSideBar
@@ -192,8 +200,9 @@ Class ChkCode
 	
 	Private Sub FillSideBar
 		Response.Write("function doSide(){" & vbcrlf)
-		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$(PluginOutPutString[a][0]).innerHTML = outputSideBar(PluginOutPutString[a][1])}catch(e){}}" & vbcrlf)
+		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$('#' + PluginOutPutString[a][0]).html(outputSideBar(PluginOutPutString[a][1]));}catch(e){}}" & vbcrlf)
 		Response.Write("}" & vbcrlf)
+'		Response.Write("alert(jQuery(PluginOutPutString).length);jQuery(PluginOutPutString).each(function(i){$('#' + PluginOutPutString[i][0]).html(outputSideBar(PluginOutPutString[i][1]))})}")
 		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{fillSide();doSide();}")
 	End Sub
 

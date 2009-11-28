@@ -1,0 +1,19 @@
+﻿@charset "utf-8";
+.editor-wrapper { }
+.editor-toolbar { height:20px; padding:2px; margin-bottom:5px; border-bottom:0px solid #006; background:none; }
+.editor-textarea, .editor-frame { width: 100%; display: block;height:150px;border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; }
+.editor-textarea { }
+.editor-body { border: 0; width:100%; white-space:pre; }
+.editor-button { display:block; float:left; overflow:hidden; margin:0 2px;
+                 text-indent:-10000em; width:21px; height:20px; cursor:pointer;
+                 background:transparent url() left top no-repeat; }
+.editor-button:hover { background-color:#b7d4ff; }
+.editor-btnToggle { background-image:url(./images/bb_toggle.gif); }
+.editor-btnRemoveFormat { background-image:url(./images/bb_removeformat.gif); }
+.editor-btnBold { background-image:url(./images/bb_bold.gif); }
+.editor-btnItalic { background-image:url(./images/bb_italic.gif); }
+.editor-btnSize { background-image:url(./images/bb_size.gif); }
+.editor-btnColor { background-image:url(./images/bb_color.gif); }
+.editor-btnLink { background-image:url(./images/bb_link.gif); }
+.editor-btnUnlink { background-image:url(./images/bb_unlink.gif); }
+.editor-btnImage { background-image:url(./images/bb_image.gif); }

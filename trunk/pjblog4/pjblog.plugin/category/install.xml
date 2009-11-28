@@ -37,11 +37,11 @@
 			<BackenterPole do="false"></BackenterPole>
 			<mode do="true">
 				<item>
-					<mark>ins.category</mark>
+					<mark>Sidecategory</mark>
 					<name>分类列表</name>
 					<include>ins_category.asp</include>
 					<templatePath>p_category.html</templatePath>
-					<tag><![CDATA[<plugin:ins.category/>]]></tag>
+					<tag><![CDATA[<plugin:Sidecategory/>]]></tag>
 				</item>
 			</mode>
 		</Template>

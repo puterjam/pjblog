@@ -1,0 +1,77 @@
+﻿@charset "utf-8";
+/* CSS Document */
+body{
+	padding:0px;
+	margin:0px;
+	border:0px;
+	font-size:12px;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#000
+}
+a:link, a:visited{
+	color:#03F;
+	text-decoration:none;
+}
+a:hover{
+	color:#F30;
+	text-decoration:none
+}
+input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
+input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
+
+.wrap{
+	
+}
+.head{
+	width:100%;
+	height:50px;
+	background:#464646;
+	margin:0px;
+	border:0px;
+	border-bottom:1px solid #393939;
+}
+.content{ margin:10px 40px 10px 40px}
+.content #tool{
+	width:150px;
+	float:left;
+}
+.content #main{
+	padding:6px 10px 6px 10px;
+}
+.clear{ clear:both}
+
+.content #tool .info{ padding:6px 10px 6px 10px; line-height:18px;}
+.content #tool .bar{ margin-top:10px;}
+.content #tool .bar .title{ height:16px; line-height:16px;  padding:6px 10px 6px 10px; }
+.content #tool .bar .ccontent{ text-align:left; width:100%; padding:6px 10px 6px 10px;}
+.content #tool .bar .ccontent .item{line-height:20px;border:}
+#main .left{ margin-right:270px;}
+#main .right{ float:right; width : 250px;}
+.side{ border:1px solid #ccc; padding:10px; margin-bottom:10px}
+.side .title{ border-bottom:1px solid #eee; line-height:20px}
+.side .body div{ margin-top:15px; line-height:22px;}
+.article{ margin-top:20px}
+.article .title{}
+.article .title input{ width:99%; line-height:28px; height:30px; font-size:18px; padding-left:2px}
+
+
+
+
+.editor-wrapper { }
+.editor-toolbar { height:20px; padding:2px; margin-bottom:5px; border-bottom:1px solid #006; background:none; }
+.editor-textarea, .editor-frame { width: 100%; height: 320px; display: block; border: 1px solid #999; }
+.editor-textarea { }
+.editor-body { border: 0; width:100%; white-space:pre; }
+.editor-button { display:block; float:left; overflow:hidden; margin:0 2px;
+                 text-indent:-10000em; width:21px; height:20px; cursor:pointer;
+                 background:transparent url() left top no-repeat; }
+.editor-button:hover { background-color:#b7d4ff; }
+.editor-btnToggle { background-image:url(./images/bb_toggle.gif); }
+.editor-btnRemoveFormat { background-image:url(./images/bb_removeformat.gif); }
+.editor-btnBold { background-image:url(./images/bb_bold.gif); }
+.editor-btnItalic { background-image:url(./images/bb_italic.gif); }
+.editor-btnSize { background-image:url(./images/bb_size.gif); }
+.editor-btnColor { background-image:url(./images/bb_color.gif); }
+.editor-btnLink { background-image:url(./images/bb_link.gif); }
+.editor-btnUnlink { background-image:url(./images/bb_unlink.gif); }
+.editor-btnImage { background-image:url(./images/bb_image.gif); }
