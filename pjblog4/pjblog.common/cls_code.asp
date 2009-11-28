@@ -738,6 +738,10 @@ Class Sys_Asp
 				DateToStr = Right(Year(DateTime), 2)&DateMonth
 			Case "d"
 				DateToStr = DateDay
+			Case "y"
+				DateToStr = Year(DateTime)
+			Case "m"
+				DateToStr = DateMonth
 			Case "ymd"
 				DateToStr = Right(Year(DateTime), 4)&DateMonth&DateDay
 			Case "mdy"

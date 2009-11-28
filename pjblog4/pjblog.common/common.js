@@ -26,7 +26,13 @@ var cookie = {
     SET	: function(name, value, days) {var expires = "";if (days) {var d = new Date();d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);expires = "; expires=" + d.toGMTString();}document.cookie = name + "=" + value + expires + "; path=/";},
 	GET	: function(name) {var re = new RegExp("(\;|^)[^;]*(" + name + ")\=([^;]*)(;|$)");var res = re.exec(document.cookie);return res != null ? res[3] : null;}
 };
-
+var PluginOutPutString = new Array(), PluginTempValue;
+function outputSideBar(html){
+	html = html.replace(/[\n\r]/g,"");
+	html = html.replace(/\\/g,"\\\\");
+	html = html.replace(/\'/g,"\\'");
+	return html;
+}
 /* ---------------------------- 创建文件夹规则 example: ------------------------------ */
 //<input onblur="ReplaceInput(this,window.event)" onkeyup="ReplaceInput(this,window.event)" />
 function ReplaceInput(obj, cevent){

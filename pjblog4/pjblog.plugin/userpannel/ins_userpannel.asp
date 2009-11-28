@@ -32,8 +32,8 @@ Function userPanel
 End Function
 plus.open("sys.userpannel")
 Dim te
-te = Trim(Asp.UnCheckStr(plus.getSingleTemplate("ins.userpannel")))
+te = Trim(Asp.UnCheckStr(plus.getSingleTemplate("SideUserPannel")))
 te = Replace(te, "<#user#>", userPanel)
 %>
-	PluginTempValue = ['ins.userpannel', '<%=outputSideBar(te)%>'];
+	PluginTempValue = ['SideUserPannel', '<%=outputSideBar(te)%>'];
 	PluginOutPutString.push(PluginTempValue);

@@ -171,8 +171,8 @@ Class template
 	Public Sub open
 		c_Content = LoadFromFile(FilePath)
 		Call include
-		c_Content = Fame(c_Content)
-		c_Content = done(c_Content)
+'		c_Content = Fame(c_Content)
+'		c_Content = done(c_Content)
 		c_Content = Plugin(c_Content)
 	End Sub
 	
