@@ -116,7 +116,7 @@ End Select
 	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(17)%>:</strong></td><td align="left" style="padding:3px;"><%if (blog_Mem("mem_HideEmail") and (not stat_Admin)) or len(blog_Mem("mem_Email"))<1 or isnull(blog_Mem("mem_Email")) then response.write lang.MemBer.EditForm(26) else response.write blog_Mem("mem_Email") end if%></td></tr>
 	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(19)%>:</strong></td><td align="left" style="padding:3px;"><a href="<%=blog_Mem("mem_HomePage")%>" target="_blank"><%=blog_Mem("mem_HomePage")%></a></td></tr>
 	  <tr><td align="right" width="85"><strong>　<%=lang.MemBer.EditForm(20)%>:</strong></td><td align="left" style="padding:3px;"><%=blog_Mem("mem_QQ")%></td></tr>
-	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(27)%>:</strong></td><td align="left" style="padding:3px;"><%=lang.MemBer.EditForm(28)(blog_Mem("mem_PostLogs"), blog_Mem("mem_PostComms"), blog_Mem("mem_PostMessageNums"))%></td></tr>
+	  <tr><td align="right" width="85"><strong>统计:</strong></td><td align="left" style="padding:3px;">日志共 <b><%=blog_Mem("mem_PostLogs")%></b> 篇，评论共 <b><%=blog_Mem("mem_PostComms")%></b> 篇，留言共 <b><%=blog_Mem("mem_PostMessageNums")%></b> 个。</td></tr>
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
 			  <input type="button" class="userbutton" value="<%=lang.Tip.SysTem(6)%>" onclick="history.go(-1)"/>
