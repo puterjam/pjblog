@@ -402,6 +402,151 @@ var ceeevio = {
 				});
 			}
 		}//,
+	},
+	Comment : {
+		post : function(){
+			$("#postform").ajaxForm({
+				dataType : "json",
+				beforeSubmit : function(){
+					// 判断用户名
+					var reg;
+					if ($("#comm_Author").val().length == 0){
+						alert("请填写用户名!");
+						$("#comm_Author").seekAttention();
+						return false;
+					}
+					// 判断邮箱
+					if ($("#comm_Email").val().length > 0){
+						reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/ig;
+						if (!reg.test($("#comm_Email").val())){
+							alert("邮箱格式不正确");
+							$("#comm_Email").seekAttention();
+							return false;
+						}
+					}
+					// 判断网址
+					if ($("#comm_WebSite").val().length > 0){
+						reg = /(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/ig;
+						if (!reg.test($("#comm_WebSite").val())){
+							alert("网址格式不正确");
+							$("#comm_WebSite").seekAttention();
+							return false;
+						}
+					}
+					if ($("#comm_Content").val().length == 0){
+						alert("评论内容不能为空");
+						$("#comm_Content").seekAttention();
+						return false;
+					}
+				},
+				success : function(data){
+					$("#postform").resetForm();
+					var str = cee.decode(data.Info);
+					var div = document.createElement("div");
+					jQuery(div).attr("id", "comment_" + data.id).addClass("CommPart").html(str);
+					$("#commentBox").prepend(div);
+					if (CommPageSize < $(".CommPart").length){
+						$(".CommPart:last").remove();
+					}
+					jQuery(div).seekAttention();
+				}
+			});	
+		},
+		page : function(id, needTip, url){
+			if (needTip){$("#commentBox").html("正在加载评论, 请稍后...");}
+			var cJS = document.createElement("script");
+			jQuery(cJS).attr("chatset", "utf-8").attr("src", url + "&page=" + id + "&s=" + Math.random());
+			$("head:first").append(jQuery(cJS));
+		},
+		replyBox : function(id){
+			var _id = id;
+			try{$("#commentcontentreply_" + id).css("display", "block");}catch(e){}
+			$.getJSON(
+				"../pjblog.logic/log_comment.asp?action=replybox&s=" + Math.random(),
+				{id : id},
+				function(data){
+					if (data.Suc){
+						var div = document.createElement("div");
+						var Str = cee.decode(data.Info);
+						jQuery(div).html(Str).attr("id", "replyBox");
+						if ($("#commcontent_" + _id)){
+							$("#commcontent_" + _id).append(jQuery(div));
+						}
+						try{$("#commentcontentreply_" + _id).css("display", "none");}catch(e){}
+					}else{}
+				}
+			);
+		},
+		replyBoxRemove : function(id){
+			try{$("#replyBox").remove();$("#commentcontentreply_" + id).css("display", "block");}catch(e){}
+		},
+		doReply : function(id){
+			var content = $("#replyBox_" + id).val(), _this = this, _id = id;
+			$.post(
+				"../pjblog.logic/log_comment.asp?action=savereply&s=" + Math.random(),
+				{id : id, content : content},
+				function(data){
+					var json = data.json();
+					if (json.Suc){
+						effect.WarnTip.open({title : "恭喜 操作成功", html : "回复评论成功!"});
+						try{
+						  _this.replyBoxRemove();
+						  $("#commentcontentreply_" + _id).css("display", "block");
+						  $("#commentcontentreply_" + _id).html(cee.decode(json.Info));//这里改
+					  }catch(e){alert(e.description)}
+					}else{effect.WarnTip.open({title : "抱歉 操作失败", html : json.Info});}
+				}
+			);
+		},
+		Aduit : function(id, static, _obj){
+			var _s = static, _this = this, _id = id, __obj = _obj;
+			$.getJSON(
+			  "../pjblog.logic/log_comment.asp?s=" + Math.random(),
+			  {action : "Aduit", id : id, which : static},
+			  function(data){
+					if (data.Suc){
+						var __this = _this, __id = _id;
+						var ___obj = __obj;
+						/*
+							@ 1 : 通过审核
+							@ 0 : 取消审核
+						*/
+						if (_s == 0){
+							effect.WarnTip.open({title : "恭喜 操作成功", html : "<strong>取消</strong> 审核成功!"});
+							jQuery(__obj).text("通过审核")
+										 .bind("click", function(){
+											ceeevio.Comment.Aduit(__id, 1, ___obj);
+										 });
+						}else{
+							effect.WarnTip.open({title : "恭喜 操作成功", html : "<strong>通过</strong> 审核成功!"});
+							jQuery(__obj).text("取消审核")
+										 .bind("click", function(){
+											ceeevio.Comment.Aduit(__id, 0, ___obj);
+										 });
+						}
+					}else{
+						effect.WarnTip.open({title : "错误信息", html : data.Info});
+					}
+			  }
+			);
+		},
+		del : function(id){
+			var _id = id;
+			$.getJSON(
+				"../pjblog.logic/log_comment.asp?s=" + Math.random(),
+				{action : "del", id : id},
+				function(data){
+					if (data.Suc){
+						effect.WarnTip.open({title : "恭喜 操作成功", html : "删除评论成功"});
+						$("#comment_" + _id).remove();
+					}else{alert(data.Info)}
+				}
+			);
+		},
+		quote : function(id, mem){
+			$("#comm_Content").val("[quote=" + mem + "]" + $("#commcontent_" + id).text() + "[/quote]");
+			location = "#postform";
+		}
 	}//,
 }
 
