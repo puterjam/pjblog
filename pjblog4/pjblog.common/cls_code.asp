@@ -692,7 +692,7 @@ Class Sys_Asp
 	'*************************************
 	
 	Public Function DateToStr(DateTime, ShowType)
-		If Len(DateTime) = 0 Then DateToStr = "" : Exit Function
+		If Len(DateTime) = 0 Or DateTime = "" Then DateToStr = "" : Exit Function
 		Dim DateMonth, DateDay, DateHour, DateMinute, DateWeek, DateSecond
 		Dim FullWeekday, shortWeekday, Fullmonth, Shortmonth, TimeZone1, TimeZone2
 		TimeZone1 = "+0800"

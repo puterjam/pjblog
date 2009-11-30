@@ -132,17 +132,21 @@ Class ChkCode
 				' -----------------------------------------------------
 				'	回复样式 开始
 				' -----------------------------------------------------
-				If blog_commAduit And (Not GetRow(12, i)) Then
+				If IsNull(GetRow(13, i)) Or IsEmpty(GetRow(13, i)) Or Len(GetRow(13, i)) = 0 Then
 					Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
 				Else
-					TempReply = ReplyStr
-					TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(GetRow(14, i)), 1, -1, 1)
-					TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(GetRow(15, i)), 1, -1, 1)
-					TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(GetRow(13, i)), 1, -1, 1)
-					If GetRow(13, i) = null Or Len(GetRow(13, i)) = 0 Or GetRow(13, i) = "" Or GetRow(13, i) = Empty Then
+					If blog_commAduit And (Not GetRow(12, i)) Then
 						Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
 					Else
-						Str2 = Replace(Str2, "<#comm_replycontent#>", Asp.BlankString(TempReply), 1, -1, 1)
+						TempReply = ReplyStr
+						TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(GetRow(14, i)), 1, -1, 1)
+						TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(Asp.DateToStr(GetRow(15, i), "Y-m-d H:I:S")), 1, -1, 1)
+						TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(GetRow(13, i)), 1, -1, 1)
+						If GetRow(13, i) = null Or Len(GetRow(13, i)) = 0 Or GetRow(13, i) = "" Or GetRow(13, i) = Empty Then
+							Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
+						Else
+							Str2 = Replace(Str2, "<#comm_replycontent#>", Asp.BlankString(TempReply), 1, -1, 1)
+						End If
 					End If
 				End If
 				' -----------------------------------------------------
