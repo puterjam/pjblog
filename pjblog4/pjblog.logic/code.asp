@@ -1,5 +1,6 @@
 ﻿<!--#include file = "../include.asp" -->
 <!--#include file = "../pjblog.model/cls_Stream.asp" -->
+<!--#include file = "../pjblog.common/md5.asp" -->
 <%
 Dim Code
 Set Code = New ChkCode
@@ -117,6 +118,12 @@ Class ChkCode
 				Str2 = Replace(Str2, "<#comm_weburl#>", Asp.BlankString(GetRow(9, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_ip#>", Asp.BlankString(GetRow(10, i)), 1, -1, 1)
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
+				Dim Gra
+				Set Gra = New Gravatar
+					Gra.Gravatar_r = "r"
+					Gra.Gravatar_EmailMd5 = MD5(GetRow(8, i))
+					Str2 = Replace(Str2, "<#GRA#>", Gra.outPut, 1, -1, 1)
+				Set Gra = Nothing
 				
 				If stat_CommentDel Then
 					Str2 = Replace(Str2, "<#comm_del#>", "<a href=""javascript:ceeevio.Comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')"">删除</a>", 1, -1, 1)				

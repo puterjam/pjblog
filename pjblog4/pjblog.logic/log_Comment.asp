@@ -215,6 +215,13 @@ Class do_Comment
 				Str = Replace(Str, "<#comm_del#>", "", 1, -1, 1)
 			End If
 			
+			Dim Gra
+			Set Gra = New Gravatar
+				Gra.Gravatar_r = "r"
+				Gra.Gravatar_EmailMd5 = MD5(comm_Email)
+				Str = Replace(Str, "<#GRA#>", Gra.outPut, 1, -1, 1)
+			Set Gra = Nothing
+			
 			Str = Replace(Str, "<#comm_Aduit#>", "", 1, -1, 1)		
 				
 			If stat_Admin Then
