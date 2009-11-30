@@ -460,7 +460,7 @@ var ceeevio = {
 		},
 		replyBox : function(id){
 			var _id = id;
-			try{$("#commentcontentreply_" + id).css("display", "block");}catch(e){}
+			try{this.replyBoxRemove(id);$("#commentcontentreply_" + id).css("display", "block");}catch(e){}
 			$.getJSON(
 				"../pjblog.logic/log_comment.asp?action=replybox&s=" + Math.random(),
 				{id : id},
@@ -514,13 +514,13 @@ var ceeevio = {
 						if (_s == 0){
 							effect.WarnTip.open({title : "恭喜 操作成功", html : "<strong>取消</strong> 审核成功!"});
 							jQuery(__obj).text("通过审核")
-										 .bind("click", function(){
+										 .one("click", function(){
 											ceeevio.Comment.Aduit(__id, 1, ___obj);
 										 });
 						}else{
 							effect.WarnTip.open({title : "恭喜 操作成功", html : "<strong>通过</strong> 审核成功!"});
 							jQuery(__obj).text("取消审核")
-										 .bind("click", function(){
+										 .one("click", function(){
 											ceeevio.Comment.Aduit(__id, 0, ___obj);
 										 });
 						}
@@ -545,7 +545,7 @@ var ceeevio = {
 		},
 		quote : function(id, mem){
 			$("#comm_Content").val("[quote=" + mem + "]" + $("#commcontent_" + id).text() + "[/quote]");
-			location = "#postform";
+			location = window.location.href + "#postform";
 		}
 	}//,
 }
