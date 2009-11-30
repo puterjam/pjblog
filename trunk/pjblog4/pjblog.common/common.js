@@ -221,7 +221,7 @@ var ceeevio = {
 					var _this = this, _obj = obj, _n = n, _t = t, f = i[1];
 					$.getJSON(
 						"../pjblog.logic/log_webconfig.asp?s=" + Math.random(),
-						{action : "category", id : i[0]},
+						{action : "category", id : i[0], folder : i[1]},
 						function(Data){
 							if (Data.Suc){
 								$("#Sbox").append("<div style=\"text-align:right; line-height:18px\"><span style=\"float:left;\">&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#0000ff\">静态文件夹为 " + f + " 的分类重建成功</font></span>" + Data.Info + "</div><div class=\"clear\"></div>");
