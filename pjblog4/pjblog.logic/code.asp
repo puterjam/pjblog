@@ -211,7 +211,7 @@ Class ChkCode
 		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$('#' + PluginOutPutString[a][0]).html(outputSideBar(PluginOutPutString[a][1]));}catch(e){}}" & vbcrlf)
 		Response.Write("}" & vbcrlf)
 '		Response.Write("alert(jQuery(PluginOutPutString).length);jQuery(PluginOutPutString).each(function(i){$('#' + PluginOutPutString[i][0]).html(outputSideBar(PluginOutPutString[i][1]))})}")
-		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{window.reload();}")
+		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{window.location.reload();}")
 	End Sub
 
 End Class
