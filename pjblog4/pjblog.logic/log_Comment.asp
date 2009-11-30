@@ -45,7 +45,11 @@ Class do_Comment
 		blog_ID = Asp.CheckUrl(Asp.CheckStr(Request.Form("blog_ID")))
 		comm_Author = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Author"))))
 		comm_Content = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Content"))))
-		comm_IsAudit = True
+		If blog_commAduit Then
+			comm_IsAudit = False
+		Else
+			comm_IsAudit = True
+		End If
 		comm_Email = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_Email"))))
 		comm_WebSite = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("comm_WebSite"))))
 		validate = Trim(Asp.CheckUrl(Asp.CheckStr(Request.Form("validate"))))
@@ -200,7 +204,7 @@ Class do_Comment
 				Str = doo.LoadFile(local & "l_comment.html")
 			Set doo = Nothing
 			Str = Replace(Str, "<#comm_id#>", Int(OK(1)), 1, -1, 1)
-			Str = Replace(Str, "<#comm_author#>", memName, 1, -1, 1)
+			Str = Replace(Str, "<#comm_author#>", comm_Author, 1, -1, 1)
 			
 			If blog_commAduit Then
 				If comm_Author = memName Then
@@ -212,11 +216,12 @@ Class do_Comment
 				Str = Replace(Str, "<#comm_Content#>", UBBCode(comm_Content, DisSM, blog_commUBB, blog_commIMG, AutoURL, AutoKEY, True), 1, -1, 1)
 			End If
 			
-			Str = Replace(Str, "<#comm_del#>", "| <a href=""javascript:CheckForm.comment.del(" & OK(1) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')""><img src=""../images/icon_del.gif"" alt=""删除该条评论"" border=""0""/></a>", 1, -1, 1)
+			Str = Replace(Str, "<#comm_del#>", "<a href=""javascript:CheckForm.comment.del(" & OK(1) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')"">删除</a>", 1, -1, 1)
 			
-			Str = Replace(Str, "<#comm_Aduit#>", "", 1, -1, 1)			
+			Str = Replace(Str, "<#comm_Aduit#>", "", 1, -1, 1)		
+				
 			If stat_Admin Then
-				Str = Replace(Str, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & OK(1) & ")""><img src=""../images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;"" border=""0""/></a>", 1, -1, 1)
+				Str = Replace(Str, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & OK(1) & ")"">回复</a>", 1, -1, 1)
 			Else
 				Str = Replace(Str, "<#comm_reply#>", "", 1, -1, 1)
 			End If

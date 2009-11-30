@@ -68,7 +68,7 @@ Class ChkCode
 			Loop
 		End If
 		Set Rs = Nothing
-		If Len(memName) > 0 Then Response.Write("try{if ($('passArea')){$('comm_Author').value='" & memName & "';$('comm_Author').readOnly = true;$('passArea').parentNode.removeChild($('passArea'));$('removevalidate').parentNode.removeChild($('removevalidate'))}}catch(e){};")
+		If Len(memName) > 0 Then Response.Write("try{if ($('#passArea')){$('#comm_Author').val('" & memName & "');$('#comm_Author').attr('readOnly', true);$('#passArea').remove();$('#removevalidate').remove();}}catch(e){};")
 		' ---------------------------------------------------
 		' 	加载评论 - 开始
 		' ---------------------------------------------------
@@ -87,7 +87,7 @@ Class ChkCode
 		End If
 		Set Rs = Nothing
 		If UBound(GetRow, 1) > 0 Then
-			PageStr = "javascript:CheckForm.comment.page({$page}, false, '../pjblog.logic/code.asp?action=article&id=" & ID & "');"
+			PageStr = "javascript:ceeevio.Comment.page({$page}, false, '../pjblog.logic/code.asp?action=article&id=" & ID & "');"
 			CurrtPage = Request.QueryString("page")
 			If Not Asp.Isinteger(CurrtPage) Then CurrtPage = 1
 			If CurrtPage < 1 Then CurrtPage = 1
@@ -119,27 +119,31 @@ Class ChkCode
 				Str2 = Replace(Str2, "<#comm_posttime#>", Asp.BlankString(Asp.DateToStr(GetRow(11, i), "Y-m-d H:I:S")), 1, -1, 1)
 				
 				If stat_CommentDel Then
-					Str2 = Replace(Str2, "<#comm_del#>", "<a href=""javascript:CheckForm.comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')"">删除</a>", 1, -1, 1)				
+					Str2 = Replace(Str2, "<#comm_del#>", "<a href=""javascript:ceeevio.Comment.del(" & GetRow(0, i) & ");"" onclick=""return confirm('确定删除?\n删除后无法恢复')"">删除</a>", 1, -1, 1)				
 				Else
 					Str2 = Replace(Str2, "<#comm_del#>", "", 1, -1, 1)
 				End If
 				
 				If stat_Admin Then
-					Str2 = Replace(Str2, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""CheckForm.comment.reply(" & GetRow(0, i) & ")"">回复</a>", 1, -1, 1)
+					Str2 = Replace(Str2, "<#comm_reply#>", "<a href=""javascript:void(0);"" onclick=""ceeevio.Comment.replyBox(" & GetRow(0, i) & ")"">回复</a>", 1, -1, 1)
 				Else
 					Str2 = Replace(Str2, "<#comm_reply#>", "", 1, -1, 1)
 				End If
 				' -----------------------------------------------------
 				'	回复样式 开始
 				' -----------------------------------------------------
-				TempReply = ReplyStr
-				TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(GetRow(14, i)), 1, -1, 1)
-				TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(GetRow(15, i)), 1, -1, 1)
-				TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(GetRow(13, i)), 1, -1, 1)
-				If GetRow(13, i) = null Or Len(GetRow(13, i)) = 0 Or GetRow(13, i) = "" Or GetRow(13, i) = Empty Then
+				If blog_commAduit And (Not GetRow(12, i)) Then
 					Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
 				Else
-					Str2 = Replace(Str2, "<#comm_replycontent#>", Asp.BlankString(TempReply), 1, -1, 1)
+					TempReply = ReplyStr
+					TempReply = Replace(TempReply, "<#replyAuthor#>", Asp.BlankString(GetRow(14, i)), 1, -1, 1)
+					TempReply = Replace(TempReply, "<#replyTime#>", Asp.BlankString(GetRow(15, i)), 1, -1, 1)
+					TempReply = Replace(TempReply, "<#replyContent#>", Asp.BlankString(GetRow(13, i)), 1, -1, 1)
+					If GetRow(13, i) = null Or Len(GetRow(13, i)) = 0 Or GetRow(13, i) = "" Or GetRow(13, i) = Empty Then
+						Str2 = Replace(Str2, "<#comm_replycontent#>", "", 1, -1, 1)
+					Else
+						Str2 = Replace(Str2, "<#comm_replycontent#>", Asp.BlankString(TempReply), 1, -1, 1)
+					End If
 				End If
 				' -----------------------------------------------------
 				'	回复样式 结束
@@ -147,9 +151,9 @@ Class ChkCode
 				
 				If blog_commAduit And stat_Admin Then
 					If GetRow(12, i) Then
-						Str2 = Replace(Str2, "<#comm_Aduit#>", " | <a href=""javascript:void(0);"" onclick=""CheckForm.comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 0, this)"">取消审核</a>")
+						Str2 = Replace(Str2, "<#comm_Aduit#>", "[ <a href=""javascript:void(0);"" onclick=""ceeevio.Comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 0, this)"">取消审核</a> ]")
 					Else
-						Str2 = Replace(Str2, "<#comm_Aduit#>", " | <a href=""javascript:void(0);"" onclick=""CheckForm.comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 1, this)"">通过审核</a>")
+						Str2 = Replace(Str2, "<#comm_Aduit#>", "[ <a href=""javascript:void(0);"" onclick=""ceeevio.Comment.Aduit(" & Asp.BlankString(GetRow(0, i)) & ", 1, this)"">通过审核</a> ]")
 					End If
 				Else
 					Str2 = Replace(Str2, "<#comm_Aduit#>", "")
@@ -157,17 +161,17 @@ Class ChkCode
 				Str2 = "<div id=""comment_" & Asp.BlankString(GetRow(0, i)) & """ class=""CommPart"">" & Str2 & "</div>"
 				Str3 = Str3 & Str2
 			Next
-			Str3 = Str3 & MultiPage(PageLen + 1, blogcommpage, CurrtPage, PageStr, "float:right", "", False)
+			Str3 = Str3 & MultiPage(PageLen + 1, blogcommpage, CurrtPage, PageStr, "float:right", "", False) & "<div class=""clear""></div>"
 			Response.Write("try{$('#commentBox').html('" & outputSideBar(Str3) & "');}catch(e){}")
 		End If
 		' ---------------------------------------------------
 		' 	加载评论 - 结束
 		'	加载评论框 - 开始
 		' ---------------------------------------------------
-		Set doo = New Stream
-			Str = doo.LoadFile(local & "l_commBox.html")
-		Set doo = Nothing
-		Response.Write("try{$('#CommPostBox').html('" & outputSideBar(Str) & "')}catch(e){}")
+		'Set doo = New Stream
+			'Str = doo.LoadFile(local & "l_commBox.html")
+		'Set doo = Nothing
+		'Response.Write("try{$('#CommPostBox').html('" & outputSideBar(Str) & "')}catch(e){}")
 		' ---------------------------------------------------
 		' 	加载评论框 - 结束
 		'	加载侧边 - 开始
@@ -203,7 +207,7 @@ Class ChkCode
 		Response.Write("for (var a = 0 ; a < PluginOutPutString.length ; a++){try{$('#' + PluginOutPutString[a][0]).html(outputSideBar(PluginOutPutString[a][1]));}catch(e){}}" & vbcrlf)
 		Response.Write("}" & vbcrlf)
 '		Response.Write("alert(jQuery(PluginOutPutString).length);jQuery(PluginOutPutString).each(function(i){$('#' + PluginOutPutString[i][0]).html(outputSideBar(PluginOutPutString[i][1]))})}")
-		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{fillSide();doSide();}")
+		Response.Write("if (PluginOutPutString.length > 0){doSide();}else{window.reload();}")
 	End Sub
 
 End Class
