@@ -1,515 +1,375 @@
 ﻿<%
-Dim StreamT
-Class SysUpLoad
-   Private Form, Fils
-   Private vCharSet, vMaxSize, vSingleSize, vErr, vVersion, vTotalSize, vExe, pID,vOP
-  
-  '==============================
-   '设置和读取属性开始
-  '==============================
-   Public Property Let MaxSize(ByVal value)
-	 vMaxSize = value
-   End Property
-   
-   Public Property Let SingleSize(ByVal value)
-	 vSingleSize = value
-   End Property
-   
-   Public Property Let Exe(ByVal value)
-	 vExe = LCase(value)
-   End Property
-   
-   Public Property Let CharSet(ByVal value)
-	 vCharSet = value
-   End Property
-   
-   Public Property Get ErrorID()
-	 ErrorID = vErr
-   End Property
-   
-   Public Property Get Description()
-	 Description = GetErr(vErr)
-   End Property
-   
-   Public Property Get Version()
-	 Version = vVersion
-   End Property
-   
-   Public Property Get TotalSize()
-	 TotalSize = vTotalSize
-   End Property
-  
-   Public Property Get ProcessID()
-	 ProcessID = pID
-   End Property
-  
-   Public Property Let openProcesser(ByVal value)
-	 vOP = value
-   End Property
-'==============================
- '设置和读取属性结束，初始化类
-'==============================
+'----------------------------------------------------------
+'**************  风声 ASP 无组件上传类 V2.11  *************
+'作者：风声
+'网站：http://www.fonshen.com
+'邮件：webmaster@fonshen.com
+'版权：版权全体,源代码公开,各种用途均可免费使用
+'**********************************************************
+'----------------------------------------------------------
+Class UpLoadClass
 
- Private Sub Class_Initialize()
-   set StreamT=server.createobject("ADODB.STREAM")
-   set Form = server.createobject("Scripting.Dictionary")
-   set Fils = server.createobject("Scripting.Dictionary")
-   vVersion = "pjblog无组件上传程序"
-   vMaxSize = -1
-   vSingleSize = -1
-   vErr = -1
-   vExe = ""
-   vTotalSize = 0
-   vCharSet = "utf-8"
-   vOP=false
-   pID="pjblog"
-   setApp "",0,0,""
- End Sub
+	Private m_TotalSize,m_MaxSize,m_FileType,m_SavePath,m_AutoSave,m_Error,m_Charset
+	Private m_dicForm,m_binForm,m_binItem,m_strDate,m_lngTime
+	Public	FormItem,FileItem
 
- Private Sub Class_Terminate()
-   Set Form = Nothing
-   Set Fils = Nothing
-   Set StreamT = Nothing
- End Sub
-
-'==============================
- '函数名:GetData
- '作用:处理客户端提交来的所有数据
-'==============================
- Public Sub GetData()
-    if vOP then pID=request.querystring("processid")
-    Dim value, str, bcrlf, fpos, sSplit, slen, istart
-    Dim TotalBytes,BytesRead,ChunkReadSize,PartSize,DataPart,tempdata,formend, formhead, startpos, endpos, formname, FileName, fileExe, valueend, NewName,localname,type_1,contentType
-    If checkEntryType = True Then
-        vTotalSize = 0
-        StreamT.Type = 1
-        StreamT.Mode = 3
-        StreamT.Open
-        TotalBytes = Request.TotalBytes
-        BytesRead = 0
-        ChunkReadSize = 102400
-        '循环分块读取
-        Do While BytesRead < TotalBytes
-            '分块读取
-            PartSize = ChunkReadSize
-            If PartSize + BytesRead > TotalBytes Then PartSize = TotalBytes - BytesRead
-            DataPart = Request.BinaryRead(PartSize)
-            StreamT.Write DataPart
-            BytesRead = BytesRead + PartSize
-            setApp "uploading",TotalBytes,BytesRead,""
-        Loop
-        setApp "uploaded",TotalBytes,BytesRead,""
-        StreamT.Position = 0
-        tempdata = StreamT.Read
-        bcrlf = ChrB(13) & ChrB(10)
-        fpos = InStrB(1, tempdata, bcrlf)
-        sSplit = MidB(tempdata, 1, fpos - 1)
-        slen = LenB(sSplit)
-        istart = slen + 2
-        Do
-            formend = InStrB(istart, tempdata, bcrlf & bcrlf)
-            formhead = MidB(tempdata, istart, formend - istart)
-            str = Bytes2Str(formhead)
-            startpos = InStr(str, "name=""") + 6
-            endpos = InStr(startpos, str, """")
-            formname = LCase(Mid(str, startpos, endpos - startpos))
-            valueend = InStrB(formend + 3, tempdata, sSplit)
-            If InStr(str, "filename=""") > 0 Then
-                startpos = InStr(str, "filename=""") + 10
-                endpos = InStr(startpos, str, """")
-                type_1=instr(endpos,lcase(str),"content-type")
-		contentType=trim(mid(str,type_1+13))
-                FileName = Mid(str, startpos, endpos - startpos)
-                If Trim(FileName) <> "" Then
-                    LocalName = FileName
-                    FileName = Replace(FileName, "/", "\")
-                    FileName = Mid(FileName, InStrRev(FileName, "\") + 1)
-                    setApp "processing",TotalBytes,BytesRead,FileName
-                    fileExe = Split(FileName, ".")(UBound(Split(FileName, ".")))
-                    If vExe <> "" Then '判断扩展名
-                        If checkExe(fileExe) = True Then
-                            vErr = 3
-                            Exit Sub
-                        End If
-                    End If
-                    NewName = Getname()
-                    NewName = NewName & "." & fileExe
-                    vTotalSize = vTotalSize + valueend - formend - 6
-                    If vSingleSize > 0 And (valueend - formend - 6) > vSingleSize Then '判断上传单个文件大小
-                        vErr = 5
-                        Exit Sub
-                    End If
-                    If vMaxSize > 0 And vTotalSize > vMaxSize Then '判断上传数据总大小
-                        vErr = 1
-                        Exit Sub
-                    End If
-                    If Fils.Exists(formname) Then
-                        vErr = 4
-                        Exit Sub
-                    Else
-                        Dim fileCls:set fileCls=New fileAction
-                        fileCls.ContentType=contentType
-                        fileCls.Size = (valueend - formend - 6)
-                        fileCls.Position = (formend + 3)
-                        fileCls.NewName = NewName
-                        fileCls.LocalName = FileName
-                        Fils.Add formname, fileCls
-                        Form.Add formname, LocalName
-                        Set fileCls = Nothing
-                    End If
-                End If
-            Else
-                value = MidB(tempdata, formend + 4, valueend - formend - 6)
-                If Form.Exists(formname) Then
-                    Form(formname) = Form(formname) & "," & Bytes2Str(value)
-                Else
-                    Form.Add formname, Bytes2Str(value)
-                End If
-            End If
-            istart = valueend + 2 + slen
-        Loop Until (istart + 2) >= LenB(tempdata)
-        vErr = 0
-   Else
-        vErr = 2
-   End If
-   setApp "processed",TotalBytes,BytesRead,""
-   if err then setApp "faild",1,0,err.description
- End Sub
- 
-Public sub setApp(stp,total,current,desc)
-	Dim Str
-	Str = "{ID:""" & pID & """,step:""" & stp & """,total:" & total & ",now:" & current & ",description:""" & desc & """,dt:""" & now() & """}"
-	Response.Cookies(pID) = Str
-	Response.Cookies(pID).Expires = Date + 365
-'    Application.lock()
-'    Application(pID)="{ID:""" & pID & """,step:""" & stp & """,total:" & total & ",now:" & current & ",description:""" & desc & """,dt:""" & now() & """}"
-'    Application.unlock()
-end sub
-'==============================
- '判断扩展名
-'==============================
- Private Function checkExe(ByVal ex)
-      Dim notIn: notIn = True
-      If vExe="*" then
-           notIn=false 
-      elseIf InStr(1, vExe, "|") > 0 Then
-           Dim tempExe: tempExe = Split(vExe, "|")
-           Dim I: I = 0
-           For I = 0 To UBound(tempExe)
-                 If LCase(ex) = tempExe(I) Then
-                       notIn = False
-                       Exit For
-                 End If
-           Next
-     Else
-           If vExe = LCase(ex) Then
-                notIn = False
-           End If
-     End If
-     checkExe = notIn
- End Function
- 
-'==============================
- '把数字转换为文件大小显示方式
-'==============================
- Public Function GetSize(ByVal Size)
-    If Size < 1024 Then
-       GetSize = FormatNumber(Size, 2) & "B"
-    ElseIf Size >= 1024 And Size < 1048576 Then
-       GetSize = FormatNumber(Size / 1024, 2) & "KB"
-    ElseIf Size >= 1048576 Then
-       GetSize = FormatNumber((Size / 1024) / 1024, 2) & "MB"
-    End If
- End Function
-
-'==============================
- '二进制数据转换为字符
-'==============================
- Private Function Bytes2Str(ByVal byt)
-    If LenB(byt) = 0 Then
-    Bytes2Str = ""
-    Exit Function
-    End If
-    Dim mystream, bstr
-    Set mystream =server.createobject("ADODB.Stream")
-    mystream.Type = 2
-    mystream.Mode = 3
-    mystream.Open
-    mystream.WriteText byt
-    mystream.Position = 0
-    mystream.CharSet = vCharSet
-    mystream.Position = 2
-    bstr = mystream.ReadText()
-    mystream.Close
-    Set mystream = Nothing
-    Bytes2Str = bstr
- End Function
-
-'==============================
- '获取错误描述
-'==============================
- Private Function GetErr(ByVal Num)
-    Select Case Num
-      Case 0
-        GetErr = "数据处理完毕!"
-      Case 1
-        GetErr = "上传数据超过" & GetSize(vMaxSize) & "限制!可设置MaxSize属性来改变限制!"
-      Case 2
-        GetErr = "未设置上传表单enctype属性为multipart/form-data或者未设置method属性为Post,上传无效!"
-      Case 3
-        GetErr = "含有非法扩展名文件!只能上传扩展名为" & Replace(vExe, "|", ",") & "的文件"
-      Case 4
-        GetErr = "对不起,程序不允许使用相同name属性的文件域!"
-      Case 5
-        GetErr = "单个文件大小超出" & GetSize(vSingleSize) & "的上传限制!"
-    End Select
- End Function
-
-'==============================
- '根据日期生成随机文件名
-'==============================
- Private Function Getname()
-    Dim y, m, d, h, mm, S, r
-    Randomize
-    y = Year(Now)
-    m = Month(Now): If m < 10 Then m = "0" & m
-    d = Day(Now): If d < 10 Then d = "0" & d
-    h = Hour(Now): If h < 10 Then h = "0" & h
-    mm = Minute(Now): If mm < 10 Then mm = "0" & mm
-    S = Second(Now): If S < 10 Then S = "0" & S
-    r = 0
-    r = CInt(Rnd() * 1000)
-    If r < 10 Then r = "00" & r
-    If r < 100 And r >= 10 Then r = "0" & r
-    Getname = y & m & d & h & mm & S & r
- End Function
- 
-'==============================
- '检测上传类型是否为multipart/form-data
-'==============================
- Private Function checkEntryType()
-    Dim ContentType, ctArray, bArray,RequestMethod
-    RequestMethod=trim(LCase(Request.ServerVariables("REQUEST_METHOD")))
-    if RequestMethod="" or RequestMethod<>"post" then
-        checkEntryType = False
-        exit function
-    end if
-    ContentType = LCase(Request.ServerVariables("HTTP_CONTENT_TYPE"))
-    ctArray = Split(ContentType, ";")
-    if ubound(ctarray)>=0 then
-        If Trim(ctArray(0)) = "multipart/form-data" Then
-            checkEntryType = True
-        Else
-            checkEntryType = False
-        End If
-    else
-        checkEntryType = False
-    end if
- End Function
- 
-'==============================
- '获取上传表单值,参数可选,如果为-1则返回一个包含所有表单项的一个dictionary对象
-'==============================
- Public Function Forms(ByVal formname)
- 	If trim(formname) = "-1" Then
-        	Set Forms = Form
- 	Else
-        	If Form.Exists(LCase(formname)) Then
-            		Forms = Form(LCase(formname))
-        	Else
-            		Forms = ""
-        	End If
- 	End If
- End Function
- 
-'==============================
-'获取上传的文件类,参数可选,如果为-1则返回一个包含所有上传文件类的一个dictionary对象
-'==============================
- Public Function Files(ByVal formname)
- 	If trim(formname) = "-1" Then
-        	Set Files = Fils
- 	Else
-        	If Fils.Exists(LCase(formname)) Then
-            		Set Files = Fils(LCase(formname))
-        	Else
-            		Set Files = Nothing
-        	End If
- 	End If
- End Function
-'==============================
-'简便文件保存函数1
-'==============================
-Public Function Save(byval formname)
-	dim vsimpleSave
-	set vsimpleSave=new simpleSave
-	vsimpleSave.fileAction=Files(formname)
-	set Save=vsimpleSave
-	set vsimpleSave=nothing
-end function
-
-'==============================
-'简便文件保存函数2
-'==============================
-Public Function SaveAs(byval formname,ByVal path, ByVal saveType )
-	dim vfileAction
-	set vfileAction=Files(formname)
-	if vfileAction.FileName<>"" then
-		if vfileAction.SaveToFile(path,saveType) then
-			SaveAs=vfileAction.FileName
-		else
-			SaveAs="Has Error!"
-		end if
-	end if
-	set vfileAction=nothing
-end function
-End Class
-
-
-
-'==========================
-'简易保存类
-'==========================
-Class simpleSave
-	private vfileAction,vfileName
-    	'==============================
-    	'设置属性
-    	'==============================
-    	Public Property Let fileAction(ByVal value)
-		set vfileAction = value
-    	End Property
-    
-    	Private Sub Class_Terminate()
-		Set vfileAction = Nothing
-	End Sub
-	Public Property Get FileName()
-		FileName = vfileName
+	Public Property Get Version
+		Version="Fonshen ASP UpLoadClass Version 2.11"
 	End Property
-	
-	Public Function AsThis(ByVal path, ByVal saveType) 
-		if vfileAction.SaveToFile(path,saveType) then
-			AsThis=vfileAction.FileName
+
+	Public Property Get Error
+		Error=m_Error
+	End Property
+
+	Public Property Get Charset
+		Charset=m_Charset
+	End Property
+	Public Property Let Charset(strCharset)
+		m_Charset=strCharset
+	End Property
+
+	Public Property Get TotalSize
+		TotalSize=m_TotalSize
+	End Property
+	Public Property Let TotalSize(lngSize)
+		if isNumeric(lngSize) then m_TotalSize=Clng(lngSize)
+	End Property
+
+	Public Property Get MaxSize
+		MaxSize=m_MaxSize
+	End Property
+	Public Property Let MaxSize(lngSize)
+		if isNumeric(lngSize) then m_MaxSize=Clng(lngSize)
+	End Property
+
+	Public Property Get FileType
+		FileType=m_FileType
+	End Property
+	Public Property Let FileType(strType)
+		m_FileType=strType
+	End Property
+
+	Public Property Get SavePath
+		SavePath=m_SavePath
+	End Property
+	Public Property Let SavePath(strPath)
+		m_SavePath=Replace(strPath,chr(0),"")
+	End Property
+
+	Public Property Get AutoSave
+		AutoSave=m_AutoSave
+	End Property
+	Public Property Let AutoSave(byVal Flag)
+		select case Flag
+			case 0,1,2: m_AutoSave=Flag
+		end select
+	End Property
+
+	Private Sub Class_Initialize
+		m_Error	   = -1
+		m_Charset  = "gb2312"
+		m_TotalSize= 0
+		m_MaxSize  = 153600
+		m_FileType = "jpg/gif"
+		m_SavePath = ""
+		m_AutoSave = 0
+		Dim dtmNow : dtmNow = Date()
+		m_strDate  = Year(dtmNow)&Right("0"&Month(dtmNow),2)&Right("0"&Day(dtmNow),2)
+		m_lngTime  = Clng(Timer()*1000)
+		Set m_binForm = Server.CreateObject("ADODB.Stream")
+		Set m_binItem = Server.CreateObject("ADODB.Stream")
+		Set m_dicForm = Server.CreateObject("Scripting.Dictionary")
+		m_dicForm.CompareMode = 1
+	End Sub
+
+	Private Sub Class_Terminate
+		m_dicForm.RemoveAll
+		Set m_dicForm = nothing
+		Set m_binItem = nothing
+		m_binForm.Close()
+		Set m_binForm = nothing
+	End Sub
+
+	Public Function Open()
+		Open = 0
+		if m_Error=-1 then
+			m_Error=0
 		else
-			AsThis="Has Error!"
-		end if
-	End function
-end class
-
-'==============================
-'文件类,存储文件的详细信息
-'==============================
-Class fileAction
-   Private vSize, vPosition, vName, vNewName, vLocalName, vPath, saveName,vContentType
-   '==============================
-   '设置属性
-   '==============================
-   Public Property Let NewName(ByVal value)
-          vNewName = value
-   End Property
-   
-   Public Property Get NewName()
-          NewName = vNewName
-   End Property
-   
-   Public Property Let ContentType(vData)
-          vContentType = vData
-   End Property
-   Public Property Get ContentType()
-          ContentType = vContentType
-   End Property
-   
-   Public Property Let LocalName(ByVal value)
-          vLocalName = value
-		  vName = value
-   End Property
-   
-   Public Property Get LocalName()
-          LocalName = vLocalName
-   End Property
-
-   Public Property Get FileName()
-          FileName = vName
-   End Property
-
-   Public Property Let Position(ByVal value)
-          vPosition = value
-   End Property
-
-   Public Property Let Size(ByVal value)
-          vSize = value
-   End Property
-   Public Property Get Size()
-          Size = vSize
-   End Property
-   
-   '==============================
-   '函数名:SaveToFile
-   '作用:根据参数保存文件到服务器
-   '参数:参数1--文件保存的路径
-   '     参数2--文件保存的方式,有两个可选项0表示以新名字(时间+随机数)为文件名保存,1表示以原文件名保存文件
-   '==============================
-   Public Function SaveToFile(ByVal path, ByVal saveType)
-    On Error Resume Next
-    Err.Clear
-    vPath = Replace(path, "/", "\")
-    If Right(vPath, 1) <> "\" Then vPath = vPath & "\"
-    CreateFolder vPath
-	Dim mystream
-    Set mystream =server.createobject("ADODB.Stream")
-    mystream.Type = 1
-    mystream.Mode = 3
-    mystream.Open
-    StreamT.Position = vPosition
-    StreamT.CopyTo mystream, vSize
-    vName = vNewName
-    If saveType = 1 Then vName = vLocalName
-    mystream.SaveToFile vPath & vName, 2
-    mystream.Close
-    Set mystream = Nothing
-    If Err Then
-        SaveToFile = False
-    Else
-        SaveToFile = True
-    End If
-   End Function
-
-   '==============================
-   '函数名:GetBytes
-   '作用:获取文件的二进制形式
-   '参数:无
-   '==============================
-   Public Function GetBytes()
-    StreamT.Position = vPosition
-    GetBytes = StreamT.Read(vSize)
-  End Function
-  
-   '==============================
-   '函数名:CreateFolder
-   '作用:自动创建文件夹
-   '参数:要创建文件夹的路径
-   '==============================
-
-	Private Function CreateFolder(ByVal FolderPath)
-		on error resume next
-		Dim FolderArray
-		Dim i
-		Dim DiskName
-		Dim Created
-		Dim FSO : Set FSO = Server.CreateObject("Scripting.FileSystemObject")
-		If FSO.FolderExists(FolderPath) Then
-			Set Fso = Nothing
 			Exit Function
-		End If
-		FolderPath = Replace(FolderPath, "/", "\")
-		If Mid(FolderPath, Len(FolderPath), 1) = "\" Then FolderPath = Mid(FolderPath, 1, Len(FolderPath) - 1)
-		FolderArray = Split(FolderPath, "\")
-		DiskName = FolderArray(0)
-		Created = DiskName
-		For i = 1 To UBound(FolderArray)
-			Created = Created & "\" & FolderArray(i)
-			If Not FSO.FolderExists(Created) Then FSO.CreateFolder Created
-		Next
-		Set FSO = Nothing
-		err.clear
+		end if
+		Dim lngRequestSize : lngRequestSize=Request.TotalBytes
+		if m_TotalSize>0 and lngRequestSize>m_TotalSize then
+			m_Error=5
+			Exit Function
+		elseif lngRequestSize<1 then
+			m_Error=4
+			Exit Function
+		end if
+
+		Dim lngChunkByte : lngChunkByte = 102400
+		Dim lngReadSize : lngReadSize = 0
+		m_binForm.Type = 1
+		m_binForm.Open()
+		do
+			m_binForm.Write Request.BinaryRead(lngChunkByte)
+			lngReadSize=lngReadSize+lngChunkByte
+			if  lngReadSize >= lngRequestSize then exit do
+		loop		
+		m_binForm.Position=0
+		Dim binRequestData : binRequestData=m_binForm.Read()
+
+		Dim bCrLf,strSeparator,intSeparator
+		bCrLf=ChrB(13)&ChrB(10)
+		intSeparator=InstrB(1,binRequestData,bCrLf)-1
+		strSeparator=LeftB(binRequestData,intSeparator)
+
+		Dim strItem,strInam,strFtyp,strPuri,strFnam,strFext,lngFsiz
+		Const strSplit="'"">"
+		Dim strFormItem,strFileItem,intTemp,strTemp
+		Dim p_start : p_start=intSeparator+2
+		Dim p_end
+		Do
+			p_end = InStrB(p_start,binRequestData,bCrLf&bCrLf)-1
+			m_binItem.Type=1
+			m_binItem.Open()
+			m_binForm.Position=p_start
+			m_binForm.CopyTo m_binItem,p_end-p_start
+			m_binItem.Position=0
+			m_binItem.Type=2
+			m_binItem.Charset=m_Charset
+			strItem = m_binItem.ReadText()
+			m_binItem.Close()
+			intTemp=Instr(39,strItem,"""")
+			strInam=Mid(strItem,39,intTemp-39)
+
+			p_start = p_end + 4
+			p_end = InStrB(p_start,binRequestData,strSeparator)-1
+			m_binItem.Type=1
+			m_binItem.Open()
+			m_binForm.Position=p_start
+			lngFsiz=p_end-p_start-2
+			m_binForm.CopyTo m_binItem,lngFsiz
+
+			if Instr(intTemp,strItem,"filename=""")<>0 then
+			if not m_dicForm.Exists(strInam&"_From") then
+				strFileItem=strFileItem&strSplit&strInam
+				if m_binItem.Size<>0 then
+					intTemp=intTemp+13
+					strFtyp=Mid(strItem,Instr(intTemp,strItem,"Content-Type: ")+14)
+					strPuri=Mid(strItem,intTemp,Instr(intTemp,strItem,"""")-intTemp)
+					intTemp=InstrRev(strPuri,"\")
+					strFnam=Mid(strPuri,intTemp+1)
+					m_dicForm.Add strInam&"_Type",strFtyp
+					m_dicForm.Add strInam&"_Name",strFnam
+					m_dicForm.Add strInam&"_Path",Left(strPuri,intTemp)
+					m_dicForm.Add strInam&"_Size",lngFsiz
+					if Instr(strFnam,".")<>0 then
+						strFext=Mid(strFnam,InstrRev(strFnam,".")+1)
+					else
+						strFext=""
+					end if
+
+					select case strFtyp
+					case "image/jpeg","image/pjpeg","image/jpg"
+						if Lcase(strFext)<>"jpg" then strFext="jpg"
+						m_binItem.Position=3
+						do while not m_binItem.EOS
+							do
+								intTemp = Ascb(m_binItem.Read(1))
+							loop while intTemp = 255 and not m_binItem.EOS
+							if intTemp < 192 or intTemp > 195 then
+								m_binItem.read(Bin2Val(m_binItem.Read(2))-2)
+							else
+								Exit do
+							end if
+							do
+								intTemp = Ascb(m_binItem.Read(1))
+							loop while intTemp < 255 and not m_binItem.EOS
+						loop
+						m_binItem.Read(3)
+						m_dicForm.Add strInam&"_Height",Bin2Val(m_binItem.Read(2))
+						m_dicForm.Add strInam&"_Width",Bin2Val(m_binItem.Read(2))
+					case "image/gif"
+						if Lcase(strFext)<>"gif" then strFext="gif"
+						m_binItem.Position=6
+						m_dicForm.Add strInam&"_Width",BinVal2(m_binItem.Read(2))
+						m_dicForm.Add strInam&"_Height",BinVal2(m_binItem.Read(2))
+					case "image/png"
+						if Lcase(strFext)<>"png" then strFext="png"
+						m_binItem.Position=18
+						m_dicForm.Add strInam&"_Width",Bin2Val(m_binItem.Read(2))
+						m_binItem.Read(2)
+						m_dicForm.Add strInam&"_Height",Bin2Val(m_binItem.Read(2))
+					case "image/bmp"
+						if Lcase(strFext)<>"bmp" then strFext="bmp"
+						m_binItem.Position=18
+						m_dicForm.Add strInam&"_Width",BinVal2(m_binItem.Read(4))
+						m_dicForm.Add strInam&"_Height",BinVal2(m_binItem.Read(4))
+					case "application/x-shockwave-flash"
+						if Lcase(strFext)<>"swf" then strFext="swf"
+						m_binItem.Position=0
+						if Ascb(m_binItem.Read(1))=70 then
+							m_binItem.Position=8
+							strTemp = Num2Str(Ascb(m_binItem.Read(1)), 2 ,8)
+							intTemp = Str2Num(Left(strTemp, 5), 2)
+							strTemp = Mid(strTemp, 6)
+							while (Len(strTemp) < intTemp * 4)
+								strTemp = strTemp & Num2Str(Ascb(m_binItem.Read(1)), 2 ,8)
+							wend
+							m_dicForm.Add strInam&"_Width", Int(Abs(Str2Num(Mid(strTemp, intTemp + 1, intTemp), 2) - Str2Num(Mid(strTemp, 1, intTemp), 2)) / 20)
+							m_dicForm.Add strInam&"_Height",Int(Abs(Str2Num(Mid(strTemp, 3 * intTemp + 1, intTemp), 2) - Str2Num(Mid(strTemp, 2 * intTemp + 1, intTemp), 2)) / 20)
+						end if
+					end select
+
+					m_dicForm.Add strInam&"_Ext",strFext
+					m_dicForm.Add strInam&"_From",p_start
+					if m_AutoSave<>2 then
+						intTemp=GetFerr(lngFsiz,strFext)
+						m_dicForm.Add strInam&"_Err",intTemp
+						if intTemp=0 then
+							if m_AutoSave=0 then
+								strFnam=GetTimeStr()
+								if strFext<>"" then strFnam=strFnam&"."&strFext
+							end if
+							m_binItem.SaveToFile Server.MapPath(m_SavePath&strFnam),2
+							m_dicForm.Add strInam,strFnam
+						end if
+					end if
+				else
+					m_dicForm.Add strInam&"_Err",-1
+				end if
+			end if
+			else
+				m_binItem.Position=0
+				m_binItem.Type=2
+				m_binItem.Charset=m_Charset
+				strTemp=m_binItem.ReadText
+				if m_dicForm.Exists(strInam) then
+					m_dicForm(strInam) = m_dicForm(strInam)&","&strTemp
+				else
+					strFormItem=strFormItem&strSplit&strInam
+					m_dicForm.Add strInam,strTemp
+				end if
+			end if
+
+			m_binItem.Close()
+			p_start = p_end+intSeparator+2
+		loop Until p_start+3>lngRequestSize
+		FormItem=Split(strFormItem,strSplit)
+		FileItem=Split(strFileItem,strSplit)
+		
+		Open = lngRequestSize
 	End Function
+
+	Private Function GetTimeStr()
+		m_lngTime=m_lngTime+1
+		GetTimeStr=m_strDate&Right("00000000"&m_lngTime,8)
+	End Function
+
+	Private Function GetFerr(lngFsiz,strFext)
+		dim intFerr
+		intFerr=0
+		if lngFsiz>m_MaxSize and m_MaxSize>0 then
+			if m_Error=0 or m_Error=2 then m_Error=m_Error+1
+			intFerr=intFerr+1
+		end if
+		if Instr(1,LCase("/"&m_FileType&"/"),LCase("/"&strFext&"/"))=0 and m_FileType<>"" then
+			if m_Error<2 then m_Error=m_Error+2
+			intFerr=intFerr+2
+		end if
+		GetFerr=intFerr
+	End Function
+
+	Public Function Save(Item,strFnam)
+		Save=false
+		if m_dicForm.Exists(Item&"_From") then
+			dim intFerr,strFext
+			strFext=m_dicForm(Item&"_Ext")
+			intFerr=GetFerr(m_dicForm(Item&"_Size"),strFext)
+			if m_dicForm.Exists(Item&"_Err") then
+				if intFerr=0 then
+					m_dicForm(Item&"_Err")=0
+				end if
+			else
+				m_dicForm.Add Item&"_Err",intFerr
+			end if
+			if intFerr<>0 then Exit Function
+			if VarType(strFnam)=2 then
+				select case strFnam
+					case 0:strFnam=GetTimeStr()
+						if strFext<>"" then strFnam=strFnam&"."&strFext
+					case 1:strFnam=m_dicForm(Item&"_Name")
+				end select
+			end if
+			m_binItem.Type = 1
+			m_binItem.Open
+			m_binForm.Position = m_dicForm(Item&"_From")
+			m_binForm.CopyTo m_binItem,m_dicForm(Item&"_Size")
+			m_binItem.SaveToFile Server.MapPath(m_SavePath&strFnam),2
+			m_binItem.Close()
+			if m_dicForm.Exists(Item) then
+				m_dicForm(Item)=strFnam
+			else
+				m_dicForm.Add Item,strFnam
+			end if
+			Save=true
+		end if
+	End Function
+
+	Public Function GetData(Item)
+		GetData=""
+		if m_dicForm.Exists(Item&"_From") then
+			if GetFerr(m_dicForm(Item&"_Size"),m_dicForm(Item&"_Ext"))<>0 then Exit Function
+			m_binForm.Position = m_dicForm(Item&"_From")
+			GetData = m_binForm.Read(m_dicForm(Item&"_Size"))
+		end if
+	End Function
+
+	Public Function Form(Item)
+		if m_dicForm.Exists(Item) then
+			Form=m_dicForm(Item)
+		else
+			Form=""
+		end if
+	End Function
+
+	Private Function BinVal2(bin)
+		dim lngValue,i
+		lngValue=0
+		for i = lenb(bin) to 1 step -1
+			lngValue = lngValue *256 + Ascb(midb(bin,i,1))
+		next
+		BinVal2=lngValue
+	End Function
+
+	Private Function Bin2Val(bin)
+		dim lngValue,i
+		lngValue=0
+		for i = 1 to lenb(bin)
+			lngValue = lngValue *256 + Ascb(midb(bin,i,1))
+		next
+		Bin2Val=lngValue
+	End Function
+
+	Private Function Num2Str(num, base, lens)
+		Dim ret,i
+		ret = ""
+		while(num >= base)
+			i   = num Mod base
+			ret = i & ret
+			num = (num - i) / base
+		wend
+		Num2Str = Right(String(lens, "0") & num & ret, lens)
+	End Function
+
+	Private Function Str2Num(str, base)
+		Dim ret, i
+		ret = 0 
+		for i = 1 to Len(str)
+			ret = ret * base + Cint(Mid(str, i, 1))
+		next
+		Str2Num = ret
+	End Function
+
 End Class
 %>

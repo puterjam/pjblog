@@ -140,5 +140,29 @@ Class Stream
 		SaveToLocal = RText
 	End Function
 	
+	Public Function upload(ByVal Url, ByVal FilePath)
+		Dim ImgContent, RText
+		RText = Array(0, "")
+
+			With c_Stream
+				.Type = 1 '以二进制模式打开
+				.Open
+				.Write ImgContent(1)
+				On Error Resume Next
+				.SaveToFile Server.MapPath(FilePath), 2 '-将缓冲的内容写入文件
+				If Err Then
+					Rtext = Array(Err.Number, Err.Description)
+					SaveToLocal = RText
+					Err.Clear
+					Exit Function
+				End If
+				.Cancel() 
+				.Close()
+			End With
+			RText = Array(0, "保存文件成功!")
+
+		upload = RText
+	End Function
+	
 End Class
 %>
