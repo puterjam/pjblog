@@ -147,6 +147,8 @@ background-repeat:no-repeat;
 	border: 1px solid #9EA9C5;
 	background:#fff url(../images/Control/s.png) repeat-x;
 	background-position-y:28px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 .CPanel{
  padding:5px;

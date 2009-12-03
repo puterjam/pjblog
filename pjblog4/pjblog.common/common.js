@@ -547,6 +547,228 @@ var ceeevio = {
 			$("#comm_Content").val("[quote=" + mem + "]" + $("#commcontent_" + id).text() + "[/quote]");
 			location = window.location.href + "#postform";
 		}
+	},
+	Link : {
+		editBox : function(id){
+			$(".linkeditbutton").attr("disabled", true).bind("click", function(){return false;});
+			$("#edit_" + id).css({display : "block"});
+			$("#tool_" + id).append("<span id=\"canel_" + id + "\"> | <a href=\"javascript:;\" onclick=\"ceeevio.Link.canelEditBox(" + id + ")\">取消</a></span>")
+			$("#name_" + id).html("<input type=\"text\" value=\"" + $("#name_" + id).text() + "\" class=\"text\" id=\"b_name_" + id + "\" style=\"width:90%\">");
+			$("#url_" + id).html("<input type=\"text\" value=\"" + $("#url_" + id).text() + "\" class=\"text\" id=\"b_url_" + id + "\" style=\"width:80%\">");
+			$("#image_" + id).html("<input type=\"text\" value=\"" + $("#image_" + id).text() + "\" class=\"text\" id=\"b_image_" + id + "\" style=\"width:90%\">");
+			$("#order_" + id).html("<input type=\"text\" value=\"" + $("#order_" + id).text() + "\" class=\"text\" id=\"b_order_" + id + "\" style=\"width:90%\">");
+		},
+		canelEditBox : function(id){
+			$("#canel_" + id).remove();
+			$(".linkeditbutton").attr("disabled", false).unbind("click");
+			$("#edit_" + id).css({display : "none"});
+			$("#name_" + id).html($("#b_name_" + id).val());
+			$("#url_" + id).html($("#b_url_" + id).val());
+			$("#image_" + id).html($("#b_image_" + id).val());
+			$("#order_" + id).html($("#b_order_" + id).val());
+		},
+		postLinkedit : function(id){
+			var name = $("#b_name_" + id).val(), url = $("#b_url_" + id).val(), image = $("#b_image_" + id).val(), _this = this, _id = id, order = $("#b_order_" + id).val();
+			if (!REGEXP.REG_WEBURL.test(url)){alert("链接格式错误"); return;}
+			if (image.length > 0){if (!REGEXP.REG_WEBURL.test(image)){alert("logo格式错误"); return;}}
+			//alert("name : " + name + "\n url : " + url + "\n image : " + image)
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : "edit", name : name, url : url, image : image, id : id, order : order},
+				function(data){
+					if (data.Suc){
+						_this.canelEditBox(_id);
+						effect.WarnTip.open({
+									title		: 		"恭喜 操作成功",
+									html		:		data.Info
+						});
+					}else{
+						alert(data.Info)
+					}
+				}
+			);
+		},
+		SetSession : function(key, value){
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : "session", key : key, value : value},
+				function(data){
+					if (data.Suc){window.location.reload();}else{alert("筛选失败")}
+				}
+			);
+		},
+		ShowAll : function(){
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : "showAll"},
+				function(data){
+					if (data.Suc){window.location.reload();}else{alert(data.Info)}
+				}
+			);
+		},
+		AddLinkClass : {
+			Box : function(){
+				$(".newadd").attr("disabled", true).bind("click", function(){return false})
+				c = "<div style=\"border:1px solid #dfdfdf; margin-bottom:10px\" id=\"newLinkClassAdd\"><div style=\"background:url(../images/Control/gray-grad.png) repeat-x; padding:5px 10px 5px 10px;\">添加新分类</div>" +
+						"<div style=\"padding:5px 10px 5px 10px;\">" + 
+							"<table>" +
+								"<tr>" +
+									"<td>新分类名 <input type=\"text\" class=\"text\" value=\"\" id=\"NewLinkClassName\" size=\"30\"></td>" +
+									"<td><input type=\"button\" value=\"保存\" class=\"button\" onclick=\"ceeevio.Link.AddLinkClass.post()\"></td>" +
+									"<td><input type=\"button\" value=\"取消\" class=\"button\" onclick=\"ceeevio.Link.AddLinkClass.canel()\"></td>" +
+								"</tr>" +
+							"</table>" +
+						"</div>"+
+					"</div>";
+				$("#rightbox").prepend(c);
+			},
+			post : function(){
+				var c = $("#NewLinkClassName").val();
+				if (c.length <= 0){alert("新分类名不能为空!"); return;}
+				$(".button").attr("disabled", true);
+				var _this = this;
+				$.getJSON(
+						"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+						{action : "addNewClass", name : c},
+						function(data){
+							if (data.Suc){
+								_this.canel();
+								window.location.reload();
+							}else{alert(data.Info);$(".button").attr("disabled", false)}
+						}
+				);
+			},
+			canel : function(){
+				$("#newLinkClassAdd").remove();
+				$(".newadd").attr("disabled", false).unbind("click");
+			}
+		},
+		AddLink : {
+			Box : function(){
+				location = "#rightbox";
+				$(".newadd").attr("disabled", true).bind("click", function(){return false})
+				c = "<div style=\"border:1px solid #dfdfdf; margin-bottom:10px\" id=\"newLinkAdd\"><div style=\"background:url(../images/Control/gray-grad.png) repeat-x; padding:5px 10px 5px 10px;\">添加新链接</div>" +
+						"<div style=\"padding:5px 10px 5px 10px;\">" + 
+							"<table>" +
+								"<tr>" +
+									"<td>序号</td>" +
+									"<td>站点名</td>" +
+									"<td>链接</td>" +
+									"<td>logo</td>" +
+									"<td>&nbsp;</td>" +
+								"</tr>" +
+								
+								"<tr>" +
+									"<td width=\"10\"><input type=\"text\" id=\"c_order\" class=\"text\" size=\"1\" value=\"0\"></td>" +
+									"<td width=\"150\"><input type=\"text\" id=\"c_name\" class=\"text\" style=\"width:90%\"></td>" +
+									"<td width=\"250\"><input type=\"text\" id=\"c_url\" class=\"text\" style=\"width:90%\"></td>" +
+									"<td width=\"250\"><input type=\"text\" id=\"c_image\" class=\"text\" style=\"width:90%\"></td>" +
+									'<td width=\"250\"><select id=\"c_CateID\">' + CateString + '</select></td>' +
+								"</tr>" +
+								
+								"<tr>" +
+									"<td colspan=\"5\"><input type=\"button\" value=\"保存\" class=\"button\" onclick=\"ceeevio.Link.AddLink.post()\"><input type=\"button\" value=\"取消\" class=\"button\" onclick=\"ceeevio.Link.AddLink.canel()\"></td>" +
+								"</tr>" +
+								
+							"</table>" +
+						"</div>"+
+					"</div>";
+				$("#rightbox").prepend(c);
+			},
+			post : function(){
+				$(".button").attr("disabled", true);
+				var order = $("#c_order").val(), name = $("#c_name").val(), url = $("#c_url").val(), image = $("#c_image").val(), cateID = $("#c_CateID").val();
+				if (name.length < 1){alert("站点名不能为空!"); return;}
+				if (!REGEXP.REG_WEBURL.test(url)){alert("链接格式错误"); return;}
+				if (image.length > 0){if (!REGEXP.REG_WEBURL.test(image)){alert("logo格式错误"); return;}}
+				$.getJSON(
+					"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+					{
+						action 	: 	"addNewLink",
+						order 	: 	order,
+						name	: 	name,
+						url		:	url,
+						image	:	image,
+						cateID	:	cateID
+					},
+					function(data){
+						if (data.Suc){
+							window.location.reload();
+						}else{
+							$(".button").attr("disabled", false);
+							alert(data.Info);
+						}
+					}
+				);
+			},
+			canel : function(){
+				$("#newLinkAdd").remove();
+				$(".newadd").attr("disabled", false).unbind("click");
+			}
+		},
+		DelLink : function(id){
+			$(".linkdel").attr("disabled", true).bind("click", function(){return false;})
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : "del", id : id},
+				function(data){
+					if (data.Suc){
+						window.location.reload();
+					}else{alert(data.Info)}
+				}
+			);
+		},
+		Show : function(id, filter){
+			$(".linkdel").attr("disabled", true).bind("click", function(){return false;});
+			var _filter = filter, _id = id;
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : filter, id : id},
+				function(data){
+					if (data.Suc){
+						$(".linkdel").attr("disabled", false).unbind("click");
+						if (_filter == "show"){
+							$("#doshow_" + _id).attr("href", "javascript:ceeevio.Link.Show(" + _id + ", 'unshow');").text("取消通过");
+						}else{
+							$("#doshow_" + _id).attr("href", "javascript:ceeevio.Link.Show(" + _id + ", 'show');").text("通过");
+						}
+					}else{alert(data.Info)}
+				}
+			);
+		},
+		main : function(id, filter){
+			$(".linkdel").attr("disabled", true).bind("click", function(){return false;});
+			var _filter = filter, _id = parseInt(id);
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : filter, id : id},
+				function(data){
+					if (data.Suc){
+						$(".linkdel").attr("disabled", false).unbind("click");
+						if (jQuery.trim(_filter) == "tomain"){
+							$("#domain_" + _id).text("取消置顶")
+											   .attr("href", "javascript:ceeevio.Link.main(" + _id + ", 'unmain')");
+											   window.location.reload();
+						}else{
+							$("#domain_" + _id).text("置顶").attr("href", "javascript:ceeevio.Link.main(" + _id + ", 'tomain')");
+						}
+					}else{alert(data.Info)}
+				}
+			);
+		},
+		move : function(id, classid){
+			$.getJSON(
+				"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+				{action : "move", id : id, classid : classid},
+				function(data){
+					if (data.Suc){
+						window.location.reload();
+					}else{
+						alert(data.Info)
+					}
+				}
+			);
+		}
 	}//,
 }
 

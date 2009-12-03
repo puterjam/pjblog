@@ -63,52 +63,6 @@
 	}
 
 /*
-	' @	图片资源显示窗口代码
-*/
-	upload.Sourceimage = function(obj, id){
-		var c = "";
-		c += "<div id=\"openview\">";
-		c += "<input type=\"hidden\" id=\"jsid\" value=\"" + id + "\">";
-		c += "<div class=\"title\" style>";
-		c += "<div class=\"left\"><img src=\"" + obj.path + "\"></div>";
-		c += "<div class=\"right\"><div style=\"width:100%;height:50px\"></div><div><strong>" + obj.name + "</strong></div><div>图片类型 : " + obj.ext + " <span style=\"margin-left:20px\">图片大小 : " + obj.size + "<sub>Bytes</sub></span></div></div>";
-		c += "</div>";
-		c += "<div style=\"clear:both\"></div>";
-		c += "<div class=\"body\">";
-		c += "<div>图片路径 : <i>" + obj.path + "</i></div>";
-		c += "<div>文件类型 : " + obj.type + "</div>";
-		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.update(this, " + obj.id + ");\" id=\"b_update\">更新</a> | <a href=\"javascript:void(0);\" onclick=\"upload.SingleDel(this, " + obj.id + ")\">删除</a> | <a href=\"javascript:;\">插入</a></div>";
-		c += "</div>";
-		c += "<div class=\"rbottom\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').draggable({disabled : false});$('#opensee').remove();\"></div>"
-		c += "</div>";
-		return c;
-	}
-
-/*
-	' @	附件详细信息窗口代码
-*/
-	upload.AttentMent = function(obj, id){
-		var c = "";
-		c += "<div id=\"openview\">";
-		c += "<input type=\"hidden\" id=\"jsid\" value=\"" + id + "\">";
-		c += "<div class=\"title\" style=\"padding: 2px 20px 2px 20px\">";
-		c += "<h4>附件详细信息</h4>";
-		c += "<div>附件名 : " + obj.name + "</div>"
-		c += "<div>附件大小 : " + obj.size + "<sub>Bytes</sub></div>"
-		c += "<div>附件后缀 : " + obj.ext + "</div>"
-		c += "</div>";
-		c += "<div style=\"clear:both\"></div>";
-		c += "<div class=\"body\">";
-		c += "<div>文件真实路径 : <i>" + obj.path + "</i></div>";
-		c += "<div>文件类型 : " + obj.type + "</div>";
-		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.update(this, " + obj.id + ");\" id=\"b_update\">更新</a> | <a href=\"javascript:void(0);\" onclick=\"upload.SingleDel(this, " + obj.id + ")\">删除</a> | <a href=\"javascript:;\">插入</a></div>";
-		c += "</div>";
-		c += "<div class=\"rbottom\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').draggable({disabled : false});$('#opensee').remove();\"></div>"
-		c += "</div>";
-		return c;
-	}
-
-/*
 	' @	资源加载选择过程
 */
 	upload.viewChoose = function(obj){
@@ -134,7 +88,16 @@
 		$("#postUpload").ajaxForm({
 				dataType : "json",
 				beforeSubmit : function(){
-					$("#uploadinfo").text("正在上传, 请稍后...");
+					var canUp = true;
+					$("input[type*='file']").each(function(){
+						if ($(this).val() == "" || $(this).val().length  == 0){canUp = false}							   
+					});
+					if (canUp) {
+						$("#uploadinfo").text("正在上传, 请稍后..."); return true;
+					}else{
+						alert("上传的附件内容不能为空");
+						return false;
+					}
 				},
 				success : function(data){
 					var t = data.Info;
@@ -155,56 +118,6 @@
 	};
 
 /*
-	' @	主窗口HTML代码
-*/
-	upload.html = function(){
-		var c = "";
-		var left = this.left();
-		var right = this.right();
-		c += "<form action=\"../pjblog.logic/log_Upload.asp?action=fast\" method=\"post\" enctype=\"multipart/form-data\" id=\"postUpload\">"; // form
-		c += "<div class=\"title\" id=\"uploadTitle\"><span style=\"float:left\">附件管理</span><span class=\"close\" onclick=\"$('#upload').remove()\"></span><div style=\"clear:both\"></div></div>";
-		c += "<div class=\"body\">"
-		c += "<div class=\"left\">" + left + "</div>"
-		c += "<div class=\"right\" id=\"contentMain\">" + right + "</div>";
-		c += "<div style=\"clear:both\"></div>";
-		c += "</div>";
-		c += "<div class=\"bottom\"><input type=\"submit\" class=\"button\" value=\"上传\"><input type=\"button\" class=\"button\" value=\"添加\" onclick=\"upload.add()\"><input type=\"button\" class=\"button\" value=\"删除\" onclick=\"upload.del()\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').remove()\"></div>"
-		c += "</form>";
-		return c;
-	};
-
-/*
-	' @	主窗口左边代码
-*/
-	upload.left = function(){
-		var c = "<div class=\"sourcetitle\">资源管理</div>";
-		c += "<div class=\"source\" id=\"source\">";
-		c += "</div>";
-		c += "<div id=\"SourcePage\"></div>"
-		return c;
-	};
-
-/*
-	' @	主窗口右边代码
-*/
-	upload.right = function(){
-		var c = "<div class=\"main\">";
-		c += "<div class=\"ctop\"><span style=\"float:left\"><input type=\"checkbox\" value=\"1\" class=\"check\" onclick=\"upload.selectAll(this)\"> 全选</span><span style=\"float:right; color:#333\"><span style=\"cursor:pointer\">上传模式</span> <span style=\"cursor:pointer\">信息模式</span></span></div>";
-		c += "<div class=\"cbottom\">";
-		c += "<div style=\"text-align:right; padding-right:20px\"><span style=\"float:left;font-style:oblique; font-size:10px\">▶ CopyRight @ PJBlog 4</span><span id=\"uploadinfo\">&nbsp;</span></div>";
-		// 模式开始
-		
-		c += "<div class=\"fload\" id=\"fload\" style=\"min-height:120px\">";
-		c += "<div class=\"item\" id=\"item1\"><input type=\"checkbox\" value=\"1\" class=\"filedel\"><input type=\"file\" class=\"file\" size=\"40\" name=\"file-1\"></div>";
-		c += "</div>";
-		
-		// 模式结束
-		c += "</div>";
-		c += "</div>";
-		return c;
-	};
-
-/*
 	' @	增加上传按钮
 */
 	upload.add = function(){
@@ -212,7 +125,24 @@
 		if (i > this.alowCount){alert("超过允许上传最大量"); return;}
 		var file = document.createElement("input");
 		var items = document.createElement("div");
-		$("#fload").append(jQuery(items).addClass("item").attr("id", "item" + i).append("<input type=\"checkbox\" value=\"" + i + "\" class=\"filedel\">").append(jQuery(file).addClass("file").attr({size : "40", name : "file-" + i, type : "file"})));
+		$("#fload")
+			.append(
+					jQuery(items)
+						.addClass("item")
+						.attr("id", "item" + i)
+						.append(
+								"<input type=\"checkbox\" value=\"" + i + "\" class=\"filedel\">"
+						)
+						.append(
+								jQuery(file)
+									.addClass("file")
+									.attr({
+										  size : "40",
+										  name : "file-" + i,
+										  type : "file"
+									})
+								)
+			);
 	}
 
 /*
@@ -273,19 +203,28 @@
 		$("#updatePostBox").ajaxForm({
 				dataType : "json",
 				beforeSubmit : function(){
-					jQuery(effect.windows.open($("#updateBox"), {
-								position 	:  	0,
-								html		: 	"<strong>正在上传, 请稍后...</strong>",
-								offset		: 	0
-					}))
-					.addClass("opacity")
-					.css({
-								width		:	$("#updateBox").outerWidth() + "px",
-								height		:	$("#updateBox").outerHeight() + "px",
-								color		:	"#000000",
-								"text-align":	"center",
-								"line-height" : $("#updateBox").outerHeight() + "px"
-					}).attr("id", "updateBox2");
+					var canUp = true;
+					$("#updatePostBox input[type*='file']").each(function(){
+						if ($(this).val() == "" || $(this).val().length  == 0){canUp = false}							   
+					});
+					if (canUp) {
+						jQuery(effect.windows.open($("#updateBox"), {
+									position 	:  	0,
+									html		: 	"<strong>正在上传, 请稍后...</strong>",
+									offset		: 	0
+						}))
+						.addClass("opacity")
+						.css({
+									width		:	$("#updateBox").outerWidth() + "px",
+									height		:	$("#updateBox").outerHeight() + "px",
+									color		:	"#000000",
+									"text-align":	"center",
+									"line-height" : $("#updateBox").outerHeight() + "px"
+						}).attr("id", "updateBox2");
+					}else{
+						alert("上传的附件内容不能为空");
+						return false;
+					}
 				},
 				success : function(data){
 					var json = data.Info[0];
@@ -302,14 +241,6 @@
 					}catch(e){}
 				}
 		});
-	}
-	
-	upload.updateString = function(obj, id){
-		var c = "";
-		c += "<form action=\"../pjblog.logic/log_Upload.asp?action=update&id=" + id + "\" method=\"post\" id=\"updatePostBox\" enctype=\"multipart/form-data\">"
-		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.updateClose()\" style=\"margin-right:6px\"><img src=\"../images/check_error.gif\" border=\"0\"></a><input type=\"file\" style=\"width:240px; border:1px solid #ccc\"  name=\"evio\"><input type=\"submit\" class=\"button\" value=\"更新\"></div>";
-		c += "</form>";
-		return c;
 	}
 	
 	upload.updateClose = function(){
@@ -418,4 +349,108 @@
 		FirstShortCut = true;
 		
 		return pageCode;
+	}
+
+/*
+	' @	图片资源显示窗口代码
+*/
+	upload.Sourceimage = function(obj, id){
+		var c = "";
+		c += "<div id=\"openview\">";
+		c += "<input type=\"hidden\" id=\"jsid\" value=\"" + id + "\">";
+		c += "<div class=\"title\" style>";
+		c += "<div class=\"left\"><img src=\"" + obj.path + "\"></div>";
+		c += "<div class=\"right\"><div style=\"width:100%;height:50px\"></div><div><strong>" + obj.name + "</strong></div><div>图片类型 : " + obj.ext + " <span style=\"margin-left:20px\">图片大小 : " + obj.size + "<sub>Bytes</sub></span></div></div>";
+		c += "</div>";
+		c += "<div style=\"clear:both\"></div>";
+		c += "<div class=\"body\">";
+		c += "<div>图片路径 : <i>" + obj.path + "</i></div>";
+		c += "<div>文件类型 : " + obj.type + "</div>";
+		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.update(this, " + obj.id + ");\" id=\"b_update\">更新</a> | <a href=\"javascript:void(0);\" onclick=\"upload.SingleDel(this, " + obj.id + ")\">删除</a> | <a href=\"javascript:;\">插入</a></div>";
+		c += "</div>";
+		c += "<div class=\"rbottom\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').draggable({disabled : false});$('#opensee').remove();\"></div>"
+		c += "</div>";
+		return c;
+	}
+	
+/*
+	' @	附件详细信息窗口代码
+*/
+	upload.AttentMent = function(obj, id){
+		var c = "";
+		c += "<div id=\"openview\">";
+		c += "<input type=\"hidden\" id=\"jsid\" value=\"" + id + "\">";
+		c += "<div class=\"title\" style=\"padding: 2px 20px 2px 20px\">";
+		c += "<h4>附件详细信息</h4>";
+		c += "<div>附件名 : " + obj.name + "</div>"
+		c += "<div>附件大小 : " + obj.size + "<sub>Bytes</sub></div>"
+		c += "<div>附件后缀 : " + obj.ext + "</div>"
+		c += "</div>";
+		c += "<div style=\"clear:both\"></div>";
+		c += "<div class=\"body\">";
+		c += "<div>文件真实路径 : <i>" + obj.path + "</i></div>";
+		c += "<div>文件类型 : " + obj.type + "</div>";
+		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.update(this, " + obj.id + ");\" id=\"b_update\">更新</a> | <a href=\"javascript:void(0);\" onclick=\"upload.SingleDel(this, " + obj.id + ")\">删除</a> | <a href=\"javascript:;\">插入</a></div>";
+		c += "</div>";
+		c += "<div class=\"rbottom\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').draggable({disabled : false});$('#opensee').remove();\"></div>"
+		c += "</div>";
+		return c;
+	}
+	
+/*
+	' @	主窗口HTML代码
+*/
+	upload.html = function(){
+		var c = "";
+		var left = this.left();
+		var right = this.right();
+		c += "<form action=\"../pjblog.logic/log_Upload.asp?action=fast\" method=\"post\" enctype=\"multipart/form-data\" id=\"postUpload\">"; // form
+		c += "<div class=\"title\" id=\"uploadTitle\"><span style=\"float:left\">附件管理</span><span class=\"close\" onclick=\"$('#upload').remove()\"></span><div style=\"clear:both\"></div></div>";
+		c += "<div class=\"body\">"
+		c += "<div class=\"left\">" + left + "</div>"
+		c += "<div class=\"right\" id=\"contentMain\">" + right + "</div>";
+		c += "<div style=\"clear:both\"></div>";
+		c += "</div>";
+		c += "<div class=\"bottom\"><input type=\"submit\" class=\"button\" value=\"上传\"><input type=\"button\" class=\"button\" value=\"添加\" onclick=\"upload.add()\"><input type=\"button\" class=\"button\" value=\"删除\" onclick=\"upload.del()\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"$('#upload').remove()\"></div>"
+		c += "</form>";
+		return c;
+	};
+	
+/*
+	' @	主窗口左边代码
+*/
+	upload.left = function(){
+		var c = "<div class=\"sourcetitle\">资源管理</div>";
+		c += "<div class=\"source\" id=\"source\">";
+		c += "</div>";
+		c += "<div id=\"SourcePage\"></div>"
+		return c;
+	};
+	
+/*
+	' @	主窗口右边代码
+*/
+	upload.right = function(){
+		var c = "<div class=\"main\">";
+		c += "<div class=\"ctop\"><span style=\"float:left\"><input type=\"checkbox\" value=\"1\" class=\"check\" onclick=\"upload.selectAll(this)\"> 全选</span><span style=\"float:right; color:#333\"><span style=\"cursor:pointer\">上传模式</span> <span style=\"cursor:pointer\">信息模式</span></span></div>";
+		c += "<div class=\"cbottom\">";
+		c += "<div style=\"text-align:right; padding-right:20px\"><span style=\"float:left;font-style:oblique; font-size:10px\">▶ CopyRight @ PJBlog 4</span><span id=\"uploadinfo\">&nbsp;</span></div>";
+		// 模式开始
+		
+		c += "<div class=\"fload\" id=\"fload\" style=\"min-height:120px\">";
+		c += "<div class=\"item\" id=\"item1\"><input type=\"checkbox\" value=\"1\" class=\"filedel\"><input type=\"file\" class=\"file\" size=\"40\" name=\"file-1\"></div>";
+		c += "</div>";
+		
+		// 模式结束
+		c += "</div>";
+		c += "</div>";
+		return c;
+	};
+	
+	upload.updateString = function(obj, id){
+		var c = "";
+		c += "<form action=\"../pjblog.logic/log_Upload.asp?action=update&id=" + id + "\" method=\"post\" id=\"updatePostBox\" enctype=\"multipart/form-data\">"
+		c += "<div><a href=\"javascript:void(0);\" onclick=\"upload.updateClose()\" style=\"margin-right:6px\"><img src=\"../images/check_error.gif\" border=\"0\"></a><input type=\"file\" style=\"width:240px; border:1px solid #ccc\"  name=\"evio\"><input type=\"submit\" class=\"button\" value=\"更新\"></div>";
+		c += "</form>";
+		return c;
 	}
