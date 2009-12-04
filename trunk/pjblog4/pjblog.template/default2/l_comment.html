@@ -1,0 +1,28 @@
+﻿<li class="comment admin-comment" id="comment-<#comm_id#>">
+<div style="clear:both"></div>
+  <div class="comment-meta">
+   <div class="comment-meta-left">
+  <img alt='' src='<#GRA#>' class='avatar avatar-35 photo' height='35' width='35' />  
+    <ul class="comment-name-date">
+     <li class="comment-name">
+<span id="commentauthor-<#comm_id#>"><#comm_author#> <#comm_Aduit#></span>
+     </li>
+     <li class="comment-date"><#comm_posttime#></li>
+    </ul>
+   </div>
+
+   <ul class="comment-act">
+    <li class="comment-reply"><#comm_reply#></li>
+    <li class="comment-quote"><a href="javascript:void(0);" onclick="ceeevio.Comment.quote(<#comm_id#>, '<#comm_author#>');">引用</a></li>
+    <li class="comment-edit"><#comm_del#></li>   </ul>
+
+  </div>
+  <div class="comment-content" id="commcontent_<#comm_id#>">
+    <p>
+    	<#comm_Content#>
+		<div id="commentcontentreply_<#comm_id#>">
+            <#comm_replycontent#>
+        </div>
+    </p>
+  </div>
+</li>

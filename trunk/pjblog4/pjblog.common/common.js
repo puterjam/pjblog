@@ -769,6 +769,32 @@ var ceeevio = {
 				}
 			);
 		}
+	},
+	ManComm : {
+		Reply : {
+			ReplyBox : function(id){
+				this.disabled();
+				var c = "<tr id=\"replycontent_" + id + "\"><td></td><td><textarea class=\"text\" style=\"width:100%; height:100px\" id=\"replycontent_" + id + "\"></textarea><br /><input type=\"button\" class=\"button\" value=\"保存\"><input type=\"button\" class=\"button\" value=\"取消\" onclick=\"ceeevio.ManComm.Reply.canel(" + id + ")\"></td><td><div id=\"author_" + id + "\"></div></td></tr>";
+				$("#comcontent_" + id).after(c)
+			},
+			disabled : function(){
+				$(".activeButton").attr("disabled", true).bind("click", function(){return false});
+			},
+			canel : function(id){
+				$("#replycontent_" + id).remove();
+				$(".activeButton").attr("disabled", false).unbind("click");
+			},
+			post : function(id){
+				var c = $("#replycontent_" + id).val();
+				$.getJSON(
+					"",
+					{},
+					function(){
+						
+					}
+				);
+			}
+		}
 	}//,
 }
 

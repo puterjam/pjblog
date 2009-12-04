@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>对象参考——风声 ASP 无组件上传类 V2.11 [Fonshen ASP UpLoadClass Version 2.11]</title>
+<meta name="Keywords" content="ASP,无组件上传,上传组件,图片上传,风声,风声边界,Fonshen,Upload" />
+<meta name="Description" content="风声 ASP 无组件上传类,Fonshen ASP UpLoadClass" />
+<link href="../styles/works.css" rel="stylesheet" type="text/css" />
+</head>
+<body id="UpLoadClass_V2.11">
+	<div id="Context">
+		<div id="Topic">
+			风声 ASP 无组件上传类 V2.11 [Fonshen ASP UpLoadClass Version 2.11]
+		</div>
+		<div id="Menu">
+			<a href="../index.htm">首 页</a>
+			<a>对象参考</a>
+			<a href="help2.htm">专家说明</a>
+			<a href="../demo1/index.htm">范例一</a>
+			<a href="../demo2/index.htm">范例二</a>
+			<a href="../demo3/index.htm">范例三</a>
+			<a href="../speed/index.htm">速度测试</a>
+			<a href="../speed/uplist.asp">测试结果</a>
+		</div>
+		<p id="Title">
+			UpLoadClass对象[对象参考]
+		</p>
+		<div id="Content">
+			<div>
+			　　使用 UpLoadClass 对象可以处理一个HTTP表单上传二进制数据（文件）到服务器，其形式模拟 ASP 内置对象 Request。上传的处理要创建一个 UpLoadClass 对象实例，可以使用&lt;%Set request2=new UpLoadClass%&gt;
+			</div>
+			<table width="100%" border="0" cellpadding="2" cellspacing="1" class="TbRefer">
+				<caption>属性</caption>
+				<tr>
+					<th>TotalSize</th>
+					<td>
+						上传总大小限制字节数<br />
+						<label>默认值：0 表示上传大小不受限制</label>
+					</td>
+				</tr>
+				<tr>
+					<th>Charset</th>
+					<td>
+						接受字符集<br />
+						<label>默认值：gb2312</label>	
+					</td>
+				</tr>
+				<tr>
+					<th>MaxSize</th>
+					<td>
+						每个上传文件的最大字节数<br />
+						<label>
+							默认值：153600<br />
+							特征值：0表示文件大小不受限制
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th>FileType</th>
+					<td>
+						允许上传的文件类型<br />
+						<label>
+							默认值：&quot;gif/jpg&quot;<br />
+							特征值：&quot;&quot;（空） 表示文件类型不受限制
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th>SavePath</th>
+					<td>
+						文件存放的路径，可以是相对路径<br />
+						<label>默认值：&quot;&quot;（空）即当前目录</label>	
+					</td>
+				</tr>
+				<tr>
+					<th><span>AutoSave</span></th>
+					<td>
+						设置 Open 方法处理文件的方式，对其他方法无效<br />
+						<label>
+							默认值：0<br />
+							可选值：<br />
+							0：取无重复的服务器时间字符串为文件名自动保存文件<br />
+							1：取源文件名自动保存文件<br />
+							2：不自动保存文件，Open之后请用Save/GetData方法保存文件
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th>Version</th>
+					<td>返回类版本说明</td>
+				</tr>
+				<tr>
+					<th>Error</th>
+					<td>
+						返回当前文件保存状态<br />
+						<label>
+							Error -1：上传没有开始，请先 'Open' 。<br />
+							Error 0：上传成功。<br />
+							Error 1：上传生效，但有一些文件因大于 'MaxSize' 而未被保存。<br />
+							Error 2：上传生效，但有一些文件因不匹配 'FileType' 而未被保存。<br />
+							Error 3：上传生效，但有一些文件因大于 'MaxSize' 并且不匹配 'FileType' 而未被保存。<br />
+							Error 4：异常，不存在上传。<br />
+							Error 5：上传已经取消，请检查总上载数据是否小于 'TotalSize' 。
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th>FormItem</th>
+					<td>保存Post表单中文本域名称的数组，下标从1开始</td>
+				</tr>
+				<tr>
+					<th>FileItem</th>
+					<td>保存Post表单中文件域名称的数组，下标从1开始</td>
+				</tr>
+			</table>
+			<table width="100%" border="0" cellpadding="2" cellspacing="1" class="TbRefer">
+				<caption>方法</caption>
+				<tr>
+					<th><span>Function Open()</span></th>
+					<td>
+						打开对象开始上传，返回本次上传总数据大小<br />
+						<label>
+							打开之前可以重定义对象参数属性 MaxSize 等<br />
+							每个实例均需调用的方法
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th><span>Function Save(Item,Name)</span></th>
+					<td>
+						保存表单中 file 域上传的文件，成功保存返回 true，否则返回 false<br />
+						Item 是 file 域名称，Name 是保存的文件名<br />
+						<label>
+							Name 特征值有：<br />
+							0：自动取无重复的服务器时间字符串为文件名<br />
+							1：自动取源文件名<br />
+							字符串：自定义的文件名，如&quot;mypic.jpg&quot;
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th><span>Function Form(Item)</span></th>
+					<td>
+						返回表单中各类域提交（上传）的文本（文件）信息<br />
+						Item 是域名称<br />
+						<label>
+							对于非 file 域返回：<span>对应的文本值</span><br />
+							对于 file 域返回：<span>文件上传后的文件名</span><br />
+						</label>
+						对于 file 域还有以 Item 加特征后缀为参数对应不同的返回信息：<br />
+						<label>
+							Form(Item&amp;&quot;_Type&quot;) 文件类型，例&quot;image/gif&quot;<br />
+							Form(Item&amp;&quot;_Name&quot;) 原文件名<br />
+							Form(Item&amp;&quot;_Path&quot;) 原文件本地上传路径<br />
+							Form(Item&amp;&quot;_Size&quot;) 文件字节数<br />
+							Form(Item&amp;&quot;_Width&quot;) 宽度（对image/flash有效）<br />
+							Form(Item&amp;&quot;_Height&quot;)高度（对image/flash有效）<br />
+							Form(Item&amp;&quot;_Ext&quot;) 文件扩展名<br />
+							Form(Item&amp;&quot;_Err&quot;) 该文件保存状态<br />
+							Err -1：没有文件上传。<br />
+							Err 0：文件保存成功。<br />
+							Err 1：文件因大于 'MaxSize' 而未被保存。<br />
+							Err 2：文件因不匹配 'FileType' 而未被保存。<br />
+							Err 3：文件因大于 'MaxSize' 并且不匹配 'FileType' 而未被保存。
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th>Function GetData(Item)</th>
+					<td>
+						返回表单中 file 域上传的文件数据流，Item 是 file 域名称<br />
+						<label>可用来保存文件到数据库，试图获取非文件数据时返回空值</label>	
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
