@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script language="javascript" src="../pjblog.common/jquery.js"></script>
+<script language="javascript" src="../pjblog.common/jqueryform.js"></script>
+<script language="javascript" src="../pjblog.common/upload.js"></script>
+<script language="javascript" src="../pjblog.common/common.js"></script>
+<title>overlay</title>
+</head>
+<style>
+	body{ font-size:12px; color:#333; font-family: Arial, Helvetica, sans-serif}
+	.upload{}
+	.upload .title{ height:26px; line-height:26px; background:url(1.jpg) repeat-x; font-size:14px; font-weight:700; padding-left:10px; padding-right:10px; overflow:hidden}
+	.upload .title .close{ width:9px; height:9px; background:url(2.png) no-repeat; float:right; margin-top:8px; cursor:pointer}
+	.upload .body{ padding:0px; clear:both; border-collapse: collapse;}
+	.upload .body .left{ float:left; border-right:1px solid #AAC1EA; width:150px; min-height:200px; padding:8px; border-collapse: collapse;}
+	.upload .body .right{ margin-left:166px; padding:0px; border-left:1px solid #AAC1EA; border-collapse: collapse;}
+	.upload .body .right .main{ padding:0px 0px 0px 0px;}
+	.upload .body .right .main div{ line-height:20px}
+	.upload .bottom{ height:35px; line-height:35px; border-top:1px solid #AAC1EA; text-align:right; background:#ECF0F9; padding:0px 10px 0px 10px; clear:both}
+	/* css hack */
+	.opacity{
+		-moz-opacity:0.5;
+		opacity:0.5;
+		filter:alpha(opacity=50);
+		-ms-filter:"alpha(opacity=50)";
+		background-color: #C5EE48;
+  	}
+	
+	.button{ background:url(3.jpg) repeat-x; height:21px; border:1px solid #87A2D3; line-height:21px; padding:0px 10px 0px 10px; margin:7px}
+	.button:hover{ border:1px solid #FDAA33; background:url(4.jpg) repeat-x; cursor:pointer}
+	.upload .body .right .main .ctop{ height:35px ; line-height:35px;; border-bottom:1px solid #AAC1EA; padding:0px 10px 0px 10px}
+	.upload .body .right .main .cbottom{ padding:20px 10px 20px 10px}
+	.upload .body .right .main .ctop .check{}
+	.upload .body .right .main .cbottom .file{ border:1px solid #C5C5C5; font-size:12px;}
+	.fload{ margin-top: 10px; margin-left:10px;}
+	.fload .item{ line-height:22px; margin-bottom:5px}
+	.filedel{ margin-right:6px}
+	#uploadinfo{ color:#ff0000}
+	.source{ margin-top:10px; height:140px}
+	.sourcetitle{ line-height:28px; height:28px; border-bottom:1px solid #eee}
+	.source .item{ line-height:20px; width:150px; overflow:hidden}
+	#SourcePage{ list-style:none; text-align:right;}
+	.page ul{ list-style:none}
+	
+	
+	#openview{}
+	#openview .title{}
+	#openview .title .left{ width:100px; height:100px; float:left; padding:1px; border:1px solid #ccc}
+	#openview .title .left img{ width:100px; height:100px;}
+	#openview .title .right{ margin-left:130px;}
+	#openview .title .right div{ line-height:26px;}
+	#openview .body{ margin-top:10px; padding: 2px 20px 2px 20px}
+	#openview .body div{ line-height:22px;}
+	#openview .rbottom{ border-top:1px solid #eee; margin-top:4px; line-height:20px; text-align:right; padding:0px 20px 0px 20px}
+	
+	#updateBox{ padding:6px 15px 6px 15px; border:1px solid #AAC1EA; width:335px; background:#fff}
+	
+	/* --------------- 文件类型 ------------------*/
+	.rar{ background:url(../images/file/rar.gif) no-repeat; padding-left:20px}
+	.jpg{ background:url(../images/file/jpg.gif) no-repeat; padding-left:20px}
+	.gif{ background:url(../images/file/gif.gif) no-repeat; padding-left:20px}
+	.zip{ background:url(../images/file/zip.gif) no-repeat; padding-left:20px}
+	.png{ background:url(../images/file/png.gif) no-repeat; padding-left:20px}
+	.bmp{ background:url(../images/file/bmp.gif) no-repeat; padding-left:20px}
+	.swf{ background:url(../images/file/swf.gif) no-repeat; padding-left:20px}
+	.wma{ background:url(../images/file/wma.gif) no-repeat; padding-left:20px}
+	.asp{ background:url(../images/file/asp.gif) no-repeat; padding-left:20px}
+	.php{ background:url(../images/file/php.gif) no-repeat; padding-left:20px}
+	.aspx{ background:url(../images/file/aspx.gif) no-repeat; padding-left:20px}
+	.html{ background:url(../images/file/html.gif) no-repeat; padding-left:20px}
+	.htm{ background:url(../images/file/html.gif) no-repeat; padding-left:20px}
+	.js{ background:url(../images/file/js.gif) no-repeat; padding-left:20px}
+	.mdb{ background:url(../images/file/mdb.gif) no-repeat; padding-left:20px}
+	.xls{ background:url(../images/file/xls.gif) no-repeat; padding-left:20px}
+	.xml{ background:url(../images/file/xml.gif) no-repeat; padding-left:20px}
+	.css{ background:url(../images/file/css.gif) no-repeat; padding-left:20px}
+	.pdb{ background:url(../images/file/pbd.gif) no-repeat; padding-left:20px}
+</style>
+<body>
+<script language="javascript" type="text/javascript">
+</script>
+	<input type="button" value="123" onclick="upload.open()">
+</body>
+</html>

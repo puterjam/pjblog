@@ -1,0 +1,207 @@
+﻿<include:head.html/>
+<body>
+<script language="javascript">
+	var CommPageSize = <Set:blogcommpage/>;
+</script>
+<div id="wrapper">
+
+ <div id="header">
+
+  <div id="header_top"> 
+   <div id="logo">
+    <a href="<Set:SiteUrl/>"><Set:SiteName/></a>
+    <h1><Set:blogTitle/></h1>
+   </div>
+   <div id="header_menu">
+    <include:p_navlist.html/>
+   </div>
+  </div>
+
+  </div><!-- #header end -->  <div id="contents" class="clearfix">
+
+   <div id="left_col">
+
+
+    <div class="post clearfix" id="single_post">
+     <div class="post_content_wrapper">
+      <h2><span><Set:log_Title/></span></h2>
+      <div class="post_content">
+       <p>
+       		{UBB:"<Set:log_Content/>", "<Set:log_ubbFlags/>", "<Set:log_edittype/>"}
+       </p>
+      </div>
+     </div>
+     <dl class="post_meta">
+        <dt class="meta_date">{function:Asp.DateToStr("<Set:log_PostTime/>", "y")}</dt>
+         <dd class="post_date">{function:Asp.DateToStr("<Set:log_PostTime/>", "m")}
+         	<span>/{function:Asp.DateToStr("<Set:log_PostTime/>", "d")}</span>
+         </dd>
+               <dt>分类：</dt>
+        <dd><a href="../default.asp?cate=<Set:log_CateID/>" title="查看 未分类 的全部文章" rel="category">{function:Data.GetCateInfo(<Set:log_CateID/>, "cate_Name")}</a></dd>
+               <dt class="meta_comment"><a href="{function:Init.doArticleUrl(<Set:log_ID/>)}#respond">抢沙发</a></dt>
+        <dd><span class="index_edit"><a class="post-edit-link" href="../pjblog.express/blogedit.asp?id=<Set:log_ID/>" title="编辑文章">[ 编辑 ]</a></span></dd></dl>
+    </div>
+
+
+<div id="comments_wrapper">
+<div id="comments">
+
+
+
+
+
+ <div id="comment_header" class="clearfix">
+
+  <ul id="comment_header_left">
+   <li id="add_comment"><a href="{function:Init.doArticleUrl(<Set:log_ID/>)}#respond">抢沙发</a></li>
+   <li id="comment_feed"><a href="http://miss.cn/?feed=comments-rss2" title="评论RSS">评论RSS</a></li>
+  </ul>
+
+  <ul id="comment_header_right">
+    <li id="trackback_switch"><a href="javascript:void(0);">引用通告 ( <span id="indexQuote">-</span> )</a></li>
+    <li id="comment_switch" class="comment_switch_active"><a href="javascript:void(0);">评论 ( <span id="indexComment">-</span> )</a></li>
+  </ul>
+
+
+ </div><!-- comment_header END -->
+
+
+<div id="comment_area">
+<!-- start commnet -->
+<ol class="commentlist" id="commentBox"></ol>
+<!-- comments END -->
+
+
+</div><!-- #comment-list END -->
+
+
+<div id="trackback_area">
+<!-- start trackback -->
+
+<div id="trackback_url_wrapper">
+<label for="trackback_url">引用网址</label>
+<input type="text" name="trackback_url" id="trackback_url" size="60" value="http://miss.cn/wp-trackback.php?p=7" readonly="readonly" onFocus="this.select()" />
+</div>
+
+<ol class="commentlist">
+
+<li class="comment"><div class="comment-content"><p>还没有引用通告。</p></div></li>
+</ol>
+<!-- trackback end -->
+</div><!-- #trackbacklist END -->
+
+
+
+
+
+<!--commentbox-->
+<div id="CommPostBox">
+<fieldset class="comment_form_wrapper" id="respond"> 
+	<div id="cancel_comment_reply">
+    	<a rel="nofollow" id="cancel-comment-reply-link" href="/index.php?p=7#respond" style="display:none;">点击这里取消回复</a>
+    </div>
+	<form action="../pjblog.logic/log_comment.asp?action=add" method="post" id="postform">
+		<div id="guest_info">
+ 			<div id="guest_name">
+            	<label for="comm_Author"><span>大名</span>( 必填 )</label>
+                <input type="text" name="comm_Author" id="comm_Author" value="" size="22" tabindex="1" aria-required='true' />
+            </div>
+            <div id="passArea">
+            	<label for="comm_Author"><span>密码</span>( 匿名发表可以不填 )</label>
+                <input type="password" name="password" id="password" value="" size="22" tabindex="2" aria-required='true' />
+            </div>
+ 			<div id="guest_email">
+            	<label for="comm_Email"><span>E-MAIL</span>( 必填 ) - 不会被公布-</label>
+                <input type="text" name="comm_Email" id="comm_Email" value="" size="22" tabindex="3" aria-required='true' />
+            </div>
+ 			<div id="guest_url">
+            	<label for="comm_WebSite"><span>网站</span></label>
+                <input type="text" name="comm_WebSite" id="comm_WebSite" value="" size="22" tabindex="4" />
+            </div>
+            <div id="guest_url">
+            	<label for="comm_WebSite"><span>验证码</span></label>
+                <input name="validate" id="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="ceeevio.GetCode('../pjblog.common/GetCode.asp', 'checkcode')"/> <span id="checkcode"><span style="cursor:pointer;" onClick="ceeevio.GetCode('../pjblog.common/GetCode.asp', 'checkcode')">请输入验证码</span> <span id="isok_checkcode"></span></span>
+            </div>
+		</div> 
+		<div id="comment_textarea">
+ 			<textarea name="comm_Content" id="comm_Content" cols="50" rows="10" tabindex="4"></textarea>
+		</div> 
+		<div id="submit_comment_wrapper">
+ 			<input name="submit" type="submit" id="submit_comment" tabindex="5" value="提交评论" title="提交评论" alt="提交评论" />
+		</div>
+		<div id="input_hidden_field">
+			<input type='hidden' name='blog_ID' value='<Set:log_ID/>' id='blog_ID' />
+		</div>
+	</form>
+</fieldset>
+<script language="javascript" type="text/javascript">
+	$(document).ready(function(){ceeevio.Comment.post();});
+</script>
+</div>
+
+
+</div><!-- #comment end --></div>
+
+   </div><!-- #left_col end -->
+
+   <div id="right_col">
+  
+    <div id="information_area" class="clearfix">
+   <div class="side_box" id="information">
+    <h3>信息</h3>
+    <div id="information_contents">改变此项请到主题管理页面</div>
+   </div>
+      <div id="entries_rss">
+    <a href="http://miss.cn/?feed=rss2" title="文章RSS" >RSS FEED</a>
+   </div>
+     </div>
+  
+    <div class="side_box" id="search_area_top">
+   <div id="search_area" class="clearfix">
+    <form method="get" id="searchform" action="http://miss.cn/">
+     <div><input type="text" value="搜索" name="s" id="search_input" onFocus="this.value=''; changefc('white');" /></div>
+     <div><input type="image" src="http://miss.cn/wp-content/themes/monochrome/img/search_button_n.gif" alt="搜索本博客" title="搜索本博客" id="search_button" /></div>
+    </form>
+   </div>
+     </div>
+  
+  
+   <plugin:NewTopArticle/>
+
+   <div class="side_box">
+   <h3>存档</h3>
+   <ul>
+    	<li><a href='http://miss.cn/?m=200911' title='2009年十一月'>2009年十一月</a></li>
+   </ul>
+   </div>
+
+   <plugin:Sidecategory/>
+
+
+  
+</div><!-- #right_col end -->
+  </div><!-- #contents end -->
+
+  <div id="footer">
+   <ul id="copyright">
+    <li style="background:none;">
+                Copyright &copy;&nbsp; 2009     &nbsp;<a href="http://miss.cn/">miss.cn</a></li>
+    <li><a href="http://www.mono-lab.net/">Theme designed by mono-lab</a></li>
+    <li><a href="http://wordpress.org/">Powerd by WordPress</a></li>
+   </ul>
+  </div>
+ 
+</div><!-- #wrapper end -->
+
+<div id="return_top">
+ <a href="#wrapper"></a>
+</div>
+
+<script type="text/javascript">
+	var menu=new menu.dd("menu");
+	menu.init("menu","menuhover");
+</script>
+<script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=article&id=<Set:log_ID/>"></script>
+</body>
+</html>

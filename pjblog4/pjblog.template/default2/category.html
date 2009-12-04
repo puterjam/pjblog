@@ -1,0 +1,120 @@
+﻿<include:head.html/>
+<body>
+ <script language="javascript" type="text/javascript">
+ 	var ArticleArrayIDJoin = new Array();
+	var cookies = "<Set:cookie/>";
+ </script>
+<div id="wrapper">
+
+ <div id="header">
+
+  <div id="header_top"> 
+   <div id="logo">
+    <a href="<Set:SiteUrl/>"><Set:SiteName/></a>
+    <h1><Set:blogTitle/></h1>
+   </div>
+   <div id="header_menu">
+    <include:p_navlist.html/>
+   </div>
+  </div>
+
+  </div><!-- #header end -->  <div id="contents" class="clearfix">
+
+   <div id="left_col">
+    <div class="content_noside">
+
+<div id="headline">
+  <p> <!--&#8216; 关于过去 &#8217 的存档; 分类--></p>
+ 
+ </div>
+
+
+    <pjblog:2 datasource="Data.CategoryList(1, <Set:CateID/>)" name="loop" element="div" page="<Set:blogPerPage/>" id="categorylist" class="archive_contents">
+	<Columns>
+        <ItemTemplate>
+        <script language="javascript" type="text/javascript">
+            ArticleArrayIDJoin.push($0$);
+            cookie.SET(cookies + "_categoryArticleList", ArticleArrayIDJoin, 1);
+        </script>
+     <h2><a href="{function:Init.doArticleUrl($0$)}">$1$</a></h2>
+     <ul class="archive_meta">
+      <li>{function:Asp.DateToStr("$3$", "Y-m-d")}</li>
+      <li>归类于<a href="../default.asp?cate=$6$" title="" rel="category">{function:Data.GetCateInfo($6$, "cate_Name")}</a></li>
+      <li class="post-edit"><span class="index_edit"><a class="post-edit-link" href="../pjblog.express/blogedit.asp?id=$0$" title="编辑文章">[ 编辑 ]</a></span></li>
+      </ul>
+     <p><a href="{function:Init.doArticleUrl($0$)}">$1$<span class="read-more">[ 阅读全文]</span></a></p>
+		</ItemTemplate>
+   	</Columns>
+</pjblog:2>
+
+
+    <div class="page_navi clearfix">
+
+</div>
+    </div><!-- #content_noside end -->
+
+   </div><!-- #left_col end -->
+
+   <div id="right_col">
+  
+    <div id="information_area" class="clearfix">
+   <div class="side_box" id="information">
+    <h3>信息</h3>
+    <div id="information_contents">改变此项请到主题管理页面</div>
+   </div>
+      <div id="entries_rss">
+    <a href="http://miss.cn/?feed=rss2" title="文章RSS" >RSS FEED</a>
+   </div>
+     </div>
+  
+    <div class="side_box" id="search_area_top">
+   <div id="search_area" class="clearfix">
+    <form method="get" id="searchform" action="http://miss.cn/">
+     <div><input type="text" value="搜索" name="s" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
+     <div><input type="image" src="http://miss.cn/wp-content/themes/monochrome/img/search_button_n.gif" alt="搜索本博客" title="搜索本博客" id="search_button" /></div>
+    </form>
+   </div>
+     </div>
+  
+  
+   <plugin:NewTopArticle/>
+   
+   <plugin:SideUserPannel/>
+ 
+   <div class="side_box">
+   <h3>存档</h3>
+   <ul>
+    	<li><a href='http://miss.cn/?m=200911' title='2009年十一月'>2009年十一月</a></li>
+   </ul>
+   </div>
+ 
+ 	<plugin:Sidecategory/>
+
+
+  
+</div><!-- #right_col end -->
+  </div><!-- #contents end -->
+
+  <div id="footer">
+   <ul id="copyright">
+    <li style="background:none;">
+                Copyright &copy;&nbsp; 2009     &nbsp;<a href="http://miss.cn/">miss.cn</a></li>
+    <li><a href="http://www.mono-lab.net/">Theme designed by mono-lab</a></li>
+    <li><a href="http://wordpress.org/">Powerd by WordPress</a></li>
+   </ul>
+  </div>
+ 
+</div><!-- #wrapper end -->
+
+<div id="return_top">
+ <a href="#wrapper"></a>
+</div>
+
+<script type="text/javascript">
+	var menu=new menu.dd("menu");
+	menu.init("menu","menuhover");
+</script>
+<script language="javascript" type="text/javascript" src="../pjblog.logic/plugin.asp"></script>
+ <script language="javascript" type="text/javascript" src="../pjblog.logic/code.asp?action=category"></script>
+</body>
+</html>

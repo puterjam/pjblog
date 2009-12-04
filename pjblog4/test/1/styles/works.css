@@ -1,0 +1,94 @@
+body { background-color: #dddddd; margin:10px; text-align: center; }
+table {
+	background-color: #999999;
+}
+th {
+	background-color: #aaaaaa;
+	text-align: center;
+	color: #ffffff;
+}
+td {
+	background-color: #ffffff;
+}
+
+#Context { 
+	border: 5px solid #666666;
+	width: 680px;
+	padding: 20px 40px 20px 40px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #ffffff;
+	line-height: 150%;
+	font-size: 14px;
+	text-align: left;
+}
+
+#Topic {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+#Nav {
+	float: left;
+	line-height: 26px;
+	margin-left: 10px;
+	position: relative;
+	background-color: #999999;
+}
+#Nav a { color: #ffffff; }
+
+#Menu {
+	line-height: 26px;
+	background-color: #999999;
+	text-align: right;
+}
+#Menu a {
+	color: #ffffff;
+	margin-right: 10px;
+}
+
+#Title {
+	font-weight: bold;
+}
+
+#Content p { padding-left: 30px; text-indent: -30px; }
+
+.TbRefer {
+	font-size: 14px;
+}
+.TbRefer caption {
+	background-color: #cccccc;
+	color:#000000;
+	border-top: 8px solid #ffffff;
+	padding:5px 0px 0px 5px;
+	text-align:left;
+	font-weight: bold;
+	line-height:22px;
+}
+.TbRefer th {
+	padding: 2px 2px 2px 5px;
+	background-color:#eeeeee;
+	width:28%;
+	color:#000000;
+	text-align:left;
+}
+.TbRefer td {
+	padding: 2px 2px 2px 5px;
+	height:22px;
+	line-height: 130%;
+}
+.TbRefer label {
+	font-size: 12px;
+	color:#888888
+}
+.TbRefer span { color:#ff0000; }
+
+#Copyright {
+	margin-top: 15px;
+	padding-top: 10px;
+	text-align: center;
+	border-top: solid 1px #999999;
+}
+
+.Highlight { color: #ff0000; }

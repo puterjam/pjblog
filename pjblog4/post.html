@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" rev="stylesheet" href="pjblog.common/blog.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="pjblog.common/editor.css" type="text/css" media="all" />
+<script language="javascript" type="text/javascript" src="pjblog.common/language.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.common/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.common/jqueryform.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.common/common.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.common/editor.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.common/ubbutils.js"></script>
+<script language="javascript" type="text/javascript" src="pjblog.model/base64.js"></script>  
+<script language="javascript" type="text/javascript">
+	$(function() {
+		var editor = new UbbEditor('message'); // 传入textarea的Id
+		
+		// 也可以传入第二个参数，决定默认的编辑模式
+		// var editor = new UbbEditor('editor', UbbEditor.EditMode.Visual);
+	
+		// UbbUtils.smilePath = '../build/smiles/'; // 在需要的时候设置表情路径以保证表情工作正常
+	});
+</script>
+<title>Untitled Document</title>
+</head>
+<body>
+<div class="wrap">
+	<div class="head"></div>
+    <div class="content">
+    	<div id="tool">
+        	<div class="info">
+            	<div>欢迎 evio 发表日志</div>
+                <div style=" margin-top:10px">超级管理员</div>
+            </div>
+        	<div class="bar">
+            	<div class="title">辅助工具</div>
+            	<div class="ccontent">
+                	<div class="item"><a href="javascript:;">Ajax草稿保存</a></div>
+                </div>
+            </div>
+        </div>
+        <div id="main" style="margin-left:200px;">
+        	<div style="font-style:oblique; font-size:16px">发表新日志</div>
+            <div class="right">
+            	<div class="category side">
+                	<div class="title">请选择分类</div>
+                    <div class="body">
+                    	<div>已有分类 <select>
+                        	<option value="1">请选择分类</option>
+                            <option value="1">新分类</option>
+                        </select></div>
+                        
+                        <div>添加新分类</div>
+                    </div>
+                </div>
+                
+                <div class="cname side">
+                	<div class="title">日志别名</div>
+                    <div class="body">
+                    	<div><input type="text" value="" class="text"> <strong>.</strong> <select><option value="1">html</option></select></div>
+                        <div>别名是URL友好的另一种写法</div>
+                    </div>
+                </div>
+                
+                <div class="tag side">
+                	<div class="title">日志标签</div>
+                    <div class="body">
+                    	<div><input type="text" value="" class="text" style="width:100%"></div>
+                        <div>插入已使用的标签</div>
+                    </div>
+                </div>
+                
+                <div class="tag side">
+                	<div class="title">基本设置</div>
+                    <div class="body">
+                    	<div>
+                        	<div class="jbar"><input type="checkbox" name="" name="log_IsTop" value="1"> 日志置顶</div>
+                            <div class="jbar"><input type="checkbox" name="log_DisComment" value="1"> 禁止评论</div>
+                            <div class="jbar"><input type="checkbox" name="log_comorder" value="1"> 评论倒序</div>
+                        </div>
+                        <div style=" margin-top:15px">其他设置</div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="left">
+            	<div class="article">
+                	<div class="title">
+                    	<input type="text" value="" class="text" />
+                    	<div>注意 : 大师傅哈吉斯飞艾丝凡好噶时间</div>
+                    </div>
+                    <div style="width:100%; margin-top:20px; border:0px solid #ccc; line-height:30px;">
+                    	<div style="background:#dfdfdf; padding-left:10px; background:url(images/control/gray-grad.png) repeat-x; border:1px solid #dfdfdf">内容编辑</div>
+                    	<div><textarea id="message" name="message" style=" width:100%; height:150px" class="text"></textarea></div>
+                        <div style="margin-top:10px"><input type="checkbox" onclick="if (this.checked){$('#intro').show();}else{$('#intro').hide();}"> 编辑日志摘要</div>
+                        <div><textarea id="intro" name="intro" style="border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; width:100%; height:80px; display:none"></textarea></div>   
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+</body>
+</html>

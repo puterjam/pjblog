@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="UTF-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="UTF-8" />
+<meta name="robots" content="all" />
+<meta name="author" content="<$blog_email$>,<$blog_master$>" />
+<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
+<meta name="keywords" content="<$keywords$>,PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
+<meta name="description" content="<$description$>,<$siteName$> - <$blog_Title$>" />
+<title><$log_Title$> - <$siteName$></title>
+<base href="<$base$>"></base>
+<style type="text/css">
+	.ownerClassLog{display:none}
+	.ownerClassComment{display:none}
+</style>
+<link rel="alternate" type="application/rss+xml" href="<$siteURL$>feed.asp?cateID=<$log_CateID$>" title="订阅 <$siteName$> - <$Cate_Title$> 所有文章(rss2)" />
+<link rel="alternate" type="application/atom+xml" href="<$siteURL$>atom.asp?cateID=<$log_CateID$>"  title="订阅 <$siteName$> - <$Cate_Title$> 所有文章(atom)"  />
+<link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/global.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/layout.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/typography.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/link.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="skins/<$skin$>/UBB/editor.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="FCKeditor/editor/css/Dphighlighter.css" type="text/css" media="all" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<script type="text/javascript" src="common/common.js"></script>
+<script type="text/javascript" src="common/AjaxRequest.js"></script>
+<script type="text/javascript" src="common/Action.js"></script>
+<script type="text/javascript">
+	var g_styleID = "<$skin$>";
+	var g_logID = "<$LogID$>";
+	var g_comDesc = "<$comDesc$>";
+	
+	document.write ('<script type="text/javascript" src="static_js.asp"><\/script>')
+</script>
+<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
+</head>
+<body onload="initJS()" onkeydown="PressKey()">
+<a href="default.asp" accesskey="i"></a> <a href="javascript:history.go(-1)" accesskey="z"></a>
+<div id="container">
+  <!--顶部-->
+  <div id="header">
+    <div id="blogname"><$siteName$>
+      <div id="blogTitle"><$blog_Title$></div>
+    </div>
+		<!-- 导航位置 -->
+      <$CategoryList$>
+  </div>
+  <!--内容-->
+  <div id="Tbody">
+    <div id="mainContent">
+      <div id="innermainContent">
+        <div id="mainContent-topimg"></div>
+		<!-- 内容开始 -->
+			<div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
+				<div class="pageContent">
+					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有【<$Cate_Title$>】的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有【<$Cate_Title$>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<$Cate_Title$>】的日志" style="margin-bottom:-1px"/></a>
+				</div>
+				<div class="Content">
+					<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
+					<h1 class="ContentTitle"><strong><$log_Title$></strong></h1>
+					<h2 class="ContentAuthor">作者:<$log_Author$> 日期:<$log_PostTime$></h2>
+				</div>
+			    <div class="Content-Info">
+					<div class="InfoOther">字体大小: <a href="javascript:SetFont('12px')" accesskey="1">小</a> <a href="javascript:SetFont('14px')" accesskey="2">中</a> <a href="javascript:SetFont('16px')" accesskey="3">大</a></div>
+					<div class="InfoAuthor"><img src="images/weather/hn2_<$log_weather$>.gif" style="margin:0px 2px -6px 0px" alt=""/><img src="images/weather/hn2_t_<$log_weather$>.gif" alt=""/> <img src="images/<$log_level$>.gif" style="margin:0px 2px -1px 0px" alt=""/>
+						<span class="ownerClassLog">
+						<a href="blogedit.asp?id=<$LogID$>" title="编辑该日志" accesskey="E"><img src="images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a> <a href="blogedit.asp?action=del&id=<$LogID$>" onclick="if (!window.confirm('是否要删除该日志')) return false" accesskey="K"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
+						</span>
+					</div>
+				</div>
+				<div id="logPanel" class="Content-body">
+					<$ArticleContent$>
+					<br/><br/>
+				</div>
+				<div class="Content-body">
+					<$log_Modify$>
+                    <$log_Navigation$>
+					<img src="images/From.gif" style="margin:0px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<$log_FromUrl$>" target="_blank"><$log_From$></a><br/>
+					<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="trackback.asp?tbID=<$LogID$>&action=view" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<$LogID$>)">我要引用此文章</a><br/>
+					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
+                    <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
+                    <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
+                    <script language="javascript" type="text/javascript">Related(<$LogID$>, 2, "related_tag");</script>
+				</div>
+				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
+			</div>
+		</div>
+		<!-- 内容结束 -->   
+        <!--评论区域-->
+        <div id="commentBox"><$comment$></div>
+		<script type="text/javascript">tryLoadComment();</script>
+        <!-- 评论输入框 -->
+		 <div id="MsgContent" style="width:94%;">
+		  <div id="MsgHead">发表评论</div>
+		  <div id="MsgBody">
+		    <script type="text/javascript">
+				      		function checkCommentPost(){
+				      			if (!CheckPost) return false
+								// 备用方法
+				      			return true
+				      		}
+				      </script>
+		    <form name="frm" action="blogcomm.asp" method="post" onsubmit="return checkCommentPost()" style="margin:0px;">
+		      <table width="100%" cellpadding="0" cellspacing="0">
+		        <tr>
+		          <td align="right" width="70"><strong>昵　称:</strong></td>
+		          <td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" /></td>
+		        </tr>
+		        <tr id="passArea">
+		      	  <td align="right" width="70"><strong>密　码:</strong></td>
+		      	  <td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
+		        </tr>
+                <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
+              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+		        <tr>
+		          <td align="right" width="70" valign="top"><strong>内　容:</strong><br/></td>
+		          <td style="padding:2px;">
+		          	<script language="javascript" type="text/javascript" src="common/UBBCode.js"></script>
+		            <script language="javascript" type="text/javascript" src="common/UBBCode_help.js"></script>
+		            <div id="UBBSmiliesPanel" class="UBBSmiliesPanel"></div>
+		            <textarea id="editMask" class="editTextarea" style="width:99%;height:100px" onfocus="loadUBB('Message')"></textarea>
+		            <div id="editorbody" style="display:none">
+		              <div id="editorHead">正在加载编辑器...</div>
+		              <div class="editorContent">
+		                <textarea name="Message" class="editTextarea" style="height:150px;;" cols="1" rows="1" accesskey="R"></textarea>
+		              </div>
+		            </div></td>
+		        </tr>
+		        <tr id="removevalidate">
+		          <td align="right" width="70"><strong>验证码:</strong></td>
+		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
+		        </tr>
+		        <tr>
+		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
+		          <td align="left" style="padding:3px;"><label for="label5">
+		              <input name="log_DisSM" type="checkbox" id="label5" value="1" />
+		              禁止表情转换</label>
+		            <label for="label6">
+		              <input name="log_DisURL" type="checkbox" id="label6" value="1" />
+		              禁止自动转换链接</label>
+		            <label for="label7">
+		              <input name="log_DisKey" type="checkbox" id="label7" value="1" />
+		              禁止自动转换关键字</label>
+                    <span id="GuestCanRemeberComment"><br />
+                    <label for="label8">
+		              <input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>
+		              记住我的信息,以便下次评论时不用输入用户名.</label></span></td>
+		        </tr>
+		        <tr>
+		          <td colspan="2" align="center" style="padding:3px;">
+		          	<input name="logID" type="hidden" value="<$LogID$>"/>
+		            <input name="action" type="hidden" value="post"/>
+		            <input name="submit2" type="submit" class="userbutton" value="发表评论" accesskey="S"/>
+		            <input name="button" type="reset" class="userbutton" value="重写"/></td>
+		        </tr>
+		        <tr>
+		          <td colspan="2" align="right" > 虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. 
+		           </td>
+		        </tr>
+		      </table>
+		    </form>
+		  </div>
+		</div>
+ 
+        <div id="mainContent-bottomimg"></div>
+      </div>
+    </div>
+    <div id="sidebar">
+      <div id="innersidebar">
+        <div id="sidebar-topimg">
+          <!--工具条顶部图象-->
+        </div>
+        <!--侧边栏的内容-->
+        <div id="sidebarDynamic"></div>
+        <div id="sidebar-bottomimg"></div>
+      </div>
+    </div>
+    <div style="clear: both;height:1px;overflow:hidden;margin-top:-1px;"></div>
+  </div>
+  <!--底部-->
+  <div id="foot">
+    <p>Powered By <a href="http://www.pjhome.net" target="_blank"><strong>PJBlog3 v<$blog_version$></strong></a> CopyRight 2005 - 2009, <strong><$siteName$></strong> <a href="http://validator.w3.org/check/referer" target="_blank">xhtml</a> | <a href="http://jigsaw.w3.org/css-validator/validator-uri.html">css</a></p>
+    <p><a href="http://www.miibeian.gov.cn" style="font-size:12px" target="_blank"><b><$blogabout$></b></a>
+</p>
+  </div>
+</div>
+
+<script type="text/javascript">
+	//初始化日志页面
+	initAccessKey();
+	initSidebar();
+	initLogin('<$CookieName$>');
+	ping();
+</script>
+</body>
+</html>
+

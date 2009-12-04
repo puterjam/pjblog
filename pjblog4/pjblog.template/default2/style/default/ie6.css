@@ -1,0 +1,7 @@
+#menu .current_page_item a, #menu .current_page_item a:visited,#menu .current-cat a, #menu .current-cat a:visited
+ { padding-bottom:0; background:none; }
+
+#return_top a { display:none; }
+
+.post_content a.more-link, .post_content a.more-link:visited 
+ { height:20px; padding:0 0 0 45px; }
