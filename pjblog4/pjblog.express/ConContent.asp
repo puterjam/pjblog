@@ -21,6 +21,7 @@ End If
 <!--#include file = "control/c_categories.asp" -->
 <!--#include file = "control/c_skins.asp" -->
 <!--#include file = "control/c_link.asp" -->
+<!--#include file = "control/c_comment.asp" -->
 
 <%
 ' 加载功能类
