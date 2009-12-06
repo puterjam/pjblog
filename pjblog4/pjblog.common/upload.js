@@ -1,6 +1,6 @@
 ﻿// JavaScript Document
 	var upload = {};
-	upload.alowCount = 10;
+	upload.alowCount = 5;
 	upload.fileCount = 2;
 	upload.fileArray = new Array(); // [{id:*,name:*,path:*,size:*,type:*,ext:*}[, ....]]
 /*

@@ -152,7 +152,7 @@ Class Stream
 				.SaveToFile Server.MapPath(FilePath), 2 '-将缓冲的内容写入文件
 				If Err Then
 					Rtext = Array(Err.Number, Err.Description)
-					SaveToLocal = RText
+					upload = RText
 					Err.Clear
 					Exit Function
 				End If
