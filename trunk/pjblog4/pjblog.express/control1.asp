@@ -5,41 +5,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Language" content="UTF-8" />
+<meta name="author" content="puter2001@21cn.com,PuterJam" />
+<meta name="Copyright" content="PL-Blog 2 CopyRight 2005" />
+<meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,ccessibility,w3c,w3,w3cn" />
+<meta name="description" content="PuterJam's BLOG" />
+
 <title>后台管理</title>
-<style type="text/css">
-body{
-	background:#f7f6f6;
-	margin:0;
-	padding:0;
-	color:#056cc9;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:12px;
-}
-.wrap{
-	width:606px;
-	height:262px;
-	background:#f7f6f6 url(../images/Control/log.png) no-repeat;
-	margin:0 auto;
-	position:relative;
-	top:34px;
-}
-
-.table{
-	position:absolute;
-	width:306px;
-	height:104px;
-	top:60px;
-	left:150px;
-	line-height:40px;
-}
-
-.main{
-	margin-top:150px;
-	height:262px;
-	background:url(../images/Control/log2.png) repeat-x center;
-}
-
-</style>
 </head>
 <%
 If memName = Empty Or stat_Admin <> True Then
@@ -59,18 +30,22 @@ Else
 Else
 
 %>
-<body>
-	<div class="main">
-        <div class="wrap">
-        	<div class="table">
-            <span style="font-weight:700">登入密码:</span>
-            <div>
-            	<input type="text" value="" class="text" />
-            </div>
-            </div>
-        </div>
-    </div>
-</body>
+  <body style="background:#E8EDF4">
+  <form action="control.asp" method="post" style="margin:2px;">
+  <input type="hidden" name="action" value="login"/>
+  <div style="font-size:12px;text-align:center">
+   <div style="margin:auto;border:1px solid #999;padding:2px;background:#fff;width:350px;">
+
+    <div style="border:1px solid #e5e5e5;padding:2px;">
+	    <div style="border-bottom:1px solid #e5e5e5;padding:5px;text-align:left"><img src="../images/Control/logo.gif"/></div>
+	    <div style="padding:16px;padding-top:40px"><b style="margin-left:-146px;font-size:14px;"><%=lang.Set.Asp(23)%>: </b><br/><br/><input name="adpass" type="password" size="20" style="border:1px solid #999;font-size:18px"/></div>
+	    <input type="submit" value=" <%=lang.Set.Asp(21)%> " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
+	    <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(Sys.CookieName & "_ShowError")%></div><%session(Sys.CookieName & "_ShowError") = ""%>
+	    <div style="padding:2px;font-family:arial;color:#666;font-size:9px;text-align:right"><b>PJBlog4 v<%=Sys.version%></b></div>
+   </div>
+   </div>
+  </div>
+  </form></body>
   <%
 Dim action
 action = Asp.CheckStr(Request.Form("action"))

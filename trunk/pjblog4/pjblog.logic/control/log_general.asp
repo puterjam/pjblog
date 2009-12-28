@@ -27,6 +27,7 @@ Class do_general
 	Private Sub Class_Initialize
 		Select Case Action
 			Case "SaveGeneral" Call SaveGeneral
+			Case "SaveTipWord" Call SaveTipWord
 		End Select
     End Sub 
      
@@ -93,6 +94,10 @@ Class do_general
 		Session(Sys.CookieName & "_ShowMsg") = True
 		Session(Sys.CookieName & "_MsgText") = "保存信息成功!"
 		RedirectUrl(RedoUrl)
+	End Sub
+	
+	Private Sub SaveTipWord
+		Response.Write("{Suc : true, Info : 'OK'}")
 	End Sub
 	
 End Class
