@@ -1,65 +1,159 @@
 ﻿@charset "utf-8";
 /* CSS Document */
-body{
-	padding:0px;
-	margin:0px;
-	border:0px;
-	font-size:12px;
-	font-family: Arial, Helvetica, sans-serif;
-	color:#333
-}
-a:link, a:visited{
-	color:#03F;
-	text-decoration:none;
-}
-a:hover{
-	color:#F30;
-	text-decoration:none
-}
-input.text{ font-size:12px; height:16px; border-left: 1px solid #666666; border-top: 1px solid #666666; border-bottom:1px solid #CCCCCC; border-right: 1px solid #CCCCCC; background:#F9F9F9; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; color:#333333}
-input.text:hover{ border:1px solid #0099CC; background:#F5F9FD;}
 
-.wrap{
-	
+.blog-wrap{
+	border:5px solid #add5fa;
+	background:#fff;
 }
-.head{
-	width:100%;
-	height:50px;
-	background:#464646;
-	margin:0px;
-	border:0px;
-	border-bottom:1px solid #393939;
+
+.blog-line{
+	border:1px solid #83C3FB;
+	padding:10px 20px;
 }
-.content{ margin:10px 40px 10px 40px}
-.content #tool{
-	width:150px;
+
+.blog-top{
+	height:32px;
+	overflow:hidden;
+}
+
+.box-title{
 	float:left;
-	 text-align:right
+	line-height:32px;
+	color:#51ABF9;
+	font-weight:700;
+	cursor:move;
 }
-.content #tool a:link, .content #tool a:visited{ text-align:right}
-.content #main{
-	padding:6px 10px 6px 10px;
+
+.box-go{
+	background: url(../images/go_l.gif) no-repeat;
+	width:23px;
+	height:20px;
+	float:right;
+	cursor:pointer;
+	margin-right:3px;
 }
-.clear{ clear:both}
+.box-go:hover{
+	background: url(../images/go_h.gif) no-repeat;
+	width:23px;
+	height:20px;
+	float:right;
+	cursor:pointer;
+}
 
-.content #tool .info{ padding:6px 10px 6px 10px; line-height:18px; text-align:right}
-.content #tool .bar{ margin-top:10px; text-align:right}
-.content #tool .bar .title{ height:16px; line-height:16px;  padding:6px 10px 6px 10px; border-bottom:1px solid #eee}
-.content #tool .bar .ccontent{ text-align:left; width:100%; padding:6px 10px 6px 10px;}
-.content #tool .bar .ccontent .item{line-height:20px; text-align:right;padding:6px 10px 6px 10px;}
-#main .left{ margin-right:270px;}
-#main .right{ float:right; width : 250px;}
-.side{ border:1px solid #ccc; padding:10px; margin-bottom:10px}
-.side .title{ border-bottom:1px solid #eee; line-height:20px}
-.side .body div{ margin-top:15px;}
-.side .body .jbar{ margin-top:2px; line-height:10px;}
-.article{ margin-top:20px}
-.article .title{}
-.article .title input{ width:99%; line-height:28px; height:30px; font-size:18px; padding-left:2px}
+.box-tip{
+	background: url(../images/T-l.gif) no-repeat;
+	width:23px;
+	height:20px;
+	float:right;
+	cursor:pointer;
+	margin-right:3px;
+}
+.box-tip:hover{
+	background: url(../images/T-h.gif) no-repeat;
+	width:23px;
+	height:20px;
+	float:right;
+	cursor:pointer;
+}
 
-.other{}
-.other .item .title{ line-height:30px; border-bottom:1px solid #eee}
-.other .item .body{ line-height:22px; margin-top:10px}
-.other .item .body div{ line-height:22px;}
-.tip{ margin-left:10px; color:#999}
-#PostWhere{ font-size:11px; color:#ccc}
+.box-close{
+	width:23px;
+	height:20px;
+	background:url(../images/close-l.gif) no-repeat;
+	float:right;
+	cursor:pointer;
+}
+.box-close:hover{
+	width:23px;
+	height:20px;
+	background:url(../images/close-h.gif) no-repeat;
+	float:right;
+	cursor:pointer;
+}
+
+.blog-body{
+}
+
+.blog-title{
+	line-height:30px;
+}
+
+.blog-title input{
+	font-style:oblique;
+	color:#6b6b6b;
+}
+
+.input-text{
+	border:1px solid #40a7f6;
+}
+.input-text:hover{
+	border:1px solid #fb9c1e;
+}
+
+#cate-select{
+	float:left;
+	margin:0;
+	padding:0;
+	list-style:none;
+	border:1px solid #999;
+	line-height:16px;
+}
+
+#cate-select li{
+	float:left;
+}
+
+#cate-select li.tnt{
+	margin-left:3px;
+	margin-right:3px;
+}
+
+.cate-doSel{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.cate-doTop{
+	background:url(../images/cateSelect-t.png) no-repeat;
+	width:150px;
+	height:1px;
+}
+
+.cate-doContent{
+	background:url(../images/cateSelect-m.png) repeat-y;
+	width:150px;
+}
+
+.cate-doContent ul{
+	margin:0;
+	padding:0;
+	list-style:none;
+	margin:0 1px 0 1px;
+	background:#fff;
+	width:146px;
+}
+
+.cate-doContent ul li{
+	line-height:20px;
+}
+
+.cate-doContent ul li:hover{
+	background:#CCC;
+	cursor:pointer;
+}
+
+.cate-doContent ul li .cate-li{
+	padding:3px 10px;
+	line-height:20px;
+}
+
+.cate-doContent ul li .cate-li img{
+	margin-right:4px;
+}
+
+.cate-doBottom{
+	background:url(../images/cateSelect-f.png) no-repeat;
+	width:150px;
+	height:3px;
+}

@@ -5,39 +5,20 @@
 Public Sub c_welcome
 	%>   
 <script language="javascript" type="text/javascript">
-	$(function(){
-	  	$("#tip_word").hover(
-			function(){
-				$("#tip_word .edit").css("display", "block");
-			},
-			function(){
-				$("#tip_word .edit").css("display", "none");
-			}
-		);
-		
-    	$("ul.slide > li:first-child").addClass("actived");
-		$("div.Zcontent > ul > li").hide();
-		$("div.Zcontent > ul > li:first").show();
-    	$("div.Zcontent ul li").attr("id", function(){return idNumber("No") + $("div.Zcontent ul li").index(this)});
-     	$("ul.slide li").click(function(){
-         	var c = $("ul.slide li");
-         	var index = c.index(this);
-         	var p = idNumber("No");
-         	show(c, index, p);
-    	});
-     
-     	function show(controlMenu, num, prefix){
-        	var content = prefix + num;
-         	$('#'+content).siblings().hide();
-         	$('#'+content).show();
-        	controlMenu.eq(num).addClass("actived").siblings().removeClass("actived");
-     	};
-
-     	function idNumber(prefix){
-         	var idNum = prefix;
-         	return idNum;
-     	};
- });
+$(function(){
+	$("#tip_word").hover(
+		function(){
+			$("#tip_word .edit").show();
+		},
+		function(){
+			$("#tip_word .edit").hide();
+		}
+	);
+	
+	$("ul.slide").tabs("ul.toolbar", {
+		current : "actived"
+	});
+});
 </script>
 
 <style type="text/css">
@@ -403,6 +384,10 @@ Public Sub c_welcome
 	height:20px!important;
 	line-height:20px;
 }
+
+.select .Zcontent ul li{
+	width:485px;
+}
 </style>
 		<div class="welcome">
         	<div class="left">
@@ -427,8 +412,8 @@ Public Sub c_welcome
                     	<div class="o">您好, <strong><%=memName%></strong> , 您可以点击以下图表快速发表日志.</div>
                     </div>
                     <div class="Mcontent">
-                        <div class="l"><a href=""><img src="../../images/Control/trimbg.png" width="75" height="65" border="0" /></a></div>
-                        <div class="r">发表自己的日志哦!<br /><span><a href="">快速发表</a></span></div>
+                        <div class="l"><a href="javascript:;" onclick="blog.post(this)"><img src="../../images/Control/trimbg.png" width="75" height="65" border="0" /></a></div>
+                        <div class="r">发表自己的日志哦!<br /><span><a href="javascript:;" onclick="blog.post(this)">快速发表</a></span></div>
                         <div class="clear"></div>
                     </div>
                 </div>
