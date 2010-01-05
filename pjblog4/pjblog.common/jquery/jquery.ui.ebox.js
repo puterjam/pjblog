@@ -174,4 +174,17 @@ $.eBoxClick(obj, {
 	$.fn.eBoxClose = function(){
 		this.remove();
 	}
+	
+	$.fn.rePostion = function(){
+		var width = this.outerWidth();
+		var height = this.outerHeight();
+		var ps = getPostion({
+			dw : width,
+			dh : height
+		});
+		this.css({
+			left : ps.left + "px",
+			top : ps.top + "px"
+		});
+	}
 })(jQuery);

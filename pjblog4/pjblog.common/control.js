@@ -100,3 +100,170 @@ conMain.PersonSet = function(obj){
 		ofl 	: 	0
 	});
 }
+
+conMain.Base = {
+	seo : {
+		ping : function(obj){
+			var div = document.createElement("<tr><td>aaa</td></tr>")
+			$(div).insertBefore($(obj).parent().parent());
+		},
+		Post : function(){
+			$("#SEO").ajaxForm({
+				dataType : "json",
+				beforeSubmit : function(){
+					$("input").attr("disabled", true);
+				},
+				success : function(data){
+					var c = "";
+					data.Suc ? c = "更新数据成功" : c = "更新数据失败";
+					jAlert(c, '反馈信息');
+					$("input").attr("disabled", false);
+				}
+			});
+		}
+	},
+	BaseSetting : function(){
+		$("#BaseSetting").ajaxForm({
+			dataType : "json",
+			beforeSubmit : function(){
+				$("input").attr("disabled", true);
+			},
+			success : function(data){
+				var c = "";
+				data.Suc ? c = "更新数据成功" : c = "更新数据失败";
+    			jAlert(c, '反馈信息');
+				$("input").attr("disabled", false);
+			}
+		});	
+	},
+	ArtComm : function(){
+		$("#ArtComm").ajaxForm({
+			dataType : "json",
+			beforeSubmit : function(){
+				$("input").attr("disabled", true);
+			},
+			success : function(data){
+				var c = "";
+				data.Suc ? c = "更新数据成功" : c = "更新数据失败";
+    			jAlert(c, '反馈信息');
+				$("input").attr("disabled", false);
+			}
+		});
+	},
+	WebMode : function(){
+		$("#WebMode").ajaxForm({
+			dataType : "json",
+			beforeSubmit : function(){
+				$("input").attr("disabled", true);
+			},
+			success : function(data){
+				var c = "";
+				data.Suc ? c = "更新数据成功" : c = "更新数据失败";
+    			jAlert(c, '反馈信息');
+				$("input").attr("disabled", false);
+			}
+		});
+	}
+}
+
+conMain.initialize = {
+	Get : function(){
+		$("input").attr("disabled", true);
+		if ($("#s1").attr("checked")) this.s1();
+		if ($("#s2").attr("checked")) this.s2();
+		if ($("#s3").attr("checked")) this.s3();
+		if ($("#s4").attr("checked")) this.s4();
+	},
+	s1 : function(){conMain.ReBuild.s1();},
+	s2 : function(){conMain.ReBuild.s2();},
+	s3 : function(){conMain.ReBuild.s3();},
+	s4 : function(){conMain.ReBuild.s4();},
+	conWidth : function(obj, delay, obj2){
+		var step = 5;
+		var parWidth = $(obj).parent().outerWidth();
+		var selWidth = $(obj).outerWidth();
+		var newStep = selWidth + step;
+		if (newStep <= parWidth){
+			$(obj).css({
+				width : newStep + "px"		   
+			});
+			var c = parseInt((newStep /  parWidth) * 100);
+			$(obj2 + " > td").eq(2).text(c + "%");
+			setTimeout("conMain.initialize.conWidth('" + obj + "', " + delay + ", '" + obj2 + "')", delay);
+		}
+	}
+}
+
+conMain.ReBuild = {}
+
+conMain.ReBuild.s1 = function(){
+	$("#n1").css({
+		width : "10%"
+	});
+	$.getJSON(
+		"../pjblog.logic/control/log_general.asp?s=" + Math.random(),
+		{
+			action : "ReBuidWebData"
+		},
+		function(data){
+			if (data.Suc){
+				conMain.initialize.conWidth("#n1", 10, "#t1");
+			}
+		}
+	);
+}
+
+conMain.ReBuild.s2 = function(){
+	$("#n2").css({
+		width : "10%"
+	});
+	$.getJSON(
+		"../pjblog.logic/control/log_general.asp?s=" + Math.random(),
+		{
+			action : "ClearVistor"
+		},
+		function(data){
+			if (data.Suc){
+				conMain.initialize.conWidth("#n2", 10, "#t2");
+			}
+		}
+	);
+}
+
+conMain.ReBuild.s4 = function(){
+	$.get(
+		"../pjblog.logic/control/log_general.asp?s=" + Math.random(),
+		{
+			action : "AppCount"
+		},
+		function(data){
+			if (data > 0){
+				conMain.ReBuild.app(0, data);
+			}
+		}
+	);
+}
+
+conMain.ReBuild.app = function(index, count){
+
+	if ((index + 1) <= count){
+		var _index = index, _count = count;
+		$.getJSON(
+			"../pjblog.logic/control/log_general.asp?s=" + Math.random(),
+			{
+				action : "AppRemove",
+				index : index
+			},
+			function(data){
+				if (data.Suc){
+					var c = parseInt(((_index + 1) / _count) * 100);
+					$("#n4").css({
+						width : c + "%"
+					});
+					$("#t4 > td").eq(2).text(c + "%");
+					conMain.ReBuild.app((_index + 1), _count);
+				}
+			}
+		);
+	}
+}

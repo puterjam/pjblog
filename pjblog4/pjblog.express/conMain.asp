@@ -13,10 +13,13 @@
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.alerts.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.draggable.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.ebox.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.slide.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/control.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/blog.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.model/base64.js"></script>
 <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/control.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/jquery/jquery.alerts.css" type="text/css" media="all" />
+<link rel="stylesheet" rev="stylesheet" href="../pjblog.common/blog.css" type="text/css" media="all" />
 <title>后台管理 - PJBlog4 v<%=Sys.version%></title>
 </head>
 <!--#include file = "log_control.asp" -->
@@ -77,8 +80,8 @@ Dim Menu, SubMenu
             <div class="menu_mid">
             	<div class="menuList">
                 	<ul>
-                    	<li><div class="icon"><img src="../images/Control/Icon/zhengzhan.gif"></div><div class="title"><a href="">整站优化</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="">分类管理</a></div><div class="do"></div><div class="clear"></div></li>
+                    	<li><div class="icon"><img src="../images/Control/Icon/zhengzhan.gif"></div><div class="title"><a href="?m=general">整站优化</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="?m=category">分类管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;">发表</a></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/pinglun.gif"></div><div class="title"><a href="">评论管理</a></div><div class="do">[1]</div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/waiguan.gif"></div><div class="title"><a href="">外观设置</a></div><div class="do"></div><div class="clear"></div></li>
@@ -87,6 +90,9 @@ Dim Menu, SubMenu
                         <li><div class="icon"><img src="../images/Control/Icon/zhanghu.gif"></div><div class="title"><a href="">账户权限</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="">友情链接</a></div><div class="do">添加</div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/qita.gif"></div><div class="title"><a href="">其他管理</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li style="border-bottom:1px dashed #8ec5f7; height:1px"></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/can02.gif" style="width:17px!important;height:17px!important; float:right"></div><div class="title"><a href="">添加应用</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/can01.gif" style="width:17px!important;height:17px!important; float:right"></div><div class="title"><a href="">管理应用</a></div><div class="do"></div><div class="clear"></div></li>
                     </ul>
                 </div>
             </div>
@@ -98,6 +104,8 @@ Dim Menu, SubMenu
         <%
 			Select Case Menu
 				Case "default" Call c_welcome
+				Case "general" Call c_ceneral
+				Case "category" Call c_categories
 				Case Else Call c_welcome
 			End Select
 		%>
