@@ -29,7 +29,8 @@ $.eBoxClick(obj, {
 			oft 	: 	null,
 			css 	: 	null,
 			html 	: 	null,
-			fix 	: 	true
+			fix 	: 	true,
+			complete : function(){}
 		}, options || {});
 		
 		$(div).html(options.html).css(options.css);
@@ -65,7 +66,8 @@ $.eBoxClick(obj, {
 		}else{
 			$(div).css("position", "absolute");
 		}
-		//$(div).fadeOut(0).fadeIn(600);
+		var callback = options.complete;
+		callback();
 	}
 /*
 		option : options

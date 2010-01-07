@@ -32,10 +32,13 @@ Class do_general
 			Case "ArtComm" Call ArtComm
 			Case "SEO" Call SEO
 			Case "WebMode" Call WebMode
+			Case "WapMail" Call WapMail
+			Case "RegFilter" Call RegFilter
 			Case "ReBuidWebData" Call ReBuidWebData
 			Case "ClearVistor" Call ClearVistor
 			Case "AppCount" Call AppCount
 			Case "AppRemove" Call AppRemove
+			Case "savePing" Call savePing
 		End Select
     End Sub 
      
@@ -190,6 +193,37 @@ Class do_general
 		End If
 	End Sub
 	
+	Private Sub WapMail
+		general.blog_smtp = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_smtp"))))
+		general.blog_email = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_email"))))
+		general.blog_emailpass = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_emailpass"))))
+		general.blog_sendmailName = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_sendmailName"))))
+		
+		general.blog_wapNum = Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_wapNum"))))
+		If Asp.CheckStr(Request.Form("blog_wapImg")) = "1" Then general.blog_wapImg = True Else general.blog_wapImg = False
+		If Asp.CheckStr(Request.Form("blog_wapHTML")) = "1" Then general.blog_wapHTML = True Else general.blog_wapHTML = False
+		If Asp.CheckStr(Request.Form("blog_wapLogin")) = "1" Then general.blog_wapLogin = True Else general.blog_wapLogin = False
+		If Asp.CheckStr(Request.Form("blog_wapComment")) = "1" Then general.blog_wapComment = True Else general.blog_wapComment = False
+		If Asp.CheckStr(Request.Form("blog_wap")) = "1" Then general.blog_wap = True Else general.blog_wap = False
+		If Asp.CheckStr(Request.Form("blog_wapURL")) = "1" Then general.blog_wapURL = True Else general.blog_wapURL = False
+		ReConSio = general.WapMail
+		If ReConSio(0) Then
+			Response.Write("{Suc : true}")
+		Else
+			Response.Write("{Suc : false}")
+		End If
+	End Sub
+	
+	Private Sub RegFilter
+		general.blog_Disregister = Int(Trim(Asp.checkURL(Asp.CheckStr(Request.Form("blog_Disregister")))))
+		ReConSio = general.RegFilter
+		If ReConSio(0) Then
+			Response.Write("{Suc : true}")
+		Else
+			Response.Write("{Suc : false}")
+		End If
+	End Sub
+	
 	Private Sub ReBuidWebData
 		Dim blog_Content_count, blog_Comment_count, ContentCount, TBCount, Count_Member
 		ContentCount = 0
@@ -221,6 +255,24 @@ Class do_general
 	Private Sub AppRemove
 		Application.Contents.Remove(Request.QueryString("index"))
 		Response.Write("{Suc : true}")
+	End Sub
+	
+	Private Sub savePing
+		Dim id, Ping_url, Ping_Name, Arrays
+		id = Request.QueryString("id")
+		If Not Asp.IsInteger(id) Then
+			Response.Write("{Suc : false, Info : '非法参数'}")
+		Else
+			Ping_Name = Trim(Asp.CheckStr(Request.QueryString("Ping_Name")))
+			Ping_url = Trim(Asp.CheckStr(Request.QueryString("Ping_url")))
+			Arrays = Array(Array("Ping_Name", Ping_Name), Array("Ping_url", Ping_url))
+			ReConSio = Sys.doRecord("blog_Ping", Arrays, "update", "Ping_ID", id)
+			If ReConSio(0) Then
+				Response.Write("{Suc : true, Info : '更新成功'}")
+			Else
+				Response.Write("{Suc : false, Info : '" & ReConSio(1) & "'}")
+			End If
+		End If
 	End Sub
 	
 End Class

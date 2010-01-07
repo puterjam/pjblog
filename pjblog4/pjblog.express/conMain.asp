@@ -49,11 +49,12 @@ Dim Menu, SubMenu
 	<!--顶部导航 开始-->
 	<div class="ConMenu">
     	<div class="nav">
-        	<ul>
+<!--        	<ul>
             	<li><a href="">预览首页</a></li>
                 <li><a href="?m=default">后台首页</a></li>
                 <li><a href="">服务器信息</a></li>
-            </ul>
+            </ul>-->
+           	PJBlog 4 Control Pannel  -  New Offical Studio
         </div>
         <div class="action">
         	<div class="l f">
@@ -81,18 +82,19 @@ Dim Menu, SubMenu
             	<div class="menuList">
                 	<ul>
                     	<li><div class="icon"><img src="../images/Control/Icon/zhengzhan.gif"></div><div class="title"><a href="?m=general">整站优化</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="?m=category">分类管理</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;">发表</a></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="?m=category">分类管理</a></div><div class="do"><a href="javascript:;" onclick="conMain.category.add(this)">新增</a></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;" onclick="">发表</a></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/pinglun.gif"></div><div class="title"><a href="">评论管理</a></div><div class="do">[1]</div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/waiguan.gif"></div><div class="title"><a href="">外观设置</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/chajian.gif"></div><div class="title"><a href="">插件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/fujian.gif"></div><div class="title"><a href="">附件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/zhanghu.gif"></div><div class="title"><a href="">账户权限</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="">友情链接</a></div><div class="do">添加</div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="">友情链接</a></div><div class="do">新增</div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/qita.gif"></div><div class="title"><a href="">其他管理</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li style="border-bottom:1px dashed #8ec5f7; height:1px"></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/can02.gif" style="width:17px!important;height:17px!important; float:right"></div><div class="title"><a href="">添加应用</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/can01.gif" style="width:17px!important;height:17px!important; float:right"></div><div class="title"><a href="">管理应用</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li style="border-top:1px dashed #8ec5f7; margin-top:10px; padding-top:10px;"><div class="icon"><img src="../images/Control/Icon/home.gif"></div><div class="title"><a href="">前台预览</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/yulan.gif"></div><div class="title"><a href="?m=default">后台首页</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/fuwuqi.gif"></div><div class="title"><a href="">服 务 器</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/fangke.gif"></div><div class="title"><a href="">访客记录</a></div><div class="do"></div><div class="clear"></div></li>
                     </ul>
                 </div>
             </div>
@@ -119,4 +121,10 @@ Dim Menu, SubMenu
 </html>
 <%
 Set Sys = Nothing
+Public Function yellowBox(ByVal Str)
+	yellowBox = ""
+	yellowBox = yellowBox & "<div class=""yellowbox"" style=""display:none"">"
+	yellowBox = yellowBox & "<div class=""rtxt"">" & Str & "</div>"
+	yellowBox = yellowBox & "</div>"
+End Function
 %>

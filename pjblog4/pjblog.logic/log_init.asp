@@ -70,7 +70,7 @@ Class log_Init
         blog_commLength = Int(GlobalCache(31, 0))			'评论长度
         blog_downLocal = CBool(GlobalCache(32, 0))			'是否使用防盗链下载
         blog_DisMod = CBool(GlobalCache(33, 0))				'默认显示内容
-        blog_Disregister = Int(GlobalCache(34, 0))			'是否允许注册
+        blog_Disregister = Int(GlobalCache(34, 0))			'用户注册类型
         blog_master = GlobalCache(35, 0)					'blog管理员姓名
         blog_email = GlobalCache(36, 0)						'blog管理员邮件地址
         blog_CountNum = GlobalCache(37, 0)					'访客统计最大次数
@@ -88,6 +88,9 @@ Class log_Init
 		blog_html = Trim(GlobalCache(49, 0))				'日志文件后缀列表
 		blog_commAduit = GlobalCache(50, 0)					'评论是否需要审核
 		blog_style = GlobalCache(51, 0)						'样式文件目录
+		blog_smtp = GlobalCache(52, 0)						'smtp发件地址
+		blog_emailpass = GlobalCache(53, 0)					'邮件密码
+		blog_sendmailName = GlobalCache(54, 0)				'发送邮件邮箱名称
 	End Sub
 	
 	' ***********************************************

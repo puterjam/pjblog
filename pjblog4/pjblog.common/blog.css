@@ -157,3 +157,60 @@
 	width:150px;
 	height:3px;
 }
+
+/* -----------  后台分类  ----------- */
+#cateAdd{
+}
+
+#cateAdd div{
+	line-height:26px;
+}
+
+#cateAdd .title{
+	border-bottom:1px solid #efefef;
+	height:26px;
+}
+
+#cateAdd .title .left{
+	float:left;
+}
+
+#cateAdd .title .right{
+	float:right;
+	cursor:pointer;
+}
+
+#cateAdd .mainBody{
+	padding:10px 10px
+}
+
+#cateAdd .mainBody .submit{
+	margin-top:11px;
+}
+
+#cateAdd .mainBody select{
+	font-size:10px;
+	color:#424242;
+}
+
+#postNewCate{
+	margin:0;
+}
+#newcatepostinfo{
+	margin-left:10px;
+	color:#0F5FBB;
+	font-style:oblique;
+	font-size:11px;
+}
+
+.lowBox{
+	z-index:99;
+	position:relative;
+	border:1px solid #7BBCF6;
+	background:#fff;
+	border-bottom:1px solid #fff;
+	padding:5px 5px 0px 5px;
+}
+.hideData{
+	display:none;
+}
