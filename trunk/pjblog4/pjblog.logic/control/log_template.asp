@@ -79,22 +79,20 @@ Class do_Template
 	
 	Private Sub doUpdate
 		Dim f1, f2
-		f1 = Trim(Asp.CheckStr(Request.Form("f1")))
-		f2 = Trim(Asp.CheckStr(Request.Form("f2")))
+		f1 = Trim(Asp.CheckStr(Request.Form("skin_common")))
+		f2 = Trim(Asp.CheckStr(Request.Form("skin_style")))
+'		response.Write("{Suc : false, Info : '" & f1 & "|" & f2 & "'}")
+'		response.End()
 		If Asp.IsBlank(f1) Or Asp.IsBlank(f2) Then
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = "应用主题失败, 请选择样式或主题!"
-			RedirectUrl(RedoUrl)
+			Response.Write("{Suc : false, Info : '缺少参数,请选择合适主题和样式.'}")
 		End If
 		OK = Temp.doUpdate(f1, f2)
-		Session(Sys.CookieName & "_ShowMsg") = True
 		If OK(0) Then
 			Cache.GlobalCache(2)
-			Session(Sys.CookieName & "_MsgText") = "应用主题成功!"
+			Response.Write("{Suc : true, Info : '应用主题和样式成功!'}")
 		Else
-			Session(Sys.CookieName & "_MsgText") = OK(1)
+			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
 		End If
-		RedirectUrl(RedoUrl)
 	End Sub
 	
 	Private Sub AddPlus

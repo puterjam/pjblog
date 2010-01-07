@@ -148,7 +148,7 @@ Public Sub WebMode
     	<div style="margin:12px 0; line-height:30px; border-bottom:1px solid #7BBCF6"><strong>根据需要选择你喜欢的模式:</strong></div>
         <div>
         	<p><label for="p1" ><input id="p1" name="blog_postFile" type="radio" value="0" <%If blog_postFile = 0 Then%>checked="checked"<%End If%>/> 全动态模式 (不推荐)<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">文章数据从数据库里直接获取</span> <br/></label></p>
-            <p><label for="p2" ><input id="p2" name="blog_postFile" type="radio" value="1" <%If blog_postFile = 1 Then%>checked="checked"<%End If%>/> 伪静态模式 (适合喜欢个性化的用户)<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">采用自定义404页面伪静态,不需要IIS的REWRITE插件支持! 需要注意的是 : 您的空间必须支持自定义404页面.</span> <br/></label></p>
+            <p><label for="p2" ><input id="p2" name="blog_postFile" type="radio" value="1" <%If blog_postFile = 1 Then%>checked="checked"<%End If%>/> 伪静态模式 (适合喜欢个性化的用户, 组件支持.)<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">采用URL ReWrite组件进行伪静态,只需要将httpd.ini文件放置到网站根目录, 配置URL正则规则即可实现整站伪静态.</span> <br/></label></p>
             <p><label for="p3" ><input id="p3" name="blog_postFile" type="radio" value="2" <%If blog_postFile = 2 Then%>checked="checked"<%End If%>/> 全静态模式<span style="color:#f00;font-size:8px">new</span> (适合在乎seo和速度的用户)<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999">把文章保存成全静态文件. 需要注意的是，这种模式下文章发布和编辑后需要重新生成文件. </span> <br/></label></p>
         </div>
         <div><input type="submit" value="确定" class="button" /></div>
@@ -184,7 +184,7 @@ Public Sub WebMode
                         	<div class="process s3" id="n3"></div>
                         </div>
                    	</td>
-                    <td width="50">14%</td>
+                    <td width="50">0%</td>
                     <td width="50"><input type="checkbox" id="s3" /></td>
                 </tr>
                 <tr id="t4">

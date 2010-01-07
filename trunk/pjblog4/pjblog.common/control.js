@@ -337,7 +337,6 @@ conMain.ReBuild.s4 = function(){
 }
 
 conMain.ReBuild.app = function(index, count){
-
 	if ((index + 1) <= count){
 		var _index = index, _count = count;
 		$.getJSON(
@@ -402,7 +401,6 @@ conMain.category = {
 				});
 			}
 		});
-		
 	},
 	AddString : function(){
 		var c =   "<div class=\"title\">"
@@ -520,5 +518,99 @@ conMain.category = {
 				);
 			}
 		});
+	}
+}
+
+conMain.skin = {}
+
+conMain.skin.set = {
+	read : {
+		html : function(obj, s1, s2, s3){
+			var info = $(obj).find(".readinfo div");
+			var styleinfo;
+			var m = "";
+			if (s1 == s3) m = s2;
+			var c =   "<div class=\"title\">"
+					+ 	"<span class=\"left\">查看主题</span>"
+					+ 	"<span class=\"right\" onclick=\"$('#cateAdd').eBoxClose();\">关闭</span>"
+					+ 	"<div class=\"clear\"></div>"
+					+ "</div>"
+					+ "<div class=\"mainBody\">"
+					+	"<div><strong>主题名称</strong> " + $.trim(info.eq(0).text()) + "</div>"
+					+	"<div><strong>主题作者</strong> " + $.trim(info.eq(1).text()) + "</div>"
+					+	"<div><strong>发布时间</strong> " + $.trim(info.eq(2).text()) + "</div>"
+					+	"<div><strong>作者网站</strong> " + $.trim(info.eq(3).text()) + " <a href=\"" + $.trim(info.eq(3).text()) + "\" target=\"_blank\" style=\"margin-left:10px;\">访问</a></div>"
+					+	"<div><strong>作者邮箱</strong> " + $.trim(info.eq(4).text()) + " <a href=\"mailto:" + $.trim(info.eq(4).text()) + "\" style=\"margin-left:10px;\">发邮件给他</a></div>"
+					+	"<div><strong>主题版本</strong> " + $.trim(info.eq(5).text()) + "</div>"
+					+	"<div><strong>主题说明</strong> " + $.trim(info.eq(8).text()) + "</div>"
+					+ 	"<div class=\"submit\"><form action=\"../pjblog.logic/control/log_template.asp?action=update\"  method=\"post\" id=\"sinset\">"
+					+	"<strong>样式选择:</strong><input type=\"hidden\" value=\"" + m + "\" name=\"skin_style\"><input type=\"hidden\" value=\"" + s3 + "\" name=\"skin_common\">"
+				   	+	"<div class=\"style\">";
+				$(obj).find(".readStyle .item").each(function(){
+					styleinfo = $(this).find("div");
+					c += "<li><img src=\"" + $.trim(styleinfo.eq(6).text()) + "\" width=\"40\" height=\"40\" title=\"" + $.trim(styleinfo.eq(0).text()) + "\" class=\"" + (((s1 == s3)&&($.trim(styleinfo.eq(9).text()) == s2)) ? "selectimg" : "cimg") + "\" rel=\"" + $.trim(styleinfo.eq(9).text()) + "\"/></li>"					  
+				});					
+				c	+=	"<div class=\"clear\"></div></div>"
+					+	"<input type=\"submit\" value=\"确定\" class=\"button\" />"
+					+	"</form></div>"
+					+ "</div>"
+			return c;
+		},
+		open : function(obj, s1, s2, s3){
+			// s1 : 默认主题文件夹
+			// s2 : 默认样式文件夹
+			// s3 : 当前主题的文件夹
+			try{$("#cateAdd").eBoxClose();}catch(e){}
+			$.eBoxClick(obj, {
+				css : {
+					width : "420px",
+					border : "1px solid #7BBCF6",
+					background : "#fff",
+					padding : "10px 15px"
+				},
+				html 	: 	this.html(obj, s1, s2, s3),
+				fix 	: 	true,
+				id 		: 	"cateAdd",
+				oft 	: 	0,
+				ofl 	: 	0,
+				complete : function(){
+					$(".cimg").click(function(){
+						try{
+							$(".selectimg").attr("class", "cimg");
+						}catch(e){}				  
+						$(this).attr("class", "selectimg");
+						var c = $(this).attr("rel");
+						$("input[name='skin_style']").val(c);
+					});
+					$("#sinset").ajaxForm({
+						dataType : "json",
+						beforeSubmit : function(){
+							if ($("#sinset input[name='skin_style']").val().length <= 0){
+								jAlert("分类名称不能为空", "错误信息");
+								return false;
+							}
+							if ($("#sinset input[name='skin_common']").val().length <= 0){
+								jAlert("分类名称不能为空", "错误信息");
+								return false;
+							}
+							$("#sinset input").attr("disabled", true);
+							jAlert("正在发送数据,请稍后...", "确认信息");
+						},
+						success : function(data){
+							if (data.Suc){
+								jConfirm('激活主题和样式成功, 是否要关闭本样式列表, 并且刷新数据?', '确认对话框', function(r){
+									if (r){
+										window.location.reload();
+									}
+								});
+							}else{
+								jAlert(data.Info, "错误信息");
+							};
+							$("#sinset input").attr("disabled", false);
+						}				  
+					});
+				}
+			});
+		}
 	}
 }
