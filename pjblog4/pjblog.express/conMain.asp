@@ -26,9 +26,12 @@
 <!--#include file = "control/c_welcome.asp" -->
 <!--#include file = "control/c_general.asp" -->
 <!--#include file = "control/c_categories.asp" -->
-<!--#include file = "control/c_skins.asp" -->
 <!--#include file = "control/c_link.asp" -->
 <!--#include file = "control/c_comment.asp" -->
+<!--#include file = "control/c_skins.asp" -->
+<!--#include file = "control/c_skins_set.asp" -->
+<!--#include file = "control/c_skins_net.asp" -->
+<!--#include file = "control/c_skins_upd.asp" -->
 
 <!--#include file = "../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../pjblog.model/cls_stream.asp" -->
@@ -82,10 +85,10 @@ Dim Menu, SubMenu
             	<div class="menuList">
                 	<ul>
                     	<li><div class="icon"><img src="../images/Control/Icon/zhengzhan.gif"></div><div class="title"><a href="?m=general">整站优化</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="?m=category">分类管理</a></div><div class="do"><a href="javascript:;" onclick="conMain.category.add(this)">新增</a></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;" onclick="">发表</a></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/toppiao.gif"></div><div class="title"><a href="?m=category">分类管理</a></div><div class="do"><a href="javascript:;" onClick="conMain.category.add(this)">新增</a></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;" onClick="">发表</a></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/pinglun.gif"></div><div class="title"><a href="">评论管理</a></div><div class="do">[1]</div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/waiguan.gif"></div><div class="title"><a href="">外观设置</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/waiguan.gif"></div><div class="title"><a href="?m=skin">外观设置</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/chajian.gif"></div><div class="title"><a href="">插件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/fujian.gif"></div><div class="title"><a href="">附件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/zhanghu.gif"></div><div class="title"><a href="">账户权限</a></div><div class="do"></div><div class="clear"></div></li>
@@ -108,6 +111,13 @@ Dim Menu, SubMenu
 				Case "default" Call c_welcome
 				Case "general" Call c_ceneral
 				Case "category" Call c_categories
+				Case "skin" 
+					Select Case SubMenu
+						Case "set" Call Skin_Set
+						Case "net" Call Skin_Net
+						Case "upd" Call Skin_Upload
+						Case Else Call c_skins
+					End Select
 				Case Else Call c_welcome
 			End Select
 		%>
