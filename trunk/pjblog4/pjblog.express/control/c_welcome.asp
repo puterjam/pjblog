@@ -210,6 +210,7 @@ $(function(){
 	font-size:11px;
 	font-weight: normal;
 	color:#919191;
+	margin-right:10px;
 }
 
 .trim .Mcontent .r a:link, .trim .Mcontent .r a:visited{
@@ -413,7 +414,7 @@ $(function(){
                     </div>
                     <div class="Mcontent">
                         <div class="l"><a href="javascript:;" onclick="blog.post(this)"><img src="../../images/Control/trimbg.png" width="75" height="65" border="0" /></a></div>
-                        <div class="r">发表自己的日志哦!<br /><span><a href="javascript:;" onclick="blog.post(this)">快速发表</a></span></div>
+                        <div class="r">发表自己的日志哦!<br /><span><a href="javascript:;" onclick="blog.post(this)">快速发表</a></span><span><a href="javascript:;">管理日志</a></span></div>
                         <div class="clear"></div>
                     </div>
                 </div>

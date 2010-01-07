@@ -11,7 +11,7 @@ Dim general : Set general = New c_general
 
 Class c_general
 
-	Public SiteName, blog_Title, blog_master, blog_email, SiteURL, blog_KeyWords, blog_Description, blog_about, blog_html, blog_postFile, blog_SplitType, blog_introChar, blog_introLine, blog_PerPage, blog_ImgLink, blog_commPage, blog_commTimerout, blog_commLength, blog_validate, blog_commUBB, blog_commIMG, blog_Disregister, blog_CountNum, blog_FilterName, blog_FilterIP, blog_commAduit, blog_IsPing
+	Public SiteName, blog_Title, blog_master, blog_email, SiteURL, blog_KeyWords, blog_Description, blog_about, blog_html, blog_postFile, blog_SplitType, blog_introChar, blog_introLine, blog_PerPage, blog_ImgLink, blog_commPage, blog_commTimerout, blog_commLength, blog_validate, blog_commUBB, blog_commIMG, blog_Disregister, blog_CountNum, blog_FilterName, blog_FilterIP, blog_commAduit, blog_IsPing, blog_smtp, blog_emailpass, blog_sendmailName, blog_wapNum, blog_wapImg, blog_wapHTML, blog_wapLogin, blog_wapComment, blog_wap, blog_wapURL
 	
 	Private ReConSio, Arrays
 
@@ -62,6 +62,20 @@ Class c_general
 	Public Function WebMode
 		Arrays = Array(Array("blog_postFile", blog_postFile))
 		WebMode = Sys.doRecord("blog_Info", Arrays, "update", "blog_ID", 1)
+		Call Cache.GlobalCache(2)
+		Call Data.ArticleList(2)
+	End Function
+	
+	Public Function WapMail
+		Arrays = Array(Array("blog_smtp", blog_smtp), Array("blog_email", blog_email), Array("blog_emailpass", blog_emailpass), Array("blog_sendmailName", blog_sendmailName), Array("blog_wapNum", blog_wapNum), Array("blog_wapImg", blog_wapImg), Array("blog_wapHTML", blog_wapHTML), Array("blog_wapLogin", blog_wapLogin), Array("blog_wapComment", blog_wapComment), Array("blog_wap", blog_wap), Array("blog_wapURL", blog_wapURL))
+		WapMail = Sys.doRecord("blog_Info", Arrays, "update", "blog_ID", 1)
+		Call Cache.GlobalCache(2)
+		Call Data.ArticleList(2)
+	End Function
+	
+	Public Function RegFilter
+		Arrays = Array(Array("blog_Disregister", blog_Disregister))
+		RegFilter = Sys.doRecord("blog_Info", Arrays, "update", "blog_ID", 1)
 		Call Cache.GlobalCache(2)
 		Call Data.ArticleList(2)
 	End Function

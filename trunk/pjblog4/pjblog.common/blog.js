@@ -1,4 +1,12 @@
 ﻿// JavaScript Document
+String.prototype.json = function(){
+	try{
+		eval("var jsonStr = (" + this.toString() + ")");
+	}catch(ex){
+		var jsonStr = null;
+	}
+	return jsonStr;
+};
 var blog = {}
 
 blog.post = function(obj){
