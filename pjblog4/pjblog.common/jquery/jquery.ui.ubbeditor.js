@@ -1,17 +1,21 @@
 ﻿// JavaScript Document
 // author : evio http://www.evio.name
-var NodeForEvioBject;
+var NodeForEvioBject, UBBEditorView;
+var frameWidth, frameHeight;
 
 ;(function($){
 	$.fn.ubbEditor = function(options){
 		
 		// 被绑定元素 $(this) || this
-			NodeForEvioBject = $(this)
+			NodeForEvioBject = $(this);
+			//alert(NodeForEvioBject.outerHeight())
 		// 继承元素属性
 		options = $.extend({
-			 toolBar : "1,2,3,4,5,6",
-			 offsetLeft : 0,
-			 iframeOffsetTop : 0
+			 toolBar : "1,2,3,4,5,6,7",
+			 iframeOffsetTop : 0,
+			 view : true,  //是否开启可视化
+			 type : "edit", // 编辑状态 可选 post / edit
+			 iframeBorderCss : "1px solid #d7d7d7"
 		}, options || {});
 		
 		var objects = {
@@ -22,11 +26,13 @@ var NodeForEvioBject;
 		}
 		
 		// 获取被当定元素的长宽数据
-		objects.thisData = function(o){
-			this.objWidth = $(o).outerWidth();
-			this.objHeight = $(o).outerHeight();
-			this.objOffsetLeft = $(o).offset().left;
-			this.objOffsetLeft = $(o).offset().top;
+		objects.thisData = function(){
+			this.objWidth = NodeForEvioBject.outerWidth();
+			this.objHeight = NodeForEvioBject.outerHeight();
+			this.objOffsetLeft = NodeForEvioBject.offset().left;
+			this.objOffsetLeft = NodeForEvioBject.offset().top;
+			frameWidth = this.objWidth;
+			frameHeight = this.objHeight;
 		}
 		
 		// font size ||  color left center right blod underline oblique delete ||
@@ -43,27 +49,36 @@ var NodeForEvioBject;
 		
 		// insert : options.toolBar
 		// obj : 被绑定的元素 $(this)
-		objects.load = function(obj, str){
-			objects.thisData(obj);
+		objects.load = function(str){
+			objects.thisData();
 			var c = this.toolBarItem(str)
 			var div = document.createElement("div");
 			$(div).attr("class", "UBBeditor").html(c).css({
 				width	:	"100%"
-			}).insertBefore($(obj)).append("<div class=\"clear\"></div>");
+			}).insertBefore(NodeForEvioBject).append("<div class=\"clear\"></div>");
+			
+			NodeForEvioBject.wrap("<div class=\"editorWrap\"></div>");
+			$(".editorWrap").css("position", "relative");
 			
 			//  加载iframe
+			//alert(this.objWidth + "," + this.objHeight)
 			var iframe = document.createElement("iframe");
 			$(iframe)
 			.attr({
 				marginWidth : 0,
 				marginHeight : 0,
 				id : "HTMLEditor",
-				src : ""
+				src : "",
+				frameBorder : 0
 			})
 			.css({
 				width : this.objWidth + "px",
-				height : this.objHeight + "px"
-			}).insertAfter($(obj));
+				height : this.objHeight + 1 + "px",
+				position : "absolute",
+				top : "0px",
+				left : "0px",
+				"z-index" : 99
+			}).insertAfter(NodeForEvioBject);
 			
 			$(iframe).ready(function(){
 				var iObj = document.getElementById("HTMLEditor").contentWindow; 
@@ -73,15 +88,42 @@ var NodeForEvioBject;
 				iObj.document.writeln("<html><head>");
 				iObj.document.writeln("</head><body contenteditable='true'></body></html>"); 
 				iObj.document.close();
-				//$("#HTMLEditor", parent.document.body).attr("contenteditable", "true")
+				$(iObj.document.body).css({
+					background : "#fff",
+					border : options.iframeBorderCss
+				});
+				
+				if (options.view) {$(iframe).show(); UBBEditorView = true;}else{$(iframe).hide(); UBBEditorView = false;} // 开启可视化设置
+				if (options.type == "edit"){NodeForEvioBject.UBBTOHTML(document.getElementById('HTMLEditor').contentWindow.document.body)}// 初始化编辑状态
+
 			}) 
 
 			//if ($(div).outerWidth() > this.objWidth) $(div).css("width", (objects.objWidth + options.offsetLeft)+"px");
 		}	
+		
+	//UBB到HTML的转换方法
+	$.fn.UBBTOHTML = function(obj){
+		var Text = $(this).val();
+		for (var i = 0 ; i < UBBASHTML.length ; i++){
+			Text = Text.replace(UBBASHTML[i].reg, UBBASHTML[i].value);
+		}
+		$(obj).html(Text);
+	}
+	
+	//HTML到UBB的转换方法
+	$.fn.HTMLTOUBB = function(obj){
+		var Text = $(this).html();
+		for (var i = 0 ; i < HTMLASUBB.length ; i++){
+			Text = Text.replace(HTMLASUBB[i].reg, HTMLASUBB[i].value);
+		}
+		$(obj).val(Text);
+	}
+		
+		
 /*
 		处理代码
 */
-		objects.load(this, options.toolBar);
+		objects.load(options.toolBar);
 		$(this).setCaret();
 		$(".UBBeditor > .bar:last").css("background", "none");
 		$(this).click(function(){
@@ -162,6 +204,11 @@ var NodeForEvioBject;
 					  + 	"<div class=\"clear\"></div>"
 					  + "</div>";
 					break;
+				default :
+					c = "<div class=\"child_7 bar\">"
+					  + 	"<div class=\"view baritem\" onclick=\"UBBEditToggle()\"></div>"
+					  + 	"<div class=\"clear\"></div>"
+					  + "</div>";
 			}
 			return c;
 		}
@@ -420,26 +467,22 @@ var NodeForEvioBject;
 		}
 	}
 	
-	//UBB到HTML的转换方法
-	$.fn.UBBTOHTML = function(obj){
-		var Text = $(this).val();
-		for (var i = 0 ; i < UBBASHTML.length ; i++){
-			Text = Text.replace(UBBASHTML[i].reg, UBBASHTML[i].value);
-		}
-		$(obj).html(Text);
-	}
-	
-	//HTML到UBB的转换方法
-	$.fn.HTMLTOUBB = function(obj){
-		var Text = $(this).html();
-		for (var i = 0 ; i < HTMLASUBB.length ; i++){
-			Text = Text.replace(HTMLASUBB[i].reg, HTMLASUBB[i].value);
-		}
-		$(obj).val(Text);
-	}
-	
 	
 })(jQuery);
+
+
+//转换编辑状态
+function UBBEditToggle(){
+	if (UBBEditorView){
+		$("#HTMLEditor").hide();
+		$(document.getElementById('HTMLEditor').contentWindow.document.body).HTMLTOUBB(NodeForEvioBject);
+		UBBEditorView = false;
+	}else{
+		$("#HTMLEditor").show();
+		NodeForEvioBject.UBBTOHTML(document.getElementById('HTMLEditor').contentWindow.document.body);
+		UBBEditorView = true;
+	}
+}
 
 var textOutString = {
 	getColor : function(){
@@ -511,7 +554,7 @@ var textOutString = {
 
 var UBBASHTML = [
 	{
-		reg : /\[color=(#\w{3,10}|\w{3,10})\]([^\r]*?)\[\/color\]/igm, 
+		reg : /\[color=(.*?)\]([^\r]*?)\[\/color\]/igm, 
 		value : "<span style=\"color:$1\">$2</span>"
 	}
 ];
