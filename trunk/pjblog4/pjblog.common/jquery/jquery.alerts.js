@@ -30,8 +30,8 @@
 		verticalOffset: -75,                // vertical offset of the dialog from center screen, in pixels
 		horizontalOffset: 0,                // horizontal offset of the dialog from center screen, in pixels/
 		repositionOnResize: true,           // re-centers the dialog on window resize
-		overlayOpacity: .01,                // transparency level of overlay
-		overlayColor: '#FFF',               // base color of overlay
+		overlayOpacity: .5,                // transparency level of overlay
+		overlayColor: '#fff',               // base color of overlay
 		draggable: true,                    // make the dialogs draggable (requires UI Draggables plugin)
 		okButton: '&nbsp;确定&nbsp;',         // text for the OK button
 		cancelButton: '&nbsp;取消&nbsp;', // text for the Cancel button
