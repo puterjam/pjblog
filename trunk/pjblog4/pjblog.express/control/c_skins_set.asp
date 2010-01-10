@@ -33,18 +33,21 @@ h5.skinset{
 .setBody ul li.item .skinbg .mid .whole .tools{ height:20px;}
 
 
-.setBody ul li.item .skinbg .mid .whole .tools .yulan{ width:13px; background:url(../../images/Control/yulan.gif) no-repeat; float:right; height:16px;margin-right:5px;}
-.setBody ul li.item .skinbg .mid .whole .tools .yulan:hover{ width:13px; background: url(../../images/Control/yulan2.gif) no-repeat; float:right; height:16px;margin-right:5px; cursor:pointer;}
+.setBody ul li.item .skinbg .mid .whole .tools .yulan{ width:13px; background:url(../../images/Control/yulan.gif) no-repeat; float:left; height:16px;}
+.setBody ul li.item .skinbg .mid .whole .tools .yulan:hover{ width:13px; background: url(../../images/Control/yulan2.gif) no-repeat; float:left; height:16px;cursor:pointer;}
 
-.setBody ul li.item .skinbg .mid .whole .tools .fabu{ float:right; height:16px; width:12px; background:url(../../images/Control/fabu.gif) no-repeat; margin-right:5px;}
-.setBody ul li.item .skinbg .mid .whole .tools .fabu:hover{float:right; height:16px; width:12px; background: url(../../images/Control/fabu2.gif) no-repeat; margin-right:5px; cursor:pointer;}
+.setBody ul li.item .skinbg .mid .whole .tools .fabu{ float:right; height:16px; width:12px; background:url(../../images/Control/fabu.gif) no-repeat; margin-right:3px;}
+.setBody ul li.item .skinbg .mid .whole .tools .fabu:hover{float:right; height:16px; width:12px; background: url(../../images/Control/fabu2.gif) no-repeat; margin-right:3px; cursor:pointer;}
 
 .setBody ul li.item .skinbg .mid .whole .tools .daochu{ float:right; height:16px; width:17px; background:url(../../images/Control/daochu.gif) no-repeat;}
 .setBody ul li.item .skinbg .mid .whole .tools .daochu:hover{ float:right; height:16px; width:17px; background: url(../../images/Control/daochu2.gif) no-repeat; cursor:pointer;}
 
+.setBody ul li.item .skinbg .mid .whole .tools .del{ float:right; height:14px; width:14px; background:url(../../images/Control/skin_set_close.gif) no-repeat; margin-right:3px;}
+.setBody ul li.item .skinbg .mid .whole .tools .del:hover{ float:right; height:14px; width:14px; background: url(../../images/Control/skin_set_close_hover.gif) no-repeat; cursor:pointer; margin-right:3px;}
+
 
 .setBody ul li.item .skinbg .mid .whole .themepic{ border:1px solid #f1f0f0; width:180px; position:relative}
-.setBody ul li.item .skinbg .mid .whole .themepic:hover{ border:1px solid #C4E0FB; width:180px; position:relative; cursor:pointer}
+.setBody ul li.item .skinbg .mid .whole .themepic:hover{ border:1px solid #65aff2; width:180px; position:relative; cursor:pointer}
 .setBody ul li.item .skinbg .mid .whole .themepic .checked{ width:21px; height:20px; background:url(../../images/Control/xuanzhong.gif) no-repeat; position:absolute; top:0px; left:0px;}
 .setBody ul li.item .skinbg .mid .whole .themetitle{ height:30px;}
 .setBody ul li.item .skinbg .mid .whole .themetitle .themename{ width:180px; overflow:hidden; text-align:center; line-height:30px; margin:0 auto; color:#1d6bb2; font-weight:700;}
@@ -131,6 +134,7 @@ For i = 1 To UBound(TempFolderArray)
                     	<div class="whole">
                         	<div class="tools">
                             	<div class="daochu" title="导出该主题"></div>
+                                <div class="del" title="删除该主题" onclick="conMain.skin.set.del('<%=TempFolderArray(i)%>')"></div>
                                 <div class="fabu" title="发布该主题"></div>
                                 <div class="yulan" title="预览该主题"></div>
                                 <div class="clear"></div>

@@ -33,33 +33,20 @@ blog.close = function(){
 blog.add = function(obj, html){
 	$.eBoxClick(obj, {
 		css : {
-			width : "600px"
+			width : "610px",
+			border : "1px solid #7BBCF6",
+			background : "#fff",
+			padding : "10px 15px"
 		},
 		html 	: 	html,
 		fix 	: 	true,
-		id 		: 	"blog"
+		id 		: 	"cateAdd",
+		oft 	: 	0,
+		ofl 	: 	0,
+		complete : function(){
+			$('#cateAdd').draggable({handle : "#blogPost"});
+			$("#blogSlide").tabs("#blogSlideContent");
+			$("textarea[name='Message']").ubbEditor();
+		}
 	});
-	$("#blog").draggable({handle : ".box-title"});
-	var t = $(".xml > .item").size();
-	if ($(".xml > .item").size() > 0){
-		$("#cate-select").mouseover(function(){
-			try{$("#cateSelectBox").remove();}catch(e){}
-			var c = "<div class=\"cate-doTop\"></div><div class=\"cate-doContent\"><ul class=\"cate-doSel\">";
-			$(".xml > .item").each(function(){
-				c += "<li><div class=\"cate-li\">" + $(this).find(".icon").html() + $(this).find(".txt").html() + "</div></li>";
-			})
-				c += "</ul></div><div class=\"cate-doBottom\"></div>";
-			$.eBoxClick(this, {
-				css : {
-					width : "151px"
-				},
-				n 	: 	5,
-				html 	: 	c,
-				fix 	: 	false,
-				id 	: 	"cateSelectBox",
-				oft 	: 	0,
-				ofl 	: 	1
-			});								 
-		});
-	}
 }

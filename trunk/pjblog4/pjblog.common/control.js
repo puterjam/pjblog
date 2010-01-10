@@ -530,7 +530,7 @@ conMain.skin.set = {
 			var styleinfo;
 			var m = "";
 			if (s1 == s3) m = s2;
-			var c =   "<div class=\"title\">"
+			var c =   "<div class=\"title\" id=\"SkinSetTitle\" title=\"点击此处拖动本框\">"
 					+ 	"<span class=\"left\">查看主题</span>"
 					+ 	"<span class=\"right\" onclick=\"$('#cateAdd').eBoxClose();\">关闭</span>"
 					+ 	"<div class=\"clear\"></div>"
@@ -548,7 +548,7 @@ conMain.skin.set = {
 				   	+	"<div class=\"style\">";
 				$(obj).find(".readStyle .item").each(function(){
 					styleinfo = $(this).find("div");
-					c += "<li><img src=\"" + $.trim(styleinfo.eq(6).text()) + "\" width=\"40\" height=\"40\" title=\"" + $.trim(styleinfo.eq(0).text()) + "\" class=\"" + (((s1 == s3)&&($.trim(styleinfo.eq(9).text()) == s2)) ? "selectimg" : "cimg") + "\" rel=\"" + $.trim(styleinfo.eq(9).text()) + "\"/></li>"					  
+					c += "<li><img src=\"" + $.trim(styleinfo.eq(6).text()) + "\" width=\"40\" height=\"40\" title=\"" + $.trim(styleinfo.eq(0).text()) + "\" class=\"" + (((s1 == s3)&&($.trim(styleinfo.eq(9).text()) == s2)) ? "selectimg" : "cimg") + "\" rel=\"" + $.trim(styleinfo.eq(9).text()) + "\" onerror=\"this.src='../images/control/sPreview.jpg'\"/></li>"					  
 				});					
 				c	+=	"<div class=\"clear\"></div></div>"
 					+	"<input type=\"submit\" value=\"确定\" class=\"button\" />"
@@ -574,6 +574,7 @@ conMain.skin.set = {
 				oft 	: 	0,
 				ofl 	: 	0,
 				complete : function(){
+					$('#cateAdd').draggable({handle : "#SkinSetTitle"});
 					$(".cimg").click(function(){
 						try{
 							$(".selectimg").attr("class", "cimg");
@@ -612,5 +613,26 @@ conMain.skin.set = {
 				}
 			});
 		}
+	},
+	del : function(f){
+		jConfirm("删除主题后将无法恢复.<br />确定这样做吗?", "确认对话框", function(r){
+			if (r){
+				$.getJSON(
+					"../pjblog.logic/control/log_template.asp?action=DelTheme&s=" + Math.random(), 
+					{
+						fo : f
+					},
+					function(data){
+						if (data.Suc){
+							jConfirm("删除主题成功, 是否要刷新数据?", "确认对话框", function(r){
+								if (r) window.location.reload();										   
+							})
+						}else{
+							jAlert(data.Info, "错误对话框");
+						}
+					}
+				);
+			}
+		});
 	}
 }

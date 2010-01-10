@@ -30,6 +30,7 @@ Class do_Template
 			Case "GetPlusCode" Call GetPlusCode
 			Case "SavePlusCode" Call SavePlusCode
 			Case "delPlus" Call DelPlus
+			Case "DelTheme" Call DelTheme
 		End Select
     End Sub 
      
@@ -246,6 +247,23 @@ Class do_Template
 			End If
 		End If
 		RedirectUrl(RedoUrl)
+	End Sub
+	
+	Private Sub DelTheme
+		Dim sFolder
+		sFolder = Request.QueryString("fo")
+		If blog_DefaultSkin = sFolder Then
+			Response.Write("{Suc : false, Info : '正在使用本主题, 无法删除.'}")
+		Else
+			Set fso = New cls_fso
+				OK = fso.DeleteFolder("../../pjblog.template/" & sFolder, True)
+				If OK Then
+					Response.Write("{Suc : true}")
+				Else
+					Response.Write("{Suc : false, Info : '删除主题失败.'}")
+				End If
+			Set fso = Nothing
+		End If
 	End Sub
 	
 End Class

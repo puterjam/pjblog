@@ -14,9 +14,12 @@
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.draggable.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.ebox.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.slide.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.ubbeditor.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.selectContent.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/control.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/blog.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.model/base64.js"></script>
+<link rel="stylesheet" rev="stylesheet" href="../pjblog.common/jquery/ubbeditor.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/control.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/jquery/jquery.alerts.css" type="text/css" media="all" />
 <link rel="stylesheet" rev="stylesheet" href="../pjblog.common/blog.css" type="text/css" media="all" />
@@ -32,6 +35,7 @@
 <!--#include file = "control/c_skins_set.asp" -->
 <!--#include file = "control/c_skins_net.asp" -->
 <!--#include file = "control/c_skins_upd.asp" -->
+<!--#include file = "control/c_plugins.asp" -->
 
 <!--#include file = "../pjblog.model/cls_fso.asp" -->
 <!--#include file = "../pjblog.model/cls_stream.asp" -->
@@ -89,7 +93,7 @@ Dim Menu, SubMenu
                         <li><div class="icon"><img src="../images/Control/Icon/rizhi.gif"></div><div class="title"><a href="">日志管理</a></div><div class="do"><a href="javascript:;" onClick="">发表</a></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/pinglun.gif"></div><div class="title"><a href="">评论管理</a></div><div class="do">[1]</div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/waiguan.gif"></div><div class="title"><a href="?m=skin">外观设置</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/chajian.gif"></div><div class="title"><a href="">插件管理</a></div><div class="do"></div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/chajian.gif"></div><div class="title"><a href="?m=plus">插件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/fujian.gif"></div><div class="title"><a href="">附件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/zhanghu.gif"></div><div class="title"><a href="">账户权限</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="">友情链接</a></div><div class="do">新增</div><div class="clear"></div></li>
@@ -117,6 +121,10 @@ Dim Menu, SubMenu
 						Case "net" Call Skin_Net
 						Case "upd" Call Skin_Upload
 						Case Else Call c_skins
+					End Select
+				Case "plus"
+					Select Case SubMenu
+						Case Else Call c_plugins
 					End Select
 				Case Else Call c_welcome
 			End Select
