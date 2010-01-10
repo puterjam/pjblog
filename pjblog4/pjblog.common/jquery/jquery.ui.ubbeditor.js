@@ -2,13 +2,13 @@
 // author : evio http://www.evio.name
 var NodeForEvioBject, UBBEditorView;
 var frameWidth, frameHeight;
+var _win, _doc;
 
 ;(function($){
 	$.fn.ubbEditor = function(options){
 		
 		// 被绑定元素 $(this) || this
 			NodeForEvioBject = $(this);
-			//alert(NodeForEvioBject.outerHeight())
 		// 继承元素属性
 		options = $.extend({
 			 toolBar : "1,2,3,4,5,6,7",
@@ -82,11 +82,13 @@ var frameWidth, frameHeight;
 			
 			$(iframe).ready(function(){
 				var iObj = document.getElementById("HTMLEditor").contentWindow; 
+				_win=$('#HTMLEditor')[0].contentWindow; // 我们用 _win 变量代替 iframe window 
+				_doc=_win.document;
 				iObj.document.designMode = "on"; 
 				iObj.document.contentEditable = true; 
 				iObj.document.open(); 
 				iObj.document.writeln("<html><head>");
-				iObj.document.writeln("</head><body contenteditable='true'></body></html>"); 
+				iObj.document.writeln("</head><body></body></html>"); 
 				iObj.document.close();
 				$(iObj.document.body).css({
 					background : "#fff",
@@ -108,6 +110,7 @@ var frameWidth, frameHeight;
 			Text = Text.replace(UBBASHTML[i].reg, UBBASHTML[i].value);
 		}
 		$(obj).html(Text);
+		$(_doc.body).setCaret();
 	}
 	
 	//HTML到UBB的转换方法
@@ -117,6 +120,7 @@ var frameWidth, frameHeight;
 			Text = Text.replace(HTMLASUBB[i].reg, HTMLASUBB[i].value);
 		}
 		$(obj).val(Text);
+		NodeForEvioBject.setCaret();
 	}
 		
 		
@@ -124,9 +128,14 @@ var frameWidth, frameHeight;
 		处理代码
 */
 		objects.load(options.toolBar);
-		$(this).setCaret();
+		if (UBBEditorView){$("#HTMLEditor > html > body").setCaret();}else{$(this).setCaret();}
 		$(".UBBeditor > .bar:last").css("background", "none");
 		$(this).click(function(){
+			try{
+				$(".float").hide('fast');
+			}catch(e){}
+		});
+		$(_doc).click(function(){
 			try{
 				$(".float").hide('fast');
 			}catch(e){}
@@ -250,6 +259,7 @@ var frameWidth, frameHeight;
 	}
 	
 	var outTextRange = {
+		iframeObject : function(){return document.getElementById("HTMLEditor").contentWindow},
 		ovelayBox : function(str){
 			var c = "<div class=\"ubbOverlay_wrap\">"
 				  + 	"<div class=\"ubbOverlay_inner\">"
@@ -262,7 +272,11 @@ var frameWidth, frameHeight;
 			if (NodeForEvioBject.cloneTextRange().length > 0){NodeForEvioBject.insertAtCaret("[b]{$}[/b]", true);}
 		},
 		left : function(){
-			if (NodeForEvioBject.cloneTextRange().length > 0){NodeForEvioBject.insertAtCaret("[align=left]{$}[/align]", true);}
+			if (UBBEditorView){
+				$(_doc.body).insertAtCaret("111{$}222", true);
+			}else{
+				if (NodeForEvioBject.cloneTextRange().length > 0){NodeForEvioBject.insertAtCaret("[align=left]{$}[/align]", true);}
+			}
 		},
 		center : function(){
 			if (NodeForEvioBject.cloneTextRange().length > 0){NodeForEvioBject.insertAtCaret("[align=center]{$}[/align]", true);}
@@ -556,6 +570,10 @@ var UBBASHTML = [
 	{
 		reg : /\[color=(.*?)\]([^\r]*?)\[\/color\]/igm, 
 		value : "<span style=\"color:$1\">$2</span>"
+	},
+	{
+		reg : /\n/igm,
+		value : "<br>"
 	}
 ];
 
@@ -563,7 +581,15 @@ var HTMLASUBB = [
 	{
 		reg : /\<span\sstyle\=\"color\:(.*?)\"\>([\s\S]*?)\<\/span\>/igm,
 		value : "[color=$1]$2[/color]"
-	}			 
+	},
+	{
+		reg : /\<br\>/igm,
+		value : "\n"
+	},
+	{
+		reg : /\<p\>([\s\S]*?)\<\/p\>/igm,
+		value : "$1\n"
+	}
 ];
 
 //1.var n = 0;   
@@ -579,4 +605,18 @@ var HTMLASUBB = [
 //11.            }   
 //12.        }   
 //13.    }   
-//14.}  
+//14.} 
+
+function getSelectedText(obj) {
+	if (obj.getSelection) {
+		// This technique is the most likely to be standardized.
+		// getSelection() returns a Selection object, which we do not document.
+		return obj.getSelection().toString();
+	}else if (obj.document.getSelection) { 
+		// This is an older, simpler technique that returns a string
+		return obj.document.getSelection();
+	}else if (obj.document.selection) { 
+		// This is the IE-specific technique.// We do not document the IE selection property or TextRange objects.
+		return obj.document.selection.createRange().text;
+	} 
+}

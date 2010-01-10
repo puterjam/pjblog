@@ -1,162 +1,21 @@
 ﻿@charset "utf-8";
 /* CSS Document */
+#blogSlide{border-bottom:1px solid #7bbcf6; margin:0px; padding:0px 10px; height:30px; list-style:none;}
+#blogSlide li{height:30px;line-height:30px;width:92px;margin-right:3px;background:url(../../images/Control/selectdiv.gif) no-repeat;text-align:center;float:left;cursor:pointer;}
+#blogSlide li.current{ border-bottom:1px solid #fff}
 
-.blog-wrap{
-	border:5px solid #add5fa;
-	background:#fff;
-}
+#blogSlideContent{ list-style:none; margin:0; padding:0;}
+#blogSlideContent li{ padding:15px 10px 0px 10px;}
+.conArticle{}
+.aTitle{ margin-bottom:10px;}
+.aCate{ line-height:22px;}
+.aCate .cateList{ height:130; overflow:auto;}
+.aContent{}
+.lineheight22{ line-height:22px;}
+.lineheight30{ line-height:30px;}
+.blogSlideBottom{ padding:0 20px 10px 20px;}
+.cateItem{ width:33%; overflow:hidden; float:left;}
 
-.blog-line{
-	border:1px solid #83C3FB;
-	padding:10px 20px;
-}
-
-.blog-top{
-	height:32px;
-	overflow:hidden;
-}
-
-.box-title{
-	float:left;
-	line-height:32px;
-	color:#51ABF9;
-	font-weight:700;
-	cursor:move;
-}
-
-.box-go{
-	background: url(../images/go_l.gif) no-repeat;
-	width:23px;
-	height:20px;
-	float:right;
-	cursor:pointer;
-	margin-right:3px;
-}
-.box-go:hover{
-	background: url(../images/go_h.gif) no-repeat;
-	width:23px;
-	height:20px;
-	float:right;
-	cursor:pointer;
-}
-
-.box-tip{
-	background: url(../images/T-l.gif) no-repeat;
-	width:23px;
-	height:20px;
-	float:right;
-	cursor:pointer;
-	margin-right:3px;
-}
-.box-tip:hover{
-	background: url(../images/T-h.gif) no-repeat;
-	width:23px;
-	height:20px;
-	float:right;
-	cursor:pointer;
-}
-
-.box-close{
-	width:23px;
-	height:20px;
-	background:url(../images/close-l.gif) no-repeat;
-	float:right;
-	cursor:pointer;
-}
-.box-close:hover{
-	width:23px;
-	height:20px;
-	background:url(../images/close-h.gif) no-repeat;
-	float:right;
-	cursor:pointer;
-}
-
-.blog-body{
-}
-
-.blog-title{
-	line-height:30px;
-}
-
-.blog-title input{
-	font-style:oblique;
-	color:#6b6b6b;
-}
-
-.input-text{
-	border:1px solid #40a7f6;
-}
-.input-text:hover{
-	border:1px solid #fb9c1e;
-}
-
-#cate-select{
-	float:left;
-	margin:0;
-	padding:0;
-	list-style:none;
-	border:1px solid #999;
-	line-height:16px;
-}
-
-#cate-select li{
-	float:left;
-}
-
-#cate-select li.tnt{
-	margin-left:3px;
-	margin-right:3px;
-}
-
-.cate-doSel{
-	margin:0;
-	padding:0;
-	list-style:none;
-}
-
-.cate-doTop{
-	background:url(../images/cateSelect-t.png) no-repeat;
-	width:150px;
-	height:1px;
-}
-
-.cate-doContent{
-	background:url(../images/cateSelect-m.png) repeat-y;
-	width:150px;
-}
-
-.cate-doContent ul{
-	margin:0;
-	padding:0;
-	list-style:none;
-	margin:0 1px 0 1px;
-	background:#fff;
-	width:146px;
-}
-
-.cate-doContent ul li{
-	line-height:20px;
-}
-
-.cate-doContent ul li:hover{
-	background:#CCC;
-	cursor:pointer;
-}
-
-.cate-doContent ul li .cate-li{
-	padding:3px 10px;
-	line-height:20px;
-}
-
-.cate-doContent ul li .cate-li img{
-	margin-right:4px;
-}
-
-.cate-doBottom{
-	background:url(../images/cateSelect-f.png) no-repeat;
-	width:150px;
-	height:3px;
-}
 
 /* -----------  后台分类  ----------- */
 #cateAdd{
@@ -181,7 +40,7 @@
 }
 
 #cateAdd .mainBody{
-	padding:10px 10px
+	padding:10px 10px;
 }
 
 #cateAdd .mainBody .submit{

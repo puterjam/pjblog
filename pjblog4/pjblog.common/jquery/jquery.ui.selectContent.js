@@ -59,14 +59,19 @@ jQuery.fn.extend({
      * 在当前对象光标处插入指定的内容  
      */  
     insertAtCaret: function(textFeildValue, bool){
-       var textObj = $(this).get(0);   
+       var textObj = $(this).get(0);
        if(document.all && textObj.createTextRange && textObj.caretPos){
            var caretPos=textObj.caretPos; 
 		   if (bool){
 			  textFeildValue = textFeildValue.replace("{$}", caretPos.text); 
 		   }
-           caretPos.text = caretPos.text.charAt(caretPos.text.length-1) == '' ?   
-                               textFeildValue+'' : textFeildValue;   
+		   if (UBBEditorView){
+			   $(_win).focus();
+		    	_doc.selection.createRange().pasteHTML(textFeildValue);
+		   }else{
+           		caretPos.text = caretPos.text.charAt(caretPos.text.length-1) == '' ?   
+                               textFeildValue+'' : textFeildValue;  
+		   }
        }   
        else if(textObj.setSelectionRange){
            var rangeStart=textObj.selectionStart;   
@@ -89,7 +94,11 @@ jQuery.fn.extend({
            textObj.blur();   
        }   
        else {
-           textObj.value+=textFeildValue;   
+		   if (UBBEditorView){
+			  $(textObj).html($(textObj).html() + textFeildValue) ;
+		   }else{
+           		textObj.value+=textFeildValue;  
+		   }
        }   
     },
 	/*
