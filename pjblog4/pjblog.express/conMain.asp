@@ -16,6 +16,9 @@
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.slide.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.ubbeditor.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.selectContent.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.domedit.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.fonteffect.js"></script>
+<script language="javascript" type="text/javascript" src="../pjblog.common/jquery/jquery.ui.scrolling.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/control.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.common/blog.js"></script>
 <script language="javascript" type="text/javascript" src="../pjblog.model/base64.js"></script>
@@ -96,7 +99,7 @@ Dim Menu, SubMenu
                         <li><div class="icon"><img src="../images/Control/Icon/chajian.gif"></div><div class="title"><a href="?m=plus">插件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/fujian.gif"></div><div class="title"><a href="">附件管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/zhanghu.gif"></div><div class="title"><a href="">账户权限</a></div><div class="do"></div><div class="clear"></div></li>
-                        <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="">友情链接</a></div><div class="do">新增</div><div class="clear"></div></li>
+                        <li><div class="icon"><img src="../images/Control/Icon/link.gif"></div><div class="title"><a href="?m=link">友情链接</a></div><div class="do"><a href="javascript:;" onClick="conMain.links.addNewLink(this, 6)">新增</a></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/qita.gif"></div><div class="title"><a href="">其他管理</a></div><div class="do"></div><div class="clear"></div></li>
                         <li style="border-top:1px dashed #8ec5f7; margin-top:10px; padding-top:10px;"><div class="icon"><img src="../images/Control/Icon/home.gif"></div><div class="title"><a href="">前台预览</a></div><div class="do"></div><div class="clear"></div></li>
                         <li><div class="icon"><img src="../images/Control/Icon/yulan.gif"></div><div class="title"><a href="?m=default">后台首页</a></div><div class="do"></div><div class="clear"></div></li>
@@ -126,6 +129,7 @@ Dim Menu, SubMenu
 					Select Case SubMenu
 						Case Else Call c_plugins
 					End Select
+				Case "link" Call c_link
 				Case Else Call c_welcome
 			End Select
 		%>
