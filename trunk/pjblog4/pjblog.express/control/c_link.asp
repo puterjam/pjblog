@@ -1,192 +1,256 @@
 ﻿<%
 Public Sub c_link
-	Dim Rs, Sql, LinkArray, i
-	Dim linkLeft, linkRight, linkLen, linkPageStr
-	linkPageStr = ""
-	Dim CateID, IsShow, IsMain, Order, PerPage, page, PageCount
-	
-	CateID = Session(Sys.CookieName & "CateID") : If Not Asp.IsInteger(CateID) Then CateID = "" Else CateID = "And Link_ClassID=" & CateID
-	IsShow = Session(Sys.CookieName & "IsShow") : IsMain = Session(Sys.CookieName & "IsMain") : Order = Session(Sys.CookieName & "Order")
-	PerPage = Session(Sys.CookieName & "PerPage") : If Not Asp.IsInteger(PerPage) Then PerPage = 10
-	page = Asp.CheckStr(Request.QueryString("page")) : If Not Asp.IsInteger(page) Then page = 1
-	If Not Asp.IsInteger(IsShow) Then
-		IsShow = ""
-	Else
-		If CBool(IsShow) Then
-			IsShow = "And link_IsShow=true"
-		Else
-			IsShow = "And link_IsShow=false"
-		End If
-	End If
-	
-	If Not Asp.IsInteger(IsMain) Then
-		IsMain = ""
-	Else
-		If CBool(IsMain) Then
-			IsMain = "And link_IsMain=true"
-		Else
-			IsMain = "And link_IsMain=false"
-		End If
-	End If
-	
-	If Not Asp.IsInteger(Order) Then
-		Order = ""
-	Else
-		If CBool(Order) Then
-			Order = ",link_Order desc"
-		Else
-			Order = ",link_Order asc"
-		End If
-	End If
 %>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="CContent">
-	<tr>
-    	<th class="CTitle"><%=control.categoryTitle%></th>
-  	</tr>
-    <tr><td>
-    <div style="width:220px; float:left">
-    	<!--分类筛选-->
-    	<div style=" margin:10px; border:1px solid #dfdfdf;">
-        	<div style="background:url(../images/Control/gray-grad.png) repeat-x; padding:5px 10px 5px 10px; text-align:right"><span style="float:left; font-weight:bold">分类筛选</span><a href="javascript:ceeevio.Link.AddLinkClass.Box();" class="newadd">添加</a></div>
-            <div style="line-height:20px; padding:5px 10px 5px 10px;">已有分类 (你可以添加分类)<br />
-            	<select style="width:175px;" onchange="ceeevio.Link.SetSession('CateID', jQuery(this).val())">
-                	<option value="">不筛选分类(默认)</option>
-                    <%=CateSelect(Session(Sys.CookieName & "CateID"))%>
-                </select><br />
-			</div>
-        </div>
-        <script language="javascript">
-			var CateString = '<%=CateSelect("")%>';
-		</script>
-        <!--其他筛选-->
-        <div style=" margin:10px; border:1px solid #dfdfdf;">
-        	<div style="background:url(../images/Control/gray-grad.png) repeat-x; padding:5px 10px 5px 10px;"><span style="font-weight:bold">其他筛选</span></div>
-            <div style="line-height:20px; padding:5px 10px 5px 10px;">你可以根据不同条件来进行筛选<br />
-            	<div>1. 每页链接数 <input type="text" value="<%If Not Asp.IsInteger(Session(Sys.CookieName & "PerPage")) Then Response.Write("10") Else Response.Write(Session(Sys.CookieName & "PerPage"))%>" class="text" size="1" id="PageSize"> <a href="javascript:;" onclick="ceeevio.Link.SetSession('PerPage', $('#PageSize').val())">确定</a></div>
-                <div>2. <a href="javascript:;" onclick="ceeevio.Link.SetSession('IsShow', 1)">已通过链接</a> &nbsp;&nbsp;<a href="javascript:;" onclick="ceeevio.Link.SetSession('IsShow', 0)">未通过链接</a></div>
-                 <div>3. <a href="javascript:;" onclick="ceeevio.Link.SetSession('IsMain', 1)">已置顶链接</a> &nbsp;&nbsp;<a href="javascript:;" onclick="ceeevio.Link.SetSession('IsMain', 0)">未置顶链接</a></div>
-                 <div>4. 链接顺序 &nbsp;<a href="javascript:;" onclick="ceeevio.Link.SetSession('Order', 0)">顺序</a> &nbsp;&nbsp;<a href="javascript:;" onclick="ceeevio.Link.SetSession('Order', 1)">倒序</a></div>
-                 <div>5. <a href="javascript:;" onclick="ceeevio.Link.ShowAll()">显示全部</a></div>
-			</div>
+<script language="javascript" type="text/javascript">
+$(function(){
+	$("ul.slide").tabs("ul.toolbar", {
+		current : "actived"
+	});	
+	conMain.links.NewClassAdd();
+	//$(".linkItem3:odd .linkItem_Content").css("background", "#fcfcfc")
+});
+</script>
+<style type="text/css">
+.content h5{
+	color:#1d6bb2;
+	font-size:14px;
+	margin:0;
+}
+h5.link{
+	background: url(../../images/Control/Icon/link.gif) no-repeat;
+	line-height:28px;
+	height:28px;
+	padding-left:35px;
+}
+
+.toolbar li{
+	padding:0px 20px 10px 20px;
+	width:650px;
+}
+
+.select{
+	width:750px;
+}
+
+.select .Zcontent{
+	margin-top:12px;
+}
+
+.tagname{color:#424242}
+
+.setting table tr td{
+	line-height:30px;
+}
+
+.label{
+	margin-bottom:10px;
+}
+
+#linkContent{ margin-top:20px; line-height:30px;}
+#toolsInfo{ line-height:30px; border:1px dotted #ccc; margin-top:10px; padding:10px;}
+
+.cload{ float:left}
+.mload{ float:right}
+.corder{ width:50px;}
+.cname{ width:300px;}
+.maction{ width:100px;}
+.maction a{ float:left; margin-right:3px}
+
+
+.linkItem{ margin-bottom:10px; position:relative}
+.linkItem .linkItem_Top{ background:url(../../images/Control/linedit_t.png) no-repeat; width:631px; height:4px;}
+.linkItem .linkItem_Mid{ background:url(../../images/Control/linkedit_m.png) repeat-y; width:631px;}
+.linkItem .linkItem_Bom{ background:url(../../images/Control/linedit_b.png) no-repeat; width:631px; height:4px;}
+.linkItem .linkItem_Content{ padding:5px 15px;}
+.linkItem .itemLeft{ float:left; width:85px;}
+.linkItem .itemRight{ float:left; width:470px; margin-left:15px; border-left:1px solid #DDDBDB; padding-left:15px;}
+.linkItem .itemLeft .itemLeftTop{ height:50px; line-height:50px; text-align:center; font-size:24px; font-family: Georgia, "Times New Roman", Times, serif}
+.linkItem .itemLeft .itemLeftBom{ text-align:center}
+.linkItem .itemRight .linkItemTitle{ line-height:30px; height:30px;}
+.linkItem .itemRight .linkItemInfo{ margin:0 0 4px 0; color:#666;line-height:30px; text-indent:2em}
+.linkItem .itemRight .linkItemAction{ line-height:30px; height:30px;}
+.linkItem .itemRight .linkItemTitle .linkItemTitleleft{ float:left; color:#0F5FBB; font-weight:700}
+.linkItem .itemRight .linkItemTitle .linkItemTitleright{ float:right; font-style:oblique; font-size:10px;}
+.linkItem .top{ background:url(../../images/Control/link_top.png) no-repeat; width:11px; height:11px; position:absolute; top:4px; left:4px;}
+
+.linkItem2{ margin-bottom:10px; position:relative}
+.linkItem2 .linkItem_Top{ background:url(../../images/Control/linedit_t_hover.png) no-repeat; width:631px; height:4px;}
+.linkItem2 .linkItem_Mid{ background:url(../../images/Control/linkedit_m_hover.png) repeat-y; width:631px;}
+.linkItem2 .linkItem_Bom{ background:url(../../images/Control/linedit_b_hover.png) no-repeat; width:631px; height:4px;}
+.linkItem2 .linkItem_Content{ padding:5px 15px;}
+.linkItem2 .itemLeft{ float:left; width:85px;}
+.linkItem2 .itemRight{ float:left; width:470px; margin-left:15px; border-left:1px solid #49A1F6; padding-left:15px;}
+.linkItem2 .itemLeft .itemLeftTop{ height:50px; line-height:50px; text-align:center; font-size:24px; font-family: Georgia, "Times New Roman", Times, serif}
+.linkItem2 .itemLeft .itemLeftBom{ text-align:center}
+.linkItem2 .itemRight .linkItemTitle{ line-height:30px; height:30px;}
+.linkItem2 .itemRight .linkItemInfo{ margin:0 0 4px 0; color:#666;line-height:30px; text-indent:2em}
+.linkItem2 .itemRight .linkItemAction{ line-height:30px; height:30px;}
+.linkItem2 .itemRight .linkItemTitle .linkItemTitleleft{ float:left; color:#0F5FBB; font-weight:700}
+.linkItem2 .itemRight .linkItemTitle .linkItemTitleright{ float:right; font-style:oblique; font-size:10px;}
+.linkItem2 .top{ background:url(../../images/Control/link_top.png) no-repeat; width:11px; height:11px; position:absolute; top:0px; left:0px;}
+
+.linkItem3{}
+.linkItem3 .linkItem_Top{ width:631px; height:4px;}
+.linkItem3 .linkItem_Mid{ width:631px;}
+.linkItem3 .linkItem_Bom{ width:631px; height:4px;}
+.linkItem3 .linkItem_Content{ padding:5px 15px; border-bottom:1px dashed #efefef}
+.linkItem3 .itemLeft{ float:left; width:85px;}
+.linkItem3 .itemRight{ float:left; width:470px; margin-left:15px; border-left:1px solid #49A1F6; padding-left:15px;}
+.linkItem3 .itemLeft .itemLeftTop{ height:50px; line-height:50px; text-align:center; font-size:24px; font-family: Georgia, "Times New Roman", Times, serif}
+.linkItem3 .itemLeft .itemLeftBom{ text-align:center}
+.linkItem3 .itemRight .linkItemTitle{ line-height:30px; height:30px;}
+.linkItem3 .itemRight .linkItemInfo{ margin:0 0 4px 0; color:#666;line-height:30px; text-indent:2em}
+.linkItem3 .itemRight .linkItemAction{ line-height:30px; height:30px;}
+.linkItem3 .itemRight .linkItemTitle .linkItemTitleleft{ float:left; color:#0F5FBB; font-weight:700}
+.linkItem3 .itemRight .linkItemTitle .linkItemTitleright{ float:right; font-style:oblique; font-size:10px;}
+
+.linkItem3Title .cload{ color:#000}
+.linkItem3Title{ margin:0px}
+.linkItem3Title .linkItem_Content{border-bottom:1px solid #bbb}
+
+.addNewlinkCate{ border:1px dashed #ccc; background:#efefef; padding:10px 20px; margin:10px; line-height:30px; display:none;}
+
+</style>
+<h5 class="link">友情链接管理</h5>
+	<div class="select">
+        <div class="tits">
+            <ul class="slide">
+                <li>基本链接</li>
+                <li>链接分类</li>
+            </ul>
         </div>
         
-    </div>
-    
-	<div style="margin:10px 20px 10px 220px" id="rightbox">
-    
-    <table cellpadding="3" cellspacing="0" class="CeeTable" width="100%">
-    	<thead>
-        	<tr>
-            	<th width="50"><input type="checkbox"></th>
-                <th width="150">站点名</th>
-                <th>链接</th>
-                <th width="300">logo</th>
-                <th width="100"><a href="javascript:ceeevio.Link.AddLink.Box();" style="font-weight:normal" class="newadd">+ 添加新链接</a></th>
-            </tr>
-        </thead>
-        <tfoot>
-        	<tr>
-            	<th width="50"><input type="checkbox"></th>
-                <th width="150">站点名</th>
-                <th>链接</th>
-                <th width="300">logo</th>
-                <th width="100"><a href="javascript:javascript:ceeevio.Link.AddLink.Box();" style="font-weight:normal" class="newadd">+ 添加新链接</a></th>
-            </tr>
-        </tfoot>
-        <tbody>
-<%	
-	Sql = "Select link_ID, link_Name, link_URL, link_Image, link_Order, link_IsShow, link_IsMain, Link_ClassID, Link_Type From blog_Links Where Link_Type=false " & CateID & " " & IsShow & " " & IsMain & " Order By link_IsShow desc" & Order
-	'				0		1			2			3			4			5			6			7
-	'8
-	'Response.Write(Sql)
-	Set Rs = Server.CreateObject("Adodb.RecordSet")
-	Rs.open Sql, Conn, 1, 1
-	If Rs.Bof Or Rs.Eof Then
-		ReDim LinkArray(0, 0)
-	Else
-		LinkArray = Rs.GetRows
-	End If
-	Rs.Close
-	Set Rs = Nothing
-	If UBound(LinkArray, 1) = 0 Then
-		Response.Write("<tr><td colspan=""4"" align=""center"">没有找到信息</td></tr>")
-	Else
-		linkLen = UBound(LinkArray, 2)
-		If (linkLen + 1) Mod PerPage = 0 Then
-			PageCount = Int((linkLen + 1) / PerPage)
-		Else
-			PageCount = Int((linkLen + 1) / PerPage) + 1
-		End If
-		If Int(page) > Int(PageCount) Then page = PageCount
-		linkLeft = (page - 1) * PerPage
-		linkRight = page * PerPage - 1
-		If linkLeft < 0 Then linkLeft = 0
-		If linkRight > linkLen Then linkRight = linkLen
-		For i = linkLeft To linkRight
-		
-%>
-		<tr class="active" id="link_<%=LinkArray(0, i)%>">
-        	<td width="50"><input type="checkbox" value="" name="SelectID" style="margin-left:4px"></td>
-            <td width="150"><div id="name_<%=LinkArray(0, i)%>"><%=Trim(LinkArray(1, i))%></div></td>
-            <td><div id="url_<%=LinkArray(0, i)%>"><%=Trim(LinkArray(2, i))%></div></td>
-            <td width="300"><div id="image_<%=LinkArray(0, i)%>"><%=Trim(LinkArray(3, i))%></div></td>
-            <td width="100"><div id="order_<%=LinkArray(0, i)%>"><%=Trim(LinkArray(4, i))%></div></td>
-        </tr>
-        <tr class="active second">
-        	<td width="50">&nbsp;</td>
-            <td width="150"><div id="tool_<%=LinkArray(0, i)%>"><a href="javascript:ceeevio.Link.DelLink(<%=LinkArray(0, i)%>);" class="linkdel">删除</a> | <a href="javascript:ceeevio.Link.editBox(<%=LinkArray(0, i)%>);" class="linkeditbutton">修改</a></div></td>
-            <td>
-            <%If LinkArray(5, i) Then%>
-            	<a href="javascript:ceeevio.Link.Show(<%=LinkArray(0, i)%>, 'unshow');" class="linkdel" id="doshow_<%=LinkArray(0, i)%>">取消通过</a>
-            <%Else%>
-            	<a href="javascript:ceeevio.Link.Show(<%=LinkArray(0, i)%>, 'show');" class="linkdel" id="doshow_<%=LinkArray(0, i)%>">通过</a>
-            <%End If%>
-             |  
-             <%If LinkArray(6, i) Then%>
-             	<a href="javascript:ceeevio.Link.main(<%=LinkArray(0, i)%>, 'unmain')" class="linkdel" id="domain_<%=LinkArray(0, i)%>">取消置顶</a>
-             <%Else%>
-             	<a href="javascript:ceeevio.Link.main(<%=LinkArray(0, i)%>, 'tomain')" class="linkdel" id="domian_<%=LinkArray(0, i)%>">置顶</a>
-             <%End If%>
-              |  <a href="<%=Trim(LinkArray(2, i))%>" target="_blank">访问</a> | 
-              转移到 <select id="move_<%=LinkArray(0, i)%>" onchange="ceeevio.Link.move(<%=LinkArray(0, i)%>, $(this).val())"><%=CateSelect(LinkArray(7, i))%></select></td>
-            <td align="center">&nbsp;</td>
-            <td align="center"><div id="edit_<%=LinkArray(0, i)%>" style="text-align:center; display:none"><input type="button" value="修改" class="button" onClick="ceeevio.Link.postLinkedit(<%=LinkArray(0, i)%>)"></div></td>
-        </tr>
+        <div class="Zcontent">
+            <ul class="toolbar">
+                <li><%Links%></li>
+                <li><%LinkCates%></li>
+            </ul>
+        </div>
+   </div>
 <%
-		Next
-		linkPageStr = MultiPage(linkLen + 1, PerPage, page, "?Fmenu=Link&page={$page}", "float:right", "", false)
-	End If
-%>
-    </tbody>
-    </table>
-    <div class="page" style="margin:10px 10px 10px 10px;"><span style="float:left">共有链接 <%=Sys.doGet("Select Count(*) From blog_Links Where Link_Type=false")(0)%> 个</span><%=linkPageStr%></div>
-    </div>
-   </td></tr>
-</table>
-<%
-Control.getMsg
 End Sub
 
-Public Function CateSelect(Sess)
-	Dim Rs
-	Set Rs = Conn.Execute("Select * From blog_Links Where Link_Type=true")
-	If Rs.Bof Or Rs.Eof Then
-		CateSelect = ""
-	Else
-		CateSelect = ""
+' ***********************************
+'	链接管理
+' ***********************************
+Public Sub Links
+%>
+	<div class="tools"><input type="button" value="添加链接" class="button" onclick="conMain.links.addNewLink(this, 11)" /><span style="margin-left:10px;"><input type="button" value="批量管理" class="button" onclick="$('#toolsInfo').slideToggle('fast')"></span></div>
+    <div id="toolsInfo" style="display:none">aaa</div>
+    <div id="linkContent">
+
+<%
+Dim Rs, id
+Set Rs = Conn.Execute("Select * From blog_Links Where Link_Type=False Order By link_Order ASC")
+If Rs.Bof Or Rs.Eof Then
+
+Else
+	Do While Not Rs.Eof
+		id = Rs("link_ID").value
+%>
+    
+    	<div id="linkItem_<%=id%>" class="linkItem">
+        	<div class="linkItem_Top"></div>
+            <div class="linkItem_Mid">
+            	<div class="linkItem_Content">
+                	<div class="itemLeft">
+                    	<div class="itemLeftTop" name="link_order"><%=Rs("link_Order").value%></div>
+                        <div class="itemLeftBom"><%If Rs("link_IsShow").value Then%>已通过<%Else%>未通过<%End If%></div>
+                    </div>
+                    <div class="itemRight">
+                    	<div class="linkItemTitle"><div class="linkItemTitleleft" name="link_name"><%=Rs("link_Name").value%></div> <div class="linkItemTitleright" name="link_url"><%=Rs("link_URL").value%></div><div class="clear"></div></div>
+                        <div class="linkItemInfo" name="link_info">
+							<%
+								If LCase(TypeName(Rs("link_info").value)) = "null" Then
+									Response.Write("[..该链接暂未链接说明..]") 
+								Else
+									Response.Write(Rs("link_info").value)
+								End If
+							%>
+                        </div>
+                        <div class="linkItemAction">快捷操作：<span class="active">
+                        	<a href="javascript:;" onclick="conMain.links.CanEdit($('#linkItem_<%=id%>'), <%=id%>)">编辑</a> | 
+                            <a href="javascript:;" onclick="conMain.links.dellins(<%=id%>)">删除</a> | 
+                            <%If Rs("link_IsMain").value Then%><a href="javascript:;" onclick="conMain.links.Action('unmain', <%=id%>)">已置顶</a> | <%Else%><a href="javascript:;" onclick="conMain.links.Action('tomain', <%=id%>)">未置顶</a> | <%End If%>
+                            <%If Rs("link_IsShow").value Then%><a href="javascript:;" onclick="conMain.links.Action('unshow', <%=id%>)">已通过</a><%Else%><a href="javascript:;" onclick="conMain.links.Action('show', <%=id%>)">未通过</a><%End If%>
+                            
+                        </span>
+                        <span class="unactive" style="display:none">
+                        	<a href="javascript:;" class="saveLink">保存</a> 
+                            <a href="javascript:;" onclick="conMain.links.UnCanEdit($('#linkItem_<%=id%>'))">取消</a>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <%If Rs("link_IsMain").value Then%><div class="top"></div><%End If%>
+            <div class="linkItem_Bom"></div>
+        </div>
+<%
+	Rs.MoveNext
+	Loop
+End If
+%>       
+    </div>
+<%
+End Sub
+
+' ***********************************
+'	分类管理
+' ***********************************
+Public Sub LinkCates
+%>
+	<div>快捷操作： <a href="javascript:;" onclick="$('.addNewlinkCate').toggle('fast')">添加分类</a></div>
+    <div class="addNewlinkCate">
+    <form action="../pjblog.logic/control/log_link.asp?action=addNewClass" method="post" id="NewClassAdded">
+    	<div>分类名称 <input type="text" name="link_Name" class="text"></div>
+        <div>分类排序 <input type="text" name="link_Order" class="text" value="0"></div>
+        <div><input type="submit" value="提交" class="button"></div>
+    </form>
+    </div>
+    <div style="margin-top:20px;">
+    
+    <div class="linkItem3 linkItem3Title">
+        <div class="linkItem_Top"></div>
+        <div class="linkItem_Mid">
+            <div class="linkItem_Content">
+                <div class="cload corder" name="link_order">排序</div>
+                <div class="cload cname" name="link_name">分类名称</div>
+                <div class="mload maction">
+                <div class="clear"></div>
+                </div><div class="clear"></div>
+            </div>
+        </div>
+        <div class="linkItem_Bom"></div>
+    </div>
+<%
+	Dim Rs 'link_Name, link_Order
+	Set Rs = Conn.Execute("Select * From blog_Links Where Link_Type=True Order By link_Order Asc")
+	If Not (Rs.Bof And Rs.Eof) Then
 		Do While Not Rs.Eof
-			If Not Asp.IsInteger(Sess) Then
-				CateSelect = CateSelect & "<option value=""" & Rs("link_ID").value & """>" & Rs("link_Name").value & "</option>"
-			Else
-				If Int(Rs("link_ID").value) = Int(Sess) Then
-					CateSelect = CateSelect & "<option value=""" & Rs("link_ID").value & """ selected=""selected"">" & Rs("link_Name").value & "</option>"
-				Else
-					CateSelect = CateSelect & "<option value=""" & Rs("link_ID").value & """>" & Rs("link_Name").value & "</option>"
-				End If
-			End If
+%>
+    <div id="linkClassItem_<%=Rs("link_ID")%>" class="linkItem3">
+        <div class="linkItem_Top"></div>
+        <div class="linkItem_Mid">
+            <div class="linkItem_Content">
+                <div class="cload corder" name="link_order"><%=Rs("link_Order")%></div>
+                <div class="cload cname" name="link_name"><%=Rs("link_Name")%></div>
+                <div class="mload maction">
+                <a href="javascript:;" onclick="conMain.links.NewClassEditBox(<%=Rs("link_ID")%>)" class="linkclasseditbutton">编辑</a> <a href="javascript:;" class="linkclassdelebutton" onclick="conMain.links.ClassDelete(<%=Rs("link_ID")%>)">删除</a> <a href="javascript:;" style="display:none;" class="linkclassupdatebutton">更新</a>
+                <div class="clear"></div>
+                </div><div class="clear"></div>
+            </div>
+        </div>
+        <div class="linkItem_Bom"></div>
+    </div>
+<%
 		Rs.MoveNext
 		Loop
 	End If
 	Set Rs = Nothing
-End Function
+%>
+	</div>
+<%
+End Sub
 %>

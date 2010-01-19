@@ -29,6 +29,8 @@ Class do_Link
 			Case "unmain" Call main(False)
 			Case "move" Call Moveto
 			Case "showAll" Call showAll
+			Case "editClass" Call editClass
+			Case "getLinkCateArray" Call getLinkCateArray
 		End Select
     End Sub 
      
@@ -40,20 +42,28 @@ Class do_Link
     End Sub
 	
 	Private Sub edit
-		Dim name, url, image, id, order
-		name = Trim(Asp.CheckStr(Request.QueryString("name")))
-		url = Trim(Asp.CheckStr(Request.QueryString("url")))
-		image = Trim(Asp.CheckStr(Request.QueryString("image")))
+		Dim name, url, info, id, order
+		name = Trim(Asp.CheckStr(Request.Form("link_name")))
+		url = Trim(Asp.CheckStr(Request.Form("link_url")))
+		info = Trim(Asp.CheckStr(Request.Form("link_info")))
 		id = Trim(Asp.CheckStr(Request.QueryString("id")))
-		order = Trim(Asp.CheckStr(Request.QueryString("order")))
+		order = Trim(Asp.CheckStr(Request.Form("link_Order")))
 		If Not Asp.IsInteger(order) Then order = 0
 		If Not Asp.IsInteger(id) Then
 			Response.Write("{Suc : false, Info : '非法参数'}")
 			Exit Sub
 		End If
+		If Len(name) = 0 Then
+			Response.Write("{Suc : false, Info : '链接名不能为空'}")
+			Exit Sub
+		End If
+		If Len(url) = 0 Then
+			Response.Write("{Suc : false, Info : '链接地址不能为空'}")
+			Exit Sub
+		End If
 		link.link_Name = name
 		link.link_URL = url
-		link.link_Image = image
+		link.link_info = info
 		link.link_Order = Int(order)
 		link.link_ID = Int(id)
 		OK = link.edit
@@ -73,41 +83,45 @@ Class do_Link
 	End Sub
 	
 	Private Sub addNewClass
-		Dim name
-		name = Trim(Asp.CheckStr(Request.QueryString("name")))
+		Dim name, order
+		name = Trim(Asp.CheckStr(Request.Form("link_Name")))
+		order = Trim(Asp.CheckStr(Request.Form("link_Order")))
+		If Len(name) > 0 And (Len(order) > 0) Then
 		link.link_Name = name
+		link.link_Order = order
 		OK = link.addNewClass
-		If OK(0) Then
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = "增加新分类成功!"
-			Response.Write("{Suc : true, Info : '增加新分类成功!'}")
+		If Ok(0) Then Response.Write("{Suc : true}") Else Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
 		Else
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = OK(1)
-			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+			Response.Write("{Suc : false, Info : '内容不能为空'}")
 		End If
 	End Sub
 	
 	Private Sub addNewLink
-		Dim order, name, url, image, cateID
-		name = Trim(Asp.CheckStr(Request.QueryString("name")))
-		url = Trim(Asp.CheckStr(Request.QueryString("url")))
-		image = Trim(Asp.CheckStr(Request.QueryString("image")))
-		order = Trim(Asp.CheckStr(Request.QueryString("order")))
-		cateID = Int(Trim(Asp.CheckStr(Request.QueryString("cateID"))))
+		Dim order, name, url, cateID, linkinfo
+		name = Trim(Asp.CheckStr(Request.Form("link_Name")))
+		url = Trim(Asp.CheckStr(Request.Form("link_Url")))
+		order = Trim(Asp.CheckStr(Request.Form("link_Order")))
+		linkinfo = Trim(Asp.CheckStr(Request.Form("link_info")))
+		cateID = Trim(Asp.CheckStr(Request.Form("Link_ClassID")))
 		If Not Asp.IsInteger(order) Then order = 0
-		link.link_Name = name
-		link.link_URL = url
-		link.link_Image = image
-		link.link_Order = Int(order)
-		link.Link_ClassID = cateID
-		OK = link.addNewLink
-		If OK(0) Then
-			Session(Sys.CookieName & "_ShowMsg") = True
-			Session(Sys.CookieName & "_MsgText") = "增加新链接成功!"
-			Response.Write("{Suc : true, Info : '添加成功!'}")
+		If Not Asp.IsInteger(cateID) Then
+			Response.Write("{Suc : false, Info : '请选择分类完成添加友情链接操作.'}")
 		Else
-			Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+			If Int(cateID) = 0 Then
+				Response.Write("{Suc : false, Info : '选择的分类非法'}")
+			Else
+				link.link_Name = name
+				link.link_URL = url
+				link.link_info = linkinfo
+				link.link_Order = Int(order)
+				link.Link_ClassID = Int(cateID)
+				OK = link.addNewLink
+				If OK(0) Then
+					Response.Write("{Suc : true}")
+				Else
+					Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+				End If
+			End If
 		End If
 	End Sub
 	
@@ -174,6 +188,44 @@ Class do_Link
 		Session(Sys.CookieName & "IsMain") = ""
 		Session(Sys.CookieName & "Order")  = ""
 		Response.Write("{Suc : true, Info : '清理完成'}")
+	End Sub
+	
+	Private Sub editClass
+		Dim link_order, link_name, link_ID
+		link_ID = Trim(Asp.CheckStr(Request.QueryString("id")))
+		If Not Asp.IsInteger(link_ID) Then
+			Response.Write("{Suc : false, Info : '非法参数'}")
+		Else
+			link_name = Trim(Asp.CheckStr(Request.Form("link_Name")))
+			link_order = Trim(Asp.CheckStr(Request.Form("link_Order")))
+			If Len(link_name) > 0 And (Len(link_order) > 0) Then
+				link.link_ID = link_ID
+				link.link_Name = link_name
+				link.link_Order = link_order
+				OK = link.editClass
+				If Ok(0) Then Response.Write("{Suc : true}") Else Response.Write("{Suc : false, Info : '" & OK(1) & "'}")
+			Else
+				Response.Write("{Suc : false, Info : '内容不能为空'}")
+			End If
+		End If
+	End Sub
+	
+	Private Sub getLinkCateArray
+		Dim Rs, Str
+		Set Rs = Conn.Execute("Select * From blog_Links Where Link_Type=True Order By link_Order Asc")
+		If Rs.Bof Or Rs.Eof Then
+			Response.Write("{Suc : false}")
+		Else
+			Str = ""
+			Do While Not Rs.Eof
+				Str = Str & "{id:" & Rs("link_ID").value & ",name:'" & Rs("link_Name").value & "'},"
+			Rs.MoveNext
+			Loop
+			Str = Mid(Str, 1, Len(Str) - 1)
+			Str = "[" & Str & "]"
+			Response.Write("{Suc : true, Arr : " & Str & "}")
+		End If
+		Set Rs = Nothing
 	End Sub
 	
 End Class

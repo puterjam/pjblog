@@ -44,6 +44,265 @@ var conMain = {}
 
 conMain.seesion = "";
 
+conMain.links = {
+	CanEdit : function(obj, id){
+		var _this = this, _obj = obj;
+		jConfirm("模块区域为蓝色<br />只需要将鼠标移动到该区域内的文字上即可编辑<br />点击保存后即可保存数据", "确认对话框", function(r){
+			if (r){
+				_this.UnCanEdit(_obj.siblings());
+				obj.find(".active").hide();
+				obj.find(".unactive").show();
+				obj.attr("class", "linkItem2");
+				obj.setDomForm({
+					dataType : "json",
+					target : "../pjblog.logic/control/log_link.asp?action=edit&id=" + id + "&s=" + Math.random(),
+					success : function(data){
+						if (data.Suc){
+							jAlert(
+								"保存数据成功,是否要更新数据?",
+								"确认对话框"
+							);
+						}else{
+							jAlert(
+								data.Info,
+								"错误对话框"
+							);
+						}
+						_this.UnCanEdit(_obj);
+					},
+					submitDomObject : obj.find(".saveLink"),
+					AltTitle : "该区域可编辑,可直接输入编辑内容."
+				});
+			}					  
+		});
+	},
+	UnCanEdit : function(obj){
+		obj.attr("class", "linkItem").setAllDomUnEdit();
+		obj.find(".active").show();
+		obj.find(".unactive").hide();
+	},
+	addNewLink : function(obj, n){
+		try{$("#cateAdd").eBoxClose()}catch(e){}
+		$.eBoxClick(obj, {
+			css : {
+				width : "420px",
+				border : "1px solid #7BBCF6",
+				background : "#fff",
+				padding : "10px 15px"
+			},
+			n 		: 	n,
+			html 	: 	this.addString(),
+			fix 	: 	false,
+			id 		: 	"cateAdd",
+			oft 	: 	1,
+			ofl 	: 	0,
+			complete : function(){
+				$("#linkCateAjax").text("正在加载分类信息, 请稍后..");
+				$("#PostNewLink").ajaxForm({
+					dataType : "json",	
+					beforeSubmit : function(){
+						if ($("#cateAdd input[name='link_Name']").val().length <= 0){
+							jAlert("友情链接名称不能为空.", "错误信息");
+							return false;
+						}
+						if ($("#cateAdd input[name='link_Url']").val().length <= 0){
+							jAlert("友情链接地址不能为空.", "错误信息");
+							return false;
+						}
+						if (!(/\d{1,3}/g.test($("#cateAdd input[name='link_Order']").val()))){
+							jAlert("链接排序必须为数字.", "错误信息");
+							return false;
+						}
+					},
+					success : function(data){
+						if (data.Suc){
+							jConfirm("添加新的友情链接成功.是否要刷新页面完成数据加载?", "确认对话框", function(r){
+								if (r) {
+									window.location.reload();
+								}					  
+							});
+						}else{
+							jAlert(data.Info, "错误信息");
+						}
+					}
+				});
+				$.getJSON(
+					"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+					{
+						action : "getLinkCateArray"
+					},
+					function(data){
+						if (data.Suc){
+							var c = data.Arr, d = "";
+							for (var i = 0 ; i < c.length ; i++){
+								d += "<span style=\"margin-right:10px;\"><input type='radio' name='Link_ClassID' value='" + c[i].id + "'> " + c[i].name + "</span>";
+							}
+							$("#linkCateAjax").html(d);
+						}else{
+							jAlert("您还没有对友情链接分类,请前往分类后再添加.", "错误信息");
+						}
+					}
+				);
+			}
+		});
+	},
+	addString : function(){
+		var c =   "<div class=\"title\">"
+					+ "<div class=\"left\">增加新友情链接</div>"
+					+ "<div class=\"right\" onclick=\"$('#cateAdd').eBoxClose();\">关闭</div>"
+					+ "<div class=\"clear\"></div>"
+				+ "</div>"
+				+ "<form action=\"../pjblog.logic/control/log_link.asp?action=addNewLink\" method=\"post\" id=\"PostNewLink\" style=\"margin:0\">"
+				+ "<div class=\"mainBody\">"
+					+ "<div>链接名称 <input type=\"text\" name=\"link_Name\" class=\"text\" /></div>"
+					+ "<div>链接地址 <input type=\"text\" name=\"link_Url\" class=\"text\" style=\"width:250px\" /></div>"
+					+ "<div>链接排序 <input type=\"text\" name=\"link_Order\" class=\"text\" value=\"0\" size=\"4\" /></div>"
+					+ "<div style=\"line-height:30px; margin-bottom:10px;\">链接说明 <br /><textarea name=\"link_info\" class=\"text\" style=\"width:300px; height:50px;\"/></textarea></div>"
+					+ "<div style=\"border-top:1px solid #eee\">选择所属分类:</div>"
+					+ "<div id=\"linkCateAjax\"></div>"
+					+ "<div class=\"submit\"><input type=\"submit\" value=\"保存\" class=\"button\" /></div>"
+				+ "</div>"
+				+ "</form>";
+		return c;
+	},
+	Action : function(str, id){
+		$.getJSON(
+			"../pjblog.logic/control/log_link.asp?s=" + Math.random(),
+			{
+				action : str,
+				id : id
+			},
+			function(data){
+				if (data.Suc){
+					jConfirm("操作成功,是否刷新数据", "确认对话框", function(r){
+						if (r) {
+							window.location.reload();	
+						}				  
+					});
+				}else{
+					jAlert(data.Info, "错误信息")
+				}
+			}
+		);
+	},
+	dellins : function(id){
+		var _id = id;
+		jConfirm("确定删除该友情链接?<br />删除后无法恢复.", "确认对话框", function(r){
+			if (r) {
+				$.getJSON(
+					"../pjblog.logic/control/log_link.asp?s=" + Math.random(), 
+					{
+						action : "del",
+						id : id
+					},
+					function(data){
+						if (data.Suc){
+							jConfirm("删除分类成功,是否刷新数据?", "确认对话框", function(){
+								if (r) {
+									$("#linkItem_" + _id).remove();
+									jAlert("数据已更新,请查看.", "反馈信息");
+								}				  
+							});
+						}else{
+							jAlert(data.Info, "错误信息");
+						}
+					}
+				);
+			}				  
+		});
+	},
+	NewClassAdd : function(){
+		$("#NewClassAdded").ajaxForm({
+			dataType : "json",
+			beforeSubmit : function(){
+				var name = $("#NewClassAdded input[name='link_Name']").val();
+				var order = $("#NewClassAdded input[name='link_Order']").val();
+				if (name.length <= 0){
+					jAlert("新友情链接分类名不能为空!", "错误提示框");
+					return false;
+				}
+				if (!(/^\d{1,3}$/g.test(order))){
+					jAlert("新友情链接排序不能为空,并且为1到3位数字.", "错误提示框");
+					return false;
+				}
+			},
+			success : function(data){
+				if (data.Suc){
+					jConfirm("增加新友情链接分类成功<br />是否要继续添加分类?", "确认对话框", function(r){
+						if (r){
+							$("#NewClassAdded").resetForm();
+							jAlert("请继续添加分类", "确认信息框")
+						}else{
+							$("#NewClassAdded").resetForm();
+							jConfirm("是否要刷新数据?", "确认对话框", function(r){
+								if (r) {
+									window.location.reload();
+								}else{
+									$('.addNewlinkCate').toggle('fast');
+								}
+							});
+						}													  
+					})
+				}else{jAlert(data.Info, "错误信息框");}
+			}
+		})
+	},
+	NewClassEditBox : function(id){
+		var _id = id;
+		$(".linkclasseditbutton").show();
+		$(".linkclassdelebutton").show();
+		$(".linkclassupdatebutton").hide();
+		$("#linkClassItem_" + id).siblings().attr("class", "linkItem3");
+		$("#linkClassItem_" + id).siblings().setAllDomUnEdit();
+		$("#linkClassItem_" + id + " .linkclassupdatebutton").show();
+		$("#linkClassItem_" + id + " .linkclasseditbutton").hide();
+		$("#linkClassItem_" + id + " .linkclassdelebutton").hide();
+		$("#linkClassItem_" + id).attr("class", "linkItem2").setDomForm({
+			dataType : "json",
+			target : "../pjblog.logic/control/log_link.asp?action=editClass&id=" + id + "&s=" + Math.random(),
+			success : function(data){
+				if (data.Suc){
+					jAlert("更新分类信息成功!", "反馈信息");
+					$("#linkClassItem_" + id).attr("class", "linkItem3");
+					$("#linkClassItem_" + id).setAllDomUnEdit();
+					$(".linkclasseditbutton").show();
+					$(".linkclassdelebutton").show();
+					$(".linkclassupdatebutton").hide();
+				}else{
+					jAlert(data.Info + "<br />请重新填写.", "错误信息");
+				}
+			},
+			submitDomObject : $("#linkClassItem_" + id + " .linkclassupdatebutton"),
+			AltTitle : "该区域可编辑,可直接输入编辑内容."															
+		});
+		
+	},
+	ClassDelete : function(id){
+		jConfirm("危险操作,删除后无法恢复.", "确认对话框", function(r){
+			if (r) {
+				$("#linkClassItem_" + id).attr("class", "linkItem2");
+				$.getJSON(
+					"../pjblog.logic/control/log_link.asp?action=del&id=" + id + "&s=" + Math.random(),
+					function(data){
+						if (data.Suc){
+							jConfirm("删除分类成功!<br />是否刷新数据?", "确认对话框", function(r){
+								if (r){
+									$("#linkClassItem_" + id).remove();
+									jAlert("数据已更新,请查看.", "反馈信息");
+								}else{
+									jAlert("刷新后更新数据,请谅解.", "反馈信息");
+								}											   
+							})
+						}else{
+							jAlert(data.Info, "错误信息");
+						}
+					}
+				);
+			}					  
+		});
+	}
+}
+
 conMain.tip = {
 	edit : function(){
 		conMain.seesion = $(".te").html();
