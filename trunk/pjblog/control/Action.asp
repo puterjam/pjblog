@@ -248,7 +248,7 @@ Sub doAction
 End If
 Application.Lock
 Application(CookieName & "_SiteEnable") = 0
-Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站在初始化数据，请稍后在访问. :P"
+Application(CookieName & "_SiteDisbleWhy") = "抱歉!网站在初始化数据，请稍后再访问. :P"
 Application.UnLock
 
 
@@ -703,7 +703,7 @@ ElseIf Request.Form("action") = "Members" Then
         DelUserStatus = conn.Execute("select mem_Status from blog_Member where mem_ID="&DelUserID)(0)
         If ((blogmemberNum = 1) And (DelUserStatus = "SupAdmin")) Then
             session(CookieName&"_ShowMsg") = True
-            session(CookieName&"_MsgText") = "不能删除仅有的管理员权限!"
+            session(CookieName&"_MsgText") = "不能删除仅有的博客管理员权限!"
             RedirectUrl("ConContent.asp?Fmenu=Members&Smenu=Users")
         Else
             DelUserName = conn.Execute("select mem_Name from blog_Member where mem_ID="&DelUserID)(0)
@@ -851,10 +851,10 @@ ElseIf Request.Form("action") = "Links" Then
     ElseIf Request.Form("whatdo") = "LinkClassUpdate" Then
 
 		Dim TLinkClassID, TLinkClassName, TLinkClassTitle, TLinkClassOrder
-		LinkClassID = Split(Request.Form("LinkClass_ID"), ",")
-		LinkClassName = Split(Request.Form("LinkClass_Name"), ",")
-		LinkClassTitle = Split(Request.Form("LinkClass_Title"), ",")
-		LinkClassOrder = Split(Request.Form("LinkClass_Order"), ",")
+		LinkClassID = Split(Request.Form("LinkClass_ID"), ", ")
+		LinkClassName = Split(Request.Form("LinkClass_Name"), ", ")
+		LinkClassTitle = Split(Request.Form("LinkClass_Title"), ", ")
+		LinkClassOrder = Split(Request.Form("LinkClass_Order"), ", ")
 		
 		For i = 0 To UBound(LinkClassID)
             If UBound(LinkClassName) < 0 Then TLinkClassName = "未知" Else TLinkClassName = LinkClassName(i)

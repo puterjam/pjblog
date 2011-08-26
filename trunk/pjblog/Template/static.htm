@@ -31,7 +31,6 @@
 	var g_styleID = "<$skin$>";
 	var g_logID = "<$LogID$>";
 	var g_comDesc = "<$comDesc$>";
-	
 	document.write ('<script type="text/javascript" src="static_js.asp"><\/script>')
 </script>
 <!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
@@ -82,7 +81,7 @@
 					<img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <$log_tag$><br/>
                     <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
                     <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
-                    <script language="javascript" type="text/javascript">Related(<$LogID$>, 2, "related_tag");</script>
+                    <script language="javascript" type="text/javascript">Related(<$LogID$>, 1, 1, related_tag)</script>
 				</div>
 				<div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <$log_CommNums$> | <a href="trackback.asp?tbID=<$LogID$>&action=view" target="_blank">引用: <$log_QuoteNums$></a> | 查看次数: <span id="countNum">-</span> </div>
 			</div>
@@ -106,14 +105,11 @@
 		      <table width="100%" cellpadding="0" cellspacing="0">
 		        <tr>
 		          <td align="right" width="70"><strong>昵　称:</strong></td>
-		          <td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" /></td>
+		          <td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" /><span id="GuestCanRemeberComment"><label for="label8"><input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>记住我的信息.</label></span></td>
 		        </tr>
-		        <tr id="passArea">
-		      	  <td align="right" width="70"><strong>密　码:</strong></td>
-		      	  <td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td>
-		        </tr>
-                <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 支持Gravatar头像.</td></tr>
-              <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+		      	  <tr id="passArea"><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr>
+		      	  <tr id="EmailArea"><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" /> 邮件地址支持<a href="http://www.gravatar.com/site/signup/" title="没有Gravatar头像？在线申请吧..." target="_blank">Gravatar</a>头像,邮箱地址不会公开.</td></tr>
+		      	  <tr id="WebSiteArea"><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
 		        <tr>
 		          <td align="right" width="70" valign="top"><strong>内　容:</strong><br/></td>
 		          <td style="padding:2px;">
@@ -133,20 +129,12 @@
 		          <td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td>
 		        </tr>
 		        <tr>
-		          <td align="right" width="70" valign="top"><strong>选　项:</strong></td>
-		          <td align="left" style="padding:3px;"><label for="label5">
-		              <input name="log_DisSM" type="checkbox" id="label5" value="1" />
-		              禁止表情转换</label>
-		            <label for="label6">
-		              <input name="log_DisURL" type="checkbox" id="label6" value="1" />
-		              禁止自动转换链接</label>
-		            <label for="label7">
-		              <input name="log_DisKey" type="checkbox" id="label7" value="1" />
-		              禁止自动转换关键字</label>
-                    <span id="GuestCanRemeberComment"><br />
-                    <label for="label8">
-		              <input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>
-		              记住我的信息,以便下次评论时不用输入用户名.</label></span></td>
+		          <td align="right" width="70"><strong>选　项:</strong></td>
+		          <td align="left" style="padding:3px;">
+					<label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" style="margin-top:-2px;"/> 禁止表情转换</label>
+					<label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" style="margin-top:-2px;"/> 禁止自动转换链接</label>
+					<label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" style="margin-top:-2px;"/> 禁止自动转换关键字</label>
+		          </td>
 		        </tr>
 		        <tr>
 		          <td colspan="2" align="center" style="padding:3px;">
@@ -156,7 +144,8 @@
 		            <input name="button" type="reset" class="userbutton" value="重写"/></td>
 		        </tr>
 		        <tr>
-		          <td colspan="2" align="right" > 虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. 
+		          <td colspan="2" align="right"><span id="removeCommTips">虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>.<br/></span>
+			  字数限制 <b><$blog_commLength$> 字</b> | UBB代码 <b><$blog_commUBB$></b> | [img]标签 <b><$blog_commIMG$></b>
 		           </td>
 		        </tr>
 		      </table>

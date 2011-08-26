@@ -145,7 +145,7 @@ End Function
 
 Function delTrackback
     If Not IsInteger(Request.QueryString("tbID")) And IsInteger(Request.QueryString("logID")) Then
-        showmsg "Trackback 错误信息", "<b>无效参数</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+        showmsg "Trackback 错误信息", "<b>无效参数</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>", "ErrorIcon", ""
         Exit Function
     End If
 
@@ -156,7 +156,7 @@ Function delTrackback
     Set dele_tb = Conn.Execute("SELECT * FROM blog_TrackBack WHERE blog_ID="&logID&" AND tb_ID="&CheckStr(Request.QueryString("tbID")))
     SQLQueryNums = SQLQueryNums + 1
     If dele_tb.EOF And dele_tb.BOF Then
-        showmsg "Trackback 错误信息", "<b>引用通告不存在</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>", "WarningIcon", ""
+        showmsg "Trackback 错误信息", "<b>引用通告不存在</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>", "WarningIcon", ""
     Else
         If stat_Admin Then
             Conn.Execute("UPDATE blog_Content SET log_QuoteNums=log_QuoteNums-1 WHERE log_ID="&dele_tb("blog_ID"))
@@ -167,9 +167,9 @@ Function delTrackback
             Keywords(1)
             PostArticle logID, False
             getInfo(2)
-            showmsg "提示信息", "<b>引用通告删除成功！</b><br/><a href=""default.asp?id="&logID&""">" & lang.Tip.SysTem(2) & "</a>", "MessageIcon", ""
+            showmsg "提示信息", "<b>引用通告删除成功！</b><br/><a href=""default.asp?id="&logID&""">单击返回</a>", "MessageIcon", ""
         Else
-            showmsg "Trackback 错误信息", "<b>你没有权限删除引用通告~</b><br/><a href=""default.asp?id="&logID&""">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+            showmsg "Trackback 错误信息", "<b>你没有权限删除引用通告~</b><br/><a href=""default.asp?id="&logID&""">单击返回</a>", "ErrorIcon", ""
         End If
     End If
 End Function

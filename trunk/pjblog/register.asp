@@ -7,7 +7,7 @@
 '  用户注册页面
 '    更新时间: 2006-5-29
 '==================================
-If blog_Disregister Then showmsg lang.Tip.SysTem(1), "站点不允许注册新用户<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+If blog_Disregister Then showmsg "错误信息", "站点不允许注册新用户<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
 %>
 
  <div id="Tbody">
@@ -22,32 +22,33 @@ If Request.QueryString("action") = "agree" Then
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:520px">
-      <div id="MsgHead"><%=lang.Action.Register%></div>
+      <div id="MsgHead">用户注册</div>
       <div id="MsgBody">
 	  <table width="100%" cellpadding="0" cellspacing="0">
 	  <form name="frm" action="register.asp" method="post">
-	  <tr><td align="right" width="85"><strong>　<%=lang.MemBer.EditForm(4)%>:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" onblur="if (this.value.length != 0) {CheckName();}" onfocus="if (this.value.length != 0) {CheckName();}" onclick="if (this.value.length != 0) {CheckName();}" id="vs"/><input id="PostBack_UserName" value="False|$|False" type="hidden"><font color="#FF0000">&nbsp;*</font> <%=lang.MemBer.EditForm(48)%> <span id="CheckName"></span></td></tr>
-	  <tr><td align="right" width="85"><strong>　<%=lang.Action.LoginForm(3)%>:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/><font color="#FF0000">&nbsp;*</font> <%=lang.MemBer.EditForm(7)%></td></tr>
-      <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(8)%>:</strong></td><td align="left">&nbsp;<img src="images/0.gif" id="strong"></td></tr>
-	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(9)%>:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16" onblur="if (this.value.length != 0) {CheckPwd();}" onfocus="if (this.value.length != 0) {CheckPwd();}" onclick="if (this.value.length != 0) {CheckPwd();}" id="cConfirmpassword"/><font color="#FF0000">&nbsp;*</font> <%=lang.MemBer.EditForm(10)%><span id="CheckPwds"><span></td></tr>
+	  <tr><td align="right" width="85"><strong>　用户名:</strong></td><td align="left" style="padding:3px;"><input name="username" type="text" size="18" class="userpass" maxlength="24" onblur="if (this.value.length != 0) {CheckName();}" onfocus="if (this.value.length != 0) {CheckName();}" onclick="if (this.value.length != 0) {CheckName();}" id="vs"/><input id="PostBack_UserName" value="False|$|False" type="hidden"><font color="#FF0000">&nbsp;*</font> 用户名由2到24个字符组成 <span id="CheckName"></span></td></tr>
+	  <tr><td align="right" width="85"><strong>登录密码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="16" id="cpassword" onkeyup="istrong()"/><font color="#FF0000">&nbsp;*</font> 密码必须是6到16个字符，建议使用英文和符号混合</td></tr>
+      <tr><td align="right" width="85"></td><td align="left">&nbsp;<img src="images/0.gif" id="strong" style="margin-bottom:-5px">　<strong>密码强度</strong></td></tr>
+	  <tr><td align="right" width="85"><strong>确认密码:</strong></td><td align="left" style="padding:3px;"><input name="Confirmpassword" type="password" size="18" class="userpass" maxlength="16" onblur="if (this.value.length != 0) {CheckPwd();}" onfocus="if (this.value.length != 0) {CheckPwd();}" onclick="if (this.value.length != 0) {CheckPwd();}" id="cConfirmpassword"/><font color="#FF0000">&nbsp;*</font> 必须和上面的密码一样<span id="CheckPwds"><span></td></tr>
       <%
 	  	If blog_PasswordProtection Then
 	  %>
-      <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(49)%>:</strong></td><td align="left">&nbsp;<input name="Question" type="text" class="userpass" value="" size="40" maxlength="50"/></td></tr>
-      <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(50)%>:</strong></td><td align="left">&nbsp;<input name="Answer" type="text" class="userpass" value="" size="40" maxlength="50"></td></tr>
+      <tr><td align="right" width="85"><strong>密保问题:</strong></td><td align="left">&nbsp;<input name="Question" type="text" class="userpass" value="" size="40" maxlength="50"/></td></tr>
+      <tr><td align="right" width="85"><strong>密保答案:</strong></td><td align="left">&nbsp;<input name="Answer" type="text" class="userpass" value="" size="40" maxlength="50"></td></tr>
       <%
 	  	End If
 	  %>
-	  <tr><td align="right" width="85"><strong>　<%=lang.MemBer.EditForm(13)%>:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" checked/> <%=lang.MemBer.EditForm(14)%> <input name="Gender" type="radio" value="1"/><%=lang.MemBer.EditForm(15)%> <input name="Gender" type="radio" value="2"/><%=lang.MemBer.EditForm(16)%></td></tr>
-	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(17)%>:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" checked/> <label for="hiddenEmail"><%=lang.MemBer.EditForm(18)%></label></td></tr>
-	  <tr><td align="right" width="85"><strong><%=lang.MemBer.EditForm(19)%>:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value=""/></td></tr>
-	  <tr><td align="right" width="85"><strong><%=lang.Action.LoginForm(4)%>:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();"><%=lang.Action.LoginForm(5)%></label></span> <span id="isok_checkcode"></span></td></tr>
+	  <tr><td align="right" width="85"><strong>　性　别:</strong></td><td align="left" style="padding:3px;"><input name="Gender" type="radio" value="0" checked/> 保密 <input name="Gender" type="radio" value="1"/>男 <input name="Gender" type="radio" value="2"/>女</td></tr>
+	  <tr><td align="right" width="85"><strong>电子邮件:</strong></td><td align="left" style="padding:3px;"><input name="email" type="text" size="38" class="userpass" maxlength="255"/> <input id="hiddenEmail" name="hiddenEmail" type="checkbox" value="1" checked/> <label for="hiddenEmail">不公开我的电子邮件</label></td></tr>
+	  <tr><td align="right" width="85">&nbsp;</td><td align="left" style="padding:3px;">邮件地址支持<a href="http://www.gravatar.com/site/signup/" title="没有Gravatar头像？在线申请吧..." target="_blank">Gravatar</a>头像,在评论或留言时显示头像.</td></tr>
+	  <tr><td align="right" width="85"><strong>个人主页:</strong></td><td align="left" style="padding:3px;"><input name="homepage" type="text" size="38" class="userpass" maxlength="255" value="" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}"/></td></tr>
+	  <tr><td align="right" width="85"><strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr>
 
           <tr>
             <td colspan="2" align="center" style="padding:3px;">
               <input name="action" type="hidden" value="save"/>
-			  <input name="submit2" type="button" class="userbutton" value="<%=lang.Action.Register%>" onclick="IsPost()"/>
-              <input name="button" type="reset" class="userbutton" value="<%=lang.Action.ReSet%>"/></td>
+			  <input name="submit2" type="button" class="userbutton" value="注册新用户" onclick="IsPost()"/>
+              <input name="button" type="reset" class="userbutton" value="重写"/></td>
           </tr>
 		  </form>
 	  </table>
@@ -75,7 +76,7 @@ Function register
     Dim ReInfo
     Dim username, password, Confirmpassword, Gender, email, homepage, validate, HideEmail, checkUser, Question, Answer
 
-    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon")
+    ReInfo = Array("错误信息", "", "MessageIcon")
     username = Trim(CheckStr(request.Form("username")))
     password = Trim(CheckStr(request.Form("password")))
     Confirmpassword = Trim(CheckStr(request.Form("Confirmpassword")))
@@ -96,24 +97,24 @@ Function register
     End If
 
     If Len(username) = 0 Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>" & lang.MemBer.EditForm(51) & "</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>请输入用户名(昵称)!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         register = ReInfo
         Exit Function
     End If
 
     If Len(username)<2 Or Len(username)>24 Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>" & lang.MemBer.EditForm(52) & "</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>用户名(昵称)不能小于2或<br/>大于24个字符！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If IsValidUserName(username) = False Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(53) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
@@ -121,24 +122,24 @@ Function register
 
     Set checkUser = conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
     If Not checkUser.EOF Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(54) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>用户名已经被注册！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If Len(password) = 0 Or (Len(password)<6 Or Len(password)>16) Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(55) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>请输入6到16位密码！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         register = ReInfo
         Exit Function
     End If
 
     If password<>Confirmpassword Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(56) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>两次密码输入不一致！请重新输入。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
@@ -146,8 +147,8 @@ Function register
 	
 	If blog_PasswordProtection Then
 		If (len(Question) > 0 and len(Answer) = 0) or (len(Question) = 0 and len(Answer) > 0) Then
-			ReInfo(0) = lang.Tip.SysTem(1)
-        	ReInfo(1) = lang.MemBer.EditForm(57) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+			ReInfo(0) = "错误信息"
+        	ReInfo(1) = "<b>密码保护问题和答案未填写完整。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         	ReInfo(2) = "ErrorIcon"
         	register = ReInfo
         	Exit Function
@@ -155,16 +156,16 @@ Function register
 	End If
 
     If Len(email)>0 And IsValidEmail(email) = False Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(58) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>错误的电子邮件地址。</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
     End If
 
     If CStr(LCase(Session("GetCode")))<>CStr(LCase(validate)) Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = lang.MemBer.EditForm(59) & "<a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         register = ReInfo
         Exit Function
@@ -184,12 +185,12 @@ Function register
     Conn.Execute("UPDATE blog_Info SET blog_MemNums=blog_MemNums+1")
     getInfo(2)
     SQLQueryNums = SQLQueryNums + 2
-    ReInfo(0) = lang.MemBer.EditForm(60)
+    ReInfo(0) = "用户注册成功"
 	Referer_Url = Session(CookieName & "_Register_Referer_Url")
     If len(Referer_Url) < 8 Then
-    	ReInfo(1) = lang.MemBer.EditForm(61) & "<meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+    	ReInfo(1) = "<b>注册并登录成功，三秒后返回首页！</b><br/><a href=""default.asp"">如果您的浏览器没有自动跳转，请点击这里</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
     Else
-    	ReInfo(1) = "<b>" & lang.MemBer.EditForm(62) & "</b><br/><a href="""&Referer_Url&""">" & lang.MemBer.EditForm(63) & "</a>&nbsp;|&nbsp;<a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><br/>" & lang.MemBer.EditForm(64) & "<meta http-equiv=""Refresh"" content=""3;url="&Referer_Url&"""/>"
+    	ReInfo(1) = "<b>注册并登录成功！</b><br/><a href="""&Referer_Url&""">返回注册前页面</a>&nbsp;|&nbsp;<a href=""default.asp"">返回首页</a><br/>三秒后自动返回登录前页面<meta http-equiv=""Refresh"" content=""3;url="&Referer_Url&"""/>"
     End If
     ReInfo(2) = "MessageIcon"
     register = ReInfo
@@ -207,11 +208,24 @@ Else
    <div style="text-align:center;">
   <form name="aform" action="login.asp" method="post">
     <div id="MsgContent">
-      <div id="MsgHead"><%=lang.Action.Register%></div>
+      <div id="MsgHead">用户注册</div>
       <div id="MsgBody">
-	  <div style="text-align:left;line-height:120%;"><%=lang.MemBer.EditForm(65)%></div>
-	   <input type="button" name="agreesubmit" value="<%=lang.MemBer.EditForm(66)%>" class="userbutton" onclick="location='register.asp?action=agree'"/>
-	   <input type="button" name="noagreesubmit" value="<%=lang.MemBer.EditForm(67)%>" class="userbutton" onclick="location='default.asp'"/>
+	  <div style="text-align:left;line-height:120%;">为维护网上公共秩序和社会稳定，请您自觉遵守以下条款： <br/><br/>
+
+　 一、不得利用本站危害国家安全、泄露国家秘密，不得侵犯国家社会集体的和公民的合法权益，不得利用本站制作、复制和传播下列信息：<br/> 
+　　 （一）煽动抗拒、破坏宪法和法律、行政法规实施的； <br/>
+　　 （二）煽动颠覆国家政权，推翻社会主义制度的； <br/>
+　　 （三）煽动分裂国家、破坏国家统一的； <br/>
+　　 （四）煽动民族仇恨、民族歧视，破坏民族团结的； <br/>
+　　 （五）捏造或者歪曲事实，散布谣言，扰乱社会秩序的； <br/>
+　　 （六）宣扬封建迷信、淫秽、色情、赌博、暴力、凶杀、恐怖、教唆犯罪的； <br/>
+　　 （七）公然侮辱他人或者捏造事实诽谤他人的，或者进行其他恶意攻击的；<br/> 
+　　 （八）损害国家机关信誉的； <br/>
+　　 （九）其他违反宪法和法律行政法规的； <br/>
+　　 （十）进行商业广告行为的。 <br/>
+　 二、互相尊重，对自己的言论和行为负责。 <br/><br/></div>
+	   <input type="button" name="agreesubmit" value="我同意" class="userbutton" onclick="location='register.asp?action=agree'"/>
+	   <input type="button" name="noagreesubmit" value="不同意" class="userbutton" onclick="location='default.asp'"/>
 	   </div>
 	</div>
   </form>
@@ -219,7 +233,7 @@ Else
  <script language="javascript">
 var secs = 5;
 var wait = secs * 1000;
-var agreetext="<%=lang.MemBer.EditForm(68)%>";
+var agreetext="请仔细阅读以上条款";
 document.aform.agreesubmit.value = agreetext+"(" + secs + ") ";
 document.aform.agreesubmit.disabled = true;
 document.aform.noagreesubmit.disabled = false;
@@ -238,7 +252,7 @@ function update(num, value) {
 function timer() {
   document.aform.agreesubmit.disabled = false;
   document.aform.noagreesubmit.disabled = false;
-  document.aform.agreesubmit.value = "<%=lang.MemBer.EditForm(66)%>";
+  document.aform.agreesubmit.value = "我同意";
 }
 </script>
  

@@ -220,7 +220,7 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
                 tmpStr1 = checkURL(strMatch.SubMatches(0))
                 tmpStr2 = strMatch.SubMatches(1)
                 tmpStr3 = strMatch.SubMatches(2)
-                rndnum11 = randomStr(10)		
+                rndnum11 = randomStr(10)
 				strContent = Replace(strContent, strMatch.Value, "<span id=""down_"&rndnum11&"""></span><script language=""javascript"" type=""text/javascript"">doAjax('?action=Antidown&id="&tmpStr2&"&downurl="&server.URLEncode(tmpStr1&tmpStr2)&"&main="&server.URLEncode(tmpStr3)&"','down_"&rndnum11&"');</script>", 1, -1, 0)
             Next
 
@@ -303,7 +303,6 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             re.Pattern = "\[quote=(.[^\]]*)\](.*?)\[\/quote\]"
             strContent = re.Replace(strContent, "<div class=""UBBPanel quotePanel""><div class=""UBBTitle""><img src=""images/quote.gif"" style=""margin:0px 2px -3px 0px"" alt=""引用来自 $1""/> 引用来自 $1</div><div class=""UBBContent"">$2</div></div>")
 
-            '-----------隐藏----------------
             re.Pattern = "\[hidden\](.*?)\[\/hidden\]"
 			Dim HiddenRand1
             Set strMatchs = re.Execute(strContent)
@@ -344,10 +343,10 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
+        strContent = re.Replace(strContent, "<div class=""replayPanel""><div class=""commenttop replayTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
 
         re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""UBBPanel replayPanel""><div class=""UBBTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
+        strContent = re.Replace(strContent, "<div class=""replayPanel""><div class=""commenttop replayTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
 
 
         '-----------表情图标----------------
@@ -360,7 +359,6 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
         End If
 
         '-----------关键词识别----------------
-
         If AutoKEY = 1 Then
             Dim log_Keywords, log_KeywordsContent
             For Each log_Keywords IN Arr_Keywords

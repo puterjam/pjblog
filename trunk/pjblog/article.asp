@@ -32,7 +32,7 @@ If IsInteger(id) Then
     SQLQueryNums = SQLQueryNums + 1
     If log_View.EOF Or log_View.bof Then
         log_View.Close
-        showmsg lang.Tip.SysTem(1), "不存在当前日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+        showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
     viewCount = log_View("log_ViewNums") + 1
     log_View("log_ViewNums") = viewCount
@@ -46,11 +46,11 @@ If IsInteger(id) Then
 		Call updateViewNums(id, viewCount)
 	end if
 	
-    If log_ViewArr(3, 0) And Not getCate.cate_Secret Then
+    If Not log_ViewArr(22, 0) Or (log_ViewArr(3, 0) And Not getCate.cate_Secret) Then
         BlogTitle = log_ViewArr(2, 0) & " - " & siteName
     End If
 Else
-    showmsg lang.Tip.SysTem(1), lang.Err.info(999), "ErrorIcon", ""
+    showmsg "错误信息", "非法操作", "ErrorIcon", ""
 End If
 getBlogHead BlogTitle, getCate.cate_Name, getCate.cate_ID, log_ViewArr(24, 0), log_ViewArr(25, 0)
 tKey = getTempKey
@@ -63,7 +63,7 @@ tKey = getTempKey
 	   <%=content_html_Top%>
 	   <%
 If id<>"" And IsInteger(id) = False Then
-    Response.Write (lang.Err.info(999))
+    response.Write ("非法操作！！")
 Else
     ShowArticle id '显示日志
 End If

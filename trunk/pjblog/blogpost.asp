@@ -20,11 +20,11 @@ If ChkPost() Then
     If stat_AddAll<>True And stat_Add<>True Then
 %>
       <div id="MsgContent" style="width:350px">
-        <div id="MsgHead"><%=lang.Tip.SysTem(1)%></div>
+        <div id="MsgHead">出错信息</div>
         <div id="MsgBody">
   		 <div class="ErrorIcon"></div>
-          <div class="MessageText"><b><%=lang.Action.logs.LogErr(2)%></b><br/>
-          <a href="default.asp"><%=lang.Tip.SysTem(4)%></a><%if memName=Empty Then %> | <a href="login.asp"><%=lang.Action.Login%></a><%end if%>
+          <div class="MessageText"><b>您没有没有权限发表新日志!</b><br/>
+          <a href="default.asp">单击返回首页</a><%if memName=Empty Then %> | <a href="login.asp">登录</a><%end if%>
   		 </div>
   	 </div>
   	</div>
@@ -110,12 +110,12 @@ If ChkPost() Then
 
 %>
 		      <div id="MsgContent" style="width:300px">
-		        <div id="MsgHead"><%=lang.Tip.SysTem(5)%></div>
+		        <div id="MsgHead">反馈信息</div>
 		        <div id="MsgBody">
 		  		 <div class="<%if postLog(0)<0 Then response.write "ErrorIcon" else response.write "MessageIcon"%>"></div>
-		          <div class="MessageText"><%=postLog(1)%><br/><a href="default.asp"><%=lang.Tip.SysTem(4)%></a><br/>
+		          <div class="MessageText"><%=postLog(1)%><br/><a href="default.asp">点击返回首页</a><br/>
 		  		 <%if postLog(0)>=0 Then %>
-			  		 <a href="default.asp?id=<%=postLog(2)%>"><%=lang.Tip.logs.post(1)%></a><br/>
+			  		 <a href="default.asp?id=<%=postLog(2)%>">返回你所发表的日志</a><br/>
 			  		 <meta http-equiv="refresh" content="3;url=default.asp?logID=<%=postLog(2)%>"/>
 			     <%end if%>
 		  	  </div>
@@ -129,7 +129,7 @@ Else
    <script language="javascript">
     function chkFrm(){
      if (document.forms["frm"].log_CateID.value=="") {
-      alert("<%=lang.Action.ChooseCate%>")
+      alert("请选择日志分类")
   	return false
      }
      return true
@@ -137,21 +137,21 @@ Else
    </script>
     <form name="frm" action="blogpost.asp" method="post" onSubmit="return chkFrm()">
       <div id="MsgContent" style="width:350px">
-        <div id="MsgHead"><%=lang.Tip.logs.post(2)%> - <%=lang.Action.ChooseCate%></div>
+        <div id="MsgHead">发表日志 - 选择分类</div>
         <div id="MsgBody">
           <table width="100%" border="0" cellpadding="3" cellspacing="0">
           <tr><td colspan="2" align="left" style=" padding:2px 2px 2px 2px">
           <ol>
-          	<li><%=lang.Tip.logs.post(3)%></li>
-            <li><%=lang.Tip.logs.post(4)%></li>
-            <li><%=lang.Tip.logs.post(5)%></li>
+          	<li>您必须选择分类后才可以进行下一步操作.</li>
+            <li>如果您需要立即增加新分类请点击"增加新分类"链接.</li>
+            <li>请选择编辑器类型,默认为UBB编辑器.</li>
           </ol>
           </td></tr>
     <tr>
-      <td width="100" align="right"><span style="font-weight: bold"><%=lang.Action.ChooseCate%>:</span></td>
+      <td width="100" align="right"><span style="font-weight: bold">选择日志分类:</span></td>
       <td align="left"><span style="font-weight: bold">
         <select name="log_CateID" id="select2">
-          <option value="" selected="selected" style="color:#333"><%=lang.Action.ChooseCate%></option>
+          <option value="" selected="selected" style="color:#333">请选择分类</option>
           <%
 outCate
 
@@ -173,17 +173,17 @@ Sub outCate
 End Sub
 
 %>
-        </select>&nbsp;<a href="javascript:void(0)" onClick="showPopup('<%=lang.Action.AddNewCate%>', AddNewCate(), 400);"><%=lang.Action.AddNewCate%></a>
+        </select>&nbsp;<a href="javascript:void(0)" onClick="showPopup('增加新分类', AddNewCate(), 400);">增加新分类</a>
       </span></td>
     </tr>
     <tr>
-      <td align="right"><span style="font-weight: bold"><%=lang.Action.logs.EditType%>:</span></td>
-      <td align="left"><label title="<%=lang.Action.logs.UBB(1)%>" for="ET1" accesskey="U"><input type="radio" id="ET1" name="log_editType" value="1" checked="checked" /><%=lang.Action.logs.UBB(2)%></label>         <label title="<%=lang.Action.logs.FCK(1)%>" for="ET2" accesskey="K">
+      <td align="right"><span style="font-weight: bold">选择编辑类型:</span></td>
+      <td align="left"><label title="UBB编辑器" for="ET1" accesskey="U"><input type="radio" id="ET1" name="log_editType" value="1" checked="checked" />UBBeditor</label>         <label title="FCK在线编辑器" for="ET2" accesskey="K">
           <input name="log_editType" type="radio" id="ET2" value="0" />         
-          <%=lang.Action.logs.FCK(2)%></label></td>
+          FCKeditor</label></td>
     </tr>
     <tr>
-    <td colspan="2" align="center"><input name="submit" type="submit" class="userbutton" value="<%=lang.Tip.SysTem(7)%>" accesskey="N"/> <input name="button" type="button" class="userbutton" value="<%=lang.Tip.SysTem(4)%>" onClick="location='default.asp'" accesskey="Q"/></td>
+    <td colspan="2" align="center"><input name="submit" type="submit" class="userbutton" value="下一步" accesskey="N"/> <input name="button" type="button" class="userbutton" value="返回主页" onClick="location='default.asp'" accesskey="Q"/></td>
     </tr>
   </table>
   
@@ -204,18 +204,18 @@ End Sub
                 <input name="postbackId" type="hidden" value="0"/>
                 <input name="log_IsDraft" type="hidden" id="log_IsDraft" value="False"/>
   	<div id="MsgContent" style="width:700px">
-        <div id="MsgHead"><%=lang.Action.logs.CateName(Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID="&Request.Form("log_CateID")&"")(0))%></div>
+        <div id="MsgHead">在 【<%=Conn.ExeCute("SELECT cate_Name FROM blog_Category WHERE cate_ID="&Request.Form("log_CateID")&"")(0)%>】 发表日志</div>
         <div id="MsgBody">
         <script language="javascript" type="text/javascript" src="common/pinyin.js"></script>
           <table width="100%" border="0" cellpadding="2" cellspacing="0">
             <tr>
-              <td width="76" height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.Title%>:</span></td>
+              <td width="76" height="24" align="right" valign="top"><span style="font-weight: bold">标题:</span></td>
               <td align="left"><input name="title" type="text" class="inputBox" id="title" size="50" maxlength="50"/>
               </td>
             </tr>
 			<%If blog_postFile = 2 Then%>
 			<tr>
-              <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.Cname%>:</span></td>
+              <td height="24" align="right" valign="top"><span style="font-weight: bold">别名:</span></td>
               <td align="left">
 			  <input name="cname" type="text" class="inputBox" id="titles" size="30" maxlength="50" onblur="ReplaceInput(this,window.event);" onkeyup="ReplaceInput(this,window.event)" />
 			   <span> . </span>
@@ -227,22 +227,22 @@ End Sub
 						Response.Write("<option value=""" & blog_html_option(blog_html_option_i) & """>" & blog_html_option(blog_html_option_i) & "</option>")
 					Next
 			  %>
-			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)"><%=lang.Action.UpperPinyin%></a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)"><%=lang.Action.LowerPinyin%></a></span>
+			  </select> <span id="CheckAlias"></span>&nbsp;&nbsp;<span><a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value)">自动转成开头大写拼音</a> &nbsp;&nbsp;<a href="javascript:void(0)" onClick="$('titles').value= pinyin.go($('title').value,1)">自动转成小写拼音</a></span>
               </td>
             </tr>
 			<%end if%>
             <tr>
-              <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.LogSetting%>:</span></td>
+              <td align="right" valign="top"><span style="font-weight: bold">日志设置:</span></td>
               <td align="left">
                 <select name="log_weather" id="logweather">
-                  <option value="sunny" selected="selected"><%=lang.Action.Weather.Sun%> </option>
-                  <option value="cloudy"><%=lang.Action.Weather.Cloud%> </option>
-                  <option value="flurries"><%=lang.Action.Weather.Wind%> </option>
-                  <option value="ice"><%=lang.Action.Weather.Ice%> </option>
-                  <option value="ptcl"><%=lang.Action.Weather.Cloudy%> </option>
-                  <option value="rain"><%=lang.Action.Weather.Rain%> </option>
-                  <option value="showers"><%=lang.Action.Weather.Shower%> </option>
-                  <option value="snow"><%=lang.Action.Weather.Snow%> </option>
+                  <option value="sunny" selected="selected">晴天 </option>
+                  <option value="cloudy">多云 </option>
+                  <option value="flurries">疾风 </option>
+                  <option value="ice">冰雹 </option>
+                  <option value="ptcl">阴天 </option>
+                  <option value="rain">下雨 </option>
+                  <option value="showers">阵雨 </option>
+                  <option value="snow">下雪 </option>
                 </select>
                 <select name="log_Level" id="logLevel">
                   <option value="level1">★</option>
@@ -253,69 +253,69 @@ End Sub
                 </select>
                 <label for="label">
                 <input id="label" name="log_comorder" type="checkbox" value="1" checked="checked" />
-        <%=lang.Action.logs.CommDesc%></label>
+        评论倒序</label>
                 <label for="label2">
                 <input name="log_DisComment" type="checkbox" id="label2" value="1" />
-        <%=lang.Action.logs.CommUnAble%></label>
+        禁止评论</label>
                 <label for="label3">
                 <input name="log_IsTop" type="checkbox" id="label3" value="1" />
-        <%=lang.Action.logs.LogTop%></label>
+        日志置顶</label>
               </td>
             </tr>
 			<tr>
-               <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.Meta%>:</span></td>
+               <td align="right" valign="top"><span style="font-weight: bold">隐私及Meta:</span></td>
                <td align="left"><div>
 	 				<label for="Secret">
 	                <input id="Secret" name="log_IsHidden" type="checkbox" value="1" onClick="document.getElementById('Div_Password').style.display=(this.checked)?'block':'none'" />
-	        <%=lang.Action.logs.PrivacySet%></label>
+	        设置日志隐私</label>
 	 				<label for="Meta">
 	                <input id="Meta" name="log_Meta" type="checkbox" value="1" onClick="document.getElementById('Div_Meta').style.display=(this.checked)?'block':'none'" />
-	        <%=lang.Action.logs.MetaSet%></label></div>
+	        自定义日志页Meta信息</label></div>
 	                  <div id="Div_Password" style="display:none;" class="tips_body">
-                          <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b><%=lang.Action.logs.PrivateLog%></b></label> - <%=lang.Action.logs.PrivateInfo%><br/>
-                          <label for="bpws2"><input id="bpws2" type="radio" name="log_pws" value="1"/><b><%=lang.Action.logs.EncryptedLog%></b></label> - <%=lang.Action.logs.EncryptedInfo%>
+                          <label for="bpws1"><input id="bpws1" type="radio" name="log_pws" value="0" checked/><b>私密日志</b></label> - 私密日志只有主人和作者能查阅<br/>
+                          <label for="bpws2"><input id="bpws2" type="radio" name="log_pws" value="1"/><b>加密日志</b></label> - 加密日志允许客人输入正确的密码即可查看
                           <br/>&nbsp;&nbsp;&nbsp;&nbsp;
-                          <span style="font-weight: bold"><%=lang.Action.PassWord%>:</span>
-                          <input onFocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="<%=lang.Action.logs.EnCloneLogSe%>" />
-                          <span style="font-weight: bold"><%=lang.Action.PassWordTip%>:</span>
-                          <input onFocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="35" class="inputBox" title="<%=lang.Action.logs.EnCloneLogTip%>" />
-                          <label for="bpws3"><input id="bpws3" name="log_Pwtitle" type="checkbox" value="1" checked="checked" /><%=lang.Action.logs.CloneTitle%></label>
-                          <label for="bpws4"><input id="bpws4" name="log_Pwcomm" type="checkbox" value="1" /><%=lang.Action.logs.CloneComment%></label>
+                          <span style="font-weight: bold">密码:</span>
+                          <input onFocus="this.select();$('bpws2').checked='checked'" name="log_Readpw" type="password" id="log_Readpw" size="12" class="inputBox" title="不需要加密则留空" />
+                          <span style="font-weight: bold">密码提示:</span>
+                          <input onFocus="$('bpws2').checked='checked'" name="log_Pwtips" type="text" id="log_Pwtips" size="35" class="inputBox" title="不需要提示则留空" />
+                          <label for="bpws3"><input id="bpws3" name="log_Pwtitle" type="checkbox" value="1" checked="checked" />加密标题</label>
+                          <label for="bpws4"><input id="bpws4" name="log_Pwcomm" type="checkbox" value="1" />加密评论</label>
 	                  </div>
 	                  <div id="Div_Meta" style="display:none;" class="tips_body">
-      	 				  - <%=lang.Action.logs.MetaTagSet%><br/>
-		                  <span style="font-weight: bold"><%=lang.Action.logs.KeyWords%>&nbsp;&nbsp;:</span>
-						  <input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="<%=lang.Action.logs.LogKeyWordAlt%>" size="80" maxlength="254" />
+      	 				  - 自定义日志页面头的Meta信息，留空则默认为Tag和日志摘要<br/>
+		                  <span style="font-weight: bold">KeyWords&nbsp;&nbsp;:</span>
+						  <input name="log_KeyWords" type="text" class="inputBox" id="log_KeyWords" title="填写你的keywords，利于搜索引擎，不需要则留空" size="80" maxlength="254" />
 						  <br />
-						  <span style="font-weight: bold"><%=lang.Action.logs.Description%>:</span>
-						  <input name="log_Description" type="text" class="inputBox" id="log_Description" title="<%=lang.Action.logs.LogDescriptionAlt%>" size="80" maxlength="254" />
+						  <span style="font-weight: bold">Description:</span>
+						  <input name="log_Description" type="text" class="inputBox" id="log_Description" title="填写你的Description，利于搜索引擎，不需要则留空" size="80" maxlength="254" />
 	                  </div>
 				  </td>
              </tr>
             <tr>
-              <td height="24" align="right" valign="top"><b><%=lang.Action.logs.ComeFrom%>:</b></td>
+              <td height="24" align="right" valign="top"><b>来源:</b></td>
               <td align="left"><span style="font-weight: bold"></span>
-                  <input name="log_From" type="text" id="log_From" value="<%=lang.Action.logs.ComeFromValue%>" size="12" class="inputBox" />
-                  <span style="font-weight: bold"><%=lang.Action.logs.WebSite%>:</span>
+                  <input name="log_From" type="text" id="log_From" value="本站原创" size="12" class="inputBox" />
+                  <span style="font-weight: bold">网址:</span>
                   <input name="log_FromURL" type="text" id="log_FromURL" value="<%=siteURL%>" size="38" class="inputBox" />
                 </td>
             </tr>
             <tr>
-              <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.PostTime%>:</span></td>
+              <td height="24" align="right" valign="top"><span style="font-weight: bold">发表时间:</span></td>
               <td align="left">
-                  <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/><%=lang.Action.logs.LocalTime%></label> 
-                  <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" /><%=lang.Action.logs.AutoTime%>:</label>
-                  <input onFocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (<%=lang.Action.logs.TimeForMat%>)
+                  <label for="P1"><input name="PubTimeType" type="radio" id="P1" value="now" size="12" checked/>当前时间</label> 
+                  <label for="P2"><input name="PubTimeType" type="radio" id="P2" value="com" size="12" />自定义日期:</label>
+                  <input onFocus="this.select();$('P2').checked='checked'" name="PubTime" type="text" value="<%=DateToStr(now(),"Y-m-d H:I:S")%>" size="21" class="inputBox" /> (格式:yyyy-mm-dd hh:mm:ss)
                 </td>
             </tr>
             <tr>
-              <td height="24" align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.Tags%>:</span></td>
+              <td height="24" align="right" valign="top"><span style="font-weight: bold">Tags:</span></td>
               <td align="left">
-                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="<%=lang.Action.logs.InsTags%>" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (<%=lang.Action.logs.TagInfo%>)
+                      <input name="tags" type="text" value="" size="50" class="inputBox" /> <img src="images/insert.gif" alt="插入已经使用的Tag" onClick="popnew('getTags.asp','tag','250','324')" style="cursor:pointer"/> (tag之间用英文的空格或逗号分割)
                </td>
             </tr>
              <tr>
-              <td  align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.Content%>:</span></td>
+              <td  align="right" valign="top"><span style="font-weight: bold">内容:</span></td>
               <td align="center"><%
 If log_editType = 0 Then
     Dim sBasePath
@@ -342,22 +342,22 @@ End If
   <%if log_editType<>0 then %>
                <label for="label4">
                 <label for="label4"><input id="label4" name="log_disImg" type="checkbox" value="1" />
-  <%=lang.Action.logs.DisImg%></label>
+  禁止显示图片</label>
                 <label for="label5">
                 <input name="log_DisSM" type="checkbox" id="label5" value="1" />
-  <%=lang.Action.logs.DisSim%></label>
+  禁止表情转换</label>
                 <label for="label6">
                 <input name="log_DisURL" type="checkbox" id="label6" value="1" />
-  <%=lang.Action.logs.DisUrl%></label>
+  禁止自动转换链接</label>
                 <label for="label7">
                 <input name="log_DisKey" type="checkbox" id="label7" value="1" />
-  <%=lang.Action.logs.AutoKey%></label>
+  禁止自动转换关键字</label>
   <%else%>
-                <strong>[&nbsp;&nbsp;<a herf="#" onClick="GetLength();" style="cursor:pointer"><%=lang.Action.logs.TotalLetter%></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onClick="SetContents();" style="cursor:pointer"><%=lang.Action.logs.ClearContent%></a>&nbsp;&nbsp;]</strong>
+                <strong>[&nbsp;&nbsp;<a herf="#" onClick="GetLength();" style="cursor:pointer">统计字数</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a herf="#" onClick="SetContents();" style="cursor:pointer">清空内容</a>&nbsp;&nbsp;]</strong>
   <%end if%></td></tr>
           <tr>
-              <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.SummyContent%>:</span></td>
-              <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onClick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/><%=lang.Action.logs.EditSummyContent%></label></div>
+              <td align="right" valign="top"><span style="font-weight: bold">内容摘要:</span></td>
+              <td align="left"><div><label for="shC"><input id="shC" name="log_IntroC" type="checkbox" value="1" onClick="document.getElementById('Div_Intro').style.display=(this.checked)?'block':'none'"/>编辑内容摘要</label></div>
               <div id="Div_Intro" style="display:none">
               <%
 If log_editType = 0 Then
@@ -380,22 +380,22 @@ End If
 %></div>
               </td>
           </tr>          <tr>
-              <td align="right" valign="top" nowrap><span style="font-weight: bold"><%=lang.Action.logs.Upload%>:</span></td>
+              <td align="right" valign="top" nowrap><span style="font-weight: bold">附件上传:</span></td>
               <td align="left"><iframe src="attachment.asp" width="100%" height="24" frameborder="0" scrolling="no" border="0" frameborder="0"></iframe></td>
             </tr>
             <tr>
-              <td align="right" valign="top"><span style="font-weight: bold"><%=lang.Action.logs.Quote%>:</span></td>
-              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" id="logQuote"/><br><%=lang.Action.logs.QuoteInfo%>         </td>
+              <td align="right" valign="top"><span style="font-weight: bold">引用通告:</span></td>
+              <td align="left"><input name="log_Quote" type="text" size="80" class="inputBox" id="logQuote"/><br>请输入网络日志项的引用通告URL。可以用逗号分隔多个引用通告地址.          </td>
             </tr>
             <tr>
               <td colspan="2" align="center">
-                <input name="SaveArticle" type="submit" class="userbutton" value="<%=lang.Action.logs.PostLog%>" accesskey="S"/>
-                <input name="SaveDraft" type="submit" class="userbutton" value="<%=lang.Action.logs.SaveDraft%>" accesskey="D" onClick="document.getElementById('log_IsDraft').value='True'"/>
-                <input name="ReturnButton" type="button" class="userbutton" value="<%=lang.Tip.SysTem(6)%>" accesskey="Q" onClick="history.go(-1)"/></td>
+                <input name="SaveArticle" type="submit" class="userbutton" value="提交日志" accesskey="S"/>
+                <input name="SaveDraft" type="submit" class="userbutton" value="保存为草稿" accesskey="D" onClick="document.getElementById('log_IsDraft').value='True'"/>
+                <input name="ReturnButton" type="button" class="userbutton" value="返回" accesskey="Q" onClick="history.go(-1)"/></td>
             </tr>
             <tr>
               <td colspan="2" align="right">
-                 <%=lang.Action.logs.EditDraftInfo%></td>
+                友情提示:保存草稿后，日志不会在日志列表中出现。只有再次编辑，<b>取消草稿</b>后才显示出来。</td>
             </tr>
            
            </table>
@@ -410,10 +410,10 @@ Else
 %>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
-      <div id="MsgHead"><%=lang.Action.logs.LogeditErr%></div>
+      <div id="MsgHead">日志发表错误</div>
       <div id="MsgBody">
 		 <div class="ErrorIcon"></div>
-        <div class="MessageText"><%=lang.Err.info(4)%><br/><a href="default.asp"><%=lang.Tip.SysTem(4)%></a>
+        <div class="MessageText">不允许外部链接提交数据<br/><a href="default.asp">点击返回首页</a>
 		 <meta http-equiv="refresh" content="3;url=default.asp"/></div>
 	  </div>
 	</div>

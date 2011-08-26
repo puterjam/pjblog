@@ -14,9 +14,9 @@ Function login(UserName, Password)
     Password = CheckStr(Password)
 
     validate = Trim(request.Form("validate"))
-    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon", False)
+    ReInfo = Array("错误信息", "", "MessageIcon", False)
     If Trim(UserName) = "" Or Trim(Password) = "" Then
-        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(0) = "错误信息"
         ReInfo(1) = "<b>请将信息输入完整</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
         ReInfo(2) = "WarningIcon"
         login = ReInfo
@@ -25,7 +25,7 @@ Function login(UserName, Password)
     End If
 
     If validate = "" Then
-        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(0) = "错误信息"
         ReInfo(1) = "<b>请输入登录验证码</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
         ReInfo(2) = "WarningIcon"
         login = ReInfo
@@ -34,8 +34,8 @@ Function login(UserName, Password)
     End If
 
     If IsValidUserName(UserName) = False Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a><br/>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a><br/>"
         ReInfo(2) = "ErrorIcon"
         login = ReInfo
         logout(False)
@@ -43,7 +43,7 @@ Function login(UserName, Password)
     End If
 
     If CStr(LCase(Session("GetCode")))<>CStr(LCase(validate)) Then
-        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(0) = "错误信息"
         ReInfo(1) = "<b>验证码有误，请返回重新输入</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
         ReInfo(2) = "ErrorIcon"
         login = ReInfo
@@ -62,7 +62,7 @@ Function login(UserName, Password)
         memLogin.Open SQL, conn, 1, 3
         SQLQueryNums = SQLQueryNums + 1
         If memLogin.EOF And memLogin.BOF Then
-            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(0) = "错误信息"
             ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
             ReInfo(2) = "ErrorIcon"
             logout(False)
@@ -90,7 +90,7 @@ Function login(UserName, Password)
         End If
     Else
         If memLogin("mem_Password")<>SHA1(Password&memLogin("mem_salt")) Then
-            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(0) = "错误信息"
             ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
             ReInfo(2) = "ErrorIcon"
             logout(False)
@@ -107,7 +107,7 @@ Function login(UserName, Password)
             End If
             memLogin.Update
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If
@@ -122,9 +122,9 @@ Function login2(UserName, Password)
     UserName = CheckStr(UserName)
     Password = CheckStr(Password)
 
-    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon", False)
+    ReInfo = Array("错误信息", "", "MessageIcon", False)
     If Trim(UserName) = "" Or Trim(Password) = "" Then
-        ReInfo(0) = lang.Tip.SysTem(1)
+        ReInfo(0) = "错误信息"
         ReInfo(1) = "<b>请将信息输入完整</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
         ReInfo(2) = "WarningIcon"
         login2 = ReInfo
@@ -134,8 +134,8 @@ Function login2(UserName, Password)
     End If
 
     If IsValidUserName(UserName) = False Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a><br/>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a><br/>"
         ReInfo(2) = "ErrorIcon"
         login2 = ReInfo
         logout(False)
@@ -155,7 +155,7 @@ Function login2(UserName, Password)
         memLogin.Open SQL, conn, 1, 3
         SQLQueryNums = SQLQueryNums + 1
         If memLogin.EOF And memLogin.BOF Then
-            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(0) = "错误信息"
             ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
             ReInfo(2) = "ErrorIcon"
             logout(False)
@@ -178,7 +178,7 @@ Function login2(UserName, Password)
         End If
     Else
         If memLogin("mem_Password")<>SHA1(Password&memLogin("mem_salt")) Then
-            ReInfo(0) = lang.Tip.SysTem(1)
+            ReInfo(0) = "错误信息"
             ReInfo(1) = "<b>用户名与密码错误</b><br/><a href=""javascript:history.go(-1);"">请返回重新输入</a><br/>"
             ReInfo(2) = "ErrorIcon"
             logout(False)
@@ -186,7 +186,7 @@ Function login2(UserName, Password)
             memName = memLogin("mem_Name")
             memStatus = memLogin("mem_Status")
             ReInfo(0) = "登录成功"
-            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
+            ReInfo(1) = "<b>"&memLogin("mem_Name")&"</b>，欢迎你的再次光临。<br/><a href=""default.asp"">点击返回主页</a><meta http-equiv=""refresh"" content=""3;url=default.asp""/>"
             ReInfo(2) = "MessageIcon"
             ReInfo(3) = True
         End If
@@ -215,7 +215,7 @@ Sub checkCookies()
             If tmpC>= blog_CountNum Then
                 Dim tmpLC
                 tmpLC = conn.Execute("select top 1 coun_ID from [blog_Counter] order by coun_Time ASC")(0)
-                Conn.Execute("update [blog_Counter] set coun_Time=#"&Now()&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
+                Conn.Execute("update [blog_Counter] set coun_Time=#"&DateToStr(Now(), "Y-m-d H:I:S")&"#,coun_IP='"&Guest_IP&"',coun_OS='"&Guest_Browser(1)&"',coun_Browser='"&Guest_Browser(0)&"',coun_Referer='"&HTMLEncode(CheckStr(Guest_Refer))&"' where coun_ID="&tmpLC)
                 SQLQueryNums = SQLQueryNums + 2
             Else
                 Conn.Execute("INSERT INTO blog_Counter(coun_IP,coun_OS,coun_Browser,coun_Referer) VALUES ('"&Guest_IP&"','"&Guest_Browser(1)&"','"&Guest_Browser(0)&"','"&HTMLEncode(CheckStr(Guest_Refer))&"')")

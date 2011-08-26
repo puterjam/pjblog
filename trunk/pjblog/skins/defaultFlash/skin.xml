@@ -7,7 +7,7 @@
  <DesignerMail>puterjam@gmail.com</DesignerMail>
  <Flash>
   <UseFlash>-1</UseFlash>
-  <FlashPath>head.swf</FlashPath>
+  <FlashPath>images/head.swf</FlashPath>
   <FlashWidth>748</FlashWidth>
   <FlashHeight>80</FlashHeight>
   <FlashAlign>center</FlashAlign>

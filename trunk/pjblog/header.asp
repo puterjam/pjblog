@@ -78,19 +78,19 @@ End If
 	<meta name="robots" content="all" />
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
 	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
-	<meta name="keywords" content="<%=blog_KeyWords%>PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,accessibility,w3c,w3,w3cn" />
-	<meta name="description" content="<%=blog_Description%> <%=SiteName%> - <%=blog_Title%>" />
+	<meta name="keywords" content="<%=blog_KeyWords%>" />
+	<meta name="description" content="<%=blog_Description%> - <%=SiteName%> - <%=blog_Title%>" />
 	<meta name="generator" content="PJBlog3" />
 	<link rel="service.post" type="application/atom+xml" title="<%=SiteName%> - Atom" href="<%=siteURL%>xmlrpc.asp" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<%=siteURL%>rsd.asp" />
 	<title><%=Title%></title>
 
 	<%if len(CateTitle)>0 and CategoryID>0 then %>
-	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CategoryID%>" title="<%=lang.Action.Rss(siteName & " - " & CateTitle, "rss2")%>" />
-	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CategoryID%>"  title="<%=lang.Action.Rss(siteName & " - " & CateTitle, "atom")%>"  />
+	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp?cateID=<%=CategoryID%>" title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(rss2)" />
+	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp?cateID=<%=CategoryID%>"  title="订阅 <%=siteName%> - <%=CateTitle%> 所有文章(atom)"  />
 	<%else%>
-	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="<%=lang.Action.Rss(siteName, "rss2")%>" />
-	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="<%=lang.Action.Rss(siteName, "atom")%>" />
+	<link rel="alternate" type="application/rss+xml" href="<%=siteURL%>feed.asp" title="订阅 <%=siteName%> 所有文章(rss2)" />
+	<link rel="alternate" type="application/atom+xml" href="<%=siteURL%>atom.asp" title="订阅 <%=siteName%> 所有文章(atom)" />
 	<%end if%>
 	
 	<link rel="stylesheet" rev="stylesheet" href="skins/<%=Skins%>/global.css" type="text/css" media="all" /><!--全局样式表-->

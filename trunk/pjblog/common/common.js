@@ -654,25 +654,35 @@ function initLogin(CookieName){
 				un.value = u[1];
 				un.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
+				if ($("EmailArea")) $("EmailArea").parentNode.removeChild($("EmailArea"));
+				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
+				if ($("removevalidate")) $("removevalidate").parentNode.removeChild($("removevalidate"));
+				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
 				if (menvalidate[1] == "True" || menvalidate[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else if(cnvalue.length > 0){
 				var cnun = document.forms["frm"]["username"];
 				cnun.value = cnvalue;
 				cnun.readOnly = true;
 				if ($("passArea")) $("passArea").parentNode.removeChild($("passArea"));
+				if ($("EmailArea")) $("EmailArea").parentNode.removeChild($("EmailArea"));
+				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
+				if ($("removevalidate")) $("removevalidate").parentNode.removeChild($("removevalidate"));
+				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
 				if (menvalidate[1] == "True" || menvalidate[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=(.*)/.exec(unescape(decodeURI(n)));
+			if (Guest != null && Guest[1].json() != null){
 			var ComRe = Guest[1].json();
 			if (ComRe.record){
 				try{
 					if (document.forms[0].username) document.forms[0].username.value = ComRe.username;
 					if (document.forms[0].Email) document.forms[0].Email.value = ComRe.useremail;
 					if (document.forms[0].WebSite) document.forms[0].WebSite.value = ComRe.userwebsite;
-				}catch(e){if (e.description.length > 0) alert(e.description);}
+					}catch(e){if (e.description.length > 0) alert(e.description);}
+				}
 			}
 		}
 		

@@ -51,8 +51,8 @@ If session(CookieName&"_System") = True And memName<>Empty And stat_Admin = True
 <body class="headbody">
  <div class="headmain">
  	<div style="float:right;margin:4px;">
- 		<img src="images/control/return.png" style="cursor:pointer" onclick="goFront()" alt="预览首页的效果"/>
- 		<img src="images/control/closeMenu.png" style="cursor:pointer" onclick="switchToolbar(this)"/><img onclick="parent.MainContent.location='ConContent.asp?Fmenu=Logout&Smenu='" src="images/control/logout.png" onmouseover="this.src='images/control/logoutIn.png'" onmouseout="this.src='images/control/logout.png'" style="cursor:pointer"/>
+ 		<img src="images/control/return.png" style="cursor:pointer" onClick="goFront()" alt="预览首页的效果"/>
+ 		<img src="images/control/closeMenu.png" style="cursor:pointer" onClick="switchToolbar(this)"/><img onClick="parent.MainContent.location='ConContent.asp?Fmenu=Logout&Smenu='" src="images/control/logout.png" onMouseOver="this.src='images/control/logoutIn.png'" onMouseOut="this.src='images/control/logout.png'" style="cursor:pointer"/>
  	</div>
  
    <div style="height:70px;background:url('images/Control/Pic2.jpg') no-repeat;">

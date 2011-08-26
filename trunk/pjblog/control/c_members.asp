@@ -188,7 +188,7 @@ Sub c_members
 					            <option value="0" style="background:#FABABA" <%if not CBool(mid(RightDB("stat_code"),12,1)) then response.write ("selected=""selected""")%>>不允许</option>
 		                    </select>
 		                </td></tr>
-		               <tr><td align="right">管理员</td>
+		               <tr><td align="right">博客管理</td>
 				         <td ><select name="IsAdmin">
 				            <option value="1" style="background:#C5FDB7">是</option>
 				            <option value="0" style="background:#FABABA" <%if not CBool(mid(RightDB("stat_code"),11,1)) then response.write ("selected=""selected""")%>>否</option>

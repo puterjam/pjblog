@@ -11,7 +11,7 @@
 '    更新时间: 2006-1-12
 '=====================================
 If Not ChkPost() Then
-    Response.Write (lang.Err.info(999))
+    response.Write ("非法操作!!")
 ElseIf Request.Form("action") = "post" Then
     '评论发表代码
     Dim PostBComm
@@ -42,7 +42,7 @@ ElseIf Request.QueryString("action") = "del" Then
   </div>
 <%
 Else
-    Response.Write (lang.Err.info(999))
+    response.Write ("非法操作!!")
 End If
 
 '============================ 删除评论函数 =================================================
@@ -50,12 +50,12 @@ End If
 Function delcomm
     Dim post_commID, blog_Comm, blog_CommAuthor, logid
     Dim ReInfo
-    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon")
+    ReInfo = Array("错误信息", "", "MessageIcon")
     post_commID = CLng(CheckStr(request.QueryString("commID")))
     Set blog_Comm = Conn.Execute("select top 1 comm_ID,blog_ID,comm_Author from blog_Comment where comm_ID="&post_commID)
     If blog_Comm.EOF Or blog_Comm.bof Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>不存在此评论,或该评论已经被删除!</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>不存在此评论,或该评论已经被删除!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         delcomm = ReInfo
         Exit Function
@@ -63,7 +63,7 @@ Function delcomm
     blog_CommAuthor = blog_Comm("comm_Author")
     If stat_Admin = True Or (stat_CommentDel = True And memName = blog_CommAuthor) Then
         ReInfo(0) = "评论删除成功"
-        ReInfo(1) = "<b>评论已经被删除成功!</b><br/><a href=""default.asp?id="&blog_Comm("blog_ID")&""">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>评论已经被删除成功!</b><br/><a href=""default.asp?id="&blog_Comm("blog_ID")&""">单击返回</a>"
         ReInfo(2) = "MessageIcon"
         logid = Conn.Execute("select blog_ID from blog_Comment where comm_ID="&post_commID)(0)
         Conn.Execute("update blog_Content set log_CommNums=log_CommNums-1 where log_ID="&blog_Comm("blog_ID"))
@@ -76,8 +76,8 @@ Function delcomm
         delcomm = ReInfo
         Session(CookieName&"_LastDo") = "DelComment"
     Else
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>你没有权限删除评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>你没有权限删除评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         delcomm = ReInfo
     End If
@@ -89,18 +89,24 @@ End Function
 Function postcomm
     Dim username, post_logID, post_From, post_FromURL, post_disImg, post_DisSM, post_DisURL, post_DisKEY, post_DisUBB, post_Message, validate, GuestCanRemeberComment
     Dim password
-    Dim ReInfo, LastMSG, FlowControl
+    Dim ReInfo, LastMSG, FlowControl, SQLMem
 	' New Add
 	Dim Post_Email, Post_WebSite
-    ReInfo = Array(lang.Tip.SysTem(1), "", "MessageIcon")
+    ReInfo = Array("错误信息", "", "MessageIcon")
     username = Trim(CheckStr(request.Form("username")))
     password = Trim(CheckStr(request.Form("password")))
     post_logID = CLng(CheckStr(request.Form("logID")))
     validate = Trim(request.Form("validate"))
     post_Message = CheckStr(request.Form("Message"))
 	' --------------------------
+	Set SQLMem=conn.Execute("Select mem_Email,mem_HomePage FROM blog_Member Where mem_Name='"&memName&"'")
+	If memName=Empty Then
 	Post_Email = Trim(CheckStr(request.Form("Email")))
 	Post_WebSite = Trim(CheckStr(request.Form("WebSite")))
+	Else
+	Post_Email = SQLMem("mem_Email")
+	Post_WebSite = SQLMem("mem_HomePage")
+	End if
 	' --------------------------
 	GuestCanRemeberComment = CheckStr(Request.Form("log_GuestCanRemeberComment"))
 	if GuestCanRemeberComment = "1" then GuestCanRemeberComment = 1 else GuestCanRemeberComment = 0
@@ -125,7 +131,7 @@ Function postcomm
 
     If Left(post_Message,1)= Chr(32) then
             ReInfo(0)="评论发表错误信息"
-            ReInfo(1)="<b>评论内容中不允许首字空格</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1)="<b>评论内容中不允许首字空格</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2)="WarningIcon"
             postcomm = ReInfo
 	    Exit Function 
@@ -133,7 +139,7 @@ Function postcomm
   
     If Left(post_Message,1)= Chr(13) then
             ReInfo(0)="评论发表错误信息"
-            ReInfo(1)="<b>评论内容中不允许首字换行</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1)="<b>评论内容中不允许首字换行</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2)="WarningIcon"
             postcomm = ReInfo
 	    Exit Function 
@@ -142,7 +148,7 @@ Function postcomm
         '高级过滤规则
     If regFilterSpam(post_Message, "reg.xml") Then
             ReInfo(0) = "评论发表错误信息"
-            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
       Exit Function
@@ -151,7 +157,7 @@ Function postcomm
         '基本过滤规则
     If filterSpam(post_Message, "spam.xml") Then
             ReInfo(0) = "评论发表错误信息"
-            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+            ReInfo(1) = "<b>评论中包含被屏蔽的字符</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
             ReInfo(2) = "WarningIcon"
             postcomm = ReInfo
       Exit Function
@@ -159,7 +165,7 @@ Function postcomm
 
     If FlowControl Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>禁止恶意灌水！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>禁止恶意灌水！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
         Exit Function
@@ -167,7 +173,7 @@ Function postcomm
 
     If DateDiff("s", Request.Cookies(CookieName)("memLastPost"), DateToStr(now(),"Y-m-d H:I:S"))<blog_commTimerout Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>发言太快,请 "&blog_commTimerout&" 秒后再发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
       Exit Function
@@ -183,8 +189,8 @@ Function postcomm
     End If
 
     If IsValidUserName(username) = False Then
-        ReInfo(0) = lang.Tip.SysTem(1)
-        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(0) = "错误信息"
+        ReInfo(1) = "<b>非法用户名！<br/>请尝试使用其他用户名！</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
@@ -197,7 +203,7 @@ Function postcomm
             loginUser = login(Request.Form("username"), Request.Form("password"))
             If Not request.Cookies(CookieName)("memName") = username Then
                 ReInfo(0) = "评论发表错误信息"
-                ReInfo(1) = "<b>登录失败，请检查用户名和密码</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+                ReInfo(1) = "<b>登录失败，请检查用户名和密码</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
                 ReInfo(2) = "WarningIcon"
                 postcomm = ReInfo
                 Exit Function
@@ -206,7 +212,7 @@ Function postcomm
             Set checkMem = Conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
             If Not checkMem.EOF Then
                 ReInfo(0) = "评论发表错误信息"
-                ReInfo(1) = "<b>该用户已经存在，无法发表评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+                ReInfo(1) = "<b>该用户已经存在，无法发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
                 ReInfo(2) = "WarningIcon"
                 postcomm = ReInfo
                 Exit Function
@@ -215,7 +221,7 @@ Function postcomm
     Else
  			If Not request.Cookies(CookieName)("memName") = username Then
                 ReInfo(0) = "评论发表错误信息"
-                ReInfo(1) = "<b>请输入正确的用户名</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+                ReInfo(1) = "<b>请输入正确的用户名</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
                 ReInfo(2) = "WarningIcon"
                 postcomm = ReInfo
                 Exit Function
@@ -224,14 +230,14 @@ Function postcomm
     
     If Not stat_CommentAdd Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>你没有权限发表评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>你没有权限发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
     End If
     If Conn.Execute("select log_DisComment from blog_Content where log_ID="&post_logID)(0) Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>该日志不允许发表任何评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>该日志不允许发表任何评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "WarningIcon"
         postcomm = ReInfo
         Exit Function
@@ -242,14 +248,14 @@ Function postcomm
 
     If Len(post_Message)<1 Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>不允许发表空评论</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>不允许发表空评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
     End If
     If Len(post_Message)>blog_commLength Then
         ReInfo(0) = "评论发表错误信息"
-        ReInfo(1) = "<b>评论超过最大字数限制</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        ReInfo(1) = "<b>评论超过最大字数限制</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         ReInfo(2) = "ErrorIcon"
         postcomm = ReInfo
         Exit Function
@@ -258,7 +264,7 @@ Function postcomm
 	If Len(Post_Email) > 0 Then
 		If Not RegMatch(Post_Email, "\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*") Then
 			ReInfo(0) = "评论发表错误信息"
-        	ReInfo(1) = "<b>验证邮箱格式错误</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        	ReInfo(1) = "<b>验证邮箱格式错误</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         	ReInfo(2) = "ErrorIcon"
         	postcomm = ReInfo
         	Exit Function
@@ -268,7 +274,7 @@ Function postcomm
 	If Len(Post_WebSite) > 0 Then
 		If Not RegMatch(Post_WebSite, "(http):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?") Then
 			ReInfo(0) = "评论发表错误信息"
-        	ReInfo(1) = "<b>网址格式错误,请用http://开头</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>"
+        	ReInfo(1) = "<b>网址格式错误,请用http://开头</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
         	ReInfo(2) = "ErrorIcon"
         	postcomm = ReInfo
         	Exit Function
@@ -331,11 +337,11 @@ Function postcomm
 		log_commcomm.Close
 		Set log_commcomm=Nothing
         dim emailcontent,emailtitle
-        emailtitle = "您发表的文章《"&email_log_title&"》已有客人发表了评论"
+        emailtitle = "您的日志《"&email_log_title&"》有了新评论！"
         if blog_postFile = 2 then
-            emailcontent = "["&username&"]在您的博客中发表了评论,请点击查"&siteURL&caload(post_logID)&"#comm_"&email_commid&"。评论内容如下："&post_Message&""
+            emailcontent = " "&username&" 对您的日志《"&email_log_title&"》发表了如下评论：“"&post_Message&"”。详情请点击查看 "&siteURL&caload(post_logID)&"#comm_"&email_commid&""
         else 
-            emailcontent = "["&username&"]在您的博客中发表了评论,请点击查"&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&"。评论内容如下："&post_Message&""
+            emailcontent = " "&username&" 对您的日志《"&email_log_title&"》发表了如下评论：“"&post_Message&"”。详情请点击查看 "&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&""
         end if
         call sendmail(blog_email,emailtitle,emailcontent,sitename)
     End If

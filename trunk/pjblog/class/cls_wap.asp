@@ -118,10 +118,10 @@ Sub outLog
             If dbRow(5, i) = False And dbRow(2, i) = memName Then CanRead = True
             If CanRead Then
                 response.Write "<p>&nbsp;&nbsp;"&(i + wPageSize * (CurPage -1) + 1)&". <a href=""wap.asp?do=showLogDetail&amp;id="&dbRow(0, i)&""">"&toUnicode(dbRow(1, i))&"</a>"
-                If dbRow(5, i) = False Then response.Write toUnicode(" [隐]")
+                If dbRow(5, i) = False Then response.Write toUnicode(" [私]")
                 response.Write "</p>"
             Else
-                response.Write "<p>&nbsp;&nbsp;"&(i + wPageSize * (CurPage -1) + 1)&". "&toUnicode("[隐藏日志]")&"</p>"
+                response.Write "<p>&nbsp;&nbsp;"&(i + wPageSize * (CurPage -1) + 1)&". "&toUnicode("[私密日志]")&"</p>"
             End If
         Next
         Call getPage (Log_Num, CurPage, wPageSize, Url_Add)
@@ -156,7 +156,7 @@ Sub outLogDetail
         End If
 
         response.Write "<p>"&"<b>"&toUnicode("标题:")&"</b> "&toUnicode(lArticle.logTitle)
-        If lArticle.logIsShow = False Then response.Write toUnicode(" [隐]")
+        If lArticle.logIsShow = False Then response.Write toUnicode(" [私]")
         response.Write "</p>"
         response.Write "<p>"&"<b>"&toUnicode("作者:")&"</b> "&toUnicode(lArticle.logAuthor)&"</p>"
         response.Write "<p>"&"<b>"&toUnicode("日期:")&"</b> "&toUnicode(DateToStr(lArticle.logPubTime, "Y-m-d H:I A"))&"</p>"
@@ -357,11 +357,11 @@ End Sub
 '--------------------登录框----------------
 
 Sub outLogin
-    outCardHead (lang.Action.Login)
+    outCardHead ("登录Blog")
     response.Write "<p><a href=""wap.asp"">"&toUnicode(HTMLDecode(SiteName))&"</a><br/>&nbsp;</p><p>"
     response.Write toUnicode("用户名: ")&"<input emptyok=""false"" name=""userName"" size=""10"" maxlength=""20"" type=""text"" value="""" /><br/>"
     response.Write toUnicode("密　码: ")&"<input emptyok=""false"" name=""Password"" size=""10"" maxlength=""32"" type=""password"" /><br/>"
-    response.Write "<anchor>"&toUnicode(lang.Action.Login)&"<go href=""wap.asp?do=CheckUser"" method=""post"">"
+    response.Write "<anchor>"&toUnicode("登录")&"<go href=""wap.asp?do=CheckUser"" method=""post"">"
     response.Write "<postfield name=""userName"" value=""$(userName)"" />"
     response.Write "<postfield name=""Password"" value=""$(Password)"" />"
     response.Write "<postfield name=""validate"" value=""0000"" />"
@@ -426,7 +426,7 @@ Sub outControl
     If memName<>Empty Then
         response.Write "<br/><a href=""wap.asp?do=Logout"">"&toUnicode("登出")&"</a>"
     Else
-        If blog_wapLogin Then response.Write "<br/><a href=""wap.asp?do=Login"">"&toUnicode(lang.Action.Login)&"</a>"
+        If blog_wapLogin Then response.Write "<br/><a href=""wap.asp?do=Login"">"&toUnicode("登录")&"</a>"
     End If
     response.Write "</p>"
 End Sub
@@ -543,30 +543,14 @@ Function wap_CommentPost
     'Conn.ExeCute("INSERT INTO blog_Comment(blog_ID,comm_Content,comm_Author,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY) VALUES ("&post_logID&",'"&post_Message&"','"&username&"',"&post_DisSM&","&post_DisUBB&","&post_disImg&","&post_DisURL&",'"&getIP()&"',"&post_DisKEY&")")
     Conn.Execute("update blog_Content set log_CommNums=log_CommNums+1 where log_ID="&post_logID)
     Conn.Execute("update blog_Info set blog_CommNums=blog_CommNums+1")
-    Response.Cookies(CookieName)("memLastpost") = Now()
+    Response.Cookies(CookieName)("memLastpost") = DateToStr(now(),"Y-m-d H:I:S")
     getInfo(2)
-
-    Dim blog_Comment, ShowLen, i
-    ShowLen = 10 '显示最新评论预览数量
-    '-----------------写入最新评论缓存--------------------
-    Dim log_Comments
-    SQL = "SELECT top "&ShowLen&" comm_ID,blog_ID,comm_Author,comm_Content,comm_PostTime" &_
-    " FROM blog_Comment as C,blog_Content as T,blog_Category as A where C.blog_ID=T.log_ID and T.log_IsShow=true and T.log_CateID=A.cate_ID and A.cate_Secret=false order by C.comm_PostTime Desc"
-    Set log_Comments = Conn.Execute(SQL)
-    SQLQueryNums = SQLQueryNums + 1
-    If log_Comments.EOF Or log_Comments.bof Then
-        ReDim blog_Comment(0, 0)
-    Else
-        blog_Comment = log_Comments.GetRows(ShowLen)
-    End If
-    Set log_Comments = Nothing
-    Application.Lock
-    Application(CookieName&"_blog_Comment") = blog_Comment
-    Application.UnLock
+    NewComment(2)
 
     If memName<>Empty Then conn.Execute("update blog_Member set mem_PostComms=mem_PostComms+1 where mem_Name='"&memName&"'")
-    PostArticle post_logID
     wap_CommentPost = "<b>"&toUnicode("你成功地对该日志发表了评论")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#CommentCard"">"&toUnicode("返回")&"</a>"
+    PostArticle post_logID, False
+    call newEtag
 End Function
 
 Sub outwap_AritclePost
@@ -642,11 +626,11 @@ Function NewArticle(ByVal action)
         TempVar = ""
         Do While Not book_Articles.EOF
             If book_Articles("cate_Secret") Then
-                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[隐藏分类日志]"
+                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[私密分类日志]"
             ElseIf book_Articles("log_IsShow") Then
                 book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&book_Articles("log_title")
             Else
-                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[隐藏日志]"
+                book_Article = book_Article&TempVar&book_Articles("log_ID")&"|,|"&book_Articles("log_Author")&"|,|"&book_Articles("log_PostTime")&"|,|"&"[私密日志]"
             End If
             TempVar = "|$|"
             book_Articles.MoveNext

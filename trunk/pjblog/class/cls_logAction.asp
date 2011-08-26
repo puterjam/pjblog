@@ -359,12 +359,12 @@ Class logArticle
         Else
             If Int(logEditType) = 1 Then
                 If blog_SplitType Then
-                    logIntro = closeUBB(SplitLines(CheckStr(HTMLEncode(logMessage)), blog_introLine))
+                    logIntro = closeUBB(CheckStr(SplitLines(HTMLEncode(logMessage), blog_introLine)))
                 Else
-                    logIntro = closeUBB(CutStr(CheckStr(HTMLEncode(logMessage)), blog_introChar))
+                    logIntro = closeUBB(CheckStr(CutStr(HTMLEncode(logMessage), blog_introChar)))
                 End If
             Else
-                logIntro = closeHTML(SplitLines(CheckStr(logMessage), blog_introLine))
+                logIntro = closeHTML(CheckStr(SplitLines(logMessage, blog_introLine)))
             End If
         End If
 
@@ -386,7 +386,7 @@ Class logArticle
         If logIntroCustom = 1 Then logIntroCustom = 0 Else logIntroCustom = 1
         logUbbFlags = logDisableSmile & "0" & logDisableImage & logDisableURL & logDisableKeyWord & logIntroCustom
 
-        If logIsDraft = False Then weblog("log_Modify") = "[本日志由 "&memName&" 于 "&DateToStr(Now(), "Y-m-d H:I A")&" 编辑]"
+        If logIsDraft = False Then weblog("log_Modify") = "[本日志由 "&memName&" 于 "&DateToStr(Now(), "Y-m-d H:I A")&" 更新]"
         If logIsDraft = False And weblog("log_IsDraft")<>logIsDraft Then
 			if isajax <> true then
             	Conn.Execute("UPDATE blog_Info SET blog_LogNums=blog_LogNums+1")
@@ -1069,7 +1069,6 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
-    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
     Temp1 = Replace(Temp1, "<$log_IsShow$>", log_View("log_IsShow"))
 
     If log_View("log_IsShow") and not getCate.cate_Secret Then
@@ -1131,9 +1130,9 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     	Else 
     		urlLink = "?id="&preLogC("log_ID")
     	End If
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&urlLink&""" accesskey="","">"&preLogC("log_Title")&"</a><br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&urlLink&""" accesskey="","">"&preLogC("log_Title")&"</a><br/>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> 这是最新一篇日志<br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> <i>这是最早的一篇日志</i><br/>"
     End If
 
     If Not nextLogC.EOF Then
@@ -1142,9 +1141,9 @@ Sub PostHalfStatic(ByVal LogID, ByVal UpdateListOnly)
     	Else 
     		urlLink = "?id="&nextLogC("log_ID")
     	End If
-        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&urlLink&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&urlLink&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br/>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> 这是最后一篇日志<br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> <i>这是最新的一篇日志</i><br/>"
     End If
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
@@ -1215,7 +1214,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     	"#body{position:absolute;left:expression(document.body.clientWidth/2-210);top:expression(document.body.clientHeight/2-100);border:1px dotted #206CFF;padding:20px;color:#206CFF;background:#EEFCFF;}"& vbcrlf &_
     	"</style></head>"& vbcrlf &_
     	"<body onLoad=""loadarticle();"" >"& vbcrlf &_
-    	"<div id=""body""><h3>请稍后...正在加载私密日志</h3>"& vbcrlf &_
+    	"<div id=""body""><h3>请稍候...正在加载私密日志</h3>"& vbcrlf &_
     	"<div id=""out""><div id=""in"" style=""width:10%"">10%</div></div>"& vbcrlf &_
     	"<script type=""text/javascript"">"& vbcrlf &_
     	"function loadarticle(){"& vbcrlf &_
@@ -1262,8 +1261,17 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
    '输出第一页评论
 
     Temp1 = Replace(Temp1, "<$comment$>", ShowComm(LogID, comDesc, log_View("log_DisComment"), True, log_View("log_IsShow"), log_View("log_Readpw"), CanRead, False))   
-    
-    
+    Temp1 = Replace(Temp1, "<$blog_commLength$>", blog_commLength)
+    If (blog_commUBB=0) Then
+    	Temp1 = Replace(Temp1, "<$blog_commUBB$>", "开启")
+    Else
+    	Temp1 = Replace(Temp1, "<$blog_commUBB$>", "关闭")
+    End If
+    If (blog_commIMG=0) Then
+    	Temp1 = Replace(Temp1, "<$blog_commIMG$>", "开启")
+    Else
+    	Temp1 = Replace(Temp1, "<$blog_commIMG$>", "关闭")
+    End If
     Temp1 = Replace(Temp1, "<$Cate_icon$>", getCate.cate_icon)
     Temp1 = Replace(Temp1, "<$Cate_Title$>", getCate.cate_Name)
     Temp1 = Replace(Temp1, "<$log_CateID$>", log_View("log_CateID"))
@@ -1274,7 +1282,6 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
-    Temp1 = Replace(Temp1, "<$log_Author$>", log_View("log_Author"))
 	If not isblank(log_View("log_KeyWords")) Then
 		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords"))&",")
     Else
@@ -1295,8 +1302,8 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$comDesc$>", comDesc)
     Temp1 = Replace(Temp1, "<$log_DisComment$>", log_View("log_DisComment"))
 
-    If log_View("log_edittype") = 1 Then
-        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    If log_View("log_EditType") = 1 Then
+        Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(UBBCode(HtmlEncode(log_View("log_Content")), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
     Else
         Temp1 = Replace(Temp1, "<$ArticleContent$>", UnCheckStr(log_View("log_Content")))
     End If
@@ -1326,15 +1333,15 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim BTemp
     BTemp = ""
     If Not preLogC.EOF Then
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&Alias(preLogC("log_ID"))&""" accesskey="","">"&preLogC("log_Title")&"</a><br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&Alias(preLogC("log_ID"))&""" accesskey="","">"&preLogC("log_Title")&"</a><br/>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> 这是最新一篇日志<br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> <i>这是最早的一篇日志</i><br/>"
     End If
 
     If Not nextLogC.EOF Then
-        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&Alias(nextLogC("log_ID"))&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&Alias(nextLogC("log_ID"))&""" accesskey=""."">"&nextLogC("log_Title")&"</a><br/>"
     Else
-        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> 这是最后一篇日志<br>"
+        BTemp = BTemp & "<img border=""0"" src=""images/Cnext1.gif""/><strong>下一篇:</strong> <i>这是最新的一篇日志</i><br/>"
     End If
 
     Temp1 = Replace(Temp1, "<$log_Navigation$>", BTemp)
@@ -1395,7 +1402,7 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是加密日志，需要输入正确密码才可以查看！")
 	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock2.gif"" style=""margin:0px 0px -3px 2px;"" alt=""加密日志"" />")
 	    Else
-	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有管理员或发布者可以查看！")
+	        Temp2 = Replace(Temp2, "<$log_Secret$>", "该日志是私密日志，只有博主或发布者可以查看！")
 	        Temp2 = Replace(Temp2, "<$log_hiddenIcon$>", "<img src=""images/icon_lock1.gif"" style=""margin:0px 0px -3px 2px;"" alt=""私密日志"" />")
 	    End If
 
@@ -1416,14 +1423,14 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
 
     If log_View("log_ComOrder") Then comDesc = "Desc" Else comDesc = "Asc" End If
 
-    If log_View("log_edittype") = 1 Then
-        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_ubbFlags"), 1, 1), Mid(log_View("log_ubbFlags"), 2, 1), Mid(log_View("log_ubbFlags"), 3, 1), Mid(log_View("log_ubbFlags"), 4, 1), Mid(log_View("log_ubbFlags"), 5, 1))))
+    If log_View("log_EditType") = 1 Then
+        Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(UBBCode(log_View("log_Intro"), Mid(log_View("log_UbbFlags"), 1, 1), Mid(log_View("log_UbbFlags"), 2, 1), Mid(log_View("log_UbbFlags"), 3, 1), Mid(log_View("log_UbbFlags"), 4, 1), Mid(log_View("log_UbbFlags"), 5, 1))))
         If log_View("log_Intro")<>HtmlEncode(log_View("log_Content")) Then
         
-            If blog_postFile = 1 Then
-       	     Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")           
-			else
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
+            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
+          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href="""&Alias(LogID)&""" class=""more""><span>查看更多...</span></a></p>")
+			Else
+          	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href=""article.asp?id="&LogID&""" class=""more""><span>查看更多...</span></a></p>")           
   			End If
   			
         Else
@@ -1432,11 +1439,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     Else
         Temp2 = Replace(Temp2, "<$log_Intro$>", UnCheckStr(log_View("log_Intro")))
         If log_View("log_Intro")<>log_View("log_Content") Then
-            If blog_postFile = 1 Then
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article.asp?id="&LogID&""" class=""more"">查看更多...</a></p>")
-         	else
-         	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p><a href=""article/"&LogID&".htm"" class=""more"">查看更多...</a></p>")
-         	end if           
+            If blog_postFile = 2 and log_View("log_IsShow") and not getCate.cate_Secret Then
+             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href="""&Alias(LogID)&""" class=""more""><span>查看更多...</span></a></p>")
+            Else
+             	   Temp2 = Replace(Temp2, "<$log_readMore$>", "<p class=""readMore""><a href=""article.asp?id="&LogID&""" class=""more""><span>查看更多...</span></a></p>")
+            End If
         Else
             Temp2 = Replace(Temp2, "<$log_readMore$>", "")
         End If

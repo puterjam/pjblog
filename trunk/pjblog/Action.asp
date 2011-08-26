@@ -44,9 +44,9 @@ Elseif request.QueryString("action") = "type1" Then
         	response.clear()
         	mainstr = ""
     	If Len(memName)>0 Then
-        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(1) & """ style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""下载此文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&mainurl&""" target=""_blank"">"&main&"</a>"
     	Else
-        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(2) & """ style=""margin:0px 2px -4px 0px""/> " & lang.Tip.UBB.Down(2) & " <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
+        	mainstr = mainstr & "<img src=""images/download.gif"" alt=""该文件只允许会员下载"" style=""margin:0px 2px -4px 0px""/>该文件只允许会员下载<a href=""login.asp"">登录</a> | <a href=""register.asp"">注册新用户</a>"
     	End If
     	response.write mainstr
 	End If
@@ -57,9 +57,9 @@ elseif request.QueryString("action") = "type2" then
         	response.clear()
         	mstr = ""
     	If Len(memName) > 0 Then
-       		mstr=mstr&"<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(1) & """ style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">" & lang.Tip.UBB.Down(1) & "</a>"
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""下载此文件"" style=""margin:0px 2px -4px 0px""/> <a href="""&main2&""" target=""_blank"">下载此文件</a>"
     	Else
-       		mstr=mstr&"<img src=""images/download.gif"" alt=""" & lang.Tip.UBB.Down(2) & """ style=""margin:0px 2px -4px 0px""/> " & lang.Tip.UBB.Down(2) & " <a href=""login.asp"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
+       		mstr=mstr&"<img src=""images/download.gif"" alt=""该文件只允许会员下载"" style=""margin:0px 2px -4px 0px""/>该文件只允许会员下载<a href=""login.asp"">登录</a> | <a href=""register.asp"">注册新用户</a>"
     	End If
     	response.write mstr
 	End If
@@ -77,9 +77,9 @@ elseif request.QueryString("action") = "checkname" then
 			strname = CheckStr(request.QueryString("usename"))
 			set checkdb = conn.execute("select * from blog_Member where mem_Name='"&strname&"'")
 				if checkdb.bof or checkdb.eof then
-					response.write"<font color=""#0000ff"">" & lang.Err.info(2) & "</font>|$|True"
+					response.write"<font color=""#0000ff"">用户名未注册</font>|$|True"
 				else
-					response.write"<font color=""#ff0000"">" & lang.Err.info(1) & "</font>|$|False"
+					response.write"<font color=""#ff0000"">用户名已注册</font>|$|False"
 				end if
 			set checkdb = nothing
 	End If
@@ -139,9 +139,9 @@ elseif request.QueryString("action") = "PostSave" then
         postLog = lArticle.postLog    
         Set lArticle = Nothing   
 
-        response.write "{info : '" & transHtml(lang.Tip.logs.Ajax(1)(DateToStr(now(), "Y-m-d H:I:S"))) & "', right : 1, id : "&postLog(2) & "}"
+        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#9C0024'>保存</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 1, id : "&postLog(2) & "}"
     else    
-        response.write lang.Err.info(999)
+        response.write "非法操作！"
     end if    
 '--------------------------- [Ajax草稿保存 -- 编辑时保存] --------------------------    
 elseif request.QueryString("action") = "UpdateSave" then    
@@ -201,9 +201,9 @@ elseif request.QueryString("action") = "UpdateSave" then
         postLog = lArticle.editLog(SaveId)    
         Set lArticle = Nothing   
             
-        response.write "{info : '" & transHtml(lang.Tip.logs.Ajax(2)(DateToStr(now(), "Y-m-d H:I:S"))) & "', right : 0 , id : " & SaveId & "}"  
+        response.write "{info : '" & transHtml("草稿于 " & DateToStr(now(), "Y-m-d H:I:S") & " <font color='#AF5500'>更新</font>成功,请不要刷新本页,以免丢失信息!") & "', right : 0 , id : " & SaveId & "}"  
     Else    
-        Response.write lang.Err.info(999)   
+        Response.write "非法操作！"   
     End if
 '-------------[防盗链]---------------
 ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
@@ -215,13 +215,13 @@ ElseIf request("action") = "Antidown" or request("action") = "Antimdown" then
 			Set down = conn.execute("select FilesPath,FilesCounts from blog_Files where id="&id)
 				response.clear()
 				If request("action") = "Antimdown" and memName = empty Then
-					showdownstr = getFileIcons(getFileInfo(down(0))(9)) & lang.Tip.UBB.Down(2) & " <a href=""login.asp"" accesskey=""L"">" & lang.Action.Login & "</a> | <a href=""register.asp"">" & lang.Action.Register & "</a>"
+					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" 该文件只允许会员下载 <a href=""login.asp"" accesskey=""L"">登录</a> | <a href=""register.asp"">注册新用户</a>"
 				Else
-					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; " & lang.Tip.UBB.Down(3) & ":"&down(1)&"]</font>"
+					showdownstr = getFileIcons(getFileInfo(down(0))(9))&" <a href="""&request("downurl")&""" target=""_blank"">"&trim(checkstr(request("main")))&"</a><font color=""#999999"">("&getFileInfo(down(0))(0)&")</font><br/><font color=""#999999"">["&Datetostr(getFileInfo(down(0))(10),"Y-m-d H:I A")&"; 已下载次数:"&down(1)&"]</font>"
 				End If
 			response.write showdownstr
 	else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	end if
 '-------------[Ajax增加新分类]---------------
 ElseIf Request.QueryString("action") = "AddNewCate" then
@@ -258,7 +258,7 @@ ElseIf Request.QueryString("action") = "AddNewCate" then
 		
 		Response.Write(ReturnID)
 	Else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	End If
 '-------------[Ajax找回密码]---------------
 ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
@@ -278,7 +278,7 @@ ElseIf Request.QueryString("action") = "GetPassReturnInfo" Then
 		End If
 		Set Rs = Nothing
 	Else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	End If
 ElseIf Request.QueryString("action") = "UpdatePass" Then
 	If ChkPost() And stat_Admin Then
@@ -289,7 +289,7 @@ ElseIf Request.QueryString("action") = "UpdatePass" Then
 		Conn.Execute("Update [blog_Member] Set [mem_Question]='"&u_q&"',[mem_Answer]='"&u_a&"' Where [mem_ID]="&u_ID)
 		Response.Write("1")
 	Else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	End If
 ElseIf Request.QueryString("action") = "CheckPostName" Then
 	If ChkPost() Then
@@ -302,7 +302,7 @@ ElseIf Request.QueryString("action") = "CheckPostName" Then
 			Response.Write(UnCheckStr(zName) & "|$|" & Zs("mem_Question"))
 		End If
 	Else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	End If
 ElseIf Request.QueryString("action") = "updatepassto" Then
 	If ChkPost() And stat_Admin Then
@@ -320,15 +320,15 @@ ElseIf Request.QueryString("action") = "updatepassto" Then
 		Set e_Rs = nothing
 		response.Write("1")
 	Else
-		response.write lang.Err.info(999)
+		response.write "非法操作！"
 	End If
 '-------------[Ajax首页评论审核]---------------
 ElseIf Request.QueryString("action") = "IndexAudit" Then
 	AType = Int(CheckStr(UnEscape(Request.QueryString("type"))))
 	SaveId = Int(CheckStr(UnEscape(Request.QueryString("id"))))
 	BlogId = Int(CheckStr(UnEscape(Request.QueryString("blogid"))))
-	If len(SaveId) = 0 Then Response.Write(lang.Err.info(3)) : Response.End()
-	If len(BlogId) = 0 Then Response.Write(lang.Err.info(3)) : Response.End()
+	If len(SaveId) = 0 Then Response.Write("评论参数错误") : Response.End()
+	If len(BlogId) = 0 Then Response.Write("日志参数错误") : Response.End()
 	If AType = 0 Then
 		Conn.Execute("Update [blog_Comment] Set comm_IsAudit=true Where [comm_ID]="&SaveId)
 		Response.Write("0")
@@ -348,20 +348,20 @@ ElseIf Request.QueryString("action") = "ReadArticleComentByCommentID" Then
 	SplitStr = ""
 	For SplitSi = 0 to (Ubound(SplitSaveId) - 1)
 		Set SplitRs = Conn.Execute("Select comm_ID,comm_Content,comm_Author,comm_PostTime,comm_DisSM,comm_DisUBB,comm_DisIMG,comm_AutoURL,comm_PostIP,comm_AutoKEY,comm_IsAudit From blog_Comment Where comm_ID="&SplitSaveId(SplitSi))
-'   0         1            2           3            4           5         6             7           8             9         10
+											'   0         1            2           3            4           5         6             7           8             9         10
 		If Not SplitRs.Eof And Not SplitRs.Bof Then
 			If blog_AuditOpen Then
-				If stat_Admin Then
+				If stat_Admin Or memName=SplitRs(2) Then
 					If SplitRs(10) Then
 						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					Else
-						SplitStr = SplitStr & Escape("[" & lang.Tip.Comment(1) & "]:&nbsp;" & UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
+						SplitStr = SplitStr & Escape("<span class='CommentCheck'>[此评论正在审核中,内容如下：]</span><br/>" & UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					End If
 				Else
 					If SplitRs(10) Then	
 						SplitStr = SplitStr & Escape(UBBCode(HtmlEncode(SplitRs(1)),SplitRs(4),blog_commUBB,blog_commIMG,SplitRs(7),SplitRs(9))) & "|$|"
 					Else
-						SplitStr = SplitStr & "[" & lang.Tip.Comment(1) & "]|$|"
+						SplitStr = SplitStr & "<span class='CommentCheck'>[此评论正在审核中,只有博主及评论作者可见]</span>|$|"
 					End If
 				End If
 			Else
@@ -394,6 +394,6 @@ ElseIf Request.QueryString("action") = "validate" Then
 		Response.Write "{suc : true, info : '" & transHtml("<img src=""images/code_ok.gif"" border=""0""/>") & "'}"
 	End If
 Else
-	Response.write lang.Err.info(999)
+	Response.write "非法操作！"
 End If
 %>

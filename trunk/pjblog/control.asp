@@ -14,7 +14,7 @@
 <meta name="keywords" content="PuterJam,Blog,ASP,designing,with,web,standards,xhtml,css,graphic,design,layout,usability,ccessibility,w3c,w3,w3cn" />
 <meta name="description" content="PuterJam's BLOG" />
 
-<title><%=lang.Action.Control%></title>
+<title>后台管理</title>
 </head>
 <%
 If memName = Empty Or stat_Admin<>True Then
@@ -42,8 +42,8 @@ Else
 
     <div style="border:1px solid #e5e5e5;padding:2px;">
 	    <div style="border-bottom:1px solid #e5e5e5;padding:5px;text-align:left"><img src="images/Control/logo.gif"/></div>
-	    <div style="padding:16px;padding-top:40px"><b style="margin-left:-146px;font-size:14px;"><%=lang.Tip.Control(1)%>: </b><br/><br/><input name="adpass" type="password" size="20" style="border:1px solid #999;font-size:18px"/></div>
-	    <input type="submit" value=" <%=lang.Action.Login%> " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
+	    <div style="padding:16px;padding-top:40px"><b style="margin-left:-146px;font-size:14px;">管理员密码: </b><br/><br/><input name="adpass" type="password" size="20" style="border:1px solid #999;font-size:18px"/></div>
+	    <input type="submit" value=" 登 录 " style="background:#fff;border:1px solid #999;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px"/>
 	    <div style="padding:8px;height:22px;color:#f00;font-weight:bold"><%=session(CookieName&"_ShowError")%></div><%session(CookieName&"_ShowError")=""%>
 	    <div style="padding:2px;font-family:arial;color:#666;font-size:9px;text-align:right"><b>PJBlog3 v<%=blog_version%></b></div>
    </div>
@@ -58,11 +58,11 @@ If action = "login" Then
     getPass = CheckStr(Request.Form("adpass"))
     Set chUser = conn.Execute("SELECT Top 1 mem_Name,mem_Password,mem_salt,mem_Status,mem_LastIP,mem_lastVisit,mem_hashKey FROM blog_member WHERE mem_Name='"&memName&"'")
     If chUser.EOF Or chUser.bof Then
-        session(CookieName&"_ShowError") = lang.Tip.Control(2)
+        session(CookieName&"_ShowError") = "管理员密码错误!"
         RedirectUrl("control.asp")
     Else
         If chUser("mem_Password")<>SHA1(getPass&chUser("mem_salt")) Then
-            session(CookieName&"_ShowError") = lang.Tip.Control(2)
+            session(CookieName&"_ShowError") = "管理员密码错误!"
             RedirectUrl("control.asp")
         Else
             session(CookieName&"_System") = True

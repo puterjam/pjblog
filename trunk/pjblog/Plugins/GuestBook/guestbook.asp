@@ -16,7 +16,7 @@
      <div id="innermainContent">
        <div id="mainContent-topimg"></div>
 	   <%=content_html_Top%>
-	   <%'在这里写代码，为了保证也、页面完整性，其他地方尽量不要修改 %>
+	<%'在这里写代码，为了保证页面完整性，其他地方尽量不要修改 %>
 	    <div id="Content_Contentlist" class="content-width">
 	    
 	    <%	     
@@ -30,20 +30,20 @@
 	        end if
 	         if replyMsg then
 	          if not (memName<>empty and stat_Admin) then
-                showmsg lang.Tip.SysTem(1),"你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon",""
+                showmsg "错误信息","你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon",""
 	          end if
 	          If MsgID=Empty then 
-	            showmsg lang.Tip.SysTem(1), lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","" 
+	            showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
 	          end if
 	          If IsInteger(MsgID)=False then 
-	            showmsg lang.Tip.SysTem(1), lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","" 
+	            showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","" 
 	          end if
 	         end if
 	         
 	        Getplugins=CheckStr(Request.QueryString("plugins"))
 	        GBSet.open(Getplugins)
             if not cBool(GBSet.getKeyValue("OpenState")) then
-              showmsg lang.Tip.SysTem(1),"留言本暂时关闭！<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a>","WarningIcon",""
+              showmsg "错误信息","留言本暂时关闭！<br/><a href=""default.asp"">单击返回首页</a>","WarningIcon",""
             end if
             
 	        Dim GuestDB,GuestNum,PageCount
@@ -59,7 +59,7 @@
 	        if GuestDB.eof and GuestDB.bof then
                response.write "<div style=""margin:10px 0px 10px 0px""><strong>抱歉，没有找到任何留言！</strong></div>"
                if replyMsg then 
-                showmsg lang.Tip.SysTem(1),"没有找到可以回复的留言！<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","" 
+                showmsg "错误信息","没有找到可以回复的留言！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","" 
                end if
 	        else
 	            dim bookPage

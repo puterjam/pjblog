@@ -36,7 +36,7 @@ Sub c_article
 		                conn.execute ("update blog_Category set cate_count=cate_count+1 where cate_ID="&CheckStr(Request.form("source")))
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 						PostArticle Log_Dele(i), False
-		            next
+		            Next
 		             session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志移动成功！"
 			        FreeMemory
@@ -48,17 +48,17 @@ Sub c_article
 		            for i=0 to ubound(Log_Dele)
 		                Log_source_ID = conn.execute("select log_CateID from blog_Content where log_ID="&Log_Dele(i))(0)
 						logTag = conn.execute("select log_Tag from blog_Content where log_ID="&Log_Dele(i))(0)
-						if fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) then
+						If fso.FileExists(server.MapPath(Alias(Log_Dele(i)))) Then
 		                    WebFso.DeleteFile(Alias(Log_Dele(i)))
 							WebFso.DeleteFile("cache/"&Log_Dele(i)&".asp")
-		                end if
+		                End If
 		                conn.execute ("update blog_Category set cate_count=cate_count-1 where cate_ID="&Log_source_ID)
 						conn.execute ("update blog_Info set blog_LogNums=blog_LogNums-1 where blog_ID=1")
 		                conn.execute("DELETE * from blog_Content where log_ID="&Log_Dele(i))
 		                autoDeleteTag logTag
-		            next
+		            Next
 					Set WebFso = Nothing
-		            session(CookieName&"_ShowMsg") = True
+		             session(CookieName&"_ShowMsg") = True
 		            session(CookieName&"_MsgText") = "日志删除成功！"
 			        FreeMemory
 					Session(CookieName&"_LastDo")="DelArticle"
@@ -75,19 +75,19 @@ Sub c_article
 		    <%
 		        Dim Log_cate,Log_cateid
 				Log_cateid=Request("cate_ID")
-				If Log_cateid="" then
+				If Log_cateid="" Then
 					Log_cateid=0
-				End if
+				End If
 		        Set Log_cate=Server.CreateObject("ADODB.RecordSet")
 		        Sql="select * from blog_Category where not cate_OutLink"
 		        Log_cate.Open Sql,conn,1,1
-		        If Log_cate.eof and Log_cate.bof then
+		        If Log_cate.eof and Log_cate.bof Then
 		            response.write "暂未添加分类！"
 		        Else
 					Dim Log_c
 					Set Log_c=Server.CreateObject("ADODB.RecordSet")
 					Log_c.Open "SELECT COUNT(*) as Mycount FROM blog_Content",Conn
-		                If Log_cateid>0 then
+		                If Log_cateid>0 Then
 							Response.write "<a href=ConContent.asp?Fmenu=Article&Smenu=>查看全部("&Log_c("MyCount")&")</a> | "
 		                Else
 							Response.write "<a href=ConContent.asp?Fmenu=Article&Smenu=><b>查看全部("&Log_c("MyCount")&")</b></a> | "
@@ -95,7 +95,7 @@ Sub c_article
 					Log_c.Close
 					Set Log_c=nothing
 		            Do While Not Log_cate.eof
-		                If Log_cate("cate_ID")=int(Log_cateid) then
+		                If Log_cate("cate_ID")=int(Log_cateid) Then
 		                    response.write "<a href='ConContent.asp?Fmenu=Article&cate_ID="&Log_cate("cate_ID")&"&Smenu='><b>"&Log_cate("cate_Name")&"</b></a>("&Log_cate("cate_Count")&") | "
 		                Else
 		                    response.write "<a href='ConContent.asp?Fmenu=Article&cate_ID="&Log_cate("cate_ID")&"&Smenu='>"&Log_cate("cate_Name")&"</a>("&Log_cate("cate_Count")&") | "
@@ -191,11 +191,11 @@ Sub c_article
 				    </tr>
 				    <%
 					Do Until Log_List.EOF OR Log_PageCM=Log_List.PageSize
-						if blog_postFile = 2 then
+						If blog_postFile = 2 Then
 							urlLink = Alias(Log_List(0))
-						else 
+						Else 
 							urlLink = "article.asp?id="&Log_List(0)
-						end if
+						End If
 
 				    %>
 				    <tr bgcolor="#FFFFFF">
@@ -207,7 +207,7 @@ Sub c_article
 				    <td><nobr><%=DateToStr(Log_List(3),"Y-m-d H:I:S")%></nobr></td>
 				    <td align="center">
 				    <%
-				    If Log_List(4)>0 then
+				    If Log_List(4)>0 Then
 				    %>
 				    <a href="<%=urlLink%>#comm_top" target="_blank"><%=Log_List(4)%></a>
 				    <%
@@ -238,9 +238,9 @@ Sub c_article
 					    Dim Log_CategoryListDB,Log_CateInOpstions
 					            set Log_CategoryListDB=conn.execute("select * from blog_Category order by cate_local asc, cate_Order desc")
 					             do while not Log_CategoryListDB.eof
-					              if not Log_CategoryListDB("cate_OutLink") then
+					              If not Log_CategoryListDB("cate_OutLink") Then
 					               Log_CateInOpstions=Log_CateInOpstions&"<option value="""&Log_CategoryListDB("cate_ID")&""">&nbsp;&nbsp;"&Log_CategoryListDB("cate_Name")&" ["&Log_CategoryListDB("cate_count")&"]</option>"
-					              end if
+					              End If
 					              Log_CategoryListDB.movenext
 					             loop
 					             set Log_CategoryListDB=nothing
@@ -264,5 +264,5 @@ Sub c_article
    	 </tr>
     </table>
 <%
-end Sub
+End Sub
 %>

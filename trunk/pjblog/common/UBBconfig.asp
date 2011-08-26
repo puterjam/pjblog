@@ -133,7 +133,7 @@ Function ToolsToCode()
                     Case "mDown"
                         ToolsToCode = ToolsToCode&"<li><a id=""A_mDown"" href=""javascript:UBB_mDown();void(0)"" title=""插入只允许会员下载的文件地址"" class=""Toolsbutton""><img src=""images/disk.gif"" border=""0"" alt=""插入只允许会员下载的文件地址"" /></a></li>"
 					Case "AjaxLogSave"
-                        ToolsToCode = ToolsToCode&"<li><a id=""A_AjaxLogSave"" href=""javascript:UBB_AjaxLogSave();void(0)"" title=""点击开启或关闭Ajax草稿自动保存"" class=""Toolsbutton""><img src=""images/AjaxLogSave.png"" border=""0"" alt=""点击开启或关闭Ajax草稿自动保存"" /></a></li>"
+                        ToolsToCode = ToolsToCode&"<li><a id=""A_AjaxLogSave"" href=""javascript:UBB_AjaxLogSave();void(0)"" title=""点击开启或关闭草稿自动保存"" class=""Toolsbutton""><img src=""images/AjaxLogSave.png"" border=""0"" alt=""点击开启或关闭草稿自动保存"" /></a></li>"
                     Case Else
                         ToolsToCode = ToolsToCode&"<li><a id=""A_"&Items&""" href=""javascript:UBB_"&Items&"();void(0)"" title=""" + Tip(Items) + """ class=""Toolsbutton""><img src=""skins/"&Skins&"/UBB/Icons/"&Items&".gif"" border=""0"" alt=""" + Tip(Items) + """ /></a></li>"
                 End Select

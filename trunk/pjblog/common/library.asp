@@ -172,7 +172,7 @@ Function userPanel()
     userPanel = ""
     If memName<>Empty Then userPanel = userPanel&" <b>"&memName&"</b>，欢迎你!<br/>你的权限: "&stat_title&"<br/><br/>"
     If stat_Admin = True Then userPanel = userPanel + "<a href=""control.asp"" target=""_blank"" class=""sideA"" accesskey=""3"">系统管理</a>"
-    If stat_AddAll = True Or stat_Add = True Then userPanel = userPanel + "<a href=""blogpost.asp"" class=""sideA"" accesskey=""N"">发表新日志</a>"
+    If stat_AddAll = True Or stat_Add = True Then userPanel = userPanel + "<a href=""blogpost.asp"" class=""sideA"" accesskey=""N"">发表日志</a>"
     If (stat_AddAll = True Or stat_Add = True) And (stat_EditAll Or stat_Edit) Then
         If IsEmpty(session(CookieName&"_draft_"&memName)) Then
             If stat_EditAll Then
@@ -193,7 +193,7 @@ Function userPanel()
         End If
     End If
     If memName<>Empty Then
-        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改个人资料</a><a href=""login.asp?action=logout"" class=""sideA"" accesskey=""Q"">" & lang.Action.Logout & "</a>"
+        userPanel = userPanel&"<a href=""member.asp?action=edit"" class=""sideA"" accesskey=""M"">修改资料</a><a href=""login.asp?action=logout"" class=""sideA"" accesskey=""Q"">退出系统</a>"
     Else
         userPanel = userPanel&"<a href=""login.asp"" class=""sideA"" accesskey=""L"">登录</a><a href=""register.asp"" class=""sideA"" accesskey=""U"">用户注册</a>"
         If blog_PasswordProtection Then
@@ -508,13 +508,13 @@ End Class
 '*******************************************
 '  Tag Gravatar
 ' 设置Gravatar头像信息
-' <img alt="Gravatar Icon" src="http://www.gravatar.com/avatar/email md5?d=identicon&s=80&r=g"/>
+' <img alt="Gravatar Icon" src="http://www.gravatar.com/avatar/email md5?d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D60&s=60&r=g"/>
 '*******************************************
 Class Gravatar
 	Public Gravatar_d, Gravatar_s, Gravatar_r, Gravatar_EmailMd5
 	Private Sub Class_Initialize()
-        Gravatar_d = "identicon" ' 默认图片，如d=http%3A%2F%2Fexample.com%2Fimages%2Fexample.jpg(其中“%3A”代“:”，“%2F”代“/”)，也可以用三个特殊参数：identicons、monsterids、wavatars
-        Gravatar_s = "40" ' 图片大小，单位是px，默认是80，可以取1~512之间的整数
+        Gravatar_d = "http%3A%2F%2Fwww.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D60" ' 默认图片，如d=http%3A%2F%2Fexample.com%2Fimages%2Fexample.jpg(其中“%3A”代“:”，“%2F”代“/”)，也可以用三个特殊参数：identicons、monsterids、wavatars
+        Gravatar_s = "60" ' 图片大小，单位是px，默认是80，可以取1~512之间的整数
         Gravatar_r = "g" ' 限制等级，默认为g，(G 普通级、PG 辅导级、R 和 X 为限制级)
         Gravatar_EmailMd5 = "" ' 邮箱的MD5值
     End Sub

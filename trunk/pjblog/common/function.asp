@@ -212,7 +212,7 @@ End Function
 '自定义读取缓存路径 by evio
 '*************************************
 function caload(id)
-  If not IsEmpty(Application(CookieName&"_articleUrl_"&id)) then
+  If not IsEmpty(Application(CookieName&"_articleUrl_"&id)) and Application(CookieName&"_articleUrl_"&id) <> "" then
   	caload = Application(CookieName&"_articleUrl_"&id)
   	Exit function
   End if
@@ -221,7 +221,7 @@ function caload(id)
   dim rex, strrexs, strrex, conrex, istr, jstr, sestr, recname, recpart, rechtml, loadtype, cacheStream,pid,ppid
   Dim LoadList, cacheList
   
-  If not IsEmpty(Application(CookieName&"_listCache")) then
+  If not IsEmpty(Application(CookieName&"_listCache")) and Application(CookieName&"_listCache")<>"" then
    		cacheList = Application(CookieName&"_listCache")
   Else
    		LoadList = LoadFromFile("cache/listCache.asp")
@@ -501,6 +501,22 @@ Function IsValidEmail(Email)
     End If
     If InStr(email, "..") > 0 Then
         IsValidEmail = False
+    End If
+End Function
+
+'*************************************
+'检测是否有效的网址
+'*************************************
+Function IsRightUrl(UrlStrng)
+    Dim regEx, retVal
+    Set regEx = New RegExp
+    regEx.Pattern = "^https?:\/\/[\u4E00-\u9FA5a-zA-Z\.\/0-9]{3,}[\u4E00-\u9FA5a-zA-Z\/0-9]{2,}$"
+    regEx.IgnoreCase = False
+    retVal = regEx.Test(UrlStrng)
+    If retVal Then
+        IsRightUrl = True
+    Else
+        IsRightUrl = False
     End If
 End Function
 
@@ -1011,6 +1027,9 @@ Function getBrowser(strUA)
         arrInfo(0) = ""
         If InStr(strUA, "omniweb")>0 Then arrInfo(0) = "OmniWeb"
         If InStr(strUA, "safari")>0 Then arrInfo(0) = "Safari"
+        If InStr(strUA, "maxthon")>0 Then arrInfo(0) = "Maxthon"
+        If InStr(strUA, "360se")>0 Then arrInfo(0) = "360浏览器"
+        If InStr(strUA, "QQBrowser")>0 Then arrInfo(0) = "QQ浏览器"
         arrInfo(0) = arrInfo(0) + strType
     End If
 
@@ -1026,6 +1045,8 @@ Function getBrowser(strUA)
         If InStr(strUA, "webtv")>0 Then arrInfo(0) = "WebTV"
         If InStr(strUA, "myie2")>0 Then arrInfo(0) = "MyIE2"
         If InStr(strUA, "maxthon")>0 Then arrInfo(0) = "Maxthon"
+        If InStr(strUA, "360se")>0 Then arrInfo(0) = "360浏览器"
+        If InStr(strUA, "QQBrowser")>0 Then arrInfo(0) = "QQ浏览器"
         If InStr(strUA, "gosurf")>0 Then arrInfo(0) = "GoSurf"
         If InStr(strUA, "netcaptor")>0 Then arrInfo(0) = "NetCaptor"
         If InStr(strUA, "sleipnir")>0 Then arrInfo(0) = "Sleipnir"
@@ -1043,12 +1064,16 @@ Function getBrowser(strUA)
     If InStr(strUA, "windows 98")>0 Then arrInfo(1) = "Windows 98"
     If InStr(strUA, "windows 2000")>0 Then arrInfo(1) = "Windows 2000"
     If InStr(strUA, "windows xp")>0 Then arrInfo(1) = "Windows XP"
+    If InStr(strUA, "windows vista")>0 Then arrInfo(1) = "Windows Vista"
+    If InStr(strUA, "windows 7")>0 Then arrInfo(1) = "Windows 7"
 
     If InStr(strUA, "windows nt")>0 Then
         arrInfo(1) = "Windows NT"
         If InStr(strUA, "windows nt 5.0")>0 Then arrInfo(1) = "Windows 2000"
         If InStr(strUA, "windows nt 5.1")>0 Then arrInfo(1) = "Windows XP"
-        If InStr(strUA, "windows nt 5.2")>0 Then arrInfo(1) = "Windows 2003"
+        If InStr(strUA, "windows nt 5.2")>0 Then arrInfo(1) = "Windows Server 2003"
+        If InStr(strUA, "windows nt 6.0")>0 Then arrInfo(1) = "Windows Vista"
+        If InStr(strUA, "windows nt 6.1")>0 Then arrInfo(1) = "Windows 7"
     End If
     If InStr(strUA, "x11")>0 Or InStr(strUA, "unix")>0 Then arrInfo(1) = "Unix"
     If InStr(strUA, "sunos")>0 Or InStr(strUA, "sun os")>0 Then arrInfo(1) = "SUN OS"
@@ -1804,30 +1829,30 @@ function MultiPage(Numbers, Perpage, Curpage, Url_Add, aname, Style, baseUrl, ev
     var pageCode = ['<div class="page" style="'+Style+'"><ul><li class="pageNumber">']; // & _curPage&"/"&Pages & " | "
     
     //第一页
-    if (_curPage!=1 && FromPage>1) {pageCode.push('<a href="'+Url+'page=1'+aname+'" page="1" title="第一页"  style="text-decoration:none" ' + event + '>«</a> | ')}
+    if (_curPage!=1) {pageCode.push('<a href="'+Url+'page=1'+aname+'" page="1" title="第一页"  style="text-decoration:none" ' + event + '>首页</a>')}
         
     if (!FirstShortCut) {ShortCut = ' accesskey=","'}else{ ShortCut = ''}
     
     //上一页
-    if (_curPage!=1) {pageCode.push('<a href="'+Url+'page='+ (_curPage -1)+aname+'" page="'+(_curPage-1)+'" title="上一页" style="text-decoration:none;"'+ShortCut+' ' + event + '>‹</a> | ')}
+    if (_curPage!=1) {pageCode.push('<a href="'+Url+'page='+ (_curPage -1)+aname+'" page="'+(_curPage-1)+'" title="上一页" style="text-decoration:none;"'+ShortCut+' ' + event + '>上一页</a>')}
     
     //列表部分
     for (PageI = FromPage;PageI<=ToPage;PageI++){
         if (PageI!=_curPage) {
-            pageCode.push('<a href="'+Url+'page='+(PageI+aname)+'" ' + event + ' page="'+PageI+'">'+PageI+'</a> | ');
+            pageCode.push('<a href="'+Url+'page='+(PageI+aname)+'" ' + event + ' page="'+PageI+'">'+PageI+'</a>');
         }else{
             pageCode.push('<strong>'+PageI+'</strong>');
-            if (PageI!=Pages) {pageCode.push(' | ')}
+            if (PageI!=Pages) {pageCode.push('')}
         }
     }
     
     if (!FirstShortCut) {ShortCut = ' accesskey="."'} else {ShortCut = ''}
     
     //下一页
-    if (_curPage!=Pages) {pageCode.push('<a href="'+Url+'page='+(_curPage+1)+aname+'" title="下一页" page="'+(_curPage+1)+'" style="text-decoration:none"'+ShortCut+' ' + event + '>›</a>')}
+    if (_curPage!=Pages) {pageCode.push('<a href="'+Url+'page='+(_curPage+1)+aname+'" title="下一页" page="'+(_curPage+1)+'" style="text-decoration:none"'+ShortCut+' ' + event + '>下一页</a>')}
     
     //最后一页
-    if (_curPage!=Pages && ToPage<Pages) {pageCode.push(' | <a href="'+Url+'page='+(Pages+aname)+'" page="'+Pages+'"  title="最后一页" style="text-decoration:none" ' + event + '>»</a>')}
+    if (_curPage!=Pages) {pageCode.push('<a href="'+Url+'page='+(Pages+aname)+'" page="'+Pages+'"  title="最后一页" style="text-decoration:none" ' + event + '>末页</a>')}
     
     //html end
     pageCode.push('</li></ul></div>');

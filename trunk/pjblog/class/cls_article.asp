@@ -36,11 +36,11 @@ End Sub
 Sub ShowArticle(LogID)
     If (log_ViewArr(5, 0) = memName And log_ViewArr(3, 0) = False) Or stat_Admin Or log_ViewArr(3, 0) = True or Trim(log_ViewArr(20, 0)) <> "" Then
     Else
-        showmsg lang.Tip.SysTem(1), "该日志为私密日志，没有权限查看该日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+        showmsg "错误信息", "该日志为私密日志，没有权限查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
     If (Not getCate.cate_Secret) Or (log_ViewArr(5, 0) = memName And getCate.cate_Secret) Or stat_Admin Or (getCate.cate_Secret And stat_ShowHiddenCate) Then
     Else
-        showmsg lang.Tip.SysTem(1), "该日志分类为私密类型，无法查看该日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+        showmsg "错误信息", "该日志分类为私密类型，无法查看该日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
 
     If log_ViewArr(6, 0) Then comDesc = "Desc" Else comDesc = "Asc" End If
@@ -100,35 +100,6 @@ Sub ShowArticle(LogID)
 %>
 					   <div id="Content_ContentList" class="content-width"><a name="body" accesskey="B" href="#body"></a>
 					   <div class="pageContent">
-						   <div style="float:right;width:auto">
-						   <%
-If Not preLog.EOF Then
-    	if blog_postFile = 2 then
-    		urlLink = caload(preLog("log_ID"))
-    	else 
-    		urlLink = "?id="&preLog("log_ID")
-    	end if
-    response.Write ("<a href="""&urlLink&""" title=""上一篇日志: "&preLog("log_Title")&""" accesskey="",""><img border=""0"" src=""images/Cprevious.gif"" alt=""""/>上一篇</a>")
-Else
-    response.Write ("<img border=""0"" src=""images/Cprevious1.gif"" alt=""这是最新一篇日志""/>上一篇")
-End If
-If Not nextLog.EOF Then
-    	if blog_postFile = 2 then
-    		urlLink = caload(nextLog("log_ID"))
-    	else 
-    		urlLink = "?id="&nextLog("log_ID")
-    	end if
-    response.Write (" | <a href="""&urlLink&""" title=""下一篇日志: "&nextLog("log_Title")&""" accesskey="".""><img border=""0"" src=""images/Cnext.gif"" alt=""""/>下一篇</a>")
-Else
-    response.Write (" | <img border=""0"" src=""images/Cnext1.gif"" alt=""这是最后一篇日志""/>下一篇")
-End If
-preLog.Close
-nextLog.Close
-Set preLog = Nothing
-Set nextLog = Nothing
-
-%>
-						   </div>
  						   <img src="<%=getCate.cate_icon%>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<%=log_ViewArr(1,0)%>" title="查看所有【<%=getCate.cate_Name%>】的日志"><%=getCate.cate_Name%></a></strong> <a href="feed.asp?cateID=<%=log_ViewArr(1,0)%>" target="_blank" title="订阅所有【<%=getCate.cate_Name%>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<%=getCate.cate_Name%>】的日志" style="margin-bottom:-1px"/></a>
 					   </div>
 					   <div class="Content">
@@ -194,7 +165,33 @@ Set nextLog = Nothing
 					   <br/><br/>
 					   </div>
 					   <div class="Content-body">
-					    <%if len(log_ViewArr(16,0))>0 then response.write ("<div class=""Modify"">"&log_ViewArr(16,0)&"</div>")%>
+					    <%
+					    if len(log_ViewArr(16,0))>0 then response.write ("<div class=""Modify"">"&log_ViewArr(16,0)&"</div>")
+If Not preLog.EOF Then
+    	if blog_postFile = 2 then
+    		urlLink = caload(preLog("log_ID"))
+    	else 
+    		urlLink = "?id="&preLog("log_ID")
+    	end if
+    response.Write ("<img border=""0"" src=""images/Cprevious.gif"" alt=""""/><strong>上一篇:</strong> <a href="""&urlLink&""" accesskey="","">"&preLog("log_Title")&"</a><br/>")
+Else
+    response.Write ("<img border=""0"" src=""images/Cprevious1.gif""/><strong>上一篇:</strong> <i>这是最早一篇日志</i><br/>")
+End If
+If Not nextLog.EOF Then
+    	if blog_postFile = 2 then
+    		urlLink = caload(nextLog("log_ID"))
+    	else 
+    		urlLink = "?id="&nextLog("log_ID")
+    	end if
+    response.Write ("<img border=""0"" src=""images/Cnext.gif"" alt=""""/><strong>下一篇:</strong> <a href="""&urlLink&""" accesskey=""."">"&nextLog("log_Title")&"</a><br/>")
+Else
+    response.Write ("<img border=""0"" src=""images/Cnext1.gif"" alt=""""/><strong>下一篇:</strong> <i>这是最新一篇日志</i><br/>")
+End If
+preLog.Close
+nextLog.Close
+Set preLog = Nothing
+Set nextLog = Nothing
+%>
 						<img src="images/From.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>文章来自:</strong> <a href="<%=log_ViewArr(17,0)%>" target="_blank"><%=log_ViewArr(18,0)%></a><br/>
 						<img src="images/icon_trackback.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>引用通告:</strong> <a href="<%="trackback.asp?tbID="&id&"&amp;action=view"%>" target="_blank">查看所有引用</a> | <a href="javascript:;" title="获得引用文章的链接" onclick="getTrackbackURL(<%=id%>)">我要引用此文章</a><br/>
 					   	<%Dim getTag
@@ -221,7 +218,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, pjblogCommentEmail, pjblogCommentWebSite, pjblogCommentEmailImg, pjblogCommentWebSiteImg
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, blog_CommentEmail, blog_CommentWebSite, blog_CommentEmailImg, blog_CommentWebSiteImg
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
     
     Pcount = 0
@@ -243,8 +240,6 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
         blog_Comment.PageSize = blogcommpage
         blog_Comment.AbsolutePage = CurPage
         comm_Num = blog_Comment.RecordCount
-		
-
 
         commArr = blog_Comment.GetRows(comm_Num)
         blog_Comment.Close
@@ -253,14 +248,14 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 
         Url_Add = "?id="&LogID&"&"
         aName = "#comm_top"
-        
+
         If blog_postFile = 2 and logShow then '静态页面使用#方式来切换
         	BaseUrl = caload(LogID)
         	Url_Add="#"
         	aName = ""
         	aEvent = "onclick=""openCommentPage(this)"""
         End If 
-        
+
 		'顶部翻页
   	   ShowComm = ShowComm&"<div class=""pageContent"">"&MultiPage(comm_Num,blogcommpage,CurPage,Url_Add,aName,"float:right", BaseUrl,aEvent)&"</div>"
 
@@ -293,40 +288,29 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			
 			If blog_GravatarOpen Then
 				ShowComm = ShowComm&"<div class=""commentleft Gravatar"" style=""float:left"" id=""Gravatar_"&blog_CommID&""">"
-'				If isblank(commArr(12, Pcount)) or isblank(commArr(11, Pcount)) Then
-'					ShowComm = ShowComm&"<img src=""images/gravatar.gif"" alt="""&blog_CommAuthor&""" border=""0"" />"
-'				Else
-'					ShowComm = ShowComm&"<a href="""&commArr(12, Pcount)&""" target=""_blank""><img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" /></a>"
-'				End If
-				If isblank(commArr(11, Pcount)) Then
-					ShowComm = ShowComm&"<img src=""images/gravatar.gif"" alt="""&blog_CommAuthor&""" border=""0"" />"
-				Else
 					ShowComm = ShowComm&"<img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" />"
-				End If
 				ShowComm = ShowComm&"</div><div class=""commentright"" style=""text-align:left"">"
 			End If
 			
-			pjblogCommentEmail = commArr(11, Pcount)
-			pjblogCommentWebSite = commArr(12, Pcount)
+			blog_CommentEmail = commArr(11, Pcount)
+			blog_CommentWebSite = commArr(12, Pcount)
 			
-			If IsBlank(pjblogCommentEmail) Then 
-				pjblogCommentEmail = "javascript:void(0)" 
-				pjblogCommentEmailImg = "images/noCommentEmail.gif" 
+			If IsBlank(blog_CommentEmail) Then 
+				blog_CommentEmailImg = "<img src=""images/noCommentEmail.gif"" border=""0"">" 
 			Else 
-				pjblogCommentEmail = "mailto:" & pjblogCommentEmail
-				pjblogCommentEmailImg = "images/CommentEmail.gif"
+				blog_CommentEmailImg = "<a href=""mailto:"&blog_CommentEmail&"""><img src=""images/CommentEmail.gif"" border=""0"" alt=""Mail To:"&blog_CommentEmail&"""></a>"
 			End If
-			If IsBlank(pjblogCommentWebSite) Then 
-				pjblogCommentWebSite = "javascript:void(0)"
-				pjblogCommentWebSiteImg = "images/nositeurl.gif" 
+			If IsBlank(blog_CommentWebSite) Then 
+				blog_CommentWebSiteImg = "<img src=""images/nositeurl.gif"" border=""0"">" 
 			Else 
-				pjblogCommentWebSiteImg = "images/siteurl.gif"
+				blog_CommentWebSiteImg = "<a href="""&blog_CommentWebSite&""" target=""_blank""><img src=""images/siteurl.gif"" border=""0"" alt=""访问 "&blog_CommentWebSite&"""></a>"
 			End If
 			
 			ShowComm = ShowComm&"<div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
+			ShowComm = ShowComm&"<div class=""commenttop"">"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
-     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | <a href="""&pjblogCommentEmail&"""><img src="""&pjblogCommentEmailImg&""" border=""0""></a> | <a href="""&pjblogCommentWebSite&""" target=""_blank""><img src="""&pjblogCommentWebSiteImg&""" border=""0""></a><span class=""ownerClassComment""> | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
+     		ShowComm = ShowComm&"<span class=""commentinfo"">["&DateToStr(commArr(3,Pcount),"Y-m-d H:I A")&" | "&blog_CommentWebSiteImg&"<span class=""ownerClassComment""> | "&blog_CommentEmailImg&" | "&commArr(8,Pcount)&" | <a href=""blogcomm.asp?action=del&amp;commID="&blog_CommID&""" onclick=""return delCommentConfirm()""><img src=""images/del1.gif"" alt=""del"" border=""0""/></a>"
 			'' 评论审核按钮部分
 			If blog_AuditOpen Then
 				'If stat_Admin Then
@@ -337,7 +321,9 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 					End If
 				'End If
 			End If
-			ShowComm = ShowComm&"</span>]</span>"
+			ShowComm = ShowComm&" | <span style=""cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-3px;""/>回复</span>"
+			ShowComm = ShowComm&"</span>]</span></div>"
+     		ShowComm = ShowComm&"<span class=""CommentFloor"">"&Floor&"</span>"
 		
 			'删除按钮
 		'	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 
@@ -346,39 +332,39 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			
      		'ShowComm = ShowComm&"<div class=""comment""><div class=""commenttop"">"
 			'评论内容
-			ShowComm = ShowComm&"</div><div class=""commentcontent"" id=""commcontent_"&blog_CommID&""">"
+			ShowComm = ShowComm&"<div class=""commentcontent"" id=""commcontent_"&blog_CommID&""">"
 			'评论审核部分
 			If blog_AuditOpen Then
 				If blog_postFile = 2 Then '  区分动静态
 					 If forStaticComment Then '区分静态下的评论
-						If stat_Admin Then '  判断权限
+						If stat_Admin Or memName=blog_CommAuthor Then '  判断权限
 							If commArr(10,Pcount) Then
 								ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 							Else
-								ShowComm = ShowComm&"[未审核评论,仅管理员可见]:&nbsp;"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+								ShowComm = ShowComm&"<span class=""CommentCheck"">[此评论正在审核中,内容如下：]</span><br/>"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 							End If
 						Else
 							If commArr(10,Pcount) Then	
 								ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 							Else
-								ShowComm = ShowComm&"[未审核评论,仅管理员可见]"
+								ShowComm = ShowComm&"<span class=""CommentCheck"">[此评论正在审核中,只有博主及评论作者可见]</span>"
 							End If
 						End If
 					Else
-						ShowComm = ShowComm & "[ 正在加载评论信息,请稍后... ]"
+						ShowComm = ShowComm & "<span class=""CommentCheck"">[正在加载评论信息,请稍候...]</span>"
 					End If
 				Else
-					If stat_Admin Then '  判断权限
+					If stat_Admin Or memName=blog_CommAuthor Then '  判断权限
 						If commArr(10,Pcount) Then
 							ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 						Else
-							ShowComm = ShowComm&"[未审核评论,仅管理员可见]:&nbsp;"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
+							ShowComm = ShowComm&"<span class=""CommentCheck"">[此评论正在审核中,内容如下：]</span><br/>"&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 						End If
 					Else
 						If commArr(10,Pcount) Then	
 							ShowComm = ShowComm&UBBCode(HtmlEncode(blog_CommContent),commArr(4,Pcount),blog_commUBB,blog_commIMG,commArr(7,Pcount),commArr(9,Pcount))
 						Else
-							ShowComm = ShowComm&"[未审核评论,仅管理员可见]"
+							ShowComm = ShowComm&"<span class=""CommentCheck"">[此评论正在审核中,只有博主及评论作者可见]</span>"
 						End If
 					End If
 				End If
@@ -471,10 +457,17 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 					response.write ("value="""&Ts_UserName&"""")
 				End if
 			  End if
-			  %>/></td></tr>
-		      <%if memName=empty then%><tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr><%end if%>
-              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = true then response.write(Ts_Email) Else Response.Write("")%>" /> 支持Gravatar头像.</td></tr>
+			  %>/>
+			  <%if memName=empty then%>
+			  <label for="label8"><input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>记住我的信息</label>
+			  <%else%> 您当前的权限:[<%=stat_title%>] <a href="login.asp?action=logout">[退出]</a>
+			  <%end if%>
+			  </td></tr>
+		      <%if memName=empty then%>
+		      <tr><td align="right" width="70"><strong>密　码:</strong></td><td align="left" style="padding:3px;"><input name="password" type="password" size="18" class="userpass" maxlength="24"/> 游客发言不需要密码.</td></tr>
+              <tr><td align="right" width="70"><strong>邮　箱:</strong></td><td align="left" style="padding:3px;"><input name="Email" type="text" size="30" class="userpass" value="<%if Ts_True = true then response.write(Ts_Email) Else Response.Write("")%>" /> 邮件地址支持<a href="http://www.gravatar.com/site/signup/" title="没有Gravatar头像？在线申请吧..." target="_blank">Gravatar</a>头像,邮箱地址不会公开.</td></tr>
               <tr><td align="right" width="70"><strong>网　址:</strong></td><td align="left" style="padding:3px;"><input name="WebSite" type="text" size="30" class="userpass" value="<%if Ts_True = true then response.write(Ts_WebSite) Else Response.Write("")%>" onfocus="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}" onblur="if (this.value.length >= 0 && this.value.substring(0, 7) != 'http://'){this.value = 'http://' + this.value}else{if (this.value == 'http://'){this.value = ''}}" /> 输入网址便于回访.</td></tr>
+              <%end if%>
 			  <tr><td align="right" width="70" valign="top"><strong>内　容:</strong><br/>
 			  </td><td style="padding:2px;">
 			   <%
@@ -486,14 +479,11 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 			  </td></tr>
 			  <%if (memName=empty or blog_validate=true) and stat_Admin=false then%><tr><td align="right" width="70">
               <strong>验证码:</strong></td><td align="left" style="padding:3px;"><input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></td></tr><%end if%>
-			  <tr><td align="right" width="70" valign="top"><strong>选　项:</strong></td><td align="left" style="padding:3px;">
-		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" />禁止表情转换</label>
-		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" />禁止自动转换链接</label>
-		             <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" />禁止自动转换关键字</label>
-                     <%if not len(memName) > 0 then%>
-                     <span id="GuestCanRemeberComment"><br />
-                    <label for="label8"><input name="log_GuestCanRemeberComment" type="checkbox" id="label8" value="1" id="e_GuestCanRemeberComment" checked="checked"/>记住我的信息,以便下次评论时不用输入用户名.</label></span>
-                    <%end if%>
+			  <tr><td align="right" width="70"><strong>选　项:</strong></td>
+			  <td align="left" style="padding:3px;">
+		             <label for="label5"><input name="log_DisSM" type="checkbox" id="label5" value="1" style="margin-top:-2px;"/> 禁止表情转换</label>
+		             <label for="label6"><input name="log_DisURL" type="checkbox" id="label6" value="1" style="margin-top:-2px;"/> 禁止自动转换链接</label>
+		             <label for="label7"><input name="log_DisKey" type="checkbox" id="label7" value="1" style="margin-top:-2px;"/> 禁止自动转换关键字</label>
 			  </td></tr>
 		          <tr>
 		            <td colspan="2" align="center" style="padding:3px;">
@@ -505,12 +495,11 @@ Sub ShowCommentPost(ByVal logID, ByVal DisComment, ByVal logPwcomm, ByVal CanRea
 		          <tr>
 		            <td colspan="2" align="right" >
 					 <%if memName=empty then%>
-					 	虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>. <br/>
+					 	虽然发表评论不用注册，但是为了保护您的发言权，建议您<a href="register.asp">注册帐号</a>.<br/>
 					 <%end if%>
 			  字数限制 <b><%=blog_commLength%> 字</b> |
 			  UBB代码 <b><%if (blog_commUBB=0) then response.write ("开启") else response.write ("关闭") %></b> |
 			  [img]标签 <b><%if (blog_commIMG=0) then response.write ("开启") else response.write ("关闭") %></b>
-		
 					</td>
 		          </tr>		  
 			  </table></form>

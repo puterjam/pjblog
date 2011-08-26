@@ -81,4 +81,3 @@ Else
     Curpage = 1
 End If
 %>
-<script language="jscript" type="text/jscript" runat="server" src="language/language.js"></script>
