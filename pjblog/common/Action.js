@@ -377,10 +377,10 @@ function IndexAudit(id, i, Thisobj, BlogID){
 	var c;
 	var ajax = new AJAXRequest;
 	if (i == 0){
-		LoadInformation("正在通过审核ID为" + id + "的评论,请稍后...");
+		LoadInformation("正在审核通过ID为" + id + "的评论,请稍候...");
 		c = GetFile[0]+GetAction[9]+"type=0&id=" + escape(id) + "&blogid=" + escape(BlogID) + "&TimeStamp="+new Date().getTime();
 	}else if (i == 1){
-		LoadInformation("正在取消审核ID为" + id + "的评论,请稍后...");
+		LoadInformation("正在取消审核ID为" + id + "的评论,请稍候...");
 		c = GetFile[0]+GetAction[9]+"type=1&id=" + escape(id) + "&blogid=" + escape(BlogID) + "&TimeStamp="+new Date().getTime();
 	}else{
 		c = 0;
@@ -393,11 +393,12 @@ function IndexAudit(id, i, Thisobj, BlogID){
 				 	TempStr = parseInt(TempStr);
 					if (TempStr == 0){
 						Thisobj.innerHTML = "取消审核";
-						$("commcontent_" + id).innerHTML = $("commcontent_" + id).innerHTML.replace("[未审核评论,仅管理员可见]:&nbsp;", "");
+						$("commcontent_" + id).innerHTML = $("commcontent_" + id).innerHTML.replace(/\[.*?\]/ig, "<font color='red'><strong>[操作成功,此评论通过审核]</strong></font>");
 						Thisobj.onclick = function(){IndexAudit(id, 1, Thisobj, BlogID);}
 					}else if (TempStr == 1){
 						Thisobj.innerHTML = "通过审核"; 
-						$("commcontent_" + id).innerHTML = "[未审核评论,仅管理员可见]:&nbsp;" + $("commcontent_" + id).innerHTML;
+						$("commcontent_" + id).innerHTML = $("commcontent_" + id).innerHTML.replace(/<span.*?<br>/ig, "");
+						$("commcontent_" + id).innerHTML = "<span class='CommentCheck'>[此评论正在审核中,内容如下：]</span><br/>" + $("commcontent_" + id).innerHTML;
 						Thisobj.onclick = function(){IndexAudit(id, 0, Thisobj, BlogID);}
 					}
 					LoadInformation();
@@ -492,11 +493,11 @@ function StartHTML(){
 }
 
 
-function Related(logid, postfile, div){
+function Related(logid, page, act, div){
 	var TempStr;
 	var ajax = new AJAXRequest;
 	ajax.get(
-			 GetFile[1] + "?id=" + logid + "&blog_postFile=" + postfile + "&TimeStamp="+new Date().getTime(),
+			 GetFile[1] + "?id=" + logid + "&page=" + page + "&act=" + act + "&TimeStamp="+new Date().getTime(),
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 $(div).innerHTML = TempStr;

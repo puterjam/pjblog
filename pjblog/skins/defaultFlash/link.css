@@ -9,17 +9,17 @@
 ------------------------------------*/
  a:link,a:visited{text-decoration:underline;color:#574D31;}
  a:hover{color:#996600;}
- .menuA:link,.menuA:visited{float:left;height:28px;text-align:center;padding:0px 4px 0px 4px;background:#E3CE96 url(menu_main.jpg) 0px 0px;text-decoration:none;color:#493107;line-height:210%;}  
- .menuA:hover{background:#E3CE96 url(menu_main.jpg) 0px -28px;color:#493107} 
+ .menuA:link,.menuA:visited{float:left;height:28px;text-align:center;padding:0px 4px 0px 4px;background:#E3CE96 url(images/menu_main.jpg) 0px 0px;text-decoration:none;color:#493107;line-height:210%;}  
+ .menuA:hover{background:#E3CE96 url(images/menu_main.jpg) 0px -28px;color:#493107} 
  .titleA:link,.titleA:visited{text-decoration:none;font-weight:bold;font-family:verdana,宋体;text-align:left;color:#FFFFFF;}
  .titleA:hover{color:#FFFFCC;text-decoration:underline;}
- .sideA:link,.sideA:visited{text-decoration:none;padding-left:16px;background:url(arrow.gif) 2px 3px no-repeat;height:16px;overflow:hidden;display:block;margin-bottom:2px;width:170px;}
- .sideA:hover{text-decoration:underline;padding-left:16px;background:url(arrow.gif) 2px -13px no-repeat;height:16px;overflow:hidden}
+ .sideA:link,.sideA:visited{text-decoration:none;padding-left:16px;background:url(images/arrow.gif) 2px 3px no-repeat;height:16px;overflow:hidden;display:block;margin-bottom:2px;width:170px;}
+ .sideA:hover{text-decoration:underline;padding-left:16px;background:url(images/arrow.gif) 2px -13px no-repeat;height:16px;overflow:hidden}
  .CategoryA:link,.CategoryA:visited{text-decoration:none;}
  .CategoryA:hover{text-decoration:underline;}
  
- .more:link,.more:visited{font-weight:bold;background:url(bullet-arrow.gif) no-repeat 0px 0px;padding-left:18px;margin:5px;text-decoration:none;}
- .more:hover{background:url(bullet-arrow.gif) no-repeat 0px -15px;}  
+ .more:link,.more:visited{font-weight:bold;background:url(images/bullet-arrow.gif) no-repeat 0px 0px;padding-left:18px;margin:5px;text-decoration:none;}
+ .more:hover{background:url(images/bullet-arrow.gif) no-repeat 0px -15px;}  
  .blogsetA:link,.blogsetA:visited{padding:0px 9px 4px 16px ; background:url(../../images/tools.gif) no-repeat;text-decoration:none}
  .mp3A:link,.mp3A:visited{padding:0px 0px 4px 16px; background:url(../../images/mm_snd.gif) no-repeat;text-decoration:none}
  .collA:link,.collA:visited{padding:0px 0px 4px 16px; background:url(../../images/MyFa.gif) no-repeat;text-decoration:none}

@@ -15,12 +15,12 @@ If Request.QueryString("action") = "logout" Then
 %><br/><br/>
    <div style="text-align:center;">
     <div id="MsgContent" style="width:300px">
-      <div id="MsgHead"><%=lang.Action.Logout%></div>
+      <div id="MsgHead">退出系统</div>
       <div id="MsgBody">
 		 <div class="MessageIcon"></div>
-        <div class="MessageText"><b><%=lang.Action.LoginSuc(1)%></b><br/>
-         <a href="default.asp"><%=lang.Tip.SysTem(4)%></a>&nbsp;|&nbsp;<a href="<%=Referer_Url%>"><%=lang.Tip.SysTem(8)%></a>
-         <br/><%=lang.Action.LoginSuc(2)%></div>
+        <div class="MessageText"><b>退出登录成功</b><br/>
+         <a href="default.asp">单击返回首页</a>&nbsp;|&nbsp;<a href="<%=Referer_Url%>">单击返回退出前页面</a>
+         <br/>三秒后自动返回登录前页面</div>
          <meta http-equiv="refresh" content="3;url=<%=Referer_Url%>"/>
 		</div>
 	  </div>
@@ -39,7 +39,7 @@ ElseIf Request.Form("action") = "login" Then
       <div id="MsgHead"><%=loginUser(0)%></div>
       <div id="MsgBody">
 	   <div class="<%=loginUser(2)%>"></div>
-       <div class="MessageText"><%=Replace(Replace(loginUser(1),"default.asp",Referer_Url), lang.Tip.SysTem(4) & "</a>", lang.Tip.SysTem(9) & "</a>&nbsp;|&nbsp;<a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a><br/>" & lang.Action.LoginSuc(2))%></div>
+       <div class="MessageText"><%=Replace(Replace(loginUser(1),"default.asp",Referer_Url),"返回主页</a>","返回登录前页</a>&nbsp;|&nbsp;<a href=""default.asp"">返回首页</a><br/>三秒后自动返回登录前页面")%></div>
 	  </div>
 	</div>
   </div><br/><br/>
@@ -52,14 +52,14 @@ Else
    <div style="text-align:center;">
   <form name="checkUser" action="login.asp" method="post">
     <div id="MsgContent">
-      <div id="MsgHead"><%=lang.Action.LoginForm(1)%></div>
+      <div id="MsgHead">用户登录</div>
       <div id="MsgBody">
 	  <input name="action" type="hidden" value="login"/>
-	   <label><%=lang.Action.LoginForm(2)%>：<input name="username" type="text" size="18" class="userpass" maxlength="24"/></label><br/>
-	   <label><%=lang.Action.LoginForm(3)%>：<input name="password" type="password" size="18" class="userpass" onfocus="this.select()"/></label><br/>
-	   <label><%=lang.Action.LoginForm(4)%>：<input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();"><%=lang.Action.LoginForm(5)%></label></span> <span id="isok_checkcode"></span></label><br/>
-	   　　<label><input name="KeepLogin" type="checkbox" value="1"/><%=lang.Action.LoginForm(6)%></label><br/>
-	   <input type="submit" value="<%=lang.Action.Login%>" class="userbutton"/>　<input type="button" value="<%=lang.Action.Register%>" class="userbutton" onclick="location='register.asp'"/>
+	   <label>用户名：<input name="username" type="text" size="18" class="userpass" maxlength="24"/></label><br/>
+	   <label>密　码：<input name="password" type="password" size="18" class="userpass" onfocus="this.select()"/></label><br/>
+	   <label>验证码：<input name="validate" type="text" size="4" class="userpass" maxlength="4" onFocus="get_checkcode();this.onfocus=null;" onKeyUp="ajaxcheckcode('isok_checkcode',this);"/> <span id="checkcode"><label style="cursor:pointer;" onClick="get_checkcode();">点击获取验证码</label></span> <span id="isok_checkcode"></span></label><br/>
+	   　　<label><input name="KeepLogin" type="checkbox" value="1"/>记住我的登录信息</label><br/>
+	   <input type="submit" value="登　陆" class="userbutton"/>　<input type="button" value="用户注册" class="userbutton" onclick="location='register.asp'"/>
 	   </div>
 	</div>
   </form>

@@ -54,14 +54,14 @@ Sub replyComm
 
        If blog_reply_Isjmail and trim(quest(4))<>"" Then
             dim emailcontent,emailtitle
-            emailtitle = "您在"&siteName&"上发表的评论已被回复"
+            emailtitle = "您在 "&siteName&" 上发表的评论已有了新回复！"
             dim CommUrl
             if blog_postFile = 2 then
-                CommUrl = "请点击查看"&siteurl&caload(quest(3))&"#comm_"&cID&"。"
+                CommUrl = "详情请点击查看 "&siteurl&caload(quest(3))&"#comm_"&cID&""
             else 
-                CommUrl = "请点击查看"&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&"。"
+                CommUrl = "详情请点击查看 "&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&""
             end if
-            emailcontent = "尊敬的｛"&quest(1)&"｝，您好，你在["&siteName&"]上发表的关于["&quest(2)&"]日志的评论，现已被["&memName&"]回复，回复内容为：["&replay&"]，"&CommUrl&"谢谢您的评论，欢迎再次光临！"
+            emailcontent = "尊敬的 "&quest(1)&" ，您好！您在博客 "&siteName&" 上对日志《"&quest(2)&"》发表的评论，博主 "&memName&" 已经有了新的回复，回复内容为： “"&replay&"” 。"&CommUrl&" 谢谢您参与评论，欢迎您再次光临本博客！本邮件系统自动发送，请勿直接回复。"
             call sendmail(quest(4),emailtitle,emailcontent,quest(1))
 	end if
 

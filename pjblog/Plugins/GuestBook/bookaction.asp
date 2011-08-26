@@ -18,14 +18,14 @@ dim charCount,delay,OpenState
 Set GBSet=New ModSet
 GBSet.open("GuestBookForPJBlog")
 if not GBSet.PasreError<>-18903 then
-   showmsg lang.Tip.SysTem(1),"留言本插件没有安装<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","MessageIcon","plugins"
+   showmsg "错误信息","留言本插件没有安装<br/><a href=""javascript:history.go(-1)"">单击返回</a>","MessageIcon","plugins"
 end if
 charCount=GBSet.getKeyValue("charCount")
 delay=GBSet.getKeyValue("delay")
 OpenState=GBSet.getKeyValue("OpenState")
 
 if not cBool(OpenState) then
-   showmsg lang.Tip.SysTem(1),"留言本暂时关闭！<br/><a href=""default.asp"">" & lang.Tip.SysTem(4) & "</a>","WarningIcon","plugins"
+   showmsg "错误信息","留言本暂时关闭！<br/><a href=""default.asp"">单击返回首页</a>","WarningIcon","plugins"
 end if
 
 if request.form("action")="post" then
@@ -35,7 +35,7 @@ if request.form("action")="post" then
  elseif Request.form("action")="reply" then 
    replyMsg '回复留言
  else
-   showmsg lang.Tip.SysTem(1), lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","plugins"
+   showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","ErrorIcon","plugins"
 end if
 
 '============================= 发表留言 ========================================
@@ -110,29 +110,29 @@ dim email,tsiteURL
         Dim loginUser
         loginUser=login(Request.Form("username"),Request.Form("password"))
          if not request.Cookies(CookieName)("memName")=username then
-            showmsg "留言发表错误信息","<b>登陆失败，请检查用户名和密码</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins"
+            showmsg "留言发表错误信息","<b>登陆失败，请检查用户名和密码</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","WarningIcon","plugins"
             exit function
          end if
     else
        set checkMem=Conn.ExeCute("select * from blog_Member where mem_Name='"&username&"'")
        if not checkMem.eof then
-         showmsg "留言发表错误信息","<b>该用户已经存在，无法发表留言</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins"
+         showmsg "留言发表错误信息","<b>该用户已经存在，无法发表留言</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","WarningIcon","plugins"
     	 exit function
        end if
     end if
   end if 
 
   if len(post_Message)<1 then
-     showmsg "留言发表错误信息","<b>不允许发表空留言信息</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins"
+     showmsg "留言发表错误信息","<b>不允许发表空留言信息</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","WarningIcon","plugins"
 	 exit function
   end if
   if len(post_Message)>int(charCount) then
-     showmsg "留言发表错误信息","留言超过最大字数限制<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","plugins"
+     showmsg "留言发表错误信息","留言超过最大字数限制<br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
 	 exit function
   end if
   if hiddenreply=1 then hiddenreply=true else hiddenreply=false
   if memName=empty and hiddenreply then
-     showmsg "留言发表错误信息","必须登陆才可以发表隐藏留言<br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","plugins"
+     showmsg "留言发表错误信息","必须登陆才可以发表隐藏留言<br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
 	 exit function
   end if
  '插入数据
@@ -175,7 +175,7 @@ function delMsg
   book_ID=CheckStr(request.QueryString("id"))
   set bookDB=Conn.ExeCute("select * from blog_book where book_ID="&book_ID)
   if bookDB.eof or bookDB.bof then
-     showmsg lang.Tip.SysTem(1),"<b>不存在此留言,或该评论已经被删除!</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","plugins"
+     showmsg "错误信息","<b>不存在此留言,或该评论已经被删除!</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
 	 exit function
   end if
   PostMessager=bookDB("book_Messager")
@@ -184,9 +184,9 @@ function delMsg
      Conn.ExeCute("update blog_Info set blog_MessageNums=blog_MessageNums-1")
      getInfo(2)
  	 reloadMsg
-     showmsg "留言删除成功","<b>留言已经被删除成功!</b><br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">" & lang.Tip.SysTem(2) & "</a>","MessageIcon","plugins"
+     showmsg "留言删除成功","<b>留言已经被删除成功!</b><br/><a href=""LoadMod.asp?plugins=GuestBookForPJBlog"">单击返回</a>","MessageIcon","plugins"
   else
-     showmsg lang.Tip.SysTem(1),"<b>你没有权限删除该留言</b><br/><a href=""javascript:history.go(-1);"">" & lang.Tip.SysTem(2) & "</a>","ErrorIcon","plugins"
+     showmsg "错误信息","<b>你没有权限删除该留言</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
   end if
 	EmptyEtag
 end function 
@@ -197,13 +197,13 @@ function replyMsg
   MsgID = CheckStr(Request.form("MsgID"))
   MsgReplyContent=CheckStr(request.form("Message"))
 	   if not (memName<>empty and stat_Admin) then
-                showmsg lang.Tip.SysTem(1),"你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins"
+                showmsg "错误信息","你没有权限回复留言<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins"
 	   end if
 	   If MsgID=Empty then 
-	            showmsg lang.Tip.SysTem(1), lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins" 
+	            showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
 	   end if
 	   If IsInteger(MsgID)=False then 
-	            showmsg lang.Tip.SysTem(1), lang.Err.info(999) & "<br/><a href=""javascript:history.go(-1)"">" & lang.Tip.SysTem(2) & "</a>","WarningIcon","plugins" 
+	            showmsg "错误信息","非法操作！<br/><a href=""javascript:history.go(-1)"">单击返回</a>","WarningIcon","plugins" 
 	   end if
    Conn.ExeCute("update blog_book set book_reply='"&MsgReplyContent&"',book_replyAuthor='"&memName&"',book_replyTime=#"&DateToStr(now(),"Y-m-d H:I:S")&"# where book_ID=" & MsgID)
 

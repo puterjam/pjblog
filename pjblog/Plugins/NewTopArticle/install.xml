@@ -37,11 +37,7 @@
               dim Article_Items,Article_Item
              	For Each Article_Items IN blog_Article
              	 Article_Item=Split(Article_Items,"|,|")
-				If blog_postFile>1 Then
-					 NewArticle=NewArticle&"<a class=""sideA"" href="&caload(Article_Item(0))&" title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
-				else
-					 NewArticle=NewArticle&"<a class=""sideA"" href=""article.asp?id=" & Article_Item(0) & """ title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
-				end if
+             	 NewArticle=NewArticle&"<a class=""sideA"" href=""default.asp?id="&Article_Item(0)&""" title="""&Article_Item(1)&" 于 "&Article_Item(2)&" 发表该日志"&CHR(10)&CCEncode(CutStr(Article_Item(3),25))&""">"&CCEncode(CutStr(Article_Item(3),25))&"</a>"
              	Next
               end if
        end function
@@ -51,7 +47,7 @@
     	Article_code=NewArticle(0)
         side_html_default = replace(side_html_default,"<$NewLog$>",Article_code)
         side_html = replace(side_html,"<$NewLog$>",Article_code)
-		side_html_static = replace(side_html_static,"<$NewLog$>",Article_code)
+	side_html_static = replace(side_html_static,"<$NewLog$>",Article_code)
     %>]]></PluginASPCode>
   <PluginPath><![CDATA[guestbook.asp]]></PluginPath>
   <SettingFile></SettingFile>

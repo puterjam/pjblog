@@ -171,7 +171,7 @@ Loop
 If ViewType = "list" Then
 %>
 		 </table></div>
-		<%end if%>
+		<%End If%>
 		 <div class="pageContent"><%=MultiPage(Log_Num,blogPerPage,CurPage,Url_Add,"","","")%></div>
 		<%End If
 End Function
@@ -189,7 +189,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 		aUrl = caload(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
-	end if
+	End If
 %>
 		<div class="Content">
 		<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
@@ -205,7 +205,7 @@ Function OutNomal(webLogArr, PageCount, getCate, CanRead)
 			If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 			%>
 			<%If Trim(webLogArr(16,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="加密日志" /><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="私密日志" /><%End If%>
-			<%end if%>
+			<%End If%>
 		</h1>
 		<h2 class="ContentAuthor">作者:<%=webLogArr(2,PageCount)%>&nbsp; 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%></h2></div>
 		  <div id="log_<%=webLogArr(0,PageCount)%>"<%if webLogArr(9,PageCount)=true then %> style="display:none"<%end if%>>
@@ -216,7 +216,7 @@ If CanRead Then
 					<div class="Content-body"><%=UnCheckStr(UBBCode(webLogArr(10,PageCount),mid(webLogArr(14,PageCount),1,1),mid(webLogArr(14,PageCount),2,1),mid(webLogArr(14,PageCount),3,1),mid(webLogArr(14,PageCount),4,1),mid(webLogArr(14,PageCount),5,1)))%>
 					<%if webLogArr(10,PageCount)<>HtmlEncode(webLogArr(11,PageCount)) then%>
 						<p class="readMore"><a href="<%=aUrl%>" class="more"><span>查看更多...</span></a></p>
-					<%end if%>
+					<%End If%>
 			<%else%>
 					<div class="Content-body"><%=UnCheckStr(webLogArr(10,PageCount))%>
 					<%if webLogArr(10,PageCount)<>webLogArr(11,PageCount) then%>
@@ -235,9 +235,9 @@ Else
 			<%if Trim(webLogArr(16,PageCount))<>"" then%>
 			该日志是加密日志，需要输入正确密码才可以查看！
 			<%else%>
-			该日志是私密日志，只有管理员或发布者可以查看！
-			<%end if%>
-		<%end if%>
+			该日志是私密日志，只有博主或发布者可以查看！
+			<%End If%>
+		<%End If%>
 							 
 		</div><div class="Content-bottom">
 		<div class="ContentBLeft"></div><div class="ContentBRight"></div>
@@ -247,14 +247,14 @@ Else
 			 禁止评论 
 		<%Else%>
 			 <a href="<%=aUrl%>#comm_top">评论: <%=webLogArr(6,PageCount)%></a>
-		<%end If%>
+		<%End If%>
 			 | 引用: <%=webLogArr(7,PageCount)%> | 查看次数: <%=webLogArr(8,PageCount)%>
 				<%if stat_EditAll or (stat_Edit and webLogArr(2,PageCount)=memName) then%>
 					 | <a href="blogedit.asp?id=<%=webLogArr(0,PageCount)%>"><img src="images/icon_edit.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
-				<%end if%>
+				<%End If%>
 				<%if stat_DelAll or (stat_Del and webLogArr(2,PageCount)=memName)  then%>
 					 | <a href="blogedit.asp?action=del&amp;id=<%=webLogArr(0,PageCount)%>" onclick="if (!window.confirm('是否要删除该日志')) return false"><img src="images/icon_del.gif" alt="" border="0" style="margin-bottom:-2px"/></a>
-				<%end if%>
+		      <%End If%>
 			   </div>
 			</div></div>
 <%
@@ -273,7 +273,7 @@ Function OutList(webLogArr, PageCount, getCate, ViewDraft, CanRead)
 		aUrl = caload(webLogArr(0,PageCount))
 	else
 		aUrl = "article.asp?id=" & webLogArr(0,PageCount)
-	end if
+	End If
 %>
 		<tr><td valign="top">
 		<%If ViewDraft = "draft" Then
@@ -284,8 +284,8 @@ Else
     logIcon = "<a href=""default.asp?cateID="&webLogArr(1, PageCount)&""" ><img border=""0"" alt=""查看 "&getCate.cate_Name&" 的日志"" src="""&getCate.cate_icon&""" style=""margin:0px 2px -3px 0px""/></a>"
 End If
 
-If webLogArr(9, PageCount) Then
-%><b><%end If%>
+If webLogArr(9,PageCount) Then
+%><b><%End If%>
 		<%=logIcon%>
 		<%If CanRead Then%>
 			<a href="<%=logLink%>" title="作者:<%=webLogArr(2,PageCount)%> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
@@ -296,14 +296,13 @@ If webLogArr(9, PageCount) Then
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 %>
 		<%If Trim(webLogArr(10,PageCount)) <> "" Then%><img src="images/icon_lock2.gif" style="margin:0px 0px -3px 2px;" alt="加密日志"/><%Else%><img src="images/icon_lock1.gif" style="margin:0px 0px -3px 2px;" alt="私密日志"/><%End If%>
-
-		<%end if%>
+		<%End If%>
 		</td>
-		<%If webLogArr(9,PageCount) Then %></b><%end If%>
+		<%If webLogArr(9,PageCount) Then %></b><%End If%>
 		<%If not ViewDraft="draft" then %>
 			<td valign="top" width="60"><nobr><a href="<%=aUrl%>#comm_top" title="评论"><%=webLogArr(6,PageCount)%></a> | <span title="引用通告"><%=webLogArr(7,PageCount)%></span> | <span title="阅读次数"><%=webLogArr(8,PageCount)%></span></nobr></td>
 		<%else%>
 		    <td valign="top" width="60"><nobr><%=webLogArr(2,PageCount)%></span></nobr></td>
-		<%end if%>
+		<%End If%>
 		</tr>
 <%end function%>

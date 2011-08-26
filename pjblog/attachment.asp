@@ -77,9 +77,9 @@ If stat_FileUpLoad = True And memName<>Empty Then
         F_Name = F_Name&"."&F_File.FileExt
         F_Type = FixName(F_File.FileExt)
         If F_File.FileSize > Int(UP_FileSize) Then
-            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>" & lang.Tip.UBB.Down(4) & "</a></div>")
+            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>文件大小超出，请返回重新上传</a></div>")
         ElseIf IsvalidFile(UCase(F_Type)) = False Then
-            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>" & lang.Tip.UBB.Down(5) & "</a></div>")
+            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>文件格式非法，请返回重新上传</a></div>")
         Else
 		    FilePath = "attachments/"&D_Name&"/"&F_Name
             F_File.SaveAs Server.MapPath(FilePath)
@@ -90,7 +90,7 @@ If stat_FileUpLoad = True And memName<>Empty Then
             Dim UploadID : UploadID = Conn.Execute("SELECT ID FROM blog_Files order by ID desc")(0)
 			If AntiDown = "1" then UploadID = UploadID&"&code="&right(md5(right(Ucase(FilePath),15)),10)
             response.Write "<script>addUploadItem('"&F_Type&"','download.asp?id="&UploadID&"',"&Request.QueryString("MSave")&")</script>"
-            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>" & lang.Tip.UBB.Down(6) & "</a></div>")
+            Response.Write("<div style=""padding:6px""><a href='attachment.asp'>文件上传成功，请返回继续上传</a></div>")
         End If
         Set F_File = Nothing
         Set FileUP = Nothing
@@ -108,10 +108,10 @@ If stat_FileUpLoad = True And memName<>Empty Then
   }
  }
 </script>
-<form name="frm" enctype="multipart/form-data" method="post" action="attachment.asp?action=upload&MSave=0"><input name="File" type="File" size="28" style="font-size:12px;border-width:1px">&nbsp;<input type="Submit" name="Submit" value="<%=lang.Tip.UBB.Down(7)%>" class="userbutton"><input type="checkbox" name="MemberDown" value="1" id="Md" onClick="MSave(this)" title="<%=lang.Tip.UBB.Down(8)%>"/><label for="Md" title="<%=lang.Tip.UBB.Down(8)%>"><%=lang.Tip.UBB.Down(2)%> </label> <select name="sy" style="font-size:12px;border-width:1px"<%If not CheckObjInstalled("Persits.Jpeg") Then Response.Write (" disabled=""disabled""")%>><option selected><%=lang.Tip.UBB.Down(12)%></option><option value="1"><%=lang.Tip.UBB.Down(9)%></option><option value="2"><%=lang.Tip.UBB.Down(10)%></option></select><input type="checkbox" name="AntiDown" id="AntiDown" value="1"/><label for="AntiDown"><%=lang.Tip.UBB.Down(11)%> </label></form>
+<form name="frm" enctype="multipart/form-data" method="post" action="attachment.asp?action=upload&MSave=0"><input name="File" type="File" size="28" style="font-size:12px;border-width:1px">&nbsp;<input type="Submit" name="Submit" value="确定上传" class="userbutton"><input type="checkbox" name="MemberDown" value="1" id="Md" onclick="MSave(this)" title="只对UBB编辑有效,媒体文件包括图片无效"/><label for="Md" title="只对UBB编辑有效,媒体文件包括图片无效">此文件只允许会员下载 </label> <select name="sy" style="font-size:12px;border-width:1px"<%If not CheckObjInstalled("Persits.Jpeg") Then Response.Write (" disabled=""disabled""")%>><option selected>水印类型</option><option value="1">文字水印</option><option value="2">图片水印</option></select><input type="checkbox" name="AntiDown" id="AntiDown" value="1"/><label for="AntiDown">允许盗链 </label></form>
 <%
 End If
 Else
-    Response.Write("<div style=""padding:6px;color:#f00"">" & lang.Tip.UBB.Down(13) & "</div>")
+    Response.Write("<div style=""padding:6px;color:#f00"">对不起，你没有权限上传附件！</div>")
 End If
 %>

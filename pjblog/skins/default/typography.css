@@ -3,7 +3,7 @@
  .userpass:hover,.userpass:focus{border-color:#9E9234;background:#FFFFEE}
  .inputBox{border:1px solid;border-color:#9E9234 #fff #fff #9E9234;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
  .inputBox:hover,.inputBox:focus{border-color:#9E9234;background:#FFFFEE}
- .userbutton{border:1px solid;border-color:#fff #9E9234 #9E9234 #fff;height:22px;padding:0px 5px 2px 5px !important;padding:3px 2px 0px 2px;background:#E3CE96 url(menu_main.jpg) 0px -30px;}
+ .userbutton{border:1px solid;border-color:#fff #9E9234 #9E9234 #fff;height:22px;padding:0px 5px 2px 5px !important;padding:3px 2px 0px 2px;background:#E3CE96 url(images/menu_main.jpg) 0px -30px;}
  .LinkTable{margin:5px 10px 5px 0px;}
  .commentTable{}
  .high1{font-weight:bold;color:#f00;background:#ff0}

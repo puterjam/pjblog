@@ -1,6 +1,6 @@
 ﻿<!--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -36,7 +36,7 @@ Class FCKeditor
 	private oConfig
 
 	Private Sub Class_Initialize()
-		sBasePath		= "/fckeditor/"
+		sBasePath		= "/FCKeditor/"
 		sWidth			= "100%"
 		sHeight			= "200"
 		sToolbarSet		= "Default"

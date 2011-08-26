@@ -17,8 +17,8 @@ Dim memoryCache, blog_UpLoadSet
 Dim blog_smtp, blog_smtpuser, blog_smtppassword, blog_jmail, IsObj, msg, objMail, VerObj, TestObj, blog_smtpmail, blog_Isjmail, blog_reply_Isjmail, blog_IsPing
 
 '一些初始化的值
-blog_version = "3.2.8.352" '当前PJBlog版本号
-blog_UpdateDate = "2009-09-18" 'PJBlog最新更新时间
+blog_version = "3.2.8.498 alpha" '当前PJBlog版本号
+blog_UpdateDate = "2011-08-25" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
@@ -89,8 +89,8 @@ Sub getInfo(ByVal action)
         blog_downLocal = CBool(blog_Infos(32, 0))'是否使用防盗链下载
         blog_DisMod = CBool(blog_Infos(33, 0))'默认显示内容
         blog_Disregister = CBool(blog_Infos(34, 0))'是否允许注册
-        blog_master = blog_Infos(35, 0)'blog管理员姓名
-        blog_email = blog_Infos(36, 0)'blog管理员邮件地址
+        blog_master = blog_Infos(35, 0)'博主姓名
+        blog_email = blog_Infos(36, 0)'博主邮件地址
         blog_CountNum = blog_Infos(37, 0)'访客统计最大次数
         blog_wapNum = Int(blog_Infos(38, 0))'Wap 文章列表数量
         blog_wapImg = CBool(blog_Infos(39, 0))'Wap 文章显示图片
@@ -584,18 +584,20 @@ Function BlogArticleID(ByVal action)
 End Function
 
 '======================自定义模块缓存=====================
-Dim side_html_default, side_html, side_html_static, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin
+Dim side_html_default, side_html, side_html_static, content_html_Top_default, content_html_Top, content_html_Top_static, content_html_Bottom_default, content_html_Bottom, content_html_Bottom_static, function_Plugin
 
 Function log_module(ByVal action)
     Dim blog_modules
     side_html_default = "" '首页侧栏代码
     side_html = "" '普通页面侧栏代码
-    side_html_static = "" '静态页面的侧边栏
+    side_html_static = "" '静态页面侧栏代码
     
     content_html_Top_default = "" '首页内容代码顶部
     content_html_Top = "" '普通页面内容代码顶部
+    content_html_Top_static = "" '静态页面内容代码顶部
     content_html_Bottom_default = "" '首页内容代码底部
     content_html_Bottom = "" '普通页面内容代码底部
+    content_html_Bottom_static = "" '静态页面内容代码底部
     function_Plugin = "" 'Blog功能插件
 
     If Not IsArray(Application(CookieName&"_blog_module")) Or action = 2 Then
@@ -628,11 +630,13 @@ Function log_module(ByVal action)
                     content_html_Top_default = content_html_Top_default&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
                     If blog_module("IndexOnly") = False Then
                         content_html_Top = content_html_Top&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
+                        content_html_Top_static = content_html_Top_static&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
                     End If
                 Else
                     content_html_Bottom_default = content_html_Bottom_default&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
                     If blog_module("IndexOnly") = False Then
                         content_html_Bottom = content_html_Bottom&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
+                        content_html_Bottom_static = content_html_Bottom_static&"<div id=""Content_"&blog_module("name")&""" class=""content-width"">"&blog_module("HtmlCode")&"</div>"
                     End If
                 End If
             End If
@@ -645,7 +649,7 @@ Function log_module(ByVal action)
             blog_module.movenext
         Loop
         Set blog_module = Nothing
-        blog_modules = Array(side_html_default, side_html, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin,side_html_static)
+        blog_modules = Array(side_html_default, side_html, content_html_Top_default, content_html_Top, content_html_Bottom_default, content_html_Bottom, function_Plugin,side_html_static,content_html_Top_static,content_html_Bottom_static)
         Application.Lock
         Application(CookieName&"_blog_module") = blog_modules
         Application.UnLock
@@ -661,8 +665,10 @@ Function log_module(ByVal action)
         
         content_html_Top_default = UnCheckStr(blog_modules(2)) '首页内容代码顶部
         content_html_Top = UnCheckStr(blog_modules(3)) '普通页面内容代码顶部
+        content_html_Top_static = UnCheckStr(blog_modules(8)) '静态页面内容代码顶部
         content_html_Bottom_default = UnCheckStr(blog_modules(4)) '首页内容代码底部
         content_html_Bottom = UnCheckStr(blog_modules(5)) '普通页面内容代码底部
+        content_html_Bottom_static = UnCheckStr(blog_modules(9)) '静态页面内容代码底部
         function_Plugin = blog_modules(6) 'Blog功能插件
     End If
 

@@ -10,12 +10,6 @@ Sub c_welcome
 		  </tr>
 		  <tr>
 		    <td class="CPanel">
-		        <div id="updateInfo" style="background:ffffe1;border:1px solid #89441f;padding:4px;display:none"></div>
-		    <script>
-		      var CVersion="<%=blog_version%>";
-		      var CDate="<%=blog_UpdateDate%>";
-		    </script>
-		    <script src="http://www.pjhome.net/updateN.js"></script>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			 <tr>
 				 <td valign="top" style="padding:5px;width:140px"><img src="images/Control/Icon/ControlPanel.png"/></td>
@@ -33,7 +27,12 @@ Sub c_welcome
 				 </td>
 			 </tr>
 			</table>
-		
+		        <div id="updateInfo" style="background:ffffe1;border:1px solid #89441f;padding:4px;display:none"></div>
+		    <script>
+		      var CVersion="<%=blog_version%>";
+		      var CDate="<%=blog_UpdateDate%>";
+		    </script>
+		    <script src="http://www.pjhome.net/updateN.js"></script>
 		</td></tr></table>
 	<%
 end Sub

@@ -35,7 +35,7 @@ log_module(1)
 
 '禁止IP访问
 If MatchIP(getIP) Then
-    response.Write "<span style=""font-size:12px;font-weight:bold;margin:4px"">" & lang.Err.Enable & "</span>"
+    response.Write "<span style=""font-size:12px;font-weight:bold;margin:4px"">本站不欢迎你的访问。</span>"
     response.End
 End If
 Side_Module_Replace '处理系统侧栏模块信息

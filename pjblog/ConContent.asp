@@ -62,7 +62,7 @@ End If
     <script type="text/javascript" src="common/common.js"></script>
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>
 	<script type="text/javascript" src="common/Action.js"></script>
-	<title><%=lang.Action.Control%>-<%=lang.Action.logs.Content%></title>
+	<title>后台管理-内容</title>
 	<style type="text/css">
 		<!--
 		.style1 {color: #999}
