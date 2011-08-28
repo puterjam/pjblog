@@ -63,7 +63,7 @@ Sub ShowArticle(LogID)
     If Trim(log_ViewArr(20,0)) = CheckReadPW Then CanRead = True
 
     '从文件读取日志
-    If Trim(log_ViewArr(20, 0)) = "" and blog_postFile>0 Then
+    If Trim(log_ViewArr(20, 0)) = "" and blog_postFile>0 and log_ViewArr(26, 0) = False Then
         Dim LoadArticle, TempStr, TempArticle
         LoadArticle = LoadFromFile("post/"&LogID&".asp")
 
@@ -93,8 +93,8 @@ Sub ShowArticle(LogID)
 
     '从数据库读取日志
     'on error resume Next
-    Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime DESC")
-    Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False and T.log_IsDraft=false ORDER BY T.log_PostTime ASC")
+    Set preLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime<#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False ORDER BY T.log_PostTime DESC")
+    Set nextLog = Conn.Execute("SELECT TOP 1 T.log_Title,T.log_ID FROM blog_Content As T,blog_Category As C WHERE T.log_PostTime>#"&DateToStr(log_ViewArr(9, 0), "Y-m-d H:I:S")&"# and T.log_CateID=C.cate_ID and (T.log_IsShow=true or T.log_Readpw<>'') and C.cate_Secret=False ORDER BY T.log_PostTime ASC")
     SQLQueryNums = SQLQueryNums + 2
 
 %>
