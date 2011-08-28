@@ -1283,7 +1283,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
 	If not isblank(log_View("log_KeyWords")) Then
-		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords"))&",")
+		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords")))
     Else
 		Temp1 = Replace(Temp1, "<$keywords$>", "")
 	End If
