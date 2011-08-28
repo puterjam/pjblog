@@ -306,7 +306,6 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 				blog_CommentWebSiteImg = "<a href="""&blog_CommentWebSite&""" target=""_blank""><img src=""images/siteurl.gif"" border=""0"" alt=""访问 "&blog_CommentWebSite&"""></a>"
 			End If
 			
-			ShowComm = ShowComm&"<div class=""commenttop""><span class=""ownerClassComment"" style=""float:right;cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-2px;""/>回复</span>"
 			ShowComm = ShowComm&"<div class=""commenttop"">"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
@@ -323,7 +322,6 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			End If
 			ShowComm = ShowComm&" | <span style=""cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-3px;""/>回复</span>"
 			ShowComm = ShowComm&"</span>]</span></div>"
-     		ShowComm = ShowComm&"<span class=""CommentFloor"">"&Floor&"</span>"
 		
 			'删除按钮
 		'	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 

@@ -39,7 +39,10 @@ If InStr(Replace(LCase(Request.ServerVariables("URL")), "\", "/"), "/default.asp
         	rUrl = caload(Tid)
 	    else
 		 	rUrl = "article.asp?id=" & Tid
-	    end if 
+	    end if
+		If rUrl = "" Then
+		 	rUrl = "article.asp?id=" & Tid
+		End If
 	    RedirectUrl (rUrl)
 	    Response.end
     End If
