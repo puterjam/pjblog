@@ -25,7 +25,7 @@ If IsInteger(id) Then
     'If blog_postFile>1 Then
         'SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_KeyWords,log_Description FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
     'Else
-        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_KeyWords,log_Description FROM blog_Content WHERE log_ID="&id&" and log_IsDraft=false"
+        SQL = "SELECT top 1 log_ID,log_CateID,log_title,Log_IsShow,log_ViewNums,log_Author,log_comorder,log_DisComment,log_Content,log_PostTime,log_edittype,log_ubbFlags,log_CommNums,log_QuoteNums,log_weather,log_level,log_Modify,log_FromUrl,log_From,log_tag,log_Readpw,log_Pwtips,log_Pwtitle,log_Pwcomm,log_KeyWords,log_Description,log_IsDraft FROM blog_Content WHERE log_ID="&id
     'End If
 
     log_View.Open SQL, Conn, 1, 3
@@ -34,6 +34,11 @@ If IsInteger(id) Then
         log_View.Close
         showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
+	If log_View("log_IsDraft") = True And not stat_Admin And memName <> log_View("log_Author") Then
+        log_View.Close
+        showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
+	End If
+
     viewCount = log_View("log_ViewNums") + 1
     log_View("log_ViewNums") = viewCount
     log_View.UPDATE
