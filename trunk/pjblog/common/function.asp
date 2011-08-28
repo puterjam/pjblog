@@ -212,7 +212,7 @@ End Function
 '自定义读取缓存路径 by evio
 '*************************************
 function caload(id)
-  If not IsEmpty(Application(CookieName&"_articleUrl_"&id)) and Application(CookieName&"_articleUrl_"&id) <> "" then
+  If Application(CookieName&"_articleUrl_"&id)<>"" then
   	caload = Application(CookieName&"_articleUrl_"&id)
   	Exit function
   End if
@@ -221,7 +221,7 @@ function caload(id)
   dim rex, strrexs, strrex, conrex, istr, jstr, sestr, recname, recpart, rechtml, loadtype, cacheStream,pid,ppid
   Dim LoadList, cacheList
   
-  If not IsEmpty(Application(CookieName&"_listCache")) and Application(CookieName&"_listCache")<>"" then
+  If Application(CookieName&"_listCache")<>"" then
    		cacheList = Application(CookieName&"_listCache")
   Else
    		LoadList = LoadFromFile("cache/listCache.asp")
