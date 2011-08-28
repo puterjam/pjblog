@@ -180,9 +180,9 @@ Sub outLogDetail
         response.Write "<p><b>"&toUnicode("标题:")&"</b> <a href=""#MainCard"">"&toUnicode(lArticle.logTitle)&"</a><br/></p>"
         response.Write "<p><br/><b>发表评论:</b></p><p>"
         If memName<>Empty Then
-            response.Write toUnicode("昵称: ")&"<b><i>"&memName&"</i></b><br/>"
+            response.Write toUnicode("昵称:")&"<b><i>"&memName&"</i></b><br/>"
         Else
-            response.Write toUnicode("昵称: ")&"<input emptyok=""false"" name=""userName"" size=""10"" maxlength=""20"" type=""text"" value="""" /><br/>"
+            response.Write toUnicode("昵称:")&"<input emptyok=""false"" name=""userName"" size=""10"" maxlength=""20"" type=""text"" value="""" /><br/>"&toUnicode("密码:")&"<input emptyok=""false"" name=""password"" size=""10"" maxlength=""20"" type=""password"" value="""" /><br/>"
         End If
         response.Write toUnicode("评论内容: ")&"<br/> <input emptyok=""false"" name=""message""  maxlength="""&blog_commLength&""" format=""false"" value="""" /><br/>"
         response.Write "<anchor>"&toUnicode("发表")&"<go href=""wap.asp?do=postComment"" method=""post"">"
@@ -191,6 +191,8 @@ Sub outLogDetail
         Else
             response.Write "<postfield name=""userName"" value=""$(userName)"" />"
         End If
+        response.Write "<postfield name=""password"" value=""$(password)"" />"
+		response.Write "<postfield name=""validate"" value=""0000"" />"
         response.Write "<postfield name=""message"" value=""$(message)"" />"
         response.Write "<postfield name=""id"" value="""&logID&""" />"
         response.Write "</go></anchor>"
@@ -458,8 +460,9 @@ End Sub
 
 Function wap_CommentPost
     wap_CommentPost = ""
-    Dim username, post_logID, post_Message, LastMSG, FlowControl, ReInfo
+    Dim username, post_logID, post_Message, LastMSG, FlowControl, ReInfo, password
     username = Trim(CheckStr(request.Form("userName")))
+    password = Trim(CheckStr(request.Form("password")))
     post_logID = CLng(CheckStr(request.Form("id")))
     post_Message = CheckStr(request.Form("message"))
 
@@ -516,12 +519,28 @@ Function wap_CommentPost
     End If
 
     Dim checkMem
-    If memName = Empty Then
-        Set checkMem = Conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
-        If Not checkMem.EOF Then
-            wap_CommentPost = "<b>"&toUnicode("该用户名已存在，无法发表评论")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#postCommentCard"">"&toUnicode("返回")&"</a>"
-            Exit Function
+    If memName = Empty Then'匿名评论
+        If Len(password)>0 Then
+            Dim loginUser
+			Session("GetCode") = Request.Form("validate")
+            loginUser = login(Request.Form("username"), Request.Form("password"))
+			If Not loginUser(3) Then
+				wap_CommentPost = "<b>"&toUnicode("登录失败，请检查用户名和密码")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#postCommentCard"">"&toUnicode("返回")&"</a>"
+                Exit Function
+            End If
+        Else
+            Set checkMem = Conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
+            If Not checkMem.EOF Then
+				wap_CommentPost = "<b>"&toUnicode("该用户已经存在，请登录后或输入用户密码再发表评论")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#postCommentCard"">"&toUnicode("返回")&"</a>"
+                Exit Function
+            End If
         End If
+    Else
+ 			If Not request.Cookies(CookieName)("memName") = username Then
+                ReInfo(0) = "评论发表错误信息"
+				wap_CommentPost = "<b>"&toUnicode("请输入正确的用户名")&"</b><br/><a href=""wap.asp?do=showLogDetail&amp;id="&post_logID&"#postCommentCard"">"&toUnicode("返回")&"</a>"
+                Exit Function
+            End If
     End If
 
     If Conn.Execute("select log_DisComment from blog_Content where log_ID="&post_logID)(0) Then

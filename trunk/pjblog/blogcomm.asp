@@ -212,7 +212,7 @@ Function postcomm
             Set checkMem = Conn.Execute("select top 1 mem_id from blog_Member where mem_Name='"&username&"'")
             If Not checkMem.EOF Then
                 ReInfo(0) = "评论发表错误信息"
-                ReInfo(1) = "<b>该用户已经存在，无法发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
+                ReInfo(1) = "<b>该用户已经存在，请登录后或输入用户密码再发表评论</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>"
                 ReInfo(2) = "WarningIcon"
                 postcomm = ReInfo
                 Exit Function
