@@ -30,14 +30,10 @@ If IsInteger(id) Then
 
     log_View.Open SQL, Conn, 1, 3
     SQLQueryNums = SQLQueryNums + 1
-    If log_View.EOF Or log_View.bof Then
+    If (log_View.EOF Or log_View.bof) Or (log_View("log_IsDraft") = True And not stat_Admin And memName <> log_View("log_Author")) Then
         log_View.Close
         showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">单击返回</a>", "ErrorIcon", ""
     End If
-	If log_View("log_IsDraft") = True And not stat_Admin And memName <> log_View("log_Author") Then
-        log_View.Close
-        showmsg "错误信息", "不存在当前日志！<br/><a href=""default.asp"">" & lang.Tip.SysTem(2) & "</a>", "ErrorIcon", ""
-	End If
 
     viewCount = log_View("log_ViewNums") + 1
     log_View("log_ViewNums") = viewCount
