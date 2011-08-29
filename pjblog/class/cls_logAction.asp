@@ -1166,7 +1166,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim SaveArticle, LoadTemplate1, Temp1, TempStr, log_View, preLogC, nextLogC, Category,baseUrl, SavesFso
     
     '读取日志模块
-    LoadTemplate1 = LoadFromFile("Template/static.htm")
+    LoadTemplate1 = LoadFromFile("Template/Static.htm")
 
     If LoadTemplate1(0) <> 0 Then Exit Sub'读取成功后写入信息
     
@@ -1283,11 +1283,11 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Temp1 = Replace(Temp1, "<$log_weather$>", log_View("log_weather"))
     Temp1 = Replace(Temp1, "<$log_level$>", log_View("log_level"))
 	If not isblank(log_View("log_KeyWords")) Then
-		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords")))
+		Temp1 = Replace(Temp1, "<$keywords$>", trim(log_View("log_KeyWords"))&","&blog_KeyWords)
     Else
-		Temp1 = Replace(Temp1, "<$keywords$>", "")
+		Temp1 = Replace(Temp1, "<$keywords$>", blog_KeyWords)
 	End If
-	If not isblank(log_View("log_Description")) Then
+	If not isblank(log_View("log_Description"))  and log_View("log_IsShow") = True Then
 		Temp1 = Replace(Temp1, "<$description$>", CheckStr(replace(UnCheckStr(trim(log_View("log_Description"))),vbcrlf,""))&",")
     Else
 		Temp1 = Replace(Temp1, "<$description$>", "")
