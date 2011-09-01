@@ -891,7 +891,7 @@ ElseIf Request.Form("action") = "Links" Then
     '==========================表情和关键字===============================
 ElseIf Request.Form("action") = "smilies" Then
     Dim smilesID, smiles, smilesURL
-    Dim KeyWordID, KeyWord, KeyWordURL
+    Dim KeyWordID, KeyWord, KeyWordURL, KeyWordImage
     '--------------------------处理表情符号----------------------------
     If Request.Form("whatdo") = "smilies" Then
         If Request.Form("doModule") = "DelSelect" Then
@@ -933,17 +933,16 @@ ElseIf Request.Form("action") = "smilies" Then
             session(CookieName&"_MsgText") = session(CookieName&"_MsgText")&(UBound(KeyWordID) + 1)&"关键字被删除!"
             RedirectUrl("ConContent.asp?Fmenu=smilies&Smenu=KeyWord")
         Else
-            Dim key_Image
             KeyWordID = Split(Request.Form("KeyWordID"), ", ")
             KeyWord = Split(Request.Form("KeyWord"), ", ")
             KeyWordURL = Split(Request.Form("KeyWordURL"), ", ")
-            key_Image = Split(Request.Form("key_Image"), ", ")
+            KeyWordImage = Split(Request.Form("KeyWordImage"), ", ")
             For i = 0 To UBound(KeyWordID)
                 If Int(KeyWordID(i))<> -1 Then
-                    conn.Execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"',key_Image='"&CheckStr(key_Image(i))&"' where key_ID="&KeyWordID(i))
+                    conn.Execute("update blog_Keywords set key_Text='"&CheckStr(KeyWord(i))&"',key_URL='"&CheckStr(KeyWordURL(i))&"',key_Image='"&CheckStr(KeyWordImage(i))&"' where key_ID="&KeyWordID(i))
                 Else
                     If Len(Trim(CheckStr(KeyWord(i))))>0 Then
-                        conn.Execute("insert into blog_Keywords (key_Text,key_URL,key_Image) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"','"&CheckStr(key_Image(i))&"')")
+                        conn.Execute("insert into blog_Keywords (key_Text,key_URL,key_Image) values ('"&CheckStr(KeyWord(i))&"','"&CheckStr(KeyWordURL(i))&"','"&CheckStr(KeyWordImage(i))&"')")
                         session(CookieName&"_MsgText") = "新关键字添加成功! "
                     End If
                 End If

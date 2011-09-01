@@ -363,13 +363,10 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
             Dim log_Keywords, log_KeywordsContent
             For Each log_Keywords IN Arr_Keywords
                 log_KeywordsContent = Split(log_Keywords, "$|$")
-				If Left(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Replace(log_KeywordsContent(1), "|", vbNullString,1,1)
-				If Right(log_KeywordsContent(1),1) = "|" Then log_KeywordsContent(1) = Left(log_KeywordsContent(1),Len(log_KeywordsContent(1))-1)
-				re.Pattern = "(\<(.*)\>)(" & Replace(log_KeywordsContent(1), "$", "\$") & ")"
                 If log_KeywordsContent(3)<>"None" Then
-					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/>$2</a>")
+                    strContent = Replace(strContent, log_KeywordsContent(1), "<a href="""&log_KeywordsContent(2)&""" target=""_blank""><img src=""images/keywords/"&log_KeywordsContent(3)&""" border=""0"" alt=""""/> "&log_KeywordsContent(1)&"</a>")
                 Else
-					strContent=re.Replace(strContent, "$1<a href="""&log_KeywordsContent(2)&""" target=""_blank"">$2</a>")
+                    strContent = Replace(strContent, log_KeywordsContent(1), "<a href="""&log_KeywordsContent(2)&""" target=""_blank"">"&log_KeywordsContent(1)&"</a>")
                 End If
             Next
         End If

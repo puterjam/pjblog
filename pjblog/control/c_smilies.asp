@@ -34,7 +34,7 @@ Sub c_smilies
 		          <td><input name="SelectKeyWordID" type="checkbox" value="<%=bKeyWord("key_ID")%>"/></td>
 		          <td><input name="KeyWordID" type="hidden" value="<%=bKeyWord("key_ID")%>"/><input name="KeyWord" type="text" size="18" class="text" value="<%=bKeyWord("key_Text")%>"/></td>
 		          <td><input name="KeyWordURL" type="text" size="34" class="text" value="<%=bKeyWord("key_URL")%>"/></td>
-		          <td><input name="key_Image" type="text" class="text" id="key_Image" value="<%=bKeyWord("key_Image")%>" size="34"/></td>
+		          <td><input name="KeyWordImage" type="text" size="34" class="text" value="<%=bKeyWord("key_Image")%>"/></td>
 			   </tr>
 			   <%
 		bKeyWord.movenext
@@ -48,7 +48,7 @@ Sub c_smilies
 				  <td></td>
 		          <td><input name="KeyWordID" type="hidden" value="-1"/><input name="KeyWord" type="text" size="18" class="text"/></td>
 		          <td><input name="KeyWordURL" type="text" size="34" class="text"/></td>
-		          <td><input name="key_Image" type="text" class="text" id="key_Image" size="34"/></td>
+		          <td><input name="KeyWordImage" type="text" size="34" class="text"/></td>
 			   </tr>
 			 </table>
 		  <div class="SubButton" style="text-align:left;">
