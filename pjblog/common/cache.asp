@@ -17,8 +17,8 @@ Dim memoryCache, blog_UpLoadSet
 Dim blog_smtp, blog_smtpuser, blog_smtppassword, blog_jmail, IsObj, msg, objMail, VerObj, TestObj, blog_smtpmail, blog_Isjmail, blog_reply_Isjmail, blog_IsPing
 
 '一些初始化的值
-blog_version = "3.2.8.498 alpha" '当前PJBlog版本号
-blog_UpdateDate = "2011-08-25" 'PJBlog最新更新时间
+blog_version = "3.2.9.506" '当前PJBlog版本号
+blog_UpdateDate = "2011-09-01" 'PJBlog最新更新时间
 memoryCache = false '全内存cache
 
 '=========================日志基本信息缓存=======================
