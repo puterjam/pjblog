@@ -82,10 +82,11 @@
 					Set NewGravatar = new Gravatar
 					If not isblank(GuestDB("email")) Then
 						NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GuestDB("email"))))
+						GravatarImg = lcase(NewGravatar.outPut())
 					Else
 						NewGravatar.Gravatar_EmailMd5 = ""
+						GravatarImg = "images/gravatar.gif"
 					End If
-					GravatarImg = lcase(NewGravatar.outPut())
 					Set NewGravatar = nothing
 %>
 				text-align:right
@@ -97,17 +98,7 @@
 			If blog_GravatarOpen Then
 %>
                 <div class="commentleft Gravatar" style="float:left" id="Gravatar_<%=MsgID%>">
-<%
-				If isblank(GuestDB("email")) Then
-%>
-					<img src="images/gravatar.gif" alt="<%=GuestDB("book_Messager")%>" border="0" />
-<%                    
-				Else
-%>
 					<img src="<%=GravatarImg%>" alt="<%=GuestDB("book_Messager")%>" border="0" />
-<%
-				End If
-%>				
 				    </div><div class="commentright" style="text-align:left">
 <%                    
 			End If
