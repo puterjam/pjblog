@@ -200,7 +200,7 @@ Set nextLog = Nothing
 						 <img src="images/tag.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>Tags:</strong> <%=getTag.filterHTML(log_ViewArr(19,0))%><br/>
 						 <img src="images/notify.gif" style="margin:4px 2px -4px 0px" alt=""/><strong>相关日志:</strong>
 						 <div class="Content-body" id="related_tag" style="margin-left:25px"></div>
-						 <script language="javascript" type="text/javascript">Related(<%=LogID%>, 1, 'related_tag');</script>
+						 <script language="javascript" type="text/javascript">Related(<%=LogID%>, 1, 1, 'related_tag');</script>
 					   </div>
 					   <div class="Content-bottom"><div class="ContentBLeft"></div><div class="ContentBRight"></div>评论: <%=log_ViewArr(12,0)%> | 引用: <%=log_ViewArr(13,0)%> | 查看次数: <%=log_ViewArr(4,0)%>
 					   </div></div>
