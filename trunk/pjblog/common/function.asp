@@ -4,8 +4,8 @@
 '    更新时间: 2009-05-22
 '===============================================================
 Public Function CreateUrl(ByVal part, ByVal cname, ByVal ctype)
-	If Len(cname) = 0 Or Len(ctype) = 0 Then Exit Function
-	If IsNull(part) Or Len(part) = 0 Then
+	If IsBlank(cname) Or IsBlank(ctype) Then Exit Function
+	If IsBlank(part) Then
 		CreateUrl = "article/" & cname & "." & ctype
 	Else
 		CreateUrl = "article/" & part & "/" & cname & "." & ctype
