@@ -1187,9 +1187,9 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     Dim blog_Cate, blog_CateArray, comDesc, CanRead
     Dim getCate, getTags
 	
-	Dim evio_cname
-	evio_cname = log_View("log_cname").value
-	If Len(evio_cname) = 0 Then evio_cname = LogID
+	Dim p_cname
+	p_cname = log_View("log_cname").value
+	If IsBlank(p_cname) Then p_cname = LogID
 	
     Set getCate = New Category
     Set getTags = New Tag
@@ -1237,7 +1237,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
     	"	}"& vbcrlf &_
     	"}"& vbcrlf &_
     	"</script>"& vbcrlf &_
-    	"</div></body></html>", CreateUrl(getCate.cate_Part, evio_cname, log_View("log_ctype")))
+    	"</div></body></html>", CreateUrl(getCate.cate_Part, p_cname, log_View("log_ctype")))
     	PostHalfStatic LogID, UpdateListOnly
 	    Set log_View = Nothing
 	    exit Sub
@@ -1350,7 +1350,7 @@ Sub PostFullStatic(ByVal LogID, ByVal UpdateListOnly)
 		If Len(getCate.cate_Part) > 0 Then SavesFso.CreateFolder("article/" & getCate.cate_Part & "/")
 	Set SavesFso = Nothing
 
-    SaveArticle = SaveToFile(Temp1, CreateUrl(getCate.cate_Part, evio_cname, log_View("log_ctype")))
+    SaveArticle = SaveToFile(Temp1, CreateUrl(getCate.cate_Part, p_cname, log_View("log_ctype")))
 
     PostArticleListCache LogID, log_View, getCate , getTags
 
@@ -1380,7 +1380,11 @@ Sub PostArticleListCache(ByVal LogID,ByVal log_View,ByVal getCate,ByVal getTags)
     
     'article.asp?id=<$LogID$>
     If blog_postFile = 2  and log_View("log_IsShow") and not getCate.cate_Secret Then
-        Temp2 = Replace(Temp2, "<$pLink$>", CreateUrl(getCate.cate_Part, log_View("log_cname"), log_View("log_ctype")))
+		If IsBlank(log_View("log_cname")) Then
+    	    Temp2 = Replace(Temp2, "<$pLink$>", CreateUrl(getCate.cate_Part, LogID, log_View("log_ctype")))
+		Else
+	        Temp2 = Replace(Temp2, "<$pLink$>", CreateUrl(getCate.cate_Part, log_View("log_cname"), log_View("log_ctype")))
+		End If
     Else
 	 	Temp2 = Replace(Temp2, "<$pLink$>", "article.asp?id=" & LogID)
     End If 
