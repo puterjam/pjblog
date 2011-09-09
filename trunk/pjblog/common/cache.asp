@@ -178,6 +178,8 @@ Sub FillRight(StatusCode) '写入权限变量
     stat_ShowHiddenCate = CBool(Mid(StatusCode, 12, 1))
     
     Response.Cookies(CookieName)("memRight") = StatusCode
+    Response.Cookies(CookieName)("IsAdmin") = stat_Admin
+    Response.Cookies(CookieName)("DisValidate") = blog_validate
 	If DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))>0 Then
         Response.Cookies(CookieName).Expires = Date + DateDiff("d",Date(),Request.Cookies(CookieName)("exp"))
     End If
