@@ -108,7 +108,7 @@ End If
 	<script type="text/javascript" src="common/AjaxRequest.js"></script>
 	<script type="text/javascript" src="common/Action.js"></script>
     <script language="javascript" type="text/javascript">
-		var time = <%=blog_SaveTime%>;
+		var time = "<%=blog_SaveTime%>";
 		var menvalidate = "<%=blog_validate%>";
 	</script>
 	<!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
