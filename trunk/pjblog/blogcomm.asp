@@ -324,13 +324,12 @@ Function postcomm
 	
     '评论邮件通知
     If blog_Isjmail Then
-		Dim email_commid, SQLcomm, log_commcomm
+		Dim email_commid, SQLcomm, log_commcomm, email_log_title, CommUrl
 		SQLcomm="Select TOP 1 * FROM blog_Comment Where comm_Author='"&username&"' order By comm_ID Desc "
 		Set log_commcomm=conn.execute(SQLcomm) 
 			email_commid=log_commcomm("comm_ID")
 		log_commcomm.Close
 		Set log_commcomm=Nothing
-		dim email_log_title
 		SQLcomm="Select * FROM blog_Content Where log_ID="&post_logID&""
 		Set log_commcomm=conn.execute(SQLcomm) 
 			email_log_title=log_commcomm("log_Title")
@@ -339,10 +338,11 @@ Function postcomm
         dim emailcontent,emailtitle
         emailtitle = "您的日志《"&email_log_title&"》有了新评论！"
         if blog_postFile = 2 then
-            emailcontent = " "&username&" 对您的日志《"&email_log_title&"》发表了如下评论：“"&post_Message&"”。详情请点击查看 "&siteURL&caload(post_logID)&"#comm_"&email_commid&""
+            CommUrl = "<a href="""&siteURL&caload(post_logID)&"#comm_"&email_commid&"""  target=""_blank"">详情请点击查看</a>"
         else 
-            emailcontent = " "&username&" 对您的日志《"&email_log_title&"》发表了如下评论：“"&post_Message&"”。详情请点击查看 "&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&""
+            CommUrl = "<a href="""&siteURL&"default.asp?id="&post_logID&"#comm_"&email_commid&"""  target=""_blank"">详情请点击查看</a>"
         end if
+            emailcontent = "访客 <strong>"&username&"</strong> 对您的日志<strong>《"&email_log_title&"》</strong>发表了如下评论：<div style=""margin:10px 0px;padding:10px;width:400px;border:1px solid #999;border-bottom-left-radius:4px 4px;border-bottom-right-radius:4px 4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;color:#574D31;background:#F0ECD0;""><strong>"&username&"</strong>："&DelQuote(post_Message)&"。</div>"&CommUrl&""
         call sendmail(blog_email,emailtitle,emailcontent,sitename)
     End If
     '评论邮件通知结束

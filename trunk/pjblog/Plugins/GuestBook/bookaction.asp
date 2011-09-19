@@ -148,16 +148,16 @@ Conn.ExeCute("Insert INTO blog_book(book_Messager,book_face,book_IP,book_Content
 	If blog_Isjmail Then
 		Dim SQLcomm, log_commcomm
 		SQLcomm="Select TOP 1 * FROM blog_book Where book_Messager='"&username&"' order By book_ID Desc "
-		dim email_bookid
+		Dim email_bookid
 		Set log_commcomm=conn.execute(SQLcomm) 
 			email_bookid=log_commcomm("book_ID")
 		log_commcomm.Close
 		Set log_commcomm=Nothing
-			dim emailcontent,emailtitle
-			emailtitle = "您的博客已有客人留言"
-			emailcontent = "["&username&"]在您的博客中发表了留言,请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&email_bookid&"。留言内容如下："&post_Message&""
+			Dim emailcontent,emailtitle
+			emailtitle = "您的博客有新的留言！"
+			emailcontent = " 访客 <strong>"&username&"</strong> 在您的博客中发表了如下留言：<div style=""margin:10px 0px;padding:10px;width:400px;border:1px solid #999;border-bottom-left-radius:4px 4px;border-bottom-right-radius:4px 4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;color:#574D31;background:#F0ECD0;""><strong>"&username&"</strong>："&DelQuote(post_Message)&"。</div><a href="""&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&email_bookid&"""  target=""_blank"">详情请点击查看</a>"
 			call sendmail(blog_email,emailtitle,emailcontent,sitename)
-	'		call sendmail(username,"",email_bookid,"",0,post_Message)
+			'call sendmail(username,"",email_bookid,"",0,post_Message)
 	End If
 	'留言邮件通知结束
 
@@ -213,11 +213,11 @@ function replyMsg
 			SQLcomm="Select TOP 1 * FROM blog_book Where book_ID="&MsgID
 			Set log_commcomm=conn.execute(SQLcomm) 
 			if trim(log_commcomm("email"))<>"" then
-				dim emailcontent,emailtitle
-				emailtitle = "您在"&siteName&"上发表的留言已被回复"
-				emailcontent = "尊敬的｛"&log_commcomm("book_Messager")&"｝，您好，您在["&siteName&"]上发表的留言，现已被["&memName&"]回复，回复内容为：["&MsgReplyContent&"]，请点击查看"&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&MsgID&"。谢谢您的留言，欢迎再次光临！系统自动发送，请勿直接回复。"
-				call sendmail(log_commcomm("email"),emailtitle,emailcontent,log_commcomm("book_Messager"))
-		'		call sendmail(username,"",email_bookid,"",0,post_Message)
+				Dim emailcontent,emailtitle
+				emailtitle = "您在"&siteName&"上发表的留言已有了新回复！"
+				emailcontent = "尊敬的 <strong>"&log_commcomm("book_Messager")&"</strong> ，您好！<br/>您在博客 <strong>"&siteName&"</strong> 上发表的留言<br/>博主 <strong>"&memName&"</strong> 已经有了新的回复，回复内容为： <div style=""margin:10px 0px;padding:10px;width:400px;border:1px solid #999;border-bottom-left-radius:4px 4px;border-bottom-right-radius:4px 4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;color:#574D31;background:#F0ECD0;""><strong>您 </strong>说："&DelQuote(log_commcomm("book_Content"))&"<br/><strong>"&memName&" </strong>回复："&DelQuote(MsgReplyContent)&"<br/><br/><a href="""&siteURL&"LoadMod.asp?plugins=GuestBookForPJBlog#book_"&MsgID&"""  target=""_blank"">详情请点击查看</a></div>谢谢您的留言，欢迎您再次光临本博客！<br/>本邮件系统自动发送，请勿直接回复。"
+				call sendmail(log_commcomm("book_email"),emailtitle,emailcontent,log_commcomm("book_Messager"))
+				'call sendmail(username,"",email_bookid,"",0,post_Message)
 			end if
 			log_commcomm.Close
 			Set log_commcomm=Nothing

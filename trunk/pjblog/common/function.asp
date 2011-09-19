@@ -1613,6 +1613,7 @@ Function sendmail(blogemail,emailtitle,emailcontent,toname)  '邮件发送
             msg.silent = true
             msg.Logging = true
             msg.Charset = "gb2312"
+            msg.ContentType = "text/html"
             msg.MailServerUserName = blog_smtpuser
             msg.MailServerPassword = blog_smtppassword   
             msg.From = blog_smtpmail
