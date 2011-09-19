@@ -290,7 +290,7 @@ If webLogArr(9,PageCount) Then
 		<%If CanRead Then%>
 			<a href="<%=logLink%>" title="作者:<%=webLogArr(2,PageCount)%> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>"><%=HtmlEncode(webLogArr(3,PageCount))%></a>
 		<%Else%>
-			<a href="<%=logLink%>"><%if webLogArr(11,PageCount)=False then%><%=HtmlEncode(webLogArr(3,PageCount))%><%ElseIf Trim(webLogArr(10,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
+			<a href="<%=logLink%>" title="作者:<%=webLogArr(2,PageCount)%> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>"><%if webLogArr(11,PageCount)=False then%><%=HtmlEncode(webLogArr(3,PageCount))%><%ElseIf Trim(webLogArr(10,PageCount)) <> "" Then%>[加密日志]<%Else%>[私密日志]<%End If%></a>
 		<%End If
 
 If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
@@ -300,9 +300,9 @@ If webLogArr(5, PageCount) = False Or getCate.cate_Secret Then
 		</td>
 		<%If webLogArr(9,PageCount) Then %></b><%End If%>
 		<%If not ViewDraft="draft" then %>
-			<td valign="top" width="60"><nobr><a href="<%=aUrl%>#comm_top" title="评论"><%=webLogArr(6,PageCount)%></a> | <span title="引用通告"><%=webLogArr(7,PageCount)%></span> | <span title="阅读次数"><%=webLogArr(8,PageCount)%></span></nobr></td>
+			<td valign="top" width="60"><nobr> [作者:<a href="member.asp?action=view&memName=<%=webLogArr(2,PageCount)%>"><%=webLogArr(2,PageCount)%></a> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>] | <a href="<%=aUrl%>#comm_top" title="评论"><%=webLogArr(6,PageCount)%></a> | <span title="引用通告"><%=webLogArr(7,PageCount)%></span> | <span title="阅读次数"><%=webLogArr(8,PageCount)%></span></nobr></td>
 		<%else%>
-		    <td valign="top" width="60"><nobr><%=webLogArr(2,PageCount)%></span></nobr></td>
+		    <td valign="top" width="60"><nobr> [作者:<a href="member.asp?action=view&memName=<%=webLogArr(2,PageCount)%>"><%=webLogArr(2,PageCount)%></a> 日期:<%=DateToStr(webLogArr(4,PageCount),"Y-m-d")%>] | <%=webLogArr(2,PageCount)%></span></nobr></td>
 		<%End If%>
 		</tr>
 <%end function%>

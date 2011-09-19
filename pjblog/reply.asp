@@ -53,15 +53,14 @@ Sub replyComm
 		
 
        If blog_reply_Isjmail and trim(quest(4))<>"" Then
-            dim emailcontent,emailtitle
+            dim emailcontent, emailtitle, CommUrl
             emailtitle = "您在 "&siteName&" 上发表的评论已有了新回复！"
-            dim CommUrl
             if blog_postFile = 2 then
-                CommUrl = "详情请点击查看 "&siteurl&caload(quest(3))&"#comm_"&cID&""
+                CommUrl = "<a href="""&siteurl&caload(quest(3))&"#comm_"&cID&"""  target=""_blank"">详情请点击查看</a>"
             else 
-                CommUrl = "详情请点击查看 "&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&""
+                CommUrl = "<a href="""&siteurl&"default.asp?id="&quest(3)&"#comm_"&cID&"""  target=""_blank"">详情请点击查看</a>"
             end if
-            emailcontent = "尊敬的 "&quest(1)&" ，您好！您在博客 "&siteName&" 上对日志《"&quest(2)&"》发表的评论，博主 "&memName&" 已经有了新的回复，回复内容为： “"&replay&"” 。"&CommUrl&" 谢谢您参与评论，欢迎您再次光临本博客！本邮件系统自动发送，请勿直接回复。"
+            emailcontent = "尊敬的 <strong>"&quest(1)&"</strong> ，您好！<br/>您在博客 <strong>"&siteName&"</strong> 上对日志<strong>《"&quest(2)&"》</strong>发表的评论<br/>博主 <strong>"&memName&"</strong> 已经有了新的回复，回复内容为： <div style=""margin:10px 0px;padding:10px;width:400px;border:1px solid #999;border-bottom-left-radius:4px 4px;border-bottom-right-radius:4px 4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;color:#574D31;background:#F0ECD0;""><strong>您 </strong>说："&DelQuote(quest(0))&"<br/><strong>"&memName&" </strong>回复："&replay&"<br/><br/>"&CommUrl&"</div>谢谢您参与评论，欢迎您再次光临本博客！<br/>本邮件系统自动发送，请勿直接回复。"
             call sendmail(quest(4),emailtitle,emailcontent,quest(1))
 	end if
 
