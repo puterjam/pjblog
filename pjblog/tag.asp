@@ -27,7 +27,7 @@ For Each log_TagItem IN Arr_Tags
     log_Tag = Split(log_TagItem, "||")
 
 %>
-									<a href="default.asp?tag=<%=Server.URLEncode(log_Tag(1))%>" title="共包含 <%=log_Tag(2)%> 篇日志"><span style="font-size:<%=getTagSize(log_Tag(2))%>px"><%=log_Tag(1)%></span></a>&nbsp;&nbsp;
+									<a href="default.asp?tag=<%=Server.URLEncode(log_Tag(1))%>" title="共包含 <%=log_Tag(2)%> 篇日志"><span style="font-size:<%=getTagSize(log_Tag(2))%>px"><%=log_Tag(1)%>[<%=log_Tag(2)%>]</span></a>&nbsp;&nbsp;
 								<%
 Next
 
