@@ -270,7 +270,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			If blog_GravatarOpen Then
 			' Gravatar 头像基本设置
 				Set NewGravatar = new Gravatar
-				If Len(commArr(11, Pcount)) > 0 Then
+				If IsBlank(commArr(11, Pcount)) = False Then
 					NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(commArr(11, Pcount))))
 					GravatarImg = lcase(NewGravatar.outPut())
 				Else

@@ -659,8 +659,7 @@ function initLogin(CookieName){
 				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
 				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
-				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
-				if (menvalidate[1] == "False" || menvalidate[1] == "false") $("removevalidate").parentNode.removeChild($("removevalidate"));
+				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate" || menvalidate[1] == "False" || menvalidate[1] == "false").parentNode.removeChild($("removevalidate"));
 		}else if(cnvalue.length > 0){
 				var cnun = document.forms["frm"]["username"];
 				cnun.value = cnvalue;
@@ -670,8 +669,7 @@ function initLogin(CookieName){
 				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
 				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
-				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate").parentNode.removeChild($("removevalidate"));
-				if (menvalidate[1] == "False" || menvalidate[1] == "false") $("removevalidate").parentNode.removeChild($("removevalidate"));
+				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate" || menvalidate[1] == "False" || menvalidate[1] == "false").parentNode.removeChild($("removevalidate"));
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=(.*)/.exec(unescape(decodeURI(n)));
@@ -834,7 +832,7 @@ function replyMsg(logId,id,a1,a2,a3){
 		var _c = $("commcontent_" + id);
 		_c.appendChild(_r);
 
-		_r.innerHTML = '<br/><div class="UBBPanel replayPanel"><div class="UBBTitle"><img alt="评论回复" style="margin: 0px 2px -3px 0px;" src="images/icon_reply.gif"/> 评论回复</div><div class="UBBContent">' +
+		_r.innerHTML = '<br/><div class="replayPanel"><div class="commenttop replayTitle"><img alt="评论回复" style="margin: 0px 2px -3px 0px;" src="images/icon_reply.gif"/> 评论回复</div><div class="UBBContent">' +
 				'<form onsubmit="return checkReplyMsg(this)" method="post" action="reply.asp" target="replyFrame_'+id+'">' +
 				'<input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="logId" value="'+logId+'"/>' +
 				'<input type="hidden" name="a1" value="'+a1+'"/><input type="hidden" name="a2" value="'+a2+'"/><input type="hidden" name="a3" value="'+a3+'"/>' +
