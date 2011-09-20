@@ -82,11 +82,10 @@
 					Set NewGravatar = new Gravatar
 					If not isblank(GuestDB("email")) Then
 						NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GuestDB("email"))))
-						GravatarImg = lcase(NewGravatar.outPut())
 					Else
 						NewGravatar.Gravatar_EmailMd5 = ""
-						GravatarImg = "images/gravatar.gif"
 					End If
+					GravatarImg = lcase(NewGravatar.outPut())
 					Set NewGravatar = nothing
 %>
 				text-align:right
