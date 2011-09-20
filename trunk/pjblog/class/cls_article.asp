@@ -272,11 +272,10 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 				Set NewGravatar = new Gravatar
 				If IsBlank(commArr(11, Pcount)) = False Then
 					NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(commArr(11, Pcount))))
-					GravatarImg = lcase(NewGravatar.outPut())
 				Else
 					NewGravatar.Gravatar_EmailMd5 = ""
-					GravatarImg = "images/gravatar.gif"
 				End If
+				GravatarImg = lcase(NewGravatar.outPut())
 				Set NewGravatar = nothing
 			End If
      		ShowComm = ShowComm&"<div class=""comment"" "

@@ -68,7 +68,7 @@
   .commentinfo{font-size:11px;color:#999;}
   .commenttop{border-bottom:1px dotted #6B5D52;padding:4px;background:#FCF9EF}
   .commentcontent{padding:10px;line-height:140%;overflow:hidden;width:94%}
-  .Gravatar{ margin:0px 10px 0px 0px;}
+  .Gravatar{ margin:0px 10px 0px 0px;width:40px;height:40px;}
   /*---UBB框--*/ 
   .UBBPanel{border:1px solid #B4A79C;background:#FCF9EF;border-left:3px solid;}
   .UBBTitle{font-weight:bold;padding:4px;background:#F7EFD6 url(images/ubbback.gif) no-repeat 400px 0px;border-bottom:1px dotted #B4A79C;}
