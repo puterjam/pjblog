@@ -343,11 +343,34 @@ Function UBBCode(ByVal strContent, DisSM, DisUBB, DisIMG, AutoURL, AutoKEY)
 
 	'-----------回复标签----------------
         re.Pattern = "\[reply=(.[^\]]*),(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""replayPanel""><div class=""commenttop replayTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 于 <span class=""commentinfo replayinfo"">$2</span> 回复</div><div class=""UBBContent"">$3</div></div>")
-
-        re.Pattern = "\[reply=(.[^\]]*)\](.*?)\[\/reply\]"
-        strContent = re.Replace(strContent, "<div class=""replayPanel""><div class=""commenttop replayTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 $1 的评论""/> $1 回复</div><div class=""UBBContent"">$2</div></div>")
-
+		Dim GravatarDB, GravatarImg, NewGravatar
+                Set strMatchs = re.Execute(strContent)
+                For Each strMatch in strMatchs
+                    Randomize
+                    rndID = "Gravatar"&Int(100000 * Rnd)
+                    tmpStr1 = strMatch.SubMatches(0)
+                    tmpStr2 = strMatch.SubMatches(1)
+                    tmpStr3 = strMatch.SubMatches(2)
+	        set GravatarDB=Server.CreateObject("Adodb.Recordset")
+	        SQL="select mem_Email from blog_Member where mem_Name='"&tmpStr1&"'"
+	        SQLQueryNums=SQLQueryNums+1
+	        GravatarDB.Open SQL,CONN,1,1
+			If blog_GravatarOpen Then
+			' Gravatar 头像基本设置
+				Set NewGravatar = new Gravatar
+				If IsBlank(GravatarDB("mem_Email")) = False Then
+					NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GravatarDB("mem_Email"))))
+				Else
+					NewGravatar.Gravatar_EmailMd5 = ""
+				End If
+					GravatarImg = "<div class=""replyGravatar"" id=""" & rndID & """><img src="""&lcase(NewGravatar.outPut())&""" alt="""&tmpStr1&""" border=""0"" /></div>"
+				Set NewGravatar = nothing
+			else
+				GravatarImg = ""
+			End If
+        strContent = Replace(strContent, strMatch.Value, "<div class=""replyPanel"">"&GravatarImg&"<div class=""replyTitle""><img src=""images/icon_reply.gif"" style=""margin:0px 2px -3px 0px"" alt=""回复来自 "&tmpStr1&"""/> "&tmpStr1&" 回复 <span class=""replyinfo"">["&tmpStr2&"]</span> </div><div class=""replyContent"">"&tmpStr3&"</div></div>")
+                Next
+                Set strMatchs = Nothing
 
         '-----------表情图标----------------
         If Not DisSM = 1 Then

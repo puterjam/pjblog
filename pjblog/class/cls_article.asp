@@ -218,7 +218,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 	ShowComm = ""
     ShowComm = ShowComm&"<a name=""comm_top"" href=""#comm_top"" accesskey=""C""></a>"
     
-    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, blog_CommentEmail, blog_CommentWebSite, blog_CommentEmailImg, blog_CommentWebSiteImg
+    Dim blog_Comment, Pcount, comm_Num, blog_CommID, blog_CommAuthor, blog_CommContent, Url_Add, commArr, commArrLen, BaseUrl, aName, aEvent, outPutCommentCount, GravatarImg, NewGravatar, blog_CommentEmail, blog_CommentWebSite, blog_CommentEmailImg, blog_CommentWebSiteImg, Floor
     Set blog_Comment = Server.CreateObject("Adodb.RecordSet")
     
     Pcount = 0
@@ -287,7 +287,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			ShowComm = ShowComm&">"
 			
 			If blog_GravatarOpen Then
-				ShowComm = ShowComm&"<div class=""commentleft Gravatar"" style=""float:left"" id=""Gravatar_"&blog_CommID&""">"
+				ShowComm = ShowComm&"<div class=""commentleft Gravatar"" id=""Gravatar_"&blog_CommID&""">"
 					ShowComm = ShowComm&"<img src="""&GravatarImg&""" alt="""&blog_CommAuthor&""" border=""0"" />"
 				ShowComm = ShowComm&"</div><div class=""commentright"" style=""text-align:left"">"
 			End If
@@ -306,6 +306,21 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 				blog_CommentWebSiteImg = "<a href="""&blog_CommentWebSite&""" target=""_blank""><img src=""images/siteurl.gif"" border=""0"" alt=""访问 "&blog_CommentWebSite&"""></a>"
 			End If
 			
+		    If comDesc = "Desc" Then
+		        Floor = comm_Num - (Pcount + 1 + (CurPage - 1) * blogcommpage) + 1
+		    Else
+		        Floor = Pcount + 1 + (CurPage - 1) * blogcommpage
+		    End If
+		    If Floor = 1 Then
+		       Floor = "沙发"
+		    ElseIf Floor = 2 Then
+		       Floor = "板凳"
+		    ElseIf Floor = 3 Then
+		       Floor = "地板"
+		    Else
+		       Floor = Floor & "<sup style=""font-size:11px;"">#</sup>"
+		    End If
+			
 			ShowComm = ShowComm&"<div class=""commenttop"">"
      		ShowComm = ShowComm&"<a name=""comm_"&blog_CommID&""" href=""javascript:addQuote('"&blog_CommAuthor&"','commcontent_"&blog_CommID&"')""><img border=""0"" src=""images/icon_quote.gif"" alt="""" style=""margin:0px 4px -3px 0px""/></a>"
      		ShowComm = ShowComm&"<a href=""member.asp?action=view&memName="&Server.URLEncode(blog_CommAuthor)&"""><strong>"&blog_CommAuthor&"</strong></a>"
@@ -322,6 +337,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
 			End If
 			ShowComm = ShowComm&" | <span style=""cursor:pointer"" onclick=""replyMsg("&LogID&","&blog_CommID&","&commArr(4,Pcount)&","&commArr(7,Pcount)&","&commArr(9,Pcount)&")""><img src=""images/reply.gif"" alt=""回复"" style=""margin-bottom:-3px;""/>回复</span>"
 			ShowComm = ShowComm&"</span>]</span></div>"
+     		ShowComm = ShowComm&"<span class=""CommentFloor"">"&Floor&"</span>"
 		
 			'删除按钮
 		'	if stat_Admin=true or (stat_CommentDel=true and memName=blog_CommAuthor) then 

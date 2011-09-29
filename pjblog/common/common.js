@@ -659,7 +659,7 @@ function initLogin(CookieName){
 				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
 				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
-				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate" || menvalidate[1] == "False" || menvalidate[1] == "false").parentNode.removeChild($("removevalidate"));
+				if (IsAdmin[1] == "True" || IsAdmin[1] == "true" || menvalidate[1] == "False" || menvalidate[1] == "false") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else if(cnvalue.length > 0){
 				var cnun = document.forms["frm"]["username"];
 				cnun.value = cnvalue;
@@ -669,7 +669,7 @@ function initLogin(CookieName){
 				if ($("WebSiteArea")) $("WebSiteArea").parentNode.removeChild($("WebSiteArea"));
 				if ($("GuestCanRemeberComment")) $("GuestCanRemeberComment").parentNode.removeChild($("GuestCanRemeberComment"));
 				if ($("removeCommTips")) $("removeCommTips").parentNode.removeChild($("removeCommTips"));
-				if (IsAdmin[1] == "True" || IsAdmin[1] == "true") $("removevalidate" || menvalidate[1] == "False" || menvalidate[1] == "false").parentNode.removeChild($("removevalidate"));
+				if (IsAdmin[1] == "True" || IsAdmin[1] == "true" || menvalidate[1] == "False" || menvalidate[1] == "false") $("removevalidate").parentNode.removeChild($("removevalidate"));
 		}else{
 			//var escapeStr = escape("|$|")
 			var Guest = /Guest=(.*)/.exec(unescape(decodeURI(n)));
@@ -832,11 +832,11 @@ function replyMsg(logId,id,a1,a2,a3){
 		var _c = $("commcontent_" + id);
 		_c.appendChild(_r);
 
-		_r.innerHTML = '<br/><div class="replayPanel"><div class="commenttop replayTitle"><img alt="评论回复" style="margin: 0px 2px -3px 0px;" src="images/icon_reply.gif"/> 评论回复</div><div class="UBBContent">' +
+		_r.innerHTML = '<br/><div class="replyPanel"><div class="commenttop replyTitle"><img alt="评论回复" style="margin: 0px 2px -3px 0px;" src="images/icon_reply.gif"/> 评论回复</div><div class="commentcontent replyContent">' +
 				'<form onsubmit="return checkReplyMsg(this)" method="post" action="reply.asp" target="replyFrame_'+id+'">' +
 				'<input type="hidden" name="id" value="'+id+'"/><input type="hidden" name="logId" value="'+logId+'"/>' +
 				'<input type="hidden" name="a1" value="'+a1+'"/><input type="hidden" name="a2" value="'+a2+'"/><input type="hidden" name="a3" value="'+a3+'"/>' +
-				'<textarea name="replay" style="width: 99%; height: 60px;" class="editTextarea" id="edit_'+id+'"></textarea>' +
+				'<textarea name="reply" style="width: 99%; height: 60px;" class="editTextarea" id="edit_'+id+'"></textarea>' +
 				'<input type="submit" value="回复" class="userbutton"  id="button_'+id+'"/> <input onclick="removeReplyMsg('+id+')" type="button" value="取消" class="userbutton"/>' +
 				'<iframe name="replyFrame_'+id+'" style="display:none"/></form></div></div>';
 	}
@@ -845,10 +845,10 @@ function replyMsg(logId,id,a1,a2,a3){
 }
 
 function checkReplyMsg(o){
-	var msg = Trim(o.replay.value)
+	var msg = Trim(o.reply.value)
 	if (msg == "") {
 		alert("回复不能为空")
-		o.replay.select();
+		o.reply.select();
 		return false
 	}
 	return true

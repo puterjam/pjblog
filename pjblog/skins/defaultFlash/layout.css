@@ -64,19 +64,27 @@
   .Content-Info .InfoAuthor{text-align:left}
   .Content-Info .InfoOther{float:right;text-align:right;}
   /*--评论框--*/
-  .comment{text-align:left;margin:0px 12px 4px 12px}
+  .comment{width:500px;text-align:left;margin:0px 12px 4px 12px}
   .commentinfo{font-size:11px;color:#999;}
-  .commenttop{border-bottom:1px dotted #6B5D52;padding:4px;background:#FCF9EF}
+  .commenttop{border-bottom:1px dotted #6B5D52;padding:4px;background:#FCF9EF;width:95%;}
   .commentcontent{padding:10px;line-height:140%;overflow:hidden;width:94%}
-  .Gravatar{ margin:0px 10px 0px 0px;width:40px;height:40px;}
+  .commentleft {float:left;}
+  .commentright {margin-left:50px;width:90%;}
+  .Gravatar{border:1px solid #999;width:40px;height:40px;margin-right:5px;}
+  .CommentCheck {color:#999;font-size:11px;;}
+  .CommentFloor {float:right;border-left:2px solid #E00404;margin-top:5px;margin-right:15px;padding-left:10px;font-weight:bold;font-size:15px;font-family:微软雅黑;color:#BBBBBB;}
+  /*---回复框--*/
+  .replyPanel {margin:5px -3px -3px 10px;border:0px;}
+  .replyTitle {border-bottom:1px dotted #6B5D52;padding:4px;background:#FCF9EF;margin-right:50px;}
+  .replyinfo {}
+  .replyContent {padding:10px;line-height:140%;overflow:hidden;margin-right:50px;}
+  .replyGravatar{float:right;width:40px;height:40px;margin-left:5px;}
   /*---UBB框--*/ 
   .UBBPanel{border:1px solid #B4A79C;background:#FCF9EF;border-left:3px solid;}
   .UBBTitle{font-weight:bold;padding:4px;background:#F7EFD6 url(images/ubbback.gif) no-repeat 400px 0px;border-bottom:1px dotted #B4A79C;}
   .UBBContent{padding:6px;line-height:160%;}
   .UBBContent TEXTAREA {width:448px;margin-bottom:2px;}
   :link.UBBLink,:visited.UBBLink{font-size:11px;font-family:verdana;}
-  /*---回复框--*/
-  .replayPanel {margin:5px -3px -3px 10px;padding-left:60px;background:url('images/avatar.jpg') no-repeat;border:0px;border-left:0px;}
   /*---信息框--*/
   #MsgContent{border:1px solid #795B50;width:450px;padding:1px; background:#F8F6E9;margin:auto;}
   #MsgContent #MsgHead{background:#795B50;padding:4px;color:#fff;text-align:center;font-weight:bold;}
