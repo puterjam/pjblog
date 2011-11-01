@@ -435,7 +435,7 @@ Class Tag
             Dim log_Tag, log_TagItem
             For Each log_TagItem IN Arr_Tags
                 log_Tag = Split(log_TagItem, "||")
-                Str = Replace(Str, "{"&log_Tag(0)&"}", "<a href=""default.asp?tag="&Server.URLEncode(log_Tag(1))&""">"&log_Tag(1)&"</a><a href=""http://technorati.com/tag/"&log_Tag(1)&""" rel=""tag"" style=""display:none"">"&log_Tag(1)&"</a> ")
+                Str = Replace(Str, "{"&log_Tag(0)&"}", "<a href=""default.asp?tag="&Server.URLEncode(log_Tag(1))&""">"&log_Tag(1)&"</a> ")
             Next
             Dim re
             Set re = New RegExp
