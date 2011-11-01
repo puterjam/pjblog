@@ -96,7 +96,7 @@ ElseIf Request.QueryString("Smenu") = "Attachment" Then%>
           If instr(uploadDB("FilesPath"),"http://") = 0 then
           If FileExist(uploadDB("FilesPath")) = True Then
             Dim FilesSize, FilesType, Filestime
-            FilesSize = getFileInfo(uploadDB("FilesPath"))(0)
+            FilesSize = "<a href="""&uploadDB("FilesPath")&""" target=""_blank"">"&getFileInfo(uploadDB("FilesPath"))(0)&"</a>"
             FilesType = getFileInfo(uploadDB("FilesPath"))(9)
             Filestime = DateToStr(getFileInfo(uploadDB("FilesPath"))(10),"Y-m-d H:I:S")
           Else
@@ -105,16 +105,16 @@ ElseIf Request.QueryString("Smenu") = "Attachment" Then%>
             Filestime = "文件不存在"
           End If
           Else
-            FilesSize = "外链地址"
+            FilesSize = "<a href="""&uploadDB("FilesPath")&""" target=""_blank"">外链文件</a>"
             FilesType = Replace(right(uploadDB("FilesPath"),4),".","")
-            Filestime = "外链地址"
+            Filestime = "外链文件"
           End If
 	   %>
 	   <tr align="center">
 		  <td><input name="SelectFilesID" type="checkbox" value="<%=uploadDB("id")%>"/></td>
           <td><input name="FilesID" type="hidden" value="<%=uploadDB("id")%>"/><%=uploadDB("id")%></td>
           <td align="left">&nbsp;<%=FilesSize%></td>
-          <td><%=FilesType%></td>
+          <td align="left">&nbsp;<%=getFileIcons(FilesType)%><%=FilesType%></td>
 	      <td><input name="url" type="text" size="60" class="text" value="<%=uploadDB("FilesPath")%>" style="width:100%"/></td>
 	      <td><input name="count" type="text" size="10" value="<%=uploadDB("FilesCounts")%>" class="text"/></td>
 	      <td><%=Filestime%></td>
@@ -129,7 +129,7 @@ ElseIf Request.QueryString("Smenu") = "Attachment" Then%>
 End If
 %>
 	    <tr align="center" bgcolor="#D5DAE0">
-        <td colspan="6" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加附件</td>
+        <td colspan="8" class="TDHead" align="left" style="border-top:1px solid #999"><a name="AddLink"></a><img src="images/add.gif" style="margin:0px 2px -3px 2px"/>添加附件</td>
        </tr>
 <%
 Dim Rs, S_ID

@@ -416,7 +416,7 @@ Function NewComment(ByVal action)
 				If blog_Comment(5, i) Then
 					NewComment = NewComment&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))
 				Else
-					NewComment = NewComment&"[未审核评论]"
+					NewComment = NewComment&"[评论须审核通过后显示...]"
 				End If
 			Else
 				NewComment = NewComment&CCEncode(CutStr(DelQuote(blog_Comment(3, i)), 25))
