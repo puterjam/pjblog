@@ -80,7 +80,7 @@ End If
 	<meta http-equiv="Content-Language" content="UTF-8" />
 	<meta name="robots" content="all" />
 	<meta name="author" content="<%=blog_email%>,<%=blog_master%>" />
-	<meta name="Copyright" content="PJBlog3 CopyRight 2008" />
+	<meta name="Copyright" content="PJBlog3 CopyRight 2011" />
 	<meta name="keywords" content="<%=blog_KeyWords%>" />
 	<meta name="description" content="<%=blog_Description%> - <%=SiteName%> - <%=blog_Title%>" />
 	<meta name="generator" content="PJBlog3" />

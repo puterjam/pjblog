@@ -571,7 +571,7 @@ Sub c_ceneral
 		    <legend> 用户注册与过滤</legend>
 		    <div align="left">
 		      <table border="0" cellpadding="2" cellspacing="1">
-		  		<tr><td width="180" align="right">不允许注册新用户</td><td width="300"><input name="blog_Disregister" type="checkbox" value="1" <%if blog_Disregister then response.write ("checked=""checked""")%>  /> </td></tr> 
+		  		<tr><td width="180" align="right">不允许注册新用户</td><td width="300"><input name="blog_Disregister" type="checkbox" value="1" <%if blog_Disregister then response.write ("checked=""checked""")%>  /> </td></tr>
 		  	    <tr><td width="180" align="right">访客记录最大值</td><td width="300"><input name="blog_CountNum" type="text" size="5" class="text" value="<%=blog_CountNum%>"/>  <span style="color:#999">设置为0则不进行任何访客记录</span></td></tr>
 		     <tr>
 		         <td width="180" valign="top"><div align="right">注册名字过滤
