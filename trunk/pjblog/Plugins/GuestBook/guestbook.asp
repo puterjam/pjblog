@@ -80,8 +80,8 @@
 				' Gravatar 头像基本设置
 					Dim NewGravatar, GravatarImg
 					Set NewGravatar = new Gravatar
-					If not isblank(GuestDB("email")) Then
-						NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GuestDB("email"))))
+					If not isblank(GuestDB("book_Mail")) Then
+						NewGravatar.Gravatar_EmailMd5 = Trim(MD5(Trim(GuestDB("book_Mail"))))
 					Else
 						NewGravatar.Gravatar_EmailMd5 = ""
 					End If
@@ -111,13 +111,13 @@
        	         <%end if%>
        	         <a href="member.asp?action=view&memName=<%=Server.URLEncode(GuestDB("book_Messager"))%>"><b><%=GuestDB("book_Messager")%></b></a> 
 <%
-if trim(GuestDB("email"))<>"" then
-    response.write " <a href=mailto:"&trim(GuestDB("email"))&" target=_blank><img src=images/email1.gif border=0></a>"
+if trim(GuestDB("book_Mail"))<>"" then
+    response.write " <a href=mailto:"&trim(GuestDB("book_Mail"))&" target=_blank><img src=images/email1.gif border=0></a>"
 else
     response.write " <img src=images/noemail1.gif>"
 end if
-if trim(GuestDB("siteurl"))<>"" and trim(GuestDB("siteurl"))<>"http://" then
-    response.write " <a href="&trim(GuestDB("siteurl"))&" target=_blank><img src=images/url1.gif border=0></a>"
+if trim(GuestDB("book_Url"))<>"" and trim(GuestDB("book_Url"))<>"http://" then
+    response.write " <a href="&trim(GuestDB("book_Url"))&" target=_blank><img src=images/url1.gif border=0></a>"
 else
     response.write " <img src=images/nourl1.gif>"
 end if

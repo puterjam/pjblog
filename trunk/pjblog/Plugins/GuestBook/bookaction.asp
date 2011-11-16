@@ -114,7 +114,7 @@ dim email,tsiteURL
             exit function
          end if
     else
-       set checkMem=Conn.ExeCute("select * from blog_Member where mem_Name='"&username&"'")
+       set checkMem=Conn.ExeCute("select mem_Name from blog_Member where mem_Name='"&username&"'")
        if not checkMem.eof then
          showmsg "留言发表错误信息","<b>该用户已经存在，无法发表留言</b><br/><a href=""javascript:history.go(-1);"">单击返回</a>","WarningIcon","plugins"
     	 exit function
@@ -135,8 +135,16 @@ dim email,tsiteURL
      showmsg "留言发表错误信息","必须登陆才可以发表隐藏留言<br/><a href=""javascript:history.go(-1);"">单击返回</a>","ErrorIcon","plugins"
 	 exit function
   end if
+
+
+	If memName<>Empty Then
+		Set checkMem=conn.Execute("Select mem_Email,mem_HomePage FROM blog_Member Where mem_Name='"&username&"'")
+		email = checkMem("mem_Email")
+		tsiteURL = checkMem("mem_HomePage")
+	End if
+
  '插入数据
-Conn.ExeCute("Insert INTO blog_book(book_Messager,book_face,book_IP,book_Content,book_HiddenReply,email,siteurl) VALUES ('"&username&"','"&face&"','"&getIP()&"','"&post_Message&"',"&hiddenreply&",'"&email&"','"&tsiteURL&"')")
+Conn.ExeCute("Insert INTO blog_book(book_Messager,book_face,book_IP,book_Content,book_HiddenReply,book_Mail,book_Url) VALUES ('"&username&"','"&face&"','"&getIP()&"','"&post_Message&"',"&hiddenreply&",'"&email&"','"&tsiteURL&"')")
 
  Conn.ExeCute("update blog_Info set blog_MessageNums=blog_MessageNums+1")
  if memName<>empty then

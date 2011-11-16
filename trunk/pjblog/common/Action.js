@@ -360,7 +360,7 @@ function Gotoupdatepass(id){
 			 function(obj) {
 				 TempStr = obj.responseText;
 				 if (TempStr == "1"){
-					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=blue>操作成功</font></b></div>";
+					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=blue>恭喜您，您的密码已被重置，请妥善保管您的密码。</font></b></div>";
 				 }else{
 					 $("passContent").innerHTML = "<div style='text-align:center'><b><font color=red>操作失败</font></b></div>";
 				 }
