@@ -305,7 +305,7 @@ ElseIf Request.QueryString("action") = "CheckPostName" Then
 		response.write "非法操作！"
 	End If
 ElseIf Request.QueryString("action") = "updatepassto" Then
-	If ChkPost() And stat_Admin Then
+	If ChkPost() Then
 		Dim e_Pass, e_RePass, e_ID, e_Rs, e_hash, d_pass
 		e_ID = CheckStr(UnEscape(Request.QueryString("id")))
 		e_Pass = CheckStr(UnEscape(Request.QueryString("pass")))
