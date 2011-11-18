@@ -128,7 +128,7 @@ Sub ShowArticle(LogID)
 						<%If CanRead Then '密码访问
 							keyword = CheckStr(Request.QueryString("keyword"))
 							If log_ViewArr(10, 0) = 1 Then
-							    response.Write (highlight(UnCheckStr(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1))), keyword))
+							    response.Write (highlight(UBBCode(HtmlEncode(log_ViewArr(8, 0)), Mid(log_ViewArr(11, 0), 1, 1), Mid(log_ViewArr(11, 0), 2, 1), Mid(log_ViewArr(11, 0), 3, 1), Mid(log_ViewArr(11, 0), 4, 1), Mid(log_ViewArr(11, 0), 5, 1)), keyword))
 							Else
 							    response.Write (highlight(UnCheckStr(log_ViewArr(8, 0)), keyword))
 							End If
