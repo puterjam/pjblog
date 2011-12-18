@@ -818,6 +818,8 @@ Function DateToStr(DateTime, ShowType)
                 DayEnd = "th"
         End Select
         DateToStr = Fullmonth(DateMonth -1)&" "&DateDay&DayEnd&" "&Right(Year(DateTime), 4)
+        Case "sm"
+       		DateToStr = Shortmonth(DateMonth -1)
         Case "w,d m y H:I:S"
             DateSecond = Second(DateTime)
             If Len(DateHour)<2 Then DateHour = "0"&DateHour
