@@ -253,7 +253,7 @@ Function ShowComm(ByVal LogID,ByVal comDesc, ByVal DisComment, ByVal forStatic, 
         	BaseUrl = caload(LogID)
         	Url_Add="#"
         	aName = ""
-        	aEvent = "onclick=""openCommentPage(this)"""
+        	aEvent = "onclick=""openCommentPage(this);return false"""
         End If 
 
 		'顶部翻页

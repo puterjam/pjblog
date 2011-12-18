@@ -10,7 +10,7 @@
 <meta name="description" content="<$description$>,<$siteName$> - <$blog_Title$>" />
 <title><$log_Title$> - <$siteName$></title>
 <base href="<$base$>"></base>
-<style type="text/css">
+<style id="ownerStyle" type="text/css">
 	.ownerClassLog{display:none}
 	.ownerClassComment{display:none}
 </style>
@@ -31,7 +31,6 @@
 	var g_styleID = "<$skin$>";
 	var g_logID = "<$LogID$>";
 	var g_comDesc = "<$comDesc$>";
-	document.write ('<script type="text/javascript" src="static_js.asp"><\/script>')
 </script>
 <!--<script type="text/javascript" src="common/nicetitle.js"></script>-->
 </head>
@@ -56,7 +55,7 @@
 				<div class="pageContent">
 					<img src="<$Cate_icon$>" style="margin:0px 2px -4px 0px" alt=""/> <strong><a href="default.asp?cateID=<$log_CateID$>" title="查看所有【<$Cate_Title$>】的日志"><$Cate_Title$></a></strong> <a href="feed.asp?cateID=<$log_CateID$>" target="_blank" title="订阅所有【<$Cate_Title$>】的日志" accesskey="O"><img border="0" src="images/rss.png" alt="订阅所有【<$Cate_Title$>】的日志" style="margin-bottom:-1px"/></a>
 				</div>
-				<div class="Content">
+				<div class="Content Detail">
 					<div class="Content-top"><div class="ContentLeft"></div><div class="ContentRight"></div>
 					<h1 class="ContentTitle"><strong><$log_Title$></strong></h1>
 					<h2 class="ContentAuthor">作者:<$log_Author$> 日期:<$log_PostTime$></h2>
@@ -162,7 +161,9 @@
           <!--工具条顶部图象-->
         </div>
         <!--侧边栏的内容-->
-        <div id="sidebarDynamic"></div>
+        <div id="sidebarDynamic">
+			<script type="text/javascript" src="static_js.asp"></script>
+		</div>
         <div id="sidebar-bottomimg"></div>
       </div>
     </div>

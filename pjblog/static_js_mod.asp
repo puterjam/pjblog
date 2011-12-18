@@ -26,7 +26,7 @@
 		html = html.replace(/\\/g,"\\\\");
 		html = html.replace(/\'/g,"\\'");
 		Response.Clear();
-		Response.Write ("﻿callSideBar('" + html + "');")
+		Response.Write ("﻿document.write('" + html + "');")
 	}
 </script>
 <%
