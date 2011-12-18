@@ -195,9 +195,9 @@ Function getUsersBlogs()
     Response.Clear
     Response.Write "<?xml version=""1.0"" encoding=""UTF-8""?>"
     Response.Write "<methodResponse><params><param><value><array><data><value><struct>"
-    Response.Write "<member><name>url</name><value><string><![CDATA["&SiteURL&"]]></string></value></member>"
-    Response.Write "<member><name>blogid</name><value><string><![CDATA["&CookieName&"]]></string></value></member>"
-    Response.Write "<member><name>blogName</name><value><string><![CDATA["&UnCheckStr(SiteName)&"]]></string></value></member>"
+    Response.Write "<member><name>url</name><value><string>"&CheckStr(SiteURL)&"</string></value></member>"
+    Response.Write "<member><name>blogid</name><value><string>"&CheckStr(CookieName)&"</string></value></member>"
+    Response.Write "<member><name>blogName</name><value><string>"&CheckStr(UnCheckStr(SiteName))&"</string></value></member>"
     Response.Write "</struct></value></data></array></value></param></params></methodResponse>"
     Response.End
 End Function
@@ -226,21 +226,21 @@ Function getRecentPosts(intNum)
     If UBound(dbRow, 1)<>0 Then
         For i = 0 To UBound(dbRow, 2)
             RecentPosts = RecentPosts & "<value><struct>"
-            RecentPosts = RecentPosts & "<member><name>title</name><value><string><![CDATA["&dbRow(1, i)&"]]></string></value></member>"
+            RecentPosts = RecentPosts & "<member><name>title</name><value><string>"&dbRow(1, i)&"</string></value></member>"
             If dbRow(5, i) = 1 Then
                 t = AddSiteURL(UBBCode(HTMLEncode(dbRow(3, i)), 0, 0, 0, 1, 1))
-                RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
+                RecentPosts = RecentPosts & "<member><name>description</name><value><string>"&CheckStr(t)&"</string></value></member>"
             Else
                 t = AddSiteURL(UnCheckStr(dbRow(3, i)))
-                RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
+                RecentPosts = RecentPosts & "<member><name>description</name><value><string>"&CheckStr(t)&"</string></value></member>"
             End If
             RecentPosts = RecentPosts & "<member><name>dateCreated</name><value><dateTime.iso8601>"&DateToStr(dbRow(4, i), "y-m-dTH:I:S")&"</dateTime.iso8601></value></member>"
             RecentPosts = RecentPosts & "<member><name>categories</name><value><array><data><value><string>"&dbRow(6, i)&"</string></value></data></array></value></member>"
             RecentPosts = RecentPosts & "<member><name>tagwords</name><value><string><![CDATA[df34,err]]></string></value></member>"
-            RecentPosts = RecentPosts & "<member><name>postid</name><value><string><![CDATA["&dbRow(0, i)&"]]></string></value></member>"
-            RecentPosts = RecentPosts & "<member><name>userid</name><value><string><![CDATA["&dbRow(2, i)&"]]></string></value></member>"
-            RecentPosts = RecentPosts & "<member><name>link</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&dbRow(0, i)&"]]></string></value></member>"
-            RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&dbRow(0, i)&"]]></string></value></member>"
+            RecentPosts = RecentPosts & "<member><name>postid</name><value><string>"&CheckStr(dbRow(0, i))&"</string></value></member>"
+            RecentPosts = RecentPosts & "<member><name>userid</name><value><string>"&CheckStr(dbRow(2, i))&"</string></value></member>"
+            RecentPosts = RecentPosts & "<member><name>link</name><value><string>"&CheckStr(SiteURL&"/default.asp?id="&dbRow(0, i))&"</string></value></member>"
+            RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string>"&CheckStr(SiteURL&"/default.asp?id="&dbRow(0, i))&"</string></value></member>"
             RecentPosts = RecentPosts & "</struct></value>"
         Next
     End If
@@ -269,27 +269,27 @@ Function getPost(lID)
 
     RecentPosts = "<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param>"
     RecentPosts = RecentPosts & "<value><struct>"
-    RecentPosts = RecentPosts & "<member><name>title</name><value><string><![CDATA["&lArticle.logTitle&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>title</name><value><string>"&CheckStr(lArticle.logTitle)&"</string></value></member>"
     If lArticle.logEditType = 1 Then
         t = AddSiteURL(UBBCode(HTMLEncode(lArticle.logMessage), 0, 0, 0, 1, 1))
-        RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
+        RecentPosts = RecentPosts & "<member><name>description</name><value><string>"&CheckStr(t)&"</string></value></member>"
     Else
         t = AddSiteURL(UnCheckStr(lArticle.logMessage))
-        RecentPosts = RecentPosts & "<member><name>description</name><value><string><![CDATA["&t&"]]></string></value></member>"
+        RecentPosts = RecentPosts & "<member><name>description</name><value><string>"&CheckStr(t)&"</string></value></member>"
     End If
     
     RecentPosts = RecentPosts & "<member><name>dateCreated</name><value><dateTime.iso8601>"&DateToStr(lArticle.logPubTime, "y-m-dTH:I:S")&"</dateTime.iso8601></value></member>"
     RecentPosts = RecentPosts & "<member><name>categories</name><value><array><data><value><string>"&lArticle.categoryID&"</string></value></data></array></value></member>"
-    RecentPosts = RecentPosts & "<member><name>mt_keywords</name><value><string><![CDATA["&lArticle.logTags&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>mt_keywords</name><value><string>"&CheckStr(lArticle.logTags)&"</string></value></member>"
     if not CBool(lArticle.logIntroCustom) then
-    	RecentPosts = RecentPosts & "<member><name>mt_excerpt</name><value><string><![CDATA["&lArticle.logIntro&"]]></string></value></member>"
+    	RecentPosts = RecentPosts & "<member><name>mt_excerpt</name><value><string>"&CheckStr(lArticle.logIntro)&"</string></value></member>"
     else
     	RecentPosts = RecentPosts & "<member><name>mt_excerpt</name><value><string><![CDATA[]]></string></value></member>"
     end if
-    RecentPosts = RecentPosts & "<member><name>postid</name><value><string><![CDATA["&lID&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>userid</name><value><string><![CDATA["&lArticle.logAuthor&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>link</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&lID&"]]></string></value></member>"
-    RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string><![CDATA["&SiteURL&"/default.asp?id="&lID&"]]></string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>postid</name><value><string>"&CheckStr(lID)&"</string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>userid</name><value><string>"&CheckStr(lArticle.logAuthor)&"</string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>link</name><value><string>"&CheckStr(SiteURL&"/default.asp?id="&lID)&"</string></value></member>"
+    RecentPosts = RecentPosts & "<member><name>permaLink</name><value><string>"&CheckStr(SiteURL&"/default.asp?id="&lID)&"</string></value></member>"
     RecentPosts = RecentPosts & "</struct></value>"
     RecentPosts = RecentPosts & "</param></params></methodResponse>"
     response.Write RecentPosts
@@ -311,12 +311,12 @@ Function getCategories()
     For i = 0 To Category_Len
         If Not Arr_Category(4, i) Then
             Categories = Categories & "<value><struct>"
-            Categories = Categories & "<member><name>description</name><value><string><![CDATA["&Arr_Category(1, i)&"]]></string></value></member>"
-            Categories = Categories & "<member><name>httpUrl</name><value><string><![CDATA["&SiteURL&"/default.asp?cateID="&Arr_Category(0, i)&"]]></string></value></member>"
-            Categories = Categories & "<member><name>rssUrl</name><value><string><![CDATA["&SiteURL&"/feed.asp?cateID="&Arr_Category(0, i)&"]]></string></value></member>"
-            Categories = Categories & "<member><name>title</name><value><string><![CDATA["&Arr_Category(1, i)&"]]></string></value></member>"
-            Categories = Categories & "<member><name>categoryId</name><value><string><![CDATA["&Arr_Category(0, i)&"]]></string></value></member>"
-            Categories = Categories & "<member><name>categoryName</name><value><string><![CDATA["&Arr_Category(1, i)&"]]></string></value></member>"
+            Categories = Categories & "<member><name>description</name><value><string>"&CheckStr(Arr_Category(1, i))&"</string></value></member>"
+            Categories = Categories & "<member><name>httpUrl</name><value><string>"&CheckStr(SiteURL&"/default.asp?cateID="&Arr_Category(0, i))&"</string></value></member>"
+            Categories = Categories & "<member><name>rssUrl</name><value><string>"&CheckStr(SiteURL&"/feed.asp?cateID="&Arr_Category(0, i))&"</string></value></member>"
+            Categories = Categories & "<member><name>title</name><value><string>"&CheckStr(Arr_Category(1, i))&"</string></value></member>"
+            Categories = Categories & "<member><name>categoryId</name><value><string>"&CheckStr(Arr_Category(0, i))&"</string></value></member>"
+            Categories = Categories & "<member><name>categoryName</name><value><string>"&CheckStr(Arr_Category(1, i))&"</string></value></member>"
             Categories = Categories & "</struct></value>"
         End If
     Next
@@ -533,8 +533,8 @@ Function getPostCategories(lID)
     RecentPosts="<?xml version=""1.0"" encoding=""UTF-8""?><methodResponse><params><param><value><array><data>" 
     i=0 
             RecentPosts = RecentPosts & "<value><struct>" 
-            RecentPosts = RecentPosts & "<member><name>categoryId</name><value><string><![CDATA["&dbRow(8,i)&"]]></string></value></member>" 
-            RecentPosts = RecentPosts & "<member><name>categoryName</name><value><string><![CDATA["&dbRow(6,i)&"]]></string></value></member>" 
+            RecentPosts = RecentPosts & "<member><name>categoryId</name><value><string>"&CheckStr(dbRow(8,i))&"</string></value></member>" 
+            RecentPosts = RecentPosts & "<member><name>categoryName</name><value><string>"&CheckStr(dbRow(6,i))&"</string></value></member>" 
             RecentPosts = RecentPosts & "</struct></value>" 
     RecentPosts = RecentPosts & "</data></array></value></param></params></methodResponse>"  
     response.write RecentPosts 
