@@ -2,4 +2,4 @@
 Automatically exported from code.google.com/p/pjblog
 
 #version
-v3.2.9.518.zip
+v3.2.9.518
